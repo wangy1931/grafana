@@ -134,8 +134,28 @@ function (angular, _, config) {
       });
     };
 
-    $scope.init();
+    $scope.createGraphPanel = function() {
+      var defaultSpan = 12;
+      var _as = 12 - $scope.dashboard.rowSpan($scope.row);
 
+      var panel = {
+        title: "alert-name",
+        error: false,
+        span: _as < defaultSpan && _as > 0 ? _as : defaultSpan,
+        editable: false,
+        type: "graph",
+        targets: [{aggregator: "avg", metric: "cloudmon-read-latency", downsampleAggregator: "avg", downsampleInterval: "1m"}]
+      };
+
+      $scope.addPanel(panel);
+
+      $timeout(function() {
+        $scope.$broadcast('render');
+      });
+
+    };
+
+    $scope.init();
   });
 
   module.directive('rowHeight', function() {
