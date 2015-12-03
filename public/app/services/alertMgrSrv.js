@@ -10,6 +10,7 @@ function (angular) {
 
   module.service('alertMgrSrv', function($http, alertSrv/*, backendSrv*/) {
     this.alertDefMap = {};
+    this.alertTriggeredMap = {};
     var self = this;
     var alertUrl =  "http://0.0.0.0:5001/alert/definition";
 
@@ -56,6 +57,12 @@ function (angular) {
 
     this.get = function(id) {
       return self.alertDefMap[id];
+    };
+
+    this.loadTriggeredAlerts = function() {
+      self.alertTriggeredMap[0] = "cloudmon-read-latency";
+      self.alertTriggeredMap[1] = "cloudmon-write-latency";
+      return self.alertTriggeredMap;
     };
 
     this.init();

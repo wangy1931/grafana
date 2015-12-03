@@ -134,7 +134,7 @@ function (angular, _, config) {
       });
     };
 
-    $scope.createGraphPanel = function() {
+    $scope.createAlertGraphPanel = function(triggeredMetric) {
       var defaultSpan = 12;
       var _as = 12 - $scope.dashboard.rowSpan($scope.row);
 
@@ -144,7 +144,7 @@ function (angular, _, config) {
         span: _as < defaultSpan && _as > 0 ? _as : defaultSpan,
         editable: false,
         type: "graph",
-        targets: [{aggregator: "avg", metric: "cloudmon-read-latency", downsampleAggregator: "avg", downsampleInterval: "1m"}]
+        targets: [{aggregator: "avg", metric: triggeredMetric, downsampleAggregator: "avg", downsampleInterval: "1m"}]
       };
 
       $scope.addPanel(panel);

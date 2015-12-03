@@ -7,13 +7,20 @@ function (angular) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('AlertStatusCtrl', function($scope) {
+  module.controller('AlertStatusCtrl', function($scope, alertMgrSrv) {
+    var alertRows = [];
+    var triggeredAlerts = alertMgrSrv.loadTriggeredAlerts();
+    for (var id in triggeredAlerts) {
+      if (triggeredAlerts.hasOwnProperty(id)) {
+        alertRows.push({ height: '250px', panels:[], triggeredMetric: triggeredAlerts[id] });
+      }
+    }
 
     $scope.initDashboard({
       meta: { canStar: false, canShare: false, canEdit: false },
       dashboard: {
         title: "alert-name",
-        rows: [{ height: '250px', panels:[] }],
+        rows: alertRows,
         time: {from: "now-2h", to: "now"}
       },
     }, $scope);
