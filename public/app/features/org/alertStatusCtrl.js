@@ -10,7 +10,7 @@ function (angular) {
   module.controller('AlertStatusCtrl', function($scope) {
 
     $scope.initDashboard({
-      meta: { canStar: false, canShare: false },
+      meta: { canStar: false, canShare: false, canEdit: false },
       dashboard: {
         title: "alert-name",
         rows: [{ height: '250px', panels:[] }],
