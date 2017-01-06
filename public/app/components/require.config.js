@@ -23,6 +23,7 @@ require.config({
     timepicker:               'vendor/angular-other/timepicker',
     datepicker:               'vendor/angular-other/datepicker',
     slider:                   'vendor/angular-other/nouislider.min',
+    'grap-drawing':           'vendor/angular-other/sigma.min',
     bindonce:                 'vendor/angular-bindonce/bindonce',
     crypto:                   'vendor/crypto.min',
     spectrum:                 'vendor/spectrum',

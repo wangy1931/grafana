@@ -13,5 +13,6 @@ define([
   './orgApiKeysCtrl',
   './orgDetailsCtrl',
   './alertHistoryCtrl',
-  './importAlertsCtrl'
+  './importAlertsCtrl',
+  './rootCauseCtrl'
 ], function () {});

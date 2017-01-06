@@ -198,9 +198,18 @@ function (angular, _, noUiSlider) {
       $location.path("alerts/association/" + alertMetric + "/" + alertHost + "/" + Math.floor($scope.thresholdSlider.get()));
     };
 
+    $scope.showRCA = function() {
+      var rcaScope = $scope.$new();
+      rcaScope.rootCauseList = $scope.correlatedMetrics;
+      $scope.appEvent('show-modal', {
+        src: './app/partials/rca.html',
+        modalClass: 'modal-no-header invite-modal',
+        scope: rcaScope
+      });
+    };
+
     $scope.init();
   });
-
   angular.module('grafana.directives').directive('slider', function() {
     return {
       restrict: 'A',

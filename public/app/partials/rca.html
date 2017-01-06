@@ -1,0 +1,30 @@
+<div class="modal-body" ng-controller="RootCauseCtrl" ng-init="init()">
+
+  <a class="modal-close" ng-click="dismiss();">
+    <i class="fa fa-remove"></i>
+  </a>
+
+  <h3>
+    创建关联关系
+  </h3>
+
+  <div style="display: inline-block">
+    <div class="tight-form-container">
+      <div controls controls-row>
+        <label class="span3 checkbox" ng-repeat="(metricsName, metricsValue) in rootCauseList">
+          <input  type="checkbox" ng-click="nodeChange(metricsName)">{{_.getMetricName(metricsName)}}</input>
+        </label>
+      </div>
+      <div class="tight-form">
+        <div id="graph-container"></div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+
+    <div class="" style="margin-top: 30px; margin-bottom: 20px;">
+      <button type="button" class="btn btn-inverse" ng-click="dismiss()">取消</button>
+      <button type="submit" class="btn btn-success" ng-click="addSystem();">创建</button>
+
+    </div>
+  </div>
+</div>
