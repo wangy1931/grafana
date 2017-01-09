@@ -1,0 +1,9 @@
+<div class="graph-rca-popover">
+  <a class="close" ng-click="dismiss();" href="">×</a>
+  <div>
+    <button ng-if="!start" ng-click="edgeStart(nodeId);dismiss();">start</button>
+    <button ng-if="start" ng-click="edgeEnd(nodeId);dismiss();">end</button>
+    <button ng-if="start" ng-click="clear();dismiss();">clear</button>
+  </div>
+</div>
+

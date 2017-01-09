@@ -1329,7 +1329,9 @@
         removeWithAnimation() :
         $tip.detach()
 
-      this.$element.trigger('hidden')
+      //TODO figure out what it is
+      //RCA need it , if find the another way to do it should revert it
+      //this.$element.trigger('hidden')
 
       return this
     }

@@ -23,7 +23,8 @@ require.config({
     timepicker:               'vendor/angular-other/timepicker',
     datepicker:               'vendor/angular-other/datepicker',
     slider:                   'vendor/angular-other/nouislider.min',
-    'grap-drawing':           'vendor/angular-other/sigma.min',
+    sigma:                    'vendor/angular-other/sigma.min',
+    'sigma-edge':             'vendor/angular-other/sigma.renderers.customEdgeShapes.min',
     bindonce:                 'vendor/angular-bindonce/bindonce',
     crypto:                   'vendor/crypto.min',
     spectrum:                 'vendor/spectrum',
@@ -77,6 +78,11 @@ require.config({
 
     jquery: {
       exports: 'jQuery'
+    },
+
+    sigma: {
+      deps: ['sigma-edge'],
+      exports: 'sigma'
     },
 
     // simple dependency declaration

@@ -1,100 +1,112 @@
 define([
     'angular',
     'lodash',
-    'grap-drawing'
+    'sigma',
+    'sigma-edge'
   ],
   function (angular, _, sigma) {
     'use strict';
 
     var module = angular.module('grafana.controllers');
-    module.controller('RootCauseCtrl', function ($scope) {
+    module.controller('RootCauseCtrl', function ($scope, popoverSrv, $element) {
       $scope.init = function () {
-        console.log($scope.rootCauseList);
-
-        var i,
-          s,
-          N = 100,
-          E = 500,
+        $scope.edge = {
+          start: null,
+          end: null
+        };
+        $scope.start = false;
+        var i, N = 10, E = 20, L = 4,
           g = {
             nodes: [],
             edges: []
           };
 
-// Generate a random graph:
-        for (i = 0; i < N; i++) {
-          g.nodes.push({
-            id: 'n' + i,
-            label: 'Node ' + i,
-            x: Math.random(),
-            y: Math.random(),
-            size: Math.random(),
-            color: '#666'
-          });
-        }
-
-        for (i = 0; i < E; i++) {
-          g.edges.push({
-            id: 'e' + i,
-            source: 'n' + (Math.random() * N | 0),
-            target: 'n' + (Math.random() * N | 0),
-            size: Math.random(),
-            color: '#ccc'
-          });
-        }
-// Instantiate sigma:
-        s = new sigma({
+        // Instantiate sigma:
+        $scope.rcaGraph = new sigma({
           graph: g,
           settings: {
-            enableHovering: false
+            enableHovering: false,
+            enableEdgeHovering: true,
+            edgeHoverSizeRatio: 2,
+            defaultArrowSize: 10
           }
         });
 
-        s.addRenderer({
+        $scope.rcaGraph.addRenderer({
           id: 'main',
-          type: 'svg',
+          type: 'canvas',
           container: document.getElementById('graph-container'),
           freeStyle: true
         });
 
-        s.refresh();
+        $scope.rcaGraph.bind('clickNode', function (e) {
+          var nodeId = e.data.node.id;
 
-// Binding silly interactions
-        function mute(node) {
-          if (!~node.getAttribute('class').search(/muted/))
-            node.setAttributeNS(null, 'class', node.getAttribute('class') + ' muted');
-        }
+          var popoverScope = $scope.$new();
+          popoverScope.edgeStart = $scope.edgeStart;
+          popoverScope.edgeEnd = $scope.edgeEnd;
+          popoverScope.clear = $scope.clear;
+          popoverScope.start = $scope.start;
+          popoverScope.nodeId = nodeId;
 
-        function unmute(node) {
-          node.setAttributeNS(null, 'class', node.getAttribute('class').replace(/(\s|^)muted(\s|$)/g, '$2'));
-        }
-
-        $('.sigma-node').click(function () {
-
-          // Muting
-          $('.sigma-node, .sigma-edge').each(function () {
-            mute(this);
-          });
-
-          // Unmuting neighbors
-          var neighbors = s.graph.neighborhood($(this).attr('data-node-id'));
-          neighbors.nodes.forEach(function (node) {
-            unmute($('[data-node-id="' + node.id + '"]')[0]);
-          });
-
-          neighbors.edges.forEach(function (edge) {
-            unmute($('[data-edge-id="' + edge.id + '"]')[0]);
+          popoverSrv.show({
+            element: $element.find("#pop-container"),
+            templateUrl: 'app/partials/edgepicker.html',
+            scope: popoverScope
           });
         });
 
-        s.bind('clickStage', function () {
-          $('.sigma-node, .sigma-edge').each(function () {
-            unmute(this);
-          });
-        });
+        $scope.edgeStart = function (nodeId) {
+          $scope.edge.start = nodeId;
+          $scope.start = true;
+        };
 
+        $scope.edgeEnd = function (nodeId) {
+          $scope.edge.end = nodeId;
+          console.log($scope.edge.start);
+          console.log($scope.edge.end);
+          $scope.rcaGraph.graph.addEdge({
+            id: $scope.edge.start + "-" + $scope.edge.end,
+            source: $scope.edge.start,
+            target: $scope.edge.end,
+            type: 'arrow',
+            size: 7,
+            color: '#c6583e'
+          });
+
+          $scope.rcaGraph.refresh();
+
+          $scope.start = false;
+        };
+
+        $scope.clear = function () {
+          $scope.edge.start = null;
+          $scope.edge.end = null;
+          $scope.start = false;
+        };
+
+        $scope.rcaGraph.refresh();
       };
 
       $scope.nodeChange = function (metricName) {
+        var L = 4, N = 20;
+        var nodesSum = $scope.rcaGraph.graph.nodes().length;
+
+        try {
+          $scope.rcaGraph.graph.dropNode(metricName);
+        } catch (err) {
+          $scope.rcaGraph.graph.addNode({
+            id: metricName,
+            label: _.getMetricName(metricName),
+            x: L * Math.cos(Math.PI * 2 * (nodesSum + 1) / N - Math.PI / 2),
+            y: L * Math.sin(Math.PI * 2 * (nodesSum + 1) / N - Math.PI / 2),
+            size: 1,
+            color: '#666'
+          });
+        }
+
+        $scope.rcaGraph.refresh();
+
         console.log(metricName);
       };
 
