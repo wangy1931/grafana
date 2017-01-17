@@ -17,6 +17,7 @@ function (angular) {
 
     this.currentCritialThreshold = 0;
     this.currentWarningThreshold = 0;
+    this.alertId = null;
 
     this.load = function() {
       return backendSrv.alertD({
@@ -87,9 +88,10 @@ function (angular) {
       });
     };
 
-    this.resetCurrentThreshold = function (alertDetial) {
-      self.currentWarningThreshold = alertDetial.warn.threshold;
-      self.currentCritialThreshold = alertDetial.crit.threshold;
+    this.resetCurrentThreshold = function (status) {
+      self.currentWarningThreshold = status.definition.alertDetails.warn.threshold;
+      self.currentCritialThreshold = status.definition.alertDetails.crit.threshold;
+      self.alertId = status.definition.id;
     };
   });
 });
