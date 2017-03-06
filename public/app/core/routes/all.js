@@ -215,6 +215,14 @@ define([
         templateUrl: 'app/features/health/partials/systemHealth.html',
         controller: 'SystemHealthCtrl',
       })
+      .when('/kibana', {
+        templateUrl: 'app/partials/login.html',
+        controller : 'LoginCtrl',
+      })
+      .when('/kibana:rest*', {
+        templateUrl: 'app/partials/login.html',
+        controller : 'LoginCtrl',
+      })
       .otherwise({
         templateUrl: 'app/partials/error.html',
         controller: 'ErrorCtrl'
