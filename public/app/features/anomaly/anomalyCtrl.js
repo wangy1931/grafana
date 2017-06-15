@@ -9,7 +9,7 @@ define([
 
     module.controller('AnomalyCtrl', function ($scope, healthSrv, backendSrv, contextSrv, $controller, $rootScope) {
       $scope.init = function () {
-        $scope.system = backendSrv.getSystemById(contextSrv.user.systemId);
+        $scope.system = backendSrv.getSystemById(contextSrv.system);
         healthSrv.load().then(function (data) {
           $scope.applicationHealth = Math.floor(data.health);
           $scope.summary = data;

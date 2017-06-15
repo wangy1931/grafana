@@ -474,6 +474,7 @@ define([
         $scope.initDashboard({
           meta: {canStar: false, canShare: false, canEdit: false, canSave: false},
           dashboard: {
+            system: contextSrv.system,
             title: "整合分析",
             id: "123",
             rows: panelMetas,

@@ -125,7 +125,7 @@ define([
       ];
 
       $scope.init = function () {
-        if (contextSrv.user.systemId == 0 && contextSrv.user.orgId) {
+        if (contextSrv.system == 0 && contextSrv.user.orgId) {
           $location.url("/systems");
           contextSrv.sidmenu = false;
           return;
@@ -135,6 +135,7 @@ define([
         $scope.initDashboard({
           meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
           dashboard: {
+            system: contextSrv.system,
             title: "总览",
             id: "name",
             rows: $scope.initPanelRow(),
@@ -218,7 +219,7 @@ define([
         panel.grid.leftMin = 0;
         panel.grid.thresholdLine = false;
         panel.pointradius = 1;
-      };
+      }
 
       $scope.getAlertStatus = function () {
         alertMgrSrv.loadTriggeredAlerts().then(function onSuccess(response) {
@@ -254,7 +255,7 @@ define([
         $scope.serviceList = [];
         _.each(Object.keys(_.allServies()), function (key) {
           var queries = [{
-            "metric": contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + key + ".state",
+            "metric": contextSrv.user.orgId + "." + contextSrv.system + "." + key + ".state",
             "aggregator": "sum",
             "downsample": "10m-sum",
           }];
@@ -310,7 +311,7 @@ define([
         }).then(function () {
           _.each($scope.summaryList, function (metric) {
             var queries = [{
-              "metric": contextSrv.user.orgId + "." + contextSrv.user.systemId + ".collector.state",
+              "metric": contextSrv.user.orgId + "." + contextSrv.system + ".collector.state",
               "aggregator": "sum",
               "downsample": "1m-sum",
               "tags": { "host": metric.tag.host }
@@ -379,7 +380,7 @@ define([
 
         _.each(prediction, function (item, index) {
           var queries = [{
-            "metric": contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + item[1],
+            "metric": contextSrv.user.orgId + "." + contextSrv.system + "." + item[1],
             "downsample": "1d-avg",
             "aggregator": "avg",
           }];

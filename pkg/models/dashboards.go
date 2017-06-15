@@ -127,9 +127,8 @@ type DeleteDashboardCommand struct {
 //
 
 type GetDashboardQuery struct {
-	Slug  	 string
-	OrgId 	 int64
-	SystemId int64
+	Slug  string
+	OrgId int64
 
 	Result *Dashboard
 }

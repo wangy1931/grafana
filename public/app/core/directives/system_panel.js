@@ -14,9 +14,8 @@ define([
         restrict: 'E',
         link: function (scope, elem, attr) {
           scope.enter = function (systemId) {
-            contextSrv.user.systemId = systemId;
+            contextSrv.system = systemId;
             contextSrv.hostNum = scope.hostList.length;
-            backendSrv.post("/api/system/pick",{SystemId: systemId});
             if(contextSrv.hostNum) {
               scope.appEvent("toggle-sidemenu");
               $location.url("/");
@@ -37,7 +36,7 @@ define([
           datasourceSrv.get("opentsdb").then(function (datasource) {
             scope.datasource = datasource;
           }).then(function () {
-            contextSrv.user.systemId = system;
+            contextSrv.system = system;
             //------get service satatus
             var getService = function() {
               var serviesMap = _.allServies();

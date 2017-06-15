@@ -18,12 +18,12 @@ function (angular, _, dateMath) {
       this.url = datasource.url;
       this.name = datasource.name;
       this.supportMetrics = true;
-      this.prefix = contextSrv.user.orgId + "." + contextSrv.user.systemId + ".";
+      this.prefix = contextSrv.user.orgId + "." + contextSrv.system + ".";
     }
 
     // Called once per panel (graph)
     OpenTSDBDatasource.prototype.query = function(options) {
-      this.prefix = contextSrv.user.orgId + "." + contextSrv.user.systemId + ".";
+      this.prefix = contextSrv.user.orgId + "." + contextSrv.system + ".";
       var start = convertToTSDBTime(options.rangeRaw.from, false);
       var end = convertToTSDBTime(options.rangeRaw.to, true);
       var qs = [];
@@ -134,7 +134,7 @@ function (angular, _, dateMath) {
     };
 
     OpenTSDBDatasource.prototype.metricFindQuery = function(query) {
-      this.prefix = contextSrv.user.orgId + "." + contextSrv.user.systemId + ".";
+      this.prefix = contextSrv.user.orgId + "." + contextSrv.system + ".";
       if (!query) { return $q.when([]); }
 
       var self = this;

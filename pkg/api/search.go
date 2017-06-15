@@ -32,21 +32,30 @@ func Search(c *middleware.Context) {
 		return
 	}
 
-	dashQuery := m.GetCurrentSystemDashboards{}
-	dashQuery.SystemId = c.SystemId
-	HitList := make([]*search.Hit, 0)
-	err = bus.Dispatch(&dashQuery)
-	if err != nil {
-		c.JsonApiErr(500, "Get Dasboard Id failed", err)
-		return
-	}
+  dashQuery := m.GetCurrentDashboardDashboard{}
+  dashQuery.UserId = c.UserId
+  err = bus.Dispatch(&dashQuery)
+  if err != nil {
+    c.JsonApiErr(500, "Get Dasboard Id failed", err)
+    return
+  }
 
-	for _, hit := range searchQuery.Result {
-		for _, dash := range dashQuery.Result {
-			if (dash.DashboardId == hit.Id) {
-				HitList = append(HitList, hit);
-			}
-		}
-	}
-	c.JSON(200, HitList)
+  if(c.OrgRole!="Admin" || !c.IsGrafanaAdmin) {
+    for index, hit := range searchQuery.Result {
+      isDelete := true
+      for _, dash := range dashQuery.Result {
+        if (dash.Id == hit.Id) {
+          isDelete = false;
+        }
+      }
+      if (isDelete) {
+        last := index + 1
+        if (last > len(searchQuery.Result)) {
+          last = len(searchQuery.Result)
+        }
+        searchQuery.Result = append(searchQuery.Result[:index], searchQuery.Result[last:]...)
+      }
+    }
+  }
+	c.JSON(200, searchQuery.Result)
 }

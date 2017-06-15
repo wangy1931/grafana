@@ -24,7 +24,6 @@ func setIndexViewData(c *middleware.Context) error {
 		OrgRole:        c.OrgRole,
 		GravatarUrl:    dtos.GetGravatarUrl(c.Email),
 		IsGrafanaAdmin: c.IsGrafanaAdmin,
-		SystemId: 	c.SystemId,
 	}
 
 	if setting.DisableGravatar {

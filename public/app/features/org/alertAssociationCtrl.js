@@ -108,6 +108,7 @@ function (angular, _, noUiSlider) {
       $scope.initDashboard({
         meta: {canStar: false, canShare: false, canEdit: false, canSave: false},
         dashboard: {
+          system: contextSrv.system,
           title: "相关联指标",
           id: metrics,
           rows: [$scope.getRowPanelMeta(host, metrics)],
@@ -136,6 +137,7 @@ function (angular, _, noUiSlider) {
       $scope.initDashboard({
         meta: { canStar: false, canShare: false, canEdit: false , canSave: false},
         dashboard: {
+          system: contextSrv.system,
           title: "相关联指标",
           id: alertMetric,
           rows: [rowMeta],
@@ -213,7 +215,7 @@ function (angular, _, noUiSlider) {
     };
 
     $scope.addManualMetric = function (target) {
-      target.metric = contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + target.metric;
+      target.metric = contextSrv.user.orgId + "." + contextSrv.system + "." + target.metric;
       if (_.indexOf(_.keys($scope.correlatedMetrics),target.metric) > -1) {
         if($scope.correlatedMetrics[target.metric][0] == target.host)
           return;

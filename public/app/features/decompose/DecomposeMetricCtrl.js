@@ -12,6 +12,7 @@ define([
         $scope.initDashboard({
           meta: {canStar: false, canShare: false, canEdit: true, canSave: false},
           dashboard: {
+            system: contextSrv.system,
             title: "健康管理",
             id: window.decomposeTarget.metric,
             rows: [{

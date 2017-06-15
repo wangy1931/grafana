@@ -144,30 +144,29 @@ function (angular, _, coreModule, config) {
     };
 
     //update system cache when systems change
-    this.updateSystemsMap = function () {
-      var getTokens = this.get('/api/auth/keys').then(function (tokens) {
+    this.updateSystemsMap = function() {
+      this.get('/api/auth/keys').then(function (tokens) {
         self.tokens = tokens;
       });
 
-      var getSystems = this.get("/api/user/system").then(function (systems) {
+      return this.get("/api/user/system").then(function (systems) {
         contextSrv.systemsMap = systems;
       });
-      return $q.all([getTokens, getSystems])
     };
 
     this.updateSystemId = function(id) {
-      contextSrv.user.systemId = id;
+      contextSrv.system = id;
     };
 
     this.initCustomizedSources = function () {
-      return this.get('/api/customized_sources').then(function (result) {
+      this.get('/api/customized_sources').then(function (result) {
         self.alertDUrl = result.alert;
         contextSrv.elkUrl = result.elk;
       });
     };
 
     this.getToken = function () {
-      return _.chain(self.tokens).filter({'name': contextSrv.user.systemId.toString()}).first().pick('key').values().first().value();
+      return _.chain(self.tokens).filter({'name': contextSrv.system.toString()}).first().pick('key').values().first().value();
     };
 
     this.alertD = function (options) {

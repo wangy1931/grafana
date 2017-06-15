@@ -76,10 +76,11 @@ define([
 
     module.controller('SystemHealthCtrl', function ($scope, contextSrv, healthSrv, backendSrv) {
       $scope.init = function () {
-        $scope.system = backendSrv.getSystemById(contextSrv.user.systemId);
+        $scope.system = backendSrv.getSystemById(contextSrv.system);
         $scope.initDashboard({
           meta: {canStar: false, canShare: false, canEdit: false, canSave: false},
           dashboard: {
+            system: contextSrv.system,
             title: "健康状态",
             id: "name",
             rows: [panelMeta],

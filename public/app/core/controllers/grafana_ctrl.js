@@ -33,10 +33,9 @@ function (angular, _, $, coreModule, config, store) {
 
     $scope.initDashboard = function(dashboardData, viewScope) {
       $rootScope.mainScope = viewScope;
-      dashboardData.dashboard.system = contextSrv.user.systemId;
       healthSrv.transformMetricType(dashboardData.dashboard).then(function () {
         $controller('DashboardCtrl', {$scope: viewScope}).init(dashboardData);
-        contextSrv.user.systemId = dashboardData.dashboard.system || 0
+        contextSrv.system = dashboardData.dashboard.system || 0
       });
     };
 

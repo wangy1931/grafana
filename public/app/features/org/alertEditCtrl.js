@@ -93,7 +93,7 @@ function (angular, _) {
       if ($scope.isNew) {
         $scope.alertDef = {};
         $scope.alertDef.org = contextSrv.user.orgId;
-        $scope.alertDef.service = contextSrv.user.systemId;
+        $scope.alertDef.service = contextSrv.system;
         $scope.alertDef.alertDetails = {};
         $scope.alertDef.alertDetails.cluster = "cluster1";
         $scope.alertDef.alertDetails.hosts = null;
@@ -112,7 +112,7 @@ function (angular, _) {
         $scope.alertDef.alertDetails.hosts = $scope.alertDef.alertDetails.hosts ? $scope.alertDef.alertDetails.hosts.toString() : null;
       }
       $scope.orgName = contextSrv.user.orgName;
-      $scope.serviceName = backendSrv.getSystemById(contextSrv.user.systemId);
+      $scope.serviceName = backendSrv.getSystemById(contextSrv.system);
       $scope.timeRange = [
         {id:'2h',txt:'2小时之前'},
         {id:'12h',txt:'12小时之前'},
@@ -125,6 +125,7 @@ function (angular, _) {
       $scope.initDashboard({
         meta: {canStar: false, canShare: false, canEdit: false, canSave: false},
         dashboard: {
+          system: contextSrv.system,
           title: "报警预览",
           id: "name",
           rows: [panelMeta],
@@ -182,7 +183,7 @@ function (angular, _) {
         $scope.alertDef.modificationTime = milliseconds;
       }
       $scope.alertDef.org = contextSrv.user.orgId;
-      $scope.alertDef.service = contextSrv.user.systemId;
+      $scope.alertDef.service = contextSrv.system;
       $scope.getTags($scope.target.tags, $scope.alertDef.alertDetails);
       $scope.alertDef.alertDetails.hosts = $scope.alertDef.alertDetails.hosts ? $scope.alertDef.alertDetails.hosts.split(',') : null;
 
