@@ -57,7 +57,7 @@ define([
               "span": 12,
               "styles": [
                 {
-                  "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                  "dateFormat": "YYYY-MM-DD HH:mm:ss.sss",
                   "pattern": "@timestamp",
                   "type": "date"
                 },
@@ -136,7 +136,7 @@ define([
               "span": 12,
               "styles": [
                 {
-                  "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                  "dateFormat": "YYYY-MM-DD HH:mm:ss.sss",
                   "pattern": "@timestamp",
                   "type": "date"
                 },
@@ -220,7 +220,7 @@ define([
               "span": 12,
               "styles": [
                 {
-                  "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                  "dateFormat": "YYYY-MM-DD HH:mm:ss.sss",
                   "pattern": "Time",
                   "type": "date"
                 }
@@ -356,7 +356,6 @@ define([
                 "short",
                 "short"
               ],
-              "interval": "30m",
               "links": [],
               "helpInfo": {
                 "info": false,
@@ -423,7 +422,8 @@ define([
             title: "整合分析",
             id: "123",
             rows: panelMetas,
-            time: {from: "now-6h", to: "now"}
+            time: {from: "now-6h", to: "now"},
+            refresh: "1m",
           }
         }, $scope);
       };
