@@ -95,7 +95,7 @@ export class TimePickerCtrl {
     this.isOpen = true;
     this.timeOptions = rangeUtil.getRelativeTimesList(this.panel, this.rangeString);
     this.refresh = {
-      value: this.dashboard.refresh,
+      value: this.dashboard.refresh || '1m',
       options: _.map(this.panel.refresh_intervals, (interval: any) => {
         return {text: interval, value: interval};
       })
