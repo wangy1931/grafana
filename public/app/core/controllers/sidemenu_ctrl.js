@@ -8,7 +8,7 @@ define([
 function (angular, _, $, coreModule, config) {
   'use strict';
 
-  coreModule.controller('SideMenuCtrl', function($rootScope, $scope, $location, contextSrv, backendSrv) {
+  coreModule.controller('SideMenuCtrl', function($rootScope, $scope, $location, contextSrv, backendSrv, $timeout) {
 
     $scope.getUrl = function(url) {
       return config.appSubUrl + url;
@@ -394,7 +394,26 @@ function (angular, _, $, coreModule, config) {
       $scope.hideSubmenu();
       $scope.updateMenu();
       $scope.$on('$routeChangeSuccess', $scope.hideSubmenu);
+      $timeout(function() {
+        onresize();
+      });
     };
+
+    var onresize = function () {
+      if($(window).height() > 800) {
+        $('.sidemenu-item').tooltip('destroy');
+      } else {
+        _.each($('.sidemenu-item'), function(element) {
+          var txt = $(element).find('.sidemenu-item-text').text();
+          $(element).tooltip({
+            title: txt,
+            placement: 'right',
+            container: 'body'
+          });
+        });
+      }
+    };
+    window.onresize = onresize;
   });
 
 });
