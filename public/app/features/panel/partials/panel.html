@@ -1,7 +1,7 @@
 <div class="panel-container" ng-class="{'panel-transparent': panel.transparent}" ng-mouseenter="showRightMenu();" ng-mouseleave="showRightMenu();">
 	<div class="panel-header">
 		<span class="alert-error panel-error small pointer" config-modal="app/partials/inspector.html" ng-if="panelMeta.error">
-			<span data-placement="top" bs-tooltip="panelMeta.error">
+			<span data-container="body" data-placement="top" bs-tooltip="panelMeta.error">
 				<i class="fa fa-exclamation"></i><span class="panel-error-arrow"></span>
 			</span>
 		</span>

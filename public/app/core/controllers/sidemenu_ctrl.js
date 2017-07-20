@@ -4,11 +4,13 @@ define([
   'jquery',
   '../core_module',
   'app/core/config',
+  'angular-strap',
+  'angular-strap-tpl',
 ],
 function (angular, _, $, coreModule, config) {
   'use strict';
 
-  coreModule.controller('SideMenuCtrl', function($rootScope, $scope, $location, contextSrv, backendSrv) {
+  coreModule.controller('SideMenuCtrl', function($rootScope, $scope, $location, contextSrv, backendSrv, $timeout) {
 
     $scope.getUrl = function(url) {
       return config.appSubUrl + url;
@@ -394,7 +396,20 @@ function (angular, _, $, coreModule, config) {
       $scope.hideSubmenu();
       $scope.updateMenu();
       $scope.$on('$routeChangeSuccess', $scope.hideSubmenu);
+      onresize();
     };
+
+    var onresize = function (event) {
+      if($(window).height() > 800) {
+        $scope.showTooltip = false;
+      } else {
+        $scope.showTooltip = true;
+      };
+      if(event) {
+        $scope.$apply();
+      }
+    };
+    window.onresize = onresize;
   });
 
 });

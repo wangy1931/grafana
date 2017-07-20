@@ -13,6 +13,7 @@
 					class="input-mini tight-form-input"
 					ng-model="panel.cacheTimeout"
 					bs-tooltip="'Graphite parameter to override memcache default timeout (unit is seconds)'"
+					data-container="body"
 					data-placement="right"
 					spellcheck='false'
 					placeholder="60"></input>
@@ -25,6 +26,7 @@
 					class="input-mini tight-form-input"
 					ng-model="panel.maxDataPoints"
 					bs-tooltip="'Override max data points, automatically set to graph width in pixels.'"
+					data-container="body"
 					data-placement="right"
 					ng-model-onblur ng-change="get_data()"
 					spellcheck='false'
@@ -39,27 +41,27 @@
 				<i class="fa fa-info-circle"></i>
 			</li>
 			<li class="tight-form-item">
-				<a ng-click="toggleEditorHelp(1);" bs-tooltip="'click to show helpful info'" data-placement="bottom">
+				<a ng-click="toggleEditorHelp(1);" bs-tooltip="'click to show helpful info'" data-container="body" data-placement="bottom">
 					shorter legend names
 				</a>
 			</li>
 			<li class="tight-form-item">
-				<a ng-click="toggleEditorHelp(2);" bs-tooltip="'click to show helpful info'" data-placement="bottom">
+				<a ng-click="toggleEditorHelp(2);" bs-tooltip="'click to show helpful info'" data-container="body" data-placement="bottom">
 					series as parameters
 				</a>
 			</li>
 			<li class="tight-form-item">
-				<a ng-click="toggleEditorHelp(3)" bs-tooltip="'click to show helpful info'" data-placement="bottom">
+				<a ng-click="toggleEditorHelp(3)" bs-tooltip="'click to show helpful info'" data-container="body" data-placement="bottom">
 					stacking
 				</a>
 			</li>
 			<li class="tight-form-item">
-				<a ng-click="toggleEditorHelp(4)" bs-tooltip="'click to show helpful info'" data-placement="bottom">
+				<a ng-click="toggleEditorHelp(4)" bs-tooltip="'click to show helpful info'" data-container="body" data-placement="bottom">
 					templating
 				</a>
 			</li>
 			<li class="tight-form-item">
-				<a ng-click="toggleEditorHelp(5)" bs-tooltip="'click to show helpful info'" data-placement="bottom">
+				<a ng-click="toggleEditorHelp(5)" bs-tooltip="'click to show helpful info'" data-container="body" data-placement="bottom">
 					max data points
 				</a>
 			</li>

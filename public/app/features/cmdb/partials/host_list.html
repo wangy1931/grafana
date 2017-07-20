@@ -35,7 +35,7 @@
                 <td style="width: 200px;"><p class="text-overflow" style="width: 200px;">{{host.osName}}</p></td>
                 <td style="width: 240px;">{{host.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                 <td>
-                    <a href=""><span class="cmdb-icon-text" bs-tooltip="'敬请期待'" data-placement="top">编辑</span></a>
+                    <a href=""><span class="cmdb-icon-text" bs-tooltip="'敬请期待'" data-container="body" data-placement="top">编辑</span></a>
                     <a href="/cmdb/hostlist/hostdetail?id={{host.id}}">
                         <span class="cmdb-icon-text">详情</span>
                     </a>

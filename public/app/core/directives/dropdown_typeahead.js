@@ -14,7 +14,7 @@ function (_, $, coreModule) {
 
     var buttonTemplate = '<a  class="tight-form-item tight-form-func dropdown-toggle"' +
       ' tabindex="1" gf-dropdown="menuItems" data-toggle="dropdown"' +
-      ' data-placement="top"><i class="fa fa-plus"></i></a>';
+      ' data-container="body" data-placement="top"><i class="fa fa-plus"></i></a>';
 
     return {
       scope: {

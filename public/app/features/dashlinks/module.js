@@ -45,7 +45,7 @@ function (angular, _) {
       link: function(scope, elem) {
         var link = scope.link;
         var template = '<div class="submenu-item dropdown">' +
-          '<a class="pointer dash-nav-link" data-placement="bottom"' +
+          '<a class="pointer dash-nav-link" data-container="body" data-placement="bottom"' +
           (link.asDropdown ? ' ng-click="fillDropdown(link)" data-toggle="dropdown"'  : "") + '>' +
           '<i></i> <span></span></a>';
 
