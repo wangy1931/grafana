@@ -4,6 +4,8 @@ define([
   'jquery',
   '../core_module',
   'app/core/config',
+  'angular-strap',
+  'angular-strap-tpl',
 ],
 function (angular, _, $, coreModule, config) {
   'use strict';
@@ -394,23 +396,17 @@ function (angular, _, $, coreModule, config) {
       $scope.hideSubmenu();
       $scope.updateMenu();
       $scope.$on('$routeChangeSuccess', $scope.hideSubmenu);
-      $timeout(function() {
-        onresize();
-      });
+      onresize();
     };
 
-    var onresize = function () {
+    var onresize = function (event) {
       if($(window).height() > 800) {
-        $('.sidemenu-item').tooltip('destroy');
+        $scope.showTooltip = false;
       } else {
-        _.each($('.sidemenu-item'), function(element) {
-          var txt = $(element).find('.sidemenu-item-text').text();
-          $(element).tooltip({
-            title: txt,
-            placement: 'right',
-            container: 'body'
-          });
-        });
+        $scope.showTooltip = true;
+      };
+      if(event) {
+        $scope.$apply();
       }
     };
     window.onresize = onresize;

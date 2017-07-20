@@ -20,11 +20,11 @@
 		-->
 
 		<li ng-repeat="item in mainLinks">
-			<a href="{{item.href}}" class="sidemenu-item" ng-if="item.href">
+			<a href="{{item.href}}" class="sidemenu-item" ng-if="item.href" bs-tooltip="'{{item.text}}'" data-container="body" data-placement="right" bs-enabled="showTooltip">
 				<span class="icon-circle sidemenu-icon"><i class="{{item.icon}}"></i></span>
 				<span class="sidemenu-item-text">{{item.text}}</span>
 	   	</a>
-			<a class="sidemenu-item" ng-if="!item.href" ng-click="updateSubmenu(item);item.click(item)">
+			<a class="sidemenu-item" ng-if="!item.href" ng-click="updateSubmenu(item);item.click(item)" bs-tooltip="'{{item.text}}'" data-placement="right" data-container="body" bs-enabled="showTooltip">
 				<span class="icon-circle sidemenu-icon"><i class="{{item.icon}}"></i></span>
 				<span class="sidemenu-item-text">{{item.text}}</span>
 	   	</a>
@@ -34,26 +34,26 @@
 	<ul class="sidemenu sidemenu-small" ng-if="!systemSection">
 
 		<li ng-if="contextSrv.user.isSignedIn">
-			<a href="profile" class="sidemenu-item">
+			<a href="profile" class="sidemenu-item" bs-tooltip="'{{contextSrv.user.name}}'" data-container="body" data-placement="right" bs-enabled="showTooltip">
 				<span class="icon-circle sidemenu-icon"><i class="fa fa-fw fa-user"></i></span>
 				<span class="sidemenu-item-text">{{contextSrv.user.name | limitTo:5}}</span>
 	   	</a>
 		</li>
 
 		<li ng-repeat="sidemenuItem in settingMenu">
-			<a href="" class="sidemenu-item" ng-click="sidemenuItem.click(sidemenuItem);">
+			<a href="" class="sidemenu-item" ng-click="sidemenuItem.click(sidemenuItem);" bs-tooltip="'{{sidemenuItem.text}}'" data-container="body" data-placement="right" bs-enabled="showTooltip">
 				<span class="icon-circle sidemenu-icon"><i class="{{sidemenuItem.icon}}"></i></span>
 				<span class="sidemenu-item-text">{{sidemenuItem.text | limitTo:10}}</span>
 	   	</a>
 		</li>
 		<li>
-			<a href="logout" class="sidemenu-item" target="_self">
+			<a href="logout" class="sidemenu-item" target="_self" bs-tooltip="'登出'" data-container="body" data-placement="right" bs-enabled="showTooltip">
 				<span class="icon-circle sidemenu-icon"><i class="fa fa-fw fa-sign-out"></i></span>
 				<span class="sidemenu-item-text">登出</span>
 	   	</a>
 		</li>
 		<li ng-if="!contextSrv.isSignedIn">
-			<a href="login" class="sidemenu-item" target="_self">
+			<a href="login" class="sidemenu-item" target="_self" bs-tooltip="'登录'" data-container="body" data-placement="right" bs-enabled="showTooltip">
 				<span class="icon-circle sidemenu-icon"><i class="fa fa-fw fa-sign-in"></i></span>
 				<span class="sidemenu-item-text">登录</span>
 	   	</a>

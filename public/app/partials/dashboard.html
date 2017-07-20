@@ -16,10 +16,10 @@
 		<div class="grafana-row" ng-controller="RowCtrl" ng-repeat="(row_name, row) in dashboard.rows" row-height>
 			<div class="row-control">
 				<div class="row-control-inner">
-					<div class="row-close" ng-show="row.collapse" data-placement="bottom" >
+					<div class="row-close" ng-show="row.collapse" data-container="body" data-placement="bottom" >
 						<div class="row-close-buttons">
 							<span class="row-button bgPrimary" ng-click="toggleRow(row)">
-								<i bs-tooltip="'Expand row'" data-placement="right" class="fa fa-caret-left pointer" ></i>
+								<i bs-tooltip="'Expand row'" data-container="body" data-placement="right" class="fa fa-caret-left pointer" ></i>
 							</span>
 						</div>
 						<div class="row-text pointer" ng-click="toggleRow(row)" ng-bind="row.title | interpolateTemplateVars:this"></div>
@@ -80,7 +80,7 @@
 				<div class="panels-wrapper" ng-if="!row.collapse">
 					<div class="row-close-buttons" ng-if="row.showTitle">
 						<span class="row-button bgPrimary" ng-click="toggleRow(row)">
-							<i bs-tooltip="'Expand row'" data-placement="right" class="fa fa-caret-down pointer" ></i>
+							<i bs-tooltip="'Expand row'" data-container="body" data-placement="right" class="fa fa-caret-down pointer" ></i>
 						</span>
 					</div>
 					<div class="row-text pointer" ng-click="toggleRow(row)" ng-if="row.showTitle" ng-bind="row.title | interpolateTemplateVars:this">

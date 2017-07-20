@@ -38,13 +38,13 @@ function (angular, $, _) {
           if (item.show) {
             template += ' ng-if="' + item.show + '"';
           }
-          template += ' ng-click="' + item.click + '" bs-tooltip="' + "'" + item.text + "'" + '">';
+          template += ' ng-click="' + item.click + '" data-container="body" bs-tooltip="' + "'" + item.text + "'" + '">';
           template += '<i class="fa ' + item.icon + '"></i>';
           template += '</span>';
         });
 
         template += '<div class="dropdown pull-right panel-right-menu-item">';
-        template += '<a class="pointer" ng-click="hideTooltip($event)" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-bars"></i></a>';
+        template += '<a class="pointer" ng-click="hideTooltip($event)" data-container="body" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-bars"></i></a>';
         template += '<ul class="dropdown-menu">';
         _.each($scope.panelMeta.extendedMenu, function (item) {
           if (item.role === 'Editor' && !$scope.dashboardMeta.canEdit) {

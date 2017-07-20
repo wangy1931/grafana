@@ -24,13 +24,13 @@
 					</a>
 				</li>
 				<li ng-show="dashboardMeta.canShare">
-					<a class="pointer" ng-click="shareDashboard()" bs-tooltip="'分享一下'" data-placement="bottom"><i class="fa fa-share-square-o"></i></a>
+					<a class="pointer" ng-click="shareDashboard()" bs-tooltip="'分享一下'" data-container="body" data-placement="bottom"><i class="fa fa-share-square-o"></i></a>
 				</li>
 				<li ng-show="dashboardMeta.canSave">
-					<a ng-click="saveDashboard()" bs-tooltip="'保存仪表盘'" data-placement="bottom"><i class="fa fa-save"></i></a>
+					<a ng-click="saveDashboard()" bs-tooltip="'保存仪表盘'" data-container="body" data-placement="bottom"><i class="fa fa-save"></i></a>
 				</li>
 				<li class="dropdown">
-					<a class="pointer" ng-click="hideTooltip($event)" bs-tooltip="'仪表盘管理'" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-cog"></i></a>
+					<a class="pointer" ng-click="hideTooltip($event)" bs-tooltip="'仪表盘管理'" data-container="body" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-cog"></i></a>
 					<ul class="dropdown-menu">
 						<li ng-if="dashboardMeta.canEdit"><a class="pointer" ng-click="openEditView('settings');">设置</a></li>
 						<li ng-if="dashboardMeta.canEdit"><a class="pointer" ng-click="openEditView('annotations');">标注</a></li>

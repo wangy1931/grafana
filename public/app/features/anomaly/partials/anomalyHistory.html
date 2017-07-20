@@ -52,10 +52,10 @@
 <div class="grafana-row" ng-controller="RowCtrl" ng-repeat="(row_name, row) in dashboard.rows" row-height style="position: fixed; left:100px; right:0px; bottom: 0;background: #fff;">
     <div class="row-control">
       <div class="row-control-inner">
-        <div class="row-close" ng-show="row.collapse" data-placement="bottom">
+        <div class="row-close" ng-show="row.collapse" data-container="body" data-placement="bottom">
           <div class="row-close-buttons">
             <span class="row-button bgPrimary" ng-click="toggleRow(row)">
-                <i bs-tooltip="'Expand row'" data-placement="right"
+                <i bs-tooltip="'Expand row'" data-container="body" data-placement="right"
                 class="fa fa-caret-left pointer"></i>
             </span>
           </div>
