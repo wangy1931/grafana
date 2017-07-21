@@ -42,6 +42,8 @@ require.config({
     'fullcalendar':           'vendor/fullcalendar/dist/fullcalendar.min',
     'ui.calendar':            'vendor/angular-ui-calendar/src/calendar',
     'zh-cn':                  'vendor/fullcalendar/dist/zh-cn',
+    'sigma':                  'vendor/angular-other/sigma.min',
+    'sigma-edge':             'vendor/angular-other/sigma.renderers.customEdgeShapes.min',
   },
 
   shim: {
@@ -71,6 +73,10 @@ require.config({
       exports: 'jQuery'
     },
 
+    sigma: {
+      exports: 'sigma'
+    },
+
     // simple dependency declaration
     //
     'jquery.flot':          ['jquery'],
@@ -97,5 +103,6 @@ require.config({
     'bootstrap-tagsinput':          ['jquery'],
     'ui.calendar':          ['jquery','fullcalendar', 'angular'],
     'zh-cn':                ['jquery','moment', 'fullcalendar'],
+    'sigma-edge':           ['sigma'],
   },
 });

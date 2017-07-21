@@ -1,0 +1,18 @@
+<div>
+
+    <h3>
+        创建关联关系
+    </h3>
+
+    <ul ng-repeat="(metric, alias) in services">
+        <li ng-click="nodeChange(metric)">{{alias}}</li>
+    </ul>
+
+    <div id="pop-container"></div>
+    <div id="graph-container" style="height: 200px"></div>
+
+    <div>
+        <button type="button" class="btn btn-inverse" ng-click="dismiss()">取消</button>
+        <button type="submit" class="btn btn-success" ng-click="save();">保存</button>
+    </div>
+</div>

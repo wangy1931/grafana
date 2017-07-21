@@ -25,4 +25,5 @@ define([
   './setup/serviceagentCtrl',
   './setup/servicedetailCtrl',
   './setup/filebeatCtrl',
+  './service_dependency/buildDependCtrl'
 ], function () {});
