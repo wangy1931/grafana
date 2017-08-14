@@ -134,6 +134,11 @@ function (angular, _, $, kbn, dateMath, rangeUtil) {
         if (results.regularities) {
           scope.panel.regularResult = results;
         }
+
+        if (results.timeRange) {
+          scope.panel.timeRange = results.timeRange;
+        }
+
         return results;
       });
     };

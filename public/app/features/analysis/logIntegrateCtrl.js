@@ -338,6 +338,10 @@ define([
                   "value": "count"
                 },
                 {
+                  "text": "change",
+                  "value": "change"
+                },
+                {
                   "text": "message",
                   "value": "message"
                 }

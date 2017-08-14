@@ -219,6 +219,7 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
           return res;
         });
       } else if (options.scopedVars && options.scopedVars.logCompare) {
+        var relativeTime = parseInt(options.targets[1].timeShift);
         return backendSrv.logCluster({
           method: "POST",
           url: "/log/compare",
@@ -230,6 +231,16 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
           res.data = [
             {target: 'docs', type: 'docs', datapoints: res.data}
           ];
+          res.timeRange = {
+            now: {
+              start: moment.utc(timeFrom.valueOf()).subtract(relativeTime, 'days').format("YYYY-MM-DD"),
+              end  : moment.utc(timeTo.valueOf()).subtract(relativeTime, 'days').format("YYYY-MM-DD")
+            },
+            relative: {
+              start: moment.utc(timeFrom.valueOf()).format("YYYY-MM-DD"),
+              end  : moment.utc(timeTo.valueOf()).format("YYYY-MM-DD")
+            }
+          };
           return res;
         });
       } else {
