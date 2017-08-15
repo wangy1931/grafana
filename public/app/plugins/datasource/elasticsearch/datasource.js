@@ -228,8 +228,10 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
           _.each(res.data, function (target) {
             compare(target);
           });
+
+          var datapoints = options.scopedVars.logFilter ? _.filter(res.data, {'change': options.scopedVars.logFilter}) : res.data;
           res.data = [
-            {target: 'docs', type: 'docs', datapoints: res.data}
+            {target: 'docs', type: 'docs', datapoints: datapoints}
           ];
           res.timeRange = {
             now: {

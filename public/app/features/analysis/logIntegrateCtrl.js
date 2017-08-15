@@ -452,6 +452,13 @@ define([
         $rootScope.$broadcast('refresh');
       };
 
+      $scope.currentFilter = "无";
+      $scope.logFilter = function (rule) {
+        $scope.dashboard.rows[2].panels[2].scopedVars.logFilter = rule;
+        $rootScope.$broadcast('refresh');
+        $scope.currentFilter = rule + "日志";
+      };
+
       $scope.init = function (param) {
         param.targets = param.targets.filter(function (metrics) {
           return _.excludeMetricSuffix(metrics.metric);
