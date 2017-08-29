@@ -22,6 +22,7 @@ function (coreModule, kbn) {
                   return;
                 }
                 var title = kbn.slugifyForUrl(window.grafanaImportDashboard.title);
+                title += new Date().getTime();
                 window.grafanaImportDashboard.id = null;
                 $location.path('/dashboard-import/' + title);
               });
