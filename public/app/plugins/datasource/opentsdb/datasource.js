@@ -72,68 +72,48 @@ function (angular, _, dateMath) {
     };
 
     this.annotationQuery = function(options) {
+      var annotation = options.annotation;
       var start = convertToTSDBTime(options.rangeRaw.from, false);
       var end = convertToTSDBTime(options.rangeRaw.to, true);
       var qs = [];
       var eventList = [];
 
-      qs.push({ aggregator:"sum", metric:options.annotation.target });
+      var metric = contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + options.annotation.target;
+      var tags = {};
+      if(annotation.tags) {
+        tags = JSON.parse(annotation.tags);
+      }
+      qs.push({ aggregator:"sum", metric: metric, downsample: '10m-sum', tags: tags});
 
       var queries = _.compact(qs);
 
       return this.performTimeSeriesQuery(queries, start, end).then(function(results) {
-        if(results.data[0]) {
-          var annotationObject = results.data[0].annotations;
-          if(options.annotation.isGlobal){
-            annotationObject = results.data[0].globalAnnotations;
-          }
-          if(annotationObject) {
-            _.each(annotationObject, function(annotation) {
+        if(results.data) {
+          _.each(results.data, function(result) {
+            var tagsList = '';
+            if(result.tags) {
+              _.each(result.tags, function(tag) {
+                tagsList += tag + ','
+              });
+            }
+            if(annotation.customTags) {
+              tagsList += annotation.customTags;
+            }
+            tagsList = _.trimEnd(tagsList, ',');
+            _.each(result.dps, function(key) {
               var event = {
-                title: annotation.description,
-                time: Math.floor(annotation.startTime) * 1000,
-                text: annotation.notes,
-                annotation: options.annotation
+                title: annotation.name,
+                time: key * 1000,
+                text: '',
+                tags: tagsList,
+                annotation: annotation
               };
-
               eventList.push(event);
             });
-          }
+          });
         }
         return eventList;
-
       }.bind(this));
-    };
-    this.annotationQuery2 = function (options) {
-      var annotation = options.annotation;
-      var start = convertToTSDBTime(options.rangeRaw.from, false);
-      var end = convertToTSDBTime(options.rangeRaw.to, true);
-      var queries = [{
-        "metric": contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + "service.startAtSec",
-        "aggregator": "sum",
-        "downsample": "1m-avg",
-        "tags": {
-          "host": "*",
-          "service": "*"
-        }
-      }];
-
-      return this.performTimeSeriesQuery(queries, start, end).then(function (response) {
-        var list = [];
-        _.each(response.data, function (result) {
-          _.each(result.dps, function (key) {
-            var event = {
-              annotation: annotation,
-              time: key * 1000,
-              title: "服务启动时间",
-              tags: result.tags.host + "," + result.tags.service,
-              text: ""
-            };
-            list.push(event);
-          });
-        });
-        return list;
-      });
     };
 
     this.performTimeSeriesQuery = function(queries, start, end) {
