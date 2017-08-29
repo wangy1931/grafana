@@ -67,6 +67,7 @@ func Register(r *macaron.Macaron) {
 	r.Get("/login/:name", quota("session"), OAuthLogin)
 	r.Get("/login", LoginView)
 	r.Get("/invite/:code", Index)
+	r.Get("/api/stats", AdminGetStats)
 
 	// authed views
 	r.Get("/profile/", reqSignedIn, Index)
@@ -319,7 +320,6 @@ func Register(r *macaron.Macaron) {
 		r.Delete("/users/:id", AdminDeleteUser)
 		r.Get("/users/:id/quotas", wrap(GetUserQuotas))
 		r.Put("/users/:id/quotas/:target", bind(m.UpdateUserQuotaCmd{}), wrap(UpdateUserQuota))
-		r.Get("/stats", AdminGetStats)
 		r.Get("/customer", wrap(GetAllCustomerUsers))
 	}, reqGrafanaAdmin)
 

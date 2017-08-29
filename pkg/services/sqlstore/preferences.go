@@ -26,7 +26,7 @@ func GetPreferencesWithDefaults(query *m.GetPreferencesWithDefaultsQuery) error 
 	}
 
 	res := &m.Preferences{
-		Theme:           "dark",
+		Theme:           "light",
 		Timezone:        "browser",
 		HomeDashboardId: 0,
 	}
