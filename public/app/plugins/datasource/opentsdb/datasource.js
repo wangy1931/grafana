@@ -78,7 +78,7 @@ function (angular, _, dateMath) {
       var qs = [];
       var eventList = [];
 
-      var metric = contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + options.annotation.target;
+      var metric = this.prefix + options.annotation.target;
       var tags = {};
       if(annotation.tags) {
         tags = JSON.parse(annotation.tags);
@@ -100,10 +100,10 @@ function (angular, _, dateMath) {
               tagsList += annotation.customTags;
             }
             tagsList = _.trimEnd(tagsList, ',');
-            _.each(result.dps, function(key) {
+            _.each(result.dps, function(second) {
               var event = {
                 title: annotation.name,
-                time: key * 1000,
+                time: second * 1000,
                 text: '',
                 tags: tagsList,
                 annotation: annotation
