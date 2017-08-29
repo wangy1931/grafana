@@ -469,7 +469,7 @@
       "deploy": [
         "安装依赖:",
         "<p class='code-block'> 1. 进入/tmp目录</p>",
-        "<p class='code-block'> $ cd /tmp</p>",
+        "<p class='code-block indent2'> $ cd /tmp</p>",
         "<p class='code-block'> 2. 下载对应的依赖包</p>",
         "<p class='code-block indent2'> $ wget https://download.cloudwiz.cn/package/pymongo-3.4.0.tar.gz</p>",
         "<p class='code-block'> 3. 将依赖包解压并进入安装包</p>",
