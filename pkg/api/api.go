@@ -43,7 +43,6 @@ func Register(r *macaron.Macaron) {
 	r.Get("/association", reqSignedIn, Index)
 	r.Get("/knowledgebase", reqSignedIn, Index)
 	r.Get("/install", reqSignedIn, Index)
-	r.Get("/health", reqSignedIn, Index)
 	r.Get("/customer", reqSignedIn, Index)
 	r.Get("/report", reqSignedIn, Index)
 	r.Get("/cluster", reqSignedIn, Index)

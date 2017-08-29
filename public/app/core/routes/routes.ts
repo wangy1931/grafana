@@ -19,7 +19,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   var loadSummaryBundle = new BundleLoader('app/features/summary/all');
   var loadAnomalyBundle = new BundleLoader('app/features/anomaly/all');
   var loadServiceBundle = new BundleLoader('app/features/service/all');
-  var loadHealthBundle = new BundleLoader('app/features/health/all');
   var loadAnalysisBundle = new BundleLoader('app/features/analysis/all');
   var loadLogsBundle = new BundleLoader('app/features/logs/all');
   var loadReportBundle = new BundleLoader('app/features/report/reportCtrl');
@@ -327,11 +326,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     templateUrl: 'public/app/partials/install.html',
     controller : 'AnalysisCtrl',
     resolve: loadAnalysisBundle,
-  })
-  .when('/health', {
-    templateUrl: 'public/app/features/health/partials/systemHealth.html',
-    controller: 'SystemHealthCtrl',
-    resolve: loadHealthBundle,
   })
   .when('/customer', {
     templateUrl: 'public/app/features/summary/partials/customer.html',

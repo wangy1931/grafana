@@ -32,32 +32,6 @@ define([
       $location.url('/cmdb/hostlist/hostdetail?id='+host.id);
     };
 
-    $scope.importList = function() {
-      $controller('CMDBSetupCtrl',{$scope: $scope});
-      var newScope = $scope.$new();
-      newScope.importHosts = $scope.importHosts;
-      newScope.getHost = $scope.getHost;
-      newScope.fileChanged = $scope.fileChanged;
-      newScope.type = 'host';
-      $scope.appEvent('show-modal', {
-        src: 'public/app/features/cmdb/partials/import_host.html',
-        modalClass: 'cmdb-import-host',
-        scope: newScope,
-      });
-    };
-
-    $scope.refreshList = function() {
-      $scope.refreshTxt = '<i class="fa fa-spinner"></i>';
-      backendSrv.alertD({url:'/cmdb/scan', method: 'post'}).then(function(response) {
-        if(response.status === 200) {
-          $scope.appEvent('alert-success', ['扫描成功','请刷新查看列表']);
-          $scope.refreshTxt = '扫描';
-        }
-      }, function(err) {
-        $scope.refreshTxt = '扫描';
-      });
-    };
-
     $scope.orderBy = function(order) {
       $scope.order = "'"+ order +"'";
       $scope.desc = !$scope.desc;

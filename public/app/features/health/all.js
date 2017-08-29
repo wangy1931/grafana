@@ -1,4 +1,0 @@
-define([
-  "./systemHealthCtrl",
-  "./excludeMetricsModal"
-], function () {});
