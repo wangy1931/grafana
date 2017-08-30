@@ -48,12 +48,12 @@ module.exports = function(grunt) {
 
     console.log('Starting systemjs-builder');
 
+    // DataSource 加载只需要加载 opentsdb 和elk
     var modules = [
       'app/app',
       'app/features/all',
       'app/plugins/panel/**/module',
-      'app/plugins/datasource/graphite/module',
-      'app/plugins/datasource/influxdb/module',
+      'app/plugins/datasource/opentsdb/module',
       'app/plugins/datasource/elasticsearch/module',
     ];
 
