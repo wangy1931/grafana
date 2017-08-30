@@ -144,11 +144,6 @@ define(function() {
           "span": 12,
           "styles": [
             {
-              "dateFormat": "YYYY-MM-DD HH:mm:ss,sss",
-              "pattern": "@timestamp",
-              "type": "date"
-            },
-            {
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -160,6 +155,10 @@ define(function() {
               "thresholds": [],
               "type": "number",
               "unit": "short"
+            },
+            {
+              "type": "html",
+              "pattern": "/.*/"
             }
           ],
           "targets": [
@@ -434,11 +433,6 @@ define(function() {
     "span": 12,
     "styles": [
       {
-        "dateFormat": "YYYY-MM-DD HH:mm:ss,sss",
-        "pattern": "@timestamp",
-        "type": "date"
-      },
-      {
         "colorMode": null,
         "colors": [
           "rgba(245, 54, 54, 0.9)",
@@ -450,6 +444,10 @@ define(function() {
         "thresholds": [],
         "type": "number",
         "unit": "short"
+      },
+      {
+        "type": "html",
+        "pattern": "/.*/"
       }
     ],
     "targets": [

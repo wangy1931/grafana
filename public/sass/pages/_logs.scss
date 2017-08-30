@@ -31,8 +31,13 @@
   border-top: none;
   padding: 20px;
 
-  .panel {
+  .panel:first-child {
     margin: 20px 0;
+  }
+
+  .panel {
+    display: block;
+    float: none;
   }
 
   .log-compare {
@@ -204,6 +209,9 @@ table.diff {
 // hard code
 .tab-2 tbody tr td:nth-child(2) {
   cursor: pointer;
+  i {
+    padding-left: 14px;
+  }
 }
 .tab-2 thead tr th:nth-child(3) {
   display: none;
