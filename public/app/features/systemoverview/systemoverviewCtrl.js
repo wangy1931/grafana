@@ -579,7 +579,8 @@ define([
         $scope.panel = $scope._dashboard.rows[index].panels[0];
 
         if (index === 7) {
-          $scope.panel = setPanelMetaHost(_.cloneDeep($scope.panel), metric, host);
+          setPanelMetaHost($scope.panel, metric, host);
+          healthSrv.transformPanelMetricType($scope.panel);
         }
 
         var healthModal = $modal({

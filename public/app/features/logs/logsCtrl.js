@@ -15,8 +15,8 @@ define([
       return function (text) {
         if (!text) return;
 
-        var { from, to } = text;
-        var [ time, relative, index ] = Array.prototype.slice.call(arguments);
+        var from = text.from, to = text.to;
+        var args = Array.prototype.slice.call(arguments), time = args[0], relative = args[1], index = args[2];
         moment.isMoment(from) && (from = moment(from));
         moment.isMoment(to) && (to = moment(to));
 
@@ -107,8 +107,9 @@ define([
 
         // reset for requesting dashboard
         var panels = $scope.dashboard.rows[0].panels;
-        panels.forEach((panel) => {
-          panel.targets.forEach((target) => {
+        _.forEach(panels, function (panel) {
+          panel.scopedVars && panel.scopedVars.logFilter && (panel.scopedVars.logFilter = tabId ? $scope.tabsCache[tabId].logFilter : "");
+          _.forEach(panel.targets, function (target) {
             target.size && (target.size = tabId ? $scope.tabsCache[tabId].size : 500);
             (typeof target.query !== "undefined") && (target.query = tabId ? $scope.tabsCache[tabId].query : "");
             (typeof target.timeShift !== "undefined") && (target.timeShift = tabId ? $scope.tabsCache[tabId].timeShift : "-1d");
@@ -131,11 +132,11 @@ define([
       };
 
       $scope.currentFilter = "无";
-      $scope.logFilter = function (rule) {
+      $scope.logFilterOperator = function (rule) {
         $scope.logFilter = rule;
         $scope.dashboard.rows[0].panels[2].scopedVars.logFilter = rule;
         $rootScope.$broadcast('refresh');
-        $scope.currentFilter = rule + "日志";
+        $scope.currentFilter = rule === "" ? "无" : rule + "日志";
       };
 
       $scope.showInputModal = function() {
@@ -159,7 +160,7 @@ define([
 
       $scope.showSearchCompareModal = function () {
         // prepare for select ng-model
-        $scope.tabs.forEach((item) => {
+        _.forEach($scope.tabs, function (item) {
           var tabId = item.id;
           if (!$scope.tabsCache[tabId]) return;
           item.queryHeader = $scope.resultCache[tabId].queryHeader;
@@ -175,8 +176,8 @@ define([
 
       $scope.reQuery = function () {
         var panels = $scope.dashboard.rows[0].panels;
-        panels.forEach((panel) => {
-          panel.targets.forEach((target) => {
+        _.forEach(panels, function (panel) {
+          _.forEach(panel.targets, function (target) {
             (typeof target.query !== "undefined") && (target.query = $scope.query);
           });
         });
@@ -186,8 +187,8 @@ define([
 
       $scope.getLogSize = function(size) {
         var panels = $scope.dashboard.rows[0].panels;
-        panels.forEach((panel) => {
-          panel.targets.forEach((target) => {
+        _.forEach(panels, function (panel) {
+          _.forEach(panel.targets, function (target) {
             if (target.size === size) return;
             target.size && (target.size = size);
           });
@@ -204,12 +205,14 @@ define([
         $scope.query = "*";
         $scope.size = 500;
         $scope.timeShift = "-1d";
+        $scope.logFilter = "";
 
         var row = _.cloneDeep(panelMetas[0]);
         row = fillRowData(row, {
           "\\$SIZE": $scope.size,
           "\\$QUERY": $scope.query,
-          "\\$TIMESHIFT": $scope.timeShift
+          "\\$TIMESHIFT": $scope.timeShift,
+          "\\$LOGFILTER": $scope.logFilter
         });
 
         $scope.initDashboard({
@@ -234,7 +237,7 @@ define([
             templateUrl: 'public/app/features/logs/partials/log_cluster_modal.html',
             show: false
           });
-  
+
           clusterLogSourceModal.$promise.then(clusterLogSourceModal.show);
         });
       };
@@ -252,7 +255,7 @@ define([
       // 新建 日志搜索tab
       $scope.pushTab = function () {
         currentLogTab = Object.keys($scope.tabsCache).length;
-        resetRow();   
+        resetRow();
 
         $scope.tabs.push({
           "active": true,
@@ -263,9 +266,10 @@ define([
 
       // 切换 日志搜索1-n
       $scope.switchCurLogTab = function (tabId, index) {
+        if ($scope.dashboard.rows[0].id == tabId) return;
+
         // 优化: 当前所有数据加载完成 才允许切换
         // ($scope.dashboard.loaded === 4) && resetRow(tabId);
-        if ($scope.dashboard.rows[0].id == tabId) return;
         resetRow(tabId);
       };
 
@@ -277,7 +281,8 @@ define([
         row = fillRowData(row, {
           "\\$SIZE": $scope.size,
           "\\$QUERY": $scope.query,
-          "\\$TIMESHIFT": $scope.timeShift
+          "\\$TIMESHIFT": $scope.timeShift,
+          "\\$LOGFILTER": $scope.logFilter
         });
         $scope.dashboard.rows[0].panels[tab] = row;
       };
@@ -312,8 +317,8 @@ define([
       function transformToDiffData(data) {
         var list = [[], []];
 
-        data.forEach((item) => {
-          item.members.forEach((member) => {
+        _.forEach(data, function (item) {
+          _.forEach(item.members, function (member) {
             list[member.group].push({
               'cluster': item.message,
               'member' : member.message,

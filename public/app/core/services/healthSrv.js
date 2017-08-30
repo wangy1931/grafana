@@ -87,6 +87,35 @@ function (angular, _, coreModule) {
         return metrics;
       };
 
+      this.transformPanelMetricType = function (panel) {
+        var targets = {};
+        var metricsTypeQueries = [];
+
+        _.forEach(panel.targets, function (target) {
+          if (_.excludeMetricSuffix(target.metric)) {
+            targets[target.metric] = target;
+          }
+        });
+
+        if(!Object.keys(targets).length) return;
+
+        var q = _this.getMetricsType(Object.keys(targets)).then(function onSuccess(response) {
+          var types = response.data;
+          _.each(Object.keys(targets), function (key) {
+            if (types[key] === "counter") {
+              targets[key].shouldComputeRate = true;
+              targets[key].downsampleAggregator = "max";
+            } else if (types[key] === "increment") {
+              targets[key].shouldComputeRate = false;
+              targets[key].downsampleAggregator = "sum";
+            }
+          });
+        });
+        metricsTypeQueries.push(q);
+
+        return $q.all(metricsTypeQueries);
+      };
+
       this.transformMetricType = function (dashboard) {
         var targets = {};
         var metricsTypeQueries = [];

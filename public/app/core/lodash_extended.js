@@ -70,7 +70,9 @@ function ($) {
       "postgresql": "Postgresql",
       "redis": "Redis",
       "rabbitmq": "RabbitMQ",
-      "iis": "IIS"
+      "iis": "IIS",
+      "oracle": "Oracle",
+      "weblogic": "WebLogic"
     };
   };
 
