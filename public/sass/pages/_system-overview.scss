@@ -94,6 +94,16 @@ $summary-font-color: #313F48;
         }
       }
     }
+    .modal {
+      .modal-body {
+        li span {
+          display: table-cell;
+          &:first-child {
+            padding-right: 20px;
+          }
+        }
+      }
+    }
   }
 
   .anomaly-panel {
@@ -383,6 +393,12 @@ $summary-font-color: #313F48;
   // angular-strap modal override
   .center {
     padding: 10px 0 0 0;
+  }
+
+  .modal {
+    div {
+      display: block !important;
+    }
   }
 
   .status-success, .status-green-color {

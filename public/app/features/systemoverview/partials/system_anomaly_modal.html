@@ -12,7 +12,11 @@
       </div>
       <div class="modal-body" style="background-color: #fff;">
         <ul>
-          <li ng-repeat="msg in except.message" style="width:100%; text-align:left;">{{msg}}<hr/></li>
+          <li ng-repeat="msg in except.message" style="width:100%; text-align:left;">
+            <span>{{msg.host}}</span>
+            <span>{{msg.tag}}</span>
+            <hr/>
+          </li>
         </ul>
       </div>
     </div>
