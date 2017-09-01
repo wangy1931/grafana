@@ -91,6 +91,11 @@ export class DashNavCtrl {
         $scope.appEvent('alert-warning', ['保存失败', '请选择子系统']);
         return;
       }
+
+      if (_.isEmpty($scope.dashboard.title)) {
+        $scope.appEvent('alert-warning', ['保存失败', '请填写仪表盘标题']);
+        return;
+      }
       var clone = $scope.dashboard.getSaveModelClone();
 
       backendSrv.saveDashboard(clone, options).then(function(data) {

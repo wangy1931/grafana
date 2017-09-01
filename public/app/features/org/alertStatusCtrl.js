@@ -2,13 +2,14 @@ define([
   'angular',
   'moment',
   'lodash',
+  'app/plugins/datasource/opentsdb/queryCtrl',
 ],
 function (angular, moment, _) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('AlertStatusCtrl', function ($scope, alertMgrSrv, datasourceSrv, contextSrv, integrateSrv, $location) {
+  module.controller('AlertStatusCtrl', function ($scope, alertMgrSrv, datasourceSrv, contextSrv, integrateSrv, $location, backendSrv, $controller) {
     var annotation_tpl = {
       annotation: {
         datasource: "elk",
@@ -48,6 +49,9 @@ function (angular, moment, _) {
         $scope.getCurrent();
       });
       $scope.getLevel = alertMgrSrv.getLevel;
+      datasourceSrv.get('opentsdb').then(function(datasource) {
+        $scope.datasource = datasource;
+      });
     };
     $scope.resetCurrentThreshold = function (alertDetail) {
       var metric = _.getMetricName(alertDetail.metric);
@@ -78,9 +82,22 @@ function (angular, moment, _) {
     };
 
     $scope.handleAlert = function (alertDetail) {
+      $controller('OpenTSDBQueryCtrl', {$scope: $scope});
       var newScope = $scope.$new();
       newScope.alertData = alertDetail;
       newScope.closeAlert = $scope.closeAlert;
+      newScope.causeHost = alertDetail.status.monitoredEntity;
+      newScope.datasource = $scope.datasource;
+      newScope.suggestMetrics = $scope.suggestMetrics;
+      newScope.suggestTagHost = backendSrv.suggestTagHost;
+      newScope.confidenceLevel = '100';
+      newScope.confidences = {
+        '100': '非常确定',
+        '50': '可能'
+      }
+      newScope.rootCauseMetrics = [];
+      newScope.addCause = $scope.addCause;
+      newScope.removeCause = $scope.removeCause;
       $scope.appEvent('show-modal', {
         src: 'public/app/partials/handle_alert.html',
         modalClass: 'modal-no-header confirm-modal',
@@ -90,6 +107,16 @@ function (angular, moment, _) {
 
     $scope.closeAlert = function() {
       var status = $scope.alertData.status;
+
+      if(!$scope.rootCauseMetrics.length) {
+        $scope.appEvent('alert-error', ['报警根源信息不完整','请点击添加按钮添加报警根源信息']);
+        return;
+      }
+
+      if(!$scope.reason) {
+        $scope.appEvent('alert-error', ['报警处理信息不完整','请填写报警处理过程']);
+        return;
+      }
       alertMgrSrv.closeAlert(status.alertId, status.monitoredEntity, $scope.reason, contextSrv.user.name).then(function(response) {
         _.remove($scope.$parent.alertRows, function(alertDetail) {
           return (alertDetail.definition.id === status.alertId) &&  (alertDetail.status.monitoredEntity === status.monitoredEntity);
@@ -98,6 +125,29 @@ function (angular, moment, _) {
       }).catch(function(err) {
         $scope.appEvent('alert-error', ['报警处理失败','请检查网络连接状态']);
       });
+
+      var rcaFeedback = {};
+      rcaFeedback.timestampInSec = Math.round(status.levelChangedTime/1000);
+      rcaFeedback.alertIds = [status.alertId];
+      rcaFeedback.triggerMetric = {
+        name: $scope.alertData.metric,
+        host: status.monitoredEntity,
+        value: status.triggeredValue,
+      };
+      rcaFeedback.rootCauseMetrics = _.cloneDeep($scope.rootCauseMetrics);
+      _.each(rcaFeedback.rootCauseMetrics, function(cause){
+        cause.name = contextSrv.user.orgId + '.' + contextSrv.user.systemId + '.' + cause.name;
+        cause.confidenceLevel = parseInt(cause.confidenceLevel);
+      });
+      rcaFeedback.org = contextSrv.user.orgId;
+      rcaFeedback.sys = contextSrv.user.systemId;
+      rcaFeedback.relatedMetrics = [];
+      alertMgrSrv.rcaFeedback(rcaFeedback).then(function(response) {
+        $scope.appEvent('alert-success', ['报警根源添加成功']);
+      }, function(err) {
+        $scope.appEvent('alert-error', ['报警根源添加失败']);
+      });
+      $scope.dismiss();
     };
 
     $scope.statusDetails = function(alertDetails) {
@@ -168,6 +218,22 @@ function (angular, moment, _) {
           alertData.curr = "没有数据";
         });
       });
+    };
+
+    $scope.addCause = function (causeMetric,causeHost,confidenceLevel) {
+      if(_.every([causeMetric,causeHost,confidenceLevel])) {
+        $scope.causeMetric = '';
+        $scope.causeHost = '';
+        $scope.rootCauseMetrics.push({
+          name: causeMetric,
+          host: causeHost,
+          confidenceLevel: confidenceLevel
+        });
+      }
+    };
+
+    $scope.removeCause = function (index) {
+      $scope.rootCauseMetrics.splice(index, 1);
     };
 
     $scope.init();

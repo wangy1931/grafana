@@ -130,3 +130,22 @@ input {
     width: 100px;
   }
 }
+
+.gf-form-section-modal {
+  width: 75%;
+  margin: 0 auto;
+  text-align: left;
+  .typeahead.dropdown-menu {
+    max-height: 150px;
+  }
+  .gf-form-label-radio {
+    background: none;
+    padding-left: 0;
+  }
+  .gf-form-input:focus {
+    box-shadow: none;
+  }
+  .gf-form-label {
+    overflow: hidden;
+  }
+}
