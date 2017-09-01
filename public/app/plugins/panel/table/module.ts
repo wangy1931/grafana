@@ -185,6 +185,13 @@ class TablePanelCtrl extends MetricsPanelCtrl {
       renderPanel();
     }
 
+    function expandOrCollapse(e) {
+      var el = $(e.currentTarget);
+      el.css({ 'display': 'none' });
+      el.hasClass('expand-showmore') && el.next().css({ 'display': 'inline-block' }) && el.parent().prev().css({ 'max-height': 'none' });
+      el.hasClass('collapse-showmore') && el.prev().css({ 'display': 'inline-block' }) && el.parent().prev().css({ 'max-height': '125px' });
+    }
+
     function appendPaginationControls(footerElem) {
       footerElem.empty();
 
@@ -225,6 +232,9 @@ class TablePanelCtrl extends MetricsPanelCtrl {
       if (panel.targets.length) {
         panelElem._highlight(panel.targets[0].query);
       }
+
+      tbodyElem.on('click', '.expand-showmore', expandOrCollapse);
+      tbodyElem.on('click', '.collapse-showmore', expandOrCollapse);
     }
 
     elem.on('click', '.table-panel-page-link', switchPage);

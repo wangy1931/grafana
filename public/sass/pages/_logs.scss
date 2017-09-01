@@ -109,6 +109,26 @@
     }
   }
 
+  // override panel table style
+  .table-panel-table tbody {
+    width: 100%;
+    tr {
+      width: 100%;
+    }
+    tr:nth-child(even) {
+      background-color: #fff;
+    }
+  }
+
+  .log-panel .table-panel-table td {
+    &:first-child {
+      width: auto;
+      max-width: 200px;
+    }
+    &:last-child {
+      word-break: break-all;
+    }
+  }
 }
 
 // diff table
