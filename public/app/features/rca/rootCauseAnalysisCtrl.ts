@@ -15,17 +15,14 @@ export class RootCauseAnalysisCtrl {
 
   /** @ngInject */
   constructor(private backendSrv, private $location, private $scope, jsPlumbService) {
-    this.toolkit = window.jsPlumbToolkit.newInstance({
-    });  // jsPlumbService.getToolkit("rcaToolkit");
+    this.toolkit = window.jsPlumbToolkit.newInstance({});
     this.loadGraph().then(() => {
       this.renderer = this.renderFactory();
     });
     this.render();
   }
 
-  // function
   loadGraph() {
-    // mock data
     this.data = {
       "nodes" : [],
       "edges" : [],
@@ -48,7 +45,7 @@ export class RootCauseAnalysisCtrl {
         sigValList.push(item.src.sigVal), sigValList.push(item.dest.sigVal);
       });
 
-      rate = 100 / Math.max(...sigValList);
+      rate = 60 / Math.max(...sigValList);
       data.forEach(item => {
         // nodes
         item.src.sigVal *= rate, item.dest.sigVal *= rate;
@@ -71,9 +68,8 @@ export class RootCauseAnalysisCtrl {
 
     // reset canvas height
     $(".jtk-demo-canvas").css({ "height": window.innerHeight - 52 - 28 - 70 });
-    console.log(this.data);
 
-    return this.toolkit.load({type: "json", data: this.data}).render({
+    return this.toolkit.load({ type: "json", data: this.data }).render({
       container: canvasElement,
       view: {
         edges: {
