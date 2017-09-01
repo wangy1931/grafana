@@ -109,6 +109,10 @@
     }
   }
 
+  // override panel table style
+  .table-panel-table tbody tr:nth-child(even) {
+    background-color: #fff;
+  }
 }
 
 // diff table
