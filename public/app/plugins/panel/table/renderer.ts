@@ -143,9 +143,22 @@ export class TableRenderer {
     if (addWidthHack) {
       widthHack = '<div class="table-panel-width-hack">' + this.table.columns[columnIndex].text + '</div>';
     }
+    var heightHack = '';
+    var heightHackStyle = '';
+    if (value.length > 917) {
+      heightHack = `<div style="display: inline-block;">
+                      <span class="expand-showmore" style="display: inline-block; padding: 0px 10px; cursor: pointer; background-color: rgb(230, 230, 230); font-size: 12px;">
+                        ...
+                      </span>
+                      <span class="collapse-showmore" style="display: none; padding: 0px 20px; cursor: pointer; background-color: rgb(230, 230, 230); font-size: 12px;">
+                        -
+                      </span>
+                    </div>`;
+      heightHackStyle = ' style="max-height: 165px; overflow-y: hidden;"';
+    }
 
     // title="' + value + '"
-    return '<td ' + style + '>' + '<div>' + value + '</div>' + widthHack + '</td>';
+    return '<td ' + style + '>' + '<div ' + heightHackStyle + '>' + value + '</div>' + heightHack + widthHack + '</td>';
   }
 
   render(page) {
