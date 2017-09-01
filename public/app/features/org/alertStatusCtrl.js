@@ -142,7 +142,11 @@ function (angular, moment, _) {
       rcaFeedback.org = contextSrv.user.orgId;
       rcaFeedback.sys = contextSrv.user.systemId;
       rcaFeedback.relatedMetrics = [];
-      alertMgrSrv.rcaFeedback(rcaFeedback);
+      alertMgrSrv.rcaFeedback(rcaFeedback).then(function(response) {
+        $scope.appEvent('alert-success', ['报警根源添加成功']);
+      }, function(err) {
+        $scope.appEvent('alert-error', ['报警根源添加失败']);
+      });
       $scope.dismiss();
     };
 
