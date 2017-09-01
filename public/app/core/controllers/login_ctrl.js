@@ -85,7 +85,7 @@ function (angular, coreModule, config) {
     $scope.contactUs = function() {
       $scope.appEvent('confirm-modal', {
         title: '欢迎与我们联系',
-        text: '请致电：17070866703 <br/>邮 件：service@cloudwiz.cn',
+        text: '请致电：400-100-7040 <br/>邮 件：support@comlan.com',
         icon: 'fa-bell',
         yesText: '确定',
         noText: '关闭',

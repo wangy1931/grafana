@@ -200,7 +200,7 @@ function (angular, _, coreModule, config) {
         options.params.token = self.getToken();
       }).then(function () {
         if (_.isEmpty(options.params.token)) {
-          alertSrv.set("错误,无法获取TOKEN", "请联系service@cloudwiz.cn", "warning", 4000);
+          alertSrv.set("错误,无法获取TOKEN", "请联系support@comlan.com", "warning", 4000);
           var d = $q.defer();
           d.resolve({});
           return d.promise;
