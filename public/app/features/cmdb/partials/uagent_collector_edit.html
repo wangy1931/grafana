@@ -1,0 +1,40 @@
+<navbar icon="fa fa-fw fa-cubes" title="配置管理库" title-url="">
+  <ul class="nav">
+    <li><a href="/cmdb/servicelist">服务列表</a></li>
+    <li><a href="/cmdb/config/collector?serviceId={{ctrl.serviceId}}">collector</a></li>
+    <li class="active"><a>{{ctrl.confName}}</a></li>
+  </ul>
+</navbar>
+
+<div class="page-container">
+  <div class="page-header">
+		<h1>{{ctrl.confName}}</h1>
+	</div>
+
+  <form class="gf-form-group">
+    <div ng-repeat="section in ctrl.config.sections">
+      <h3 class="page-heading">{{section.name}}</h3>
+      <div class="gf-form max-width-28" ng-repeat="prop in section.props" ng-switch="prop.type">
+        <span class="gf-form-label width-14">{{prop.name}}</span>
+        <input ng-switch-when="string" class="gf-form-input width-7" 
+          type="text" 
+          ng-model="prop.value" 
+          ng-disabled="{{prop.readOnly}}"/>
+        <input ng-switch-when="integer" class="gf-form-input width-7" 
+          type="number" min="{{prop.minValue}}" 
+          ng-model="prop.value" 
+          ng-disabled="prop.readOnly"/>
+        <select ng-switch-when="enum" class="gf-form-input width-7"
+          ng-options="enum for enum in prop.enumValues"
+          ng-model="prop.value"
+        >
+        </select>
+      </div>
+    </div>
+    <div class="gf-form-button-row">
+      <a class="btn btn-primary" ng-click="saveConfig()">保存</a>
+      <a class="btn btn-outline-primary" href="/cmdb/config/collector?serviceId={{ctrl.serviceId}}">取消</a>
+    </div>
+  </form>
+
+</div>
