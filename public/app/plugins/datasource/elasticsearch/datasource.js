@@ -394,7 +394,7 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
   };
 
   function cluster(target, index) {
-    target.operator = '查看原始日志';
+    target.operator = '<i class="fa fa-expand"></i>';
     target.cid = index;
   };
 

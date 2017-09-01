@@ -33,7 +33,7 @@ export class TableRenderer {
       v = v.join(', ');
     }
 
-    return v;
+    return _.escape(v);
   }
 
   createColumnFormater(style, column) {
@@ -90,7 +90,15 @@ export class TableRenderer {
           }
         }
 
-        return dataValue;
+        return _.escape(dataValue);
+      };
+    }
+
+    if (style.type === 'html') {
+      return v => {
+        if (_.isString(v)) {
+          return v;
+        }
       };
     }
 
@@ -118,7 +126,7 @@ export class TableRenderer {
 
   renderCell(columnIndex, value, addWidthHack = false) {
     value = this.formatColumnValue(columnIndex, value);
-    value = _.escape(value);
+    // value = _.escape(value);
     var style = '';
     if (this.colorState.cell) {
       style = ' style="background-color:' + this.colorState.cell + ';color: white"';
@@ -136,7 +144,8 @@ export class TableRenderer {
       widthHack = '<div class="table-panel-width-hack">' + this.table.columns[columnIndex].text + '</div>';
     }
 
-    return '<td title="' + value + '"' + style + '>' + '<div>' + value + '</div>' + widthHack + '</td>';
+    // title="' + value + '"
+    return '<td ' + style + '>' + '<div>' + value + '</div>' + widthHack + '</td>';
   }
 
   render(page) {
