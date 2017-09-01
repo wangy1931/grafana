@@ -11,4 +11,5 @@ define([
   './panelinfo/panelInfoEditCtrl',
   './systemoverview/systemoverviewCtrl',
   './styleguide/styleguide',
+  './rca/all',
 ], function () {});
