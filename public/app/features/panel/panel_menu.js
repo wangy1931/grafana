@@ -2,8 +2,9 @@ define([
   'angular',
   'jquery',
   'lodash',
+  'tether',
 ],
-function (angular, $, _) {
+function (angular, $, _, Tether) {
   'use strict';
 
   angular
@@ -11,34 +12,38 @@ function (angular, $, _) {
     .directive('panelMenu', function($compile, linkSrv) {
       var linkTemplate =
           '<span class="panel-title drag-handle pointer">' +
-            '<span class="panel-title-text drag-handle">{{panel.title | interpolateTemplateVars:this}}</span>' +
+            '<span class="panel-title-text drag-handle">{{ctrl.panel.title | interpolateTemplateVars:this}}</span>' +
             '<span class="panel-links-btn"><i class="fa fa-external-link"></i></span>' +
-            '<span class="panel-time-info" ng-show="panelMeta.timeInfo"><i class="fa fa-clock-o"></i> {{panelMeta.timeInfo}}</span>' +
+            '<span class="panel-time-info" ng-show="ctrl.timeInfo"><i class="fa fa-clock-o"></i> {{ctrl.timeInfo}}</span>' +
           '</span>';
 
-      function createExternalLinkMenu($scope) {
+      function createExternalLinkMenu(ctrl) {
         var template = '<div class="panel-menu small">';
         template += '<div class="panel-menu-row">';
 
-        if ($scope.panel.links) {
-          _.each($scope.panel.links, function(link) {
-            var info = linkSrv.getPanelLinkAnchorInfo(link, $scope.panel.scopedVars);
+        if (ctrl.panel.links) {
+          _.each(ctrl.panel.links, function(link) {
+            var info = linkSrv.getPanelLinkAnchorInfo(link, ctrl.panel.scopedVars);
             template += '<a class="panel-menu-link" href="' + info.href + '" target="' + info.target + '">' + info.title + '</a>';
           });
         }
         return template;
       }
-      function createMenuTemplate($scope) {
-        var template = '<div class="panel-right-menu" ng-show="!panelMeta.loading">';
-        _.each($scope.panelMeta.menu, function (item) {
-          if (item.role === 'Editor' && !$scope.dashboardMeta.canEdit) {
+
+      function createMenuTemplate(ctrl) {
+        // debugger
+        var template = '<div class="panel-right-menu drag-handle" ng-show="!ctrl.loading" ng-class="{panelError: ctrl.error}">';
+        _.each(ctrl.getMenu(), function (item) {
+          if (item.role === 'Editor' && !ctrl.dashboard.meta.canEdit) {
             return;
           }
-          template += '<span class="panel-right-menu-item"';
-          if (item.show) {
-            template += ' ng-if="' + item.show + '"';
+          template += '<span class="';
+          var className = 'panel-right-menu-item';
+          if (item.hover) {
+            className += ' ' + item.hover;
           }
-          template += ' ng-click="' + item.click + '" bs-tooltip="' + "'" + item.text + "'" + '">';
+          template += className + '"';
+          template += ' ng-click="' + item.click + '" bs-tooltip="' + "'" + item.text + "'" + '" data-container="body">';
           template += '<i class="fa ' + item.icon + '"></i>';
           template += '</span>';
         });
@@ -46,13 +51,13 @@ function (angular, $, _) {
         template += '<div class="dropdown pull-right panel-right-menu-item">';
         template += '<a class="pointer" ng-click="hideTooltip($event)" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-bars"></i></a>';
         template += '<ul class="dropdown-menu">';
-        _.each($scope.panelMeta.extendedMenu, function (item) {
-          if (item.role === 'Editor' && !$scope.dashboardMeta.canEdit) {
+        _.each(ctrl.getExtendedMenu(), function (item) {
+          if (item.role === 'Editor' && !ctrl.dashboard.meta.canEdit) {
             return;
           }
           template += '<li><a class="pointer"';
           if (item.click) { template += ' ng-click="'+ item.click +'"'; }
-          template += '>' + item.text + '</a></li>'
+          template += '>' + item.text + '</a></li>';
         });
         template += '</ul>';
         template += '</div>';
@@ -60,8 +65,8 @@ function (angular, $, _) {
         return template;
       }
 
-      function getExtendedMenu($scope) {
-        return angular.copy($scope.panelMeta.extendedMenu);
+      function getExtendedMenu(ctrl) {
+        return ctrl.getExtendedMenu();
       }
 
       return {
@@ -71,18 +76,47 @@ function (angular, $, _) {
           var $panelLinksBtn = $link.find(".panel-links-btn");
           var $panelContainer = elem.parents(".panel-container");
           var menuScope = null;
+          var ctrl = $scope.ctrl;
           var timeout = null;
           var $menu = null;
+          var teather;
 
           elem.append($link);
 
-          $scope.$watchCollection('panel.links', function(newValue) {
-            var showIcon = (newValue ? newValue.length > 0 : false) && $scope.panel.title !== '';
+          $scope.$watchCollection('ctrl.panel.links', function(newValue) {
+            var showIcon = (newValue ? newValue.length > 0 : false) && ctrl.panel.title !== '';
             $panelLinksBtn.toggle(showIcon);
           });
 
-          elem.append($(createMenuTemplate($scope)));
+          function dismiss(time, force) {
+            clearTimeout(timeout);
+            timeout = null;
 
+            if (time) {
+              timeout = setTimeout(dismiss, time);
+              return;
+            }
+
+            // if hovering or draging pospone close
+            if (force !== true) {
+              if ($menu.is(':hover') || $scope.ctrl.dashboard.$$panelDragging) {
+                dismiss(2200);
+                return;
+              }
+            }
+
+            if (menuScope) {
+              teather.destroy();
+              $menu.unbind();
+              $menu.remove();
+              menuScope.$destroy();
+              menuScope = null;
+              $menu = null;
+              $panelContainer.removeClass('panel-highlight');
+            }
+          }
+
+          elem.append(createMenuTemplate(ctrl));
           $compile(elem.contents())($scope);
         }
       };

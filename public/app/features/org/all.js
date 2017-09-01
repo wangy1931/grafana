@@ -1,16 +1,23 @@
+// import './datasourcesCtrl';
+// import './datasourceEditCtrl';
+
 define([
-  './alertsCtrl',
-  './alertEditCtrl',
-  './alertStatusCtrl',
-  './alertAssociationCtrl',,
-  './datasourcesCtrl',
-  './datasourceEditCtrl',
-  './orgUsersCtrl',
+  './org_users_ctrl',
+  './profile_ctrl',
+  './select_org_ctrl',
+  './change_password_ctrl',
   './newOrgCtrl',
   './userInviteCtrl',
   './orgApiKeysCtrl',
   './orgDetailsCtrl',
-  './alertHistoryCtrl',
-  './importAlertsCtrl',
+  './prefs_control',
+
+  // cloudwiz
   './snoozeCtrl',
+  './alertsCtrl',
+  './alertEditCtrl',
+  './alertStatusCtrl',
+  './alertHistoryCtrl',
+  './alertAssociationCtrl',
+  './importAlertsCtrl',
 ], function () {});

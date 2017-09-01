@@ -1,8 +1,9 @@
 define([
   'angular',
-  'lodash'
+  'lodash',
+  'moment'
   ],
-  function (angular, _) {
+  function (angular, _, moment) {
     'use strict';
 
     var module = angular.module('grafana.controllers');
@@ -146,7 +147,7 @@ define([
           if($scope.dashboard) {
             $scope.dashboard.time.from = $scope.anomalyTimeSelected.from;
             $scope.getDetail($scope.anomalyHistory[0]);
-          };
+          }
           return $scope.anomalyHistory[0];
         });
       };

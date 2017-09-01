@@ -338,6 +338,10 @@ define([
                   "value": "count"
                 },
                 {
+                  "text": "change",
+                  "value": "change"
+                },
+                {
                   "text": "message",
                   "value": "message"
                 }
@@ -438,7 +442,7 @@ define([
         newScope.logCompare = $scope.logCompare;
         newScope.shift = "-1d";
         $scope.appEvent('show-modal', {
-          src: './app/features/logs/partials/input_time_shift.html',
+          src: 'public/app/features/logs/partials/input_time_shift.html',
           modalClass: 'modal-no-header confirm-modal',
           scope: newScope
         });
@@ -446,6 +450,13 @@ define([
       $scope.logCompare = function(timeShift) {
         $scope.dashboard.rows[2].panels[2].targets[1].timeShift = timeShift;
         $rootScope.$broadcast('refresh');
+      };
+
+      $scope.currentFilter = "无";
+      $scope.logFilter = function (rule) {
+        $scope.dashboard.rows[2].panels[2].scopedVars.logFilter = rule;
+        $rootScope.$broadcast('refresh');
+        $scope.currentFilter = rule + "日志";
       };
 
       $scope.init = function (param) {
@@ -456,14 +467,14 @@ define([
         panelMetas[0].panels[0].title = param.title;
         panelMetas[1].panels[0].targets = _.cloneDeep(param.targets);
         _.each(panelMetas[1].panels[0].targets, function (target) {
-          target.metric = target.metric + ".seasonal"
+          target.metric = target.metric + ".seasonal";
         });
         panelMetas[1].panels[1].targets = _.cloneDeep(param.targets);
         _.each(panelMetas[1].panels[1].targets, function (target) {
-          target.metric = target.metric + ".LB.percent"
+          target.metric = target.metric + ".LB.percent";
         });
         var type = metricPrefix2Type(param.targets[0].metric.split(".")[0]);
-        var host = param.targets[0].tags.host == "*" ? "*" : param.targets[0].tags.host;  // *  or 'centos24'
+        var host = param.targets[0].tags.host === "*" ? "*" : param.targets[0].tags.host;  // *  or 'centos24'
 
         $scope.query = "type:"+type+" AND host:"+host;
         panelMetas[2].panels[0].targets[0].query = $scope.query;
@@ -485,16 +496,15 @@ define([
 
       function metricPrefix2Type(prefix) {
         if (_.isNull(prefix)) {
-          return "*"
+          return "*";
         }
         if (/(iostat|cpu|df|net|proc)/.test(prefix)) {
-          return "system"
+          return "system";
         }else if (/(ssh_failed)/.test(prefix)) {
-          return "security"
+          return "security";
         }
         return prefix;
       }
-
       $scope.init(integrateSrv.options);
     });
   });

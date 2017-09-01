@@ -54,6 +54,7 @@ function (angular, _, noUiSlider) {
           var metric = _.getMetricName(alertMetric)
           $scope.dashboard.rows[0].panels[0].title = metric;
           $scope.dashboard.rows[0].panels[0].targets[0].metric = metric;
+          $scope.dashboard.rows[0].panels[0].targets[0].tags.host = alertHost;
           $scope.$broadcast('refresh');
         }
       });
@@ -82,6 +83,24 @@ function (angular, _, noUiSlider) {
               }
             ],
             'y-axis': false,
+            'yaxes': [
+                {
+                    'label': null,
+                    'show': false,
+                    'logBase': 1,
+                    'min': null,
+                    'max': null,
+                    'format': "short"
+                },
+                {
+                    'label': null,
+                    'show': false,
+                    'logBase': 1,
+                    'min': null,
+                    'max': null,
+                    'format': "short"
+                }
+            ],
             legend: {
               alignAsTable: true,
               avg: true,
@@ -115,7 +134,7 @@ function (angular, _, noUiSlider) {
         meta: {canStar: false, canShare: false, canEdit: false, canSave: false},
         dashboard: {
           title: "相关联指标",
-          id: metrics,
+          id: 1,
           rows: [$scope.getRowPanelMeta(host, metrics)],
           time: {from: "now-6h", to: "now"},
           manualAnnotation: alertMgrSrv.annotations,
@@ -187,7 +206,7 @@ function (angular, _, noUiSlider) {
 
       _.each($scope.dashboard.rows[0].panels[0].targets, function (target) {
         if (target.metric === _.getMetricName(metricName)) {
-          if (metricNameMap[metricName][0] == target.tags.host) {
+          if (metricNameMap[metricName][0] === target.tags.host) {
             isHidden = false;
             target.hide = !target.hide;
           } else {
@@ -232,7 +251,7 @@ function (angular, _, noUiSlider) {
       newScope.addManualMetric = $scope.addManualMetric;
       $scope.suggestTagHost = backendSrv.suggestTagHost;
       $scope.appEvent('show-modal', {
-        src: './app/partials/manual_association.html',
+        src: 'public/app/partials/manual_association.html',
         modalClass: 'modal-no-header confirm-modal',
         scope: newScope
       });
@@ -241,7 +260,7 @@ function (angular, _, noUiSlider) {
     $scope.addManualMetric = function (target) {
       target.metric = contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + target.metric;
       if (_.indexOf(_.keys($scope.correlatedMetrics),target.metric) > -1) {
-        if($scope.correlatedMetrics[target.metric][0] == target.host)
+        if($scope.correlatedMetrics[target.metric][0] === target.host)
           return;
       }
       $scope.correlatedMetrics[target.metric] = [target.host];
@@ -257,13 +276,15 @@ function (angular, _, noUiSlider) {
       $scope.isAssociation = false;
       $scope.correlatedMetrics = {};
       var metric = _.getMetricName(alertMetric);
-      _.each($scope.dashboard.rows[0].panels[0].targets, function (target) {
-        if(target.metric == metric){
-          target.hide = false;
-        } else {
-          target.hide = true;
-        }
-      });
+      if($scope.dashboard) {
+        _.each($scope.dashboard.rows[0].panels[0].targets, function (target) {
+          if(target.metric === metric){
+            target.hide = false;
+          } else {
+            target.hide = true;
+          }
+        });
+      }
     };
 
     $scope.init();

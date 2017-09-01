@@ -6,7 +6,7 @@ define([
   function ($, _, coreModule) {
     'use strict';
 
-    coreModule.directive('overviewPanel', function ($parse, $compile, $http) {
+    coreModule.default.directive('overviewPanel', function ($parse, $compile, $http) {
       return {
         restrict: 'EA',
         link: function (scope, elem, attr) {

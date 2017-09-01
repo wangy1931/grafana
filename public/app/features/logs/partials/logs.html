@@ -1,7 +1,7 @@
-<topnav title="日志管理" icon="fa fa-fw fa-search" subnav="true">
+<navbar icon="fa fa-fw fa-search" title="日志管理">
     <ul class="nav pull-right">
-        <li ng-show="true" class="back-to-dashboard-link">
-            <a onclick="javascript:history.go(-1)">
+        <li ng-show="dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
+            <a ng-click="exitFullscreen()">
                 返回到仪表盘
             </a>
         </li>
@@ -9,82 +9,37 @@
             <gf-time-picker dashboard="dashboard"></gf-time-picker>
         </li>
     </ul>
-</topnav>
-<div dash-editor-view class="time-picker"></div>
+</navbar>
 
-<div class="page-container" style="background:#fff;">
-    <form>
-        <div class="">
-            <h2>日志全文搜索</h2>
-            <div class="tidy-form">
-                <ul class="tidy-form-list" style="overflow: inherit">
-                    <li ng-click="showSearchGuide = !showSearchGuide" class="tidy-form-item pointer" style="width: 100px">
-                        关键词<tip>点击显示搜索指南</tip>    
-                    </li>
-                    <li>
-                        <input placeholder="支持AND, OR, 空格表示OR" type="text" class="input-xlarge tidy-form-input last"
-                               ng-model="query" required="">
-                    </li>
-                    <li class="tidy-form-item" style="width: 100px; margin-left:30px;">
-                        日志显示数量
-                    </li>
-                    <li class="tidy-form-item">
-                        <select class="input-small tidy-form-input last"
-                          ng-model="size"
-                          ng-change="getLogSize(size);"
-                          ng-options="f for f in [500,1000,2000,3000,5000]">
-                        </select>
-                    </li>
-                    <li>
-                        <button type="submit" class="btn btn-primary" ng-click="reQuery()" style="margin:0 20px;"><i class="fa fa-search"/>查找</button>
-                        <button class="btn btn-primary btn-success" ng-click="isShowKnows(true)">查询知识库</button>
-                    </li>
-                    <li class="search-guide" ng-if="showSearchGuide">
-                        <i class="fa fa-times pull-right pointer" ng-click="hideGuide();"></i>
-                        <p>1、展示所有日志: *</p>
-                        <p>2、展示特定host日志: host: host_name ("host_name"改为需要查询的host名称)</p>
-                        <p>3、联合查询-AND: host:host_name AND Exception (查询"host_name"的"Exception"日志)</p>
-                        <p>4、联合查询-NOT: NOT host:host_name (排除"host_name"相关的日志)</p>
-                        <p>5、联合查询-OR: host:host1 OR host:host2 (查询"host1"和"host2"相关的日志)</p>
-                        <p>6、正则匹配: message:"[正则表达式]"</p>
-                    </li>
-                </ul>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </form>
-    <div class="grafana-row" ng-controller="RowCtrl"
-        ng-repeat="(row_name, row) in dashboard.rows" row-height>
+<div dash-editor-view></div>
 
-        <div class="row-control">
-            <div class="panels-wrapper" ng-if="!row.collapse">
-                <div class="row-text pointer" ng-click="toggleRow(row)" ng-if="row.showTitle"
-                    ng-bind="row.title | interpolateTemplateVars:this">
-                </div>
+<div class="page-container">
+    <div class="page-header">
+        <h1>日志全文搜索</h1>
+    </div>
 
-                <div ng-repeat="(name, panel) in row.panels track by panel.id" class="panel"  ng-if="panel.tab == graph" panel-width>
-                    <panel-loader type="panel.type" class="panel-margin"></panel-loader>
-                </div>
-                <tabset>
-                    <tab heading="{{panel.title}}" ng-repeat="(name, panel) in row.panels track by panel.id" ng-if="panel.tab != graph">
-                        <ul ng-if="panel.regularResult.data[0].total">
-                            <li style="color: #F9934E;">该时间区域内共有 <strong>{{panel.regularResult.data[0].total}}</strong> 条日志，当前显示前 {{panel.regularResult.data[0].datapoints.length}} 条。放大时间区域，以查看更细日志数据。</li>
-                        </ul>
-                        <div class="btn-group btn-log-compare" ng-if="name == 2">
-                            <button class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li ng-click="logCompare('-1d')">1天以内</li>
-                                <li ng-click="logCompare('-7d')">7天以内</li>
-                                <li ng-click="showInputModal()">自定义</li>
-                            </ul>
-                        </div>
-                        <panel-loader type="panel.type" class="panel-margin log-panel"></panel-loader>
-                    </tab>
-                </tabset>
-                <div class="clearfix"></div>
-            </div>
-        </div>
+    <!-- (row_name, row) in dashboard.rows track by row.id -->
+    <tabset class="log-search">
+        <tab heading="{{ tab.title }}"
+             ng-repeat="tab in tabs"
+             active="tab.active"
+             ng-click="switchCurLogTab(tab.id, $index)">
+        </tab>
+        <tab heading=""
+             disable="true"
+             active="false"
+             class="fa btn btn-primary fa-plus btn-spec"
+             ng-click="pushTab()">
+        </tab>
+        <tab heading="横向对比"
+            disable="true"
+            active="false"
+            class="pull-right btn btn-primary"
+            ng-click="showSearchCompareModal()">
+        </tab>
+    </tabset>
+
+    <div class="log-search-result">
+        <log-tabpane template='/public/app/features/logs/partials/log_tabpane.html'></log-tabpane>
     </div>
 </div>

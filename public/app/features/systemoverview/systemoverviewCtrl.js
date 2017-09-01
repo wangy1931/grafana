@@ -178,7 +178,7 @@ define([
       // 智能检测异常指标 & 健康指数
       $scope.getAnomaly = function () {
         $scope.anomalyPanel.status = [
-          { type: 'danger', text: '严重: ', count: 0 },
+          { type: 'danger', text: '严重: ', count: -1 },
           { type: 'warning', text: '异常指标: ', count: 0 },
           { type: 'success', text: '指标数量: ', count: 0 }
         ];
@@ -196,12 +196,12 @@ define([
           ], colors.concat(['#F3F7FA']));
 
           if (data.numAnomalyMetrics) {
-            $scope.anomalyPanel.status[2].count = data.numMetrics;
             $scope.anomalyPanel.status[1].count = data.numAnomalyMetrics;
           } else {
-            $scope.anomalyPanel.status[2].text  = '系统正常';
-            $scope.anomalyPanel.status[2].count = 1;
+            $scope.anomalyPanel.status[1].type  = 'success';
+            $scope.anomalyPanel.status[1].count = 0;
           }
+          $scope.anomalyPanel.status[2].count = data.numMetrics;
         });
       };
 
@@ -579,12 +579,13 @@ define([
         $scope.panel = $scope._dashboard.rows[index].panels[0];
 
         if (index === 7) {
-          $scope.panel = setPanelMetaHost(_.cloneDeep($scope.panel), metric, host);
+          setPanelMetaHost($scope.panel, metric, host);
+          healthSrv.transformPanelMetricType($scope.panel);
         }
 
         var healthModal = $modal({
           scope: $scope,
-          templateUrl: '/app/features/systemoverview/partials/system_overview_modal.html',
+          templateUrl: 'public/app/features/systemoverview/partials/system_overview_modal.html',
           show: false
         });
 

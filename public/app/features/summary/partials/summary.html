@@ -1,6 +1,5 @@
-<topnav section="机器连接状态" icon="fa fa-fw fa-crosshairs">
-
-</topnav>
+<navbar icon="fa fa-fw fa-crosshairs" title="机器连接状态">
+</navbar>
 <div class="page-container">
   <td class="page">
     <h2>{{summarySelect.SystemsName}} 总体情况</h2>
@@ -12,7 +11,7 @@
         </li>
         <li>
           <select ng-model="summarySelect.services" class="input-small tight-form-input" ng-change="cleanup()">
-            <option ng-selected="$index == 0" ng-repeat="(key, value) in services" value="{{key}}">{{value}}</option>
+            <option ng-selected="$index === 0" ng-repeat="(key, value) in services" value="{{key}}">{{value}}</option>
           </select>
         </li>
       </ul>
@@ -32,7 +31,7 @@
         <th ng-repeat="(key,value) in tableHeader[summarySelect.services]">{{key}}</th>
       </tr>
 
-      <tbody ng-repeat="summary in summaryList" ng-if="summarySelect.services != 'service'">
+      <tbody ng-repeat="summary in summaryList" ng-if="summarySelect.services !== 'service'">
       <tr ng-repeat="content in summary.content">
         <td>{{summary.tag.host}}</td>
         <td>{{summary.state}}</td>

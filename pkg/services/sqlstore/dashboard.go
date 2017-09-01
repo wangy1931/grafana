@@ -9,16 +9,18 @@ import (
 	"github.com/wangy1931/grafana/pkg/metrics"
 	m "github.com/wangy1931/grafana/pkg/models"
 	"github.com/wangy1931/grafana/pkg/services/search"
+	"github.com/wangy1931/grafana/pkg/components/simplejson"
 	"strconv"
-	"errors"
 )
 
 func init() {
 	bus.AddHandler("sql", SaveDashboard)
 	bus.AddHandler("sql", GetDashboard)
+	bus.AddHandler("sql", GetDashboards)
 	bus.AddHandler("sql", DeleteDashboard)
 	bus.AddHandler("sql", SearchDashboards)
 	bus.AddHandler("sql", GetDashboardTags)
+	bus.AddHandler("sql", GetDashboardSlugById)
 }
 
 func SaveDashboard(cmd *m.SaveDashboardCommand) error {
@@ -77,7 +79,7 @@ func SaveDashboard(cmd *m.SaveDashboardCommand) error {
 			affectedRows, err = sess.Insert(dash)
 		} else {
 			dash.Version += 1
-			dash.Data["version"] = dash.Version
+			dash.Data.Set("version", dash.Version)
 			affectedRows, err = sess.Id(dash.Id).Update(dash)
 		}
 
@@ -116,14 +118,14 @@ func GetDashboard(query *m.GetDashboardQuery) error {
 	if err != nil {
 		return err
 	}
-	query.Result = new(m.Dashboard)
+
 	for _, dash := range dashboards {
 		sysId, err := typeSwitch(dash.Data)
 		if err !=nil {
 			continue
 		}
 		if sysId == query.SystemId {
-			dash.Data["id"] = dash.Id
+			dash.Data.Set("id", dash.Id)
 			query.Result = dash
 		}
 	}
@@ -131,10 +133,10 @@ func GetDashboard(query *m.GetDashboardQuery) error {
 	return nil
 }
 
-func typeSwitch(dash map[string]interface{}) (int64, error) {
-	switch system := dash["system"].(type) {
+func typeSwitch(dash *simplejson.Json) (int64, error) {
+	switch system := dash.Get("system").Interface().(type) {
 	default:
-		return 0, errors.New("can't resolve the systemId type")
+		return dash.Get("system").MustInt64(), nil
 	case string:
 		sysId, err := strconv.ParseInt(system, 10, 64)
 		if err != nil {
@@ -178,6 +180,19 @@ func SearchDashboards(query *search.FindPersistedDashboardsQuery) error {
 		params = append(params, query.UserId)
 	}
 
+	if len(query.DashboardIds) > 0 {
+		sql.WriteString(" AND (")
+		for i, dashboardId := range query.DashboardIds {
+			if i != 0 {
+				sql.WriteString(" OR")
+			}
+
+			sql.WriteString(" dashboard.id = ?")
+			params = append(params, dashboardId)
+		}
+		sql.WriteString(")")
+	}
+
 	if len(query.Title) > 0 {
 		sql.WriteString(" AND dashboard.title " + dialect.LikeStr() + " ?")
 		params = append(params, "%"+query.Title+"%")
@@ -186,6 +201,7 @@ func SearchDashboards(query *search.FindPersistedDashboardsQuery) error {
 	sql.WriteString(fmt.Sprintf(" ORDER BY dashboard.title ASC LIMIT 1000"))
 
 	var res []DashboardSearchProjection
+
 	err := x.Sql(sql.String(), params...).Find(&res)
 	if err != nil {
 		return err
@@ -233,7 +249,7 @@ func GetDashboardTags(query *m.GetDashboardTagsQuery) error {
 func DeleteDashboard(cmd *m.DeleteDashboardCommand) error {
 	return inTransaction2(func(sess *session) error {
 		dashboard := m.Dashboard{Slug: cmd.Slug, OrgId: cmd.OrgId}
-		has, err := x.Get(&dashboard)
+		has, err := sess.Get(&dashboard)
 		if err != nil {
 			return err
 		} else if has == false {
@@ -255,4 +271,41 @@ func DeleteDashboard(cmd *m.DeleteDashboardCommand) error {
 
 		return nil
 	})
+}
+
+func GetDashboards(query *m.GetDashboardsQuery) error {
+	if len(query.DashboardIds) == 0 {
+		return m.ErrCommandValidationFailed
+	}
+
+	var dashboards = make([]m.Dashboard, 0)
+
+	err := x.In("id", query.DashboardIds).Find(&dashboards)
+	query.Result = &dashboards
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+type DashboardSlugDTO struct {
+	Slug string
+}
+
+func GetDashboardSlugById(query *m.GetDashboardSlugByIdQuery) error {
+	var rawSql = `SELECT slug from dashboard WHERE Id=?`
+	var slug = DashboardSlugDTO{}
+
+	exists, err := x.Sql(rawSql, query.Id).Get(&slug)
+
+	if err != nil {
+		return err
+	} else if exists == false {
+		return m.ErrDashboardNotFound
+	}
+
+	query.Result = slug.Slug
+	return nil
 }

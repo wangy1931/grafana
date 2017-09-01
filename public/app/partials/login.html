@@ -1,22 +1,22 @@
 <div class="login-content">
-    <div ng-include="'app/partials/login_header.html'"></div>
-    <section class="login-inner-content">
-        <form name="loginForm" class="login-form login-content-form">
-            <label>登录名：</label>
-            <input type="text" name="username" required ng-model="formModel.user" placeholder="邮箱／用户名" />
+	<div ng-include="'public/app/partials/login_header.html'"></div>
+	<section class="login-inner-content">
+		<form name="loginForm" class="login-form login-content-form">
+			<label>登录名：</label>
+			<input type="text" name="username" required ng-model="formModel.user" placeholder="邮箱／用户名" />
 
-            <label>密码：<a href="user/password/send-reset-email" class="pull-right" tabindex="-1">忘记密码？</a></label>
-            <div class="clearfix"></div>
-            <input type="password" name="password" required ng-model="formModel.password" id="inputPassword" />
+			<label>密码：<a href="user/password/send-reset-email" class="pull-right" tabindex="-1">忘记密码？</a></label>
+			<div class="clearfix"></div>
+			<input type="password" name="password" required ng-model="formModel.password" id="inputPassword" />
 
-            <div class="btn-login-box">
-                <button type="submit" class="btn-link-login btn-login" ng-click="submit();">登录</button>
-            </div>
+			<div class="btn-login-box">
+				<button type="submit" class="btn-link-login btn-login" ng-click="submit();">登录</button>
+			</div>
 
-            <span class="help-block go-register">还没有用户名？<a href="signupfree" class="btn-link-login">免费注册</a></span>
+			<span class="help-block go-register">还没有用户名？<a href="signupfree" class="btn-link-login">免费注册</a></span>
 
-        </form>
-    </section>
+		</form>
+	</section>
 
-    <div ng-include="'app/partials/login_footer.html'"></div>
+	<div ng-include="'public/app/partials/login_footer.html'"></div>
 </div>

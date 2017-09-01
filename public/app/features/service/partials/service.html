@@ -1,4 +1,4 @@
-<topnav section="服务依赖状态" icon="fa fa-fw fa-cubes"></topnav>
+<navbar title="服务依赖状态" icon="fa fa-fw fa-cubes"></navbar>
 
 <div class="page-container service-status" style="padding-left:20px;">
 <!--surface-id="serviceSurface"-->
@@ -35,7 +35,7 @@
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{$index}}" ng-click="selectHost($index, host.hostName);">
                   <h4>
                     <span class="pull-left">
-                      <i class="fa btn btn-primary" ng-class="{true: 'fa-minus', false: 'fa-plus'}[$index == selected]"></i>
+                      <i class="fa btn btn-primary" ng-class="{true: 'fa-minus', false: 'fa-plus'}[$index === selected]"></i>
                       <span>{{host.hostName}}</span>
                     </span>
                     <span class="pull-right"><em class="host-status status-{{host.healthStatusType | lowercase}}"> </em></span>
@@ -54,7 +54,7 @@
                         <span ng-if="currentItemStatus=='GREEN'">服务线程正常运行</span>
                         <span ng-if="currentItemStatus!=='GREEN'">服务线程中断</span>
                     </p>
-                    <table-loader key={{host.hostName}} template="/app/features/service/partials/service_host_table.html"></table-loader>
+                    <table-loader key={{host.hostName}} template="public/app/features/service/partials/service_host_table.html"></table-loader>
                   </div>
                   <div ng-if="host.healthStatusType === 'GREY'">
                     <p>探针没有收集到数据 或 机器没有正常工作</p>

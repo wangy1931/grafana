@@ -4,13 +4,17 @@ define([
 function (coreModule) {
   "use strict";
 
-  coreModule.controller('LoadDashboardCtrl', function($scope, $routeParams, dashboardLoaderSrv, backendSrv) {
+  coreModule.default.controller('LoadDashboardCtrl', function($scope, $routeParams, dashboardLoaderSrv, backendSrv, $location) {
 
     if (!$routeParams.slug) {
-      backendSrv.get('/api/dashboards/home').then(function(result) {
-        var meta = result.meta;
-        meta.canSave = meta.canShare = meta.canStar = false;
-        $scope.initDashboard(result, $scope);
+      backendSrv.get('/api/dashboards/home').then(function(homeDash) {
+        if (homeDash.redirectUri) {
+          $location.path('dashboard/' + homeDash.redirectUri);
+        } else {
+          var meta = homeDash.meta;
+          meta.canSave = meta.canShare = meta.canStar = false;
+          $scope.initDashboard(homeDash, $scope);
+        }
       });
       return;
     }
@@ -21,7 +25,7 @@ function (coreModule) {
 
   });
 
-  coreModule.controller('DashFromImportCtrl', function($scope, $location, alertSrv) {
+  coreModule.default.controller('DashFromImportCtrl', function($scope, $location, alertSrv) {
     if (!window.grafanaImportDashboard) {
       alertSrv.set('抱歉', '不能在没有保存的情况下刷新页面', 'warning', 7000);
       $location.path('');
@@ -33,7 +37,7 @@ function (coreModule) {
     }, $scope);
   });
 
-  coreModule.controller('NewDashboardCtrl', function($scope, $routeParams) {
+  coreModule.default.controller('NewDashboardCtrl', function($scope, $routeParams) {
     var newTitle = $routeParams.title || "新的仪表盘";
     var newSystem = $routeParams.system;
     $scope.initDashboard({

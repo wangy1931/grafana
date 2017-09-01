@@ -7,6 +7,12 @@ function ($) {
 
   var _ = window._;
 
+  _.findWhere = _.find;
+  _.contains = _.includes;
+  _.where = _.filter;
+  _.pairs = _.toPairs;
+  _.pluck = _.map;
+
   /*
     Mixins :)
   */
@@ -64,7 +70,9 @@ function ($) {
       "postgresql": "Postgresql",
       "redis": "Redis",
       "rabbitmq": "RabbitMQ",
-      "iis": "IIS"
+      "iis": "IIS",
+      "oracle": "Oracle",
+      "weblogic": "WebLogic"
     };
   };
 
