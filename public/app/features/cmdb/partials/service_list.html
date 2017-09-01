@@ -26,10 +26,10 @@
                 <td class="main-color">{{service.name}}</td>
                 <td>{{service.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                 <td>
-                    <a href=""><span class="cmdb-icon-text" bs-tooltip="'敬请期待'" data-placement="top">编辑</span></a>
                     <a href="/cmdb/servicelist/servicedetail?id={{service.id}}">
                         <span class="cmdb-icon-text">详情</span>
                     </a>
+                    <a href="/cmdb/config/{{service.name}}?serviceId={{service.id}}" ng-if="service.name==='collector' || service.name==='filebeat'"><span class="cmdb-icon-text">编辑</span></a>
                 </td>
             </tr>
         </table>

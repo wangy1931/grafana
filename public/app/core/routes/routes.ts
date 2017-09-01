@@ -383,6 +383,24 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'CMDBServiceDetailCtrl',
     resolve: loadCMDBBundle
   })
+  .when('/cmdb/config/collector', {
+    templateUrl: 'public/app/features/cmdb/partials/uagent_collector.html',
+    controller : 'UagentCollectorCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadCMDBBundle
+  })
+  .when('/cmdb/config/collector/edit', {
+    templateUrl: 'public/app/features/cmdb/partials/uagent_collector_edit.html',
+    controller : 'UagentCollectorEditCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadCMDBBundle
+  })
+  .when('/cmdb/config/filebeat', {
+    templateUrl: 'public/app/features/cmdb/partials/uagent_filebeat.html',
+    controller : 'UagentFilebeatCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadCMDBBundle
+  })
   .when('/service_dependency', {
     templateUrl: 'public/app/features/service/partials/service_dep.html',
     controller : 'BuildDependCtrl',
