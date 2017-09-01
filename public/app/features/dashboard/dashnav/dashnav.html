@@ -1,0 +1,79 @@
+<navbar>
+
+<a class="pointer navbar-page-btn" ng-if="::!dashboardMeta.isSnapshot" ng-click="openSearch()">
+	<i class="icon-gf icon-gf-dashboard"></i>
+	<span>{{dashboard.title}}</span>
+	<i class="fa fa-caret-down"></i>
+</a>
+
+<a class="pointer navbar-page-btn" ng-if="::dashboardMeta.isSnapshot" data-container="body" bs-tooltip="titleTooltip" data-placement="bottom" ng-click="openSearch()">
+	<i class="icon-gf icon-gf-snapshot"></i>
+	<span>
+		{{dashboard.title}}
+		<em class="small">&nbsp;&nbsp;(snapshot)</em>
+	</span>
+</a>
+
+<ul class="nav pull-left dashnav-action-icons">
+	<li ng-show="::dashboardMeta.canStar">
+		<a class="pointer" ng-click="starDashboard()">
+			<i class="fa" ng-class="{'fa-star-o': !dashboardMeta.isStarred, 'fa-star': dashboardMeta.isStarred}" style="color: orange;"></i>
+		</a>
+	</li>
+	<li ng-show="::dashboardMeta.canShare" class="dropdown">
+		<a class="pointer" ng-click="hideTooltip($event)" data-container="body" bs-tooltip="'分享一下'" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-share-square-o"></i></a>
+		<ul class="dropdown-menu">
+			<li>
+				<a class="pointer" ng-click="shareDashboard(0)">
+					<i class="fa fa-link"></i> 链接分享
+				</a>
+			</li>
+			<li>
+				<a class="pointer" ng-click="shareDashboard(1)">
+					<i class="icon-gf icon-gf-snapshot"></i>快照分享
+				</a>
+			</li>
+		</ul>
+	</li>
+	<li ng-show="::dashboardMeta.canSave">
+		<a ng-click="saveDashboard()" data-container="body" bs-tooltip="'保存仪表盘 <br> CTRL+S'" data-placement="bottom"><i class="fa fa-save"></i></a>
+	</li>
+	<li ng-if="::showSettingsMenu" class="dropdown">
+		<a class="pointer" ng-click="hideTooltip($event)" data-container="body" bs-tooltip="'仪表盘管理'" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-cog"></i></a>
+		<ul class="dropdown-menu">
+			<li ng-if="dashboardMeta.canEdit"><a class="pointer" ng-click="openEditView('settings');">设置</a></li>
+			<li ng-if="dashboardMeta.canEdit"><a class="pointer" ng-click="openEditView('annotations');">标注</a></li>
+			<li ng-if="dashboardMeta.canEdit"><a class="pointer" ng-click="openEditView('templating');">模板</a></li>
+			<li ng-if="dashboardMeta.canEdit"><a class="pointer" ng-click="exportDashboard();">导出</a></li>
+			<li ng-if="dashboardMeta.canEdit"><a class="pointer" ng-click="editJson();">查看 JSON</a></li>
+			<li ng-if="contextSrv.isEditor && !dashboard.editable"><a class="pointer" ng-click="makeEditable();">可编辑</a></li>
+			<li ng-if="contextSrv.isEditor"><a class="pointer" ng-click="saveDashboardAs();">保存为</a></li>
+			<li ng-if="dashboardMeta.canSave"><a class="pointer" ng-click="deleteDashboard();">删除仪表盘</a></li>
+		</ul>
+	</li>
+</ul>
+
+<ul class="nav dash-playlist-actions" ng-if="playlistSrv">
+	<li>
+		<a ng-click="playlistSrv.prev()"><i class="fa fa-step-backward"></i></a>
+	</li>
+	<li>
+		<a ng-click="playlistSrv.stop()"><i class="fa fa-stop"></i></a>
+	</li>
+	<li>
+		<a ng-click="playlistSrv.next()"><i class="fa fa-step-forward"></i></a>
+	</li>
+</ul>
+
+<ul class="nav pull-right">
+	<li ng-show="dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
+		<a ng-click="exitFullscreen()">
+			返回仪表盘
+		</a>
+	</li>
+	<li ng-if="dashboard">
+		<gf-time-picker dashboard="dashboard"></gf-time-picker>
+	</li>
+</ul>
+
+</navbar>

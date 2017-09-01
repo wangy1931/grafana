@@ -1,7 +1,7 @@
-<topnav title="关联分析" icon="fa fa-fw fa-signal" subnav="true">
+<navbar icon="fa fa-fw fa-signal" title="关联分析">
     <ul class="nav pull-right">
-        <li ng-show="true" class="back-to-dashboard-link">
-            <a onclick="javascript:history.go(-1)">
+        <li ng-show="dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
+            <a ng-click="exitFullscreen()">
                 返回到仪表盘
             </a>
         </li>
@@ -9,10 +9,10 @@
             <gf-time-picker dashboard="dashboard"></gf-time-picker>
         </li>
     </ul>
-</topnav>
+</navbar>
 
 <div class="page-container" style="background:#fff;">
-    <form>
+    <form class="tidy-form-box">
         <h2>关联性分析</h2>
         <div class="tidy-form">
             <ul class="tidy-form-list">
@@ -45,7 +45,7 @@
             </ul>
             <div class="clearfix"></div>
         </div>
-        <button type="submit" class="btn btn-primary" ng-click="analysis()"><i class="fa fa-search"/>开始分析</button>
+        <button type="submit" class="btn btn-primary" ng-click="analysis()"><i class="fa fa-search"></i>开始分析</button>
     </form>
     <div ng-if="dashboard">
         <h2>调整相关性分析参数</h2>
@@ -90,10 +90,10 @@
                     <div ng-repeat="(name, panel) in row.panels track by panel.id" class="panel"
                         ui-draggable="!dashboardViewState.fullscreen" drag="panel.id"
                         ui-on-Drop="onDrop($data, row, panel)" drag-handle-class="drag-handle" panel-width>
-                        <panel-loader type="panel.type" class="panel-margin"></panel-loader>
+                        <plugin-component type="panel" class="panel-margin"></plugin-component>
                     </div>
 
-                    <div ng-if="isAssociation" class="page-container panel panel-associatoin"
+                    <div ng-if="isAssociation" class="panel panel-associatoin"
                         style="padding: 20px 20px 20px 20px;">
                         <h2>
                             挑选推荐关联指标进行对比
@@ -109,14 +109,6 @@
                                     <p style="width: 90%;" class="max-width" title="{{_.getMetricName(metricsName)}}">
                                         {{_.getMetricName(metricsName)}}</p></input>
                                 </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div panel-drop-zone class="panel panel-drop-zone" ui-on-drop="onDrop($data, row)" data-drop="true">
-                        <div class="panel-container" style="background: transparent">
-                            <div style="text-align: center">
-                                <em>点击这里(drop here)</em>
                             </div>
                         </div>
                     </div>

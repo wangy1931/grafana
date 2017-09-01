@@ -1,9 +1,8 @@
 define([
     'angular',
     'lodash',
-    'app/app',
   ],
-  function (angular, _, app) {
+  function (angular, _) {
     'use strict';
 
     var module = angular.module('grafana.controllers');
@@ -131,7 +130,7 @@ define([
           id  : $dragElement.attr('data-node-id'),
           icon: serviceIconMap[serviceName] || "iconfont fa-default"
         };
-      }
+      };
 
     });
   }

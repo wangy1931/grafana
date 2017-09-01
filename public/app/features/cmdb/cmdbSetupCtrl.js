@@ -1,7 +1,6 @@
 define([
   'angular',
-  'lodash'
-], function(angular, _) {
+], function(angular) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
@@ -78,6 +77,6 @@ define([
     $scope.fileChanged = function(ele) {
       $scope.fileName = ele.files[0].name;
       $scope.$apply();
-    }
+    };
   });
 });

@@ -1,0 +1,50 @@
+ .summary-item{
+   width: 50%;
+   display: inline-block;
+   box-sizing: border-box;
+ }
+
+ .summary-panel{
+   border: 1px solid #ddd;
+ }
+
+ .summary-analysis{
+   width: 30%;
+ }
+
+
+.btn-list-status{
+  list-style: none;
+}
+
+.btn-item{
+  float: left;
+  padding: 5px;
+  width: 20%;
+  margin-right: 20px;
+  span{
+    font-size: 20px;
+    font-weight: bold;
+  }
+}
+
+.summary-row {
+  height: 400px;
+  padding: 20px;
+  background: white;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border-right: 5px solid #f9f9f9;
+  &:nth-child(10){
+    height: 460px;
+    overflow: hidden;
+  }
+  .panel-margin {
+    border: 1px solid #ccc;
+    margin-top: 10px;
+  }
+}
+
+.summary-container {
+  background: #f9f9f9;
+}

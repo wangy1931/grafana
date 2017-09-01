@@ -7,7 +7,7 @@ define([
 function (angular, _, coreModule, config) {
   'use strict';
 
-  coreModule.service('backendSrv', function($http, alertSrv, $timeout,contextSrv, $q) {
+  coreModule.default.service('backendSrv', function($http, alertSrv, $timeout, contextSrv, $q) {
     var self = this;
     this.alertDUrl;
     this.tokens = null;
@@ -107,7 +107,14 @@ function (angular, _, coreModule, config) {
           });
         }
 
-        // // for Prometheus
+        //populate error obj on Internal Error
+        if (_.isString(err.data) && err.status === 500) {
+          err.data = {
+            error: err.statusText
+          };
+        }
+
+        // for Prometheus
         // if (!err.data.message && _.isString(err.data.error)) {
         //   err.data.message = err.data.error;
         // }
@@ -136,7 +143,7 @@ function (angular, _, coreModule, config) {
     this.getSystemById = function (id) {
       var sys = '';
       _.each(contextSrv.systemsMap, function (system) {
-        if (system.Id == id) {
+        if (system.Id === id) {
           sys = system.SystemsName;
         }
       });
@@ -150,7 +157,7 @@ function (angular, _, coreModule, config) {
       var getSystems = this.get("/api/user/system").then(function (systems) {
         contextSrv.systemsMap = systems;
       });
-      return $q.all([getTokens, getSystems])
+      return $q.all([getTokens, getSystems]);
     };
 
     this.updateTokens = function () {

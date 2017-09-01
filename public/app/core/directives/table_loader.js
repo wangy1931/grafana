@@ -6,7 +6,7 @@ define([
   function ($, _, coreModule) {
     'use strict';
 
-    coreModule.directive('tableLoader', function ($compile, $http) {
+    coreModule.default.directive('tableLoader', function ($compile, $http) {
       return {
         restrict: 'EA',
         link: function (scope, elem, attr) {

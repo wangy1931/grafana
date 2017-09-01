@@ -3,7 +3,7 @@ define([
     'lodash',
     'ng-quill'
   ],
-  function (angular, _) {
+  function (angular) {
     'use strict';
 
     var module = angular.module('grafana.controllers');
@@ -27,6 +27,8 @@ define([
           "opentsdb",
           "mongo3",
           "nginx",
+          "windows",
+          "exchange",
         ];
         $scope.fullText = [];
         $scope.readOnly = true;
@@ -37,8 +39,8 @@ define([
         $scope.showCreatForm = false;
         var params =  {
           q: $scope.q
-        }
-        if ($scope.service != "*") {
+        };
+        if ($scope.service !== "*") {
           params.service = $scope.service;
         }
         backendSrv.knowledge({
@@ -52,7 +54,7 @@ define([
 
       $scope.newKnows = function () {
         $scope.appEvent('show-modal', {
-          src: 'app/features/logs/partials/new_knowledge.html',
+          src: 'public/app/features/logs/partials/new_knowledge.html',
           modalClass: 'modal-no-header invite-modal',
           scope: $scope.$new(),
         });
@@ -95,14 +97,13 @@ define([
           editor.root.innerHTML = knowledge;
         } else {
           var tmp = knowledge.trim();
-          var length_txt = tmp.indexOf('\n');
-          length_txt = (length_txt > -1 && length_txt < 100) ? length_txt : 100;
+          tmp = tmp.replace(/[\r]?\n/g, '');
+          tmp = tmp.replace(/<\/?[ol|li|blockquote|pre]+>/g, '');
+          tmp = tmp.replace(/<.*\b">/g, '');
+          tmp = tmp.replace(/<\/?.*\b>/g, '');
 
-          var length_html = tmp.indexOf('</');
-          length_html = (length_html > -1 && length_html < 100) ? length_html : 100;
-
-          var length = length_txt < length_html ? length_txt : length_html;
-          var end = tmp.length > length ? '...' : '';
+          var length = tmp.length > 100 ? 100 : tmp.length;
+          var end = tmp.length > 100 ? '...' : '';
           editor.root.innerHTML = tmp.substring(0, length) + end;
         }
       };

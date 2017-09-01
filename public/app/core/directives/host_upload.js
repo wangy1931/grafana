@@ -5,7 +5,7 @@ define([
 function (coreModule, _) {
   'use strict';
 
-  coreModule.directive('hostUpload', function(alertSrv) {
+  coreModule.default.directive('hostUpload', function(alertSrv) {
     return {
       restrict: 'A',
       link: function(scope) {

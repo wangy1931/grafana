@@ -1,6 +1,7 @@
 define([
   'angular',
-  'lodash'
+  'lodash',
+  'app/plugins/datasource/opentsdb/queryCtrl',
 ],
 function (angular, _) {
   'use strict';
@@ -80,7 +81,7 @@ function (angular, _) {
               "short",
               "short"
             ],
-            "transparent": true
+            "transparent": false
           }
         ],
         "showTitle": false,
@@ -153,7 +154,7 @@ function (angular, _) {
     $scope.setTarget = function(panel,detail) {
       if(detail.alertDetails.hostQuery.metricQueries[0].aggregator) {
         panel.panels[0].targets[0].aggregator = detail.alertDetails.hostQuery.metricQueries[0].aggregator.toLowerCase();
-      };
+      }
       panel.panels[0].targets[0].metric = detail.alertDetails.hostQuery.metricQueries[0].metric;
       var tags = detail.alertDetails.tags;
       _.each(tags, function(tag) {
@@ -172,13 +173,13 @@ function (angular, _) {
     $scope.setCritThreshold = function (panel,detail) {
       if(detail.alertDetails.crit.threshold) {
         panel.panels[0].grid.threshold1 = Number(detail.alertDetails.crit.threshold);
-      };
+      }
     };
 
     $scope.setWarnThreshold = function (panel,detail) {
       if(detail.alertDetails.warn.threshold) {
         panel.panels[0].grid.threshold2 = Number(detail.alertDetails.warn.threshold);
-      };
+      }
     };
 
     $scope.saveChanges = function() {
@@ -203,7 +204,7 @@ function (angular, _) {
         });
       } else {
         alertSrv.set("信息不完整或信息格式错误", '请检查报警信息', 'warning', 10000);
-      };
+      }
     };
 
     $scope.getTags = function(tags, detail) {
@@ -214,7 +215,7 @@ function (angular, _) {
           'value': tags[i]
         };
         detail.tags.push(temp);
-      };
+      }
     };
 
     $scope.setTags = function(panel, tags) {
@@ -243,7 +244,7 @@ function (angular, _) {
           $scope.checkForm();
         });
       }
-    }
+    };
 
     $scope.checkForm = function() {
       var checkNull = [];
@@ -263,10 +264,10 @@ function (angular, _) {
       // alertDetails.crit.durarionMinutes >= 1
       checkNull.push(_.isUndefined(alertDetails.crit.durarionMinutes) || Number(alertDetails.crit.durarionMinutes)  < 1);
 
-      if(expression == "?") {
+      if(expression === "?") {
         alertDetails.crit.threshold = 0;
         alertDetails.warn.threshold = 0;
-      };
+      }
 
       // alertDetails.crit.threshold ! empty
       checkNull.push(!_.isNumber(alertDetails.crit.threshold));

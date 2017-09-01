@@ -8,7 +8,7 @@ define([
   function ($, _, coreModule) {
     'use strict';
 
-    coreModule.directive('systemPanel', function ($parse, alertMgrSrv, healthSrv, datasourceSrv, contextSrv, backendSrv, $location, $q) {
+    coreModule.default.directive('systemPanel', function ($parse, alertMgrSrv, healthSrv, datasourceSrv, contextSrv, backendSrv, $location, $q) {
       return {
         restrict: 'E',
         link: function (scope, elem, attr) {
@@ -17,7 +17,7 @@ define([
             contextSrv.hostNum = scope.hostList.length;
             backendSrv.post("/api/system/pick",{SystemId: systemId});
             if(contextSrv.hostNum) {
-              scope.appEvent("toggle-sidemenu");
+              contextSrv.toggleSideMenu();
               $location.url("/");
             } else {
               $location.url("/setting/agent");
@@ -51,7 +51,7 @@ define([
                 _.each(response, function (service) {
                   if (_.isObject(service)) {
                     var status = service.dps[_.last(Object.keys(service.dps))];
-                    if(typeof(status) != "number") {
+                    if(typeof(status) !== "number") {
                       throw Error;
                     }
                     if(status > 0) {
@@ -76,7 +76,6 @@ define([
           var getAlertStatus = alertMgrSrv.loadTriggeredAlerts().then(function onSuccess(response) {
             var critical = 0;
             var warn = 0;
-            var pieData = [];
             for (var i = 0; i < response.data.length; i++) {
               var alertDetail = response.data[i];
               if (alertDetail.status.level === "CRITICAL") {
@@ -123,7 +122,7 @@ define([
                     host.status = 0;
                     scope.hostStatus.normal++;
                   }
-                },function(err) {
+                },function() {
                   scope.hostStatus.unnormal++;
                   host.status = 1;
                 });
@@ -135,7 +134,7 @@ define([
               d.resolve();
               return d.promise;
             }
-          }, function(err) {
+          }, function() {
             getPlatform();
           });
 
@@ -152,8 +151,7 @@ define([
                   innerRadius: 0.5,
                   show: true,
                   label: {
-                      show: true,
-                      radius: 1/4,
+                      show: false,
                   }
                 }
               },
@@ -175,7 +173,7 @@ define([
                 alertRulesNum = result[1],
                 alertStatus = result[2],
                 getService = result[3];
-            if(typeof(hostNum) == "undefined"){
+            if(typeof(hostNum) === "undefined"){
               getPlatform();
             } else {
               getService();
@@ -194,7 +192,7 @@ define([
               ];
               setPie('sys_annomaly', system, annomalyPieData);
             }
-          },function(res) {
+          },function() {
             getPlatform();
           });
 

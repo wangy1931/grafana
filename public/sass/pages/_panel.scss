@@ -1,0 +1,93 @@
+//TODO update
+.panel-associatoin {
+ max-height: 500px;
+ overflow: hidden;
+ display: block;
+ float: none;
+ .grafana-options-table{
+   max-height: 200px;
+   overflow-y: scroll;
+   & > div {
+     display: flex;
+     justify-content: space-between;
+     flex-wrap: wrap;
+   }
+ }
+ .span3 {
+   width: 33%;
+   display: flex;
+   margin-left: 0;
+   & > input {
+     margin-top: -8px;
+     margin-right: 5px;
+   }
+ }
+}
+
+.panel-right-menu {
+ position: absolute;
+ margin-right: 11px;
+ top: 0;
+ right: 0;
+ width: 100%;
+ text-align: right;
+ padding-left: 20px;
+ &.panelError {
+  padding-left: 36px;
+ }
+}
+.panel-right-menu-item {
+ margin-right: 5px;
+ cursor: pointer;
+}
+
+.panel-help {
+ color: $white;
+ position: absolute;
+ right: 0;
+ padding: 0px 17px 6px 5px;
+ top: 0;
+ z-index: 10;
+ i {
+   position: relative;
+   top: -2px;
+   left: 9px;
+ }
+}
+
+.panel-help-arrow {
+ width: 0;
+ height: 0;
+ position: absolute;
+ border-left: 31px solid transparent;
+ border-right: 30px solid transparent;
+ border-bottom: 27px solid #ccc;
+ right: 0;
+ bottom: 0;
+}
+
+
+.panel-title-container {
+  min-height: 15px;
+  padding-top: 4px;
+  cursor: auto;
+  width: 100%;
+  position: relative;
+}
+.panel-title {
+  border: 0px;
+  font-weight: bold;
+  cursor: auto;
+  margin: 0 auto;
+}
+
+// cloudwiz start
+.panel-time-info {
+  float: none;
+  position: static;
+}
+
+.pull-right > .dropdown-menu {
+  text-align: left;
+}
+// cloudwiz end

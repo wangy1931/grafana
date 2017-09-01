@@ -1,6 +1,8 @@
 define([
     'angular',
-    'lodash'
+    'lodash',
+    'jquery.flot',
+    'jquery.flot.pie',
   ],
   function (angular, _) {
     'use strict';
@@ -30,6 +32,61 @@ define([
             $scope.summary.dangerMetricNum += cluster.counter.unhealth;
           });
           $scope.excludeMetricsData = healthSrv.floor(data.metricHostExcluded.elements);
+
+          $scope.pieData = {
+            'normalMetricNum': $scope.summary.numMetrics - $scope.summary.numAnomalyMetrics,
+            'criticalMetricNum': $scope.summary.numAnomalyMetrics - $scope.summary.dangerMetricNum,
+            'dangerMetricNum': $scope.summary.dangerMetricNum,
+            'normalPointNum': ($scope.summary.numDataPoints || $scope.summary.numAnomaliesInCache) - $scope.summary.numAnomaliesInCache,
+            'anomalyPointNum': $scope.summary.numAnomaliesInCache
+          };
+          $scope.pieData.normalMetricPer = Math.round($scope.pieData.normalMetricNum / $scope.summary.numMetrics * 100);
+          $scope.pieData.criticalMetricPer = Math.round($scope.pieData.criticalMetricNum / $scope.summary.numMetrics * 100);
+          $scope.pieData.dangerMetricPer = Math.round($scope.pieData.dangerMetricNum / $scope.summary.numMetrics * 100);
+          var dataPointNum = $scope.pieData.normalPointNum + $scope.pieData.anomalyPointNum;
+          $scope.pieData.normalPointPer = Math.round($scope.pieData.normalPointNum / dataPointNum * 100);
+          $scope.pieData.anomalyPointPer = Math.round($scope.pieData.anomalyPointNum / dataPointNum * 100);
+          var pieData = [
+            {label: "持续异常", data: $scope.pieData.dangerMetricNum},
+            {label: "临时异常", data: $scope.pieData.criticalMetricNum},
+            {label: "正常指标", data: $scope.pieData.normalMetricNum},
+          ];
+          $.plot("#anomaly-pie", pieData, {
+            series: {
+              pie: {
+                innerRadius: 0.5,
+                show: true,
+                label: {
+                    show: false,
+                }
+              }
+            },
+            legend:{
+              show:false
+            },
+            colors: ['rgb(224,76,65)','rgb(255,197,58)','rgb(61,183,121)']
+          });
+
+          var numDataPoints = ($scope.summary.numDataPoints || $scope.summary.numAnomaliesInCache) - $scope.summary.numAnomaliesInCache;
+          var piePointData = [
+            {label: "异常点数", data: $scope.pieData.anomalyPointNum},
+            {label: "正常点数", data: $scope.pieData.normalPointNum},
+          ];
+          $.plot("#anomaly-point-pie", piePointData, {
+            series: {
+              pie: {
+                innerRadius: 0.5,
+                show: true,
+                label: {
+                    show: false,
+                }
+              }
+            },
+            legend:{
+              show:false
+            },
+            colors: ['rgb(255,197,58)','rgb(61,183,121)']
+          });
           $controller('ClusterCtrl', {$scope: $scope}).init();
         });
         $scope.selected = 0;
@@ -40,7 +97,7 @@ define([
 
       $scope.changeExcludeMetrics = function () {
         $scope.appEvent('show-modal', {
-          src: './app/partials/exclude_metrics.html',
+          src: 'public/app/partials/exclude_metrics.html',
           modalClass: 'modal-no-header confirm-modal',
           scope: $scope.$new(),
         });
@@ -69,7 +126,7 @@ define([
       };
 
       $scope.selectCluster = function(index) {
-        if($scope.selected == index) {
+        if($scope.selected === index) {
           $scope.selected = -1;
         } else {
           $scope.selected = index;

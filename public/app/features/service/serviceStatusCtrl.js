@@ -73,7 +73,7 @@ define([
         $scope.bsTableData = [];
         $scope.$broadcast('load-table');
 
-        $scope.selected = ($scope.selected == index) ? -1 : index;
+        $scope.selected = ($scope.selected === index) ? -1 : index;
 
         $scope.selectHealthItemType(host, 'ServiceKPI');
       };
@@ -140,6 +140,12 @@ define([
           filter: ".delete *"
         },
         consumeRightClick: false
+      };
+
+      // 弹窗 查看历史情况
+      $scope.showModal = function (index, metric, host) {
+        // TODO
+        return;
       };
 
     });

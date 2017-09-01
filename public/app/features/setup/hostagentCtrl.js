@@ -47,11 +47,11 @@ function (angular, _) {
     $scope.getHosts = function() {
       if($scope.hostNum > contextSrv.hostNum){
         // 首台机器安装完成，自动加载模板
-        if(contextSrv.hostNum == 0){
+        if(contextSrv.hostNum === 0){
           contextSrv.hostNum = $scope.hostNum;
           $interval.cancel($scope.inter);
           $scope.createTemp();
-        };
+        }
         contextSrv.hostNum = $scope.hostNum;
         $interval.cancel($scope.inter);
         $scope.installed = true;
@@ -96,7 +96,7 @@ function (angular, _) {
       $scope.hostDashboard = true;
       var tmp = ["iostat","machine"];
       var promiseArr = [];
-      _.each(tmp,function(template, i) {
+      _.each(tmp,function(template) {
         var p = backendSrv.get('/api/static/template/'+template).then(function(result) {
           result.system = contextSrv.user.systemId;
           result.id = null;
@@ -137,7 +137,7 @@ function (angular, _) {
 
     $scope.updateType = function(type) {
       $scope.type = type;
-      if(type == '更新') {
+      if(type === '更新') {
         $scope.updateAuto = ' /dev/stdin -update';
         $scope.updateSelf = ' -update';
       } else {

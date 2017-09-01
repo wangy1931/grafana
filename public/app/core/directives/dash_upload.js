@@ -5,7 +5,7 @@ define([
 function (coreModule, kbn) {
   'use strict';
 
-  coreModule.directive('dashUpload', function(timer, alertSrv, $location) {
+  coreModule.default.directive('dashUpload', function(timer, alertSrv, $location) {
     return {
       restrict: 'A',
       link: function(scope) {
@@ -22,6 +22,7 @@ function (coreModule, kbn) {
                   return;
                 }
                 var title = kbn.slugifyForUrl(window.grafanaImportDashboard.title);
+                title += new Date().getTime();
                 window.grafanaImportDashboard.id = null;
                 $location.path('/dashboard-import/' + title);
               });

@@ -1,0 +1,43 @@
+.table-container {
+    border: 1px solid #ddd;
+    background: white;
+    width: 100%;
+    position: fixed;
+    top: 52px;
+    z-index: 1;
+    left: 0px;
+    table {
+        width: 100%;
+    }
+
+    .text-overflow {
+        width: 600px;
+        margin: 0px;
+        float: left;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
+.table-head {
+    th {
+        color: #2ab2e4;
+        text-align: center;
+    }
+}
+
+.table-body {
+    text-align: center;
+    max-height: 150px;
+    overflow-y: auto;
+    tr:nth-child(2n+1) {
+        background: #e4e4e4;
+    }
+}
+
+.table-foot {
+    margin: 5px;
+}
+
+.highlight { background-color: yellow }

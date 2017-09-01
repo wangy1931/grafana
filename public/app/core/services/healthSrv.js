@@ -5,7 +5,7 @@ define([
 ],
 function (angular, _, coreModule) {
     'use strict';
-    coreModule.service('healthSrv', function ($http, backendSrv, $location, $q) {
+    coreModule.default.service('healthSrv', function ($http, backendSrv, $location, $q) {
       var anomalyListUrl = "/anomaly?by_groups=true";
       var excludeAnomaly = "/anomaly/exclude";
       var includeAnomaly = "/anomaly/include";
@@ -68,7 +68,7 @@ function (angular, _, coreModule) {
       };
 
       this.getMetricType = function (metric) {
-        return this.getMetricsType([metric])
+        return this.getMetricsType([metric]);
       };
 
       this.getMetricsType = function (metrics) {
@@ -77,7 +77,7 @@ function (angular, _, coreModule) {
           params: {
             names: metrics.join()
           }
-        })
+        });
       };
 
       this.floor = function (metrics) {
@@ -85,6 +85,35 @@ function (angular, _, coreModule) {
           metric.health = Math.floor(metric.health);
         });
         return metrics;
+      };
+
+      this.transformPanelMetricType = function (panel) {
+        var targets = {};
+        var metricsTypeQueries = [];
+
+        _.forEach(panel.targets, function (target) {
+          if (_.excludeMetricSuffix(target.metric)) {
+            targets[target.metric] = target;
+          }
+        });
+
+        if(!Object.keys(targets).length) return;
+
+        var q = _this.getMetricsType(Object.keys(targets)).then(function onSuccess(response) {
+          var types = response.data;
+          _.each(Object.keys(targets), function (key) {
+            if (types[key] === "counter") {
+              targets[key].shouldComputeRate = true;
+              targets[key].downsampleAggregator = "max";
+            } else if (types[key] === "increment") {
+              targets[key].shouldComputeRate = false;
+              targets[key].downsampleAggregator = "sum";
+            }
+          });
+        });
+        metricsTypeQueries.push(q);
+
+        return $q.all(metricsTypeQueries);
       };
 
       this.transformMetricType = function (dashboard) {
@@ -108,10 +137,10 @@ function (angular, _, coreModule) {
             var q = _this.getMetricsType(Object.keys(targets)).then(function onSuccess(response) {
               var types = response.data;
               _.each(Object.keys(targets), function (key) {
-                if (types[key] == "counter") {
+                if (types[key] === "counter") {
                   targets[key].shouldComputeRate = true;
                   targets[key].downsampleAggregator = "max";
-                } else if (types[key] == "increment") {
+                } else if (types[key] === "increment") {
                   targets[key].shouldComputeRate = false;
                   targets[key].downsampleAggregator = "sum";
                 }
@@ -136,6 +165,6 @@ function (angular, _, coreModule) {
         }, function onFailed(response) {
           return response;
         });
-      }
+      };
     });
   });

@@ -5,7 +5,7 @@ define([
 ],
 function (angular, _, coreModule) {
   'use strict';
-  coreModule.service('alertMgrSrv', function(alertSrv, backendSrv) {
+  coreModule.default.service('alertMgrSrv', function(alertSrv, backendSrv) {
     this.alertDefMap = {};
     var self = this;
     var alertDefUrl = "/alert/definition";
@@ -131,7 +131,7 @@ function (angular, _, coreModule) {
         params: {
           name: ruleName,
         }
-      })
+      });
     };
   });
 });
