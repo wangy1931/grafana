@@ -20,22 +20,26 @@
     background-color: $blue; // #3E7E9C;
     color: $white; // #f7ebca;
     cursor: move;
-    font-size: 13px;
+    font-size: 14px;
     padding: 0;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .jtk-node .name span {
     cursor: pointer;
+    word-break: break-all;
   }
 
   .jtk-animate-source {
-    outline:4px solid $warn;
+    border: 4px solid $warn;
   }
 
   /** applied to a node that a path is traversing on its way to another node */
   .jtk-animate-node-traversing {
-    outline:4px solid orange;
+    border: 4px solid orange;
   }
 
   .jtk-animate-edge-traversable path {
@@ -44,9 +48,9 @@
 
   /** applied to an edge that an overlay is traversing */
   .jtk-animate-edge-traversing path {
-    stroke-dasharray:0 2 2;
-    stroke:orange;
-    stroke-width:2;
+    stroke-dasharray: 0 2 2;
+    stroke: orange;
+    stroke-width: 2;
   }
 
 }

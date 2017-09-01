@@ -17,168 +17,51 @@ export class RootCauseAnalysisCtrl {
   constructor(private backendSrv, private $location, private $scope, jsPlumbService) {
     this.toolkit = window.jsPlumbToolkit.newInstance({
     });  // jsPlumbService.getToolkit("rcaToolkit");
-    this.loadGraph();
-    this.renderer = this.renderFactory();
+    this.loadGraph().then(() => {
+      this.renderer = this.renderFactory();
+    });
     this.render();
   }
 
   // function
   loadGraph() {
     // mock data
-    var rate = 200;
     this.data = {
-      "nodes": [
-        {
-          "id": "1",
-          "name": "1",
-          "sigVal": 0.15 * rate,
-        },
-        {
-          "id": "2",
-          "name": "2",
-          "sigVal": 0.15 * rate,
-        },
-        {
-          "id": "3",
-          "name": "3",
-          "sigVal": 0.15 * rate,
-        },
-        {
-          "id": "4",
-          "name": "4",
-          "sigVal": 0.2775 * rate,
-        },
-        {
-          "id": "5",
-          "name": "5",
-          "sigVal": 0.2775 * rate,
-        },
-        {
-          "id": "6",
-          "name": "6",
-          "sigVal": 0.2775 * rate,
-        }
-      ],
-      "edges": [
-        {
-          "source": "1",
-          "target": "3",
-          "data": {
-            "type": null
-          }
-        },
-        {
-          "source": "1",
-          "target": "5",
-          "data": {
-            "type": null
-          }
-        },
-        {
-          "source": "2",
-          "target": "3",
-          "data": {
-            "type": null
-          }
-        },
-        {
-          "source": "2",
-          "target": "4",
-          "data": {
-            "type": null
-          }
-        },
-        {
-          "source": "2",
-          "target": "6",
-          "data": {
-            "type": null
-          }
-        },
-        {
-          "source": "3",
-          "target": "4",
-          "data": {
-            "type": null
-          }
-        },
-        {
-          "source": "3",
-          "target": "5",
-          "data": {
-            "type": null
-          }
-        },
-        {
-          "source": "3",
-          "target": "6",
-          "data": {
-            "type": null
-          }
-        },
-        {
-          "source": "4",
-          "target": "1",
-          "data": {
-            "type": null
-          }
-        },
-        {
-          "source": "4",
-          "target": "6",
-          "data": {
-            "type": null
-          }
-        },
-        {
-          "source": "5",
-          "target": "2",
-          "data": {
-            "type": null
-          }
-        },
-        {
-          "source": "6",
-          "target": "5",
-          "data": {
-            "type": null
-          }
-        }
-      ],
-      "ports": [],
+      "nodes" : [],
+      "edges" : [],
+      "ports" : [],
       "groups": []
     }
 
     // real api
-    // this.backendSrv.get('/rca/gragh').then(response => {
-    //   this.data = response.data.edges;
-    //   // data strcture
-    //   // [ {
-    //   //   "src": {
-    //   //     "name" : "0",
-    //   //     "sigVal" : 0.15000000000000002
-    //   //   },
-    //   //   "dest" : {
-    //   //     "name" : "1",
-    //   //     "sigVal" : 0.2775
-    //   //   },
-    //   //   "score" : 1.0
-    //   // } ]
-    //   // api
-    //   this.data.forEach(item => {
-    //     // nodes
-    //     item.src.id = item.src.name;
-    //     item.dest.id = item.src.dest;
-    //     this.data.nodes.push(item.src);
-    //     this.data.nodes.push(item.dest);
-    //     // edges
-    //     this.data.edges.push({
-    //       "source": item.src.id,
-    //       "target": item.dest.id,
-    //       "data"  : { "type": null }
-    //     });
-    //   });
-    // });
+    return this.backendSrv.alertD({
+      "url": "/rca/graph"
+    }).then(response => {
+      var data = response.data.edges;
+      var sigValList = [];
+      var rate = 1;
+
+      data.forEach(item => {
+        // nodes
+        item.src.name = _.getMetricName(item.src.name), item.dest.name = _.getMetricName(item.dest.name);
+        item.src.id = item.src.name, item.dest.id = item.dest.name;
+        sigValList.push(item.src.sigVal), sigValList.push(item.dest.sigVal);
+      });
+
+      rate = 100 / Math.max(...sigValList);
+      data.forEach(item => {
+        // nodes
+        item.src.sigVal *= rate, item.dest.sigVal *= rate;
+        this.data.nodes.push(item.src);
+        this.data.nodes.push(item.dest);
+        // edges
+        this.data.edges.push({
+          "source": item.src.id,
+          "target": item.dest.id,
+          "data"  : { "type": null }
+        });
+      });
+    });
   }
 
   renderFactory() {
@@ -188,6 +71,7 @@ export class RootCauseAnalysisCtrl {
 
     // reset canvas height
     $(".jtk-demo-canvas").css({ "height": window.innerHeight - 52 - 28 - 70 });
+    console.log(this.data);
 
     return this.toolkit.load({type: "json", data: this.data}).render({
       container: canvasElement,
@@ -231,7 +115,8 @@ export class RootCauseAnalysisCtrl {
       jsPlumb: {
         Anchor: "Continuous",
         Connector: [ "StateMachine", { cssClass: "connectorClass", hoverClass: "connectorHoverClass" } ],
-        Endpoint: "Blank"
+        Endpoint: "Blank",
+        HoverPaintStyle: { stroke: "orange" },
       },
       // activeFiltering: true
     });
