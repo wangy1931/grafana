@@ -98,7 +98,7 @@
                                         <strong>探针没有收集到数据. </strong> (可能原因有: 1. 该服务探针没有 enable, 2. 探针没有正确收集数据)
                                     </p>
                                 </div>
-                                <div ng-if="{{host.itemStatusMap[currentItem].healthStatusType}} !== 'GREY' ">
+                                <div ng-if="host.itemStatusMap[currentItem].healthStatusType !== 'GREY'">
                                     <table-loader
                                         key={{host.host}}
                                         template="public/app/features/service/partials/service_host_table.html"></table-loader>
