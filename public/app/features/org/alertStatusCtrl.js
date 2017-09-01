@@ -135,7 +135,7 @@ function (angular, moment, _) {
         value: status.triggeredValue,
       };
       rcaFeedback.rootCauseMetrics = _.cloneDeep($scope.rootCauseMetrics);
-      _.each(rcaFeedback.rootCauseMetrics, function(cause){
+      _.each(rcaFeedback.rootCauseMetrics, function(cause) {
         cause.name = contextSrv.user.orgId + '.' + contextSrv.user.systemId + '.' + cause.name;
         cause.confidenceLevel = parseInt(cause.confidenceLevel);
       });
