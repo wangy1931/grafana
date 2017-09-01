@@ -329,11 +329,11 @@ export class SideMenuCtrl {
       });
     }
 
-    item.push({
-      text: "帮助文档",
-      url: "http://cloudwiz.cn/document/",
-      target: '_blank'
-    });
+    // item.push({
+    //   text: "帮助文档",
+    //   url: "http://cloudwiz.cn/document/",
+    //   target: '_blank'
+    // });
 
     return item;
   };
