@@ -1,5 +1,5 @@
 {
-  "title": "CloudWiz",
+  "title": "Com&Lan",
   "tags": [],
   "style": "dark",
   "timezone": "browser",
@@ -24,7 +24,7 @@
       ]
     },
     {
-      "title": "Welcome to CloudWiz",
+      "title": "Welcome to Com&Lan",
       "height": "210px",
       "collapse": false,
       "editable": true,
