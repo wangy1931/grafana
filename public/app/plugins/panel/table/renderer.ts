@@ -145,7 +145,7 @@ export class TableRenderer {
     }
     var heightHack = '';
     var heightHackStyle = '';
-    if (value.length > 917) {
+    if (value.length > 1081) {
       heightHack = `<div style="display: inline-block;">
                       <span class="expand-showmore" style="display: inline-block; padding: 0px 10px; cursor: pointer; background-color: rgb(230, 230, 230); font-size: 12px;">
                         ...
@@ -154,7 +154,7 @@ export class TableRenderer {
                         -
                       </span>
                     </div>`;
-      heightHackStyle = ' style="max-height: 165px; overflow-y: hidden;"';
+      heightHackStyle = ' style="max-height: 125px; overflow-y: hidden;"';
     }
 
     // title="' + value + '"

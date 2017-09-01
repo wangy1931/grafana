@@ -189,7 +189,7 @@ class TablePanelCtrl extends MetricsPanelCtrl {
       var el = $(e.currentTarget);
       el.css({ 'display': 'none' });
       el.hasClass('expand-showmore') && el.next().css({ 'display': 'inline-block' }) && el.parent().prev().css({ 'max-height': 'none' });
-      el.hasClass('collapse-showmore') && el.prev().css({ 'display': 'inline-block' }) && el.parent().prev().css({ 'max-height': '165px' });
+      el.hasClass('collapse-showmore') && el.prev().css({ 'display': 'inline-block' }) && el.parent().prev().css({ 'max-height': '125px' });
     }
 
     function appendPaginationControls(footerElem) {
