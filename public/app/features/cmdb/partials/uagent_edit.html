@@ -1,7 +1,7 @@
 <navbar icon="fa fa-fw fa-cubes" title="配置管理库" title-url="">
   <ul class="nav">
     <li><a href="/cmdb/servicelist">服务列表</a></li>
-    <li><a href="/cmdb/config/collector?serviceId={{ctrl.serviceId}}">collector</a></li>
+    <li><a href="/cmdb/config?serviceName={{ctrl.serviceName}}&serviceId={{ctrl.serviceId}}">collector</a></li>
     <li class="active"><a>{{ctrl.confName}}</a></li>
   </ul>
 </navbar>
@@ -33,7 +33,7 @@
     </div>
     <div class="gf-form-button-row">
       <a class="btn btn-primary" ng-click="saveConfig()">保存</a>
-      <a class="btn btn-outline-primary" href="/cmdb/config/collector?serviceId={{ctrl.serviceId}}">取消</a>
+      <a class="btn btn-outline-primary" href="/cmdb/config?serviceName={{ctrl.serviceName}}&serviceId={{ctrl.serviceId}}">取消</a>
     </div>
   </form>
 

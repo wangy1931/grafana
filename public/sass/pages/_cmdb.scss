@@ -185,3 +185,10 @@ $btn-cmdb-color: rgb(25,165,228);
   position: absolute;
   right: 0;
 }
+
+.uagent-table {
+  th, td {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+  }
+}

@@ -59,7 +59,8 @@ func Register(r *macaron.Macaron) {
 	r.Get("/cmdb/setup", reqSignedIn, Index)
 	r.Get("/cmdb/servicelist", reqSignedIn, Index)
 	r.Get("/cmdb/servicelist/servicedetail", reqSignedIn, Index)
-	r.Get("/cmdb/config/collector", reqSignedIn, Index)
+	r.Get("/cmdb/config", reqSignedIn, Index)
+	r.Get("/cmdb/config/edit", reqSignedIn, Index)
 
 	// not logged in views
 	r.Get("/", reqSignedIn, Index)

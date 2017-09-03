@@ -1,0 +1,30 @@
+<navbar icon="fa fa-fw fa-cubes" title="配置管理库" title-url="">
+  <ul class="nav">
+    <li><a href="/cmdb/servicelist">服务列表</a></li>
+    <li class="active"><a>{{ctrl.serviceName}}</a></li>
+  </ul>
+</navbar>
+
+<div class="page-container">
+  <div class="page-header">
+		<h1>{{ctrl.serviceName}} 配置管理</h1>
+    <form class="form-search cmdb-search">
+      <i class="fa fa-search"></i>
+      <input type="text" class="input-medium search-query" placeholder="搜索config" ng-model="ctrl.searchConf">
+    </form>
+	</div>
+
+  <div>
+    <table class="table uagent-table">
+      <tr>
+        <th>服务名称</th>
+        <th>操作</th>
+      </tr>
+      <tr ng-repeat="config in ctrl.configs | filter: ctrl.searchConf">
+        <td>{{config.name}}</td>
+        <td><a href="/cmdb/config/edit?serviceId={{ctrl.serviceId}}&confName={{config.name}}&serviceName={{ctrl.serviceName}}">编辑</a></td>
+      </tr>
+    </table>
+  </div>
+
+</div>

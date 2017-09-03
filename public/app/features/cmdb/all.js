@@ -4,7 +4,6 @@ define([
   './cmdbSetupCtrl',
   './serviceListCtrl',
   './cmdbServiceDetailCtrl',
-  './uagentCollectorCtrl',
-  './uagentCollectorEditCtrl',
-  './uagentFilebeatCtrl',
+  './uagentCtrl',
+  './uagentEditCtrl',
 ], function() {});
