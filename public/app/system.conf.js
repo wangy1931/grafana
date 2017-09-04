@@ -46,6 +46,7 @@ System.config({
     'quill':                    'vendor/quill/quill.min',
     'ng-quill':                 'vendor/quill/ng-quill',
     'jsdiff':                   'vendor/jsdiff/index',
+    'echarts':                  'vendor/echarts/echarts.min',
   },
 
   packages: {
@@ -88,6 +89,9 @@ System.config({
       build: false
     },
     'vendor/quill/ng-quill.js': {
+      build: false
+    },
+    'vendor/echarts/echarts.min.js': {
       build: false
     }
   },

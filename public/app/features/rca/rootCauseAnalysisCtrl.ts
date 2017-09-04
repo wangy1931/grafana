@@ -4,6 +4,7 @@ import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
 import {coreModule, appEvents} from  'app/core/core';
+import echarts from 'echarts';
 
 declare var window: any;
 
@@ -15,11 +16,137 @@ export class RootCauseAnalysisCtrl {
 
   /** @ngInject */
   constructor(private backendSrv, private $location, private $scope, jsPlumbService) {
-    this.toolkit = window.jsPlumbToolkit.newInstance({});
-    this.loadGraph().then(() => {
-      this.renderer = this.renderFactory();
+    // this.toolkit = window.jsPlumbToolkit.newInstance({});
+    // this.loadGraph().then(() => {
+    //   this.renderer = this.renderFactory();
+    // });
+    // this.render();
+    this.initChart().then(() => {
+      console.log(this.data);
+      var mainElement = echarts.init(document.getElementById("rcaChart"));
+
+      mainElement.setOption({
+        title: {
+          text: 'Root Cause Analysis'
+        },
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        series : [
+          {
+            type: 'graph',
+            layout: 'none',
+            data: this.data.nodes.map(node => {
+              return {
+                x: node.x || Math.random(),
+                y: node.y || Math.random(),
+                id: node.id,
+                name: node.name,
+                symbolSize: node.sigVal,
+                itemStyle: {
+                  normal: {
+                    color: node.color || '#33B5E5'
+                  }
+                },
+                draggable: true
+              };
+            }),
+            edges: this.data.edges.map(edge => {
+              return {
+                source: edge.sourceID,
+                target: edge.targetID,
+                label: {
+                  normal: {
+                    width: edge.size,
+                    // show: true,
+                    // formatter: (({}) => {})
+                  }
+                },
+                symbolSize: [0, 8]
+              };
+            }),
+            edgeSymbol: ['none', 'arrow'],
+            label: {
+              normal: {
+                show: true,
+                position: 'bottom'
+              }
+              // emphasis: {
+              //   position: 'right',
+              //   show: true
+              // }
+            },
+            roam: true,
+            focusNodeAdjacency: true,
+            lineStyle: {
+              normal: {
+                width: 0.5,
+                curveness: 0.3,
+                opacity: 0.7
+              }
+            },
+            // draggable: true  // layout: 'force'
+          }
+        ]
+        // graphic: echarts.util.map(this.data.nodes, function (dataItem, dataIndex) {
+        //   return {
+        //     type: 'circle',
+        //     shape: {
+        //       r: dataItem.sigVal / 2
+        //     },
+        //     position: mainElement.convertToPixel({seriesIndex: 0}, [2000, 3500]),
+        //     invisible: true,
+        //     draggable: true,
+        //     z: 100,
+        //     ondrag: echarts.util.curry(this.onPointDragging, dataIndex)
+        //   };
+        // })
+      }, true);
     });
-    this.render();
+  }
+
+  onPointDragging() {
+    console.log('gggg');
+  }
+
+  initChart() {
+    this.data = {
+      "nodes" : [],
+      "edges" : [],
+      "ports" : [],
+      "groups": []
+    }
+
+    // real api
+    return this.backendSrv.alertD({
+      "url": "/rca/graph"
+    }).then(response => {
+      var data = response.data.edges;
+      var sigValList = [];
+      var idList = [];
+      var rate = 1;
+
+      data.forEach(item => {
+        // nodes
+        item.src.name = _.getMetricName(item.src.name), item.dest.name = _.getMetricName(item.dest.name);
+        item.src.id = item.src.name, item.dest.id = item.dest.name;
+        sigValList.push(item.src.sigVal), sigValList.push(item.dest.sigVal);
+      });
+
+      rate = 60 / Math.max(...sigValList);
+      data.forEach(item => {
+        // nodes
+        item.src.sigVal *= rate, item.dest.sigVal *= rate;
+        idList.indexOf(item.src.id) === -1 && idList.push(item.src.id) && this.data.nodes.push(item.src);
+        idList.indexOf(item.dest.id) === -1 && idList.push(item.dest.id) && this.data.nodes.push(item.dest);
+        // edges
+        this.data.edges.push({
+          "sourceID": item.src.id,
+          "targetID": item.dest.id,
+          "size"  : item.score * 3
+        });
+      });
+      console.log(idList);
+    });
   }
 
   loadGraph() {
