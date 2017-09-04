@@ -328,6 +328,7 @@ define([
       };
 
       $scope.selectHealthItemType = function (host, item) {
+        !$scope.service.hostStatusMap[host].itemStatusMap[item] &&  (item = 'ServiceState');
         var metrics = $scope.service.hostStatusMap[host].itemStatusMap[item].metricStatusMap;
         var metric = [];
         var alertLevel = "";
