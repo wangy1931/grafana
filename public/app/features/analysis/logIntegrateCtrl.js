@@ -471,7 +471,7 @@ define([
           scope: newScope
         });
       };
-      
+
       $scope.currentRelativeTime = "1天以前";
       $scope.logCompare = function(timeShift) {
         $scope.timeShift = timeShift;
