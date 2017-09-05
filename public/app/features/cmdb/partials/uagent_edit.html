@@ -1,38 +1,60 @@
 <navbar icon="fa fa-fw fa-cubes" title="配置管理库" title-url="">
   <ul class="nav">
     <li><a href="/cmdb/servicelist">服务列表</a></li>
-    <li><a href="/cmdb/config?serviceName={{ctrl.serviceName}}&serviceId={{ctrl.serviceId}}">collector</a></li>
-    <li class="active"><a>{{ctrl.confName}}</a></li>
+    <li><a href="/cmdb/config?serviceName={{ctrl.serviceName}}&serviceId={{ctrl.serviceId}}">{{ctrl.serviceName}}</a></li>
+    <li class="active"><a>{{ctrl.configName}}</a></li>
   </ul>
 </navbar>
 
 <div class="page-container">
   <div class="page-header">
-		<h1>{{ctrl.confName}}</h1>
+		<h1>{{ctrl.configName}}</h1>
 	</div>
 
   <form class="gf-form-group">
     <div ng-repeat="section in ctrl.config.sections">
       <h3 class="page-heading">{{section.name}}</h3>
-      <div class="gf-form max-width-28" ng-repeat="prop in section.props" ng-switch="prop.type">
+      <div class="gf-form max-width-28" ng-repeat="prop in section.props" ng-switch="prop.type" ng-if="!prop.readOnly">
         <span class="gf-form-label width-14">{{prop.name}}</span>
-        <input ng-switch-when="string" class="gf-form-input width-7" 
+        <input ng-switch-when="string" class="gf-form-input width-14" 
           type="text" 
           ng-model="prop.value" 
           ng-disabled="{{prop.readOnly}}"/>
-        <input ng-switch-when="integer" class="gf-form-input width-7" 
-          type="number" min="{{prop.minValue}}" 
-          ng-model="prop.value" 
-          ng-disabled="prop.readOnly"/>
-        <select ng-switch-when="enum" class="gf-form-input width-7"
-          ng-options="enum for enum in prop.enumValues"
+        <input ng-switch-when="integer" class="gf-form-input width-14" 
+          type="number" min="{{prop.minValue}}"
           ng-model="prop.value"
-        >
+          placeholder="请输入大于{{prop.minValue}}的整数"
+          ng-disabled="prop.readOnly"
+          ng-blur="ctrl.checkNum(prop)"/>
+        <select ng-switch-when="enum" class="gf-form-input width-14"
+          ng-options="enum for enum in prop.enumValues"
+          ng-model="prop.value">
         </select>
       </div>
     </div>
+    <br/>
+    <div class="gf-form max-width-28">
+      <span class="gf-form-label width-14">部署机器</span>
+      <button type="button" class="gf-form-input width-14" 
+        ng-model="ctrl.selectedHosts"
+        data-html="1" data-multiple="1" data-animation="am-flip-x" 
+        bs-options="host.id as host.hostname for host in ctrl.hosts" bs-select>
+      </button>
+    </div>
+    <div class="gf-form max-width-28">
+      <span class="gf-form-label width-14">是否覆盖<tip>该选项将决定是否覆盖之前修改过的机器上所部署的服务配置信息</tip></span>
+      <label class="gf-form-inline">
+        <input class="gf-form-input" type="radio" name="isCover" value="false" ng-model="ctrl.isCover"/>
+        <span class="gf-form-label gf-form-label-radio">不覆盖</span>
+      </label>
+      <label class="gf-form-inline">
+        <input class="gf-form-input" type="radio" name="isCover" value="true" ng-model="ctrl.isCover"/>
+        <span class="gf-form-label gf-form-label-radio">覆盖</span>
+      </label>
+    </div>
+      
     <div class="gf-form-button-row">
-      <a class="btn btn-primary" ng-click="saveConfig()">保存</a>
+      <a class="btn btn-primary" ng-click="ctrl.showConfirm()">应用</a>
       <a class="btn btn-outline-primary" href="/cmdb/config?serviceName={{ctrl.serviceName}}&serviceId={{ctrl.serviceId}}">取消</a>
     </div>
   </form>

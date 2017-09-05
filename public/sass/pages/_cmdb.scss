@@ -192,3 +192,16 @@ $btn-cmdb-color: rgb(25,165,228);
     border-bottom: 1px solid #ddd;
   }
 }
+
+.select-multiple {
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.gf-form-label-radio {
+  background: none;
+  padding-left: 0;
+}
+[type=radio].gf-form-input:focus {
+  box-shadow: none;
+}

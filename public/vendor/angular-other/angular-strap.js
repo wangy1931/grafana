@@ -1536,13 +1536,13 @@
       multiple: false,
       allNoneButtons: false,
       sort: true,
-      caretHtml: '&nbsp;<span class="caret"></span>',
-      placeholder: 'Choose among the following...',
+      caretHtml: '<span class="caret pull-right"></span>',
+      placeholder: '请选择...',
       allText: 'All',
       noneText: 'None',
       maxLength: 3,
-      maxLengthHtml: 'selected',
-      iconCheckmark: 'glyphicon glyphicon-ok',
+      maxLengthHtml: '已选择',
+      iconCheckmark: 'fa fa-check',
       toggle: false
     };
     this.$get = [ '$window', '$document', '$rootScope', '$tooltip', '$timeout', function($window, $document, $rootScope, $tooltip, $timeout) {
