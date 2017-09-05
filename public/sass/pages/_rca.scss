@@ -58,7 +58,7 @@
   .jtk-connector.unselected path {
     stroke: rgba(216, 217, 218, 0.2);
   }
-  .jtk-connector.unselected path:last-child {
+  .jtk-connector.unselected path:not(:first-child) {
     fill: rgba(216, 217, 218, 0.2);
   }
 

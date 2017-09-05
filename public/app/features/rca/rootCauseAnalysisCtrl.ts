@@ -20,6 +20,7 @@ export class RootCauseAnalysisCtrl {
     this.toolkit = window.jsPlumbToolkit.newInstance({});
     this.loadGraph().then(() => {
       this.renderer = this.renderFactory();
+      this.resetConnection();
     });
     this.bindEvent();
   }
@@ -50,7 +51,8 @@ export class RootCauseAnalysisCtrl {
         this.data.edges.push({
           "source": item.src.id,
           "target": item.dest.id,
-          "data"  : { "type": null }
+          "data"  : { "type": null },
+          "score" : item.score * 4
         });
       });
     });
@@ -68,10 +70,10 @@ export class RootCauseAnalysisCtrl {
       container: canvasElement,
       view: {
         edges: {
-          "default": {  // #89bcde
-            paintStyle: { lineWidth: 2, stroke: '#D8D9DA' },
+          "default": {
+            paintStyle: { lineWidth: 2, stroke: '#C7C5C1' },
             overlays: [
-              ["Arrow", { fill: "#89bcde", width: 8, length: 8, location: 1 } ]
+              [ "Arrow", { fill: "#C7C5C1", width: 8, length: 8, location: 1 } ]
             ]
           }
         },
@@ -125,6 +127,16 @@ export class RootCauseAnalysisCtrl {
     window.jsPlumb.removeClass(window.jsPlumb.getSelector(".jtk-node"), "unselected");
     window.jsPlumb.removeClass(window.jsPlumb.getSelector(".jtk-node"), "jtk-animate-source");
     window.jsPlumb.removeClass(window.jsPlumb.getSelector(".jtk-connector"), "unselected");
+  }
+
+  resetConnection() {
+    this.data.edges.forEach(item => {
+      window.jsPlumb.connect({
+        source: $(`[data-jtk-node-id="${item.source}"]`).attr('id'),
+        target: $(`[data-jtk-node-id="${item.target}"]`).attr('id'),
+        paintStyle: { strokeWidth: item.score }
+      });
+    });
   }
 
   bindEvent() {
