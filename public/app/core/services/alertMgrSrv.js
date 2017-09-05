@@ -14,6 +14,7 @@ function (angular, _, coreModule) {
     var alertHistoryUrl = "/alert/history";
     var closeAlertUrl = "/alert/status/close";
     var checkNameUrl = "/alert/definition/check";
+    var rcaFeedbackUrl = "/rca/feedback/json";
 
     this.currentCritialThreshold = 0;
     this.currentWarningThreshold = 0;
@@ -112,6 +113,15 @@ function (angular, _, coreModule) {
           reason: alertReason,
           closeBy: userName
         },
+        headers: {'Content-Type': 'text/plain;application/json;charset=UTF-8'},
+      });
+    };
+
+    this.rcaFeedback = function(rcaFeedback) {
+      return backendSrv.alertD({
+        method: "post",
+        url: rcaFeedbackUrl,
+        data:rcaFeedback,
         headers: {'Content-Type': 'text/plain;application/json;charset=UTF-8'},
       });
     };

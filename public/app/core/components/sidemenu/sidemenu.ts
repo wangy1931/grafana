@@ -173,7 +173,7 @@ export class SideMenuCtrl {
         },
         {
           text: '故障溯源',
-          click: this.getSource
+          url: this.getUrl("/rca"),
         },
         {
           text: '健康报告',

@@ -52,6 +52,7 @@ func Register(r *macaron.Macaron) {
 	r.Get("/setting/filebeat", reqSignedIn, Index)
 	r.Get("/service_v2", reqSignedIn, Index)
 	r.Get("/service_dependency", reqSignedIn, Index)
+	r.Get("/rca", reqSignedIn, Index)
 
 	// cmdb
 	r.Get("/cmdb/hostlist", reqSignedIn, Index)
