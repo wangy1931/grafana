@@ -4,119 +4,27 @@ import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
 import {coreModule, appEvents} from  'app/core/core';
-import echarts from 'echarts';
 
 declare var window: any;
 
 export class RootCauseAnalysisCtrl {
   toolkit: any;
-  data: any;
   renderer: any;
   source: any;  // path traversal.
+  mainElement: any;
+  data: any = { "nodes" : [], "edges" : [], "ports" : [], "groups": [] };
+  traceList: Array<string> = [];
 
   /** @ngInject */
-  constructor(private backendSrv, private $location, private $scope, jsPlumbService) {
-    // this.toolkit = window.jsPlumbToolkit.newInstance({});
-    // this.loadGraph().then(() => {
-    //   this.renderer = this.renderFactory();
-    // });
-    // this.render();
-    this.initChart().then(() => {
-      console.log(this.data);
-      var mainElement = echarts.init(document.getElementById("rcaChart"));
-
-      mainElement.setOption({
-        title: {
-          text: 'Root Cause Analysis'
-        },
-        animationDurationUpdate: 1500,
-        animationEasingUpdate: 'quinticInOut',
-        series : [
-          {
-            type: 'graph',
-            layout: 'none',
-            data: this.data.nodes.map(node => {
-              return {
-                x: node.x || Math.random(),
-                y: node.y || Math.random(),
-                id: node.id,
-                name: node.name,
-                symbolSize: node.sigVal,
-                itemStyle: {
-                  normal: {
-                    color: node.color || '#33B5E5'
-                  }
-                },
-                draggable: true
-              };
-            }),
-            edges: this.data.edges.map(edge => {
-              return {
-                source: edge.sourceID,
-                target: edge.targetID,
-                label: {
-                  normal: {
-                    width: edge.size,
-                    // show: true,
-                    // formatter: (({}) => {})
-                  }
-                },
-                symbolSize: [0, 8]
-              };
-            }),
-            edgeSymbol: ['none', 'arrow'],
-            label: {
-              normal: {
-                show: true,
-                position: 'bottom'
-              }
-              // emphasis: {
-              //   position: 'right',
-              //   show: true
-              // }
-            },
-            roam: true,
-            focusNodeAdjacency: true,
-            lineStyle: {
-              normal: {
-                width: 0.5,
-                curveness: 0.3,
-                opacity: 0.7
-              }
-            },
-            // draggable: true  // layout: 'force'
-          }
-        ]
-        // graphic: echarts.util.map(this.data.nodes, function (dataItem, dataIndex) {
-        //   return {
-        //     type: 'circle',
-        //     shape: {
-        //       r: dataItem.sigVal / 2
-        //     },
-        //     position: mainElement.convertToPixel({seriesIndex: 0}, [2000, 3500]),
-        //     invisible: true,
-        //     draggable: true,
-        //     z: 100,
-        //     ondrag: echarts.util.curry(this.onPointDragging, dataIndex)
-        //   };
-        // })
-      }, true);
+  constructor(private backendSrv, private $location, private $scope) {
+    this.toolkit = window.jsPlumbToolkit.newInstance({});
+    this.loadGraph().then(() => {
+      this.renderer = this.renderFactory();
     });
+    this.bindEvent();
   }
 
-  onPointDragging() {
-    console.log('gggg');
-  }
-
-  initChart() {
-    this.data = {
-      "nodes" : [],
-      "edges" : [],
-      "ports" : [],
-      "groups": []
-    }
-
-    // real api
+  loadGraph() {
     return this.backendSrv.alertD({
       "url": "/rca/graph"
     }).then(response => {
@@ -132,52 +40,12 @@ export class RootCauseAnalysisCtrl {
         sigValList.push(item.src.sigVal), sigValList.push(item.dest.sigVal);
       });
 
-      rate = 60 / Math.max(...sigValList);
+      rate = 60 / Math.max(...sigValList);  // node's max-width: 60px
       data.forEach(item => {
         // nodes
         item.src.sigVal *= rate, item.dest.sigVal *= rate;
         idList.indexOf(item.src.id) === -1 && idList.push(item.src.id) && this.data.nodes.push(item.src);
         idList.indexOf(item.dest.id) === -1 && idList.push(item.dest.id) && this.data.nodes.push(item.dest);
-        // edges
-        this.data.edges.push({
-          "sourceID": item.src.id,
-          "targetID": item.dest.id,
-          "size"  : item.score * 3
-        });
-      });
-      console.log(idList);
-    });
-  }
-
-  loadGraph() {
-    this.data = {
-      "nodes" : [],
-      "edges" : [],
-      "ports" : [],
-      "groups": []
-    }
-
-    // real api
-    return this.backendSrv.alertD({
-      "url": "/rca/graph"
-    }).then(response => {
-      var data = response.data.edges;
-      var sigValList = [];
-      var rate = 1;
-
-      data.forEach(item => {
-        // nodes
-        item.src.name = _.getMetricName(item.src.name), item.dest.name = _.getMetricName(item.dest.name);
-        item.src.id = item.src.name, item.dest.id = item.dest.name;
-        sigValList.push(item.src.sigVal), sigValList.push(item.dest.sigVal);
-      });
-
-      rate = 60 / Math.max(...sigValList);
-      data.forEach(item => {
-        // nodes
-        item.src.sigVal *= rate, item.dest.sigVal *= rate;
-        this.data.nodes.push(item.src);
-        this.data.nodes.push(item.dest);
         // edges
         this.data.edges.push({
           "source": item.src.id,
@@ -189,19 +57,19 @@ export class RootCauseAnalysisCtrl {
   }
 
   renderFactory() {
-    var mainElement = document.querySelector("#jtk-demo-paths"),
-        canvasElement = mainElement.querySelector(".jtk-demo-canvas"),
+    var mainElement = document.querySelector("#jtk-paths"),
+        canvasElement = mainElement.querySelector(".jtk-canvas"),
         miniviewElement = mainElement.querySelector(".miniview");
 
     // reset canvas height
-    $(".jtk-demo-canvas").css({ "height": window.innerHeight - 52 - 28 - 70 });
+    $(".jtk-canvas").css({ "height": window.innerHeight - 52 });
 
     return this.toolkit.load({ type: "json", data: this.data }).render({
       container: canvasElement,
       view: {
         edges: {
           "default": {  // #89bcde
-            paintStyle: { lineWidth: 1, stroke: '#D8D9DA' },
+            paintStyle: { lineWidth: 2, stroke: '#D8D9DA' },
             overlays: [
               ["Arrow", { fill: "#89bcde", width: 8, length: 8, location: 1 } ]
             ]
@@ -210,7 +78,14 @@ export class RootCauseAnalysisCtrl {
         nodes: {
           "default": {
             events: {
-              tap: this.nodeTapHandler.bind(this)
+              tap: (params) => {
+                this.resetGraph();
+                this.renderer.selectAllEdges({
+                  element: params.el
+                }).addClass('unselected');
+                $('.jtk-node').not(params.el).addClass('unselected');
+              },
+              click: this.nodeClickHandler.bind(this)
             }
           }
         }
@@ -229,6 +104,7 @@ export class RootCauseAnalysisCtrl {
       events: {
         canvasClick: (e) => {
           this.toolkit.clearSelection();
+          this.resetGraph();
         },
         modeChanged: function (mode) {
           window.jsPlumb.removeClass(window.jsPlumb.getSelector("[mode]"), "selected-mode");
@@ -240,12 +116,18 @@ export class RootCauseAnalysisCtrl {
         Connector: [ "StateMachine", { cssClass: "connectorClass", hoverClass: "connectorHoverClass" } ],
         Endpoint: "Blank",
         HoverPaintStyle: { stroke: "orange" },
-      },
-      // activeFiltering: true
+      }
     });
   }
 
-  render() {
+  resetGraph() {
+    this.traceList = [];
+    window.jsPlumb.removeClass(window.jsPlumb.getSelector(".jtk-node"), "unselected");
+    window.jsPlumb.removeClass(window.jsPlumb.getSelector(".jtk-node"), "jtk-animate-source");
+    window.jsPlumb.removeClass(window.jsPlumb.getSelector(".jtk-connector"), "unselected");
+  }
+
+  bindEvent() {
     window.jsPlumb.on(".controls", "tap", "[mode]", (...args) => {
       var element = args[0].target || args[0].srcElement;
       this.renderer.setMode(element.getAttribute("mode"));
@@ -257,38 +139,22 @@ export class RootCauseAnalysisCtrl {
     });
   }
 
-  nodeTapHandler(params) {
-    // if (this.source == null) {
-    //   this.source = params;
-    //   window.jsPlumb.addClass(this.source.el, "jtk-animate-source");
+  nodeClickHandler(params) {
+    this.source = params;
+    this.traceList.push(params.el.id);  // eg. jsPlumb_2_8
+    window.jsPlumb.addClass(this.source.el, "jtk-animate-source");
 
-    //   // Gets all Edges where this Node is the source.
-    //   console.log(this.toolkit.getNode(this.source).node.getSourceEdges());
-    //   // find target
-    //   this.toolkit.getNode(this.source).node.getSourceEdges().forEach(edge => {
-    //     // edge.target.setAttribute("class", "jtk-animate-source");
-    //     // console.log(this.toolkit.getNode(edge.target));
-    //   });
-
-    //   this.source = null;
-    // }
-    if (this.source == null) {
-      this.source = params;
-      window.jsPlumb.addClass(this.source.el, "jtk-animate-source");
-    } else {
-      // ...or trace a path from the current source to the clicked node.
-      var traced = this.renderer.tracePath({
-        source: this.source.node,
-        target: params.node,
-        overlay: ["Diamond", { width: 15, length: 15, fill: "#89bcde" }],
-        options: { speed: 250 }
+    this.toolkit.getNode(this.source).node.getSourceEdges().forEach(edge => {
+      var selectedEdges = this.renderer.selectEdges({
+        element: this.source.el
       });
-      // cleanup the source for the next one.
-      window.jsPlumb.removeClass(this.source.el, "jtk-animate-source");
-      this.source = null;
-
-      !traced && alert("No path found!");
-    }
+      selectedEdges.each(conn => {
+        window.jsPlumb.removeClass(conn.target, 'unselected');
+        this.traceList.indexOf(conn.sourceId) > -1 && window.jsPlumb.removeClass(conn.connector.canvas, 'unselected');
+      });
+      var selector = `[data-jtk-node-id="${edge.target.id}"]`;
+      $(selector).click();
+    });
   }
 };
 
