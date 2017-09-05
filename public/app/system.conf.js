@@ -45,8 +45,7 @@ System.config({
     "jquery.flot.gauge": "vendor/flot/jquery.flot.gauge",
     'quill':                    'vendor/quill/quill.min',
     'ng-quill':                 'vendor/quill/ng-quill',
-    'jsdiff':                   'vendor/jsdiff/index',
-    'echarts':                  'vendor/echarts/echarts.min',
+    'jsdiff':                   'vendor/jsdiff/index'
   },
 
   packages: {
@@ -89,9 +88,6 @@ System.config({
       build: false
     },
     'vendor/quill/ng-quill.js': {
-      build: false
-    },
-    'vendor/echarts/echarts.min.js': {
       build: false
     }
   },
