@@ -1,12 +1,36 @@
 define([
     'angular',
     'lodash',
+    'moment',
+    'app/core/utils/datemath',
     'highlight',
   ],
-  function (angular, _) {
+  function (angular, _, moment, dateMath) {
     'use strict';
 
     var module = angular.module('grafana.controllers');
+
+    module.filter('formatTimeRange', function () {
+      return function (text) {
+        if (!text) return;
+
+        var from = text.from, to = text.to;
+        var args = Array.prototype.slice.call(arguments), time = args[0], relative = args[1], index = args[2];
+        moment.isMoment(from) && (from = moment(from));
+        moment.isMoment(to) && (to = moment(to));
+
+        from = dateMath.parse(from, false);
+        to = dateMath.parse(to, true);
+
+        relative = parseInt(relative);
+        !_.isNaN(relative) && (
+          from = moment.utc(from).subtract(relative, 'days'),
+          to = moment.utc(to).subtract(relative, 'days')
+        );
+
+        return moment.utc(index === 0 ? from : to).format("YYYY-MM-DD");
+      };
+    });
 
     module.controller('LogIntegrateCtrl', function ($scope, $rootScope, contextSrv, integrateSrv) {
       var option = {
@@ -263,7 +287,7 @@ define([
               "datasource": "elk",
               "editable": true,
               "error": false,
-              "fontSize": "120%",
+              "fontSize": "100%",
               "height": "500",
               "helpInfo": {
                 "context": "",
@@ -447,9 +471,13 @@ define([
           scope: newScope
         });
       };
+
+      $scope.currentRelativeTime = "1天以前";
       $scope.logCompare = function(timeShift) {
+        $scope.timeShift = timeShift;
         $scope.dashboard.rows[2].panels[2].targets[1].timeShift = timeShift;
         $rootScope.$broadcast('refresh');
+        $scope.currentRelativeTime = timeShift.replace("-", "").replace("d", "天") + "以前";
       };
 
       $scope.currentFilter = "无";
@@ -506,5 +534,21 @@ define([
         return prefix;
       }
       $scope.init(integrateSrv.options);
+
+      // cache repsonse data when datasource.query successed
+      $scope.tabsCache = {};
+      $scope.$on('data-saved', function (event, payload) {
+        var curTabId = $scope.dashboard.rows[0].id;
+        $scope.tabsCache[curTabId] = {
+          "query": $scope.query,
+          "size" : $scope.size,
+          "timeShift": $scope.timeShift,
+          "currentRelativeTime": $scope.currentRelativeTime,
+          // "logFilter": $scope.logFilter,
+          // "currentFilter": $scope.currentFilter,
+          "timeRange": angular.copy($scope.dashboard.time),
+          "row": angular.copy($scope.dashboard.rows[0])
+        };
+      });
     });
   });
