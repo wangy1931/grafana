@@ -32,17 +32,15 @@
       "host": "Windows 2003",
       "icon": "iconfont fa-windows",
       "info": "",
-      "version": "",
-      "addr": "windows",
-      "ps1": "win32s2003_deploy_agent.ps1"
+      "version": "windows2003",
+      "addr": "windows"
     },
     {
       "host": "Windows 2008+",
       "icon": "iconfont fa-windows",
       "info": "",
-      "version": "2008,2012",
-      "addr": "windows",
-      "ps1": "windows_deploy_agent.ps1"
+      "version": "windows",
+      "addr": "windows"
     }
   ],
   "service": [
