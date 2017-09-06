@@ -22,7 +22,7 @@ export class UagentEditCtrl {
 
   getConfig() {
     var url = '';
-    if (this.configName === 'template') {
+    if (this.configName === 'filebeat') {
       url = '/cmdb/config/configTemplate?serviceName=filebeat';
     } else {
       url = '/cmdb/config/service?serviceId='+ this.serviceId + '&configName=' + this.configName;
@@ -82,7 +82,7 @@ export class UagentEditCtrl {
       hostId : ''
     };
 
-    var data = [];
+    var data = {sections: []};
 
     _.each(this.config.sections, (section)=>{
       var new_section = {
@@ -96,7 +96,7 @@ export class UagentEditCtrl {
           new_section.props.push({key: prop.name, value: prop.value});
         }
       });
-      data.push(new_section);
+      data.sections.push(new_section);
     });
 
     if (this.selectedHosts.length) {
@@ -122,9 +122,9 @@ export class UagentEditCtrl {
       headers: {'Content-Type': 'text/plain;application/json;charset=UTF-8'},
     }).then((response)=>{
       this.$scope.appEvent('alert-success', ['应用成功']);
-    }).catch((error) => {
-      this.$scope.appEvent('alert-success', ['应用成功']);
       this.$location.url('/cmdb/config?serviceName=' + this.serviceName +'&serviceId=' + this.serviceId);
+    }, (err)=>{
+      this.$scope.appEvent('alert-warning', ['应用失败']);
     });
   }
 
