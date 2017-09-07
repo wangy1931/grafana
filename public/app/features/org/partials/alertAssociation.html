@@ -60,10 +60,8 @@
           <div ng-if="isAssociation" class="panel panel-associatoin" style="padding: 20px 20px 20px 20px;">
             <h2>
               挑选推荐关联指标进行对比
-              <span ng-click="showNewAssociationManual()" class="btn btn-primary">
-                <i class="fa fa-add"></i>新增任意指标
-              </span>
-              <span ng-click="addRCA()" class="btn btn-success">添加选中关联信息至RCA</span>
+              <span ng-click="showNewAssociationManual()" class="btn btn-primary btn-association">新增任意指标</span>
+              <span ng-click="addRCA()" class="btn btn-success btn-association">添加选中关联信息至RCA</span>
             </h2>
             <p ng-if="correlatedMetrics.length">尝试将阈值调大, 匹配更多关联指标</p>
             <div class="panel grafana-options-table">
