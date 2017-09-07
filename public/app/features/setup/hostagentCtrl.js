@@ -64,6 +64,13 @@ function (angular, _) {
 
     $scope.changeSelect = function(select) {
       $scope.selected = select;
+      $scope.type = '安装';
+      if($scope.selected.addr === 'windows') {
+        $scope.updateAuto = 0;
+      } else {
+        $scope.updateAuto = '';
+        $scope.updateSelf = '';
+      }
     };
 
     $scope.nextEvent = function(type) {
@@ -138,11 +145,19 @@ function (angular, _) {
     $scope.updateType = function(type) {
       $scope.type = type;
       if(type === '更新') {
-        $scope.updateAuto = ' /dev/stdin -update';
-        $scope.updateSelf = ' -update';
+        if($scope.selected.addr === 'windows') {
+          $scope.updateAuto = 1;
+        } else {
+          $scope.updateAuto = ' /dev/stdin -update';
+          $scope.updateSelf = ' -update';
+        }
       } else {
-        $scope.updateAuto = '';
-        $scope.updateSelf = '';
+        if($scope.selected.addr === 'windows') {
+          $scope.updateAuto = 0;
+        } else {
+          $scope.updateAuto = '';
+          $scope.updateSelf = '';
+        }
       }
     };
 

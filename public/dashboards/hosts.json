@@ -27,6 +27,20 @@
       "info": "",
       "version": "暂无要求",
       "addr": "RedHat"
+    },
+    {
+      "host": "Windows 2003",
+      "icon": "iconfont fa-windows",
+      "info": "",
+      "version": "windows2003",
+      "addr": "windows"
+    },
+    {
+      "host": "Windows 2008+",
+      "icon": "iconfont fa-windows",
+      "info": "",
+      "version": "windows",
+      "addr": "windows"
     }
   ],
   "service": [
