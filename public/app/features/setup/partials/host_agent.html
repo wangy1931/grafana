@@ -29,7 +29,7 @@
           sudo ORG_TOKEN={{token}} CLIENT_ID={{orgId}} SYSTEM_ID={{systemId}} METRIC_SERVER_HOST={{metricsServer}} ALERTD_SERVER={{alertServer}} AGENT_URL=https://download.cloudwiz.cn/agent bash -c "$(curl -kL https://download.cloudwiz.cn/agent/deploy_agent.sh)"{{updateAuto}}
         </li>
         <li ng-if="selected.addr === 'windows'" style="word-break: break-all">
-          powershell -Command Set-ExecutionPolicy unrestricted; $client = new-object System.Net.WebClient;$client.DownloadFile('https://download.cloudwiz.cn/agent/windows_deploy_agent.ps1','C:/tmp/windows_deploy_agent.ps1'); $ORG_TOKEN='{{token}}';$CLIENT_ID='{{orgId}}';$SYSTEM_ID='{{systemId}}';$METRIC_SERVER_HOST='{{metricsServer}}';$ALERTD_SERVER='{{alertServer}}';$AGENT_URL='https://download.cloudwiz.cn/agent';$ONLINE=1;$UPDATE={{updateAuto}};$OS_VERSION='{{selected.version}}';c:/tmp/windows_deploy_agent.ps1;
+          powershell -Command if ( !(Test-Path C:\tmp)){ new-item -path c:\  -name tmp -type directory;} Set-ExecutionPolicy unrestricted; $client = new-object System.Net.WebClient;$client.DownloadFile('https://download.cloudwiz.cn/agent/windows_deploy_agent.ps1','C:/tmp/windows_deploy_agent.ps1'); $ORG_TOKEN='{{token}}';$CLIENT_ID='{{orgId}}';$SYSTEM_ID='{{systemId}}';$METRIC_SERVER_HOST='{{metricsServer}}';$ALERTD_SERVER='{{alertServer}}';$AGENT_URL='https://download.cloudwiz.cn/agent';$ONLINE=1;$UPDATE={{updateAuto}};$OS_VERSION='{{selected.version}}';c:/tmp/windows_deploy_agent.ps1;
         </li>
       </ul>
 
@@ -74,7 +74,7 @@
           <p style="word-break: break-all">部署探针</p>
           <div class="tight-form last">
             <p style="word-break: break-all">
-              powershell -Command Set-ExecutionPolicy unrestricted; $ORG_TOKEN='{{token}}';$CLIENT_ID='{{orgId}}';$SYSTEM_ID='{{systemId}}';$METRIC_SERVER_HOST='{{metricsServer}}';$ALERTD_SERVER='{{alertServer}}';$AGENT_URL='https://download.cloudwiz.cn/agent';$ONLINE=0;$UPDATE={{updateAuto}};$OS_VERSION='{{selected.version}}';c:/tmp/publish/windows/windows_deploy_agent.ps1;
+              powershell -Command if ( !(Test-Path C:\tmp)){ new-item -path c:\  -name tmp -type directory;} Set-ExecutionPolicy unrestricted; $ORG_TOKEN='{{token}}';$CLIENT_ID='{{orgId}}';$SYSTEM_ID='{{systemId}}';$METRIC_SERVER_HOST='{{metricsServer}}';$ALERTD_SERVER='{{alertServer}}';$AGENT_URL='https://download.cloudwiz.cn/agent';$ONLINE=0;$UPDATE={{updateAuto}};$OS_VERSION='{{selected.version}}';c:/tmp/publish/windows/windows_deploy_agent.ps1;
             </p>
           </div>
         </li>
