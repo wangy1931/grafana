@@ -86,6 +86,28 @@
         <li ng-if="selected.addr === 'windows'" style="word-break: break-all">/opt/cloudwiz-agent/altenv/bin/supervisorctl.bat start all</li>
       </ul>
 
+      <div ng-if="selected.addr === 'windows'">
+        <h4>3. 问题解决</h4>
+        <ul>
+          <li>
+            <p style="word-break: break-all; font-weight: bold;">1). 私有云用户请修改相关参数</p>
+            <p style="word-break: break-all">i. 运行以下命令</p>
+            <div class="tight-form last">
+              <p style="word-break: break-all">/opt/cloudwiz-agent/agent/cloudwiz-service.exe edit cloudwiz-agent:collector</p>
+            </div>
+            <p style="word-break: break-all">ii. 修改 Application >> Arguments 参数</p>
+            <div class="tight-form last">
+              <p style="word-break: break-all">a. 删除 '--ssl'</p>
+              <p style="word-break: break-all">b. 将port中'443' 修改为 '4242'</p>
+            </div>
+            <p style="word-break: break-all">iii. 重启探针</p>
+            <div class="tight-form last">
+              <p style="word-break: break-all">/opt/cloudwiz-agent/altenv/bin/supervisorctl.bat restart all</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
     <div class="pull-right installed">
       <button ng-click="nextEvent('skip')" class="btn" ng-if="installed">跳过</button>
       <button ng-click="nextEvent('import')" class="btn" ng-disabled="!installed" ng-class="{'btn-success':installed}">导入报警规则</button>

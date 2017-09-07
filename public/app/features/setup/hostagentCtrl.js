@@ -101,7 +101,11 @@ function (angular, _) {
     $scope.createTemp = function(options) {
       // 添加模板
       $scope.hostDashboard = true;
-      var tmp = ["iostat","machine"];
+      if ($scope.selected.addr === 'windows') {
+        var tmp = ["windows"];
+      } else {
+        var tmp = ["iostat","machine"];
+      }
       var promiseArr = [];
       _.each(tmp,function(template) {
         var p = backendSrv.get('/api/static/template/'+template).then(function(result) {
