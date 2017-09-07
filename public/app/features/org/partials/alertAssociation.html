@@ -66,33 +66,23 @@
             <p ng-if="correlatedMetrics.length">尝试将阈值调大, 匹配更多关联指标</p>
             <div class="panel grafana-options-table">
               <div controls controls-row>
-                <table class="table">
-                  <tr>
-                    <th>根源指标</th>
-                    <th>关联程度</th>
-                  </tr>
-                  <tr ng-repeat="ralation in ralationMetrics">
-                      <td>
-                          <label class="span3 checkbox">
-                              <input type="checkbox" ng-model="ralation.checked" ng-click="addQuery(ralation.metric)" />
-                              <p style="width: 90%;" class="max-width" title="{{_.getMetricName(ralation.metric)}}">
-                                  {{_.getMetricName(ralation.metric)}}</p>
-                          </label>
-                      </td>
-                      <td>
-                        <div class="gf-form max-width-28">
-                          <label class="gf-form-inline">
-                            <input class="gf-form-input" type="radio" name="{{_.getMetricName(ralation.metric)}}" value="100" ng-model="ralation.confidenceLevel"/>
-                            <span class="gf-form-label gf-form-label-radio">相关</span>
-                          </label>
-                          <label class="gf-form-inline">
-                            <input class="gf-form-input" type="radio" name="{{_.getMetricName(ralation.metric)}}" value="50" ng-model="ralation.confidenceLevel"/>
-                            <span class="gf-form-label gf-form-label-radio">一般</span>
-                          </label>
-                        </div>
-                      </td>
-                  </tr>
-                </table>
+                <div class="span3" ng-repeat="ralation in ralationMetrics">
+                  <label class="checkbox">
+                      <input type="checkbox" ng-model="ralation.checked" ng-click="addQuery(ralation.metric)" />
+                      <p class="max-width" title="{{_.getMetricName(ralation.metric)}}">
+                          {{_.getMetricName(ralation.metric)}}</p>
+                  </label>
+                  <div class="gf-form">
+                    <label class="gf-form-inline">
+                      <input class="gf-form-input" type="radio" name="{{_.getMetricName(ralation.metric)}}" value="100" ng-model="ralation.confidenceLevel"/>
+                      <span class="gf-form-label gf-form-label-radio">相关</span>
+                    </label>
+                    <label class="gf-form-inline">
+                      <input class="gf-form-input" type="radio" name="{{_.getMetricName(ralation.metric)}}" value="50" ng-model="ralation.confidenceLevel"/>
+                      <span class="gf-form-label gf-form-label-radio">一般</span>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
