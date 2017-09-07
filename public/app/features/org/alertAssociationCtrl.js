@@ -39,9 +39,17 @@ function (angular, _, noUiSlider) {
             var correlatedMetrics = correlationOfAlertMap[host];
             $scope.correlatedMetrics = correlatedMetrics;
           }
+          $scope.ralationMetrics = [];
           for (var m in $scope.correlatedMetrics) {
             if(_.isEqual(m, alertMetric)){
               delete $scope.correlatedMetrics[m];
+            } else{
+              $scope.ralationMetrics.push({
+                metric: m,
+                hosts: $scope.correlatedMetrics[m],
+                confidenceLevel: '50',
+                checked: false
+              });
             }
           }
         } else {
@@ -285,6 +293,47 @@ function (angular, _, noUiSlider) {
           }
         });
       }
+    };
+
+    $scope.addRCA = function () {
+      $scope.appEvent('confirm-modal', {
+        title: '添加',
+        text: '您确定要添加选定关联信息添加RCA吗？',
+        yesText: '确定',
+        noText: '取消',
+        onConfirm: function() {
+          var prox = contextSrv.user.orgId + '.' + contextSrv.user.systemId + '.';
+          var targets = $scope.dashboard.rows[0].panels[0].targets;
+          var rcaFeedback = {
+            alertIds: [],
+            timestampInSec: Math.round(new Date().getTime()/1000),
+            triggerMetric: {
+              name: alertMetric,
+              host: alertHost,
+            },
+            rootCauseMetrics: [],
+            relatedMetrics: [],
+            org: contextSrv.user.orgId,
+            sys: contextSrv.user.systemId
+          };
+          var rootCauseMetrics = _.filter($scope.ralationMetrics, {checked: true});
+          _.each(rootCauseMetrics, function(target) {
+            _.each(target.hosts, function(host) {
+              rcaFeedback.rootCauseMetrics.push({
+                name: target.metric,
+                host: host,
+                confidenceLevel: parseInt(target.confidenceLevel)
+              });
+            });
+          });
+
+          alertMgrSrv.rcaFeedback(rcaFeedback).then(function(response) {
+            $scope.appEvent('alert-success', ['添加成功']);
+          }, function(err) {
+            $scope.appEvent('alert-error', ['添加失败']);
+          });
+        }
+      });
     };
 
     $scope.init();

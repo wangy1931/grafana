@@ -47,8 +47,6 @@ import 'app/core/routes/routes';
 import './filters/filters';
 import coreModule from './core_module';
 import appEvents from './app_events';
-import {addRcaDirective} from './components/rca/addrca';
-
 
 export {
   arrayJoin,
@@ -65,5 +63,4 @@ export {
   Emitter,
   appEvents,
   dashboardSelector,
-  addRcaDirective,
 };

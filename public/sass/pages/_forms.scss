@@ -149,28 +149,3 @@ input {
     overflow: hidden;
   }
 }
-
-.gf-form-rca {
-  position: fixed;
-  width: 500px;
-  top: 27%;
-  left: 50%;
-  margin-left: -200px;
-  background: white;
-  z-index: 1;
-  padding-top: 35px;
-  .modal-close {
-    margin-right: 30px;
-    margin-top: -20px;
-  }
-}
-
-.rca-add-box {
-  position: absolute;
-  left: $side-menu-width;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 10;
-  background: rgba(0,0,0,0.6);
-}
