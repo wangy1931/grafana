@@ -87,8 +87,8 @@
       </ul>
 
       <div ng-if="selected.addr === 'windows'">
-        <h4>3. 问题解决</h4>
-        <ul>
+        <h4 class="pointer" ng-click="otherQuestion = !otherQuestion">3. 其他<i style="margin-left:10px;" ng-class="{true:'fa fa-hand-o-down',false:'fa fa-hand-o-left'}[otherQuestion]"></i></h4>
+        <ul ng-if="otherQuestion">
           <li>
             <p style="word-break: break-all; font-weight: bold;">1). 私有云用户请修改相关参数</p>
             <p style="word-break: break-all">i. 运行以下命令</p>
