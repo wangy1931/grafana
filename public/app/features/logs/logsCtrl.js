@@ -50,6 +50,10 @@ define([
         }
       ];
 
+      $scope.$on('$destroy', function() {
+        $('body').off('click', '.tab-2 tbody tr td:nth-child(2)');
+      });
+
       // 搜索框帮助
       $scope.queryInputOptions = [
         { key: 'host:', helpInfo: '查询特定host日志 (例如: host:centos1)' },
