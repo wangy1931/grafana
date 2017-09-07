@@ -39,6 +39,7 @@ export class AnnotationsEditorCtrl {
   datasourceChanged() {
     return this.datasourceSrv.get(this.currentAnnotation.datasource).then(ds => {
       this.currentDatasource = ds;
+      this.currentAnnotation.datasource = ds.name;
     });
   }
 
@@ -68,7 +69,7 @@ export class AnnotationsEditorCtrl {
     this.reset();
     this.mode = 'list';
     this.$scope.broadcastRefresh();
-    this.$scope.dashboard.updateSubmenuVisibility();
+    this.$scope.updateSubmenuVisibility();
   };
 
   removeAnnotation(annotation) {

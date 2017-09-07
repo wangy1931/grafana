@@ -107,7 +107,10 @@ module.directive('grafanaGraph', function($rootScope, timeSrv) {
           return true;
         }
 
-        if (!setElementHeight()) { return true; }
+        if (!setElementHeight()) {
+          // render_panel_as_graphite_png(data);
+          return true;
+        }
 
         if (panelWidth === 0) {
           return true;
@@ -130,6 +133,7 @@ module.directive('grafanaGraph', function($rootScope, timeSrv) {
         for (var i = 0; i < data.length; i++) {
           var series = data[i];
           var axis = yaxis[series.yaxis - 1];
+
           var formater = kbn.valueFormats[panel.yaxes[series.yaxis - 1].format];
 
           // decimal override
@@ -178,6 +182,7 @@ module.directive('grafanaGraph', function($rootScope, timeSrv) {
         for (var i = 0; i < yaxis.length; i++) {
           var axis = yaxis[i];
           var panelOptions = panel.yaxes[i];
+          if (!axis || !panelOptions) { continue; }
           axis.options.max = panelOptions.max;
           axis.options.min = panelOptions.min;
         }
@@ -274,6 +279,12 @@ module.directive('grafanaGraph', function($rootScope, timeSrv) {
           if (ctrl.hiddenSeries[series.alias]) {
             series.data = [];
             series.stack = false;
+          }
+
+          // if the yaxis much than twice there must be a special code.
+          // WARNING: do not move this code block.
+          if (series.yaxis > 2) {
+            series.yaxis = 2;
           }
         }
 
@@ -455,12 +466,13 @@ module.directive('grafanaGraph', function($rootScope, timeSrv) {
       }
 
       function configureAxisOptions(data, options) {
+
         var defaults = {
           position: 'left',
           show: panel.yaxes[0].show,
           index: 1,
           logBase: panel.yaxes[0].logBase || 1,
-          max: null
+          max: panel.percentage && panel.stack ? 100 : panel.yaxes[0].max,
         };
 
         options.yaxes.push(defaults);
@@ -471,6 +483,8 @@ module.directive('grafanaGraph', function($rootScope, timeSrv) {
           secondY.show = panel.yaxes[1].show;
           secondY.logBase = panel.yaxes[1].logBase || 1;
           secondY.position = 'right';
+          secondY.min = panel.yaxes[1].min;
+          secondY.max = panel.percentage && panel.stack ? 100 : panel.yaxes[1].max;
           options.yaxes.push(secondY);
 
           applyLogScale(options.yaxes[1], data);

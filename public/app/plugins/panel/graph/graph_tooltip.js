@@ -112,6 +112,7 @@ function ($) {
           yaxis = series.yaxis.n;
         }
 
+        !results[yaxis] && (results[yaxis] = []);
         results[yaxis].push({
           value: value,
           hoverIndex: hoverIndex,

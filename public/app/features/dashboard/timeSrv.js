@@ -134,7 +134,12 @@ define([
         to = dateMath.parse(to, true);
       }
 
-      return {from: from, to: to};
+      var range = {
+        from: from,
+        to:   to
+      };
+
+      return {from: from, to: to, raw: range};
     };
 
   });

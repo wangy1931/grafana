@@ -9,7 +9,7 @@ import coreModule from 'app/core/core_module';
 
 export class AnnotationsSrv {
   globalAnnotationsPromise: any;
-  alertStatesPromise: any;
+  // alertStatesPromise: any;
 
   /** @ngInject */
   constructor(private $rootScope,
@@ -23,29 +23,29 @@ export class AnnotationsSrv {
 
   clearCache() {
     this.globalAnnotationsPromise = null;
-    this.alertStatesPromise = null;
+    // this.alertStatesPromise = null;
   }
 
   getAnnotations(options) {
     return this.$q.all([
       this.getGlobalAnnotations(options),
       this.getPanelAnnotations(options),
-      this.getAlertStates(options)
+      // this.getAlertStates(options)
     ]).then(results => {
 
       // combine the annotations and flatten results
       var annotations = _.flattenDeep([results[0], results[1]]);
 
       // look for alert state for this panel
-      var alertState = _.find(results[2], {panelId: options.panel.id});
+      // var alertState = _.find(results[2], {panelId: options.panel.id});
 
       return {
         annotations: annotations,
-        alertState: alertState,
+        // alertState: alertState,
       };
 
     }).catch(err => {
-      this.$rootScope.appEvent('alert-error', ['Annotations failed', (err.message || err)]);
+      this.$rootScope.appEvent('alert-error', ['Annotations failed', (err.message || err.statusText || err)]);
     });
   }
 
@@ -68,27 +68,27 @@ export class AnnotationsSrv {
     return this.$q.when([]);
   }
 
-  getAlertStates(options) {
-    if (!options.dashboard.id) {
-      return this.$q.when([]);
-    }
+  // getAlertStates(options) {
+  //   if (!options.dashboard.id) {
+  //     return this.$q.when([]);
+  //   }
 
-    // ignore if no alerts
-    if (options.panel && !options.panel.alert) {
-      return this.$q.when([]);
-    }
+  //   // ignore if no alerts
+  //   if (options.panel && !options.panel.alert) {
+  //     return this.$q.when([]);
+  //   }
 
-    if (options.range.raw.to !== 'now') {
-      return this.$q.when([]);
-    }
+  //   if (options.range.raw.to !== 'now') {
+  //     return this.$q.when([]);
+  //   }
 
-    if (this.alertStatesPromise) {
-      return this.alertStatesPromise;
-    }
+  //   if (this.alertStatesPromise) {
+  //     return this.alertStatesPromise;
+  //   }
 
-    this.alertStatesPromise = this.backendSrv.get('/api/alerts/states-for-dashboard', {dashboardId: options.dashboard.id});
-    return this.alertStatesPromise;
-  }
+  //   this.alertStatesPromise = this.backendSrv.get('/api/alerts/states-for-dashboard', {dashboardId: options.dashboard.id});
+  //   return this.alertStatesPromise;
+  // }
 
   getGlobalAnnotations(options) {
     var dashboard = options.dashboard;
