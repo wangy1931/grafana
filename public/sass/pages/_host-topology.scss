@@ -1,0 +1,91 @@
+$tooltip-gray: #323232;
+$thresholds: (#3288BD, #66C2A5, #ABDDA4, #E6F598, #f6faaa, #FEE08B, #FDAE61, #F46D43, #D53E4F, #9E0142);
+
+.host-page {
+  
+  .relationshipGraph-block {
+    stroke: transparent;
+    stroke-width: 1px;
+    pointer-events: all;
+  }
+  
+  .relationshipGraph-block:hover {
+    cursor: pointer;
+    stroke: $black;
+  }
+  
+  .relationshipGraph-Text {
+    fill: $tooltip-gray;
+  }
+
+}
+
+// relationshipGraph style
+.relationshipGraph-measurement {
+  position: absolute;
+  width: auto;
+  height: auto;
+  left: -100%;
+  top: -100%;
+}
+
+.relationshipGraph-tip {
+  font-weight: bold;
+  line-height: 1;
+  padding: 12px;
+  background: $tooltipBackgroundOpacity;
+  color: $tooltipColor;
+  border-radius: 2px;
+  z-index: 50;
+  max-width: 350px;
+  max-height: 300px;
+}
+
+.relationshipGraph-tip:after {
+  display: inline-block;
+  width: 100%;
+  height: 3px;
+  color: $tooltipBackgroundOpacity;
+  content: "\25B6";
+  position: absolute;
+  font-size: 10px;
+}
+
+.relationshipGraph-tip.n:after {
+  content: "\25BC";
+  margin: -2px 0 0 0;
+  top: 100%;
+  left: 9px;
+  text-align: center;
+}
+
+.relationshipGraph-tip.e {
+  margin-left: 15px;
+}
+
+.relationshipGraph-tip.e:after {
+  content: "\25C0";
+  margin: -2px 0 0 0;
+  top: 50%;
+  left: -9px;
+}
+
+.relationshipGraph-tip.s {
+  margin-top: 15px;
+}
+
+.relationshipGraph-tip.s:after {
+  content: "\25B2";
+  margin: 0 0 1px 0;
+  top: -10px;
+  left: 12px;
+  text-align: center;
+}
+
+.relationshipGraph-tip.w:after {
+  content: "\25B6";
+  margin: -4px 0 0 -1px;
+  top: 50%;
+  left: 100%;
+}
+

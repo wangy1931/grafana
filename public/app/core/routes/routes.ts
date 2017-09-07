@@ -23,6 +23,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   var loadLogsBundle = new BundleLoader('app/features/logs/all');
   var loadReportBundle = new BundleLoader('app/features/report/reportCtrl');
   var loadRcaBundle = new BundleLoader('app/features/rca/all');
+  var loadHostBundle = new BundleLoader('app/features/host/all');
 
   $routeProvider
   .when('/', {
@@ -396,6 +397,13 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'RootCauseAnalysisCtrl',
     reloadOnSearch: true,
     resolve: loadRcaBundle,
+  })
+  // Host Topology
+  .when('/host_topology', {
+    templateUrl: 'public/app/features/host/partials/host.html',
+    controller : 'HostTopologyCtrl',
+    reloadOnSearch: true,
+    resolve: loadHostBundle
   })
   .when('/styleguide/:page?', {
     controller: 'StyleGuideCtrl',
