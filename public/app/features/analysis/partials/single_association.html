@@ -104,11 +104,20 @@
                         <p ng-if="correlatedMetrics.length">尝试将阈值调大, 匹配更多关联指标</p>
                         <div class="panel grafana-options-table">
                             <div controls controls-row>
-                                <label class="span3 checkbox" ng-repeat="(metricsName, metricsValue) in correlatedMetrics">
-                                    <input type="checkbox" ng-checked="isManualMetric(metricsName)" ng-click="addQuery(metricsName)">
-                                    <p style="width: 90%;" class="max-width" title="{{_.getMetricName(metricsName)}}">
-                                        {{_.getMetricName(metricsName)}}</p></input>
-                                </label>
+                                <table class="table">
+                                    <tr ng-repeat="(metricsName, metricsValue) in correlatedMetrics">
+                                        <td>
+                                            <label class="span3 checkbox">
+                                                <input type="checkbox" ng-checked="isManualMetric(metricsName)" ng-click="addQuery(metricsName)" />
+                                                <p style="width: 90%;" class="max-width" title="{{_.getMetricName(metricsName)}}">
+                                                    {{_.getMetricName(metricsName)}}</p>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-success" ng-click="addRCA(metricsName, metricsValue)">添加关联</button>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -120,3 +129,4 @@
     </div>
 </div>
 
+<rca-add></rca-add>
