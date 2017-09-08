@@ -1,8 +1,6 @@
 /* Javascript plotting library for jQuery, version 0.8.3.
-
 Copyright (c) 2007-2014 IOLA and Ole Laursen.
 Licensed under the MIT license.
-
 */
 
 // first an inline dependency, jquery.colorhelpers.js, we inline it here
@@ -248,7 +246,7 @@ Licensed under the MIT license.
 			// Create the text layer container, if it doesn't exist
 
 			if (this.textContainer == null) {
-				this.textContainer = $("<div class='flot-text'></div>")
+				this.textContainer = $("<div class='flot-text flot-temp-elem'></div>")
 					.css({
 						position: "absolute",
 						top: 0,
@@ -921,11 +919,6 @@ Licensed under the MIT license.
 
         function allAxes() {
             // return flat array without annoying null entries
-            _.each(yaxes,function(yaxesObj, i) {
-              if(i>1 && yaxesObj){
-                yaxesObj.options.show = false;
-              }
-            });
             return $.grep(xaxes.concat(yaxes), function (a) { return a; });
         }
 
@@ -1206,24 +1199,21 @@ Licensed under the MIT license.
                             points[k + m] = null;
                         }
                     }
-                    else {
-                        // a little bit of line specific stuff that
-                        // perhaps shouldn't be here, but lacking
-                        // better means...
-                        if (insertSteps && k > 0
-                            && points[k - ps] != null
-                            && points[k - ps] != points[k]
-                            && points[k - ps + 1] != points[k + 1]) {
-                            // copy the point to make room for a middle point
-                            for (m = 0; m < ps; ++m)
-                                points[k + ps + m] = points[k + m];
 
-                            // middle point has same y
-                            points[k + 1] = points[k - ps + 1];
+                    if (insertSteps && k > 0 && (!nullify || points[k - ps] != null)) {
+                        // copy the point to make room for a middle point
+                        for (m = 0; m < ps; ++m)
+                            points[k + ps + m] = points[k + m];
 
-                            // we've added a point, better reflect that
-                            k += ps;
-                        }
+                        // middle point has same y
+                        points[k + 1] = points[k - ps + 1] || 0;
+
+                        // if series has null values, let's give the last !null value a nice step
+                        if(nullify)
+                        	points[k] = p[0];
+
+                        // we've added a point, better reflect that
+                        k += ps;
                     }
                 }
             }
@@ -1321,14 +1311,10 @@ Licensed under the MIT license.
         }
 
         function setupCanvases() {
-
             // Make sure the placeholder is clear of everything except canvases
             // from a previous plot in this container that we'll try to re-use.
 
-            placeholder.css("padding", 0) // padding messes up the positioning
-                .children().filter(function(){
-                    return !$(this).hasClass("flot-overlay") && !$(this).hasClass('flot-base');
-                }).remove();
+            placeholder.find(".flot-temp-elem").remove();
 
             if (placeholder.css("position") == 'static')
                 placeholder.css("position", "relative"); // for positioning labels and overlay
@@ -1592,6 +1578,7 @@ Licensed under the MIT license.
 
         function setupGrid() {
             var i, axes = allAxes(), showGrid = options.grid.show;
+
             // Initialize the plot's offset from the edge of the canvas
 
             for (var a in plotOffset) {
@@ -1671,8 +1658,10 @@ Licensed under the MIT license.
                 delta = max - min;
 
             if (delta == 0.0) {
-                // degenerate case
-                var widen = max == 0 ? 1 : 0.01;
+                // Grafana fix: wide Y min and max using increased wideFactor
+                // when all series values are the same
+                var wideFactor = 0.25;
+                var widen = max == 0 ? 1 : max * wideFactor;
 
                 if (opts.min == null)
                     min -= widen;

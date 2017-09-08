@@ -67,6 +67,7 @@ function (angular, _) {
       $scope.type = '安装';
       if($scope.selected.addr === 'windows') {
         $scope.updateAuto = 0;
+        $scope.otherQuestion = false;
       } else {
         $scope.updateAuto = '';
         $scope.updateSelf = '';
