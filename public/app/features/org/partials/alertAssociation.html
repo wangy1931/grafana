@@ -66,19 +66,19 @@
             <p ng-if="correlatedMetrics.length">尝试将阈值调大, 匹配更多关联指标</p>
             <div class="panel grafana-options-table">
               <div controls controls-row>
-                <div class="span3" ng-repeat="ralation in ralationMetrics">
+                <div class="span3" ng-repeat="(metricsName, metricsValue) in correlatedMetrics">
                   <label class="checkbox">
-                      <input type="checkbox" ng-model="ralation.checked" ng-click="addQuery(ralation.metric)" />
-                      <p class="max-width" title="{{_.getMetricName(ralation.metric)}}">
-                          {{_.getMetricName(ralation.metric)}}</p>
+                      <input type="checkbox" ng-checked="isManualMetric(metricsName)" ng-click="addQuery(metricsName)" />
+                      <p class="max-width" title="{{_.getMetricName(metricsName)}}">
+                          {{_.getMetricName(metricsName)}}</p>
                   </label>
                   <div class="gf-form">
                     <label class="gf-form-inline">
-                      <input class="gf-form-input" type="radio" name="{{_.getMetricName(ralation.metric)}}" value="100" ng-model="ralation.confidenceLevel"/>
+                      <input class="gf-form-input" type="radio" name="{{_.getMetricName(metricsName)}}" value="100" ng-click="getConfidence(metricsName, 100);"/>
                       <span class="gf-form-label gf-form-label-radio">相关</span>
                     </label>
                     <label class="gf-form-inline">
-                      <input class="gf-form-input" type="radio" name="{{_.getMetricName(ralation.metric)}}" value="50" ng-model="ralation.confidenceLevel"/>
+                      <input class="gf-form-input" type="radio" name="{{_.getMetricName(metricsName)}}" value="50" ng-checked="true" ng-click="getConfidence(metricsName, 50);"/>
                       <span class="gf-form-label gf-form-label-radio">一般</span>
                     </label>
                   </div>

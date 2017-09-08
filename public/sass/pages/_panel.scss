@@ -30,9 +30,10 @@
 
    & > div {
     flex: 1;
+    padding-left: 50px;
    }
   .max-width {
-    max-width: 300px;
+    width: 300px;
     margin: 0;
     line-height: 40px;
   }

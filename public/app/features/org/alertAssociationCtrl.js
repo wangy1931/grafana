@@ -39,17 +39,9 @@ function (angular, _, noUiSlider) {
             var correlatedMetrics = correlationOfAlertMap[host];
             $scope.correlatedMetrics = correlatedMetrics;
           }
-          $scope.ralationMetrics = [];
           for (var m in $scope.correlatedMetrics) {
             if(_.isEqual(m, alertMetric)){
               delete $scope.correlatedMetrics[m];
-            } else{
-              $scope.ralationMetrics.push({
-                metric: m,
-                hosts: $scope.correlatedMetrics[m],
-                confidenceLevel: '50',
-                checked: false
-              });
             }
           }
         } else {
@@ -234,7 +226,9 @@ function (angular, _, noUiSlider) {
           "isCounter":false,
           "metric":_.getMetricName(metricName),
           "shouldComputeRate":false,
-          "tags":{"host":metricNameMap[metricName][0]}
+          "tags":{"host":metricNameMap[metricName][0]},
+          "hosts": metricNameMap[metricName],
+          "confidenceLevel": '50',
         };
         $scope.dashboard.rows[0].panels[0].targets.push(target);
         var seriesOverride = {
@@ -295,7 +289,20 @@ function (angular, _, noUiSlider) {
       }
     };
 
+    $scope.getConfidence = function(metricName, level) {
+      var targets = $scope.dashboard.rows[0].panels[0].targets;
+      var index = _.findIndex(targets, {metric: _.getMetricName(metricName)});
+      if(index > -1) {
+        targets[index].confidenceLevel = level;
+      }
+    };
+
     $scope.addRCA = function () {
+      var rootCauseMetrics = _.filter($scope.dashboard.rows[0].panels[0].targets, {hide: false});      
+      if(!rootCauseMetrics.length) {
+        $scope.appEvent('alert-warning', ['请选择关联指标']);
+        return;
+      }
       $scope.appEvent('confirm-modal', {
         title: '添加',
         text: '您确定要添加选定关联信息添加RCA吗？',
@@ -303,7 +310,6 @@ function (angular, _, noUiSlider) {
         noText: '取消',
         onConfirm: function() {
           var prox = contextSrv.user.orgId + '.' + contextSrv.user.systemId + '.';
-          var targets = $scope.dashboard.rows[0].panels[0].targets;
           var rcaFeedback = {
             alertIds: [],
             timestampInSec: Math.round(new Date().getTime()/1000),
@@ -316,11 +322,10 @@ function (angular, _, noUiSlider) {
             org: contextSrv.user.orgId,
             sys: contextSrv.user.systemId
           };
-          var rootCauseMetrics = _.filter($scope.ralationMetrics, {checked: true});
           _.each(rootCauseMetrics, function(target) {
             _.each(target.hosts, function(host) {
               rcaFeedback.rootCauseMetrics.push({
-                name: target.metric,
+                name: prox + target.metric,
                 host: host,
                 confidenceLevel: parseInt(target.confidenceLevel)
               });
