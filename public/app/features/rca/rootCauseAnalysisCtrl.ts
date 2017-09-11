@@ -17,12 +17,18 @@ export class RootCauseAnalysisCtrl {
 
   /** @ngInject */
   constructor(private backendSrv, private $location, private $scope) {
-    this.toolkit = window.jsPlumbToolkit.newInstance({});
+    // window.location.refresh();
+    this.toolkit = window.jsPlumbToolkit.newInstance();
+
     this.loadGraph().then(() => {
       this.renderer = this.renderFactory();
       this.resetConnection();
     });
     this.bindEvent();
+
+    $scope.$on("$destroy", () => {
+      this.toolkit.clear();
+    });
   }
 
   loadGraph() {
@@ -38,6 +44,7 @@ export class RootCauseAnalysisCtrl {
         // nodes
         item.src.name = _.getMetricName(item.src.name), item.dest.name = _.getMetricName(item.dest.name);
         item.src.id = item.src.name, item.dest.id = item.dest.name;
+        item.src.healthType = item.src.healthType.toLowerCase(), item.dest.healthType = item.dest.healthType.toLowerCase();
         sigValList.push(item.src.sigVal), sigValList.push(item.dest.sigVal);
       });
 
@@ -60,7 +67,7 @@ export class RootCauseAnalysisCtrl {
 
   renderFactory() {
     var mainElement = document.querySelector("#jtk-paths"),
-        canvasElement = mainElement.querySelector(".jtk-canvas"),
+        canvasElement = mainElement.querySelector(`.jtk-canvas`),
         miniviewElement = mainElement.querySelector(".miniview");
 
     // reset canvas height
@@ -108,7 +115,7 @@ export class RootCauseAnalysisCtrl {
           this.toolkit.clearSelection();
           this.resetGraph();
         },
-        modeChanged: function (mode) {
+        modeChanged: (mode) => {
           window.jsPlumb.removeClass(window.jsPlumb.getSelector("[mode]"), "selected-mode");
           window.jsPlumb.addClass(window.jsPlumb.getSelector("[mode='" + mode + "']"), "selected-mode");
         }
