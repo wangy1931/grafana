@@ -112,4 +112,12 @@
 .pull-right > .dropdown-menu {
   text-align: left;
 }
+
+@media (max-width: 1400px) {
+  .panel-associatoin .span3 {
+    width: 100%;
+  }
+}
+
+
 // cloudwiz end
