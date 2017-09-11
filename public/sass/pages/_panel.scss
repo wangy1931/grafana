@@ -14,13 +14,35 @@
    }
  }
  .span3 {
-   width: 33%;
+   height: 40px;
+   width: 50%;
    display: flex;
    margin-left: 0;
-   & > input {
-     margin-top: -8px;
-     margin-right: 5px;
+   border: 1px solid #ddd;
+   padding-left: 25px;
+   & > label {
+     display: flex;
+     flex: 1;
+    & > input {
+      margin-right: 20px;
+    }
    }
+
+   & > div {
+    flex: 1;
+    padding-left: 50px;
+   }
+  .max-width {
+    width: 300px;
+    margin: 0;
+    line-height: 40px;
+  }
+ }
+ .gf-form-label {
+  background: none;
+ }
+ .btn-association{
+  margin: 0 5px;
  }
 }
 
@@ -90,4 +112,12 @@
 .pull-right > .dropdown-menu {
   text-align: left;
 }
+
+@media (max-width: 1400px) {
+  .panel-associatoin .span3 {
+    width: 100%;
+  }
+}
+
+
 // cloudwiz end
