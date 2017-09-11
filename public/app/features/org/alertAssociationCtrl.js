@@ -298,7 +298,7 @@ function (angular, _, noUiSlider) {
     };
 
     $scope.addRCA = function () {
-      var rootCauseMetrics = _.filter($scope.dashboard.rows[0].panels[0].targets, {hide: false});      
+      var rootCauseMetrics = _.filter($scope.dashboard.rows[0].panels[0].targets, {hide: false});
       if(!rootCauseMetrics.length) {
         $scope.appEvent('alert-warning', ['请选择关联指标']);
         return;
