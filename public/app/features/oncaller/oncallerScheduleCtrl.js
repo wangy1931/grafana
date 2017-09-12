@@ -95,7 +95,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
           header: {
             left: 'prev, next, today',
             center: 'title',
-            right: 'month, agendaWeek'
+            right: 'month, agendaDay'
           },
           eventClick: eventClick,
           viewRender: viewRender,

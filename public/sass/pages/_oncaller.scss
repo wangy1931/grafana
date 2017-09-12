@@ -152,10 +152,46 @@
     }
 }
 
+// oncaller start
+
 .fc-event {
   margin-left: 60px;
   margin-right: -60px;
 }
+
+.fc-time-grid .fc-content-skeleton {
+  position: relative;
+  .fc-event {
+    position: relative;
+    margin: 5px 0;
+    height: 50px;
+    top: -93;
+  }
+}
+
+.fc-agenda-view .fc-day-grid {
+  display: none;
+}
+
+.fc-time-grid .fc-content-skeleton {
+  position: absolute;
+  top: 30px;
+}
+
+.fc-time-grid .fc-slats {
+  position: absolute;
+  left: 46px;
+}
+.fc-unthemed .fc-divider{
+  margin-left: 46px;
+  top: 22px;
+}
+
+.fc-ltr .fc-time-grid .fc-event-container {
+  margin: 0 2px;
+}
+
+// oncaller end 
 
 // .fc-ltr .fc-h-event.fc-not-start{
 //   margin-right: 60px;
