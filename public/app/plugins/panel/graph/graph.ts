@@ -20,7 +20,7 @@ import {ThresholdManager} from './threshold_manager';
 var module = angular.module('grafana.directives');
 var labelWidthCache = {};
 
-module.directive('grafanaGraph', function($rootScope, timeSrv) {
+module.directive('grafanaGraph', function($rootScope, timeSrv, integrateSrv) {
   return {
     restrict: 'A',
     template: '',
@@ -167,6 +167,9 @@ module.directive('grafanaGraph', function($rootScope, timeSrv) {
 
           rightLabel[0].style.marginTop = (getLabelWidth(panel.yaxes[1].label, rightLabel) / 2) + 'px';
         }
+
+        integrateSrv.options.from = moment.utc(plot.getAxes().xaxis.min).format("YYYY-MM-DDTHH:mm:ss.SSS\\Z");
+        integrateSrv.options.to = moment.utc(plot.getAxes().xaxis.max).format("YYYY-MM-DDTHH:mm:ss.SSS\\Z");
 
         thresholdManager.draw(plot);
       }
