@@ -318,6 +318,12 @@ function (moment, $, angular, _, uiCalendarConfig) {
     };
 
     function updateSchedule(role,oncallerSelcted) {
+      if (_.isString(oncallerSelcted.start)) {
+        oncallerSelcted.start = oncallerSelcted.start.replace(/[A,P]/, 'T');
+      }
+      if (_.isString(oncallerSelcted.end)) {
+        oncallerSelcted.end = oncallerSelcted.end.replace(/[A,P]/, 'T');
+      }
       oncallerMgrSrv.updateSchedule(role, oncallerSelcted.id, getTimeSec(oncallerSelcted.start), getTimeSec(oncallerSelcted.end)).then(function(response) {
         $scope.appEvent('alert-success', ['保存成功']);
       });
