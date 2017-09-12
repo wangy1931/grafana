@@ -93,8 +93,9 @@ function (moment, $, angular, _, uiCalendarConfig) {
           dayNames: moment.weekdays(),
           dayNamesShort: moment.weekdaysShort(),
           header: {
-            left: '',
+            left: 'prev, next, today',
             center: 'title',
+            right: 'month, agendaWeek'
           },
           eventClick: eventClick,
           viewRender: viewRender,
