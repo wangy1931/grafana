@@ -54,7 +54,8 @@ $ /sbin/iptables -t nat -A POSTROUTING -s 10.9.0.0/16 -d download.cloudwiz.cn -j
 		<p class="ql-indent-1">注意，这里能够看到两个外网地址，Destination --&gt; 106.75.91.106, Destination --&gt; 117.50.2.225，Gateway --&gt; 跳板机IP</p>
 		<p class="ql-indent-1"><br></p>
 		<p class="ql-indent-1"><strong>3.2 在内部节点中继续运行</strong></p>
-		<pre class="ql-syntax ql-indent-1">curl https://tsdb.cloudwiz.cn↵curl https://download.cloudwiz.cn</pre>
+		<pre class="ql-syntax ql-indent-1">curl https://tsdb.cloudwiz.cn
+curl https://download.cloudwiz.cn</pre>
 		<p class="ql-indent-1">能够看到 nginx/1.12.1 关键字即可</p>
 		<p class="ql-indent-1"><br></p>
 		<p class="ql-indent-1"><strong>3.3 在跳板机上运行</strong></p>
