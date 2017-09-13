@@ -16,7 +16,6 @@ export class RootCauseAnalysisCtrl {
   /** @ngInject */
   constructor(private backendSrv, private $location, private $scope) {
     this.toolkit = window.jsPlumbToolkit.newInstance();
-    console.log(this.data);
 
     this.loadGraph().then(() => {
       this.renderer = this.renderFactory();
