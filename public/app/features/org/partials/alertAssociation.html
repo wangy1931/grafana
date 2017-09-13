@@ -60,16 +60,29 @@
           <div ng-if="isAssociation" class="panel panel-associatoin" style="padding: 20px 20px 20px 20px;">
             <h2>
               挑选推荐关联指标进行对比
-              <span ng-click="showNewAssociationManual()" class="btn btn-primary">
-                <i class="fa fa-add"></i>新增任意指标
-              </span>
+              <span ng-click="showNewAssociationManual()" class="btn btn-primary btn-association">新增任意指标</span>
+              <span ng-click="addRCA()" class="btn btn-success btn-association">添加选中关联信息至RCA</span>
             </h2>
             <p ng-if="correlatedMetrics.length">尝试将阈值调大, 匹配更多关联指标</p>
             <div class="panel grafana-options-table">
               <div controls controls-row>
-                <label class="span3 checkbox" ng-repeat="(metricsName, metricsValue) in correlatedMetrics">
-                  <input type="checkbox" ng-checked="isManualMetric(metricsName)" ng-click="addQuery(metricsName)"><p style="width: 90%;" class="max-width" title="{{_.getMetricName(metricsName)}}">{{_.getMetricName(metricsName)}}</p></input>
-                </label>
+                <div class="span3" ng-repeat="(metricsName, metricsValue) in correlatedMetrics">
+                  <label class="checkbox">
+                      <input type="checkbox" ng-checked="isManualMetric(metricsName)" ng-click="addQuery(metricsName)" />
+                      <p class="max-width" title="{{_.getMetricName(metricsName)}}">
+                          {{_.getMetricName(metricsName)}}</p>
+                  </label>
+                  <div class="gf-form">
+                    <label class="gf-form-inline">
+                      <input class="gf-form-input" type="radio" name="{{_.getMetricName(metricsName)}}" value="100" ng-click="getConfidence(metricsName, 100);"/>
+                      <span class="gf-form-label gf-form-label-radio">非常确定</span>
+                    </label>
+                    <label class="gf-form-inline">
+                      <input class="gf-form-input" type="radio" name="{{_.getMetricName(metricsName)}}" value="50" ng-checked="true" ng-click="getConfidence(metricsName, 50);"/>
+                      <span class="gf-form-label gf-form-label-radio">可能</span>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -88,3 +101,4 @@
     </div>
   </div>
 </div>
+<rca-add></rca-add>
