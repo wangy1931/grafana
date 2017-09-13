@@ -73,7 +73,10 @@ function ($) {
       "iis": "IIS",
       "oracle": "Oracle",
       "weblogic": "WebLogic",
-      "apache": "Apache"
+      "apache": "Apache",
+      "ssdb": "SSDB",
+      "play": "Play Framework",
+      "elasticsearch": "ElasticSearch"
     };
   };
 

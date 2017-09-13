@@ -743,6 +743,54 @@
       "metrics": [],
       "status": -1,
       "template": "apache"
+    },{
+      "id": "ssdb",
+      "name": "SSDB",
+      "icon": "iconfont fa-zanwutu",
+      "img": "",
+      "info": "一个高性能的支持丰富数据结构的 NoSQL 数据库, 用于替代 Redis.",
+      "deploy": [
+        "路径: /opt/cloudwiz-agent/agent/collectors/conf/ssdb_state.conf",
+        "<p class='code-block'> enable = True </p>",
+        "<p class='code-block'> interval = 60 </p>",
+        "<p class='code-block'> host = localhost </p>",
+        "<p class='code-block'> port=8888,8889 # (多个服务，使用逗号隔开) </p>"
+      ],
+      "metrics": [],
+      "status": -1,
+      "template": "ssdb"
+    },{
+      "id": "play",
+      "name": "Play Framework",
+      "icon": "iconfont fa-playframework",
+      "img": "",
+      "info": "play framework是一个full-stack（全栈的）Java Web的应用框架，包括一个简单的无状态MVC模型，具有Hibernate的对象持续，一个基于Groovy的模板引擎，以及建立一个现代Web应用所需的所有东西。",
+      "deploy": [
+        "路径: /opt/cloudwiz-agent/agent/collectors/conf/play_framework.conf",
+        "<p class='code-block'> enable = True </p>",
+        "<p class='code-block'> interval = 60 </p>",
+        "<p class='code-block'> # 说明 process代表play_framework的唯一可以识出pid的字段，port是这个程序绑定的端口 </p>",
+        "<p class='code-block'> process_names = [{\"process\": \"sbt-launch.jar\", \"name\": \"play_framework\", \"port\": \"7778\"}] </p>"
+      ],
+      "metrics": [],
+      "status": -1,
+      "template": "play_framework"
+    },{
+      "id": "elasticsearch",
+      "name": "ElasticSearch",
+      "icon": "iconfont fa-ElasticElasticSearch",
+      "img": "",
+      "info": "Elasticsearch 是一个分布式的 RESTful 风格的搜索和数据分析引擎，能够解决不断涌现出的各种用例。",
+      "deploy": [
+        "路径: /opt/cloudwiz-agent/agent/collectors/conf/elasticsearchstat.conf",
+        "<p class='code-block'> interval = 60 </p>",
+        "<p class='code-block'> enabled = True </p>",
+        "<p class='code-block'> host= localhost </p>",
+        "<p class='code-block'> port= 9200 </p>"
+      ],
+      "metrics": [],
+      "status": -1,
+      "template": "elasticsearch"
     }
   ]
 }
