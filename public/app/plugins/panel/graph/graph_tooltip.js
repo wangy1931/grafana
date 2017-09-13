@@ -112,7 +112,12 @@ function ($) {
           yaxis = series.yaxis.n;
         }
 
-        !results[yaxis] && (results[yaxis] = []);
+        // if the yaxis much than twice there must be a special code.
+        // WARNING: do not move this code block.
+        if (yaxis > 2) {
+          yaxis = 2;
+        }
+
         results[yaxis].push({
           value: value,
           hoverIndex: hoverIndex,

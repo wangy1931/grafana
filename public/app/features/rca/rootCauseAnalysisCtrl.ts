@@ -1,5 +1,3 @@
-
-
 import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
@@ -17,12 +15,12 @@ export class RootCauseAnalysisCtrl {
 
   /** @ngInject */
   constructor(private backendSrv, private $location, private $scope) {
-    // window.location.refresh();
     this.toolkit = window.jsPlumbToolkit.newInstance();
+    console.log(this.data);
 
     this.loadGraph().then(() => {
       this.renderer = this.renderFactory();
-      this.resetConnection();
+      // this.resetConnection();
     });
     this.bindEvent();
 

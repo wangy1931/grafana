@@ -134,6 +134,12 @@ module.directive('grafanaGraph', function($rootScope, timeSrv, integrateSrv) {
           var series = data[i];
           var axis = yaxis[series.yaxis - 1];
 
+          // if the yaxis much than twice there must be a special code.
+          // WARNING: do not move this code block.
+          if (series.yaxis > 2) {
+            series.yaxis = 2;
+          }
+
           var formater = kbn.valueFormats[panel.yaxes[series.yaxis - 1].format];
 
           // decimal override
@@ -282,12 +288,6 @@ module.directive('grafanaGraph', function($rootScope, timeSrv, integrateSrv) {
           if (ctrl.hiddenSeries[series.alias]) {
             series.data = [];
             series.stack = false;
-          }
-
-          // if the yaxis much than twice there must be a special code.
-          // WARNING: do not move this code block.
-          if (series.yaxis > 2) {
-            series.yaxis = 2;
           }
         }
 

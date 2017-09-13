@@ -59,7 +59,7 @@ function (angular, moment, _) {
       var host = alertDetail.status.monitoredEntity;
       alertMgrSrv.resetCurrentThreshold(alertDetail.definition.alertDetails);
       alertMgrSrv.annotations = [{
-        annotation: {
+        source: {
           datasource: "elk",
           enable: true,
           iconColor: "#C0C6BE",
@@ -75,9 +75,9 @@ function (angular, moment, _) {
         max: alertDetail.status.creationTime,
         eventType: "123",
         title: "报警时间",
-        tags: metric +","+ host,
-        text: "[警报] "+def_zh,
-        score: 1
+        tags: metric + "," + host,
+        text: "[警报] " + def_zh,
+        scope: 1
       }];
     };
 

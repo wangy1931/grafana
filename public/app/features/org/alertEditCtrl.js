@@ -81,7 +81,8 @@ function (angular, _) {
               "short",
               "short"
             ],
-            "transparent": false
+            "transparent": false,
+            "thresholds": []
           }
         ],
         "showTitle": false,
@@ -138,13 +139,25 @@ function (angular, _) {
     };
 
     $scope.addThreshold = function (type) {
-      if(type){
-        $scope.setCritThreshold($scope.dashboard.rows[0],$scope.alertDef);
-      }else{
-        $scope.setWarnThreshold($scope.dashboard.rows[0],$scope.alertDef);
+      if (type) {
+        $scope.updateThreshold($scope.dashboard.rows[0].panels[0], Number($scope.alertDef.alertDetails.crit.threshold), 'critical', 'value');
+      } else {
+        $scope.updateThreshold($scope.dashboard.rows[0].panels[0], Number($scope.alertDef.alertDetails.warn.threshold), 'warning', 'value');
       }
       $scope.$broadcast('render');
     };
+
+    $scope.addThresholdOp = function () {
+      if ($scope.alertDef.alertDetails.hostQuery.expression === '?') {
+        $scope.addThreshold(0);
+        $scope.addThreshold(1);
+      } else {
+        var value = _.escape($scope.alertDef.alertDetails.hostQuery.expression).replace(/^&|;$/gi, '');
+        $scope.updateThreshold($scope.dashboard.rows[0].panels[0], value, 'critical', 'op');
+        $scope.updateThreshold($scope.dashboard.rows[0].panels[0], value, 'warning', 'op');
+        $scope.$broadcast('render');
+      }
+    }
 
     $scope.refreshPreview = function() {
       $scope.setTarget($scope.dashboard.rows[0],$scope.alertDef);
@@ -170,15 +183,41 @@ function (angular, _) {
       }
     };
 
-    $scope.setCritThreshold = function (panel,detail) {
-      if(detail.alertDetails.crit.threshold) {
-        panel.panels[0].grid.threshold1 = Number(detail.alertDetails.crit.threshold);
+    $scope.updateThreshold = function (panel, value, filterItem, type) {
+      var defaults = {
+        value: null,
+        colorMode: filterItem,
+        op: 'gt',
+        fill: true,
+        line: true
+      };
+      var thresholdVal = value;
+      var threshold = _.find(panel.thresholds, { 'colorMode': filterItem });
+
+      // special code: value === 0, threshold line should not exist
+      (value === 0) && (defaults.value = null);
+
+      threshold ? (threshold[type] = thresholdVal)
+                : (((defaults[type] = thresholdVal) && panel.thresholds.push(defaults)));
+    };
+
+    $scope.setCritThreshold = function (panel, detail) {
+      if (detail.alertDetails.crit.threshold) {
+        var thresholdVal = Number(detail.alertDetails.crit.threshold);
+        $scope.updateThreshold(panel.panels[0], thresholdVal, 'critical', 'value');
+
+        var value = _.escape(detail.alertDetails.hostQuery.expression).replace(/^&|;$/gi, '');
+        $scope.updateThreshold(panel.panels[0], value, 'critical', 'op');
       }
     };
 
-    $scope.setWarnThreshold = function (panel,detail) {
-      if(detail.alertDetails.warn.threshold) {
-        panel.panels[0].grid.threshold2 = Number(detail.alertDetails.warn.threshold);
+    $scope.setWarnThreshold = function (panel, detail) {
+      if (detail.alertDetails.warn.threshold) {
+        var thresholdVal = Number(detail.alertDetails.warn.threshold);
+        $scope.updateThreshold(panel.panels[0], thresholdVal, 'warning', 'value');
+
+        var value = _.escape(detail.alertDetails.hostQuery.expression).replace(/^&|;$/gi, '');
+        $scope.updateThreshold(panel.panels[0], value, 'warning', 'op');
       }
     };
 
