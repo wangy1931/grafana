@@ -161,11 +161,26 @@
 
 .fc-time-grid .fc-content-skeleton {
   position: relative;
+  .fc-event-container {
+    position: relative
+  }
   .fc-event {
-    position: relative;
+    position: absolute;
     margin: 5px 0;
     height: 50px;
-    top: -93;
+    border: 1px solid;
+    border-radius: 5px;
+  }
+
+  .fc-content {
+    font-size: 30px;
+  }
+
+  .primary {
+    top: 0!important;
+  }
+  .secondary {
+    top: 80px!important;
   }
 }
 
@@ -192,7 +207,3 @@
 }
 
 // oncaller end 
-
-// .fc-ltr .fc-h-event.fc-not-start{
-//   margin-right: 60px;
-// }
