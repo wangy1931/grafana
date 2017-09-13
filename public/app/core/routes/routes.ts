@@ -359,6 +359,10 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'FilebeatCtrl',
     resolve: loadSetupBundle,
   })
+  .when('/setting/proxy', {
+    templateUrl: 'public/app/features/setup/partials/proxy.html',
+    reloadOnSearch: false,
+  })
   .when('/cmdb/hostlist', {
     templateUrl: 'public/app/features/cmdb/partials/host_list.html',
     controller : 'HostListCtrl',
