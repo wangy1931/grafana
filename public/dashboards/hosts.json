@@ -723,6 +723,26 @@
       "metrics": [],
       "status": -1,
       "template": ""
+    },{
+      "id": "apache",
+      "name": "Apache",
+      "icon": "iconfont fa-Apacheyumao",
+      "img": "",
+      "info": "Apache是世界使用排名第一的Web服务器软件。它可以运行在几乎所有广泛使用的计算机平台上，由于其跨平台和安全性被广泛使用，是最流行的Web服务器端软件之一。",
+      "deploy": [
+        "路径: /opt/cloudwiz-agent/agent/collectors/conf/apache.conf",
+        "<p class='code-block'> enable = True </p>",
+        "<p class='code-block'> interval = 30 </p>",
+        "<p class='code-block'> disable_ssl_validation = False </p>",
+        "<p class='code-block'> apache_url = http://127.0.0.1/server-status?auto </p>",
+        "<p class='code-block'> connect_timeout = 5 </p>",
+        "<p class='code-block'> receive_timeout = 15 </p>",
+        "<p class='code-block'> #apache_user= (如果有用户认证的话，可以添加上) </p>",
+        "<p class='code-block'> #apache_password= </p>"
+      ],
+      "metrics": [],
+      "status": -1,
+      "template": ""
     }
   ]
 }

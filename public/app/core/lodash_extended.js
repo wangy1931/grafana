@@ -72,7 +72,8 @@ function ($) {
       "rabbitmq": "RabbitMQ",
       "iis": "IIS",
       "oracle": "Oracle",
-      "weblogic": "WebLogic"
+      "weblogic": "WebLogic",
+      "apache": "Apache"
     };
   };
 
@@ -109,7 +110,9 @@ function ($) {
       "nginx": "iconfont fa-image-icon_nginx",
       "postgresql": "iconfont fa-postgresql",
       "redis": "iconfont fa-redis",
-      "rabbitmq": "iconfont fa-rabbitmq"
+      "rabbitmq": "iconfont fa-rabbitmq",
+      "weblogic": "iconfont fa-weblogic",
+      "apache": "iconfont fa-Apacheyumao"
     };
   }
 
