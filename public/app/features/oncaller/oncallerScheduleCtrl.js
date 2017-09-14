@@ -165,9 +165,9 @@ function (moment, $, angular, _, uiCalendarConfig) {
       $scope.zonesStart = moment($scope.zonesStart).format('YYYY-MM-DD');
       $scope.zonesEnd = moment($scope.zonesEnd).format('YYYY-MM-DD');
 
-      $scope.curInterval = {start: view.start._d, end: view.end._d};
+      $scope.curInterval = {start: view.start.subtract(16,'hours'), end: view.end._d};
 
-      loadSchedule(view.start._d, view.end._d);
+      loadSchedule(view.start.subtract(16,'hours'), view.end._d);
     }
 
     function loadSchedule(start, end) {

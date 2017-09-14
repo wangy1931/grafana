@@ -161,11 +161,7 @@
 
 .fc-time-grid .fc-content-skeleton {
   position: relative;
-  .fc-event-container {
-    position: relative
-  }
   .fc-event {
-    position: absolute;
     margin: 5px 0;
     height: 50px;
     border: 1px solid;
@@ -186,20 +182,6 @@
 
 .fc-agenda-view .fc-day-grid {
   display: none;
-}
-
-.fc-time-grid .fc-content-skeleton {
-  position: absolute;
-  top: 30px;
-}
-
-.fc-time-grid .fc-slats {
-  position: absolute;
-  left: 46px;
-}
-.fc-unthemed .fc-divider{
-  margin-left: 46px;
-  top: 22px;
 }
 
 .fc-ltr .fc-time-grid .fc-event-container {
