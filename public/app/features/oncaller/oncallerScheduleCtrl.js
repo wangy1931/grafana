@@ -173,8 +173,8 @@ function (moment, $, angular, _, uiCalendarConfig) {
     function loadSchedule(start, end) {
       oncallerMgrSrv.loadSchedule(getTimeSec(start), getTimeSec(end)).then(function onSuccess(response) {
         _.each(response.data.roleSchedule, function(roleEvents, role) {
-          _.each(roleEvents, function(oncaller, start) {
-            oncaller.start = formatTime(new Date(parseInt(start)*1000));
+          _.each(roleEvents, function(oncaller, startTime) {
+            oncaller.start = formatTime(new Date(parseInt(startTime)*1000));
             oncaller.title = oncaller.name+$scope[role].type;
             var oncallerDef = _.find($scope.oncallerDefList, {id: oncaller.id});
             if(oncallerDef) {
