@@ -5,7 +5,7 @@ define([
   'lodash',
   'ui.calendar',
   'fullcalendar',
-  // 'zh-cn',
+  'zh-cn',
 ],
 function (moment, $, angular, _, uiCalendarConfig) {
   'use strict';
