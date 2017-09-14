@@ -11,7 +11,7 @@ function (angular, moment, _) {
 
   module.controller('AlertStatusCtrl', function ($scope, alertMgrSrv, datasourceSrv, contextSrv, integrateSrv, $location, backendSrv, $controller) {
     var annotation_tpl = {
-      annotation: {
+      source: {
         datasource: "elk",
         enable: true,
         iconColor: "rgba(19, 21, 19, 0.7)",
@@ -29,7 +29,7 @@ function (angular, moment, _) {
       title: ":",
       tags: "历史报警时间",
       text: "",
-      score: 1
+      scope: 1
     };
 
     $scope.init = function () {
