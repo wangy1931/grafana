@@ -1,5 +1,3 @@
-
-
 import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
@@ -12,17 +10,16 @@ export class RootCauseAnalysisCtrl {
   renderer: any;
   source: any;  // path traversal.
   mainElement: any;
-  data: any = { "nodes" : [], "edges" : [], "ports" : [], "groups": [] };
   traceList: Array<string> = [];
 
   /** @ngInject */
   constructor(private backendSrv, private $location, private $scope) {
-    // window.location.refresh();
     this.toolkit = window.jsPlumbToolkit.newInstance();
+    this.renderer = this.renderFactory();
 
-    this.loadGraph().then(() => {
-      this.renderer = this.renderFactory();
-      this.resetConnection();
+    this.loadGraph().then(response => {
+      this.toolkit.load({ type: "json", data: response });
+      this.resetConnection(response);
     });
     this.bindEvent();
 
@@ -35,12 +32,12 @@ export class RootCauseAnalysisCtrl {
     return this.backendSrv.alertD({
       "url": "/rca/graph"
     }).then(response => {
-      var data = response.data.edges;
+      var data = { "nodes" : [], "edges" : [], "ports" : [], "groups": [] };
       var sigValList = [];
       var idList = [];
       var rate = 1;
 
-      data.forEach(item => {
+      response.data.edges.forEach(item => {
         // nodes
         item.src.name = _.getMetricName(item.src.name), item.dest.name = _.getMetricName(item.dest.name);
         item.src.id = item.src.name, item.dest.id = item.dest.name;
@@ -49,19 +46,21 @@ export class RootCauseAnalysisCtrl {
       });
 
       rate = 60 / Math.max(...sigValList);  // node's max-width: 60px
-      data.forEach(item => {
+      response.data.edges.forEach(item => {
         // nodes
         item.src.sigVal *= rate, item.dest.sigVal *= rate;
-        idList.indexOf(item.src.id) === -1 && idList.push(item.src.id) && this.data.nodes.push(item.src);
-        idList.indexOf(item.dest.id) === -1 && idList.push(item.dest.id) && this.data.nodes.push(item.dest);
+        idList.indexOf(item.src.id) === -1 && idList.push(item.src.id) && data.nodes.push(item.src);
+        idList.indexOf(item.dest.id) === -1 && idList.push(item.dest.id) && data.nodes.push(item.dest);
         // edges
-        this.data.edges.push({
+        data.edges.push({
           "source": item.src.id,
           "target": item.dest.id,
           "data"  : { "type": null },
           "score" : item.score * 4
         });
       });
+
+      return data;
     });
   }
 
@@ -73,7 +72,7 @@ export class RootCauseAnalysisCtrl {
     // reset canvas height
     $(".jtk-canvas").css({ "height": window.innerHeight - 52 });
 
-    return this.toolkit.load({ type: "json", data: this.data }).render({
+    return this.toolkit.render({
       container: canvasElement,
       view: {
         edges: {
@@ -136,9 +135,9 @@ export class RootCauseAnalysisCtrl {
     window.jsPlumb.removeClass(window.jsPlumb.getSelector(".jtk-connector"), "unselected");
   }
 
-  resetConnection() {
-    this.data.edges.forEach(item => {
-      window.jsPlumb.connect({
+  resetConnection(response) {
+    response.edges.forEach(item => {
+      window.jsPlumbToolkit.connect({
         source: $(`[data-jtk-node-id="${item.source}"]`).attr('id'),
         target: $(`[data-jtk-node-id="${item.target}"]`).attr('id'),
         paintStyle: { strokeWidth: item.score }

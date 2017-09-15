@@ -11,7 +11,7 @@ function (angular, moment, _) {
 
   module.controller('AlertStatusCtrl', function ($scope, alertMgrSrv, datasourceSrv, contextSrv, integrateSrv, $location, backendSrv, $controller) {
     var annotation_tpl = {
-      annotation: {
+      source: {
         datasource: "elk",
         enable: true,
         iconColor: "rgba(19, 21, 19, 0.7)",
@@ -29,7 +29,7 @@ function (angular, moment, _) {
       title: ":",
       tags: "历史报警时间",
       text: "",
-      score: 1
+      scope: 1
     };
 
     $scope.init = function () {
@@ -59,7 +59,7 @@ function (angular, moment, _) {
       var host = alertDetail.status.monitoredEntity;
       alertMgrSrv.resetCurrentThreshold(alertDetail.definition.alertDetails);
       alertMgrSrv.annotations = [{
-        annotation: {
+        source: {
           datasource: "elk",
           enable: true,
           iconColor: "#C0C6BE",
@@ -75,9 +75,9 @@ function (angular, moment, _) {
         max: alertDetail.status.creationTime,
         eventType: "123",
         title: "报警时间",
-        tags: metric +","+ host,
-        text: "[警报] "+def_zh,
-        score: 1
+        tags: metric + "," + host,
+        text: "[警报] " + def_zh,
+        scope: 1
       }];
     };
 
