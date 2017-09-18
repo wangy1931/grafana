@@ -197,10 +197,12 @@ function (moment, $, angular, _, uiCalendarConfig) {
     }
 
     function eventMouseover(event, jsEvent, view) {
+      this.style.color = '#000';
       this.style.backgroundColor = '#eee';
     }
 
     function eventMouseout(event, jsEvent, view) {
+      this.style.color = '#fff';
       this.style.backgroundColor = event.color;
     }
 
