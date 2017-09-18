@@ -72,7 +72,7 @@ class SingleStatCtrl extends MetricsPanelCtrl {
 
   onInitEditMode() {
     this.fontSizes = ['20%', '30%','50%','70%','80%','100%', '110%', '120%', '150%', '170%', '200%'];
-    this.addEditorTab('Options', 'public/app/plugins/panel/singlestat/editor.html', 2);
+    this.addEditorTab('显示效果', 'public/app/plugins/panel/singlestat/editor.html', 2);
     this.unitFormats = kbn.getUnitFormats();
   }
 
