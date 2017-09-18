@@ -30,6 +30,10 @@
           ng-options="enum for enum in prop.enumValues"
           ng-model="prop.value">
         </select>
+        <select ng-switch-when="boolean" class="gf-form-input width-14"
+          ng-options="f for f in [true, false]"
+          ng-model="prop.value">
+        </select>
       </div>
     </div>
     <br/>

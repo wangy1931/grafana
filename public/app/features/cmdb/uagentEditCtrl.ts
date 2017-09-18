@@ -28,19 +28,6 @@ export class UagentEditCtrl {
       url = '/cmdb/config/service?serviceId='+ this.serviceId + '&configName=' + this.configName;
     }
     this.backendSrv.alertD({url: url}).then((response) => {
-      _.each(response.data.sections, function (section) {
-        _.each(section.props, function (prop) {
-          if (prop.type === 'integer') {
-            prop.value = parseInt(prop.value);
-          }
-          if (prop.type === 'enum' && _.isString(prop.enumValues)) {
-            prop.enumValues = _.split(prop.enumValues, '|');
-          }
-          if (_.isString(prop.readOnly)) {
-            prop.readOnly = prop.readOnly === "true" ? true : false;
-          }
-        });
-      });
       this.config = response.data;
     });
   }
