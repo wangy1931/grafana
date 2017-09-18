@@ -66,17 +66,11 @@ function (angular, _, coreModule) {
       });
     };
 
-    this.updateSchedule = function (role, id, startSec, endSec) {
+    this.updateSchedule = function (params) {
       return backendSrv.alertD({
         method: "post",
         url: oncallerScheduleUrl,
-        params:{
-          role: role,
-          id: id,
-          startSec: startSec,
-          endSec: endSec
-        },
-        headers: {'Content-Type': 'text/plain'},
+        params: params,
       });
     };
 

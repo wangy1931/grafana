@@ -12,7 +12,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('OnCallerScheduleCtrl', function ($scope, oncallerMgrSrv, $timeout) {
+  module.controller('OnCallerScheduleCtrl', function ($scope, oncallerMgrSrv, $timeout, $q) {
     /* oncaller/events
       {
         title: name,            << 显示名称
@@ -205,7 +205,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
       oncallerSelcted.end = end;
       oncallerSelcted.start = start;
       if(role === 'primary' || role === 'secondary') {
-        updateSchedule($scope.role.key, oncallerSelcted);
+        updateSchedule($scope.role.key, oncallerSelcted, 'update');
         var index = _.findIndex($scope[role].events, {start: start});
         if(index === -1){
           $scope.clearReview();
@@ -307,27 +307,43 @@ function (moment, $, angular, _, uiCalendarConfig) {
     };
 
     $scope.saveSchedule = function() {
+      var updatePrimaryList = [];
+      var updateSecondaryList = [];
       while($scope.primaryReview.events.length) {
         var primaryReview = $scope.primaryReview.events.shift();
         var secondaryReview = $scope.secondaryReview.events.shift();
-        updateSchedule('primary', primaryReview);
-        updateSchedule('secondary', secondaryReview);
-        addEvent(primaryReview, 'primary');
-        addEvent(secondaryReview, 'secondary');
+        var p = updateSchedule('primary', primaryReview, 'save');
+        var s = updateSchedule('secondary', secondaryReview, 'save');
+        updatePrimaryList.push(p);
+        updateSecondaryList.push(s);
       }
       $scope.showScheduling = false;
+      oncallerMgrSrv.updateSchedule(_.concat(updatePrimaryList, updateSecondaryList)).then(function(response) {
+        loadSchedule($scope.zonesStart, $scope.zonesEnd);
+        $scope.appEvent('alert-success', ['保存成功']);
+      });
     };
 
-    function updateSchedule(role,oncallerSelcted) {
+    function updateSchedule(role,oncallerSelcted,type) {
       if (_.isString(oncallerSelcted.start)) {
         oncallerSelcted.start = oncallerSelcted.start.replace(/[A,P,凌,早,晚,中,下,上]/, 'T');
       }
       if (_.isString(oncallerSelcted.end)) {
         oncallerSelcted.end = oncallerSelcted.end.replace(/[A,P,凌,早,晚,中,下,上]/, 'T');
       }
-      oncallerMgrSrv.updateSchedule(role, oncallerSelcted.id, getTimeSec(oncallerSelcted.start), getTimeSec(oncallerSelcted.end)).then(function(response) {
-        $scope.appEvent('alert-success', ['保存成功']);
-      });
+      var event = {
+        role: role,
+        id: oncallerSelcted.id,
+        startSec: getTimeSec(oncallerSelcted.start),
+        endSec: getTimeSec(oncallerSelcted.end)
+      }
+      if (type === 'update') {
+        oncallerMgrSrv.updateSchedule(event).then(function(response) {
+          $scope.appEvent('alert-success', ['保存成功']);
+        });
+      } else {
+        return event;
+      }
     }
 
     $scope.init();
