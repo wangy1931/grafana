@@ -47,8 +47,8 @@
                 </li>
                 <li><span>虚拟机</span><span>{{detail.isVirtual}}</span></li>
                 <li><span>架构</span><span>{{detail.architecture}}</span></li>
-                <li><span>CPU</span>
-                    <table class="table">
+                <li><span>CPU</span><span ng-if="_.isEmpty(cpuCount)">暂无信息</span>
+                    <table class="table" ng-if="!_.isEmpty(cpuCount)">
                         <tr>
                             <th>cpu型号</th>
                             <th>个数</th>
