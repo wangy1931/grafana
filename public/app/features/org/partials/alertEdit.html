@@ -132,7 +132,7 @@
             <li>
               <select class="input-medium tidy-form-input last" style="width: 40px; margin: 0 5px; text-align: center;"
                       ng-model="alertDef.alertDetails.hostQuery.expression"
-                      ng-change="checkForm();"
+                      ng-change="checkForm();addThresholdOp();"
                       ng-options="f for f in ['>', '<', '?']">
               </select>
             </li>
