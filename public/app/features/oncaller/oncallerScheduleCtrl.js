@@ -152,7 +152,9 @@ function (moment, $, angular, _, uiCalendarConfig) {
     }
 
     function viewRender(view, element) {
-      $scope.clearReview();
+      if($scope.inter) {
+        $timeout.cancel($scope.inter);
+      }
       var today = new Date();
       $scope.zonesStart = new Date(view.intervalStart);
       $scope.zonesEnd = new Date(view.intervalEnd);
@@ -167,11 +169,14 @@ function (moment, $, angular, _, uiCalendarConfig) {
 
       $scope.curInterval = {start: view.start.subtract(16,'hours'), end: view.end._d};
 
-      loadSchedule(view.start.subtract(16,'hours'), view.end._d);
+      $scope.inter = $timeout(function() {
+        loadSchedule(view.start.subtract(16,'hours'), view.end._d);
+      });
     }
 
     function loadSchedule(start, end) {
       oncallerMgrSrv.loadSchedule(getTimeSec(start), getTimeSec(end)).then(function onSuccess(response) {
+        $scope.clearReview();      
         _.each(response.data.roleSchedule, function(roleEvents, role) {
           _.each(roleEvents, function(oncaller, startTime) {
             oncaller.start = formatTime(new Date(parseInt(startTime)*1000));
@@ -338,7 +343,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
         endSec: getTimeSec(oncallerSelcted.end)
       }
       if (type === 'update') {
-        oncallerMgrSrv.updateSchedule(event).then(function(response) {
+        oncallerMgrSrv.updateSchedule([event]).then(function(response) {
           $scope.appEvent('alert-success', ['保存成功']);
         });
       } else {
