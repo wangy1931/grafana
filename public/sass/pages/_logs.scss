@@ -259,3 +259,11 @@ table.diff {
 .tab-2 tbody tr td:nth-child(3) {
   display: none;
 }
+
+// hard code
+.log-integrate-search-result {
+  border: none;
+  .nav-tabs {
+    border: none;
+  }
+}
