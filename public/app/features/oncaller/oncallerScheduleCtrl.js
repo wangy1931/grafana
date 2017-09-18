@@ -176,7 +176,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
 
     function loadSchedule(start, end) {
       oncallerMgrSrv.loadSchedule(getTimeSec(start), getTimeSec(end)).then(function onSuccess(response) {
-        $scope.clearReview();      
+        $scope.clearReview();
         _.each(response.data.roleSchedule, function(roleEvents, role) {
           _.each(roleEvents, function(oncaller, startTime) {
             oncaller.start = formatTime(new Date(parseInt(startTime)*1000));
@@ -265,10 +265,14 @@ function (moment, $, angular, _, uiCalendarConfig) {
     $scope.clearReview = function() {
       while($scope.primary.events.length){
         $scope.primary.events.pop();
+      }
+      while($scope.secondary.events.length) {
         $scope.secondary.events.pop();
       }
       while($scope.primaryReview.events.length){
         $scope.primaryReview.events.pop();
+      }
+      while($scope.secondaryReview.events.length){
         $scope.secondaryReview.events.pop();
       }
     };
