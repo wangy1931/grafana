@@ -66,11 +66,12 @@ function (angular, _, coreModule) {
       });
     };
 
-    this.updateSchedule = function (params) {
+    this.updateSchedule = function (data) {
       return backendSrv.alertD({
         method: "post",
         url: oncallerScheduleUrl,
-        params: params,
+        data: angular.toJson(data),
+        headers: {'Content-Type': 'text/plain'},
       });
     };
 
