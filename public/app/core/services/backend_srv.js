@@ -144,7 +144,7 @@ function (angular, _, coreModule, config) {
     this.getSystemById = function (id) {
       var sys = '';
       _.each(contextSrv.systemsMap, function (system) {
-        if (system.Id === id) {
+        if (system.Id === parseInt(id)) {
           sys = system.SystemsName;
         }
       });

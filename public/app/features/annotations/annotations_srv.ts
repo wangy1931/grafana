@@ -8,6 +8,7 @@ import $ from 'jquery';
 import coreModule from 'app/core/core_module';
 
 export class AnnotationsSrv {
+  list: any = [];
   globalAnnotationsPromise: any;
   // alertStatesPromise: any;
 
@@ -94,6 +95,9 @@ export class AnnotationsSrv {
     var dashboard = options.dashboard;
 
     if (dashboard.annotations.list.length === 0) {
+      if (!_.isNull(dashboard.manualAnnotation)) {
+         return this.$q.when(dashboard.manualAnnotation);
+      }
       return this.$q.when([]);
     }
 
@@ -121,7 +125,12 @@ export class AnnotationsSrv {
         // translate result
         return this.translateQueryResult(annotation, results);
       });
-    }));
+    })).then(() => {
+      if (!_.isNull(dashboard.manualAnnotation)) {
+        this.list.push(dashboard.manualAnnotation[0])
+      }
+      return this.list;
+    });
 
     return this.globalAnnotationsPromise;
   }

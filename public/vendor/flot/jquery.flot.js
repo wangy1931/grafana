@@ -918,6 +918,11 @@ Licensed under the MIT license.
         }
 
         function allAxes() {
+            _.each(yaxes, function(yaxesObj, i) {
+                if (i > 1 && yaxesObj) {
+                    yaxesObj.options.show = false;
+                }
+            });
             // return flat array without annoying null entries
             return $.grep(xaxes.concat(yaxes), function (a) { return a; });
         }

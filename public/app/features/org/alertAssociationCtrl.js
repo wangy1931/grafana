@@ -123,7 +123,23 @@ function (angular, _, noUiSlider) {
               threshold2: alertMgrSrv.currentWarningThreshold,
               threshold2Color: "rgba(251, 0, 0, 0.57)",
               thresholdLine: true
-            }
+            },
+            thresholds: [
+              {
+                value: alertMgrSrv.currentCritialThreshold,
+                colorMode: "critical",
+                op: 'gt',
+                fill: false,
+                line: true
+              },
+              {
+                value: alertMgrSrv.currentWarningThreshold,
+                colorMode: "warning",
+                op: 'gt',
+                fill: false,
+                line: true
+              }
+            ]
           }
         ]
       };

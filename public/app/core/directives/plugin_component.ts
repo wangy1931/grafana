@@ -141,7 +141,7 @@ function pluginDirectiveLoader($compile, datasourceSrv, $rootScope, $q, $http, $
             baseUrl: scope.ctrl.currentDatasource.meta.baseUrl,
             name: 'annotations-query-ctrl-' + scope.ctrl.currentDatasource.meta.id,
             bindings: {annotation: "=", datasource: "="},
-            attrs: {"annotation": "ctrl.currentAnnotation", datasource: "ctrl.currentDatasource"},
+            attrs: {"annotation": "scope.ctrl.currentAnnotation", datasource: "scope.ctrl.currentDatasource"},
             Component: dsModule.AnnotationsQueryCtrl,
           };
         });

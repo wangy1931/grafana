@@ -10,7 +10,7 @@ define([
 
     module.controller('AlertHistoryCtrl', function ($scope, $location, alertMgrSrv, integrateSrv) {
       var annotation_tpl = {
-        annotation: {
+        source: {
           datasource: "elk",
           enable: true,
           iconColor: "#C0C6BE",
@@ -28,7 +28,7 @@ define([
         title: ":",
         tags: "历史报警时间",
         text: "",
-        score: 1
+        scope: 1
       };
       $scope.init = function () {
         $scope.alertKey = '';
