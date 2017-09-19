@@ -2,18 +2,16 @@ define([
   'angular',
   'lodash',
   'moment',
-  './cmdbSetupCtrl',
 ], function(angular, _, moment) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('HostListCtrl', function ($scope, backendSrv, $location, $controller) {
+  module.controller('HostListCtrl', function ($scope, backendSrv, $location) {
     $scope.init = function() {
       $scope.searchHost = '';
       $scope.order = "'hostname'";
       $scope.desc = false;
-      $scope.refreshTxt = '扫描';
       backendSrv.alertD({url:'/cmdb/host'}).then(function(result) {
         $scope.hosts = result.data;
         _.map($scope.hosts, function(host) {

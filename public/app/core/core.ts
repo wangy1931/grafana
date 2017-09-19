@@ -22,7 +22,6 @@ import './jquery_extended';
 import './partials';
 
 //Cloudwiz 
-import "./directives/host_upload";
 import "./directives/system_panel";
 import "./directives/overview_panel";
 import "./directives/service_dep";
