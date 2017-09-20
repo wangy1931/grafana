@@ -90,7 +90,7 @@ define([
           "currentRelativeTime": $scope.currentRelativeTime,
           "logFilter": $scope.logFilter,
           "currentFilter": $scope.currentFilter,
-          "timeRange": angular.copy($scope.dashboard.time),
+          "timeRange": timeSrv.timeRange(angular.copy($scope.dashboard.time)),  // save absolute time
           "row": angular.copy($scope.dashboard.rows[0])
         };
         $scope.tabsCache[$scope.dashboard.rows[0].id] = queryInfo;
@@ -193,7 +193,7 @@ define([
         var panels = $scope.dashboard.rows[0].panels;
         _.forEach(panels, function (panel) {
           _.forEach(panel.targets, function (target) {
-            if (target.size === size) return;
+            if (target.size == size) return;
             target.size && (target.size = size);
           });
         });
@@ -293,9 +293,11 @@ define([
 
       // 横向对比
       var textTitle = [];
-      $scope.getSearchQuery = function (selected, index) {
-        textTitle[index] = selected.title;
-        $scope.selectedCompare[index] = selected;
+      $scope.getSearchQuery = function (index) {
+        return function (selected) {
+          textTitle[index] = selected.title;
+          $scope.selectedCompare[index] = selected;
+        };
       };
 
       $scope.logSearchCompare = function () {
