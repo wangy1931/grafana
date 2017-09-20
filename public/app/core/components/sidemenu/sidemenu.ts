@@ -223,10 +223,6 @@ export class SideMenuCtrl {
           text: '服务列表',
           url: this.getUrl("/cmdb/servicelist")
         },
-        // {
-        //   text: '设置',
-        //   url: this.getUrl("/cmdb/setup")
-        // }
       ]
     });
 
