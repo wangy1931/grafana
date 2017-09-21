@@ -151,3 +151,41 @@
       background-color: #ffb701;
     }
 }
+
+// oncaller start
+
+.fc-event {
+  margin-left: 60px;
+  margin-right: -60px;
+}
+
+.fc-time-grid .fc-content-skeleton {
+  position: relative;
+  .fc-event {
+    margin: 5px 0;
+    height: 50px;
+    border: 1px solid;
+    border-radius: 5px;
+  }
+
+  .fc-content {
+    font-size: 30px;
+  }
+
+  .primary {
+    top: 0!important;
+  }
+  .secondary {
+    top: 80px!important;
+  }
+}
+
+.fc-agenda-view .fc-day-grid {
+  display: none;
+}
+
+.fc-ltr .fc-time-grid .fc-event-container {
+  margin: 0 2px;
+}
+
+// oncaller end 
