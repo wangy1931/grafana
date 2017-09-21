@@ -8,7 +8,7 @@ declare var window: any;
 export class RootCauseAnalysisCtrl {
   toolkit: any;
   renderer: any;
-  source: any;  // path traversal.
+  target: any;  // path traversal.
   mainElement: any;
   traceList: Array<string> = [];
 
@@ -52,9 +52,10 @@ export class RootCauseAnalysisCtrl {
         idList.indexOf(item.src.id) === -1 && idList.push(item.src.id) && data.nodes.push(item.src);
         idList.indexOf(item.dest.id) === -1 && idList.push(item.dest.id) && data.nodes.push(item.dest);
         // edges
+        // cause --> issue
         data.edges.push({
-          "source": item.src.id,
-          "target": item.dest.id,
+          "source": item.dest.id,
+          "target": item.src.id,
           "data"  : { "type": null },
           "score" : item.score * 4
         });
@@ -158,19 +159,19 @@ export class RootCauseAnalysisCtrl {
   }
 
   nodeClickHandler(params) {
-    this.source = params;
+    this.target = params;
     this.traceList.push(params.el.id);  // eg. jsPlumb_2_8
-    window.jsPlumb.addClass(this.source.el, "jtk-animate-source");
+    window.jsPlumb.addClass(this.target.el, "jtk-animate-source");
 
-    this.toolkit.getNode(this.source).node.getSourceEdges().forEach(edge => {
+    this.toolkit.getNode(this.target).node.getTargetEdges().forEach(edge => {
       var selectedEdges = this.renderer.selectEdges({
-        element: this.source.el
+        element: this.target.el
       });
       selectedEdges.each(conn => {
-        window.jsPlumb.removeClass(conn.target, 'unselected');
-        this.traceList.indexOf(conn.sourceId) > -1 && window.jsPlumb.removeClass(conn.connector.canvas, 'unselected');
+        window.jsPlumb.removeClass(conn.source, 'unselected');
+        this.traceList.indexOf(conn.targetId) > -1 && window.jsPlumb.removeClass(conn.connector.canvas, 'unselected');
       });
-      var selector = `[data-jtk-node-id="${edge.target.id}"]`;
+      var selector = `[data-jtk-node-id="${edge.source.id}"]`;
       $(selector).click();
     });
   }

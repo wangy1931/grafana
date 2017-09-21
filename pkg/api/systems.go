@@ -41,14 +41,13 @@ func GetSystemsForCurrentOrg(c *middleware.Context) Response {
 }
 
 func GetCurrentUserSystem(c *middleware.Context) Response {
-  if(c.OrgRole=="Admin" || c.IsGrafanaAdmin) {
-    return GetSystemsForCurrentOrg(c)
-  }
-  query := m.GetUserSystemsQuery{UserId: c.UserId}
-  if err := bus.Dispatch(&query); err != nil {
-    return ApiError(500, "Failed to get Systems", err)
-  }
-  return Json(200, query.Result)
+  return GetSystemsForCurrentOrg(c)
+  // after all the user & system should be complete
+  //query := m.GetUserSystemsQuery{UserId: c.UserId}
+  //if err := bus.Dispatch(&query); err != nil {
+  //  return ApiError(500, "Failed to get Systems", err)
+  //}
+  //return Json(200, query.Result)
 }
 
 func GetCurrentUserSystemFromIndex(c *middleware.Context) (interface{}, error) {
