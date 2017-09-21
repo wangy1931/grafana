@@ -1,35 +1,6 @@
-<navbar title="配置管理库" icon="fa fa-fw fa-cubes">
-    <ul class="nav">
-        <li><a href="/cmdb/hostlist">设备列表</a></li>
-        <li class="active" ><a href="/cmdb/hostlist/{{hostId}}">设备详情</a></li>
-    </ul>
-</navbar>
-<div class="page-container">
-    <h2 class="dropdown" style="color: #2962ff;">
-        <span class="dropdown-toggle pointer" data-toggle="dropdown">{{detail.hostname}} <i class="fa fa-caret-down" ng-if="list.length > 1"></i></span>    
-        <ul class="dropdown-menu" ng-if="list.length > 1">
-            <li ng-repeat="host in list"><a href="/cmdb/hostlist/hostdetail?id={{host.id}}">{{host.hostname}}</a></li>
-        </ul>
-    </h2>
-    <div class="host-tags">
-        <div class="tags-aside">
-            <span class="fa fa-tag"></span>
-            <span class="tag-title">机器标签</span>
-        </div>
-        <ul class="tags-list">
-            <li class="tag-wrap" ng-repeat="tag in tags" ng-show="tags.length">
-                <span class="tag label">
-                    {{ tag.key }} - {{ tag.value }}
-                </span>
-                <i class="fa fa-times-circle" ng-click="removeTag(tag);"></i>
-            </li>
-            <li class="tag-add" ng-click="showPopover();">
-                <span class="tag-add-icon fa fa-plus-square-o" ng-show="tags.length"></span>
-                <span class="tag-add-tips" ng-hide="tags.length">待添加</span>
-            </li>
-        </ul>
-    </div>
-    <div class="cleafix"></div>
+<div class="host-info host-tab-content">
+    <div></div>
+
     <ul class="cmdb-ul">
         <li>
             <h4>基本信息</h4>

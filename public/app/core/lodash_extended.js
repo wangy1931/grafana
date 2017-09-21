@@ -1,8 +1,9 @@
 define([
   'jquery',
+  'moment',
   'lodash-src'
 ],
-function ($) {
+function ($, moment) {
   'use strict';
 
   var _ = window._;
@@ -129,6 +130,10 @@ function ($) {
       }
     }
     return obj;
+  };
+
+  _.transformTime = function (value) {
+    return moment.unix(value).format("YYYY-MM-DD HH:mm:ss");
   };
 
   _.metricHelpMessage = {};

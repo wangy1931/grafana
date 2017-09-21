@@ -1,5 +1,69 @@
 <navbar title="机器地图" icon="fa fa-fw fa-home"></navbar>
 
-<div class="page-container host-page">
-  <div id="heatmap"></div>
+<div class="page-container host-page" ng-init="ctrl.init();">
+    <div class="page-header">
+        <h1>机器连接状态</h1>
+    </div>
+
+    <div class="search">
+        <form class="gf-form-group tidy-form">
+            <div>
+                <div class="gf-form">
+                    <ul class="gf-form-list tidy-form-list" style="text-align:right; overflow: inherit; width: 100%;">
+                        <li class="tidy-form-item">
+                            搜索条件
+                        </li>
+                        <li class="tidy-form-item tidy-form-item-dropdown">
+                            <input type="text" class="input-xlarge tidy-form-input last"
+                                   ng-model='ctrl.query'
+                                   spellcheck='false'
+                                   bs-typeahead-old="ctrl.hostlist"
+                                   placeholder="机器名称，按 Enter 键查看结果"
+                                   ng-enter="ctrl.queryHost($event)"
+                                   ng-blur="ctrl.queryHost($event)" />
+                        </li>
+                        <li class="tidy-form-item">
+                            机器分组
+                        </li>
+                        <li class="tidy-form-item">
+                            <button type="button" class="btn btn-default" ng-model="ctrl.group" data-placement="bottom-auto"
+                                    bs-options="f.value as f.text for f in ctrl.groupOptions" bs-select ng-change="ctrl.getHostTopology();">
+                                请选择<span class="caret"></span>
+                            </button>
+                        </li>
+                        <li class="tidy-form-item">
+                            KPI 状态
+                        </li>
+                        <li class="tidy-form-item">
+                            <button type="button" class="btn btn-default" ng-model="ctrl.filter" data-toggle="true" data-placement="bottom-auto"
+                                    bs-options="f.value as f.text for f in ctrl.filterOptions" bs-select ng-change="ctrl.filterHostTopology();" >
+                                请选择<span class="caret"></span>
+                            </button>
+                        </li>
+                        <li class="tidy-form-item pull-right">
+                            <button class="btn btn-primary" style="padding: 0.4rem 1rem;" ng-click="ctrl.clearSelected();">清除选中机器</button>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="heatmap">
+        <div id="heatmap"></div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="detail">
+        <tabset class="host-detail">
+            <tab heading="{{ tab.title }}"
+                 ng-repeat="tab in ctrl.tabs"
+                 active="tab.active"
+                 ng-click="ctrl.switchTab(tab.id)"
+                 ng-show="tab.show">
+                 <div ng-include="tab.content"></div>
+            </tab>
+        </tabset>
+    </div>
 </div>

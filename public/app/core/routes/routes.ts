@@ -402,7 +402,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/host_topology', {
     templateUrl: 'public/app/features/host/partials/host.html',
     controller : 'HostTopologyCtrl',
-    reloadOnSearch: true,
+    reloadOnSearch: false,
     resolve: loadHostBundle
   })
   .when('/styleguide/:page?', {

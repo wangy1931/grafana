@@ -1,0 +1,28 @@
+<div class="host-list host-tab-content">
+  <div ng-hide="hostPanels.length">
+    <em>暂没有任何机器数据</em>
+    <cw-loading show="!hostPanels.length" duration=6000></cw-loading>
+  </div>
+  <div>
+    <table class="table host-panel-table" ng-show="hostPanels.length">
+      <thead>
+        <tr>
+          <th>机器名</th>
+          <th>机器在线状态</th>
+          <th>CPU 使用率</th>
+          <th>内存使用</th>
+          <th>磁盘剩余空间</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="host in hostPanels" ng-class="{active: host.host==ctrl.currentHost.name}">
+          <td>{{ host.host }}</td>
+          <td>{{ host.status || '-' }}</td>
+          <td>{{ host.cpu || '-' }}</td>
+          <td>{{ host.mem || '-' }}</td>
+          <td>{{ host.disk || '-' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

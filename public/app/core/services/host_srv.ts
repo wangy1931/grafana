@@ -1,64 +1,102 @@
 ///<reference path="../../headers/common.d.ts" />
 
-import angular from 'angular';
-import _ from 'lodash';
 import coreModule from 'app/core/core_module';
 
 export class HostSrv {
 
   /** @ngInject */
   constructor(private $http, private backendSrv) {
-    // ...
   }
 
   // Tags
-
-  getTags(hostId) {
+  /**
+   * Get the specific host information in cmdb.
+   * @param hostId.
+   * @returns {Array} Host information.
+   */
+  getCmdbHostInfo(hostId) {
     return this.backendSrv.alertD({
       method: 'GET',
-      url   : '/host/tags',
-      params: { 'hostId': hostId }
+      url   : '/cmdb/host',
+      params: { 'id': hostId }
     });
   }
 
+  /**
+   * Get all tags key in this system.
+   * @returns {Array} Tags key in this system.
+   */
   getAllTagsKey() {
     return this.backendSrv.alertD({
       method: 'GET',
-      url   : '/host/tags/key'
+      url   : '/host/tag/key'
     });
   }
 
-  getTagValue(keyId) {
+  /**
+   * Get the specific tag's value.
+   * @returns {Array} Tag's value.
+   */
+  getTagValue(key) {
     return this.backendSrv.alertD({
       method: 'GET',
-      url   : '/host/tags/value',
-      params: { 'kId': keyId }
+      url   : '/host/tag/value',
+      params: { 'key': key }
     });
   }
 
-  postTag({ keyId, valueId }) {
+  /**
+   * Post a tag.
+   * @returns {String|Null} If the tag was added, return the tag key. Otherwise, none.
+   */
+  postTag({ key, value, hostId }) {
     return this.backendSrv.alertD({
       method: 'POST',
-      url   : '/host/tags/value',
-      data  : { 'kId': keyId, 'vId': valueId }
+      url   : '/host/tag',
+      params: { 'hostId': hostId },
+      data  : { 'key': key, 'value': value }
     });
   }
 
-  deleteTag({ hostId, valueId }) {
+  /**
+   * Delete a tag.
+   * @returns {Null}
+   */
+  deleteTag({ hostId, key, value }) {
     return this.backendSrv.alertD({
       method: 'DELETE',
-      url   : '/host/tags',
-      data  : { 'hostId': hostId, 'vId': valueId }
+      url   : '/host/tag',
+      params: { 'hostId': hostId, 'key': key, 'value': value }
     });
   }
 
   // Host Topology
 
-  getHostTopology({ kId, status }) {
+  /**
+   * Get the host topology graph with given params.
+   * @param groupBy group rule.
+   * @param colorBy filter rule.
+   * @returns {Array|Object}
+   */
+  getHostTopology(params) {
     return this.backendSrv.alertD({
       method: 'GET',
-      url   : '/host_topology',
-      params: { 'groupby': kId, 'colorby': status }
+      url   : '/host/topology',
+      params: params
+    });
+  }
+
+  // Host Process
+
+  /**
+   * Get the specific host's process.
+   * @returns {Array} host's process information.
+   */
+  getHostProcess(hostId) {
+    return this.backendSrv.alertD({
+      method: 'GET',
+      url   : '/host/state',
+      params: { 'hostId': hostId }
     });
   }
 

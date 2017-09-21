@@ -14,7 +14,6 @@ define([
     var RelationshipGraph = function () {
     
         /**
-         *
          * @param {d3.selection} selection The ID of the element containing the graph.
          * @param {Object} userConfig Configuration for graph.
          * @constructor
@@ -211,8 +210,7 @@ define([
     
         _createClass(RelationshipGraph, [{
             key: 'getId',
-    
-    
+
             /**
              * Return the ID of the selection.
              *
@@ -225,7 +223,9 @@ define([
     
                 return parent.id;
             }
-    
+        }, {
+            key: 'getPixelLength',
+
             /**
              * Returns the pixel length of the string based on the font size.
              *
@@ -233,9 +233,6 @@ define([
              * @returns {Number} The pixel length of the string.
              * @public
              */
-    
-        }, {
-            key: 'getPixelLength',
             value: function getPixelLength(str) {
                 if (RelationshipGraph.containsKey(this.measuredCache, str)) {
                     return this.measuredCache[str];
@@ -251,7 +248,9 @@ define([
     
                 return width;
             }
-    
+        }, {
+            key: 'assignIndexAndRow',
+
             /**
              * Assign the index and row to each of the children in the Array of Objects.
              *
@@ -261,9 +260,6 @@ define([
              * @returns {Array} Object containing the longest width, the calculated max children per row, and the maximum amount
              *  of rows.
              */
-    
-        }, {
-            key: 'assignIndexAndRow',
             value: function assignIndexAndRow(json, parentSizes, parents) {
                 // Determine the longest parent name to calculate how far from the left the child blocks should start.
                 var longest = '';
@@ -382,13 +378,6 @@ define([
     
                 return [longestWidth, calculatedMaxChildren, row];
             }
-    
-            /**
-             * Verify that the JSON passed in is correct.
-             *
-             * @param json {Array} The array of JSON objects to verify.
-             */
-    
         }, {
             key: 'createParents',
     
@@ -431,11 +420,14 @@ define([
                     return Math.ceil(previousParentSize / calculatedMaxChildren) * _this.configuration.blockSize + _this._spacing * index;
                 }).style('text-anchor', 'start').style('fill', function (obj) {
                     return obj.parentColor !== undefined ? _this.configuration.colors[obj.parentColor] : '#000000';
-                }).style('cursor', this.parentPointer ? 'pointer' : 'default').attr('class', 'relationshipGraph-Text').attr('transform', 'translate(-6, ' + _this.configuration.blockSize / 1.5 + ')').on('click', function (obj) {
+                }).style('cursor', this.parentPointer ? 'pointer' : 'default').attr('class', 'relationshipGraph-Text').attr('transform', 'translate(-6, ' + _this.configuration.blockSize / 1.5 + ')')
+                .on('click', function (obj) {
                     _this.configuration.onClick.parent(obj);
                 });
             }
-    
+        }, {
+            key: 'updateParents',
+
             /**
              * Updates the existing parent nodes with new data.
              *
@@ -445,9 +437,6 @@ define([
              * @param {number} calculatedMaxChildren The maxiumum amount of children nodes per row.
              * @private
              */
-    
-        }, {
-            key: 'updateParents',
             value: function updateParents(parentNodes, parentSizes, longestWidth, calculatedMaxChildren) {
                 var parentSizesKeys = Object.keys(parentSizes),
                     _this = this;
@@ -480,7 +469,9 @@ define([
                     return obj.parentColor !== undefined ? _this.configuration.colors[obj.parentColor] : '#000000';
                 }).style('cursor', _this.parentPointer ? 'pointer' : 'default');
             }
-    
+        }, {
+            key: 'createChildren',
+
             /**
              * Creates new children nodes.
              *
@@ -488,9 +479,6 @@ define([
              * @param {number} longestWidth The longest width of a parent node.
              * @private
              */
-    
-        }, {
-            key: 'createChildren',
             value: function createChildren(childrenNodes, longestWidth) {
                 var _this = this;
     
@@ -502,12 +490,15 @@ define([
                     return (obj.__row - 1) * _this.configuration.blockSize + (_this._spacing * obj.__row - 1);
                 }).attr('rx', 4).attr('ry', 4).attr('class', 'relationshipGraph-block').attr('width', _this.configuration.blockSize).attr('height', _this.configuration.blockSize).style('fill', function (obj) {
                     return obj.__colorValue;
-                }).style('cursor', _this.childPointer ? 'pointer' : 'default').on('mouseover', _this.tooltip ? _this.tooltip.show : RelationshipGraph.noop).on('mouseout', _this.tooltip ? _this.tooltip.hide : RelationshipGraph.noop).on('click', function (obj) {
+                }).style('cursor', _this.childPointer ? 'pointer' : 'default').on('mouseover', _this.tooltip ? _this.tooltip.show : RelationshipGraph.noop).on('mouseout', _this.tooltip ? _this.tooltip.hide : RelationshipGraph.noop)
+                .on('click', function (obj) {
                     _this.tooltip.hide();
                     _this.configuration.onClick.child(obj);
                 });
             }
-    
+        }, {
+            key: 'updateChildren',
+
             /**
              * Updates the existing children nodes with new data.
              *
@@ -515,9 +506,6 @@ define([
              * @param {number} longestWidth The longest width of a parent node.
              * @private
              */
-    
-        }, {
-            key: 'updateChildren',
             value: function updateChildren(childrenNodes, longestWidth) {
                 var blockSize = this.configuration.blockSize;
                 var _this = this;
@@ -533,21 +521,22 @@ define([
                     return obj.__colorValue;
                 });
             }
-    
+        }, {
+            key: 'removeNodes',
+
             /**
              * Removes nodes that no longer exist.
              *
              * @param {d3.selection} nodes The nodes.
              * @private
              */
-    
-        }, {
-            key: 'removeNodes',
             value: function removeNodes(nodes) {
                 // noinspection JSUnresolvedFunction
                 nodes.exit().transition(this.configuration.transitionTime).remove();
             }
-    
+        }, {
+            key: 'data',
+
             /**
              * Generate the graph.
              *
@@ -555,16 +544,23 @@ define([
              * @return {RelationshipGraph} The RelationshipGraph object to keep d3's chaining functionality.
              * @public
              */
-    
-        }, {
-            key: 'data',
             value: function data(json) {
-                if (RelationshipGraph.verifyJson(json)) {
+                var _this = this;
+
+                if (!json.toString()) {
+                    this.svg.html('');
+
+                    this.svg.append('text').text('暂无数据')
+                    .attr('x', 4).attr('y', 0)
+                    .style('text-anchor', 'start')
+                    .attr('class', 'relationshipGraph-Text relationshipGraph-Empty')
+                    .attr('transform', 'translate(-6, ' + _this.configuration.blockSize / 1.5 + ')');
+                } else if (RelationshipGraph.verifyJson(json)) {
                     var parents = [];
                     var parentSizes = {};
                     var configuration = this.configuration;
-    
-    
+
+
                     var row = 0,
                         parent = void 0,
                         i = void 0,
@@ -655,16 +651,15 @@ define([
     
                 return this;
             }
-    
+        }, {
+            key: 'search',
+
             /**
              * Searches through the representation and returns the child nodes that match the search query.
              *
              * @param {object} query The partial object match to search for.
              * @returns {Array} An array with the objects that matched the partial query or an empty array if none are found.
              */
-    
-        }, {
-            key: 'search',
             value: function search(query) {
                 var results = [],
                     queryKeys = Object.keys(query),
@@ -699,7 +694,9 @@ define([
             value: function getColors() {
                 return ['#c4f1be', '#a2c3a4', '#869d96', '#525b76', '#201e50', '#485447', '#5b7f77', '#6474ad', '#b9c6cb', '#c0d6c1', '#754668', '#587d71', '#4daa57', '#b5dda4', '#f9eccc', '#0e7c7b', '#17bebb', '#d4f4dd', '#d62246', '#4b1d3f', '#cf4799', '#c42583', '#731451', '#f3d1bf', '#c77745'];
             }
-    
+        }, {
+            key: 'containsKey',
+
             /**
              * Checks if the object contains the key.
              *
@@ -708,13 +705,12 @@ define([
              * @returns {boolean} Whether or not the object contains the key.
              * @private
              */
-    
-        }, {
-            key: 'containsKey',
             value: function containsKey(obj, key) {
                 return Object.keys(obj).indexOf(key) > -1;
             }
-    
+        }, {
+            key: 'contains',
+
             /**
              * Checks whether or not the key is in the array.
              *
@@ -723,13 +719,12 @@ define([
              * @returns {boolean} Whether or not the key exists in the array.
              * @private
              */
-    
-        }, {
-            key: 'contains',
             value: function contains(arr, key) {
                 return arr.indexOf(key) > -1;
             }
-    
+        }, {
+            key: 'truncate',
+
             /**
              * Truncate a string to 25 characters plus an ellipses.
              *
@@ -738,9 +733,6 @@ define([
              * @returns {string} The string truncated (if necessary).
              * @private
              */
-    
-        }, {
-            key: 'truncate',
             value: function truncate(str, cap) {
                 if (!cap || !str) {
                     return str;
@@ -748,38 +740,35 @@ define([
     
                 return str.length > cap ? str.substring(0, cap) + '...' : str;
             }
-    
+        }, {
+            key: 'isArray',
+
             /**
              * Determines if the array passed in is an Array object.
              *
              * @param arr {Array} The array object to check.
              * @returns {boolean} Whether or not the array is actually an array object.
              */
-    
-        }, {
-            key: 'isArray',
             value: function isArray(arr) {
                 return Object.prototype.toString.call(arr) == '[object Array]';
             }
-    
+        }, {
+            key: 'noop',
+
             /**
              * Noop function.
              *
              * @private
              */
-    
+            value: function noop() {}    
         }, {
-            key: 'noop',
-            value: function noop() {}
-    
+            key: 'sortJson',
+
             /**
              * Sorts the array of JSON by parent name. This method is case insensitive.
              *
              * @param json {Array} The Array to be sorted.
              */
-    
-        }, {
-            key: 'sortJson',
             value: function sortJson(json) {
                 json.sort(function (child1, child2) {
                     var parent1 = child1.parent.toLowerCase(),
@@ -788,7 +777,9 @@ define([
                     return parent1 > parent2 ? 1 : parent1 < parent2 ? -1 : 0;
                 });
             }
-    
+        }, {
+            key: 'stringCompare',
+
             /**
              * Go through all of the thresholds and find the one that is equal to the value.
              *
@@ -798,9 +789,6 @@ define([
              *  thresholds.
              * @private
              */
-    
-        }, {
-            key: 'stringCompare',
             value: function stringCompare(value, thresholds) {
                 if (typeof value !== 'string') {
                     throw 'Cannot make value comparison between a string and a ' + (typeof value === 'undefined' ? 'undefined' : _typeof(value)) + '.';
@@ -820,7 +808,9 @@ define([
     
                 return -1;
             }
-    
+        }, {
+            key: 'numericCompare',
+
             /**
              * Go through all of the thresholds and find the smallest number that is greater than the value.
              *
@@ -830,9 +820,6 @@ define([
              *  the value isn't between any thresholds.
              * @private
              */
-    
-        }, {
-            key: 'numericCompare',
             value: function numericCompare(value, thresholds) {
                 if (typeof value !== 'number') {
                     throw 'Cannot make value comparison between a number and a ' + (typeof value === 'undefined' ? 'undefined' : _typeof(value)) + '.';
@@ -854,6 +841,12 @@ define([
             }
         }, {
             key: 'verifyJson',
+
+            /**
+             * Verify that the JSON passed in is correct.
+             *
+             * @param json {Array} The array of JSON objects to verify.
+             */
             value: function verifyJson(json) {
                 if (!RelationshipGraph.isArray(json) || json.length < 0 || _typeof(json[0]) !== 'object') {
                     throw 'JSON has to be an Array of JavaScript objects that is not empty.';
@@ -895,8 +888,6 @@ define([
     /**
      * Add a relationshipGraph function to d3 that returns a RelationshipGraph object.
      */
-    
-    
     d3.relationshipGraph = function () {
         'use strict';
     

@@ -33,6 +33,16 @@ define([
 
       var toolkit = jsPlumbService.getToolkit("serviceToolkit");
 
+      $scope.healthPanel = {};
+      $scope.alertPanel  = {};
+      $scope.exceptionPanel = {};
+      $scope.anomalyPanel   = {};
+      $scope.servicePanel   = {};
+      $scope.hostPanel      = {};
+      $scope.predictionPanel = {};
+      $scope.panels = {};
+      $scope.panel  = {};
+
       $scope.$on('$destroy', function () {
         toolkit.clear();
       });
@@ -102,16 +112,6 @@ define([
       }
 
       $scope.init = function () {
-        $scope.healthPanel = {};
-        $scope.alertPanel  = {};
-        $scope.exceptionPanel = {};
-        $scope.anomalyPanel   = {};
-        $scope.servicePanel   = {};
-        $scope.hostPanel      = {};
-        $scope.predictionPanel = {};
-        $scope.panels = {};
-        $scope.panel  = {};
-
         if (contextSrv.user.systemId == 0 && contextSrv.user.orgId) {
           $location.url("/systems");
           contextSrv.sidmenu = false;
@@ -363,8 +363,6 @@ define([
 
       // 机器连接状态
       $scope.getHostSummary = function () {
-        var hostPanel = $scope._dashboard.rows[4].panels[0];
-
         $scope.hostPanel.href = $scope.getUrl('/summary');
 
         $scope.summaryList = [];
@@ -373,16 +371,14 @@ define([
 
         backendSrv.alertD({
           method : "get",
-          url    : "/summary",
-          params : { metrics: "collector.summary" },
-          headers: { 'Content-Type': 'text/plain' },
+          url    : "/cmdb/host",
         })
         .then(function (response) {
           $scope.summaryList = response.data;
 
           _.each($scope.summaryList, function (metric) {
-            hostsResource[metric.tag.host] = {};
-            hostsResource[metric.tag.host]["host"] = metric.tag.host;
+            hostsResource[metric.hostname] = {};
+            hostsResource[metric.hostname]["host"] = metric.hostname;
           });
         })
         .then(function () {
@@ -626,6 +622,6 @@ define([
         enableWheelZoom: false
       };
 
-      $scope.init();
+      this.getHostSummary = $scope.getHostSummary;
     });
   });

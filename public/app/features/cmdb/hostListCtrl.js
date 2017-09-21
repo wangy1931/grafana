@@ -8,7 +8,7 @@ define([
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('HostListCtrl', function ($scope, backendSrv, $location, $controller) {
+  module.controller('HostListCtrl', function ($scope, backendSrv, $location, $controller, alertSrv) {
     $scope.init = function() {
       $scope.searchHost = '';
       $scope.order = "'hostname'";
@@ -60,6 +60,19 @@ define([
         window.saveAs(blob, 'cloudwiz_hosts_export.csv');
       });
     };
+
+    $scope.deleteHost = function(hostId) {
+      backendSrv.alertD({
+        method: 'DELETE',
+        url   : '/host',
+        params: { 'id': hostId }
+      }).then(function () {
+        alertSrv.set("删除成功", '', "success", 2000);
+        _.remove($scope.hosts, { id: hostId });
+      }, function (err) {
+        alertSrv.set("删除失败", err.data, "error", 2000);
+      });
+    }
 
     var initArray = function(item) {
       var text = '';

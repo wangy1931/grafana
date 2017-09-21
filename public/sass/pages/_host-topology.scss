@@ -1,23 +1,107 @@
 $tooltip-gray: #323232;
-$thresholds: (#3288BD, #66C2A5, #ABDDA4, #E6F598, #f6faaa, #FEE08B, #FDAE61, #F46D43, #D53E4F, #9E0142);
+$thresholds: (#4b9cdb, #66C2A5, #ABDDA4, #E6F598, #f6faaa, #FEE08B, #FDAE61, #F46D43, #D53E4F, #9E0142);
 
 .host-page {
+
+  .page-header {
+    margin: 0;
+  }
+
+  // search head
+  .search {
+    padding: 5px 0;
+    margin-bottom: 28px;
+    background-color: #eee;
+    border-bottom: #ddd;
+  }
+
+  .heatmap {
+    height: 400px;
+    margin-bottom: 28px;
+    svg g {
+      outline: none;
+    }
+  }
   
+  // override
   .relationshipGraph-block {
     stroke: transparent;
     stroke-width: 1px;
     pointer-events: all;
   }
-  
   .relationshipGraph-block:hover {
     cursor: pointer;
-    stroke: $black;
+    stroke: nth($thresholds, 1);
   }
-  
+  .relationshipGraph-block.selected {
+    stroke: $black;
+    stroke-width: 1px;
+  }
   .relationshipGraph-Text {
-    fill: $tooltip-gray;
+    fill: nth($thresholds, 1) !important;
+    font-weight: bold;
   }
 
+  // bootstrap override
+  .btn-default {
+    background-color: $white;
+    border-radius: 6px;
+    outline: none;
+  }
+  .caret {
+    vertical-align: middle;
+    margin-left: 1.6rem;
+  }
+  .tidy-form .tidy-form-list > li:nth-child(odd) {
+    line-height: 38px;
+    margin: 0 10px 0 30px;
+  }
+  .tidy-form .tidy-form-list .dropdown-menu {
+    border-radius: 4px;
+    text-align: center;
+  }
+  .tidy-form-item-dropdown .dropdown-menu {
+    width: 270px;
+  }
+  .tidy-form .tidy-form-list .tidy-form-input {
+    background-color: $white;
+  }
+  .tab-content {
+    border: 1px solid #eee;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  // bootstrap-table override
+  .fixed-table-container tbody td {
+    border-left: 1px solid transparent;
+  }
+
+  .tab-content{
+    .host-list, .host-process {
+      background-color: #fbfbfb;
+    }
+  }
+
+  .host-tab-content {
+    padding: 20px;
+  }
+
+  .host-list {
+    .active {
+      background-color: rgba(102, 194, 165, 0.12);
+    }
+  }
+
+  .host-alert-status {
+    p > span {
+      margin-right: 20px;
+    }
+  }
+
+  .host-info {
+    margin: 0 20px;
+  }
+  
 }
 
 // relationshipGraph style
@@ -89,3 +173,7 @@ $thresholds: (#3288BD, #66C2A5, #ABDDA4, #E6F598, #f6faaa, #FEE08B, #FDAE61, #F4
   left: 100%;
 }
 
+.relationshipGraph-Empty {
+  font-size: 18px;
+  font-weight: normal !important;
+}

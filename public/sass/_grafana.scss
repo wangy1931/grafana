@@ -71,6 +71,7 @@
 @import "components/query_editor";
 @import "components/tabbed_view";
 @import "components/query_part";
+@import "components/loading";
 
 // bootstrap
 @import "bootstrap/variables";
@@ -109,6 +110,7 @@
 @import "pages/logs";
 @import "pages/rca";
 @import "pages/host-topology";
+@import "pages/tag_picker";
 
 
 @import "old_responsive";

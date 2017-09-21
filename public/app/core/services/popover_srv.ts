@@ -35,7 +35,7 @@ function popoverSrv($compile, $rootScope) {
       target: options.element,
       content: contentElement,
       position: options.position,
-      classes: 'drop-popover',
+      classes: options.classes + ' drop-popover',
       openOn: options.openOn || 'hover',
       hoverCloseDelay: 200,
       tetherOptions: {

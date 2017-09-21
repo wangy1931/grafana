@@ -6,7 +6,7 @@
   </ul>
 </navbar>
 
-<div class="page-container" style="padding-bottom:300px;">
+<div class="page-container" style="padding-bottom:300px;" ng-init="init();">
     <h2>自动异常检测 <span style="font-size: 12px">历史</span></h2>
 
     <div ng-if="anomalyRows.length === 0">
@@ -23,7 +23,7 @@
             <select style="width: 110px" 
               ng-model="anomalyTimeSelected" 
               ng-options="item.value for item in anomalyHistoryRange"
-              ng-change="loadHistory(anomalyTimeSelected)"
+              ng-change="loadHistory(anomalyTimeSelected);refreshDashboard();"
               >
             </select>
           </li>
