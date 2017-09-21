@@ -13,7 +13,7 @@ var template = `
         <i class="fa fa-database"></i>
       </label>
       <label class="gf-form-label">
-        Panel data source
+        数据源
       </label>
 
       <metric-segment segment="ctrl.dsSegment" style-mode="select"
@@ -24,7 +24,7 @@ var template = `
     <div class="gf-form gf-form--offset-1">
       <button class="btn btn-inverse gf-form-btn" ng-click="ctrl.addDataQuery()" ng-hide="ctrl.current.meta.mixed">
         <i class="fa fa-plus"></i>&nbsp;
-        Add query
+        查询
       </button>
 
       <div class="dropdown" ng-if="ctrl.current.meta.mixed">

@@ -64,6 +64,14 @@ function (angular, _) {
 
     $scope.changeSelect = function(select) {
       $scope.selected = select;
+      $scope.type = '安装';
+      if($scope.selected.addr === 'windows') {
+        $scope.updateAuto = 0;
+        $scope.otherQuestion = false;
+      } else {
+        $scope.updateAuto = '';
+        $scope.updateSelf = '';
+      }
     };
 
     $scope.nextEvent = function(type) {
@@ -94,7 +102,11 @@ function (angular, _) {
     $scope.createTemp = function(options) {
       // 添加模板
       $scope.hostDashboard = true;
-      var tmp = ["iostat","machine"];
+      if ($scope.selected.addr === 'windows') {
+        var tmp = ["windows"];
+      } else {
+        var tmp = ["iostat","machine"];
+      }
       var promiseArr = [];
       _.each(tmp,function(template) {
         var p = backendSrv.get('/api/static/template/'+template).then(function(result) {
@@ -138,11 +150,19 @@ function (angular, _) {
     $scope.updateType = function(type) {
       $scope.type = type;
       if(type === '更新') {
-        $scope.updateAuto = ' /dev/stdin -update';
-        $scope.updateSelf = ' -update';
+        if($scope.selected.addr === 'windows') {
+          $scope.updateAuto = 1;
+        } else {
+          $scope.updateAuto = ' /dev/stdin -update';
+          $scope.updateSelf = ' -update';
+        }
       } else {
-        $scope.updateAuto = '';
-        $scope.updateSelf = '';
+        if($scope.selected.addr === 'windows') {
+          $scope.updateAuto = 0;
+        } else {
+          $scope.updateAuto = '';
+          $scope.updateSelf = '';
+        }
       }
     };
 

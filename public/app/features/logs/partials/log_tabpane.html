@@ -16,15 +16,15 @@
                         </li>
                     </ul>
               </li>
-              <li class="tidy-form-item" style="width: 100px; margin-left:30px;">
+              <li class="tidy-form-item" style="width: 100px; margin-left:30px; outline: none;">
                   日志显示数量
               </li>
               <li class="tidy-form-item">
-                  <select class="input-small tidy-form-input last"
-                    ng-model="size"
-                    ng-change="getLogSize(size);"
-                    ng-options="f for f in [500,1000,2000,3000,5000]">
-                  </select>
+                  <button type="button" class="input-small tidy-form-input last input" ng-model="size" 
+                          bs-options="f for f in [500, 1000, 2000, 3000, 5000]" data-placeholder="请选择"
+                          bs-on-select="getLogSize" data-placement="bottom-auto" bs-select>
+                    请选择 <span class="caret"></span>
+                  </button>
               </li>
               <li>
                   <button type="submit" class="btn btn-primary" ng-click="reQuery()" style="margin:0 20px;"><i class="fa fa-search"></i>查找</button>
@@ -68,7 +68,7 @@
                   </ul>
                   <div ng-if="name == 2" class="log-compare">
                     <div class="btn-group btn-log-compare">对比日志：
-                        <button class="dropdown-toggle" data-toggle="dropdown">
+                        <button class="dropdown-toggle input" data-toggle="dropdown">
                             {{currentRelativeTime}}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
                         </button>
                         <ul class="dropdown-menu">
@@ -80,7 +80,7 @@
                         </ul>
                     </div>
                     <div class="btn-group btn-log-filter">过滤条件：
-                        <button class="dropdown-toggle" data-toggle="dropdown">
+                        <button class="dropdown-toggle input" data-toggle="dropdown">
                             {{currentFilter}}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
                         </button>
                         <ul class="dropdown-menu">

@@ -50,7 +50,7 @@ import 'app/core/routes/routes';
 import './filters/filters';
 import coreModule from './core_module';
 import appEvents from './app_events';
-
+import colors from './utils/colors';
 
 export {
   arrayJoin,
@@ -67,5 +67,6 @@ export {
   Emitter,
   appEvents,
   dashboardSelector,
-  tagPicker
+  tagPicker,
+  colors
 };

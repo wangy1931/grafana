@@ -110,7 +110,8 @@ function (angular, _, coreModule, config) {
         //populate error obj on Internal Error
         if (_.isString(err.data) && err.status === 500) {
           err.data = {
-            error: err.statusText
+            error: err.statusText,
+            response: err.data,
           };
         }
 
@@ -143,7 +144,7 @@ function (angular, _, coreModule, config) {
     this.getSystemById = function (id) {
       var sys = '';
       _.each(contextSrv.systemsMap, function (system) {
-        if (system.Id === id) {
+        if (system.Id === parseInt(id)) {
           sys = system.SystemsName;
         }
       });

@@ -51,34 +51,32 @@
                 <li><span>UUID</span><span>{{detail.productUuid}}</span></li>
                 <li>
                     <span>内存</span><span>{{detail.totalMemory}} <span ng-if="detail.totalMemory!== '暂无信息'">MB</span></span>
-                    <li ng-if="detail.memory">
-                        <table class="table">
-                            <tr>
-                                <th>生产厂商</th>
-                                <th>产品型号</th>
-                                <th>容量</th>
-                            </tr>
-                            <tr ng-repeat="memory in detail.memory">
-                                <td>{{memory.vendor}}</td>
-                                <td>{{memory.model}}</td>
-                                <td>{{memory.size}} <span ng-if="memory.size !== '暂无信息'">MB</span></td>
-                            </tr>
-                        </table>
-                    </li>
+                    <table class="table" ng-if="detail.memory">
+                        <tr>
+                            <th>生产厂商</th>
+                            <th>产品型号</th>
+                            <th>容量</th>
+                        </tr>
+                        <tr ng-repeat="memory in detail.memory">
+                            <td>{{memory.vendor}}</td>
+                            <td>{{memory.model}}</td>
+                            <td>{{memory.size}} <span ng-if="memory.size !== '暂无信息'">MB</span></td>
+                        </tr>
+                    </table>
                 </li>
                 <li><span>虚拟机</span><span>{{detail.isVirtual}}</span></li>
                 <li><span>架构</span><span>{{detail.architecture}}</span></li>
-                <li><span>CPU</span>
-                <table class="table">
-                    <tr>
-                        <th>cpu型号</th>
-                        <th>个数</th>
-                    </tr>
-                    <tr ng-repeat="(cpu, num) in cpuCount">
-                        <td>{{cpu}}</td>
-                        <td>{{num}}</td>
-                    </tr>
-                </table>
+                <li><span>CPU</span><span ng-if="_.isEmpty(cpuCount)">暂无信息</span>
+                    <table class="table" ng-if="!_.isEmpty(cpuCount)">
+                        <tr>
+                            <th>cpu型号</th>
+                            <th>个数</th>
+                        </tr>
+                        <tr ng-repeat="(cpu, num) in cpuCount">
+                            <td>{{cpu}}</td>
+                            <td>{{num}}</td>
+                        </tr>
+                    </table>
                 </li>
             </ul>
         </li>

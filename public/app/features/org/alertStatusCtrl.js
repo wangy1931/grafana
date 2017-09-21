@@ -11,7 +11,7 @@ function (angular, moment, _) {
 
   module.controller('AlertStatusCtrl', function ($scope, alertMgrSrv, datasourceSrv, contextSrv, integrateSrv, $location, backendSrv, $controller) {
     var annotation_tpl = {
-      annotation: {
+      source: {
         datasource: "elk",
         enable: true,
         iconColor: "rgba(19, 21, 19, 0.7)",
@@ -29,7 +29,7 @@ function (angular, moment, _) {
       title: ":",
       tags: "历史报警时间",
       text: "",
-      score: 1
+      scope: 1
     };
 
     $scope.init = function (host) {
@@ -63,7 +63,7 @@ function (angular, moment, _) {
       var host = alertDetail.status.monitoredEntity;
       alertMgrSrv.resetCurrentThreshold(alertDetail.definition.alertDetails);
       alertMgrSrv.annotations = [{
-        annotation: {
+        source: {
           datasource: "elk",
           enable: true,
           iconColor: "#C0C6BE",
@@ -79,9 +79,9 @@ function (angular, moment, _) {
         max: alertDetail.status.creationTime,
         eventType: "123",
         title: "报警时间",
-        tags: metric +","+ host,
-        text: "[警报] "+def_zh,
-        score: 1
+        tags: metric + "," + host,
+        text: "[警报] " + def_zh,
+        scope: 1
       }];
     };
 
@@ -112,45 +112,42 @@ function (angular, moment, _) {
     $scope.closeAlert = function() {
       var status = $scope.alertData.status;
 
-      if(!$scope.rootCauseMetrics.length) {
-        $scope.appEvent('alert-error', ['报警根源信息不完整','请点击添加按钮添加报警根源信息']);
-        return;
-      }
-
-      if(!$scope.reason) {
-        $scope.appEvent('alert-error', ['报警处理信息不完整','请填写报警处理过程']);
-        return;
-      }
-      alertMgrSrv.closeAlert(status.alertId, status.monitoredEntity, $scope.reason, contextSrv.user.name).then(function(response) {
-        _.remove($scope.$parent.alertRows, function(alertDetail) {
-          return (alertDetail.definition.id === status.alertId) &&  (alertDetail.status.monitoredEntity === status.monitoredEntity);
+      if($scope.reason) {
+        alertMgrSrv.closeAlert(status.alertId, status.monitoredEntity, $scope.reason, contextSrv.user.name).then(function(response) {
+          _.remove($scope.$parent.alertRows, function(alertDetail) {
+            return (alertDetail.definition.id === status.alertId) &&  (alertDetail.status.monitoredEntity === status.monitoredEntity);
+          });
+          $scope.appEvent('alert-success', ['报警处理成功']);
+        }).catch(function(err) {
+          $scope.appEvent('alert-error', ['报警处理失败','请检查网络连接状态']);
         });
-        $scope.appEvent('alert-success', ['报警处理成功']);
-      }).catch(function(err) {
-        $scope.appEvent('alert-error', ['报警处理失败','请检查网络连接状态']);
-      });
+      }
 
-      var rcaFeedback = {};
-      rcaFeedback.timestampInSec = Math.round(status.levelChangedTime/1000);
-      rcaFeedback.alertIds = [status.alertId];
-      rcaFeedback.triggerMetric = {
-        name: $scope.alertData.metric,
-        host: status.monitoredEntity,
-        value: status.triggeredValue,
-      };
-      rcaFeedback.rootCauseMetrics = _.cloneDeep($scope.rootCauseMetrics);
-      _.each(rcaFeedback.rootCauseMetrics, function(cause) {
-        cause.name = contextSrv.user.orgId + '.' + contextSrv.user.systemId + '.' + cause.name;
-        cause.confidenceLevel = parseInt(cause.confidenceLevel);
-      });
-      rcaFeedback.org = contextSrv.user.orgId;
-      rcaFeedback.sys = contextSrv.user.systemId;
-      rcaFeedback.relatedMetrics = [];
-      alertMgrSrv.rcaFeedback(rcaFeedback).then(function(response) {
-        $scope.appEvent('alert-success', ['报警根源添加成功']);
-      }, function(err) {
-        $scope.appEvent('alert-error', ['报警根源添加失败']);
-      });
+      $scope.addCause($scope.causeMetric,$scope.causeHost,$scope.confidenceLevel);
+      if($scope.rootCauseMetrics.length) {
+        var rcaFeedback = {};
+        rcaFeedback.timestampInSec = Math.round(status.levelChangedTime/1000);
+        rcaFeedback.alertIds = [status.alertId];
+        rcaFeedback.triggerMetric = {
+          name: $scope.alertData.metric,
+          host: status.monitoredEntity,
+          value: status.triggeredValue,
+        };
+        rcaFeedback.rootCauseMetrics = _.cloneDeep($scope.rootCauseMetrics);
+        _.each(rcaFeedback.rootCauseMetrics, function(cause) {
+          cause.name = contextSrv.user.orgId + '.' + contextSrv.user.systemId + '.' + cause.name;
+          cause.confidenceLevel = parseInt(cause.confidenceLevel);
+        });
+        rcaFeedback.org = contextSrv.user.orgId;
+        rcaFeedback.sys = contextSrv.user.systemId;
+        rcaFeedback.relatedMetrics = [];
+        alertMgrSrv.rcaFeedback(rcaFeedback).then(function(response) {
+          $scope.appEvent('alert-success', ['报警根源添加成功']);
+        }, function(err) {
+          $scope.appEvent('alert-error', ['报警根源添加失败']);
+        });
+      }
+
       $scope.dismiss();
     };
 

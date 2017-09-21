@@ -84,4 +84,40 @@
     stroke-width: 2;
   }
 
+  .rca-status-green {
+    .name {
+      background-color: #3DB779;
+       & + div  {
+         color: #3DB779;
+       }
+    }
+  }
+
+  .rca-status-yellow {
+    .name {
+      background-color: #FE9805;
+       & + div  {
+         color: #FE9805;
+       }
+    }
+  }
+
+  .rca-status-red {
+    .name {
+      background-color: #BB1144;
+       & + div  {
+         color: #BB1144;
+       }
+    }
+  }
+
+  .rca-status-grey {
+    .name {
+      background-color: #DBE1EA;
+       & + div  {
+         color: #DBE1EA;
+       }
+    }
+  }
+
 }
