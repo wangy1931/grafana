@@ -15,7 +15,7 @@ export class UagentCtrl {
   }
 
   getService() {
-    this.backendSrv.alertD({url: '/cmdb/config/configName?serviceName=' + this.serviceName}).then((response) => {
+    this.backendSrv.alertD({url: '/cmdb/config/configName?serviceName=' + this.serviceName + '&serviceId=' + this.serviceId}).then((response) => {
       this.configs = response.data;
     });
   }
