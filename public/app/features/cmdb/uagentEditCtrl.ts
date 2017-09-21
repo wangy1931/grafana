@@ -10,6 +10,7 @@ export class UagentEditCtrl {
   hosts: any;
   selectedHosts: any;
   isCover: any;
+  newPath: any;
   constructor(private $scope, private backendSrv, private $location, private contextSrv) {
     var search = this.$location.search();
     this.serviceId = search.serviceId;
@@ -22,7 +23,7 @@ export class UagentEditCtrl {
 
   getConfig() {
     var url = '';
-    if (this.configName === 'filebeat') {
+    if (this.configName === 'template') {
       url = '/cmdb/config/configTemplate?serviceName=filebeat';
     } else {
       url = '/cmdb/config/service?serviceId='+ this.serviceId + '&configName=' + this.configName;
@@ -66,6 +67,7 @@ export class UagentEditCtrl {
       serviceId : this.serviceId,
       configName : this.configName,
       usrId : user.id,
+      configId : this.config.id,
       hostId : ''
     };
 
@@ -113,6 +115,28 @@ export class UagentEditCtrl {
     }, (err)=>{
       this.$scope.appEvent('alert-warning', ['应用失败']);
     });
+  }
+
+  addPath(path, index) {
+    var values = this.config.sections[0].props[index].value;
+    if (path) {
+      if (_.indexOf(values, path) > -1) {
+        this.$scope.appEvent('alert-warning', ['参数重复', '请检查重复内容重新填写']);
+      } else {
+        this.config.sections[0].props[index].value.push(path);
+      }
+      this.newPath = '';
+    }
+  }
+
+  checkPath(path, i, index) {
+    var values = this.config.sections[0].props[index].value;
+    if (path) {
+      values[i] = path;
+      this.config.sections[0].props[index].value = _.uniq(values);
+    } else {
+      values.splice(i, 1);
+    }
   }
 
 }
