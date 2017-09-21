@@ -80,7 +80,6 @@ class MetricsPanelCtrl extends PanelCtrl {
     // clear loading/error state
     delete this.error;
     this.loading = true;
-    this.dashboard.loaded = 0;
 
     // load datasource service
     this.setTimeQueryStart();
@@ -90,7 +89,6 @@ class MetricsPanelCtrl extends PanelCtrl {
     .then(this.saveQueryResult.bind(this))
     .catch(err => {
       this.loading = false;
-      this.dashboard.loaded++;
       this.error = err.message || "Timeseries data request error";
       this.inspector = {error: err};
       this.events.emit('data-error', err);
@@ -285,8 +283,6 @@ class MetricsPanelCtrl extends PanelCtrl {
   }
 
   saveQueryResult(result) {
-    this.dashboard.loaded++;
-
     // (this.dashboard[result.id] = result.data[0].datapoints)
     result.data && result.data[0] && this.$scope.$emit('data-saved', { id: result.id, data: result.data[0].datapoints });
     (result.id === 'logSearch') && this.$scope.$emit('data-saved', { id: 'queryHeader', data: result.config.data });

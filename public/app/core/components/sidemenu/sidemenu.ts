@@ -83,12 +83,12 @@ export class SideMenuCtrl {
           url: this.getUrl("/")
         },
         {
-          text: '服务状态',
-          url: this.getUrl("/service")
+          text: '机器状态',
+          url: this.getUrl("/host_topology")
         },
         {
-          text: '机器连接状态',
-          url: this.getUrl("/summary")
+          text: '服务状态',
+          url: this.getUrl("/service")
         },
         {
           text: '服务依赖状态',

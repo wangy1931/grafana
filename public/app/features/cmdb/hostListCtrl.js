@@ -62,15 +62,24 @@ define([
     };
 
     $scope.deleteHost = function(hostId) {
-      backendSrv.alertD({
-        method: 'DELETE',
-        url   : '/host',
-        params: { 'id': hostId }
-      }).then(function () {
-        alertSrv.set("删除成功", '', "success", 2000);
-        _.remove($scope.hosts, { id: hostId });
-      }, function (err) {
-        alertSrv.set("删除失败", err.data, "error", 2000);
+      $scope.appEvent('confirm-modal', {
+        title: '删除',
+        text: '您确认要删除该机器吗？',
+        icon: 'fa-trash',
+        yesText: '删除',
+        noText: '取消',
+        onConfirm: function() {
+          backendSrv.alertD({
+            method: 'DELETE',
+            url   : '/host',
+            params: { 'id': hostId }
+          }).then(function () {
+            alertSrv.set("删除成功", '', "success", 2000);
+            _.remove($scope.hosts, { id: hostId });
+          }, function (err) {
+            alertSrv.set("删除失败", err.data, "error", 2000);
+          });
+        }
       });
     }
 

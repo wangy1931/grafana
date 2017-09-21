@@ -553,7 +553,7 @@ define([
                     this.svg.append('text').text('暂无数据')
                     .attr('x', 4).attr('y', 0)
                     .style('text-anchor', 'start')
-                    .attr('class', 'relationshipGraph-Text relationshipGraph-Empty')
+                    .attr('class', 'relationshipGraph-Text')
                     .attr('transform', 'translate(-6, ' + _this.configuration.blockSize / 1.5 + ')');
                 } else if (RelationshipGraph.verifyJson(json)) {
                     var parents = [];

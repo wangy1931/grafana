@@ -78,6 +78,8 @@ export class HostTopologyCtrl {
       _.extend(this.tabs[5], { show: true, disabled: false });
 
       this.switchTab(this.currentTab);
+      this.getProcess(this.currentHost);
+      this.getHostInfo(this.currentHost);
     } else {
       window.d3.selectAll('.relationshipGraph-block').classed('selected', false);
 
@@ -226,7 +228,6 @@ export class HostTopologyCtrl {
 
   switchTab(tabId) {
     var dashboard;
-    // if (tabId === this.currentTab) { return; }
     this.currentTab = tabId;
 
     if (tabId === 0) {
@@ -244,12 +245,8 @@ export class HostTopologyCtrl {
     if (tabId === 3) {
       this.getAnomaly(this.currentHost);
     }
-    if (tabId === 4) {
-      this.getProcess(this.currentHost);
-    }
-    if (tabId === 5) {
-      this.getHostInfo(this.currentHost);
-    }
+    if (tabId === 4) {}
+    if (tabId === 5) {}
   }
 
   saveHostSummary() {

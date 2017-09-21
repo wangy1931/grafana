@@ -10,14 +10,18 @@ $thresholds: (#4b9cdb, #66C2A5, #ABDDA4, #E6F598, #f6faaa, #FEE08B, #FDAE61, #F4
   // search head
   .search {
     padding: 5px 0;
-    margin-bottom: 28px;
     background-color: #eee;
     border-bottom: #ddd;
   }
 
   .heatmap {
-    height: 400px;
-    margin-bottom: 28px;
+    min-height: 200px;
+    margin: 28px 0;
+    position: relative;
+    svg {
+      transition: transform 1s ease;
+      transform: translateX(50%);
+    }
     svg g {
       outline: none;
     }
@@ -77,7 +81,7 @@ $thresholds: (#4b9cdb, #66C2A5, #ABDDA4, #E6F598, #f6faaa, #FEE08B, #FDAE61, #F4
   }
 
   .tab-content{
-    .host-list, .host-process {
+    .host-list, .host-process, .host-anomaly {
       background-color: #fbfbfb;
     }
   }
@@ -173,7 +177,8 @@ $thresholds: (#4b9cdb, #66C2A5, #ABDDA4, #E6F598, #f6faaa, #FEE08B, #FDAE61, #F4
   left: 100%;
 }
 
-.relationshipGraph-Empty {
-  font-size: 18px;
-  font-weight: normal !important;
+.relationshipGraph-tip {
+  table td {
+    padding: 0 10px;
+  }
 }
