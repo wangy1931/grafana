@@ -1,26 +1,26 @@
 <div class="editor-row">
 	<div class="section gf-form-group">
-		<h5 class="section-heading">Options</h5>
+		<h5 class="section-heading">图例</h5>
 		<gf-form-switch class="gf-form"
-			label="Show" label-class="width-7"
+			label="显示" label-class="width-7"
 			checked="ctrl.panel.legend.show" on-change="ctrl.refresh()">
 		</gf-form-switch>
 		<gf-form-switch class="gf-form"
-			label="As Table" label-class="width-7"
+			label="表格显示" label-class="width-7"
 			checked="ctrl.panel.legend.alignAsTable" on-change="ctrl.render()">
 		</gf-form-switch>
 		<gf-form-switch class="gf-form"
-			label="To the right" label-class="width-7"
+			label="右侧显示" label-class="width-7"
 			checked="ctrl.panel.legend.rightSide" on-change="ctrl.render()">
 		</gf-form-switch>
 		<div ng-if="ctrl.panel.legend.rightSide" class="gf-form">
-			<label class="gf-form-label width-7">Width</label>
+			<label class="gf-form-label width-7">宽</label>
 			<input type="number" class="gf-form-input max-width-5" placeholder="250" bs-tooltip="'Set a min-width for the legend side table/block'" data-placement="right" ng-model="ctrl.panel.legend.sideWidth" ng-change="ctrl.render()" ng-model-onblur>
 		</div>
 	</div>
 
 	<div class="section gf-form-group">
-		<h5 class="section-heading">Values</h5>
+		<h5 class="section-heading">数值</h5>
 
 		<div class="gf-form-inline">
 			<gf-form-switch class="gf-form"

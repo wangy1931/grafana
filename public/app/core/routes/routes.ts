@@ -22,6 +22,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   var loadAnalysisBundle = new BundleLoader('app/features/analysis/all');
   var loadLogsBundle = new BundleLoader('app/features/logs/all');
   var loadReportBundle = new BundleLoader('app/features/report/reportCtrl');
+  var loadRcaBundle = new BundleLoader('app/features/rca/all');
 
   $routeProvider
   .when('/', {
@@ -358,6 +359,10 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'FilebeatCtrl',
     resolve: loadSetupBundle,
   })
+  .when('/setting/proxy', {
+    templateUrl: 'public/app/features/setup/partials/proxy.html',
+    reloadOnSearch: false,
+  })
   .when('/cmdb/hostlist', {
     templateUrl: 'public/app/features/cmdb/partials/host_list.html',
     controller : 'HostListCtrl',
@@ -388,6 +393,13 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'BuildDependCtrl',
     reloadOnSearch: true,
     resolve: loadServiceBundle,
+  })
+  // RCA
+  .when('/rca', {
+    templateUrl: 'public/app/features/rca/partials/rca.html',
+    controller : 'RootCauseAnalysisCtrl',
+    reloadOnSearch: true,
+    resolve: loadRcaBundle,
   })
   .when('/styleguide/:page?', {
     controller: 'StyleGuideCtrl',

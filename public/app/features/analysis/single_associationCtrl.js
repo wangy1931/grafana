@@ -37,6 +37,17 @@ define([
         $scope.status = true;
       };
 
+      $scope.addRCA = function (metric, host) {
+        // 指定格式
+        $scope.rcaData = {
+          symptomMetric : $scope.targetObj.metric,
+          symptomHost : $scope.targetObj.host,
+          causeMetric : _.getMetricName(metric),
+          causeHost : host[0],
+        }
+        $scope.appEvent('show-add-rac');
+      };
+
       $scope.init();
     });
   });
