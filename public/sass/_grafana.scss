@@ -71,6 +71,7 @@
 @import "components/query_editor";
 @import "components/tabbed_view";
 @import "components/query_part";
+@import "components/edit_sidemenu";
 
 // bootstrap
 @import "bootstrap/variables";
@@ -107,6 +108,7 @@
 @import "pages/kb";
 @import "pages/system-overview";
 @import "pages/logs";
+@import "pages/rca";
 
 
 @import "old_responsive";

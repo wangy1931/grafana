@@ -27,6 +27,20 @@
       "info": "",
       "version": "暂无要求",
       "addr": "RedHat"
+    },
+    {
+      "host": "Windows 2003",
+      "icon": "iconfont fa-windows",
+      "info": "",
+      "version": "windows2003",
+      "addr": "windows"
+    },
+    {
+      "host": "Windows 2008+",
+      "icon": "iconfont fa-windows",
+      "info": "",
+      "version": "windows",
+      "addr": "windows"
     }
   ],
   "service": [
@@ -566,24 +580,6 @@
       "img": "",
       "info": "PostgreSQL 是一个自由的对象-关系数据库服务器(数据库管理系统)，它在灵活的 BSD-风格许可证下发行。",
       "deploy": [
-        "下载依赖包:",
-        "<p class='code-block'> wget https://download.cloudwiz.cn/package/psycopg2-2.6.1.tar.gz</p>",
-        "<p class='code-block'> wget https://download.cloudwiz.cn/package/libpq-dev.tar.gz</p>",
-        "安装模块包和依赖包:",
-        "<p class='code-block'> 1. 将安装包放到 /tmp 目录下,并解压</p>",
-        "<p class='code-block'> 2. 进入libpq解压包</p>",
-        "<p class='code-block indent2'> $ cd /tmp/libpq-dev</p>",
-        "<p class='code-block'> 3. 安装依赖</p>",
-        "<p class='code-block indent2'> $ rpm -ivh /tmp/libpq-dev/*.rpm</p>",
-        "<p class='code-block'> 4. 检查是否配置好环境变量</p>",
-        "<p class='code-block indent2'> $ which pg_config</p>",
-        "<p class='code-block indent2'> 若没有,请配置环境变量.如: </p>",
-        "<p class='code-block indent2'> $ export PATH=/usr/pgsql-9.3/bin:$PATH</p>",
-        "<p class='code-block'> 5. 安装模块包</p>",
-        "<p class='code-block indent2'> $ cd /tmp/psycopg2-2.6.1</p>",
-        "<p class='code-block indent2'> #执行 </p>",
-        "<p class='code-block indent2'> $ /opt/cloudwiz-agent/altenv/bin/python setup.py install --prefix=\"/opt/cloudwiz-agent/altenv\"</p>",
-        "<p class='code-block'> 6. 若没有出现任何error,则证明成功安装</p>",
         "加入用户:",
         "<p class='code-block'> 1. 我们的探针需要用户给我们设置一个专门能够收集数据的账号(只读)</p>",
         "<p class='code-block'> 2. 进去psql运行</p>",
@@ -727,6 +723,74 @@
       "metrics": [],
       "status": -1,
       "template": ""
+    },{
+      "id": "apache",
+      "name": "Apache",
+      "icon": "iconfont fa-Apacheyumao",
+      "img": "",
+      "info": "Apache是世界使用排名第一的Web服务器软件。它可以运行在几乎所有广泛使用的计算机平台上，由于其跨平台和安全性被广泛使用，是最流行的Web服务器端软件之一。",
+      "deploy": [
+        "路径: /opt/cloudwiz-agent/agent/collectors/conf/apache.conf",
+        "<p class='code-block'> enable = True </p>",
+        "<p class='code-block'> interval = 30 </p>",
+        "<p class='code-block'> disable_ssl_validation = False </p>",
+        "<p class='code-block'> apache_url = http://127.0.0.1/server-status?auto </p>",
+        "<p class='code-block'> connect_timeout = 5 </p>",
+        "<p class='code-block'> receive_timeout = 15 </p>",
+        "<p class='code-block'> #apache_user= (如果有用户认证的话，可以添加上) </p>",
+        "<p class='code-block'> #apache_password= </p>"
+      ],
+      "metrics": [],
+      "status": -1,
+      "template": "apache"
+    },{
+      "id": "ssdb",
+      "name": "SSDB",
+      "icon": "iconfont fa-zanwutu",
+      "img": "",
+      "info": "一个高性能的支持丰富数据结构的 NoSQL 数据库, 用于替代 Redis.",
+      "deploy": [
+        "路径: /opt/cloudwiz-agent/agent/collectors/conf/ssdb_state.conf",
+        "<p class='code-block'> enable = True </p>",
+        "<p class='code-block'> interval = 60 </p>",
+        "<p class='code-block'> host = localhost </p>",
+        "<p class='code-block'> port=8888,8889 # (多个服务，使用逗号隔开) </p>"
+      ],
+      "metrics": [],
+      "status": -1,
+      "template": "ssdb"
+    },{
+      "id": "play",
+      "name": "Play Framework",
+      "icon": "iconfont fa-playframework",
+      "img": "",
+      "info": "play framework是一个full-stack（全栈的）Java Web的应用框架，包括一个简单的无状态MVC模型，具有Hibernate的对象持续，一个基于Groovy的模板引擎，以及建立一个现代Web应用所需的所有东西。",
+      "deploy": [
+        "路径: /opt/cloudwiz-agent/agent/collectors/conf/play_framework.conf",
+        "<p class='code-block'> enable = True </p>",
+        "<p class='code-block'> interval = 60 </p>",
+        "<p class='code-block'> # 说明 process代表play_framework的唯一可以识出pid的字段，port是这个程序绑定的端口 </p>",
+        "<p class='code-block'> process_names = [{\"process\": \"sbt-launch.jar\", \"name\": \"play_framework\", \"port\": \"7778\"}] </p>"
+      ],
+      "metrics": [],
+      "status": -1,
+      "template": "play_framework"
+    },{
+      "id": "elasticsearch",
+      "name": "ElasticSearch",
+      "icon": "iconfont fa-ElasticElasticSearch",
+      "img": "",
+      "info": "Elasticsearch 是一个分布式的 RESTful 风格的搜索和数据分析引擎，能够解决不断涌现出的各种用例。",
+      "deploy": [
+        "路径: /opt/cloudwiz-agent/agent/collectors/conf/elasticsearchstat.conf",
+        "<p class='code-block'> interval = 60 </p>",
+        "<p class='code-block'> enabled = True </p>",
+        "<p class='code-block'> host= localhost </p>",
+        "<p class='code-block'> port= 9200 </p>"
+      ],
+      "metrics": [],
+      "status": -1,
+      "template": "elasticsearch"
     }
   ]
 }

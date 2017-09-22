@@ -123,7 +123,23 @@ function (angular, _, noUiSlider) {
               threshold2: alertMgrSrv.currentWarningThreshold,
               threshold2Color: "rgba(251, 0, 0, 0.57)",
               thresholdLine: true
-            }
+            },
+            thresholds: [
+              {
+                value: alertMgrSrv.currentCritialThreshold,
+                colorMode: "critical",
+                op: 'gt',
+                fill: false,
+                line: true
+              },
+              {
+                value: alertMgrSrv.currentWarningThreshold,
+                colorMode: "warning",
+                op: 'gt',
+                fill: false,
+                line: true
+              }
+            ]
           }
         ]
       };
@@ -226,7 +242,9 @@ function (angular, _, noUiSlider) {
           "isCounter":false,
           "metric":_.getMetricName(metricName),
           "shouldComputeRate":false,
-          "tags":{"host":metricNameMap[metricName][0]}
+          "tags":{"host":metricNameMap[metricName][0]},
+          "hosts": metricNameMap[metricName],
+          "confidenceLevel": '50',
         };
         $scope.dashboard.rows[0].panels[0].targets.push(target);
         var seriesOverride = {
@@ -285,6 +303,58 @@ function (angular, _, noUiSlider) {
           }
         });
       }
+    };
+
+    $scope.getConfidence = function(metricName, level) {
+      var targets = $scope.dashboard.rows[0].panels[0].targets;
+      var index = _.findIndex(targets, {metric: _.getMetricName(metricName)});
+      if(index > -1) {
+        targets[index].confidenceLevel = level;
+      }
+    };
+
+    $scope.addRCA = function () {
+      var rootCauseMetrics = _.filter($scope.dashboard.rows[0].panels[0].targets, {hide: false});
+      if(!rootCauseMetrics.length) {
+        $scope.appEvent('alert-warning', ['请选择关联指标']);
+        return;
+      }
+      $scope.appEvent('confirm-modal', {
+        title: '添加',
+        text: '您确定要添加选定关联信息添加RCA吗？',
+        yesText: '确定',
+        noText: '取消',
+        onConfirm: function() {
+          var prox = contextSrv.user.orgId + '.' + contextSrv.user.systemId + '.';
+          var rcaFeedback = {
+            alertIds: [],
+            timestampInSec: Math.round(new Date().getTime()/1000),
+            triggerMetric: {
+              name: alertMetric,
+              host: alertHost,
+            },
+            rootCauseMetrics: [],
+            relatedMetrics: [],
+            org: contextSrv.user.orgId,
+            sys: contextSrv.user.systemId
+          };
+          _.each(rootCauseMetrics, function(target) {
+            _.each(target.hosts, function(host) {
+              rcaFeedback.rootCauseMetrics.push({
+                name: prox + target.metric,
+                host: host,
+                confidenceLevel: parseInt(target.confidenceLevel)
+              });
+            });
+          });
+
+          alertMgrSrv.rcaFeedback(rcaFeedback).then(function(response) {
+            $scope.appEvent('alert-success', ['添加成功']);
+          }, function(err) {
+            $scope.appEvent('alert-error', ['添加失败']);
+          });
+        }
+      });
     };
 
     $scope.init();

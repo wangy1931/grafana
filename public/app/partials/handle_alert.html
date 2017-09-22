@@ -5,26 +5,72 @@
   </a>
 
   <h3>
-    报警处理过程提交
+    报警处理及分析
   </h3>
 
-  <form>
-    <div style="display: inline-block">
-      <div class="tight-form-container">
-        <div class="tight-form">
-          <ul class="tight-form-list">
-            <li>
-              <textarea style="width: 300px" ng-model="reason" required></textarea>
-            </li>
-          </ul>
+  <form class="gf-form-group ng-pristine ng-valid">
+    <div class="gf-form-section-modal">
+      <h3 class="page-heading">报警现象</h3>
+      <div class="gf-form-inline">
+        <div class="gf-form max-width-28">
+          <span class="gf-form-label width-9">现象指标</span>
+          <input type="text" class="gf-form-input" ng-value="_.getMetricName(alertData.metric)" disabled/>
+        </div>
+        <div class="gf-form max-width-28">
+          <span class="gf-form-label width-9">现象机器</span>
+          <input type="text" class="gf-form-input" ng-model="alertData.status.monitoredEntity" disabled/>
         </div>
       </div>
+    </div>
 
-      <div class="" style="margin-top: 30px; margin-bottom: 20px;">
-        <button type="button" class="btn btn-inverse" ng-click="dismiss()">取消</button>
-        <button type="submit" class="btn btn-success" ng-click="closeAlert();dismiss();">关闭警告并上传报告</button>
-
+    <div class="gf-form-section-modal">
+      <h3 class="page-heading">报警根源</h3>
+      <div class="gf-form-inline">
+        <div class="gf-form max-width-28">
+          <span class="gf-form-label width-9">根源指标</span>
+          <input type="text" class="gf-form-input" ng-model="causeMetric" required bs-typeahead-old="suggestMetrics"/>
+        </div>
+        <div class="gf-form max-width-28">
+          <span class="gf-form-label width-9">根源机器</span>
+          <input type="text" class="gf-form-input" ng-model="causeHost" required bs-typeahead-old="suggestTagHost"/>
+        </div>
+        <div class="gf-form max-width-28">
+          <span class="gf-form-label width-9">确认程度</span>
+          <label class="gf-form-inline">
+            <input class="gf-form-input" type="radio" name="confident" value="100" ng-model="confidenceLevel"/>
+            <span class="gf-form-label gf-form-label-radio">非常确定</span>
+          </label>
+          <label class="gf-form-inline">
+            <input class="gf-form-input" type="radio" name="confident" value="50" ng-model="confidenceLevel"/>
+            <span class="gf-form-label gf-form-label-radio">可能</span>
+          </label>
+        </div>
+        <div>
+        </div>
       </div>
+      <button class="btn gf-form-btn btn-success" style="padding: 0.1rem 0.5rem;" ng-click="addCause(causeMetric,causeHost,confidenceLevel)">添加</button>      
+
+      <br/>
+      <div class="gf-form-inline">
+        <div class="gf-form max-width-28" ng-repeat="cause in rootCauseMetrics">
+          <span bs-tooltip="'{{cause.name}}'" data-placement="bottom" class="gf-form-label width-8">{{cause.name}}</span>
+          <span class="gf-form-label width-8">{{cause.host}}</span>
+          <span class="gf-form-label width-8">{{confidences[cause.confidenceLevel]}}</span>
+          <button class="btn gf-form-btn btn-danger" ng-click="removeCause($index)"><i class="fa fa-minus"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="gf-form-section-modal">
+      <h3 class="page-heading">报警处理</h3>
+      <div class="gf-form-inline">
+        <textarea ng-model="reason" style="width: 100%;" required></textarea>
+      </div>
+    </div>
+
+    <div class="gf-form-button-row">
+      <button type="button" class="btn btn-inverse" ng-click="dismiss();">取消</button>
+      <button type="button" class="btn btn-success" ng-click="closeAlert();">关闭警告并上传报告</button>
     </div>
   </form>
 </div>

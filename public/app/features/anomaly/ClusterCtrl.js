@@ -25,20 +25,7 @@ define([
       };
 
       $scope.initMetaData = function() {
-        $scope.minX = -100;
-        $scope.minY = -100;
-        $scope.maxX = 1000;
-        $scope.maxY = 1000;
-
         $scope.options = {
-          xaxis:{
-            min: $scope.minX,
-            max: $scope.maxX
-          },
-          yaxis:{
-            min: $scope.minY,
-            max: $scope.maxY,
-          },
           grid: {
             hoverable: true,
             clickable: true
