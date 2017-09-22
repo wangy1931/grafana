@@ -14,6 +14,7 @@ export class ServiceCustomCtrl {
   hostId: number;
   hostProcess: Array<any> = [];
 
+  /** @ngInject */
   constructor(private $scope, private backendSrv, private contextSrv, private $location) {
     this.hostId = parseInt(this.$location.search().hostId) || -1;
     this.getSoftwares();
