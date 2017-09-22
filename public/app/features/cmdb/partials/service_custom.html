@@ -5,20 +5,13 @@
 </navbar>
 
 <div class="page-container">
-  <h2>添加自定义服务
-    <div class="dropdown pull-right" style="color: #2962ff;">
-        <span class="dropdown-toggle pointer" data-toggle="dropdown">{{ctrl.host.hostname}} <i class="fa fa-caret-down" ng-if="ctrl.hostList.length > 1"></i></span>
-        <ul class="dropdown-menu" ng-if="ctrl.hostList.length > 1">
-            <li ng-repeat="host in ctrl.hostList"><a ng-click="ctrl.setHost(host)">{{host.hostname}}</a></li>
-        </ul>
-      </div>
-  </h2>
+  <h2>添加自定义服务</h2>
 
   <table class="table">
     <tr>
       <th>服务名称</th>
       <th>操作系统</th>
-      <th>指令</th>
+      <th>规匹配则</th>
       <th>操作</th>
     </tr>
     <tr ng-repeat="software in ctrl.softwareList">
@@ -44,7 +37,7 @@
       <td>
         <span ng-if="ctrl.editIndex !== $index">{{software.command}}</span>
         <input style="width: 100%;" type="text"
-          placeholder="请输入指令"
+          placeholder="请输入匹配规则"
           ng-if="ctrl.editIndex === $index"
           ng-model="ctrl.editSoftware.command">
       </td>
@@ -81,4 +74,27 @@
   </table>
 
   <button class="btn btn-success" ng-click="ctrl.saveSoftware()">保存</button>
+
+  <div class="cmdb-reference">
+    <h2>参考信息
+      <span class="dropdown" style="color: #2962ff;">
+        <span ng-if="!ctrl.host.hostname">请选择机器</span>
+        <span class="dropdown-toggle pointer" data-toggle="dropdown">{{ctrl.host.hostname}} <i class="fa fa-caret-down" ng-if="ctrl.hostList.length > 1"></i></span>
+        <ul class="dropdown-menu" ng-if="ctrl.hostList.length > 1">
+            <li ng-repeat="host in ctrl.hostList"><a ng-click="ctrl.setHost(host)">{{host.hostname}}</a></li>
+        </ul>
+      </span>
+    </h2>
+    <p ng-if="!ctrl.hostProcess.length">暂无参考信息</p>
+    <table class="table" ng-if="ctrl.hostProcess.length">
+      <tr>
+        <th>参考名称</th>
+        <th>参考规则</th>
+      </tr>
+      <tr ng-repeat="process in ctrl.hostProcess" ng-if="process.command">
+        <td style="width: 300px;">{{process.name}}</td>
+        <td>{{process.command}}</td>
+      </tr>
+    </table>
+  </div>
 </div>
