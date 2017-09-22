@@ -65,6 +65,12 @@ export class TagPickerCtrl {
       value: this.curTagValue,
       hostId: this.$scope.id
     };
+
+    if (this.isInvalid(this.curTagKey) || this.isInvalid(this.curTagValue)) {
+      this.alertSrv.set("创建 Tag 失败", "输入内容中存在非法字符", "error", 2000);
+      return;
+    }
+
     this.hostSrv.postTag(params).then(repsonse => {
       // 如果是选择了 就返回id . 如果没有Id 默认是新增
       this.$scope.tags.push(params);
@@ -73,6 +79,11 @@ export class TagPickerCtrl {
     }, err => {
       this.alertSrv.set("创建 Tag 失败", err.data, "error", 2000);
     });
+  };
+
+  isInvalid(value) {
+    var pattern = /[`~!@#\$%\^\&\*\(\)_\+<>\?:"\{\},\.\\\/;'\[\]]/im;
+    return pattern.test(value);
   };
 
 }
