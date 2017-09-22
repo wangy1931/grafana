@@ -374,11 +374,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'HostDetailCtrl',
     resolve: loadCMDBBundle
   })
-  .when('/cmdb/setup', {
-    templateUrl: 'public/app/features/cmdb/partials/cmdb_setup.html',
-    controller : 'CMDBSetupCtrl',
-    resolve: loadCMDBBundle
-  })
   .when('/cmdb/servicelist', {
     templateUrl: 'public/app/features/cmdb/partials/service_list.html',
     controller : 'ServiceListCtrl',
@@ -387,6 +382,12 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/cmdb/servicelist/servicedetail', {
     templateUrl: 'public/app/features/cmdb/partials/service_detail.html',
     controller : 'CMDBServiceDetailCtrl',
+    resolve: loadCMDBBundle
+  })
+  .when('/cmdb/servicecustom', {
+    templateUrl: 'public/app/features/cmdb/partials/service_custom.html',
+    controller : 'ServiceCustomCtrl',
+    controllerAs: 'ctrl',
     resolve: loadCMDBBundle
   })
   .when('/service_dependency', {
