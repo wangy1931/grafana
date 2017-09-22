@@ -1,0 +1,150 @@
+
+$tag-bg: rgba(138, 202, 249, 0.8);
+$tag-color: #246493;
+
+// dom in cmdb page
+.host-tags {
+  display: flex;
+  flex-direction: row;
+  .tags-aside {
+    width: 120px;
+    padding-right: 8px;
+    align-items: center;
+    .fa-tag {
+      width: 20px;
+      height: 20px;
+      font-size: 16px;
+      line-height: 22px;
+      vertical-align: middle;
+    }
+    .tag-title {
+      line-height: 32px;
+      vertical-align: middle;
+    }
+  }
+  .tags-list {
+    padding-left: 8px;
+    li {
+      display: flex;
+      position: relative;
+      margin: 4px 8px 0 0;
+      float: left;
+      line-height: 22px;
+    }
+    li .tag {
+      position: relative;
+      margin: 0 0 4px 0;
+      padding: 1px 12px;
+      border-radius: 12px;
+      transition: padding-right 0.2s ease;
+      display: inline-block;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      background-color: $tag-bg;
+      color: $tag-color;
+      line-height: 22px;
+      vertical-align: baseline;
+    }
+    li i {
+      display: block;
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      width: 14px;
+      height: 14px;
+      opacity: 0;
+      font-size: 14px;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+      line-height: 16px;
+      color: $tag-color;
+    }
+    li:hover .tag {
+      padding-right: 26px;
+    }
+    li:hover i {
+      opacity: 1;
+      z-index: 2;
+    }
+    .tag-add .tag-add-icon {
+      font-size: 18px;
+      line-height: 24px;
+      width: 20px;
+    }
+    .tag-add:hover > span {
+      color: $btn-cmdb-color;
+      cursor: pointer;
+    }
+  }
+}
+
+.tagpicker-popover {
+  .drop-content {
+    max-width: fit-content !important;
+  }
+}
+
+// tag picker
+.tag-picker {
+  width: 400px;
+  display: flex;
+  flex-direction: row;
+  .tag-add-form-wrap {
+    flex: auto;
+    margin: 10px 0;
+    &:first-child {
+      border-right: 2px solid #f7f7f7;
+    }
+  }
+  .tag-add-form {
+    padding-bottom: 10px;
+    margin: 0 10px;
+    position: relative;
+    .add-input {
+      padding: 0;
+      margin: 0;
+      border: none;
+      width: 100%;
+      line-height: 20px;
+      outline: 0 none;
+      text-indent: 10px;
+    }
+  }
+
+  .typeahead.dropdown-menu {
+    width: 100%;
+    overflow-y: auto;
+    border-radius: 4px;
+    position: relative;
+    top: 0 !important;
+    float: none;
+    .tag-item, li {
+      float: none;
+    }
+    .tag-item a, li a {
+      display: block;
+      padding: 5px 0px 5px 10px;
+      line-height: 24px;
+      outline: 0 none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 180px;
+      width: 100%;
+      &:hover {
+        color: $btn-cmdb-color;
+        background-color: #f7f7f7;
+      }
+    }
+    .tag-label {
+      margin: 9px 8px 0 0;
+      width: 6px;
+      height: 6px;
+      border-radius: 3px;
+      background: $tag-bg;
+      display: inline-block;
+    }
+  }
+}

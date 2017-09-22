@@ -488,6 +488,5 @@
   "refresh": "30s",
   "schemaVersion": 12,
   "version": 7,
-  "links": [],
-  "loaded": 4
+  "links": []
 }

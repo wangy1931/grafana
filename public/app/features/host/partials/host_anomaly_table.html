@@ -1,0 +1,28 @@
+<div class="host-anomaly host-tab-content">
+  <div ng-hide="anomalyHistory.length">
+    <em>暂没有任何异常数据</em>
+    <cw-loading show="!anomalyHistory.length" duration=6000></cw-loading>
+  </div>
+
+  <div ng-show="anomalyHistory.length">
+    <p>
+      <em style="font-size: 12px">（1小时前）</em>
+    </p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>异常出现时间</th>
+          <th>机器名称</th>
+          <th>指标名称</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="anomaly in anomalyHistory | filter: anomalyKey">
+          <td>{{ anomaly.time | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+          <td>{{ anomaly.host }}</td>
+          <td>{{ anomaly.metric }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

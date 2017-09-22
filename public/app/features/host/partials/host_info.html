@@ -1,35 +1,6 @@
-<navbar title="配置管理库" icon="fa fa-fw fa-cubes">
-    <ul class="nav">
-        <li><a href="/cmdb/hostlist">设备列表</a></li>
-        <li class="active" ><a href="/cmdb/hostlist/{{hostId}}">设备详情</a></li>
-    </ul>
-</navbar>
-<div class="page-container">
-    <h2 class="dropdown" style="color: #2962ff;">
-        <span class="dropdown-toggle pointer" data-toggle="dropdown">{{detail.hostname}} <i class="fa fa-caret-down" ng-if="list.length > 1"></i></span>    
-        <ul class="dropdown-menu" ng-if="list.length > 1">
-            <li ng-repeat="host in list"><a href="/cmdb/hostlist/hostdetail?id={{host.id}}">{{host.hostname}}</a></li>
-        </ul>
-    </h2>
-    <div class="host-tags">
-        <div class="tags-aside">
-            <span class="fa fa-tag"></span>
-            <span class="tag-title">机器标签</span>
-        </div>
-        <ul class="tags-list">
-            <li class="tag-wrap" ng-repeat="tag in tags" ng-show="tags.length">
-                <span class="tag label">
-                    {{ tag.key }} - {{ tag.value }}
-                </span>
-                <i class="fa fa-times-circle" ng-click="removeTag(tag);"></i>
-            </li>
-            <li class="tag-add" ng-click="showPopover();">
-                <span class="tag-add-icon fa fa-plus-square-o" ng-show="tags.length"></span>
-                <span class="tag-add-tips" ng-hide="tags.length">待添加</span>
-            </li>
-        </ul>
-    </div>
-    <div class="cleafix"></div>
+<div class="host-info host-tab-content">
+    <div></div>
+
     <ul class="cmdb-ul">
         <li>
             <h4>基本信息</h4>
@@ -51,32 +22,34 @@
                 <li><span>UUID</span><span>{{detail.productUuid}}</span></li>
                 <li>
                     <span>内存</span><span>{{detail.totalMemory}} <span ng-if="detail.totalMemory!== '暂无信息'">MB</span></span>
-                    <table class="table" ng-if="detail.memory">
-                        <tr>
-                            <th>生产厂商</th>
-                            <th>产品型号</th>
-                            <th>容量</th>
-                        </tr>
-                        <tr ng-repeat="memory in detail.memory">
-                            <td>{{memory.vendor}}</td>
-                            <td>{{memory.model}}</td>
-                            <td>{{memory.size}} <span ng-if="memory.size !== '暂无信息'">MB</span></td>
-                        </tr>
-                    </table>
+                    <li ng-if="detail.memory">
+                        <table class="table">
+                            <tr>
+                                <th>生产厂商</th>
+                                <th>产品型号</th>
+                                <th>容量</th>
+                            </tr>
+                            <tr ng-repeat="memory in detail.memory">
+                                <td>{{memory.vendor}}</td>
+                                <td>{{memory.model}}</td>
+                                <td>{{memory.size}} <span ng-if="memory.size !== '暂无信息'">MB</span></td>
+                            </tr>
+                        </table>
+                    </li>
                 </li>
                 <li><span>虚拟机</span><span>{{detail.isVirtual}}</span></li>
                 <li><span>架构</span><span>{{detail.architecture}}</span></li>
-                <li><span>CPU</span><span ng-if="_.isEmpty(cpuCount)">暂无信息</span>
-                    <table class="table" ng-if="!_.isEmpty(cpuCount)">
-                        <tr>
-                            <th>cpu型号</th>
-                            <th>个数</th>
-                        </tr>
-                        <tr ng-repeat="(cpu, num) in cpuCount">
-                            <td>{{cpu}}</td>
-                            <td>{{num}}</td>
-                        </tr>
-                    </table>
+                <li><span>CPU</span>
+                <table class="table">
+                    <tr>
+                        <th>cpu型号</th>
+                        <th>个数</th>
+                    </tr>
+                    <tr ng-repeat="(cpu, num) in cpuCount">
+                        <td>{{cpu}}</td>
+                        <td>{{num}}</td>
+                    </tr>
+                </table>
                 </li>
             </ul>
         </li>
@@ -129,7 +102,7 @@
             </ul>
         </li>
         <li class="last" ng-if="detail.services">
-            <h4>部署服务<a class="btn btn-outline-primary" href="/cmdb/servicecustom?hostId={{detail.id}}">添加服务</a></h4>
+            <h4>部署服务</h4>
             <ul class="cmdb-detail">
                 <li>
                     <table class="table">

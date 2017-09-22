@@ -1537,7 +1537,7 @@
       allNoneButtons: false,
       sort: true,
       caretHtml: '&nbsp;<span class="caret"></span>',
-      placeholder: 'Choose among the following...',
+      placeholder: '请选择',
       allText: 'All',
       noneText: 'None',
       maxLength: 3,

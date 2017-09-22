@@ -8,6 +8,12 @@ $summary-font-color: #313F48;
     margin: 10px 0;
     line-height: 40px;
   }
+  h3.spec-tip {
+    .tooltip.in .tooltip-inner{
+      text-align: left;
+      width: 220px;
+    }
+  }
 
   li {
     line-height: 20px;
