@@ -11,7 +11,7 @@
     <tr>
       <th>服务名称</th>
       <th>操作系统</th>
-      <th>规匹配则</th>
+      <th>匹配规则</th>
       <th>操作</th>
     </tr>
     <tr ng-repeat="software in ctrl.softwareList">
@@ -66,7 +66,7 @@
           ng-model="ctrl.newSoftware.platform">
         </select>
       </td>
-      <td><input style="width: 100%;" type="text" placeholder="请输入指令" ng-model="ctrl.newSoftware.command"></td>
+      <td><input style="width: 100%;" type="text" placeholder="请输入匹配规则" ng-model="ctrl.newSoftware.command"></td>
       <td>
         <button class="btn btn-outline-success" ng-click="ctrl.addSoftware('add')">添加</button>
       </td>
@@ -85,16 +85,18 @@
         </ul>
       </span>
     </h2>
-    <p ng-if="!ctrl.hostProcess.length">暂无参考信息</p>
-    <table class="table" ng-if="ctrl.hostProcess.length">
-      <tr>
-        <th>参考名称</th>
-        <th>参考规则</th>
-      </tr>
-      <tr ng-repeat="process in ctrl.hostProcess" ng-if="process.command">
-        <td style="width: 300px;">{{process.name}}</td>
-        <td>{{process.command}}</td>
-      </tr>
+    <table class="table table-process"
+      data-toggle="table"
+      data-pagination="true"
+      data-sort-name="command"
+      data-sort-order="desc"
+      data-page-size="10">
+      <thead>
+        <tr>
+          <th data-field="name" data-sortable="true" data-width="300px">参考名称</th>
+          <th data-field="command" data-sortable="true">参考规则</th>
+        </tr>
+      </thead>
     </table>
   </div>
 </div>

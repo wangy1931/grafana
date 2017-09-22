@@ -2,6 +2,7 @@
 
 import angular from 'angular';
 import _ from 'lodash';
+import $ from 'jquery';
 import coreModule from 'app/core/core_module';
 
 export class ServiceCustomCtrl {
@@ -17,6 +18,7 @@ export class ServiceCustomCtrl {
   /** @ngInject */
   constructor(private $scope, private backendSrv, private contextSrv, private $location) {
     this.hostId = parseInt(this.$location.search().hostId) || -1;
+    this.hostProcess = [];
     this.getSoftwares();
     this.initEditSoftware('add');
     this.initEditSoftware('save');
@@ -24,6 +26,7 @@ export class ServiceCustomCtrl {
   }
 
   getHosts() {
+    $(".table-process").bootstrapTable();
     this.backendSrv.alertD({url: '/cmdb/host'}).then((result) => {
       this.hostList = result.data;
       if (this.hostId === -1) {
@@ -37,7 +40,8 @@ export class ServiceCustomCtrl {
   setHost(host) {
     this.host = host;
     this.backendSrv.alertD({url: '/host/state?hostId=' + host.id}).then((response) => {
-      this.hostProcess = response.data;
+      this.hostProcess = response.data || [];
+      $(".table-process").bootstrapTable('load', this.hostProcess);
     });
   }
 
