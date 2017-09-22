@@ -6,6 +6,8 @@ export class UagentCtrl {
   serviceId: any;
   serviceName: any;
   searchConf: any;
+
+  /** @ngInject */
   constructor(private $scope, private backendSrv, private $location) {
     var search = this.$location.search();
     this.serviceId = search.serviceId;

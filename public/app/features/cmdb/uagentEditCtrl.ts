@@ -11,6 +11,8 @@ export class UagentEditCtrl {
   selectedHosts: any;
   isCover: any;
   newPath: any;
+
+  /** @ngInject */
   constructor(private $scope, private backendSrv, private $location, private contextSrv) {
     var search = this.$location.search();
     this.serviceId = search.serviceId;
@@ -62,7 +64,7 @@ export class UagentEditCtrl {
     var user = this.contextSrv.user;
     var orgId = user.orgId;
     var systemId = user.systemId;
-    var url = '';
+    var url = '/cmdb/config/service';
     var param = {
       serviceId : this.serviceId,
       configName : this.configName,
@@ -71,7 +73,7 @@ export class UagentEditCtrl {
       hostId : ''
     };
 
-    var data = {sections: []};
+    var data = {sections: [], hosts: []};
 
     _.each(this.config.sections, (section)=>{
       var new_section = {
@@ -88,18 +90,8 @@ export class UagentEditCtrl {
       data.sections.push(new_section);
     });
 
-    if (this.selectedHosts.length) {
-      url = "/cmdb/config/host";
-      _.each(this.selectedHosts, (hostId)=>{
-        param.hostId = hostId;
-        this.backendSrv.alertD({url, params: param}).then((response)=>{
-          this.saveConfig(url, param, data);
-        });
-      });
-    } else {
-      url = "/cmdb/config/service";
-      this.saveConfig(url, param, data);
-    }
+    data.hosts = this.selectedHosts;
+    this.saveConfig(url, param, data);
   }
 
   saveConfig(url, param, data) {
@@ -113,7 +105,7 @@ export class UagentEditCtrl {
       this.$scope.appEvent('alert-success', ['应用成功']);
       this.$location.url('/cmdb/config?serviceName=' + this.serviceName +'&serviceId=' + this.serviceId);
     }, (err)=>{
-      this.$scope.appEvent('alert-warning', ['应用失败']);
+      this.$scope.appEvent('alert-warning', ['应用失败', '请稍后重试']);
     });
   }
 
