@@ -379,6 +379,7 @@ define([
           _.each($scope.summaryList, function (metric) {
             hostsResource[metric.hostname] = {};
             hostsResource[metric.hostname]["host"] = metric.hostname;
+            hostsResource[metric.hostname]["id"] = metric.id;
           });
         })
         .then(function () {

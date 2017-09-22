@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="host in hostPanels" ng-class="{active: host.host==ctrl.currentHost.name}">
+        <tr ng-repeat="host in hostPanels" ng-class="{active: host.host==ctrl.currentHost.name}" ng-click="ctrl.nodeClickHandle(host);">
           <td>{{ host.host }}</td>
           <td>{{ host.status || '-' }}</td>
           <td>{{ host.cpu || '-' }}</td>

@@ -55,6 +55,7 @@ export class HostTopologyCtrl {
     this.currentTab  = 0;
 
     $scope.$watch('ctrl.currentHost', newValue => {
+      if (!newValue) { return; }
       var host = newValue.name ? newValue : {};
       this.render(host);
     });
@@ -184,8 +185,16 @@ export class HostTopologyCtrl {
   }
 
   nodeClickHandle(node) {
-    this.currentHost = node;
-    this.$scope.$digest();
+    // if event is triggered by table-row click, set node.id in node._private_
+    if (node.id) {
+      var elem = _.find(this.data, data => {
+        return data._private_.id === node.id;
+      });
+      this.currentHost = elem;
+    } else {
+      this.currentHost = node;
+      this.$scope.$digest();
+    }
   }
 
   getHostList(host) {
