@@ -1,8 +1,5 @@
-///<reference path="../../headers/common.d.ts" />
-
-import angular from 'angular';
 import _ from 'lodash';
-import coreModule from '../../core/core_module';
+import coreModule from 'app/core/core_module';
 
 export class ServiceCustomCtrl {
   softwareList: Array<any>;
