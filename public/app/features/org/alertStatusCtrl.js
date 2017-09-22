@@ -32,14 +32,18 @@ function (angular, moment, _) {
       scope: 1
     };
 
-    $scope.init = function () {
+    $scope.init = function (host) {
       $scope.correlationThreshold = 100;
-      alertMgrSrv.loadTriggeredAlerts().then(function onSuccess(response) {
+      $scope.alertWarningCount = 0;
+      $scope.alertCriticalCount = 0;
+      alertMgrSrv.loadTriggeredAlerts({ host: host }).then(function onSuccess(response) {
         for (var i = 0; i < response.data.length; i++) {
           var alertDetail = response.data[i];
           if (alertDetail.status.level === "CRITICAL") {
+            $scope.alertCriticalCount++;
             alertDetail.definition.alertDetails.threshold = alertDetail.definition.alertDetails.crit.threshold;
           } else {
+            $scope.alertWarningCount++;
             alertDetail.definition.alertDetails.threshold = alertDetail.definition.alertDetails.warn.threshold;
           }
           // Only show 2 digits. +0.00001 is to avoid floating point weirdness on rounding number.
@@ -233,6 +237,6 @@ function (angular, moment, _) {
       $scope.rootCauseMetrics.splice(index, 1);
     };
 
-    $scope.init();
+    this.init = $scope.init;
   });
 });

@@ -1,7 +1,7 @@
 define([
   './hostListCtrl',
   './hostDetailCtrl',
-  './cmdbSetupCtrl',
   './serviceListCtrl',
   './cmdbServiceDetailCtrl',
+  './serviceCustomCtrl',
 ], function() {});

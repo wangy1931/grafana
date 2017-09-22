@@ -1,14 +1,19 @@
 <navbar title="关键指标" icon="fa fa-fw fa-home"></navbar>
 
-<div class="page-container summary-page">
+<div class="page-container summary-page" ng-init="init();">
     <div class="overview-list" style="box-sizing:border-box;">
         <div class="main-view-container">
 
             <div class="summary-panel view-panel">
                 <div class="health-panel panels-wrapper">
-                    <h3>
+                    <h3 class="spec-tip">
                         <a href="javascript:;" ng-click="showModal(0)" bs-tooltip="'点击查看历史指数'">健康指数趋势</a>
-                        <tip>健康值=(告警指标个数/定义规则总数)*50% + (异常指标/所有指标) * 50%</tip>
+                        <tip placement="bottom">
+                            优：系统运行状况良好<br />
+                            良：存在报警或异常指标，不影响运行<br />
+                            中：存在严重报警或异常，会影响运行<br />
+                            差：不能正常运行，请及时处理
+                        </tip>
                     </h3>
                     <div style="position: absolute; bottom: 50%; left: 50%; transform: translate(-50%, 80%); font-weight: bold;">
                         <span style="font-size: 38px;">{{healthPanel.score}}</span>

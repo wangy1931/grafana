@@ -272,7 +272,7 @@ function (angular, _, coreModule, config) {
       });
     };
 
-    this.uploadHostList = function(params, url) {
+    this.saveCustomSoftware = function(params, url) {
       return this.alertD({
         method: "post",
         url: url,

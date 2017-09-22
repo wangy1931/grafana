@@ -57,11 +57,13 @@ function (angular, _, coreModule) {
       return self.alertDefMap[id];
     };
 
-    this.loadTriggeredAlerts = function() {
+    this.loadTriggeredAlerts = function(options) {
+      var params = {};
+      _.extend(params, options);
       return backendSrv.alertD({
         method: "get",
         url: alertStatusUrl,
-        params: {}
+        params: params
       });
     };
 

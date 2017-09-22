@@ -273,7 +273,6 @@ define([
         if ($scope.dashboard.rows[0].id == tabId) return;
 
         // 优化: 当前所有数据加载完成 才允许切换
-        // ($scope.dashboard.loaded === 4) && resetRow(tabId);
         resetRow(tabId);
       };
 

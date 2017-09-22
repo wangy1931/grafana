@@ -22,12 +22,14 @@ import './jquery_extended';
 import './partials';
 
 //Cloudwiz 
-import "./directives/host_upload";
 import "./directives/system_panel";
 import "./directives/overview_panel";
 import "./directives/service_dep";
 import "./directives/table_loader";
 import "./directives/log_tabpane";
+import {tagPicker} from './directives/tagpicker';
+import "./directives/loading";
+import "./directives/ng_enter";
 
 import {grafanaAppDirective} from './components/grafana_app';
 import {sideMenuDirective} from './components/sidemenu/sidemenu';
@@ -64,5 +66,6 @@ export {
   Emitter,
   appEvents,
   dashboardSelector,
+  tagPicker,
   colors
 };

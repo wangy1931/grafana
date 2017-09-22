@@ -14,6 +14,7 @@ define([
   './healthSrv',
   './integrateSrv',
   './oncallerMgrSrv',
-  './service_dep_srv'
+  './service_dep_srv',
+  './host_srv'
 ],
 function () {});
