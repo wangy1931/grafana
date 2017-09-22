@@ -24,7 +24,7 @@ export class HostTopologyCtrl {
   hostSummary: Array<any>;
 
   /** @ngInject */
-  constructor (private hostSrv, private alertSrv, private backendSrv, private $scope, private $controller) {
+  constructor (private hostSrv, private alertSrv, private backendSrv, private popoverSrv, private $scope, private $controller) {
     $scope.ctrl = this;
 
     this.rendered = false;
@@ -34,7 +34,7 @@ export class HostTopologyCtrl {
     this.filter = '';
 
     this.tabs = [
-      { 'id': 0, 'title': '机器列表', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_list_table.html' },
+      { 'id': 0, 'title': '机器总览', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_list_table.html' },
       { 'id': 1, 'title': '系统状态', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_system_status.html' },
       { 'id': 2, 'title': '报警检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_alert_table.html' },
       { 'id': 3, 'title': '异常检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_anomaly_table.html' },
@@ -215,6 +215,7 @@ export class HostTopologyCtrl {
   getHostInfo(host) {
     // not able to set $location.search(id, id), so request cmdb directly
     // copy from AlertDetailCtrl
+    this.$scope.id = host._private_.id;
     this.backendSrv.alertD({
       url: `/cmdb/host?id=${host._private_.id}`
     }).then(response => {
@@ -225,6 +226,24 @@ export class HostTopologyCtrl {
       this.$scope.detail = _.cmdbInitObj(this.$scope.detail);
     });
   }
+
+  removeTag(tag) {
+    _.remove(this.$scope.tags, tag);
+    this.hostSrv.deleteTag({ hostId: this.$scope.id, key: tag.key, value: tag.value });
+  };
+
+  showPopover() {
+    this.popoverSrv.show({
+      element : $('.tag-add')[0],
+      position: 'bottom center',
+      template: '<cw-tag-picker></cw-tag-picker>',
+      classes : 'tagpicker-popover',
+      model : {
+        tags: this.$scope.tags,
+        id  : this.$scope.id
+      },
+    });
+  };
 
   switchTab(tabId) {
     var dashboard;
