@@ -1,15 +1,18 @@
+///<reference path="../../headers/common.d.ts" />
+
+import angular from 'angular';
 import _ from 'lodash';
 import coreModule from 'app/core/core_module';
 
 export class ServiceCustomCtrl {
-  softwareList: Array<any>;
+  softwareList: Array<any> = [];
   newSoftware: any;
   editSoftware: any;
   editIndex: number;
-  hostList: Array<any>;
+  hostList: Array<any> = [];
   host: any;
   hostId: number;
-  hostProcess: Array<any>;
+  hostProcess: Array<any> = [];
 
   constructor(private $scope, private backendSrv, private contextSrv, private $location) {
     this.hostId = parseInt(this.$location.search().hostId) || -1;
