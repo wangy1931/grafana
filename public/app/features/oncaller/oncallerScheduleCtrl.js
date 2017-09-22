@@ -12,7 +12,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('OnCallerScheduleCtrl', function ($scope, oncallerMgrSrv, $timeout) {
+  module.controller('OnCallerScheduleCtrl', function ($scope, oncallerMgrSrv, $timeout, $q) {
     /* oncaller/events
       {
         title: name,            << 显示名称
@@ -93,8 +93,9 @@ function (moment, $, angular, _, uiCalendarConfig) {
           dayNames: moment.weekdays(),
           dayNamesShort: moment.weekdaysShort(),
           header: {
-            left: '',
+            left: 'prev, next, today',
             center: 'title',
+            right: 'month, agendaDay'
           },
           eventClick: eventClick,
           viewRender: viewRender,
@@ -151,7 +152,9 @@ function (moment, $, angular, _, uiCalendarConfig) {
     }
 
     function viewRender(view, element) {
-      $scope.clearReview();
+      if($scope.inter) {
+        $timeout.cancel($scope.inter);
+      }
       var today = new Date();
       $scope.zonesStart = new Date(view.intervalStart);
       $scope.zonesEnd = new Date(view.intervalEnd);
@@ -164,16 +167,19 @@ function (moment, $, angular, _, uiCalendarConfig) {
       $scope.zonesStart = moment($scope.zonesStart).format('YYYY-MM-DD');
       $scope.zonesEnd = moment($scope.zonesEnd).format('YYYY-MM-DD');
 
-      $scope.curInterval = {start: view.start._d, end: view.end._d};
+      $scope.curInterval = {start: view.start.subtract(16,'hours'), end: view.end._d};
 
-      loadSchedule(view.start._d, view.end._d);
+      $scope.inter = $timeout(function() {
+        loadSchedule(view.start.subtract(16,'hours'), view.end._d);
+      });
     }
 
     function loadSchedule(start, end) {
       oncallerMgrSrv.loadSchedule(getTimeSec(start), getTimeSec(end)).then(function onSuccess(response) {
+        $scope.clearReview();
         _.each(response.data.roleSchedule, function(roleEvents, role) {
-          _.each(roleEvents, function(oncaller, start) {
-            oncaller.start = formatTime(new Date(parseInt(start)*1000));
+          _.each(roleEvents, function(oncaller, startTime) {
+            oncaller.start = formatTime(new Date(parseInt(startTime)*1000));
             oncaller.title = oncaller.name+$scope[role].type;
             var oncallerDef = _.find($scope.oncallerDefList, {id: oncaller.id});
             if(oncallerDef) {
@@ -191,10 +197,12 @@ function (moment, $, angular, _, uiCalendarConfig) {
     }
 
     function eventMouseover(event, jsEvent, view) {
+      this.style.color = '#000';
       this.style.backgroundColor = '#eee';
     }
 
     function eventMouseout(event, jsEvent, view) {
+      this.style.color = '#fff';
       this.style.backgroundColor = event.color;
     }
 
@@ -204,7 +212,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
       oncallerSelcted.end = end;
       oncallerSelcted.start = start;
       if(role === 'primary' || role === 'secondary') {
-        updateSchedule($scope.role.key, oncallerSelcted);
+        updateSchedule($scope.role.key, oncallerSelcted, 'update');
         var index = _.findIndex($scope[role].events, {start: start});
         if(index === -1){
           $scope.clearReview();
@@ -257,10 +265,14 @@ function (moment, $, angular, _, uiCalendarConfig) {
     $scope.clearReview = function() {
       while($scope.primary.events.length){
         $scope.primary.events.pop();
+      }
+      while($scope.secondary.events.length) {
         $scope.secondary.events.pop();
       }
       while($scope.primaryReview.events.length){
         $scope.primaryReview.events.pop();
+      }
+      while($scope.secondaryReview.events.length){
         $scope.secondaryReview.events.pop();
       }
     };
@@ -306,21 +318,43 @@ function (moment, $, angular, _, uiCalendarConfig) {
     };
 
     $scope.saveSchedule = function() {
+      var updatePrimaryList = [];
+      var updateSecondaryList = [];
       while($scope.primaryReview.events.length) {
         var primaryReview = $scope.primaryReview.events.shift();
         var secondaryReview = $scope.secondaryReview.events.shift();
-        updateSchedule('primary', primaryReview);
-        updateSchedule('secondary', secondaryReview);
-        addEvent(primaryReview, 'primary');
-        addEvent(secondaryReview, 'secondary');
+        var p = updateSchedule('primary', primaryReview, 'save');
+        var s = updateSchedule('secondary', secondaryReview, 'save');
+        updatePrimaryList.push(p);
+        updateSecondaryList.push(s);
       }
       $scope.showScheduling = false;
-    };
-
-    function updateSchedule(role,oncallerSelcted) {
-      oncallerMgrSrv.updateSchedule(role, oncallerSelcted.id, getTimeSec(oncallerSelcted.start), getTimeSec(oncallerSelcted.end)).then(function(response) {
+      oncallerMgrSrv.updateSchedule(_.concat(updatePrimaryList, updateSecondaryList)).then(function(response) {
+        loadSchedule($scope.zonesStart, $scope.zonesEnd);
         $scope.appEvent('alert-success', ['保存成功']);
       });
+    };
+
+    function updateSchedule(role,oncallerSelcted,type) {
+      if (_.isString(oncallerSelcted.start)) {
+        oncallerSelcted.start = oncallerSelcted.start.replace(/[A,P,凌,早,晚,中,下,上]/, 'T');
+      }
+      if (_.isString(oncallerSelcted.end)) {
+        oncallerSelcted.end = oncallerSelcted.end.replace(/[A,P,凌,早,晚,中,下,上]/, 'T');
+      }
+      var event = {
+        role: role,
+        id: oncallerSelcted.id,
+        startSec: getTimeSec(oncallerSelcted.start),
+        endSec: getTimeSec(oncallerSelcted.end)
+      }
+      if (type === 'update') {
+        oncallerMgrSrv.updateSchedule([event]).then(function(response) {
+          $scope.appEvent('alert-success', ['保存成功']);
+        });
+      } else {
+        return event;
+      }
     }
 
     $scope.init();

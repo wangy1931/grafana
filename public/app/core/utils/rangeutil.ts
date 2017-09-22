@@ -6,11 +6,11 @@ import * as dateMath from './datemath';
 
 var spans = {
   's': {display: '秒'},
-  'm': {display: '分'},
-  'h': {display: '时'},
-  'd': {display: '日'},
+  'm': {display: '分钟'},
+  'h': {display: '小时'},
+  'd': {display: '天'},
   'w': {display: '周'},
-  'M': {display: '月'},
+  'M': {display: '个月'},
   'y': {display: '年'},
 };
 
@@ -98,14 +98,14 @@ export function describeTextRange(expr: any) {
     let amount = parseInt(parts[1]);
     let span = spans[unit];
     if (span) {
-      opt.display = 'Last ' + amount + ' ' + span.display;
+      opt.display = amount + ' ' + span.display + '之前';
       opt.section = span.section;
-      if (amount > 1) {
-        opt.display += 's';
-      }
+      // if (amount > 1) {
+      //   opt.display += 's';
+      // }
     }
   } else {
-    opt.display = opt.from + ' to ' + opt.to;
+    opt.display = opt.from + ' 至 ' + opt.to;
     opt.invalid = true;
   }
 
@@ -113,23 +113,24 @@ export function describeTextRange(expr: any) {
 }
 
 export function describeTimeRange(range) {
+  console.log
   var option = rangeIndex[range.from.toString() + ' to ' + range.to.toString()];
   if (option) {
     return option.display;
   }
 
   if (moment.isMoment(range.from) && moment.isMoment(range.to)) {
-    return formatDate(range.from) + ' to ' + formatDate(range.to);
+    return formatDate(range.from) + ' 至 ' + formatDate(range.to);
   }
 
   if (moment.isMoment(range.from)) {
     var toMoment = dateMath.parse(range.to, true);
-    return formatDate(range.from) + ' to ' + toMoment.fromNow();
+    return formatDate(range.from) + ' 至 ' + toMoment.fromNow();
   }
 
   if (moment.isMoment(range.to)) {
     var from = dateMath.parse(range.from, false);
-    return from.fromNow() + ' to ' + formatDate(range.to);
+    return from.fromNow() + ' 至 ' + formatDate(range.to);
   }
 
   if (range.to.toString() === 'now') {
@@ -137,6 +138,6 @@ export function describeTimeRange(range) {
     return res.display;
   }
 
-  return range.from.toString() + ' to ' + range.to.toString();
+  return range.from.toString() + ' 至 ' + range.to.toString();
 }
 

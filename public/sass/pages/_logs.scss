@@ -48,6 +48,10 @@
     }
   }
 
+  .dropdown-menu {
+    border-radius: 2px;
+  }
+
   .btn-log-compare {
     position: relative;
     padding-left: 30px;
@@ -128,6 +132,22 @@
     &:last-child {
       word-break: break-all;
     }
+  }
+}
+
+.log-search-compare-modal {
+  min-height: 30%;
+  max-height: 80%;
+  max-width: 90%;
+  overflow-y: scroll;
+  .tight-form {
+    & > button {
+      outline: none;
+      padding: 0;
+    }
+  }
+  .dropdown-menu {
+    width: 210px;
   }
 }
 
@@ -238,4 +258,12 @@ table.diff {
 }
 .tab-2 tbody tr td:nth-child(3) {
   display: none;
+}
+
+// hard code
+.log-integrate-search-result {
+  border: none;
+  .nav-tabs {
+    border: none;
+  }
 }

@@ -194,6 +194,7 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
         var queryObj = this.queryBuilder.build(target);
         var esQuery = angular.toJson(queryObj);
         var luceneQuery = target.query;  // 取消默认值 "*", 否则新建一个日志搜索会有查询结果
+        if (!luceneQuery) continue;
         luceneQuery = templateSrv.replace(luceneQuery, options.scopedVars, 'lucene');
         luceneQuery = angular.toJson(luceneQuery);
 
