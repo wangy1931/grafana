@@ -185,3 +185,11 @@ $btn-cmdb-color: rgb(25,165,228);
   position: absolute;
   right: 0;
 }
+
+.cmdb-reference {
+  margin-top: 20px;
+  .dropdown-menu {
+    max-height: 200px;
+    overflow-y: scroll;
+  }
+}
