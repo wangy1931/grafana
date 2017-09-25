@@ -6,9 +6,9 @@
 
 <div class="page-container">
   <div class="page-header">
-    <h1 class="dropdown">{{ctrl.serviceName}} 配置管理
-      <span>
-        <span class="dropdown-toggle pointer" data-toggle="dropdown"> -- {{ctrl.host.hostname}} <i class="fa fa-caret-down" ng-if="ctrl.hostList.length > 1"></i></span>
+    <h1>{{ctrl.serviceName}} 配置管理 -- 
+      <span class="dropdown">
+        <span class="dropdown-toggle pointer" data-toggle="dropdown">{{ctrl.host.hostname}} <i class="fa fa-caret-down" ng-if="ctrl.hostList.length > 1"></i></span>
         <ul class="dropdown-menu" ng-if="ctrl.hostList.length > 1">
             <li ng-repeat="host in ctrl.hostList"><a href="/cmdb/config?serviceName={{ctrl.serviceName}}&serviceId={{ctrl.serviceId}}&hostId={{host.id}}">{{host.hostname}}</a></li>
         </ul>

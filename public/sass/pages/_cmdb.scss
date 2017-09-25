@@ -212,3 +212,7 @@ $btn-cmdb-color: rgb(25,165,228);
     overflow-y: scroll;
   }
 }
+
+.dropdown-menu > li > a {
+  width: 100%;
+}
