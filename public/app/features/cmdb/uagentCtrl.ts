@@ -118,9 +118,9 @@ export class UagentCtrl {
         }
         if (prop.name === 'document_type') {
           param.configName = prop.value;
-          if (_.some(this.configs, {name: prop.value}) && this.configName === 'template') {
+          if (this.configName !== prop.value && _.some(this.configs, {name: prop.value})) {
             checkDocument = false;
-            this.$scope.appEvent('alert-warning', ['document_type为' + prop.value + '的配置已经存在', '不能重复添加,请修改日志类型']);
+            this.$scope.appEvent('alert-warning', ['document_type为' + prop.value + '的配置已经存在', '请修改日志类型(document_type)']);
           }
         }
       });
