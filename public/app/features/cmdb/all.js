@@ -5,5 +5,4 @@ define([
   './serviceListCtrl',
   './cmdbServiceDetailCtrl',
   './uagentCtrl',
-  './uagentEditCtrl',
 ], function() {});

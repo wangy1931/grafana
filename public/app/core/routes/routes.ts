@@ -396,7 +396,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   })
   .when('/cmdb/config/edit', {
     templateUrl: 'public/app/features/cmdb/partials/uagent_edit.html',
-    controller : 'UagentEditCtrl',
+    controller : 'UagentCtrl',
     controllerAs: 'ctrl',
     resolve: loadCMDBBundle
   })
