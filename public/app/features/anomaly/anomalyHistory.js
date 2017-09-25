@@ -126,10 +126,10 @@ define([
         });
       };
 
-      $scope.loadHistory = function(time) {
+      $scope.loadHistory = function(time, host) {
         var from = Date.parse(moment().subtract(time.num, time.type))/1000;
         var to = Date.parse(moment())/1000;
-        return healthSrv.loadHistory({from: from, to: to}).then(function(response) {
+        return healthSrv.loadHistory({from: from, to: to}, host).then(function(response) {
           $scope.anomalyHistory = [];
           _.each(response.secAtHostToMetrics, function(metrics, timeHost) {
             var time = timeHost.substr(0,10);
@@ -144,12 +144,15 @@ define([
             });
           });
           $scope.selectedAnomaly = 0;
-          if($scope.dashboard) {
-            $scope.dashboard.time.from = $scope.anomalyTimeSelected.from;
-            $scope.getDetail($scope.anomalyHistory[0]);
-          }
           return $scope.anomalyHistory[0];
         });
+      };
+
+      $scope.refreshDashboard = function () {
+        if ($scope.dashboard) {
+          $scope.dashboard.time.from = $scope.anomalyTimeSelected.from;
+          $scope.getDetail($scope.anomalyHistory[0]);
+        }
       };
 
       $scope.getDetail = function(anomaly) {
@@ -170,6 +173,6 @@ define([
         });
       };
 
-      $scope.init();
+      this.loadHistory = $scope.loadHistory;
     });
   });

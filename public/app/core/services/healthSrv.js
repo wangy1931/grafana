@@ -152,13 +152,15 @@ function (angular, _, coreModule) {
         return $q.all(metricsTypeQueries);
       };
 
-      this.loadHistory = function(options) {
+      this.loadHistory = function(options, host) {
+        var params = {
+          from: options.from,
+          to: options.to
+        };
+        host && (params['host'] = host);
         return backendSrv.alertD({
           method: "get",
-          params: {
-            from: options.from,
-            to: options.to
-          },
+          params: params,
           url: anomalyHistory
         }).then(function onSuccess(response) {
           return response.data;

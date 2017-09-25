@@ -11,7 +11,7 @@ function (angular, coreModule, kbn) {
       restrict: 'E',
       link: function(scope, elem, attrs) {
         var _t = '<i class="grafana-tip fa fa-'+(attrs.icon||'question-circle')+'" bs-tooltip="\''+
-          kbn.addslashes(elem.text())+'\'"></i>';
+          kbn.addslashes(elem.html())+'\'" data-placement=' + (attrs.placement || 'top') + ' html=true></i>';
         _t = _t.replace(/{/g, '\\{').replace(/}/g, '\\}');
         elem.replaceWith($compile(angular.element(_t))(scope));
       }

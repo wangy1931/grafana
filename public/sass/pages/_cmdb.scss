@@ -205,3 +205,10 @@ $btn-cmdb-color: rgb(25,165,228);
 [type=radio].gf-form-input:focus {
   box-shadow: none;
 }
+.cmdb-reference {
+  margin-top: 20px;
+  .dropdown-menu {
+    max-height: 200px;
+    overflow-y: scroll;
+  }
+}

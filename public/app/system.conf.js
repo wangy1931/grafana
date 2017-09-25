@@ -26,7 +26,7 @@ System.config({
     "jquery.flot.pie":          "vendor/flot/jquery.flot.pie",
     "jquery.flot.selection":    "vendor/flot/jquery.flot.selection",
     "jquery.flot.stack":        "vendor/flot/jquery.flot.stack",
-    'eventemitter3': 'vendor/npm/eventemitter3/index.js',
+    'eventemitter3':            'vendor/npm/eventemitter3/index.js',
     "jquery.flot.stackpercent": "vendor/flot/jquery.flot.stackpercent",
     "jquery.flot.time":         "vendor/flot/jquery.flot.time",
     "jquery.flot.crosshair":    "vendor/flot/jquery.flot.crosshair",
@@ -42,10 +42,13 @@ System.config({
     'jsPlumbToolkit':           'vendor/jsPlumb/jsPlumbToolkit',
     'jsPlumbToolkit-angular':   'vendor/jsPlumb/jsPlumbToolkit-angular',
 
-    "jquery.flot.gauge": "vendor/flot/jquery.flot.gauge",
+    "jquery.flot.gauge":        "vendor/flot/jquery.flot.gauge",
     'quill':                    'vendor/quill/quill.min',
     'ng-quill':                 'vendor/quill/ng-quill',
-    'jsdiff':                   'vendor/jsdiff/index'
+    'jsdiff':                   'vendor/jsdiff/index',
+    'd3':                       'vendor/d3/d3.min',
+    'd3.tip':                   'vendor/d3/d3.tip',
+    'd3.graph':                 'vendor/d3/d3.relationshipgraph'
   },
 
   packages: {

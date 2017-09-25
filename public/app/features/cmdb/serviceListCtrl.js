@@ -1,13 +1,12 @@
 define([
   'angular',
   'lodash',
-  './cmdbSetupCtrl',
 ], function(angular, _) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('ServiceListCtrl', function ($scope, backendSrv, $location, $controller) {
+  module.controller('ServiceListCtrl', function ($scope, backendSrv, $location) {
     $scope.init = function() {
       $scope.searchHost = '';
       $scope.order = "'name'";
@@ -25,20 +24,6 @@ define([
     $scope.orderBy = function(order) {
       $scope.order = "'"+ order +"'";
       $scope.desc = !$scope.desc;
-    };
-
-    $scope.importList = function() {
-      $controller('CMDBSetupCtrl',{$scope: $scope});
-      var newScope = $scope.$new();
-      newScope.importHosts = $scope.importService;
-      newScope.getHost = $scope.getService;
-      newScope.fileChanged = $scope.fileChanged;
-      newScope.type = 'service';
-      $scope.appEvent('show-modal', {
-        src: 'public/app/features/cmdb/partials/import_host.html',
-        modalClass: 'cmdb-import-host',
-        scope: newScope,
-      });
     };
 
     $scope.init();
