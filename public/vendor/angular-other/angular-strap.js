@@ -1536,7 +1536,7 @@
       multiple: false,
       allNoneButtons: false,
       sort: true,
-      caretHtml: '<span class="caret pull-right"></span>',
+      caretHtml: '<span class="caret"></span>',
       placeholder: '请选择...',
       allText: 'All',
       noneText: 'None',

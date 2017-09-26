@@ -48,28 +48,10 @@
       </div>
     </div>
     <br/>
-    <div class="gf-form max-width-28">
-      <span class="gf-form-label width-14">部署机器</span>
-      <button type="button" class="gf-form-input width-14" 
-        ng-model="ctrl.selectedHosts"
-        data-html="1" data-multiple="1" data-animation="am-flip-x" 
-        bs-options="host.id as host.hostname for host in ctrl.hostList" bs-select>
-      </button>
-    </div>
-    <div class="gf-form max-width-28">
-      <span class="gf-form-label width-14">是否覆盖<tip>该选项将决定是否覆盖之前修改过的机器上所部署的服务配置信息</tip></span>
-      <label class="gf-form-inline">
-        <input class="gf-form-input" type="radio" name="isCover" value="false" ng-model="ctrl.isCover"/>
-        <span class="gf-form-label gf-form-label-radio">不覆盖</span>
-      </label>
-      <label class="gf-form-inline">
-        <input class="gf-form-input" type="radio" name="isCover" value="true" ng-model="ctrl.isCover"/>
-        <span class="gf-form-label gf-form-label-radio">覆盖</span>
-      </label>
-    </div>
       
     <div class="gf-form-button-row">
       <a class="btn btn-primary" ng-click="ctrl.showConfirm()">应用</a>
+      <a class="btn btn-danger" ng-click="ctrl.deleteConfig(ctrl.config.id)">删除</a>
       <a class="btn btn-outline-primary" href="/cmdb/config?serviceName={{ctrl.serviceName}}&serviceId={{ctrl.serviceId}}">取消</a>
     </div>
   </form>

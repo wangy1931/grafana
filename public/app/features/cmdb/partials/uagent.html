@@ -30,10 +30,22 @@
       <tr>
         <th>服务名称</th>
         <th>操作</th>
+        <th>同步机器</th>
       </tr>
       <tr ng-repeat="config in ctrl.configs | filter: ctrl.searchConf" ng-if="config.name">
         <td>{{config.name}}</td>
-        <td><a href="/cmdb/config/edit?serviceId={{ctrl.serviceId}}&configName={{config.name}}&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}">编辑</a></td>
+        <td>
+          <a class="btn btn-outline-primary" href="/cmdb/config/edit?serviceId={{ctrl.serviceId}}&configName={{config.name}}&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}">编辑</a>
+          <a class="btn btn-outline-danger" ng-click="ctrl.deleteConfig(config.id)">删除</a>
+        </td>
+        <td>
+          <button type="button" class="btn btn-inverse" 
+            ng-model="ctrl.selectedHosts"
+            data-html="1" data-multiple="1" data-animation="am-flip-x" 
+            bs-options="host.id as host.hostname for host in ctrl.hostList" bs-select>
+          </button>
+          <button class="btn btn-outline-secondary" ng-click="ctrl.copy(config.id)">确认同步</button>
+        </td>
       </tr>
     </table>
   </div>
