@@ -4,51 +4,5 @@
       <cw-loading show="!alertRows.length" duration=6000></cw-loading>
   </div>
 
-  <div ng-show="alertRows.length">
-    <p>
-      <span style="font-size: 12px">（实时）</span>
-      <span>触发的报警规则总数：{{ alertRows.length }}</span>
-      <span>严重报警数：{{ alertCriticalCount }}</span>
-      <span>警告报警数：{{ alertWarningCount }}</span>
-    </p>
-    <table class="grafana-options-table table-block" ng-show="alertRows.length">
-      <thead>
-        <tr>
-          <th>规则清楚</th>
-          <th>主机名称</th>
-          <th>报警指标</th>
-          <th>报警值/阈值</th>
-          <th>当前值</th>
-          <th>报警级别</th>
-          <th>报警时间</th>
-          <th>再次报警时间<tip>如果报警没有解决, 将重复报警</tip></th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="alertDetail in alertRows">
-          <td>
-            <i class="fa fa-bell" ng-class="{'CRITICAL':'system-legend-danger','WARNING':'system-legend-warning'}[alertDetail.status.level]"></i> &nbsp;
-            {{alertDetail.definition.name}}
-          </td>
-          <td>{{alertDetail.status.monitoredEntity}}</td>
-          <td>{{_.getMetricName(alertDetail.metric)}}</td>
-          <td>
-            <strong>{{alertDetail.status.triggeredValue}}</strong>/{{alertDetail.definition.alertDetails.threshold}}
-          </td>
-          <td>{{alertDetail.curr}}</td>
-          <td>{{getLevel(alertDetail.status.level)}}</td>
-          <td>{{formatDate(alertDetail.status.levelChangedTime)}}</td>
-          <td>{{timeFrom(alertDetail.status.levelChangedTime, alertDetail.status.snoozeMinutes)}}</td>
-          <td>
-            <a href="/alerts/association/{{alertDetail.status.monitoredEntity}}/{{correlationThreshold}}/{{alertDetail.metric}}" class="btn btn-mini btn-primary" ng-click="resetCurrentThreshold(alertDetail)">
-              <i class="fa fa-signal"></i>
-              关联性分析
-            </a>
-            <span><button class="btn btn-mini btn-primary" ng-click="statusDetails(alertDetail)">整合分析</button></span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div ng-include="'public/app/partials/alert_status.html'"></div>
 </div>

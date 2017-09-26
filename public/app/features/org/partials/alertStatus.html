@@ -1,76 +1,17 @@
 <navbar icon="fa fa-fw fa-bell" title="报警管理">
 	<ul class="nav">
     <li class="active"><a href="alerts/status">总览</a></li>
-    <li><a href="alerts/history">历史报警</a></li>
     <li><a href="alerts/new">新建报警规则</a></li>
     <li><a href="alerts">报警规则</a></li>
   </ul>
 </navbar>
 
 <div class="page-container" ng-init="init();">
-      <h2>报警指标状态 <span style="font-size: 12px">实时</span></h2>
+  <h2>报警指标状态</h2>
+  
+  <div ng-if="alertRows.length === 0">
+    <em>系统一切正常</em>
+  </div>
 
-      <div ng-if="alertRows.length === 0">
-        <em>系统一切正常</em>
-      </div>
-      <table class="grafana-options-table table-block" ng-if="alertRows.length > 0">
-        <tr>
-          <td><strong>规则清楚</strong></td>
-          <td><strong>主机名称</strong></td>
-          <td><strong>报警指标</strong></td>
-          <td><strong>报警值/阈值</strong></td>
-          <td><strong>当前值</strong></td>
-          <td><strong>报警级别</strong></td>
-          <td><strong>报警时间</strong></td>
-          <td><strong>再次报警时间</strong><tip>如果报警没有解决, 将重复报警</tip></td>
-          <td></td>
-        </tr>
-        <tr ng-repeat="alertDetail in alertRows">
-          <td style="width:40%">
-            <i class="fa fa-bell" ng-class="{'CRITICAL':'system-legend-danger','WARNING':'system-legend-warning'}[alertDetail.status.level]"></i> &nbsp;
-            {{alertDetail.definition.name}}
-          </td>
-          <td style="width:40%">
-            {{alertDetail.status.monitoredEntity}}
-          </td>
-          <td style="width:40%">
-            {{_.getMetricName(alertDetail.metric)}}
-          </td>
-          <td style="width:40%">
-            <strong>{{alertDetail.status.triggeredValue}}</strong>/{{alertDetail.definition.alertDetails.threshold}}
-          </td>
-          <td style="width:40%">
-            {{alertDetail.curr}}
-          </td>
-          <td style="width:40%">
-            {{getLevel(alertDetail.status.level)}}
-          </td>
-          <td style="width:40%">
-            {{formatDate(alertDetail.status.levelChangedTime)}}
-          </td>
-          <td style="width:40%">
-            {{timeFrom(alertDetail.status.levelChangedTime, alertDetail.status.snoozeMinutes)}}
-          </td>
-          <td style="width: 10%">
-            <a href="/alerts/association/{{alertDetail.status.monitoredEntity}}/{{correlationThreshold}}/{{alertDetail.metric}}" class="btn btn-mini btn-primary" ng-click="resetCurrentThreshold(alertDetail)">
-              <i class="fa fa-signal"></i>
-              关联性分析
-            </a>
-            <span><button class="btn btn-mini btn-primary" ng-click="statusDetails(alertDetail)">整合分析</button></span>
-            <a class="btn btn-mini btn-success" ng-click="handleSnooze(alertDetail)">
-              延迟报警
-            </a>
-            <a class="btn btn-mini btn-success" ng-click="handleAlert(alertDetail)">
-              处理警告
-            </a>
-          </td>
-          <!--<td style="width: 10%">-->
-            <!--<a href="http://localhost:5601/app/kibana#/discover?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:'{{alertDetail.status.levelChangedTimeStr}}',mode:quick,to:now))&_a=(columns:!(message,type,host),index:'logstash-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'*')),sort:!('@timestamp',desc))&indexPattern=logstash-*&type=histogram"-->
-               <!--class="btn btn-mini btn-primary"  target="_blank">-->
-              <!--<i class="fa fa-edit"></i>-->
-              <!--相关日志分析-->
-            <!--</a>-->
-          <!--</td>-->
-        </tr>
-      </table>
+  <div ng-include="'public/app/partials/alert_status.html'"></div>
 </div>

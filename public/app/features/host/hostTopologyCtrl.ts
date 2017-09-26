@@ -3,6 +3,7 @@ import _ from 'lodash';
 import $ from 'jquery';
 import 'd3.graph';
 import { coreModule } from 'app/core/core';
+import kbn from 'app/core/utils/kbn';
 
 declare var window: any;
 
@@ -19,12 +20,23 @@ export class HostTopologyCtrl {
 
   rendered: boolean;
   hosts: Array<any>;
-  currentHost: any;
+  currentHost: any;  // one node information of relationshipGraph
   currentTab: number;
   hostSummary: Array<any>;
+  dashboard: any;
 
   /** @ngInject */
-  constructor (private hostSrv, private alertSrv, private backendSrv, private popoverSrv, private $scope, private $controller) {
+  constructor (
+    private hostSrv,
+    private alertSrv,
+    private backendSrv,
+    private popoverSrv,
+    private templateValuesSrv,
+    private dynamicDashboardSrv,
+    private $scope,
+    private $rootScope,
+    private $controller
+  ) {
     $scope.ctrl = this;
 
     this.rendered = false;
@@ -216,6 +228,10 @@ export class HostTopologyCtrl {
 
   getProcess(host) {
     this.hostSrv.getHostProcess(host._private_.id).then(response => {
+      response.data && response.data.forEach(item => {
+        item.diskIoRead = kbn.valueFormats.Bps(item.diskIoRead);
+        item.diskIoWrite = kbn.valueFormats.Bps(item.diskIoWrite);
+      });
       this.$scope.bsTableData = response.data;
       this.$scope.$broadcast('load-table');
     });
@@ -234,6 +250,27 @@ export class HostTopologyCtrl {
       this.$scope.detail.isVirtual = this.$scope.detail.isVirtual ? '是' : '否';
       this.$scope.detail = _.cmdbInitObj(this.$scope.detail);
     });
+  }
+
+  getDashboard(host) {
+    if (!this.dashboard) {
+      this.backendSrv.get('/api/static/machine_host_topology').then(response => {
+        // handle dashboard
+        this.addDashboardTemplating(response);
+
+        // store & init dashboard
+        this.dashboard = response;
+        this.$scope.initDashboard({
+          dashboard: response,
+          meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
+        }, this.$scope);
+
+        host.name && this.variableUpdated(host);
+      });
+    } else {
+      this.variableUpdated(host);
+      this.$scope.$broadcast('refresh');
+    }
   }
 
   removeTag(tag) {
@@ -255,17 +292,13 @@ export class HostTopologyCtrl {
   };
 
   switchTab(tabId) {
-    var dashboard;
     this.currentTab = tabId;
 
     if (tabId === 0) {
       this.getHostList(this.currentHost);
     }
     if (tabId === 1) {
-      !dashboard && this.backendSrv.getDashboard('db', 'machine').then(response => {
-        dashboard = response;
-        this.$scope.initDashboard(response, this.$scope);
-      });
+      this.getDashboard(this.currentHost);
     }
     if (tabId === 2) {
       this.getAlertStatus(this.currentHost);
@@ -275,6 +308,34 @@ export class HostTopologyCtrl {
     }
     if (tabId === 4) {}
     if (tabId === 5) {}
+  }
+
+  // add templating options dynamically
+  addDashboardTemplating(dashboard) {
+    this.hostlist.forEach(host => {
+      dashboard.templating.list[0].options.push({
+        "text": host,
+        "value": host,
+        "selected": false
+      });
+    });
+    dashboard.templating.list[0].query = this.hostlist.join(',');
+  }
+
+  // change template variable value manually
+  // NOTE: The reason why i have to write `$__all` instead of `*` is that `$__all` returns only one calculated record and `*` returns multiple records.
+  //       Singlestat(module.ts #168) does not allow multiple series.
+  //       query for `*` => host:*, query for `$__all` => host:cent0|cent1|centos24|...
+  //       Otherwise, the only way is stoping use templating.
+  variableUpdated(host) {
+    this.dashboard.templating.list[0].current = { "text": host.name || "All", "value": host.name || "$__all", "tags": [] };
+
+    this.templateValuesSrv.init(this.dashboard);
+    this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
+      this.dynamicDashboardSrv.update(this.dashboard);
+      this.$rootScope.$emit('template-variable-value-updated');
+      this.$rootScope.$broadcast('refresh');
+    });
   }
 
   saveHostSummary() {
