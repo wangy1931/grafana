@@ -40,11 +40,11 @@
         </td>
         <td>
           <button type="button" class="btn btn-inverse" 
-            ng-model="ctrl.selectedHosts"
+            ng-model="config.hosts"
             data-html="1" data-multiple="1" data-animation="am-flip-x" 
             bs-options="host.id as host.hostname for host in ctrl.hostList" bs-select>
           </button>
-          <button class="btn btn-outline-secondary" ng-click="ctrl.copy(config.id)">确认同步</button>
+          <button class="btn btn-outline-secondary" ng-click="ctrl.copy(config.id, config.hosts)">确认同步</button>
         </td>
       </tr>
     </table>

@@ -10,7 +10,6 @@ export class UagentCtrl {
   serviceName: any;
   host: any;
   hostList: any;
-  selectedHosts: any;
   isCover: any;
   newPath: any;
   searchConf: any;
@@ -62,7 +61,6 @@ export class UagentCtrl {
     id = parseInt(id);
     this.backendSrv.alertD({url: '/cmdb/host'}).then((response) => {
       this.hostList = response.data;
-      this.selectedHosts = [];
       if (id > -1) {
         this.host = _.find(this.hostList, {id: id});
       } else {
@@ -103,12 +101,12 @@ export class UagentCtrl {
       orgId: this.user.orgId,
       systemId: this.user.systemId,
       configId : this.config.id,
-      hostId : ''
+      hostId : this.host.id
     };
 
     var checkDocument = true;
 
-    var data = {sections: [], hosts: []};
+    var data = {sections: [], hosts: [this.host.id]};
 
     _.each(this.config.sections, (section)=>{
       var new_section = {
@@ -132,10 +130,6 @@ export class UagentCtrl {
       data.sections.push(new_section);
     });
 
-    data.hosts = this.selectedHosts;
-    if (_.isEmpty(data.hosts)) {
-      data.hosts.push(this.host.id);
-    }
     if (checkDocument) {
       this.saveConfig(url, param, data);
     }
@@ -198,13 +192,14 @@ export class UagentCtrl {
           },
         }).then((response)=>{
           this.$scope.appEvent('alert-success', ['删除成功']);
+          this.$location.url('/cmdb/config?serviceName=' + this.serviceName +'&serviceId=' + this.serviceId + '&hostId=' + this.host.id);
           this.getData();
         });
       }
     });
   }
 
-  copy(id) {
+  copy(id, hosts) {
     this.$scope.appEvent('confirm-modal', {
       title: '同步',
       text: '您确定要同步该配置吗？',
@@ -222,7 +217,7 @@ export class UagentCtrl {
             systemId: this.user.systemId,
             userId: this.user.id
           },
-          data: {hosts: this.selectedHosts}
+          data: {hosts: hosts}
         }).then((response)=>{
           this.$scope.appEvent('alert-success', ['同步成功']);
         });
