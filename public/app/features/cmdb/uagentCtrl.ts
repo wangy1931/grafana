@@ -95,7 +95,7 @@ export class UagentCtrl {
     var param = {
       serviceName : this.serviceName,
       configName : this.configName,
-      usrId : this.user.id,
+      userId : this.user.id,
       orgId: this.user.orgId,
       systemId: this.user.systemId,
       configId : this.config.id,
