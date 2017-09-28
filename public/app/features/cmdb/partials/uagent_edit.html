@@ -1,6 +1,6 @@
 <navbar icon="fa fa-fw fa-cubes" title="配置管理库" title-url="">
   <ul class="nav">
-    <li><a href="/cmdb/config?serviceName={{ctrl.serviceName}}&serviceId={{ctrl.serviceId}}&hostId={{ctrl.host.id}}">{{ctrl.serviceName}}</a></li>
+    <li><a href="/cmdb/config?serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}">{{ctrl.serviceName}}</a></li>
     <li class="active"><a>{{ctrl.configName}}</a></li>
   </ul>
 </navbar>
@@ -11,7 +11,7 @@
       <span class="dropdown">
         <span class="dropdown-toggle pointer" data-toggle="dropdown">{{ctrl.host.hostname}} <i class="fa fa-caret-down" ng-if="ctrl.hostList.length > 1"></i></span>
         <ul class="dropdown-menu" ng-if="ctrl.hostList.length > 1">
-            <li ng-repeat="host in ctrl.hostList"><a href="/cmdb/config/edit?serviceId={{ctrl.serviceId}}&configName={{ctrl.configName}}&serviceName={{ctrl.serviceName}}&hostId={{host.id}}">{{host.hostname}}</a></li>
+            <li ng-repeat="host in ctrl.hostList"><a href="/cmdb/config/edit?configName={{ctrl.configName}}&serviceName={{ctrl.serviceName}}&hostId={{host.id}}">{{host.hostname}}</a></li>
         </ul>
       </span>
     </h1>
@@ -52,7 +52,7 @@
     <div class="gf-form-button-row">
       <a class="btn btn-primary" ng-click="ctrl.showConfirm()">应用</a>
       <a class="btn btn-danger" ng-click="ctrl.deleteConfig(ctrl.config.id)">删除</a>
-      <a class="btn btn-outline-primary" href="/cmdb/config?serviceName={{ctrl.serviceName}}&serviceId={{ctrl.serviceId}}&hostId={{ctrl.host.id}}">取消</a>
+      <a class="btn btn-outline-primary" href="/cmdb/config?serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}">取消</a>
     </div>
   </form>
 
