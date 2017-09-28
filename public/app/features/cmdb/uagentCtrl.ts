@@ -6,7 +6,6 @@ export class UagentCtrl {
   config: any;
   configs: any;
   configName: any;
-  serviceId: any;
   serviceName: any;
   host: any;
   hostList: any;
@@ -19,7 +18,6 @@ export class UagentCtrl {
   constructor(private $scope, private backendSrv, private $location, private contextSrv) {
     this.user = this.contextSrv.user;
     var search = this.$location.search();
-    this.serviceId = search.serviceId;
     this.serviceName = search.serviceName;
     this.configName = search.configName;
     this.isCover = "true";
@@ -30,7 +28,7 @@ export class UagentCtrl {
 
   getService() {
     this.backendSrv.alertD({
-      url: '/cmdb/config/configName?serviceName=' + this.serviceName + '&serviceId=' + this.serviceId + '&hostId=' + this.host.id
+      url: '/cmdb/config/configName?serviceName=' + this.serviceName + '&hostId=' + this.host.id
     }).then((response) => {
       this.configs = response.data;
     });
@@ -41,7 +39,7 @@ export class UagentCtrl {
     if (this.configName === 'template') {
       url = '/cmdb/config/configTemplate?serviceName=filebeat';
     } else {
-      url = '/cmdb/config/service?serviceId='+ this.serviceId + '&configName=' + this.configName + '&hostId=' + this.host.id;
+      url = '/cmdb/config/service?serviceName='+ this.serviceName + '&configName=' + this.configName + '&hostId=' + this.host.id;
     }
     this.backendSrv.alertD({url: url}).then((response) => {
       this.config = response.data;
@@ -95,7 +93,7 @@ export class UagentCtrl {
   confirmSave() {
     var url = '/cmdb/config/service';
     var param = {
-      serviceId : this.serviceId,
+      serviceName : this.serviceName,
       configName : this.configName,
       usrId : this.user.id,
       orgId: this.user.orgId,
@@ -144,7 +142,7 @@ export class UagentCtrl {
       headers: {'Content-Type': 'text/plain;application/json;charset=UTF-8'},
     }).then((response)=>{
       this.$scope.appEvent('alert-success', ['应用成功']);
-      this.$location.url('/cmdb/config?serviceName=' + this.serviceName +'&serviceId=' + this.serviceId + '&hostId=' + this.host.id);
+      this.$location.url('/cmdb/config?serviceName=' + this.serviceName + '&hostId=' + this.host.id);
     }, (err)=>{
       this.$scope.appEvent('alert-warning', ['应用失败', '请稍后重试']);
     });
@@ -192,7 +190,7 @@ export class UagentCtrl {
           },
         }).then((response)=>{
           this.$scope.appEvent('alert-success', ['删除成功']);
-          this.$location.url('/cmdb/config?serviceName=' + this.serviceName +'&serviceId=' + this.serviceId + '&hostId=' + this.host.id);
+          this.$location.url('/cmdb/config?serviceName=' + this.serviceName + '&hostId=' + this.host.id);
           this.getData();
         });
       }

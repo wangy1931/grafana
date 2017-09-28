@@ -10,11 +10,11 @@
       <span class="dropdown">
         <span class="dropdown-toggle pointer" data-toggle="dropdown">{{ctrl.host.hostname}} <i class="fa fa-caret-down" ng-if="ctrl.hostList.length > 1"></i></span>
         <ul class="dropdown-menu" ng-if="ctrl.hostList.length > 1">
-            <li ng-repeat="host in ctrl.hostList"><a href="/cmdb/config?serviceName={{ctrl.serviceName}}&serviceId={{ctrl.serviceId}}&hostId={{host.id}}">{{host.hostname}}</a></li>
+            <li ng-repeat="host in ctrl.hostList"><a href="/cmdb/config?serviceName={{ctrl.serviceName}}&hostId={{host.id}}">{{host.hostname}}</a></li>
         </ul>
       </span>
     </h1>
-    <a ng-if="ctrl.serviceName === 'filebeat'" href="/cmdb/config/edit?serviceId={{ctrl.serviceId}}&configName=template&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}" class="btn btn-outline-primary">添加</a>
+    <a ng-if="ctrl.serviceName === 'filebeat'" href="/cmdb/config/edit?configName=template&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}" class="btn btn-outline-primary">添加</a>
     <form ng-if="ctrl.serviceName === 'collector'" class="form-search cmdb-search">
       <i class="fa fa-search"></i>
       <input type="text" class="input-medium search-query" placeholder="搜索config" ng-model="ctrl.searchConf">
@@ -24,7 +24,7 @@
   <div>
     <div class="center" ng-if="!ctrl.configs.length">
       尚未添加filebeat配置信息，请
-      <a href="/cmdb/config/edit?serviceId={{ctrl.serviceId}}&configName=template&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}" class="btn btn-outline-primary btn-cmdb">添加</a>
+      <a href="/cmdb/config/edit?configName=template&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}" class="btn btn-outline-primary btn-cmdb">添加</a>
     </div>    
     <table class="table uagent-table" ng-if="ctrl.configs.length">
       <tr>
@@ -35,7 +35,7 @@
       <tr ng-repeat="config in ctrl.configs | filter: ctrl.searchConf" ng-if="config.name">
         <td>{{config.name}}</td>
         <td>
-          <a class="btn btn-outline-primary" href="/cmdb/config/edit?serviceId={{ctrl.serviceId}}&configName={{config.name}}&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}">编辑</a>
+          <a class="btn btn-outline-primary" href="/cmdb/config/edit?configName={{config.name}}&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}">编辑</a>
           <a class="btn btn-outline-danger" ng-click="ctrl.deleteConfig(config.id)">删除</a>
         </td>
         <td>
