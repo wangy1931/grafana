@@ -122,6 +122,8 @@ export class PanelCtrl {
     menu.push({text: '编辑', click: 'ctrl.editPanel(); dismiss();', role: 'Editor', icon: 'fa-pencil'});
     if (this.checkMenu('associate')) {
       menu.push({text: '关联性分析', click: 'ctrl.associateLink(); dismiss();', icon: 'fa-line-chart'});
+      menu.push({text: '异常标记', click: 'ctrl.markAnomaly(); dismiss();', icon: 'fa-thumb-tack'});
+      menu.push({text: '非异常标记', click: 'ctrl.markNormal(); dismiss();', icon: 'fa-eraser'});
     }
     if (this.checkMenu('integrate')) {
       menu.push({text: '整合分析', click: 'ctrl.toIntegrate(); dismiss();', icon: 'fa-book'});
@@ -290,5 +292,21 @@ export class PanelCtrl {
     }catch (e) {
       this.publishAppEvent('alert-warning', ['日志分析跳转失败', '可能缺少指标名']);
     }
+  }
+
+  markAnomaly() {
+    this.panel.selection = {
+      mode: 'xy',
+      color: '#f00'
+    };
+    this.render();
+  }
+
+  markNormal() {
+    this.panel.selection = {
+      mode: 'xy',
+      color: '#0f0'
+    };
+    this.render();
   }
 }

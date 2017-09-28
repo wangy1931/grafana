@@ -272,8 +272,8 @@ module.directive('grafanaGraph', function($rootScope, timeSrv, integrateSrv) {
             margin: { left: 0, right: 0 },
           },
           selection: {
-            mode: "x",
-            color: '#666'
+            mode: panel.selection ? panel.selection.mode : 'x',
+            color: panel.selection ? panel.selection.color : '#666'
           },
           crosshair: {
             mode: panel.tooltip.shared || dashboard.sharedCrosshair ? "x" : null
@@ -577,12 +577,16 @@ module.directive('grafanaGraph', function($rootScope, timeSrv, integrateSrv) {
       });
 
       elem.bind("plotselected", function (event, ranges) {
-        scope.$apply(function() {
-          timeSrv.setTime({
-            from  : moment.utc(ranges.xaxis.from),
-            to    : moment.utc(ranges.xaxis.to),
+        if (panel.selection) {
+          console.log(ranges);
+        } else {
+          scope.$apply(function() {
+            timeSrv.setTime({
+              from  : moment.utc(ranges.xaxis.from),
+              to    : moment.utc(ranges.xaxis.to),
+            });
           });
-        });
+        }
       });
 
       scope.$on('$destroy', function() {
