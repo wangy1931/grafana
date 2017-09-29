@@ -13,6 +13,7 @@ export class UagentCtrl {
   newPath: any;
   searchConf: any;
   user: any;
+  title: any;
 
   /** @ngInject */
   constructor(private $scope, private backendSrv, private $location, private contextSrv) {
@@ -24,6 +25,10 @@ export class UagentCtrl {
     this.searchConf = '';
     var hostId = search.hostId || -1;
     this.getHosts(hostId);
+    this.title = {
+      'filebeat': '日志管理',
+      'collector': '探针管理'
+    }
   }
 
   getService() {
@@ -43,6 +48,7 @@ export class UagentCtrl {
     }
     this.backendSrv.alertD({url: url}).then((response) => {
       this.config = response.data;
+      _.orderBy(this.config.sections[0].props, ['name']);
     });
   }
 
@@ -162,12 +168,15 @@ export class UagentCtrl {
 
   checkPath(path, i, index) {
     var values = this.config.sections[0].props[index].value;
+    values[i] = path;
     if (path) {
-      values[i] = path;
-      this.config.sections[0].props[index].value = _.uniq(values);
+      values = _.uniq(values);
     } else {
-      values.splice(i, 1);
+      _.remove(values, function(p) {
+        return p === "";
+      });
     }
+    this.config.sections[0].props[index].value = values;
   }
 
   deleteConfig(id) {

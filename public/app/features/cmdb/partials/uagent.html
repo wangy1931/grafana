@@ -1,12 +1,8 @@
-<navbar icon="fa fa-fw fa-cubes" title="配置管理库" title-url="">
-  <ul class="nav">
-    <li class="active"><a>{{ctrl.serviceName}}</a></li>
-  </ul>
-</navbar>
+<navbar icon="fa fa-fw fa-cubes" title="{{ctrl.title[ctrl.serviceName]}}" title-url=""></navbar>
 
 <div class="page-container">
   <div class="page-header">
-    <h1>{{ctrl.serviceName}} 配置管理 -- 
+    <h1>{{ctrl.title[ctrl.serviceName]}} -- 
       <span class="dropdown">
         <span class="dropdown-toggle pointer" data-toggle="dropdown">{{ctrl.host.hostname}} <i class="fa fa-caret-down" ng-if="ctrl.hostList.length > 1"></i></span>
         <ul class="dropdown-menu" ng-if="ctrl.hostList.length > 1">
