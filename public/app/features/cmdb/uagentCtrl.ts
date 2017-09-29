@@ -121,7 +121,7 @@ export class UagentCtrl {
 
       _.each(section.props, (prop)=>{
         if (!prop.readOnly) {
-          new_section.props.push({key: prop.name, value: prop.value});
+          new_section.props.push({name: prop.name, value: prop.value});
         }
         if (prop.name === 'document_type') {
           param.configName = prop.value;
