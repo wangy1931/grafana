@@ -1,10 +1,9 @@
 define([
   'angular',
   'lodash',
-  'app/core/config',
-  'app/core/utils/kbn'
+  'app/core/config'
 ],
-  function (angular, _, config, kbn) {
+  function (angular, _, config) {
     'use strict';
 
     var module = angular.module('grafana.controllers');
@@ -399,7 +398,7 @@ define([
               startTime: item.startTime,
               commit: item.commit,
               version: item.version,
-              cpu: kbn.valueFormats.percent(item["cpu.usr"], 2),
+              cpu: $scope.percentFormatter(item["cpu.usr"]),
               mem: $scope.gbFormatter(item["proc.meminfo.active"]),
               disk: $scope.gbFormatter(item["df.bytes.free"]),
               status: $scope.statusFormatter(item["collector.state"])
