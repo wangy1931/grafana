@@ -154,9 +154,17 @@
 
 // oncaller start
 
-.fc-event {
-  margin-left: 60px;
-  margin-right: -60px;
+.fc-row .fc-content-skeleton tbody td, .fc-row .fc-helper-skeleton tbody td {
+  position: relative;
+  .fc-event {
+    position: absolute;
+  }
+  .primary {
+    top: 0!important;
+  }
+  .secondary {
+    top: 20px!important;
+  }
 }
 
 .fc-time-grid .fc-content-skeleton {
