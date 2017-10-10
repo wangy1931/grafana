@@ -391,13 +391,7 @@ define([
           "hostProperties": ["version", "startTime", "commit", "id"]
         };
 
-        backendSrv.alertD({
-          method: "POST",
-          url   : "/host/metrics",
-          data  : query
-        })
-        .then(function (response) {
-          console.log()
+        backendSrv.getHosts(query).then(function (response) {
           _.each(response.data, function (item) {
             hostsResource.push({
               host: item.hostname,
