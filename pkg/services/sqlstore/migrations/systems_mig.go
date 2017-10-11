@@ -10,6 +10,7 @@ func addSystemMigrations(mg *Migrator) {
       {Name: "systems_name", Type: DB_NVarchar, Length: 255, Nullable: false},
       {Name: "slug", Type: DB_NVarchar, Length: 255, Nullable: false},
       {Name: "org_id", Type: DB_BigInt, Length: 255, Nullable: false},
+      {Name: "deleted", Type: DB_Int, Length: 1, Nullable: false},
     },
   }
 
