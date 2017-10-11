@@ -79,14 +79,15 @@
 		<h4>没有子系统,请手动加入</h4>
 	</div>
 	<form name="addOrgForm" class="gf-form-group" ng-if="systems.length > 0">
-		<div class="gf-form-inline">
-			<div class="gf-form max-width-28" ng-repeat="system in systems">
+		<div class="gf-form-inline" ng-repeat="system in systems">
+			<div class="gf-form max-width-28">
 				<span class="gf-form-label width-7">子系统名称</span>
 				<input type="text" required ng-model="system.SystemsName" class="tight-form-input last" style="width: 475px">
+				<button class="btn gf-form-btn btn-danger" ng-click="deleteSystem(system)" ng-disabled="system.Id === contextSrv.user.systemId">删除</button>
 			</div>
-			<div class="gf-form">
-				<button type="submit" class="btn gf-form-btn btn-success" ng-click="updateSystems()">更新</button>
-			</div>
+		</div>
+		<div class="gf-form-button-row">
+			<button type="submit" class="btn gf-form-btn btn-success" ng-click="updateSystems()">更新</button>
 		</div>
 	</form>
 
