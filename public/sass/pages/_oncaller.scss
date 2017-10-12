@@ -159,10 +159,10 @@
   .fc-event {
     position: absolute;
   }
-  .primary {
+  .primary, .primaryReview {
     top: 0!important;
   }
-  .secondary {
+  .secondary, .secondaryReview {
     top: 20px!important;
   }
 }
@@ -180,10 +180,10 @@
     font-size: 30px;
   }
 
-  .primary {
+  .primary, .primaryReview {
     top: 0!important;
   }
-  .secondary {
+  .secondary, .secondaryReview {
     top: 80px!important;
   }
 }
