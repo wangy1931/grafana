@@ -1,7 +1,7 @@
 define([
   'angular',
   'lodash',
-  'app/core/config',
+  'app/core/config'
 ],
   function (angular, _, config) {
     'use strict';
@@ -364,96 +364,49 @@ define([
       // 机器连接状态
       $scope.getHostSummary = function () {
         $scope.hostPanel.href = $scope.getUrl('/summary');
+        var hostsResource = [];
 
-        $scope.summaryList = [];
-        var hostsResource = {};
-        var promiseList = [];
+        var query = {
+          "queries": [
+            {
+              "metric": "cpu.usr"
+            },
+            {
+              "metric": "collector.state"
+            },
+            {
+              "metric": "proc.meminfo.active"
+            },
+            {
+              "metric": "df.bytes.free",
+              "tags": [
+                {
+                  "name": "mount",
+                  "value": "/"
+                }
+              ]
+            }
+          ],
+          "hostProperties": ["version", "startTime", "commit", "id"]
+        };
 
-        backendSrv.alertD({
-          method : "get",
-          url    : "/cmdb/host",
-        })
-        .then(function (response) {
-          $scope.summaryList = response.data;
-
-          _.each($scope.summaryList, function (metric) {
-            hostsResource[metric.hostname] = {};
-            hostsResource[metric.hostname]["host"] = metric.hostname;
-            hostsResource[metric.hostname]["id"] = metric.id;
-          });
-        })
-        .then(function () {
-          var queries = [{
-            "metric"    : contextSrv.user.orgId + "." + contextSrv.user.systemId + ".collector.state",
-            "aggregator": "sum",
-            "downsample": "1s-sum",
-            "tags"      : { "host" : "*" }
-          }];
-
-          var q = datasourceSrv.getHostResource(queries, 'now-5m').then(function (response) {
-            _.each(response, function (metric) {
-              hostsResource[metric.host]["status"] = $scope.statusFormatter(metric.value);
+        backendSrv.getHosts(query).then(function (response) {
+          _.each(response.data, function (item) {
+            hostsResource.push({
+              host: item.hostname,
+              id: item.id,
+              startTime: item.startTime,
+              commit: item.commit,
+              version: item.version,
+              cpu: $scope.percentFormatter(item["cpu.usr"]),
+              mem: $scope.gbFormatter(item["proc.meminfo.active"]),
+              disk: $scope.gbFormatter(item["df.bytes.free"]),
+              status: $scope.statusFormatter(item["collector.state"])
             });
-          });
-          promiseList.push(q);
-        })
-        .then(function () {
-          var queries = [{
-            "metric"    : contextSrv.user.orgId + "." + contextSrv.user.systemId + ".cpu.usr",
-            "aggregator": "avg",
-            "downsample": "1h-avg",
-            "tags"      : { "host" : "*" }
-          }];
-
-          var q = datasourceSrv.getHostResource(queries, 'now-1d').then(function (response) {
-            _.each(response, function (metric) {
-              if (!hostsResource[metric.host]) { return; }
-              hostsResource[metric.host]["cpu"] = $scope.percentFormatter(metric.value);
-            });
-          });
-          promiseList.push(q);
-        })
-        .then(function () {
-          var queries = [{
-            "metric"    : contextSrv.user.orgId + "." + contextSrv.user.systemId + ".df.bytes.free",
-            "aggregator": "avg",
-            "downsample": "1h-avg",
-            "tags"      : { "host" : "*" }
-          }];
-
-          var q = datasourceSrv.getHostResource(queries, 'now-1d').then(function (response) {
-            _.each(response, function (metric) {
-              if (!hostsResource[metric.host]) { return; }
-              hostsResource[metric.host]["disk"] = $scope.gbFormatter(metric.value);
-            });
-          });
-          promiseList.push(q);
-        })
-        .then(function () {
-          var queries = [{
-            "metric"    : contextSrv.user.orgId + "." + contextSrv.user.systemId + ".proc.meminfo.active",
-            "aggregator": "avg",
-            "downsample": "1h-avg",
-            "tags"      : { "host" : "*" }
-          }];
-
-          var q = datasourceSrv.getHostResource(queries, 'now-1d').then(function (response) {
-            _.each(response, function (metric) {
-              if (!hostsResource[metric.host]) { return; }
-              hostsResource[metric.host]["mem"] = $scope.gbFormatter(metric.value);
-            });
-          });
-          promiseList.push(q);
-        })
-        .finally(function () {
-          $q.all(promiseList)
-          .then(function () {
-            $scope.hostPanels = _.values(hostsResource);
-          })
-          .catch(function () {
-            $scope.hostPanels = _.values(hostsResource);
           });
         });
+
+        $scope.hostPanels = hostsResource;
       };
 
       // 智能分析预测 切换周期

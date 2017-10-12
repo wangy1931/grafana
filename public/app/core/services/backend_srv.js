@@ -301,5 +301,13 @@ function (angular, _, coreModule, config) {
       });
     };
 
+    this.getHosts = function (query) {
+      return this.alertD({
+        method: "POST",
+        url   : "/host/metrics",
+        data  : query
+      });
+    };
+
   });
 });
