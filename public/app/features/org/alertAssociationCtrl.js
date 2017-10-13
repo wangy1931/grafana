@@ -44,6 +44,9 @@ function (angular, _, noUiSlider) {
               delete $scope.correlatedMetrics[m];
             }
           }
+          if (_.isEmpty($scope.correlatedMetrics)) {
+            $scope.isAssociation = false;
+          }
         } else {
           $scope.removeAllQuery();
         }
