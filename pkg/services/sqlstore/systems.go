@@ -32,7 +32,7 @@ func AddSystem(cmd *m.AddSystemsCommand) error {
     // check if service exists
     var err error
     for _, systemName := range cmd.SystemsName {
-      if res, err := sess.Query("SELECT 1 from systems WHERE systems_name=? and org_id=?", systemName, cmd.OrgId); err != nil {
+      if res, err := sess.Query("SELECT 1 from systems WHERE systems_name=? and org_id=? and deleted = 0", systemName, cmd.OrgId); err != nil {
         return err
       } else if len(res) == 1 {
         return m.ErrSystemAlreadyAdded
@@ -158,7 +158,7 @@ func UpdatePickSystem(system_pick *m.SystemPick) error {
 func GetServicesByOrgId(query *m.GetOrgSystemsQuery) error {
   query.Result = make([]*m.Systems, 0)
   sess := x.Table("systems")
-  sess.Where("systems.org_id=?", query.OrgId)
+  sess.Where("systems.org_id=? and systems.deleted = 0", query.OrgId)
   err := sess.Find(&query.Result)
   return err
 }
@@ -168,7 +168,7 @@ func GetSystemsByUserId(query *m.GetUserSystemsQuery) error {
   query.Result = make([]*m.Systems, 0)
   params := make([]interface{}, 0)
 
-  sql.WriteString("select systems.* from systems JOIN `system_user` ON systems.id = system_id WHERE system_user.user_id=?")
+  sql.WriteString("select systems.* from systems JOIN `system_user` ON systems.id = system_id WHERE system_user.user_id=? and systems.deleted = 0")
   params = append(params, query.UserId)
   err := x.Sql(sql.String(), params...).Find(&query.Result)
   return err

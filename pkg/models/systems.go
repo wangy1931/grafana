@@ -15,6 +15,7 @@ type Systems struct {
   SystemsName string
   Slug        string
   OrgId       int64
+  Deleted     int64
 }
 
 
