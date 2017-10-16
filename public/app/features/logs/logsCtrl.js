@@ -182,7 +182,7 @@ define([
         var panels = $scope.dashboard.rows[0].panels;
         _.forEach(panels, function (panel) {
           _.forEach(panel.targets, function (target) {
-            (typeof target.query !== "undefined") && (target.query = $scope.query);
+            target.query = $scope.query;
           });
         });
 
