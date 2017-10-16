@@ -11,6 +11,7 @@ export class UagentCtrl {
   hostList: any;
   isCover: any;
   newPath: any;
+  newPort: any;
   searchConf: any;
   user: any;
   title: any;
@@ -154,7 +155,7 @@ export class UagentCtrl {
     });
   }
 
-  addPath(path, index) {
+  addCollectionValue(path, index) {
     var values = this.config.sections[0].props[index].value;
     if (path) {
       if (_.indexOf(values, path) > -1) {
@@ -163,17 +164,18 @@ export class UagentCtrl {
         this.config.sections[0].props[index].value.push(path);
       }
       this.newPath = '';
+      this.newPort = null;
     }
   }
 
-  checkPath(path, i, index) {
+  checkCollectionValue(path, i, index) {
     var values = this.config.sections[0].props[index].value;
     values[i] = path;
     if (path) {
       values = _.uniq(values);
     } else {
       _.remove(values, function(p) {
-        return p === "";
+        return p === "" || _.isNull(p);
       });
     }
     this.config.sections[0].props[index].value = values;
