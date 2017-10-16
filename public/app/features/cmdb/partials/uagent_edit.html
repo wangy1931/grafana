@@ -30,12 +30,12 @@
         </div>
         <div ng-switch-when="integer">
           <input class="gf-form-input width-14" style="margin-bottom: 3px;" type="number" ng-if="prop.isCollection"
-            ng-repeat="num in prop.value track by (num + $index)" ng-model="num"
+            ng-repeat="num in prop.value track by (num + $index)" ng-model="num" min="{{prop.minValue}}" max="{{prop.maxValue}}"
             ng-blur="ctrl.checkCollectionValue(num, $index, i)"/>
-          <input class="gf-form-input width-14" type="number" ng-if="prop.isCollection"
+          <input class="gf-form-input width-14" type="number" ng-if="prop.isCollection" min="{{prop.minValue}}" max="{{prop.maxValue}}"
             ng-model="ctrl.newPort" ng-blur="ctrl.addCollectionValue(ctrl.newPort, i)"/>
           <input class="gf-form-input width-14" ng-if="!prop.isCollection"
-            type="number" min="{{prop.minValue}}"
+            type="number" min="{{prop.minValue}}" max="{{prop.maxValue}}"
             ng-model="prop.value"
             placeholder="请输入大于{{prop.minValue}}的整数"
             ng-disabled="prop.readOnly"
