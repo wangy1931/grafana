@@ -124,11 +124,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'AlertStatusCtrl',
     resolve: loadOrgBundle,
   })
-  .when('/alerts/history', {
-    templateUrl: 'public/app/features/org/partials/alertHistory.html',
-    controller : 'AlertHistoryCtrl',
-    resolve: loadOrgBundle,
-  })
   .when('/alerts/association/:host/:distance/:metric*', {
     templateUrl: 'public/app/features/org/partials/alertAssociation.html',
     controller : 'AlertAssociationCtrl',

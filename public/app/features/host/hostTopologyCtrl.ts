@@ -35,7 +35,8 @@ export class HostTopologyCtrl {
     private dynamicDashboardSrv,
     private $scope,
     private $rootScope,
-    private $controller
+    private $controller,
+    private $location
   ) {
     $scope.ctrl = this;
 
@@ -64,17 +65,24 @@ export class HostTopologyCtrl {
     ];
 
     this.currentHost = {};
-    this.currentTab  = 0;
 
-    $scope.$watch('ctrl.currentHost', newValue => {
+    $scope.$watch('ctrl.currentHost', (newValue, oldValue) => {
       if (!newValue) { return; }
-      var host = newValue.name ? newValue : {};
-      this.render(host);
+      if ((newValue === oldValue) && _.isEmpty(newValue)) { return; }
+
+      if (_.isString(newValue)) {
+        this.render(newValue);
+      } else {
+        var host = newValue.name ? newValue : {};
+        this.render(host);
+      }
     });
   }
 
   init() {
-    this.tabs[0].active = true;
+    var search = this.$location.search();
+    this.tabs[+search.tabId || 0].active = true;
+    this.currentTab = +search.tabId || 0;
 
     this.getHostTopology();
     this.getAllTagsKey();
@@ -83,8 +91,9 @@ export class HostTopologyCtrl {
   }
 
   render(host) {
+    window.d3.selectAll('.relationshipGraph-block').classed('selected', false);
+
     if (host.name) {
-      window.d3.selectAll('.relationshipGraph-block').classed('selected', false);
       window.d3.select(`#${host.__id}`).classed('selected', true);
 
       _.extend(this.tabs[4], { show: true, disabled: false });
@@ -94,13 +103,12 @@ export class HostTopologyCtrl {
       this.getProcess(this.currentHost);
       this.getHostInfo(this.currentHost);
     } else {
-      window.d3.selectAll('.relationshipGraph-block').classed('selected', false);
-
       _.extend(this.tabs[4], { show: false, disabled: true });
       _.extend(this.tabs[5], { show: false, disabled: true });
 
       this.tabs[0].active = true;
-      this.getHostList({});
+      this.currentTab = 0;
+      this.switchTab(this.currentTab);
     }
   }
 
@@ -151,12 +159,18 @@ export class HostTopologyCtrl {
         thresholds: ['green', 'yellow', 'red', 'grey'],
         colors: ['#66C2A5', '#FEE08B', '#9E0142', '#EEEEEE'],
         onClick: {
+          parent: this.groupClickHandle.bind(this),
           child: this.nodeClickHandle.bind(this)
         }
       }));
 
       this.rendered = true;
       this.heatmap.data(this.data);
+
+      var search = this.$location.search();
+      if (search.id) {
+        this.currentHost = _.find(this.data, { name: search.name });  // { name: search.name, id: search.id };
+      }
     });
   }
 
@@ -209,10 +223,24 @@ export class HostTopologyCtrl {
     }
   }
 
+  groupClickHandle(group) {
+    this.currentHost = group;
+    this.$scope.$digest();
+  }
+
   getHostList(host) {
+    var tableData, hosts;
     this.saveHostSummary();
 
-    var tableData = host.name ? _.filter(this.hostSummary, { host: host.name }) : this.hostSummary;
+    if (_.isString(host)) {
+      hosts = _.map(_.filter(this.data, { 'parent': host }), 'name');
+      tableData = _.filter(this.hostSummary, item => {
+        return !!~hosts.indexOf(item.host);
+      });
+    } else {
+      tableData = host.name ? _.filter(this.hostSummary, { host: host.name }) : this.hostSummary;
+    }
+
     this.$scope.hostPanels = tableData;
   }
 
@@ -227,7 +255,8 @@ export class HostTopologyCtrl {
   }
 
   getProcess(host) {
-    this.hostSrv.getHostProcess(host._private_.id).then(response => {
+    var id = this.$location.search().id;
+    this.hostSrv.getHostProcess(id).then(response => {
       response.data && response.data.forEach(item => {
         item.diskIoRead = kbn.valueFormats.Bps(item.diskIoRead);
         item.diskIoWrite = kbn.valueFormats.Bps(item.diskIoWrite);
@@ -238,18 +267,7 @@ export class HostTopologyCtrl {
   }
 
   getHostInfo(host) {
-    // not able to set $location.search(id, id), so request cmdb directly
-    // copy from AlertDetailCtrl
-    this.$scope.id = host._private_.id;
-    this.backendSrv.alertD({
-      url: `/cmdb/host?id=${host._private_.id}`
-    }).then(response => {
-      this.$scope.detail = response.data;
-      this.$scope.tags = angular.copy(response.data.tags);
-      this.$scope.cpuCount = _.countBy(response.data.cpu);
-      this.$scope.detail.isVirtual = this.$scope.detail.isVirtual ? '是' : '否';
-      this.$scope.detail = _.cmdbInitObj(this.$scope.detail);
-    });
+    this.$controller('HostDetailCtrl', { $scope: this.$scope });
   }
 
   getDashboard(host) {
@@ -269,7 +287,7 @@ export class HostTopologyCtrl {
       });
     } else {
       this.variableUpdated(host);
-      this.$scope.$broadcast('refresh');
+      // this.$scope.$broadcast('refresh');
     }
   }
 
@@ -293,6 +311,17 @@ export class HostTopologyCtrl {
 
   switchTab(tabId) {
     this.currentTab = tabId;
+    this.$location.search({
+      'tabId': tabId,
+      'panelId': null,
+      'fullscreen': null,
+      'edit': null,
+      'editview': null,
+      'id': this.currentHost.name ? this.currentHost._private_.id : '',
+      'name': this.currentHost.name ? this.currentHost.name : ''
+    });
+    // this.$location.search('tabId', tabId);
+    // this.$location.search('panelId', null);
 
     if (tabId === 0) {
       this.getHostList(this.currentHost);

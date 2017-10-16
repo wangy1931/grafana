@@ -6,7 +6,7 @@ define([
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('ServiceListCtrl', function ($scope, backendSrv, $location) {
+  module.controller('ServiceListCtrl', function ($scope, backendSrv, $location, alertSrv) {
     $scope.init = function() {
       $scope.searchHost = '';
       $scope.order = "'name'";
@@ -24,6 +24,28 @@ define([
     $scope.orderBy = function(order) {
       $scope.order = "'"+ order +"'";
       $scope.desc = !$scope.desc;
+    };
+
+    $scope.deleteService = function(id) {
+      $scope.appEvent('confirm-modal', {
+        title: '删除',
+        text: '您确认要删除该服务吗？',
+        icon: 'fa-trash',
+        yesText: '删除',
+        noText: '取消',
+        onConfirm: function() {
+          backendSrv.alertD({
+            method: 'DELETE',
+            url   : '/cmdb/agent/service',
+            params: { 'id': id }
+          }).then(function () {
+            alertSrv.set("删除成功", '', "success", 2000);
+            _.remove($scope.services, { id: id });
+          }, function (err) {
+            alertSrv.set("删除失败", err.data, "error", 2000);
+          });
+        }
+      });
     };
 
     $scope.init();

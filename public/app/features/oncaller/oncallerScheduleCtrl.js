@@ -306,7 +306,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
           var sec = $scope.oncallerList[(i+1) % oncallerLength];
           var oncallerSec = {
             title: sec.name+$scope.secondaryReview.type,
-            className: ['primaryReview'],
+            className: ['secondaryReview'],
             start: formatTime(start+1000),
             end: formatTime(end),
             id: sec.id,

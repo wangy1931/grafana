@@ -111,11 +111,12 @@ function (angular, moment, _) {
     };
 
     $scope.getAlertHistory = function(time) {
+      var host = $location.search().name;
       if (time.type === 'now') {
         $scope.alertStatusShow = true;
       } else {
         var timestemp = Date.parse(moment().subtract(time.num, time.type));
-        alertMgrSrv.loadAlertHistory(timestemp).then(function (response) {
+        alertMgrSrv.loadAlertHistory(timestemp, host).then(function (response) {
           $scope.alertHistory = response.data;
         });
         $scope.alertStatusShow = false;

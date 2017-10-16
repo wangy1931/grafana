@@ -12,6 +12,9 @@
           <th>CPU 使用率</th>
           <th>内存使用</th>
           <th>磁盘剩余空间</th>
+          <th>开始运行时间</th>
+          <th>探针版本</th>
+          <th>Commit Id</th>
         </tr>
       </thead>
       <tbody>
@@ -21,6 +24,9 @@
           <td>{{ host.cpu || '-' }}</td>
           <td>{{ host.mem || '-' }}</td>
           <td>{{ host.disk || '-' }}</td>
+          <td>{{ host.startTime || '-' }}</td>
+          <td>{{ host.version || '-' }}</td>
+          <td>{{ host.commit || '-' }}</td>
         </tr>
       </tbody>
     </table>

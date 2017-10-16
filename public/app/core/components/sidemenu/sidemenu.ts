@@ -143,10 +143,6 @@ export class SideMenuCtrl {
               url: this.getUrl('/alerts/status'),
             },
             {
-              text: '历史报警',
-              url: this.getUrl('/alerts/history'),
-            },
-            {
               text: '所有规则',
               url: this.getUrl('/alerts'),
             },
