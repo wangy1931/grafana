@@ -73,6 +73,7 @@
 @import "components/query_part";
 @import "components/loading";
 @import "components/edit_sidemenu";
+@import "components/tree_menu";
 
 // bootstrap
 @import "bootstrap/variables";
@@ -112,6 +113,7 @@
 @import "pages/rca";
 @import "pages/host-topology";
 @import "pages/tag_picker";
+@import "pages/association";
 
 
 @import "old_responsive";

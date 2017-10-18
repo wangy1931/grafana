@@ -13,29 +13,10 @@
 <div dash-editor-view class="time-picker"></div>
 
 <div class="page-container">
-  <div ng-if="!isAssociation">
-    <h3 align="center">关联性分析结果尚未计算完成 <btn class="btn btn-small btn-primary" ng-click="flushResult()">刷新结果</btn></h3>
-  </div>
-
-  <div ng-if="isAssociation" style="padding: 20px 20px 20px 20px;">
-    <h2>调整相关性分析参数</h2>
-    <table class="grafana-options-table">
-      <tr>
-        <td><strong>调整阈值</strong></td>
-        <td width="400px"><div class="sliders" slider></div></td>
-        <td>
-          <span ng-click="resetCorrelation()" class="btn btn-primary">
-            <i class="fa fa-edit"></i>过滤结果
-          </span>
-        </td>
-      </tr>
-    </table>
-  </div>
-
   <div ng-if="submenuEnabled">
     <dashboard-submenu></dashboard-submenu>
   </div>
-  <div class="main-view-container">
+  <div class="main-view-container association-container">
     <div class="grafana-row" ng-controller="RowCtrl"
          ng-repeat="(row_name, row) in dashboard.rows" row-height>
 
@@ -105,6 +86,7 @@
         </div>
       </div>
     </div>
+    <cw-tree-menu ng-show="dashboard"></cw-tree-menu> 
   </div>
 </div>
 <rca-add></rca-add>

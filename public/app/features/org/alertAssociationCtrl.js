@@ -8,12 +8,14 @@ function (angular, _, noUiSlider) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('AlertAssociationCtrl', function ($scope, $routeParams, $location, alertMgrSrv, alertSrv, $timeout, contextSrv, healthSrv, backendSrv, $controller, datasourceSrv) {
+  module.controller('AlertAssociationCtrl', function ($scope, $routeParams, $location, alertMgrSrv, alertSrv, $timeout, contextSrv, healthSrv, backendSrv, $controller, datasourceSrv, associationSrv) {
     var alertMetric = $routeParams.metric;
     var alertHost = $routeParams.host;
     var distance = $routeParams.distance;
     $scope.correlationThreshold = distance;
-    $scope.yaxisNumber = 3;
+
+    associationSrv.setSourceAssociation(alertMetric, alertHost, $scope.correlationThreshold);
+    _.every([alertMetric, alertHost, $scope.correlationThreshold]) && associationSrv.setCorrelationMetrics();
 
     this.initPage = function(target) {
       alertMetric = target.metric;
@@ -22,45 +24,22 @@ function (angular, _, noUiSlider) {
       $scope.correlationThreshold = distance;
       $scope.init();
     };
-
+    
     $scope.init = function() {
       if (_.isUndefined($scope.correlationThreshold))
-        return;
+      return;
       $scope.manualMetrics = [];
       datasourceSrv.get('opentsdb').then(function (datasource) {
         $scope.datasource = datasource;
       });
-      alertMgrSrv.loadAssociatedMetrics(alertMetric, alertHost, distance).then(function onSuccess(response) {
-        var correlationOfAlertMap = response.data;
-        if (!_.isEmpty(correlationOfAlertMap)) {
-          $scope.isAssociation = true;
-          for (var host in correlationOfAlertMap) {
-            //TODO only support one host
-            var correlatedMetrics = correlationOfAlertMap[host];
-            $scope.correlatedMetrics = correlatedMetrics;
-          }
-          for (var m in $scope.correlatedMetrics) {
-            if(_.isEqual(m, alertMetric)){
-              delete $scope.correlatedMetrics[m];
-            }
-          }
-          if (_.isEmpty($scope.correlatedMetrics)) {
-            $scope.isAssociation = false;
-          }
-        } else {
-          $scope.removeAllQuery();
-        }
-      }).finally(function() {
-        if(!$scope.dashboard) {
-          $scope.createAlertMetricsGraph(_.getMetricName(alertMetric), alertHost);
-        } else {
-          var metric = _.getMetricName(alertMetric)
-          $scope.dashboard.rows[0].panels[0].title = metric;
-          $scope.dashboard.rows[0].panels[0].targets[0].metric = metric;
-          $scope.dashboard.rows[0].panels[0].targets[0].tags.host = alertHost;
-          $scope.$broadcast('refresh');
-        }
-      });
+      if(!$scope.dashboard) {
+        $scope.createAlertMetricsGraph(_.getMetricName(alertMetric), alertHost);
+      } else {
+        var metric = _.getMetricName(alertMetric)
+        $scope.dashboard.rows[0].panels[0].title = metric;
+        $scope.dashboard.rows[0].panels[0].targets[0].metric = metric;
+        $scope.dashboard.rows[0].panels[0].targets[0].tags.host = alertHost;
+      }
     };
 
     $scope.getRowPanelMeta = function (hostTag, metric) {
@@ -69,6 +48,7 @@ function (angular, _, noUiSlider) {
         height: '300px',
         panels: [
           {
+            decimals: null,
             title: metric,
             error: false,
             span: 12,
@@ -111,7 +91,8 @@ function (angular, _, noUiSlider) {
               max: true,
               current: true,
               total: true,
-              show: true,
+              show: false,
+              rightSide: true,
               values: true
             },
             grid: {
@@ -142,7 +123,8 @@ function (angular, _, noUiSlider) {
                 fill: false,
                 line: true
               }
-            ]
+            ],
+            editingThresholds: true
           }
         ]
       };
@@ -177,20 +159,6 @@ function (angular, _, noUiSlider) {
       }, $scope);
     };
 
-    $scope.flushResult = function () {
-      $scope.appEvent('alert-warning', ['请稍后', '关联性分析将于5分钟之后计算完成,先去别处逛逛吧']);
-      $timeout(function() {
-        alertMgrSrv.loadAssociatedMetrics(alertMetric, alertHost, distance).then(function onSuccess(response) {
-          if (!_.isEmpty(response.data)) {
-            $scope.init();
-            $scope.appEvent('alert-success', ['关联性分析计算完成', '请在关联性分析中查看metric:"'+alertMetric+'" host:"'+alertHost+'" 的关联结果']);
-          } else {
-            $scope.appEvent('alert-warning', ['关联性分析暂无计算结果', alertMetric + '暂无相关指标']);
-          }
-        });
-      }, 30000);
-    };
-
     $scope.createAssociatedMetricGraphPanel = function(associatedMetrics) {
       var hostTag = associatedMetrics.hosts[0] || "*";
       var rowMeta = $scope.getRowPanelMeta(hostTag, associatedMetrics.metric);
@@ -210,156 +178,6 @@ function (angular, _, noUiSlider) {
         $scope.$broadcast('render');
       });
     };
-
-    $scope.resetCorrelation = function() {
-      $scope.correlationThreshold = 50; // reset the threshold to default value
-      alertMgrSrv.resetCorrelation(alertMetric, alertHost, $scope.correlationBefore, $scope.correlationAfter).then(function onSuccess() {
-        $location.path("alerts/association/" + alertHost + "/" + $scope.correlationThreshold + "/" + alertMetric);
-      }, function onFailed(response) {
-        alertSrv.set("error", response.status + " " + (response.data || "Request failed"), response.severity, 10000);
-      });
-    };
-    $scope.addQuery = function(metricName) {
-      var metricNameMap = $scope.correlatedMetrics;
-      var isHidden = true;
-
-      _.each($scope.dashboard.rows[0].panels[0].targets, function (target) {
-        if (target.metric === _.getMetricName(metricName)) {
-          if (metricNameMap[metricName].hosts[0] === target.tags.host) {
-            isHidden = false;
-            target.hide = !target.hide;
-          } else {
-            target.hide = true;
-          }
-        }
-      });
-      if (isHidden) {
-        var target = {
-          "aggregator":"avg",
-          "currentTagKey":"",
-          "currentTagValue":"",
-          "downsampleAggregator":"avg",
-          "downsampleInterval":"1m",
-          "errors":{},
-          "hide":false,
-          "isCounter":false,
-          "metric":_.getMetricName(metricName),
-          "shouldComputeRate":false,
-          "tags":{"host":metricNameMap[metricName].hosts[0]},
-          "hosts": metricNameMap[metricName],
-          "confidenceLevel": '50',
-        };
-        $scope.dashboard.rows[0].panels[0].targets.push(target);
-        var seriesOverride = {
-          "alias":_.getMetricName(metricName)+"{host"+"="+target.tags.host+"}",
-          "yaxis": $scope.yaxisNumber++
-        };
-        $scope.dashboard.rows[0].panels[0].seriesOverrides.push(seriesOverride);
-      }
-      healthSrv.transformMetricType($scope.dashboard).then(function () {
-        $scope.broadcastRefresh();
-      });
-    };
-
-    $scope.resetCorrelation = function () {
-      $location.path("alerts/association/" + alertHost + "/" + Math.floor($scope.thresholdSlider.get()) + "/" + alertMetric);
-    };
-
-    $scope.showNewAssociationManual = function() {
-      var newScope = $scope.$new();
-      newScope.datasource = $scope.datasource;
-      $controller('OpenTSDBQueryCtrl', {$scope: newScope});
-      newScope.addManualMetric = $scope.addManualMetric;
-      $scope.suggestTagHost = backendSrv.suggestTagHost;
-      $scope.appEvent('show-modal', {
-        src: 'public/app/partials/manual_association.html',
-        modalClass: 'modal-no-header confirm-modal',
-        scope: newScope
-      });
-    };
-
-    $scope.addManualMetric = function (target) {
-      target.metric = contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + target.metric;
-      if (_.indexOf(_.keys($scope.correlatedMetrics),target.metric) > -1) {
-        if($scope.correlatedMetrics[target.metric].hosts[0] === target.host)
-          return;
-      }
-      $scope.correlatedMetrics[target.metric].hosts = [target.host];
-      $scope.addQuery(target.metric);
-      $scope.manualMetrics.push(target.metric);
-    };
-
-    $scope.isManualMetric = function (metricName) {
-      return _.indexOf($scope.manualMetrics, metricName) > -1 ? true : false;
-    };
-
-    $scope.removeAllQuery = function() {
-      $scope.isAssociation = false;
-      $scope.correlatedMetrics = {};
-      var metric = _.getMetricName(alertMetric);
-      if($scope.dashboard) {
-        _.each($scope.dashboard.rows[0].panels[0].targets, function (target) {
-          if(target.metric === metric){
-            target.hide = false;
-          } else {
-            target.hide = true;
-          }
-        });
-      }
-    };
-
-    $scope.getConfidence = function(metricName, level) {
-      var targets = $scope.dashboard.rows[0].panels[0].targets;
-      var index = _.findIndex(targets, {metric: _.getMetricName(metricName)});
-      if(index > -1) {
-        targets[index].confidenceLevel = level;
-      }
-    };
-
-    $scope.addRCA = function () {
-      var rootCauseMetrics = _.filter($scope.dashboard.rows[0].panels[0].targets, {hide: false});
-      if(!rootCauseMetrics.length) {
-        $scope.appEvent('alert-warning', ['请选择关联指标']);
-        return;
-      }
-      $scope.appEvent('confirm-modal', {
-        title: '添加',
-        text: '您确定要添加选定关联信息添加RCA吗？',
-        yesText: '确定',
-        noText: '取消',
-        onConfirm: function() {
-          var prox = contextSrv.user.orgId + '.' + contextSrv.user.systemId + '.';
-          var rcaFeedback = {
-            alertIds: [],
-            timestampInSec: Math.round(new Date().getTime()/1000),
-            triggerMetric: {
-              name: alertMetric,
-              host: alertHost,
-            },
-            rootCauseMetrics: [],
-            relatedMetrics: [],
-            org: contextSrv.user.orgId,
-            sys: contextSrv.user.systemId
-          };
-          _.each(rootCauseMetrics, function(target) {
-            _.each(target.hosts, function(host) {
-              rcaFeedback.rootCauseMetrics.push({
-                name: prox + target.metric,
-                host: host,
-                confidenceLevel: parseInt(target.confidenceLevel)
-              });
-            });
-          });
-
-          alertMgrSrv.rcaFeedback(rcaFeedback).then(function(response) {
-            $scope.appEvent('alert-success', ['添加成功']);
-          }, function(err) {
-            $scope.appEvent('alert-error', ['添加失败']);
-          });
-        }
-      });
-    };
-
     $scope.init();
   });
 
@@ -368,10 +186,11 @@ function (angular, _, noUiSlider) {
       restrict: 'A',
       scope: false,
       link: function (scope, element) {
+        var start = (scope.$parent.thresholdSlider) && scope.$parent.thresholdSlider.get() || scope.$parent.correlationThreshold;
         noUiSlider.create(element[0], {
-          start: scope.$parent.correlationThreshold,
+          start: start || 100,
           connect: [true, false],
-          tooltips: true,
+          tooltips: false,
           step: 10,
           range: {
             'min': 10,

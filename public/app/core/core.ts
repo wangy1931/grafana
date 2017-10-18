@@ -30,6 +30,7 @@ import "./directives/log_tabpane";
 import {tagPicker} from './directives/tagpicker';
 import "./directives/loading";
 import "./directives/ng_enter";
+import {treeMenu} from './components/tree_menu';
 
 import {grafanaAppDirective} from './components/grafana_app';
 import {sideMenuDirective} from './components/sidemenu/sidemenu';
@@ -67,5 +68,6 @@ export {
   appEvents,
   dashboardSelector,
   tagPicker,
-  colors
+  colors,
+  treeMenu
 };

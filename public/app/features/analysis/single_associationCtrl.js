@@ -9,7 +9,7 @@ define([
 
     var module = angular.module('grafana.controllers');
 
-    module.controller('SingleAssociationCtrl', function ($scope, datasourceSrv, $controller, contextSrv, backendSrv) {
+    module.controller('SingleAssociationCtrl', function ($scope, datasourceSrv, $controller, contextSrv, backendSrv, associationSrv) {
       $scope.init = function () {
         var targetObj = {
           metric: "",
@@ -25,27 +25,13 @@ define([
         });
       };
 
-      $scope.resetCorrelationAnalysis = function () {
-        $scope.targetObj.distance = $scope.thresholdSlider.get();
-        $scope.analysis();
-      };
-
       $scope.analysis = function () {
         var associationObj = _.cloneDeep($scope.targetObj);
         associationObj.metric = contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + $scope.targetObj.metric;
         $controller('AlertAssociationCtrl', {$scope: $scope}).initPage(associationObj);
         $scope.status = true;
-      };
-
-      $scope.addRCA = function (metric, host) {
-        // 指定格式
-        $scope.rcaData = {
-          symptomMetric : $scope.targetObj.metric,
-          symptomHost : $scope.targetObj.host,
-          causeMetric : _.getMetricName(metric),
-          causeHost : host[0],
-        }
-        $scope.appEvent('show-add-rac');
+        associationSrv.setSourceAssociation(associationObj.metric, associationObj.host, $scope.correlationThreshold);        
+        $scope.$emit('analysis', associationSrv);        
       };
 
       $scope.init();
