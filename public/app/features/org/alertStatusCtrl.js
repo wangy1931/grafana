@@ -185,7 +185,7 @@ function (angular, moment, _) {
           });
           $scope.appEvent('alert-success', ['报警处理成功']);
         }).catch(function(err) {
-          $scope.appEvent('alert-error', ['报警处理失败','请检查网络连接状态']);
+          // $scope.appEvent('alert-error', ['报警处理失败','请检查网络连接状态']);
         });
       }
 
