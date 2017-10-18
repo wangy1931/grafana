@@ -102,12 +102,12 @@ define([
 
         panel.seriesOverrides[0].alias = alias;
         panel.seriesOverrides[1].alias = metric + ".prediction.min{host=" + hostname + "}";
-        panel.seriesOverrides[1].fill  = 5;
-        panel.seriesOverrides[1].linewidth  = 0;
+        panel.seriesOverrides[1].fill  = 0;
+        panel.seriesOverrides[1].linewidth = 0;
         panel.seriesOverrides[2].alias = metric + ".prediction.max{host=" + hostname + "}";
         panel.seriesOverrides[2].fillBelowTo = metric + ".prediction.min{host=" + hostname + "}";
-        panel.seriesOverrides[2].linewidth  = 0;
-        panel.seriesOverrides[2].fill = 5;
+        panel.seriesOverrides[2].linewidth = 0;
+        panel.seriesOverrides[2].fill = 0;
         return panelDef;
       }
 
