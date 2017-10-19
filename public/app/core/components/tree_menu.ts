@@ -20,7 +20,7 @@ var template = `<div ng-init="ctrl.init()" class="tree-menu" ng-class="{true: 'o
         <li class="tree_li" ng-repeat="(service, metrics) in ctrl.correlationMetrics">
           <a ng-click="ctrl.toggleAccordion($event)" class="tree_node accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{_.snakeCase(service)}}">
             <i class="fa fa-plus-square-o"></i>
-            <p>{{service}}</p>
+            <p>{{service + ' (' + _.keys(metrics).length + ')'}}</p>
           </a>
           <ul id="{{_.snakeCase(service)}}" class="tree_ul accordion-body collapse accordion">
             <li class="tree_li" ng-repeat="(metric, hosts) in metrics">
