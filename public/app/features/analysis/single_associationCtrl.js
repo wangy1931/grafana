@@ -30,8 +30,8 @@ define([
         associationObj.metric = contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + $scope.targetObj.metric;
         $controller('AlertAssociationCtrl', {$scope: $scope}).initPage(associationObj);
         $scope.status = true;
-        associationSrv.setSourceAssociation(associationObj.metric, associationObj.host, $scope.correlationThreshold);        
-        $scope.$emit('analysis', associationSrv);        
+        associationSrv.setSourceAssociation(associationObj.metric, associationObj.host, $scope.correlationThreshold);
+        $scope.$emit('analysis', associationSrv);
       };
 
       $scope.init();

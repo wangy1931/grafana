@@ -15,7 +15,6 @@ function (angular, _, noUiSlider) {
     $scope.correlationThreshold = distance;
 
     associationSrv.setSourceAssociation(alertMetric, alertHost, $scope.correlationThreshold);
-    _.every([alertMetric, alertHost, $scope.correlationThreshold]) && associationSrv.setCorrelationMetrics();
 
     this.initPage = function(target) {
       alertMetric = target.metric;
@@ -48,7 +47,6 @@ function (angular, _, noUiSlider) {
         height: '300px',
         panels: [
           {
-            decimals: null,
             title: metric,
             error: false,
             span: 12,
@@ -92,7 +90,6 @@ function (angular, _, noUiSlider) {
               current: true,
               total: true,
               show: false,
-              rightSide: true,
               values: true
             },
             grid: {
@@ -123,8 +120,7 @@ function (angular, _, noUiSlider) {
                 fill: false,
                 line: true
               }
-            ],
-            editingThresholds: true
+            ]
           }
         ]
       };
