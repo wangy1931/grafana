@@ -26,7 +26,7 @@ var template = `<div ng-init="ctrl.init()" class="tree-menu" ng-class="{true: 'o
             <li class="tree_li" ng-repeat="(metric, hosts) in metrics">
               <a ng-click="ctrl.toggleAccordion($event)" class="tree_node accordion-toggle" data-toggle="collapse" data-parent="#{{_.snakeCase(service)}}" href="#{{_.snakeCase(service) + $index}}">
                 <i class="fa fa-plus-square-o"></i>
-                <p bs-tooltip="'{{_.getMetricName(metric)}}'" data-placement="bottom" data-container="body">{{_.getMetricName(metric)}}</p>
+                <p bs-tooltip="'{{_.getMetricName(metric)}}'" data-placement="top" data-container="body">{{_.getMetricName(metric)}}</p>
               </a>
               <ul id="{{_.snakeCase(service) + $index}}" class="tree_ul accordion-body collapse">
                 <li class="tree_li" ng-repeat="host in hosts.hosts">
