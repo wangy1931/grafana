@@ -113,7 +113,9 @@ export class TreeMenuCtrl {
 
   showTree() {
     this.isOpen = !this.isOpen;
-    this.$scope.broadcastRefresh();
+    this.$timeout(()=>{
+      this.$scope.$broadcast('render');
+    })
   }
 
   showNewAssociationManual() {
