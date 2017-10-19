@@ -33,6 +33,7 @@ import {topologyGraphDirective} from './components/topology_graph';
 import {guideDirective} from './components/guide/guide';
 import {toolbarDirective} from './components/toolbar/toolbar';
 import {cwizSwitchDirective} from './components/cwiz_switch';
+import {treeMenu} from './components/tree_menu';
 
 import {grafanaAppDirective} from './components/grafana_app';
 import {sideMenuDirective} from './components/sidemenu/sidemenu';
@@ -74,5 +75,6 @@ export {
   topologyGraphDirective,
   guideDirective,
   toolbarDirective,
-  cwizSwitchDirective
+  cwizSwitchDirective,
+  treeMenu
 };

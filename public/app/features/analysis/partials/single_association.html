@@ -22,38 +22,37 @@
     <form class="tidy-form-box">
         <div class="tidy-form">
             <ul class="tidy-form-list">
-                <li class="tidy-form-item" style="width: 100px">
+                <li class="tidy-form-item">
                     指标
                 </li>
                 <li>
-                    <!--input placeholder="需要分析的指标" ng-model="targetObj.metric" type="text" required class="input-xxlarge tidy-form-input last" -->
                     <input type="text" class="tidy-form-input input-xlarge"
-                           ng-model='targetObj.metric'
-                           spellcheck='false'
-                           bs-typeahead-old="suggestMetrics"
-                           placeholder="需要分析的指标" required/>
+                        style="margin-right: 40px;"
+                        ng-model='targetObj.metric'
+                        spellcheck='false'
+                        bs-typeahead-old="suggestMetrics"
+                        placeholder="需要分析的指标" required/>
                 </li>
             </ul>
-            <div class="clearfix"></div>
         </div>
         <div class="tidy-form">
             <ul class="tidy-form-list">
-                <li class="tidy-form-item" style="width: 100px">
+                <li class="tidy-form-item">
                     机器
                 </li>
                 <li>
                     <input type="text" class="input-medium tidy-form-input ng-pristine ng-untouched ng-valid"
-                           spellcheck="false"
-                           bs-typeahead-old="suggestTagHost"
-                           data-min-length="0" data-items="100" ng-model="targetObj.host" placeholder="请键入主机名"
-                           data-provide="typeahead">
+                        style="margin-right: 40px;"
+                        spellcheck="false"
+                        bs-typeahead-old="suggestTagHost"
+                        data-min-length="0" data-items="100" ng-model="targetObj.host" placeholder="请键入主机名"
+                        data-provide="typeahead">
                 </li>
             </ul>
-            <div class="clearfix"></div>
         </div>
         <button type="submit" class="btn btn-primary" ng-click="analysis()"><i class="fa fa-search"></i>开始分析</button>
     </form>
-    <div ng-if="dashboard">
+    <!-- <div ng-if="dashboard">
         <h3>调整相关性分析参数</h3>
         <table class="grafana-options-table">
             <tr>
@@ -69,7 +68,7 @@
             </tr>
         </table>
     </div>
-    <p ng-if="!isAssociation && status">没有关联结果？调整下阈值试试吧。还是没有？请点击右侧按钮试试。<button class="btn btn-small btn-primary" ng-click="flushResult()">刷新结果</button></p>
+    <p ng-if="!isAssociation && status">没有关联结果？调整下阈值试试吧。还是没有？请点击右侧按钮试试。<button class="btn btn-small btn-primary" ng-click="flushResult()">刷新结果</button></p> -->
     <div class="main-view-container">
         <div class="grafana-row" ng-controller="RowCtrl"
             ng-repeat="(row_name, row) in dashboard.rows" row-height>
@@ -93,11 +92,11 @@
                         ng-bind="row.title | interpolateTemplateVars:this">
                     </div>
 
-                    <div ng-repeat="(name, panel) in row.panels track by panel.id" class="panel"
+                    <div ng-repeat="(name, panel) in row.panels track by panel.id" class="panel" ng-class="{true: 'association-container'}[panel.id === 1]"
                         ui-draggable="!dashboardViewState.fullscreen" drag="panel.id"
                         ui-on-Drop="onDrop($data, row, panel)" drag-handle-class="drag-handle" panel-width>
                         <plugin-component type="panel" class="panel-margin"></plugin-component>
-                    </div>
+                    <!-- </div>
 
                     <div ng-if="isAssociation" class="panel panel-associatoin"
                         style="padding: 20px 20px 20px 20px;">
@@ -127,7 +126,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
+                        <cw-tree-menu ng-if="panel.id === 1" panelId="{{panel.id}}" rowIndex="{{row_name}}"></cw-tree-menu>
                     </div>
 
                     <div class="clearfix"></div>

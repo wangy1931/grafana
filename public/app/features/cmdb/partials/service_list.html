@@ -30,6 +30,9 @@
                     <a href="/cmdb/servicelist/servicedetail?id={{service.id}}">
                         <span class="cmdb-icon-text">详情</span>
                     </a>
+                    <a ng-click="deleteService(service.id);">
+                        <span class="cmdb-icon-text">删除</span>
+                    </a>
                 </td>
             </tr>
         </table>

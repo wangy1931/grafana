@@ -84,6 +84,7 @@
 @import "components/toolbar";
 @import "components/cwiz-switch";
 @import "components/topology-graph";
+@import "components/tree_menu";
 
 // PAGES
 @import "pages/login";
@@ -115,6 +116,7 @@
 @import "pages/rca";
 @import "pages/host-topology";
 @import "pages/tag_picker";
+@import "pages/association";
 
 
 @import "old_responsive";

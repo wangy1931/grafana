@@ -95,37 +95,30 @@ define([
           });
 
           //-------- get host status
-          var getHostStatus = backendSrv.alertD({
-            method: "get",
-            url: "/summary",
-            params: {metrics: "collector.summary"},
-            headers: {'Content-Type': 'text/plain'},
-          }).then(function (response) {
-            if(response.data.length){
-              _.each(response.data, function (summary) {
+          var query = {
+            "queries": [
+              {
+                "metric": "collector.state"
+              }
+            ],
+            "hostProperties": []
+          };
+          var getHostStatus = backendSrv.getHosts(query).then(function (response) {
+            if (response.data.length) {
+              _.each(response.data, function (item) {
                 var host = {
-                  "host": summary.tag.host,
+                  "host": item.hostname,
                   "status": 0,
                 };
 
-                var queries = [{
-                  "metric": contextSrv.user.orgId + "." + system + ".collector.state",
-                  "aggregator": "sum",
-                  "downsample": "1s-sum",
-                  "tags": {"host": summary.tag.host}
-                }];
-                datasourceSrv.getHostStatus(queries, 'now-5m').then(function(response) {
-                  if(response.status > 0) {
-                    host.status = 1;
-                    scope.hostStatus.unnormal++;
-                  } else {
-                    host.status = 0;
-                    scope.hostStatus.normal++;
-                  }
-                },function() {
-                  scope.hostStatus.unnormal++;
+                if (item["collector.state"] > 0) {
                   host.status = 1;
-                });
+                  scope.hostStatus.unnormal++;
+                } else {
+                  host.status = 0;
+                  scope.hostStatus.normal++;
+                }
+
                 scope.hostList.push(host);
               });
               return scope.hostList.length;

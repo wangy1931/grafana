@@ -67,11 +67,11 @@ function (angular, _, coreModule) {
       });
     };
 
-    this.loadAssociatedMetrics = function(alertMetric, alertHost, threshold) {
+    this.loadAssociatedMetrics = function(alertMetric, alertHost, threshold, group) {
       return backendSrv.alertD({
         method: "get",
         url: alertAssociationUrl,
-        params: {metric: alertMetric, host: alertHost, distance: threshold}
+        params: {metric: alertMetric, host: alertHost, distance: threshold, group: group}
       });
     };
 

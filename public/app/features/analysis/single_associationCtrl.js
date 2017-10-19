@@ -9,7 +9,7 @@ define([
 
     var module = angular.module('grafana.controllers');
 
-    module.controller('SingleAssociationCtrl', function ($rootScope, $scope, datasourceSrv, $controller, contextSrv, backendSrv) {
+    module.controller('SingleAssociationCtrl', function ($rootScope, $scope, datasourceSrv, $controller, contextSrv, backendSrv, associationSrv) {
       $scope.init = function () {
         var targetObj = {
           metric: "",
@@ -27,16 +27,14 @@ define([
         $rootScope.onAppEvent('exception-located', $scope.showGuideResult.bind(this), $scope);
       };
 
-      $scope.resetCorrelationAnalysis = function () {
-        $scope.targetObj.distance = $scope.thresholdSlider.get();
-        $scope.analysis();
-      };
-
       $scope.analysis = function () {
         var associationObj = _.cloneDeep($scope.targetObj);
         associationObj.metric = contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + $scope.targetObj.metric;
         $controller('AlertAssociationCtrl', {$scope: $scope}).initPage(associationObj);
         $scope.status = true;
+
+        associationSrv.setSourceAssociation(associationObj.metric, associationObj.host, $scope.correlationThreshold);
+        $scope.$emit('analysis', associationSrv);
 
         $scope.getServiceEvents();
       };
