@@ -182,9 +182,8 @@ function (angular, _, noUiSlider) {
       restrict: 'A',
       scope: false,
       link: function (scope, element) {
-        var start = (scope.$parent.thresholdSlider) && scope.$parent.thresholdSlider.get() || scope.$parent.correlationThreshold;
         noUiSlider.create(element[0], {
-          start: start || 100,
+          start: scope.$parent.correlationThreshold || 100,
           connect: [true, false],
           tooltips: false,
           step: 10,
