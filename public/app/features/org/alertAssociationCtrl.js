@@ -50,6 +50,7 @@ function (angular, _, noUiSlider) {
             title: metric,
             error: false,
             span: 12,
+            id: 1,
             editable: false,
             linewidth: 2,
             height: "500px",
@@ -193,6 +194,9 @@ function (angular, _, noUiSlider) {
           }
         });
         scope.$parent.thresholdSlider = element[0].noUiSlider;
+        scope.$parent.thresholdSlider.on('change', function() {
+          scope.$emit('analysis', 'thresholdSlider');
+        })
       }
     };
   });

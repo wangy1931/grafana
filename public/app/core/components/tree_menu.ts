@@ -61,6 +61,9 @@ export class TreeMenuCtrl {
   yaxisNumber: number;
   correlationMetrics: any;
   prox: any;
+  panelId: number;
+  rowIndex: number;
+  panel: any;
 
   /** @ngInject */
   constructor(private $scope, private associationSrv,
@@ -70,15 +73,11 @@ export class TreeMenuCtrl {
     private alertMgrSrv
   ) {
     this.isOpen = false;
-    this.$timeout(() => {
-      this.$rootScope.thresholdSlider.on('change', () => {
-        this.associationSrv.updateDistance(this.$rootScope.thresholdSlider.get());
-        this.init();
-      });
-    });
 
     var analysis = this.$rootScope.$on('analysis', (event, data) =>{
-      this.associationSrv.updateDistance(this.$rootScope.thresholdSlider.get());
+      if (_.isEqual(data, 'thresholdSlider')) {
+        this.associationSrv.updateDistance(this.$scope.$parent.thresholdSlider.get());
+      }
       this.init();
     });
 
@@ -109,12 +108,16 @@ export class TreeMenuCtrl {
         this.isLoding = false;
       });
     }
+
+    if (this.panelId) {
+      this.panel = _.find(this.$scope.dashboard.rows[this.rowIndex].panels, {id: this.panelId});
+    }
   }
 
   showTree() {
     this.isOpen = !this.isOpen;
     this.$timeout(()=>{
-      this.$scope.$broadcast('render');
+      this.$rootScope.$broadcast('render');
     })
   }
 
@@ -141,9 +144,9 @@ export class TreeMenuCtrl {
   }
 
   clearSelected() {
-    if (this.$scope.dashboard) {
+    if (this.panel) {
       var sourceMetric = this.associationSrv.sourceAssociation;
-      _.each(this.$scope.dashboard.rows[0].panels[0].targets, (target) => {
+      _.each(this.panel.targets, (target) => {
         if (!this.checkSource(this.prox+target.metric, target.tags.host)) {
           target.hide = true;
         }
@@ -166,7 +169,7 @@ export class TreeMenuCtrl {
           var checked = !_input.prop('checked');
           _input.prop({checked : checked});
         }
-        var targets = this.$scope.dashboard.rows[0].panels[0].targets;
+        var targets = this.panel.targets;
         var isHidden = true;
         _.each(targets, (target) => {
           if (target.metric === metric && target.tags.host === host) {
@@ -188,12 +191,12 @@ export class TreeMenuCtrl {
             "shouldComputeRate": false,
             "tags": {"host": host}
           };
-          this.$scope.dashboard.rows[0].panels[0].targets.push(target);
+          this.panel.targets.push(target);
           var seriesOverride = {
             "alias": metric+"{host"+"="+host+"}",
             "yaxis": this.yaxisNumber++
           };
-          this.$scope.dashboard.rows[0].panels[0].seriesOverrides.push(seriesOverride);
+          this.panel.seriesOverrides.push(seriesOverride);
         }
         this.healthSrv.transformMetricType(this.$scope.dashboard).then(() => {
           this.$scope.broadcastRefresh();
@@ -258,7 +261,11 @@ export function treeMenu() {
     controller: TreeMenuCtrl,
     bindToController: true,
     controllerAs: 'ctrl',
-    template: template
+    template: template,
+    link: (scope, elem, attrs, ctrl) => {
+      ctrl.panelId = Number(attrs.panelid);
+      ctrl.rowIndex = Number(attrs.rowindex);
+    }
   };
 }
 

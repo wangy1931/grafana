@@ -1,6 +1,6 @@
 .association-container {
   display: flex;
-  .grafana-row {
+  plugin-component {
     flex: 1;
   }
 }
