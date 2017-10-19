@@ -1,10 +1,10 @@
 <div class="host-list host-tab-content">
-  <div ng-hide="hostPanels.length">
+  <div ng-hide="ctrl.hostPanels.length">
     <em>暂没有任何机器数据</em>
-    <cw-loading show="!hostPanels.length" duration=6000></cw-loading>
+    <cw-loading show="!ctrl.hostPanels.length" duration=6000></cw-loading>
   </div>
   <div>
-    <table class="table host-panel-table" ng-show="hostPanels.length">
+    <table class="table host-panel-table" ng-show="ctrl.hostPanels.length">
       <thead>
         <tr>
           <th>机器名</th>
@@ -15,7 +15,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="host in hostPanels" ng-class="{active: host.host==ctrl.currentHost.name}" ng-click="ctrl.nodeClickHandle(host);">
+        <tr ng-repeat="host in ctrl.hostPanels"
+            ng-class="{active: host.host==ctrl.currentHost.name}"
+            ng-click="ctrl.nodeClickHandle(host);">
           <td>{{ host.host }}</td>
           <td>{{ host.status || '-' }}</td>
           <td>{{ host.cpu || '-' }}</td>

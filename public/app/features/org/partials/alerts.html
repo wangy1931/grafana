@@ -1,5 +1,5 @@
 
-<navbar icon="fa fa-fw fa-bell" title="报警管理">
+<navbar icon="fa fa-fw fa-bell" title="智能检测">
 	<ul class="nav">
     <li><a href="alerts/status">总览</a></li>
     <li><a href="alerts/new">新建报警规则</a></li>
@@ -8,8 +8,11 @@
 </navbar>
 
 <div class="page-container">
-  <div class="page">
+  <div class="page-header">
     <h2>报警规则列表</h2>
+  </div>
+
+  <div class="page">
 
     <div ng-if="alertDefList.length === 0">
       <em>展示没有任何规则</em>

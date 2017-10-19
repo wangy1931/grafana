@@ -1,4 +1,4 @@
-<navbar icon="fa fa-fw fa-bell" title="报警管理">
+<navbar icon="fa fa-fw fa-bell" title="智能检测">
 	<ul class="nav">
     <li class="active"><a href="alerts/status">总览</a></li>
     <li><a href="alerts/new">新建报警规则</a></li>
@@ -6,8 +6,10 @@
   </ul>
 </navbar>
 
-<div class="page-container" ng-init="init();">
-  <h2>报警指标状态</h2>
+<div class="page-container alert-status-page" ng-init="init();">
+  <div class="page-header">
+    <h2>报警指标状态</h2>
+  </div>
   
   <div ng-if="alertRows.length === 0">
     <em>系统一切正常</em>

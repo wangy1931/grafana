@@ -28,7 +28,7 @@ define([
                 data: scope.bsTableData,
                 onClickCell: function (field, value, row, $element) {
                   if (field == 'anomalyHealth') {
-                    scope.showModal(7, row.name, scope.key);
+                    scope.ctrl.showModal(7, row.name, scope.key);
                   }
                 }
               });

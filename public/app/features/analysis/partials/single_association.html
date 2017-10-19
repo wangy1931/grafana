@@ -1,4 +1,4 @@
-<navbar icon="fa fa-fw fa-signal" title="关联分析">
+<navbar icon="fa fa-fw fa-signal" title="智能分析">
     <ul class="nav pull-right">
         <li ng-show="dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
             <a ng-click="exitFullscreen()">
@@ -13,8 +13,13 @@
 <div dash-editor-view class="time-picker"></div>
 
 <div class="page-container">
-    <form class="tidy-form-box">
+    <guide guide-class="guide" need-host=true></guide>
+
+    <div class="page-header">
         <h2>关联性分析</h2>
+    </div>
+
+    <form class="tidy-form-box">
         <div class="tidy-form">
             <ul class="tidy-form-list">
                 <li class="tidy-form-item" style="width: 100px">
@@ -34,7 +39,7 @@
         <div class="tidy-form">
             <ul class="tidy-form-list">
                 <li class="tidy-form-item" style="width: 100px">
-                    机器标签
+                    机器
                 </li>
                 <li>
                     <input type="text" class="input-medium tidy-form-input ng-pristine ng-untouched ng-valid"
@@ -49,7 +54,7 @@
         <button type="submit" class="btn btn-primary" ng-click="analysis()"><i class="fa fa-search"></i>开始分析</button>
     </form>
     <div ng-if="dashboard">
-        <h2>调整相关性分析参数</h2>
+        <h3>调整相关性分析参数</h3>
         <table class="grafana-options-table">
             <tr>
                 <td><strong>调整阈值</strong></td>
@@ -96,11 +101,11 @@
 
                     <div ng-if="isAssociation" class="panel panel-associatoin"
                         style="padding: 20px 20px 20px 20px;">
-                        <h2>
+                        <h3>
                             挑选推荐关联指标进行对比
                             <span ng-click="showNewAssociationManual()" class="btn btn-primary btn-association">新增任意指标</span>
                             <span ng-click="addRCA()" class="btn btn-success btn-association">添加选中关联信息至RCA</span>
-                        </h2>
+                        </h3>
                         <p ng-if="correlatedMetrics.length">尝试将阈值调大, 匹配更多关联指标</p>
                         <div class="panel grafana-options-table">
                             <div controls controls-row>
@@ -128,6 +133,25 @@
                     <div class="clearfix"></div>
                 </div>
             </div>
+        </div>
+
+        <div class="service-events" ng-if="serviceEvents.length">
+            <h3>事件列表</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>名称</th><th>事件类型</th><th>发生时间</th><th>其他信息</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="event in serviceEvents">
+                        <td>{{ event.service }}</td>
+                        <td>{{ event.type }}</td>
+                        <td>{{ event.timestamp }}</td>
+                        <td>{{ event.hostname }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

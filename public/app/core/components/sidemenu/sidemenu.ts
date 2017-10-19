@@ -91,10 +91,6 @@ export class SideMenuCtrl {
           url: this.getUrl("/service")
         },
         {
-          text: '服务依赖状态',
-          url: this.getUrl("/service_v2")
-        },
-        {
           text: '创建服务依赖',
           url: this.getUrl("/service_dependency")
         },
@@ -132,21 +128,7 @@ export class SideMenuCtrl {
       children: [
         {
           text: '报警规则检测',
-          dropdown: 'dropdown',
-          children: [
-            {
-              text: '当前报警',
-              url: this.getUrl('/alerts/status'),
-            },
-            {
-              text: '所有规则',
-              url: this.getUrl('/alerts'),
-            },
-            {
-              text: '新建规则',
-              url: this.getUrl('/alerts/new'),
-            }
-          ]
+          url: this.getUrl('/alerts/status'),
         },
         {
           text: '自动异常检测',

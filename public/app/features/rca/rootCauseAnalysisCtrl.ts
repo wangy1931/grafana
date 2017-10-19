@@ -10,14 +10,16 @@ export class RootCauseAnalysisCtrl {
   renderer: any;
   target: any;  // path traversal.
   mainElement: any;
+  graph: any;
   traceList: Array<string> = [];
 
   /** @ngInject */
-  constructor(private backendSrv, private $location, private $scope) {
+  constructor(private backendSrv, private $location, private $scope, private $rootScope) {
     this.toolkit = window.jsPlumbToolkit.newInstance();
     this.renderer = this.renderFactory();
 
     this.loadGraph().then(response => {
+      this.graph = response;
       this.toolkit.load({ type: "json", data: response });
       this.resetConnection(response);
     });
@@ -26,6 +28,8 @@ export class RootCauseAnalysisCtrl {
     $scope.$on("$destroy", () => {
       this.toolkit.clear();
     });
+
+    this.$rootScope.onAppEvent('exception-located', this.showGuideResult.bind(this), $scope);
   }
 
   loadGraph() {
@@ -174,6 +178,19 @@ export class RootCauseAnalysisCtrl {
       var selector = `[data-jtk-node-id="${edge.source.id}"]`;
       $(selector).click();
     });
+  }
+
+  showGuideResult(e, params) {
+    var selectors = $(`[data-jtk-node-id="${params.metric}"]`)
+    if (selectors.length) {
+      this.resetGraph();
+      this.renderer.selectAllEdges({
+        element: selectors[0]
+      }).addClass('unselected');
+      $('.jtk-node').not(selectors[0]).addClass('unselected');
+
+      selectors[0].click();
+    }
   }
 };
 

@@ -1,6 +1,5 @@
 define([
   './buildDependCtrl',
-  './serviceStatusCtrl'
 ], function() {
 
 });

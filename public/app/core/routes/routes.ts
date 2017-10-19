@@ -53,12 +53,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     reloadOnSearch: false,
     resolve: loadSummaryBundle,
   })
-  .when('/service_v2', {
-    templateUrl: 'public/app/features/service/partials/service.html',
-    controller: 'ServiceStatusCtrl',
-    reloadOnSearch: true,
-    resolve: loadServiceBundle,
-  })
   .when('/dashboard/:type/:slug', {
     templateUrl: 'public/app/partials/dashboard.html',
     controller : 'LoadDashboardCtrl',
@@ -395,7 +389,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/rca', {
     templateUrl: 'public/app/features/rca/partials/rca.html',
     controller : 'RootCauseAnalysisCtrl',
-    reloadOnSearch: true,
+    reloadOnSearch: false,
     resolve: loadRcaBundle,
   })
   // Host Topology

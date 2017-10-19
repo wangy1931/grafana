@@ -142,6 +142,33 @@ function ($, moment) {
     return moment.unix(value).format("YYYY-MM-DD HH:mm:ss");
   };
 
+  _.statusFormatter = function (value) {
+    if (_.isNumber(value)) {
+      return value === 0 ? '正常' : '异常';
+    }
+    if (_.isString(value)) {
+      return value === 'GREEN' ? '正常' : (value === 'YELLOW' ? '警告' : (value === 'RED' ? '严重' : '异常'));
+    }
+  };
+
+  _.percentFormatter = function (value) {
+    return value && (value.toFixed(2) + '%');
+  };
+
+  _.gbFormatter = function (value) {
+    return value && ((value / Math.pow(1024, 3)).toFixed(2) + 'GB');
+  };
+
+  // Translate
+  _.translateAlertLevel = function (value) {
+    var map = {
+      "CRITICAL": "严重",
+      "WARNING" : "警告",
+      "NORMAL"  : "正常"
+    };
+    return value && map[value];
+  };
+
   _.metricHelpMessage = {};
   _.metricMessage = {};
 

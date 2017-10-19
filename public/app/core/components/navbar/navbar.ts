@@ -7,7 +7,11 @@ import coreModule from '../../core_module';
 
 export class NavbarCtrl {
   /** @ngInject */
-  constructor(private $scope, private contextSrv) {
+  constructor(private $scope, private $rootScope, private contextSrv) {
+  }
+
+  showGuide() {
+    this.$rootScope.appEvent('show-guide-book');
   }
 }
 

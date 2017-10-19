@@ -9,7 +9,7 @@ define([
 
     var module = angular.module('grafana.controllers');
 
-    module.controller('SingleAssociationCtrl', function ($scope, datasourceSrv, $controller, contextSrv, backendSrv) {
+    module.controller('SingleAssociationCtrl', function ($rootScope, $scope, datasourceSrv, $controller, contextSrv, backendSrv) {
       $scope.init = function () {
         var targetObj = {
           metric: "",
@@ -23,6 +23,8 @@ define([
         datasourceSrv.get('opentsdb').then(function(datasource) {
           $scope.datasource = datasource;
         });
+
+        $rootScope.onAppEvent('exception-located', $scope.showGuideResult.bind(this), $scope);
       };
 
       $scope.resetCorrelationAnalysis = function () {
@@ -35,6 +37,8 @@ define([
         associationObj.metric = contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + $scope.targetObj.metric;
         $controller('AlertAssociationCtrl', {$scope: $scope}).initPage(associationObj);
         $scope.status = true;
+
+        $scope.getServiceEvents();
       };
 
       $scope.addRCA = function (metric, host) {
@@ -46,6 +50,30 @@ define([
           causeHost : host[0],
         }
         $scope.appEvent('show-add-rac');
+      };
+
+      $scope.getServiceEvents = function () {
+        backendSrv.alertD({
+          method: 'GET',
+          url   : '/service/events',
+          params: { 'start': 1505721891194 }
+        }).then(function (response) {
+          _.each(response.data, function(item) {
+            item.type = (item.type === 'Start') ? '启动' : '停止';
+            item.timestamp = _.transformTime(item.timestamp);
+          });
+          $scope.serviceEvents = response.data;
+        });
+      };
+
+      $scope.showGuideResult = function (e, params) {
+        $scope.targetObj = {
+          metric: params.metric,
+          host: params.host,
+          start: params.start,
+          distance: 300,
+        };
+        $scope.analysis();
       };
 
       $scope.init();

@@ -1,14 +1,19 @@
 ///<reference path="../../headers/common.d.ts" />
 
+import _ from 'lodash';
 import coreModule from 'app/core/core_module';
 
 export class HostSrv {
+
+  topology: Array<any>;
+  hostInfo: Array<any>;
 
   /** @ngInject */
   constructor(private $http, private backendSrv) {
   }
 
-  // Tags
+  // Host Tags
+
   /**
    * Get the specific host information in cmdb.
    * @param hostId.
@@ -86,6 +91,42 @@ export class HostSrv {
     });
   }
 
+  getHostTopologyData(params) {
+    return this.backendSrv.alertD({
+      method: 'GET',
+      url   : '/host/topology',
+      params: params
+    }).then(response => {
+      this.topology = [];
+
+      if (_.isArray(response.data)) {
+        response.data.forEach(item => {
+          this.topology.push({
+            parent: 'All',
+            name  : item.hostname,
+            value : item.healthStatusType.toLowerCase(),
+            ip    : item.defaultIp,
+            _private_: item
+          });
+        });
+      } else {
+        for (var prop in response.data) {
+          response.data[prop].forEach(item => {
+            this.topology.push({
+              parent: prop,
+              name  : item.hostname,
+              value : item.healthStatusType.toLowerCase(),
+              ip    : item.defaultIp,
+              _private_: item
+            });
+          });
+        }
+      }
+
+      return this.topology;
+    });
+  }
+
   // Host Process
 
   /**
@@ -97,6 +138,75 @@ export class HostSrv {
       method: 'GET',
       url   : '/host/state',
       params: { 'hostId': hostId }
+    });
+  }
+
+  // Host Information
+
+  /**
+   * Get host's information.
+   * @return {Array} host's information: cpu, mem, disk, state, version, startTime, commitId, id.
+   */
+  getHostInfo() {
+    var query = {
+      "queries": [
+        {
+          "metric": "cpu.usr"
+        },
+        {
+          "metric": "collector.state"
+        },
+        {
+          "metric": "proc.meminfo.active"
+        },
+        {
+          "metric": "df.bytes.free",
+          "tags": [
+            {
+              "name": "mount",
+              "value": "/"
+            }
+          ]
+        }
+      ],
+      "hostProperties": ["version", "startTime", "commit", "id"]
+    };
+
+    this.hostInfo = [];
+    return this.backendSrv.alertD({
+      method: "POST",
+      url   : "/host/metrics",
+      data  : query
+    }).then(response => {
+      response.data.forEach(item => {
+        this.hostInfo.push({
+          "host": item.hostname,
+          "id": item.id,
+          "status": _.statusFormatter(item["collector.state"]),
+          "disk": _.gbFormatter(item["df.bytes.free"]),
+          "cpu": _.percentFormatter(item["cpu.usr"]),
+          "mem": _.gbFormatter(item["proc.meminfo.active"]),
+          "commit": item.commit,
+          "startTime": item.startTime,
+          "version": item.version
+        });
+      });
+
+      return this.hostInfo;
+    });
+  }
+
+  // Host KPI
+
+  /**
+   * Get host's kpi.
+   * @return {Array} host's kpi.
+   */
+  getHostKpi({ hostname }) {
+    return this.backendSrv.alertD({
+      method: "GET",
+      url   : "/service/hostStatus",
+      params: { host: hostname }
     });
   }
 
