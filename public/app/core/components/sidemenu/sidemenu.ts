@@ -142,16 +142,20 @@ export class SideMenuCtrl {
       icon: "fa fa-fw fa-bar-chart",
       children: [
         {
+          text: '故障溯源',
+          url: this.getUrl("/rca"),
+        },
+        {
           text: '关联性分析',
           url: this.getUrl("/association"),
         },
         {
-          text: '运维知识',
-          url: this.getUrl("/knowledgebase"),
+          text: '资源消耗分析',
+          url: this.getUrl("/topn"),
         },
         {
-          text: '故障溯源',
-          url: this.getUrl("/rca"),
+          text: '运维知识',
+          url: this.getUrl("/knowledgebase"),
         },
         {
           text: '健康报告',

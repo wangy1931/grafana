@@ -30,13 +30,14 @@ export class GuideCtrl {
 
     this.steps.push({
       title: '定位问题',
-      icon: 'icon-gf icon-gf-check',
+      cta: '定位问题',
+      icon: 'icon-gf icon-gf-check',  // icon-gf 
       href: '/',
       // target: '_blank',
       note: '系统报警<br/>服务KPI<br/>机器KPI',
-      check: () => $q.when(true),
+      check: () => $q.when(this.$location.path() === '/'),
       jumpTo: () => {
-        this.jump('/');
+        this.$location.url('/');
       }
     });
 
@@ -47,7 +48,7 @@ export class GuideCtrl {
       href: '/rca',
       note: '根据故障问题，寻找根源',
       // check: () => $q.when(false),
-      check: () => $q.when(this.$location.path() !== '/rca'),
+      check: () => $q.when(this.$location.path() === '/rca'),
       jumpTo: () => {
         this.jump('/rca');
       }
@@ -56,11 +57,11 @@ export class GuideCtrl {
     this.steps.push({
       title: '关联分析',
       cta: '关联分析',
-      icon: 'icon-gf iconfont fa-association',
-      href: '/association',
-      check: () => $q.when(this.$location.path() !== '/association'),
+      icon: 'iconfont fa-association',
+      href: '/association#association',
+      check: () => $q.when(this.$location.path() === '/association' && this.$location.hash() === 'association'),
       jumpTo: () => {
-        this.jump('/association');
+        this.jump('/association', '#association');
       }
     });
 
@@ -68,10 +69,10 @@ export class GuideCtrl {
       title: '日志分析',
       cta: '日志分析',
       icon: 'fa fa-fw fa-file-text-o',
-      href: '/association',
-      check: () => $q.when(false),
+      href: '/association#logs',
+      check: () => $q.when(this.$location.path() === '/association' && this.$location.hash() === 'logs'),
       jumpTo: () => {
-        this.jump('/association');
+        this.jump('/association', '#logs');
       }
       // check: () => {
       //   return  this.backendSrv.get('/api/org/users').then(res => {
@@ -83,11 +84,11 @@ export class GuideCtrl {
     this.steps.push({
       title: '高消耗进程',
       cta: '高消耗进程',
-      icon: 'icon-gf iconfont fa-process',
-      href: '/dashboard/db/topn',
-      check: () => $q.when(this.$location.path() !== '/dashboard/db/topn'),
+      icon: 'iconfont fa-process',
+      href: '/topn',
+      check: () => $q.when(this.$location.path() === '/topn'),
       jumpTo: () => {
-        this.jump('/dashboard/db/topn');
+        this.jump('/topn');
       }
     });
 
@@ -111,14 +112,14 @@ export class GuideCtrl {
 
     this.stepIndex += 1;
     var currentStep = this.steps[this.stepIndex];
-    return currentStep.check().then(passed => {
-      if (passed) {
-        currentStep.cssClass = 'completed';
-        return this.nextStep();
+    return currentStep.check().then(current => {
+      if (current) {
+        currentStep.cssClass = 'active';
+        return this.$q.when();
       }
 
-      currentStep.cssClass = 'active';
-      return this.$q.when();
+      currentStep.cssClass = 'completed';
+      return this.nextStep();
     });
   }
 
@@ -134,11 +135,8 @@ export class GuideCtrl {
     this.$rootScope.appEvent('exception-located', this.selected);
   }
 
-  jump(path) {
-    // var searchParams = this.$location.search();
-    // var host = searchParams.host || '*';
-    // var url = `${path}?guide&metric=${searchParams.metric}&host=${host}&start=${searchParams.start}`;
-    var url = `${path}?guide&metric=${this.selected.metric}&host=${this.selected.host}&start=${this.selected.start}`;
+  jump(path, hash?) {
+    var url = `${path}?guide&metric=${this.selected.metric}&host=${this.selected.host}&start=${this.selected.start}&hostId=${this.selected.hostId}${hash}`;
     this.$location.url(url);
   }
 
@@ -151,7 +149,7 @@ export class GuideCtrl {
     this.exceptionMetrics = [];
 
     this.alertMgrSrv.loadTriggeredAlerts().then(response => {
-      response.data.forEach(item => {
+      response.data && response.data.forEach(item => {
         this.exceptionMetrics.push({
           name: _.getMetricName(item.metric),
           time: item.status.levelChangedTime,

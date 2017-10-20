@@ -404,9 +404,15 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controllerAs: 'ctrl',
     templateUrl: 'public/app/features/styleguide/styleguide.html',
   })
+  .when('/topn', {
+    controller: 'TopNCtrl',
+    controllerAs: 'ctrl',
+    templateUrl: 'public/app/features/topn/partials/topn.html'
+  })
   .otherwise({
     templateUrl: 'public/app/partials/error.html',
-    controller: 'ErrorCtrl'
+    controller: 'ErrorCtrl',
+    reloadOnSearch: false,
   });
 }
 

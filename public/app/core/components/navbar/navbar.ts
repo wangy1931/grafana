@@ -6,8 +6,11 @@ import $ from 'jquery';
 import coreModule from '../../core_module';
 
 export class NavbarCtrl {
+  showGuideNav: boolean = false;
+
   /** @ngInject */
-  constructor(private $scope, private $rootScope, private contextSrv) {
+  constructor(private $scope, private $rootScope, private $location, private contextSrv) {
+    !!~['/', '/rca', '/association', '/topn'].indexOf(this.$location.path()) && (this.showGuideNav = true);
   }
 
   showGuide() {

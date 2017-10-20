@@ -155,7 +155,7 @@ export class TopologyGraphCtrl {
   getAllTagsKey() {
     // init, get all tags key for group-options
     this.hostSrv.getAllTagsKey().then(response => {
-      response.data.forEach((item, index) => {
+      response.data && response.data.forEach((item, index) => {
         response.data[index] = { 'text': item, 'value': item }
       });
       this.groupOptions = [this.groupOptions[0]].concat(response.data);

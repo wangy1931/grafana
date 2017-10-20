@@ -178,7 +178,7 @@ export class HostSrv {
       url   : "/host/metrics",
       data  : query
     }).then(response => {
-      response.data.forEach(item => {
+      response.data && response.data.forEach(item => {
         this.hostInfo.push({
           "host": item.hostname,
           "id": item.id,

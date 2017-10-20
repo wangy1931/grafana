@@ -331,6 +331,7 @@ export class SystemOverviewCtrl {
       metric.push({
         name: name,
         host: host,
+        hostId: _.findWhere(this.hostPanels, { host: host }).id,
         alertRuleSet: metrics[name].alertRuleSet ? "有" : "无",
         alertLevel: _.translateAlertLevel(metrics[name].alertLevel),
         anomalyHealth: metrics[name].health
@@ -353,6 +354,7 @@ export class SystemOverviewCtrl {
       metric.push({
         name: name,
         host: host,
+        hostId: _.findWhere(this.hostPanels, { host: host }).id,
         alertRuleSet: metrics[name].alertRuleSet ? "有" : "无",
         alertLevel: _.translateAlertLevel(metrics[name].alertLevel),
         anomalyHealth: metrics[name].health
@@ -418,7 +420,6 @@ export class SystemOverviewCtrl {
         Anchor: "Continuous",
         Connector: [ "StateMachine", { cssClass: "connectorClass", hoverClass: "connectorHoverClass" } ],
         Endpoint: "Blank",
-        // HoverPaintStyle: { stroke: "orange" },
         PaintStyle: { strokeWidth: 1, stroke: HEALTH_TYPE.BLUE.COLOR },
         Overlays: [
           ["Arrow", { fill: HEALTH_TYPE.BLUE.COLOR, width: 10, length: 10, location: 1 }]

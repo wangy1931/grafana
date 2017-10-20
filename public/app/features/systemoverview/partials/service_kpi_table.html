@@ -11,6 +11,7 @@
             <th data-field="anomalyHealth" data-sortable="true" data-formatter="healthLinkFormat" data-title-tooltip="正常: 100，临时异常: 25-100，持续异常: &lt;25" >健康值</th>
             <th data-field="snoozeState" data-sortable="true" data-visible="false">是否暂缓报警</th>
             <th data-field="host" data-sortable="false" data-visible="false">机器</th>
+            <th data-field="hostId" data-sortable="false" data-visible="false">机器id</th>
             <th data-field="operator" data-sortable="false" data-formatter="operatorFormat">操作</th>
         </tr>
     </thead>
@@ -46,7 +47,7 @@ function healthLinkFormat(value, row, index) {
 }
 function operatorFormat(value, row, index) {
     if (parseInt(row.anomalyHealth) === 0 || (parseInt(row.anomalyHealth) < 26 && !row.snoozeState)) {
-        return '<a href="/rca?guide&host=' + row.host + '&metric=' + row.name + '"><i class="fa fa-search" data-toggle="tooltip" title="诊断分析"></i></a>';
+        return '<a href="/rca?guide&hostId=' + row.hostId + '&host=' + row.host + '&metric=' + row.name + '"><i class="fa fa-search" data-toggle="tooltip" title="诊断分析"></i></a>';
     }
 }
 </script>
