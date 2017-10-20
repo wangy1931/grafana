@@ -61,8 +61,6 @@ export class TreeMenuCtrl {
   yaxisNumber: number;
   correlationMetrics: any;
   prox: any;
-  panelId: number;
-  rowIndex: number;
   panel: any;
 
   /** @ngInject */
@@ -109,9 +107,6 @@ export class TreeMenuCtrl {
       });
     }
 
-    if (this.panelId) {
-      this.panel = _.find(this.$scope.dashboard.rows[this.rowIndex].panels, {id: this.panelId});
-    }
   }
 
   showTree() {
@@ -191,7 +186,7 @@ export class TreeMenuCtrl {
             "shouldComputeRate": false,
             "tags": {"host": host}
           };
-          this.panel.targets.push(target);
+          targets.push(target);
           var seriesOverride = {
             "alias": metric+"{host"+"="+host+"}",
             "yaxis": this.yaxisNumber++
@@ -263,8 +258,7 @@ export function treeMenu() {
     controllerAs: 'ctrl',
     template: template,
     link: (scope, elem, attrs, ctrl) => {
-      ctrl.panelId = Number(attrs.panelid);
-      ctrl.rowIndex = Number(attrs.rowindex);
+      ctrl.panel = scope.$parent.panel;
     }
   };
 }

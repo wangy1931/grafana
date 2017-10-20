@@ -8,36 +8,48 @@ function (angular, _, noUiSlider) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('AlertAssociationCtrl', function ($scope, $routeParams, $location, alertMgrSrv, alertSrv, $timeout, contextSrv, healthSrv, backendSrv, $controller, datasourceSrv, associationSrv) {
-    var alertMetric = $routeParams.metric;
-    var alertHost = $routeParams.host;
-    var distance = $routeParams.distance;
-    $scope.correlationThreshold = distance;
-
-    associationSrv.setSourceAssociation(alertMetric, alertHost, $scope.correlationThreshold);
-
-    this.initPage = function(target) {
-      alertMetric = target.metric;
-      alertHost = target.host ;
-      distance = target.distance;
-      $scope.correlationThreshold = distance;
-      $scope.init();
+  module.controller('AlertAssociationCtrl', function ($scope, $location, alertMgrSrv, alertSrv, $timeout, contextSrv, healthSrv, backendSrv, $controller, datasourceSrv, associationSrv) {
+    var alertMetric = '';
+    var alertHost = '';
+    var distance = '';
+    $scope.correlationThreshold = distance || 300;
+    $scope.targetObj = {
+      metric: "",
+      host: ""
     };
 
+    if (_.isEmpty(associationSrv.sourceAssociation)) {
+      $scope.isSingle = true;
+    } else {
+      $scope.isSingle = false;
+      alertMetric = associationSrv.sourceAssociation.metric;
+      alertHost = associationSrv.sourceAssociation.host;
+      distance = associationSrv.sourceAssociation.distance;
+    }
+    $controller('OpenTSDBQueryCtrl', {$scope: $scope});
+
+    // this.initPage = function(target) {
+    //   alertMetric = target.metric;
+    //   alertHost = target.host ;
+    //   distance = target.distance;
+    //   $scope.correlationThreshold = distance;
+    //   $scope.init();
+    // };
+
     $scope.init = function() {
-      if (_.isUndefined($scope.correlationThreshold))
-      return;
-      $scope.manualMetrics = [];
+      $scope.suggestTagHost = backendSrv.suggestTagHost;
       datasourceSrv.get('opentsdb').then(function (datasource) {
         $scope.datasource = datasource;
       });
-      if(!$scope.dashboard) {
-        $scope.createAlertMetricsGraph(_.getMetricName(alertMetric), alertHost);
-      } else {
-        var metric = _.getMetricName(alertMetric)
-        $scope.dashboard.rows[0].panels[0].title = metric;
-        $scope.dashboard.rows[0].panels[0].targets[0].metric = metric;
-        $scope.dashboard.rows[0].panels[0].targets[0].tags.host = alertHost;
+      if (alertMetric) {
+        if(!$scope.dashboard) {
+          $scope.createAlertMetricsGraph(_.getMetricName(alertMetric), alertHost);
+        } else {
+          var metric = _.getMetricName(alertMetric)
+          $scope.dashboard.rows[0].panels[0].title = metric;
+          $scope.dashboard.rows[0].panels[0].targets[0].metric = metric;
+          $scope.dashboard.rows[0].panels[0].targets[0].tags.host = alertHost;
+        }
       }
     };
 
@@ -175,6 +187,48 @@ function (angular, _, noUiSlider) {
         $scope.$broadcast('render');
       });
     };
+
+    $scope.analysis = function() {
+      alertMetric = contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + $scope.targetObj.metric;
+      alertHost = $scope.targetObj.host;
+      $scope.init();
+      associationSrv.setSourceAssociation(alertMetric, alertHost, $scope.correlationThreshold);
+      $scope.$emit('analysis', associationSrv);
+
+      $scope.getServiceEvents();
+    }
+
+    $scope.getServiceEvents = function () {
+      backendSrv.alertD({
+        method: 'GET',
+        url   : '/service/events',
+        params: { 'start': 1505721891194 }
+      }).then(function (response) {
+        _.each(response.data, function(item) {
+          item.type = (item.type === 'Start') ? '启动' : '停止';
+          item.timestamp = _.transformTime(item.timestamp);
+        });
+        $scope.serviceEvents = response.data;
+      });
+    };
+
+    $scope.showGuideResult = function (e, params) {
+      $scope.targetObj = {
+        metric: params.metric,
+        host: params.host,
+        start: params.start,
+        distance: 300,
+      };
+      $scope.analysis();
+    };
+
+    $scope.$on('destroy', function() {
+      var threshold = {
+        warn: null,
+        crit: null
+      }
+      alertMgrSrv.resetCurrentThreshold(threshold);
+    });
     $scope.init();
   });
 
@@ -195,6 +249,7 @@ function (angular, _, noUiSlider) {
         });
         scope.$parent.thresholdSlider = element[0].noUiSlider;
         scope.$parent.thresholdSlider.on('change', function() {
+          scope.$parent.correlationThreshold = scope.$parent.thresholdSlider.get();
           scope.$emit('analysis', 'thresholdSlider');
         })
       }
