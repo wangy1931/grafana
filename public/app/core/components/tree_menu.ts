@@ -109,9 +109,6 @@ export class TreeMenuCtrl {
       });
     }
 
-    if (this.panelId) {
-      this.panel = _.find(this.$scope.dashboard.rows[this.rowIndex].panels, {id: this.panelId});
-    }
   }
 
   showTree() {
@@ -158,6 +155,9 @@ export class TreeMenuCtrl {
   }
 
   addQuery(event, metric, host) {
+    // if (!this.panel) {
+    //   this.panel = _.find(this.$scope.dashboard.rows[this.rowIndex].panels, {id: this.panelId});
+    // }
     var _input = $(event.currentTarget).find('input');
     if (_input.prop('disabled')) {
       return;
@@ -191,7 +191,7 @@ export class TreeMenuCtrl {
             "shouldComputeRate": false,
             "tags": {"host": host}
           };
-          this.panel.targets.push(target);
+          targets.push(target);
           var seriesOverride = {
             "alias": metric+"{host"+"="+host+"}",
             "yaxis": this.yaxisNumber++
@@ -265,6 +265,7 @@ export function treeMenu() {
     link: (scope, elem, attrs, ctrl) => {
       ctrl.panelId = Number(attrs.panelid);
       ctrl.rowIndex = Number(attrs.rowindex);
+      ctrl.panel = scope.$parent.panel;
     }
   };
 }

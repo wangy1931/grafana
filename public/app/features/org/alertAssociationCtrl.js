@@ -23,7 +23,7 @@ function (angular, _, noUiSlider) {
       $scope.correlationThreshold = distance;
       $scope.init();
     };
-    
+
     $scope.init = function() {
       if (_.isUndefined($scope.correlationThreshold))
       return;
