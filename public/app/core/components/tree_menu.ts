@@ -61,8 +61,6 @@ export class TreeMenuCtrl {
   yaxisNumber: number;
   correlationMetrics: any;
   prox: any;
-  panelId: number;
-  rowIndex: number;
   panel: any;
 
   /** @ngInject */
@@ -155,9 +153,6 @@ export class TreeMenuCtrl {
   }
 
   addQuery(event, metric, host) {
-    // if (!this.panel) {
-    //   this.panel = _.find(this.$scope.dashboard.rows[this.rowIndex].panels, {id: this.panelId});
-    // }
     var _input = $(event.currentTarget).find('input');
     if (_input.prop('disabled')) {
       return;
@@ -263,8 +258,6 @@ export function treeMenu() {
     controllerAs: 'ctrl',
     template: template,
     link: (scope, elem, attrs, ctrl) => {
-      ctrl.panelId = Number(attrs.panelid);
-      ctrl.rowIndex = Number(attrs.rowindex);
       ctrl.panel = scope.$parent.panel;
     }
   };

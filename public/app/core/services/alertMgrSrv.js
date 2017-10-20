@@ -90,9 +90,9 @@ function (angular, _, coreModule) {
       });
     };
 
-    this.resetCurrentThreshold = function (alertDetial) {
-      self.currentWarningThreshold = alertDetial.warn.threshold;
-      self.currentCritialThreshold = alertDetial.crit.threshold;
+    this.resetCurrentThreshold = function (threshold) {
+      self.currentWarningThreshold = threshold.warn;
+      self.currentCritialThreshold = threshold.crit;
     };
 
     this.loadAlertHistory = function(fromTime, host) {

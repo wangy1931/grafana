@@ -187,6 +187,14 @@ function (angular, _, noUiSlider) {
       associationSrv.setSourceAssociation(alertMetric, alertHost, $scope.correlationThreshold);
       $scope.$emit('analysis', associationSrv);
     }
+
+    $scope.$on('destroy', function() {
+      var threshold = {
+        warn: null,
+        crit: null
+      }
+      alertMgrSrv.resetCurrentThreshold(threshold);
+    });
     $scope.init();
   });
 

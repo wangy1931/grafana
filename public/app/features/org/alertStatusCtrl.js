@@ -127,7 +127,11 @@ function (angular, moment, _) {
       var metric = _.getMetricName(alertDetail.metric);
       var def_zh = alertDetail.definition.name;
       var host = alertDetail.status.monitoredEntity;
-      alertMgrSrv.resetCurrentThreshold(alertDetail.definition.alertDetails);
+      var threshold = {
+        warn: alertDetail.definition.alertDetails.warn.threshold,
+        crit: alertDetail.definition.alertDetails.crit.threshold,
+      }
+      alertMgrSrv.resetCurrentThreshold(threshold);
       alertMgrSrv.annotations = [{
         source: {
           datasource: "elk",
