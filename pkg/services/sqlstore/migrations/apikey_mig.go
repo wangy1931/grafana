@@ -13,6 +13,7 @@ func addApiKeyMigrations(mg *Migrator) {
 			{Name: "role", Type: DB_NVarchar, Length: 255, Nullable: false},
 			{Name: "created", Type: DB_DateTime, Nullable: false},
 			{Name: "updated", Type: DB_DateTime, Nullable: false},
+			{Name: "deleted", Type: DB_Int, Length: 1, Nullable: false},
 		},
 		Indices: []*Index{
 			{Cols: []string{"account_id"}},
@@ -46,6 +47,7 @@ func addApiKeyMigrations(mg *Migrator) {
 			{Name: "role", Type: DB_NVarchar, Length: 255, Nullable: false},
 			{Name: "created", Type: DB_DateTime, Nullable: false},
 			{Name: "updated", Type: DB_DateTime, Nullable: false},
+			{Name: "deleted", Type: DB_Int, Length: 1, Nullable: false},
 		},
 		Indices: []*Index{
 			{Cols: []string{"org_id"}},
@@ -69,6 +71,7 @@ func addApiKeyMigrations(mg *Migrator) {
 		"role":    "role",
 		"created": "created",
 		"updated": "updated",
+		"deleted": "deleted",
 	}))
 
 	mg.AddMigration("Drop old table api_key_v1", NewDropTableMigration("api_key_v1"))
