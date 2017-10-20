@@ -1,21 +1,52 @@
-<navbar icon="fa fa-fw fa-bell" title="报警管理">
-	<ul class="nav">
-    <li><a href="alerts/status">总览</a></li>
-    <li><a href="alerts/new">新建报警规则</a></li>
-    <li><a href="alerts">报警规则</a></li>
-  </ul>
+<navbar icon="fa fa-fw fa-signal" title="关联分析">
   <ul class="nav pull-right">
-    <li ng-if="dashboard">
-        <gf-time-picker dashboard="dashboard"></gf-time-picker>
-    </li>
+      <li ng-show="dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
+          <a ng-click="exitFullscreen()">
+              返回到仪表盘
+          </a>
+      </li>
+      <li ng-if="dashboard">
+          <gf-time-picker dashboard="dashboard"></gf-time-picker>
+      </li>
   </ul>
 </navbar>
 <div dash-editor-view class="time-picker"></div>
 
 <div class="page-container">
-  <div ng-if="submenuEnabled">
-    <dashboard-submenu></dashboard-submenu>
-  </div>
+  <form class="tidy-form-box" ng-if="isSingle">
+    <h2>关联性分析</h2>
+    <div class="tidy-form">
+        <ul class="tidy-form-list">
+            <li class="tidy-form-item">
+                指标
+            </li>
+            <li>
+                <input type="text" class="tidy-form-input input-xlarge"
+                    style="margin-right: 40px;"
+                    ng-model='targetObj.metric'
+                    spellcheck='false'
+                    bs-typeahead-old="suggestMetrics"
+                    placeholder="需要分析的指标" required/>
+            </li>
+        </ul>
+    </div>
+    <div class="tidy-form">
+        <ul class="tidy-form-list">
+            <li class="tidy-form-item">
+                机器标签
+            </li>
+            <li>
+                <input type="text" class="input-medium tidy-form-input ng-pristine ng-untouched ng-valid"
+                    style="margin-right: 40px;"
+                    spellcheck="false"
+                    bs-typeahead-old="suggestTagHost"
+                    data-min-length="0" data-items="100" ng-model="targetObj.host" placeholder="请键入主机名"
+                    data-provide="typeahead">
+            </li>
+        </ul>
+    </div>
+    <button type="submit" class="btn btn-primary" ng-click="analysis()"><i class="fa fa-search"></i>开始分析</button>
+  </form>
   <div class="main-view-container">
     <div class="grafana-row" ng-controller="RowCtrl"
          ng-repeat="(row_name, row) in dashboard.rows" row-height>

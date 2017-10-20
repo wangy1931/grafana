@@ -12,32 +12,29 @@ function (angular, _, noUiSlider) {
     var alertMetric = $routeParams.metric;
     var alertHost = $routeParams.host;
     var distance = $routeParams.distance;
-    $scope.correlationThreshold = distance;
-
-    associationSrv.setSourceAssociation(alertMetric, alertHost, $scope.correlationThreshold);
-
-    this.initPage = function(target) {
-      alertMetric = target.metric;
-      alertHost = target.host ;
-      distance = target.distance;
-      $scope.correlationThreshold = distance;
-      $scope.init();
+    $scope.correlationThreshold = distance || 100;
+    $scope.targetObj = {
+      metric: "",
+      host: ""
     };
+    ($routeParams.host) ? $scope.isSingle = false : $scope.isSingle = true;
+    associationSrv.setSourceAssociation(alertMetric, alertHost, $scope.correlationThreshold);
+    $controller('OpenTSDBQueryCtrl', {$scope: $scope});
 
     $scope.init = function() {
-      if (_.isUndefined($scope.correlationThreshold))
-      return;
-      $scope.manualMetrics = [];
+      $scope.suggestTagHost = backendSrv.suggestTagHost;
       datasourceSrv.get('opentsdb').then(function (datasource) {
         $scope.datasource = datasource;
       });
-      if(!$scope.dashboard) {
-        $scope.createAlertMetricsGraph(_.getMetricName(alertMetric), alertHost);
-      } else {
-        var metric = _.getMetricName(alertMetric)
-        $scope.dashboard.rows[0].panels[0].title = metric;
-        $scope.dashboard.rows[0].panels[0].targets[0].metric = metric;
-        $scope.dashboard.rows[0].panels[0].targets[0].tags.host = alertHost;
+      if (alertMetric) {
+        if(!$scope.dashboard) {
+          $scope.createAlertMetricsGraph(_.getMetricName(alertMetric), alertHost);
+        } else {
+          var metric = _.getMetricName(alertMetric)
+          $scope.dashboard.rows[0].panels[0].title = metric;
+          $scope.dashboard.rows[0].panels[0].targets[0].metric = metric;
+          $scope.dashboard.rows[0].panels[0].targets[0].tags.host = alertHost;
+        }
       }
     };
 
@@ -175,6 +172,14 @@ function (angular, _, noUiSlider) {
         $scope.$broadcast('render');
       });
     };
+
+    $scope.analysis = function() {
+      alertMetric = contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + $scope.targetObj.metric;
+      alertHost = $scope.targetObj.host;
+      $scope.init();
+      associationSrv.setSourceAssociation(alertMetric, alertHost, $scope.correlationThreshold);
+      $scope.$emit('analysis', associationSrv);
+    }
     $scope.init();
   });
 
@@ -195,6 +200,7 @@ function (angular, _, noUiSlider) {
         });
         scope.$parent.thresholdSlider = element[0].noUiSlider;
         scope.$parent.thresholdSlider.on('change', function() {
+          scope.$parent.correlationThreshold = scope.$parent.thresholdSlider.get();
           scope.$emit('analysis', 'thresholdSlider');
         })
       }
