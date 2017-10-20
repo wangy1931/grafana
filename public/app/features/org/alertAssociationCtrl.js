@@ -8,17 +8,24 @@ function (angular, _, noUiSlider) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('AlertAssociationCtrl', function ($scope, $routeParams, $location, alertMgrSrv, alertSrv, $timeout, contextSrv, healthSrv, backendSrv, $controller, datasourceSrv, associationSrv) {
-    var alertMetric = $routeParams.metric;
-    var alertHost = $routeParams.host;
-    var distance = $routeParams.distance;
-    $scope.correlationThreshold = distance || 100;
+  module.controller('AlertAssociationCtrl', function ($scope, $location, alertMgrSrv, alertSrv, $timeout, contextSrv, healthSrv, backendSrv, $controller, datasourceSrv, associationSrv) {
+    var alertMetric = '';
+    var alertHost = '';
+    var distance = '';
+    $scope.correlationThreshold = distance || 300;
     $scope.targetObj = {
       metric: "",
       host: ""
     };
-    ($routeParams.host) ? $scope.isSingle = false : $scope.isSingle = true;
-    associationSrv.setSourceAssociation(alertMetric, alertHost, $scope.correlationThreshold);
+
+    if (_.isEmpty(associationSrv.sourceAssociation)) {
+      $scope.isSingle = true;
+    } else {
+      $scope.isSingle = false;
+      alertMetric = associationSrv.sourceAssociation.metric;
+      alertHost = associationSrv.sourceAssociation.host;
+      distance = associationSrv.sourceAssociation.distance;
+    }
     $controller('OpenTSDBQueryCtrl', {$scope: $scope});
 
     $scope.init = function() {

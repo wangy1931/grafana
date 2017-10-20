@@ -124,7 +124,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'AlertStatusCtrl',
     resolve: loadOrgBundle,
   })
-  .when('/alerts/association/:host/:distance/:metric*', {
+  .when('/alerts/association', {
     templateUrl: 'public/app/features/org/partials/alertAssociation.html',
     controller : 'AlertAssociationCtrl',
     resolve: loadOrgBundle,

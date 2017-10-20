@@ -33,6 +33,7 @@ export class PanelCtrl {
   events: Emitter;
   contextSrv: any;
   integrateSrv: any;
+  associationSrv: any;
 
   constructor($scope, $injector) {
     this.$injector = $injector;
@@ -41,6 +42,7 @@ export class PanelCtrl {
     this.$timeout = $injector.get('$timeout');
     this.contextSrv = $injector.get('contextSrv');
     this.integrateSrv = $injector.get('integrateSrv');
+    this.associationSrv = $injector.get('associationSrv');
     this.editorTabIndex = 0;
     this.events = new Emitter();
 
@@ -266,8 +268,9 @@ export class PanelCtrl {
       var host = this.panel.targets[0].tags.host;
       var metric = this.panel.targets[0].metric;
       if (host && metric) {
-        var link = '/alerts/association/' + host + '/100/' + this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.' + metric;
-       this.$_location.url(link);
+        metric = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.' + metric;
+        this.associationSrv.setSourceAssociation(metric, host, 300);
+        this.$_location.path("/alerts/association");
       }
     } catch (err) {
       var reg = /\'(.*?)\'/g;
