@@ -99,7 +99,6 @@ define([
           }];
           datasourceSrv.getStatus(queries, 'now-5m').then(function(response) {
             _.each(response, function(data) {
-              console.log(data);
               if (_.isObject(data)) {
                 var status = data.dps[Object.keys(data.dps)[0]];
                 if(typeof(status) !== "number") {
