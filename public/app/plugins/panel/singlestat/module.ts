@@ -317,8 +317,8 @@ class SingleStatCtrl extends MetricsPanelCtrl {
       });
 
       var bgColor = config.bootData.user.lightTheme
-        ? 'rgb(230,230,230)'
-        : 'rgb(38,38,38)';
+        ? 'rgb(38,38,38)'
+        : 'rgb(230,230,230)';
 
       var fontScale = parseInt(panel.valueFontSize) / 100;
       var dimension = Math.min(width, height);
