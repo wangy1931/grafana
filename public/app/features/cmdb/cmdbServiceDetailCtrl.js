@@ -6,7 +6,7 @@ define([
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('CMDBServiceDetailCtrl', function ($scope, backendSrv, $location, $q) {
+  module.controller('CMDBServiceDetailCtrl', function ($scope, backendSrv, $location, $q, contextSrv, datasourceSrv) {
     $scope.init = function() {
       $scope.order = "'hostname'";
       $scope.desc = false;
@@ -91,6 +91,31 @@ define([
       backendSrv.alertD({url:'/cmdb/service?id='+$scope.serviceId}).then(function(response) {
         $scope.detail = _.cmdbInitObj(response.data);
         _.map($scope.detail.hosts, function(host) {
+          var queries = [{
+            "metric": contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + $scope.detail.name + ".state",
+            "aggregator": "sum",
+            "downsample": "1s-sum",
+            "tags": {"host": host.hostname}
+          }];
+          datasourceSrv.getStatus(queries, 'now-5m').then(function(response) {
+            _.each(response, function(data) {
+              console.log(data);
+              if (_.isObject(data)) {
+                var status = data.dps[Object.keys(data.dps)[0]];
+                if(typeof(status) !== "number") {
+                  throw Error;
+                }
+                if (status > 0) {
+                  host.state = "异常";
+                } else {
+                  host.state = "正常";
+                }
+              }
+            });
+          }, function() {
+            host.state = "异常";
+          });
+
           if(host.isVirtual) {
             return host.isVirtual = '是';
           } else if(host.isVirtual == false) {
