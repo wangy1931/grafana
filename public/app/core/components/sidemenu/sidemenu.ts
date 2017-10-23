@@ -383,17 +383,6 @@ export class SideMenuCtrl {
     });
   };
 
-  getSource(_self) {
-    _self.$rootScope.appEvent('confirm-modal', {
-      title: '故障溯源',
-      text: '功能暂未开放，敬请期待',
-      icon: 'fa-bell',
-      yesText: '确定',
-      noText: '关闭',
-      modalClass : 'contact-us',
-    });
-  };
-
   updateMenu() {
     var currentPath = this.$location.path();
     if (currentPath.indexOf('/dashboard/snapshot') === 0) {

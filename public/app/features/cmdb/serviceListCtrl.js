@@ -6,7 +6,7 @@ define([
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('ServiceListCtrl', function ($scope, backendSrv, $location, alertSrv) {
+  module.controller('ServiceListCtrl', function ($scope, backendSrv, $location, alertSrv, contextSrv) {
     $scope.init = function() {
       $scope.searchHost = '';
       $scope.order = "'name'";

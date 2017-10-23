@@ -1,11 +1,11 @@
 <navbar title="配置管理库" icon="fa fa-fw fa-cubes">
   <ul class="nav">
-      <li class="active"><a>拓展服务</a></li>
+      <li class="active"><a>{{ctrl.title}}服务</a></li>
   </ul>
 </navbar>
 
 <div class="page-container">
-  <h2>添加自定义服务</h2>
+  <h2>添加{{ctrl.title}}服务</h2>
 
   <table class="table">
     <tr>
@@ -35,7 +35,7 @@
         </select>
       </td>
       <td>
-        <span ng-if="ctrl.editIndex !== $index">{{software.command}}</span>
+        <span class="software-command" bs-tooltip="'{{software.command}}'" data-placement="top" data-container="body" ng-if="ctrl.editIndex !== $index">{{software.command}}</span>
         <input style="width: 100%;" type="text"
           placeholder="请输入匹配规则"
           ng-if="ctrl.editIndex === $index"
@@ -73,9 +73,7 @@
     </tr> 
   </table>
 
-  <button class="btn btn-success" ng-click="ctrl.saveSoftware()">保存</button>
-
-  <div class="cmdb-reference">
+  <div class="cmdb-reference" ng-show="!ctrl.isUnit">
     <h2>参考信息
       <span class="dropdown" style="color: #2962ff;">
         <span ng-if="!ctrl.host.hostname">请选择机器</span>

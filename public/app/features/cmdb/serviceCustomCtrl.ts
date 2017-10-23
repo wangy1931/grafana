@@ -14,10 +14,24 @@ export class ServiceCustomCtrl {
   host: any;
   hostId: number;
   hostProcess: Array<any> = [];
+  isUnit: boolean;
+  title: string;
+  orgId: any;
+  sysId: any;
 
   /** @ngInject */
   constructor(private $scope, private backendSrv, private contextSrv, private $location) {
     this.hostId = parseInt(this.$location.search().hostId) || -1;
+    this.isUnit = this.contextSrv.isGrafanaAdmin && this.$location.search().unit;
+    if (this.isUnit) {
+      this.title = '默认';
+      this.orgId = 0;
+      this.sysId = 0;
+    } else {
+      this.title = '拓展';
+      this.orgId = this.contextSrv.user.orgId;
+      this.sysId = this.contextSrv.user.systemId;
+    }
     this.hostProcess = [];
     this.getSoftwares();
     this.initEditSoftware('add');
@@ -46,8 +60,8 @@ export class ServiceCustomCtrl {
   }
 
   getSoftwares() {
-    this.backendSrv.alertD({url: '/cmdb/setting/software'}).then((response) => {
-      this.softwareList = _.find(response.data, {'orgId': this.contextSrv.user.orgId, 'sysId': this.contextSrv.user.systemId}).software;
+    this.backendSrv.alertD({url: '/cmdb/setting/software?default_config=' + this.isUnit}).then((response) => {
+      this.softwareList = _.find(response.data, {'orgId': this.orgId, 'sysId': this.sysId}).software;
     });
   }
 
@@ -82,8 +96,18 @@ export class ServiceCustomCtrl {
   }
 
   deleteSoftware(software) {
-    _.remove(this.softwareList, function(service) {
-      return _.isEqual(service, software);
+    this.$scope.appEvent('confirm-modal', {
+      title: '删除',
+      text: '您确定要删除此服务吗？',
+      icon: 'fa-bell',
+      yesText: '确定',
+      noText: '取消',
+      onConfirm: ()=> {
+        _.remove(this.softwareList, (service) => {
+          return _.isEqual(service, software);
+        });
+        this.saveSoftware('删除');
+      },
     });
   }
 
@@ -93,6 +117,7 @@ export class ServiceCustomCtrl {
         if (_.every(this.newSoftware)) {
           this.softwareList.push(this.newSoftware);
           this.initEditSoftware(type);
+          this.saveSoftware('添加');
         } else {
           this.$scope.appEvent('alert-warning', ['参数不完整', '请完整填写服务信息']);
         }
@@ -101,6 +126,7 @@ export class ServiceCustomCtrl {
         if (_.every(this.editSoftware)) {
           this.softwareList[this.editIndex] = _.cloneDeep(this.editSoftware);
           this.initEditSoftware(type);
+          this.saveSoftware('保存');
         } else {
           this.$scope.appEvent('alert-warning', ['参数不完整', '请完整填写服务信息']);
         }
@@ -108,10 +134,10 @@ export class ServiceCustomCtrl {
     }
   }
 
-  saveSoftware() {
-    this.backendSrv.saveCustomSoftware(this.softwareList, '/cmdb/setting/software').then(function(response) {
+  saveSoftware(type) {
+    this.backendSrv.saveCustomSoftware(this.softwareList, '/cmdb/setting/software?default_config=' + this.isUnit).then((response) => {
       if (response.status === 200) {
-        this.$scope.appEvent('alert-success', ['上传成功']);
+        this.$scope.appEvent('alert-success', [type + '成功']);
       }
     });
   }

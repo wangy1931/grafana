@@ -7,6 +7,7 @@
     <h2>服务列表
         <a class="btn btn-primary btn-cmdb" style="margin-left: 12px;" href="/cmdb/servicecustom">添加拓展服务</a>
         <a class="btn btn-success btn-cmdb" style="margin-left: 12px;" href="/service_dependency">创建服务依赖</a>
+        <a ng-if="contextSrv.isGrafanaAdmin" class="btn btn-success btn-cmdb" style="margin-left: 12px;" href="/cmdb/servicecustom?unit=true">添加默认服务</a>
         <form class="form-search cmdb-search">
             <i class="fa fa-search"></i>
             <input type="text" class="input-medium search-query" placeholder="搜索服务列表" ng-model="searchService">
