@@ -191,6 +191,17 @@ $btn-cmdb-color: rgb(25,165,228);
     border-top: none;
     border-bottom: 1px solid #ddd;
   }
+  .btn-inverse {
+    width: 150px;
+    height: 35px;
+    @include text-overflow();
+    position: relative;
+    .caret {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+    }
+  }
 }
 
 .select-multiple {

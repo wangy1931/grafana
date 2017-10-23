@@ -18,7 +18,7 @@
 	</div>
 
   <div>
-    <div class="center" ng-if="!ctrl.configs.length">
+    <div class="center" ng-if="!ctrl.configs.length && ctrl.serviceName === 'filebeat'">
       尚未添加filebeat配置信息，请
       <a href="/cmdb/config/edit?configName=template&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}" class="btn btn-outline-primary btn-cmdb">添加</a>
     </div>    
@@ -32,7 +32,7 @@
         <td>{{config.name}}</td>
         <td>
           <a class="btn btn-outline-primary" href="/cmdb/config/edit?configName={{config.name}}&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}">编辑</a>
-          <a class="btn btn-outline-danger" ng-click="ctrl.deleteConfig(config.id)">删除</a>
+          <a class="btn btn-outline-danger" ng-if="ctrl.serviceName === 'filebeat'" ng-click="ctrl.deleteConfig(config.id)">删除</a>
         </td>
         <td>
           <button type="button" class="btn btn-inverse" 
