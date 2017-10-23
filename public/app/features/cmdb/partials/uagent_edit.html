@@ -16,7 +16,7 @@
     <div ng-repeat="section in ctrl.config.sections">
       <h3 class="page-heading">{{section.name}}</h3>
       <div class="gf-form max-width-28" style="align-items: start;" ng-repeat="(i, prop) in section.props" ng-switch="prop.type" ng-if="!prop.readOnly">
-        <span class="gf-form-label width-14">{{prop.name}}</span>
+        <span class="gf-form-label width-14">{{prop.name}}<i ng-if="prop.unit"> ( {{prop.unit}} ) </i></span>
         <div ng-switch-when="string">
           <input class="gf-form-input width-14" style="margin-bottom: 3px;" type="text" ng-if="prop.isCollection"
             ng-repeat="string in prop.value track by (string + $index)" ng-model="string"
