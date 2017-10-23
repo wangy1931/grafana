@@ -23,33 +23,34 @@
         <li>
             <h4><span ng-if="detail.hosts.length">部署机器列表</span><a class="btn btn-primary btn-outline-primary" ng-click="showHost()">添加机器</a></h4>
             <ul class="cmdb-detail" ng-if="detail.hosts.length">
-                <table class="table">
-                    <tr>
-                        <th ng-click="orderBy('hostname')" class="pointer">机器名称<i class="fa fa-sort"></i></th>
-                        <th>IP</th>
-                        <th>虚拟机</th>
-                        <th>操作系统</th>
-                        <th ng-click="orderBy('createdAt')" class="pointer">创建时间<i class="fa fa-sort"></i></th>
-                        <th>服务连接状态</th>
-                        <th>操作</th>
-                    </tr>
-                    <tr ng-repeat="host in detail.hosts | orderBy: order : desc">
-                        <td>{{host.hostname}}</td>
-                        <td>{{host.defaultIp}}</td>
-                        <td>{{host.isVirtual}}</td>
-                        <td>{{host.osName}}</td>
-                        <td>{{host.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-                        <td>{{host.state}}</td>
-                        <td>
-                            <a href="/cmdb/hostlist/hostdetail?id={{host.id}}">
-                                <span class="cmdb-icon-text">详情</span>
-                            </a>
-                            <a ng-click="deleteHost(host.relationshipId)">
-                                <span class="cmdb-icon-text">删除</span>
-                            </a>
-                        </td>
-                    </tr>
-                </table>
+                <li>
+                    <table class="table">
+                        <tr>
+                            <th ng-click="orderBy('hostname')" class="pointer">机器名称<i class="fa fa-sort"></i></th>
+                            <th>IP</th>
+                            <th>虚拟机</th>
+                            <th>操作系统</th>
+                            <th ng-click="orderBy('createdAt')" class="pointer">创建时间<i class="fa fa-sort"></i></th>
+                            <th>服务连接状态</th>
+                            <th>操作</th>
+                        </tr>
+                        <tr ng-repeat="host in detail.hosts | orderBy: order : desc">
+                            <td>{{host.hostname}}</td>
+                            <td>{{host.defaultIp}}</td>
+                            <td>{{host.isVirtual}}</td>
+                            <td>{{host.osName}}</td>
+                            <td>{{host.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td>{{host.state}}</td>
+                            <td>
+                                <a href="/cmdb/hostlist/hostdetail?id={{host.id}}">
+                                    <span class="cmdb-icon-text">详情</span>
+                                </a>
+                                <a ng-click="deleteHost(host.relationshipId)">
+                                    <span class="cmdb-icon-text">删除</span>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
                 </li>
             </ul>
         </li>
