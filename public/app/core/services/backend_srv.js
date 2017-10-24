@@ -272,7 +272,7 @@ function (angular, _, coreModule, config) {
       });
     };
 
-    this.uploadHostList = function(params, url) {
+    this.saveCustomSoftware = function(params, url) {
       return this.alertD({
         method: "post",
         url: url,
@@ -298,6 +298,14 @@ function (angular, _, coreModule, config) {
       .catch(function (err) {
         // set isHandled true, then alertSrv won't show
         err.isHandled = true;
+      });
+    };
+
+    this.getHosts = function (query) {
+      return this.alertD({
+        method: "POST",
+        url   : "/host/metrics",
+        data  : query
       });
     };
 

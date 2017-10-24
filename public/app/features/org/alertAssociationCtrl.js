@@ -44,6 +44,9 @@ function (angular, _, noUiSlider) {
               delete $scope.correlatedMetrics[m];
             }
           }
+          if (_.isEmpty($scope.correlatedMetrics)) {
+            $scope.isAssociation = false;
+          }
         } else {
           $scope.removeAllQuery();
         }
@@ -222,7 +225,7 @@ function (angular, _, noUiSlider) {
 
       _.each($scope.dashboard.rows[0].panels[0].targets, function (target) {
         if (target.metric === _.getMetricName(metricName)) {
-          if (metricNameMap[metricName][0] === target.tags.host) {
+          if (metricNameMap[metricName].hosts[0] === target.tags.host) {
             isHidden = false;
             target.hide = !target.hide;
           } else {
@@ -242,7 +245,7 @@ function (angular, _, noUiSlider) {
           "isCounter":false,
           "metric":_.getMetricName(metricName),
           "shouldComputeRate":false,
-          "tags":{"host":metricNameMap[metricName][0]},
+          "tags":{"host":metricNameMap[metricName].hosts[0]},
           "hosts": metricNameMap[metricName],
           "confidenceLevel": '50',
         };
@@ -278,10 +281,10 @@ function (angular, _, noUiSlider) {
     $scope.addManualMetric = function (target) {
       target.metric = contextSrv.user.orgId + "." + contextSrv.user.systemId + "." + target.metric;
       if (_.indexOf(_.keys($scope.correlatedMetrics),target.metric) > -1) {
-        if($scope.correlatedMetrics[target.metric][0] === target.host)
+        if($scope.correlatedMetrics[target.metric].hosts[0] === target.host)
           return;
       }
-      $scope.correlatedMetrics[target.metric] = [target.host];
+      $scope.correlatedMetrics[target.metric].hosts = [target.host];
       $scope.addQuery(target.metric);
       $scope.manualMetrics.push(target.metric);
     };

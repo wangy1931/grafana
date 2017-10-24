@@ -300,4 +300,12 @@ div.flot-text {
     display: inline;
   }
 }
+
+.dashboard-container {
+  height: 95vh;
+}
+
+.sidemenu-pinned .dashboard-container {
+  padding-bottom: 0;
+}
 // cloudwiz end

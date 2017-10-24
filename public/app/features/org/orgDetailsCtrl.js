@@ -54,6 +54,25 @@ define([
         });
       };
 
+      $scope.deleteSystem = function (system) {
+        var url = '/grafana/system?sys='+ system.Id;
+        $scope.appEvent('confirm-modal', {
+          title: '删除',
+          text: '您确定要删除 ' + system.SystemsName + ' 吗?',
+          icon: 'fa-trash',
+          yesText: '删除',
+          noText: '取消',
+          onConfirm: function () {
+            backendSrv.alertD({url:url, method:'delete'}).then(function () {
+              $scope.appEvent('alert-success', ['删除成功']);
+              $scope.getOrgInfo();
+            }, function () {
+              $scope.appEvent('alert-danger', ['删除失败']);
+            });
+          }
+        });
+      };
+
       $scope.init();
 
     });

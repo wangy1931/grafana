@@ -83,12 +83,12 @@ export class SideMenuCtrl {
           url: this.getUrl("/")
         },
         {
-          text: '服务状态',
-          url: this.getUrl("/service")
+          text: '机器状态',
+          url: this.getUrl("/host_topology")
         },
         {
-          text: '机器连接状态',
-          url: this.getUrl("/summary")
+          text: '服务状态',
+          url: this.getUrl("/service")
         },
         {
           text: '服务依赖状态',
@@ -137,10 +137,6 @@ export class SideMenuCtrl {
             {
               text: '当前报警',
               url: this.getUrl('/alerts/status'),
-            },
-            {
-              text: '历史报警',
-              url: this.getUrl('/alerts/history'),
             },
             {
               text: '所有规则',
@@ -223,10 +219,6 @@ export class SideMenuCtrl {
           text: '服务列表',
           url: this.getUrl("/cmdb/servicelist")
         },
-        // {
-        //   text: '设置',
-        //   url: this.getUrl("/cmdb/setup")
-        // }
       ]
     });
 

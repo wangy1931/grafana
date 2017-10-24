@@ -23,6 +23,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   var loadLogsBundle = new BundleLoader('app/features/logs/all');
   var loadReportBundle = new BundleLoader('app/features/report/reportCtrl');
   var loadRcaBundle = new BundleLoader('app/features/rca/all');
+  var loadHostBundle = new BundleLoader('app/features/host/all');
 
   $routeProvider
   .when('/', {
@@ -121,11 +122,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/alerts/status', {
     templateUrl: 'public/app/features/org/partials/alertStatus.html',
     controller : 'AlertStatusCtrl',
-    resolve: loadOrgBundle,
-  })
-  .when('/alerts/history', {
-    templateUrl: 'public/app/features/org/partials/alertHistory.html',
-    controller : 'AlertHistoryCtrl',
     resolve: loadOrgBundle,
   })
   .when('/alerts/association/:host/:distance/:metric*', {
@@ -373,11 +369,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'HostDetailCtrl',
     resolve: loadCMDBBundle
   })
-  .when('/cmdb/setup', {
-    templateUrl: 'public/app/features/cmdb/partials/cmdb_setup.html',
-    controller : 'CMDBSetupCtrl',
-    resolve: loadCMDBBundle
-  })
   .when('/cmdb/servicelist', {
     templateUrl: 'public/app/features/cmdb/partials/service_list.html',
     controller : 'ServiceListCtrl',
@@ -386,6 +377,12 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/cmdb/servicelist/servicedetail', {
     templateUrl: 'public/app/features/cmdb/partials/service_detail.html',
     controller : 'CMDBServiceDetailCtrl',
+    resolve: loadCMDBBundle
+  })
+  .when('/cmdb/servicecustom', {
+    templateUrl: 'public/app/features/cmdb/partials/service_custom.html',
+    controller : 'ServiceCustomCtrl',
+    controllerAs: 'ctrl',
     resolve: loadCMDBBundle
   })
   .when('/service_dependency', {
@@ -400,6 +397,13 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'RootCauseAnalysisCtrl',
     reloadOnSearch: true,
     resolve: loadRcaBundle,
+  })
+  // Host Topology
+  .when('/host_topology', {
+    templateUrl: 'public/app/features/host/partials/host.html',
+    controller : 'HostTopologyCtrl',
+    reloadOnSearch: false,
+    resolve: loadHostBundle
   })
   .when('/styleguide/:page?', {
     controller: 'StyleGuideCtrl',

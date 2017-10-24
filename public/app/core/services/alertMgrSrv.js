@@ -57,11 +57,13 @@ function (angular, _, coreModule) {
       return self.alertDefMap[id];
     };
 
-    this.loadTriggeredAlerts = function() {
+    this.loadTriggeredAlerts = function(options) {
+      var params = {};
+      _.extend(params, options);
       return backendSrv.alertD({
         method: "get",
         url: alertStatusUrl,
-        params: {}
+        params: params
       });
     };
 
@@ -93,11 +95,14 @@ function (angular, _, coreModule) {
       self.currentCritialThreshold = alertDetial.crit.threshold;
     };
 
-    this.loadAlertHistory = function(fromTime) {
+    this.loadAlertHistory = function(fromTime, host) {
+      var params = { from: fromTime };
+      host && (params['host'] = host);
+
       return backendSrv.alertD({
         method: "get",
-        url: alertHistoryUrl+'?from='+fromTime,
-        params: {}
+        url: alertHistoryUrl,
+        params: params
       });
     };
 

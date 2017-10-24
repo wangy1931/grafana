@@ -17,7 +17,6 @@ define([
   './alertsCtrl',
   './alertEditCtrl',
   './alertStatusCtrl',
-  './alertHistoryCtrl',
   './alertAssociationCtrl',
   './importAlertsCtrl',
 ], function () {});

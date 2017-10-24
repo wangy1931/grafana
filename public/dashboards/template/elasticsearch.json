@@ -1835,6 +1835,5 @@
   "refresh": "1m",
   "schemaVersion": 12,
   "version": 4,
-  "links": [],
-  "loaded": 20
+  "links": []
 }

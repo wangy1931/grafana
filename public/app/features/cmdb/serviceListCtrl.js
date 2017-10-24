@@ -1,13 +1,12 @@
 define([
   'angular',
   'lodash',
-  './cmdbSetupCtrl',
 ], function(angular, _) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('ServiceListCtrl', function ($scope, backendSrv, $location, $controller) {
+  module.controller('ServiceListCtrl', function ($scope, backendSrv, $location, alertSrv) {
     $scope.init = function() {
       $scope.searchHost = '';
       $scope.order = "'name'";
@@ -27,17 +26,25 @@ define([
       $scope.desc = !$scope.desc;
     };
 
-    $scope.importList = function() {
-      $controller('CMDBSetupCtrl',{$scope: $scope});
-      var newScope = $scope.$new();
-      newScope.importHosts = $scope.importService;
-      newScope.getHost = $scope.getService;
-      newScope.fileChanged = $scope.fileChanged;
-      newScope.type = 'service';
-      $scope.appEvent('show-modal', {
-        src: 'public/app/features/cmdb/partials/import_host.html',
-        modalClass: 'cmdb-import-host',
-        scope: newScope,
+    $scope.deleteService = function(id) {
+      $scope.appEvent('confirm-modal', {
+        title: '删除',
+        text: '您确认要删除该服务吗？',
+        icon: 'fa-trash',
+        yesText: '删除',
+        noText: '取消',
+        onConfirm: function() {
+          backendSrv.alertD({
+            method: 'DELETE',
+            url   : '/cmdb/agent/service',
+            params: { 'id': id }
+          }).then(function () {
+            alertSrv.set("删除成功", '', "success", 2000);
+            _.remove($scope.services, { id: id });
+          }, function (err) {
+            alertSrv.set("删除失败", err.data, "error", 2000);
+          });
+        }
       });
     };
 

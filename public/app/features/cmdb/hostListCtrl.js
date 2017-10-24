@@ -2,18 +2,16 @@ define([
   'angular',
   'lodash',
   'moment',
-  './cmdbSetupCtrl',
 ], function(angular, _, moment) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('HostListCtrl', function ($scope, backendSrv, $location, $controller) {
+  module.controller('HostListCtrl', function ($scope, backendSrv, $location, $controller, alertSrv) {
     $scope.init = function() {
       $scope.searchHost = '';
       $scope.order = "'hostname'";
       $scope.desc = false;
-      $scope.refreshTxt = '扫描';
       backendSrv.alertD({url:'/cmdb/host'}).then(function(result) {
         $scope.hosts = result.data;
         _.map($scope.hosts, function(host) {
@@ -60,6 +58,28 @@ define([
         window.saveAs(blob, 'cloudwiz_hosts_export.csv');
       });
     };
+
+    $scope.deleteHost = function(hostId) {
+      $scope.appEvent('confirm-modal', {
+        title: '删除',
+        text: '您确认要删除该机器吗？',
+        icon: 'fa-trash',
+        yesText: '删除',
+        noText: '取消',
+        onConfirm: function() {
+          backendSrv.alertD({
+            method: 'DELETE',
+            url   : '/host',
+            params: { 'id': hostId }
+          }).then(function () {
+            alertSrv.set("删除成功", '', "success", 2000);
+            _.remove($scope.hosts, { id: hostId });
+          }, function (err) {
+            alertSrv.set("删除失败", err.data, "error", 2000);
+          });
+        }
+      });
+    }
 
     var initArray = function(item) {
       var text = '';

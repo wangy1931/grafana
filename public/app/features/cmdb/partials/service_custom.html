@@ -1,0 +1,103 @@
+<navbar title="配置管理库" icon="fa fa-fw fa-cubes">
+  <ul class="nav">
+      <li class="active"><a>自定义服务</a></li>
+  </ul>
+</navbar>
+
+<div class="page-container">
+  <h2>添加自定义服务</h2>
+
+  <table class="table">
+    <tr>
+      <th>服务名称</th>
+      <th>操作系统</th>
+      <th>匹配规则</th>
+      <th>操作</th>
+    </tr>
+    <tr ng-repeat="software in ctrl.softwareList">
+      <td>
+        <span ng-if="ctrl.editIndex !== $index">{{software.name}}</span>
+        <input style="width: 100%;" type="text"
+          placeholder="请输入服务名称"
+          data-min-length="0" data-html="1" data-auto-select="true" data-animation="am-flip-x" 
+          bs-typeahead bs-options="process.name as process.name for process in ctrl.hostProcess"
+          ng-blur="ctrl.checkName(ctrl.editSoftware.name, 'edit');"
+          ng-if="ctrl.editIndex === $index"
+          ng-model="ctrl.editSoftware.name">
+      </td>
+      <td>
+        <span ng-if="ctrl.editIndex !== $index">{{software.platform}}</span>
+        <select
+          ng-if="ctrl.editIndex === $index"
+          style="width: 100%;"
+          ng-options="p for p in ['linux', 'windows']"
+          ng-model="ctrl.editSoftware.platform">
+        </select>
+      </td>
+      <td>
+        <span ng-if="ctrl.editIndex !== $index">{{software.command}}</span>
+        <input style="width: 100%;" type="text"
+          placeholder="请输入匹配规则"
+          ng-if="ctrl.editIndex === $index"
+          ng-model="ctrl.editSoftware.command">
+      </td>
+      <td>
+        <span ng-if="ctrl.editIndex !== $index">
+          <button class="btn btn-outline-secondary" ng-click="ctrl.getEditSoftware(software, $index)">编辑</button>
+          <button class="btn btn-outline-danger" ng-click="ctrl.deleteSoftware(software)">删除</button>
+        </span>
+        <span ng-if="ctrl.editIndex === $index">
+          <button class="btn btn-outline-success" ng-click="ctrl.addSoftware('save')">保存</button>
+          <button class="btn btn-outline-inverse" ng-click="ctrl.initEditSoftware('save')">取消</button>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input style="width: 100%;" type="text" placeholder="请输入服务名称"
+          data-min-length="0" data-html="1" data-auto-select="true" data-animation="am-flip-x" 
+          bs-typeahead bs-options="process.name as process.name for process in ctrl.hostProcess"
+          ng-model="ctrl.newSoftware.name" ng-blur="ctrl.checkName(ctrl.newSoftware.name, 'add');">
+      </td>
+      <td>
+        <select
+          style="width: 100%;"
+          ng-options="p for p in ['linux', 'windows']"
+          ng-model="ctrl.newSoftware.platform">
+        </select>
+      </td>
+      <td><input style="width: 100%;" type="text" placeholder="请输入匹配规则" ng-model="ctrl.newSoftware.command"></td>
+      <td>
+        <button class="btn btn-outline-success" ng-click="ctrl.addSoftware('add')">添加</button>
+      </td>
+    </tr> 
+  </table>
+
+  <button class="btn btn-success" ng-click="ctrl.saveSoftware()">保存</button>
+
+  <div class="cmdb-reference">
+    <h2>参考信息
+      <span class="dropdown" style="color: #2962ff;">
+        <span ng-if="!ctrl.host.hostname">请选择机器</span>
+        <span class="dropdown-toggle pointer" data-toggle="dropdown">{{ctrl.host.hostname}} <i class="fa fa-caret-down" ng-if="ctrl.hostList.length > 1"></i></span>
+        <ul class="dropdown-menu" ng-if="ctrl.hostList.length > 1">
+            <li ng-repeat="host in ctrl.hostList"><a ng-click="ctrl.setHost(host)">{{host.hostname}}</a></li>
+        </ul>
+      </span>
+    </h2>
+    <table class="table table-process"
+      data-toggle="table"
+      data-pagination="true"
+      data-sort-name="command"
+      data-sort-order="desc"
+      data-search="true"
+      data-page-size="10">
+      <thead>
+        <tr>
+          <th data-field="name" data-sortable="true" data-width="300px">参考名称</th>
+          <th data-field="command" data-sortable="true">参考规则</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>

@@ -12,6 +12,7 @@ type ApiKey struct {
 	OrgId   int64
 	Name    string
 	Key     string
+	Deleted int64
 	Role    RoleType
 	Created time.Time
 	Updated time.Time

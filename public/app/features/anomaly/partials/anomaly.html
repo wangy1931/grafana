@@ -103,7 +103,7 @@
               <th>健康值</th>
               <th>修改</th>
             </tr>
-            <tr ng-repeat="anomalyDef in excludeMetricsData">
+            <tr ng-repeat="anomalyDef in excludeMetricsData | orderBy:'metric'">
               <td>{{_.getMetricName(anomalyDef.metric)}}</td>
               <td>{{anomalyDef.host}}</td>
               <td>{{anomalyDef.health}}</td>

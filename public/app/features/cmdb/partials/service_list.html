@@ -5,7 +5,7 @@
 </navbar>
 <div class="page-container">
     <h2>服务列表
-        <a class="btn btn-primary btn-cmdb" style="margin-left: 12px;" ng-click="importList()">添加服务</a>
+        <a class="btn btn-primary btn-cmdb" style="margin-left: 12px;" href="/cmdb/servicecustom">添加服务</a>
         <form class="form-search cmdb-search">
             <i class="fa fa-search"></i>
             <input type="text" class="input-medium search-query" placeholder="搜索服务列表" ng-model="searchService">
@@ -29,6 +29,9 @@
                     <a href=""><span class="cmdb-icon-text" bs-tooltip="'敬请期待'" data-placement="top">编辑</span></a>
                     <a href="/cmdb/servicelist/servicedetail?id={{service.id}}">
                         <span class="cmdb-icon-text">详情</span>
+                    </a>
+                    <a ng-click="deleteService(service.id);">
+                        <span class="cmdb-icon-text">删除</span>
                     </a>
                 </td>
             </tr>

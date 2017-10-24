@@ -32,27 +32,97 @@ function (angular, moment, _) {
       scope: 1
     };
 
-    $scope.init = function () {
-      $scope.correlationThreshold = 100;
-      alertMgrSrv.loadTriggeredAlerts().then(function onSuccess(response) {
+    $scope.getLevel = alertMgrSrv.getLevel;
+
+    $scope.alertHistoryRange = [
+      { 'num': 0, 'type': 'now',  'value': '现在', },
+      { 'num': 1, 'type': 'days',   'value': '过去一天' },
+      { 'num': 1, 'type': 'weeks',  'value': '过去一周' },
+      { 'num': 1, 'type': 'months', 'value': '过去一个月' },
+      { 'num': 3, 'type': 'months', 'value': '过去三个月' },
+    ];
+    $scope.alertTimeSelected = $scope.alertHistoryRange[0];
+
+    $scope.alertKey = '';
+    $scope.correlationThreshold = 100;
+    $scope.alertWarningCount = 0;
+    $scope.alertCriticalCount = 0;
+
+    $scope.formatDate = function (mSecond) {
+      return moment(mSecond).format("YYYY-MM-DD HH:mm:ss");
+    };
+
+    $scope.timeFrom = function (mSecond, snoozeMin) {
+      return moment(mSecond).add(snoozeMin, 'm').format("YYYY-MM-DD HH:mm");
+    };
+
+    $scope.init = function (host) {
+      $scope.getAlertStatus(host);
+      $scope.getDataSource();
+
+      $scope.getAlertHistory($scope.alertTimeSelected);
+    };
+
+    $scope.getAlertStatus = function (host) {
+      alertMgrSrv.loadTriggeredAlerts({ host: host }).then(function onSuccess(response) {
         for (var i = 0; i < response.data.length; i++) {
           var alertDetail = response.data[i];
           if (alertDetail.status.level === "CRITICAL") {
+            $scope.alertCriticalCount++;
             alertDetail.definition.alertDetails.threshold = alertDetail.definition.alertDetails.crit.threshold;
           } else {
+            $scope.alertWarningCount++;
             alertDetail.definition.alertDetails.threshold = alertDetail.definition.alertDetails.warn.threshold;
           }
           // Only show 2 digits. +0.00001 is to avoid floating point weirdness on rounding number.
           alertDetail.status.triggeredValue = Math.round((alertDetail.status.triggeredValue + 0.00001) * 100) / 100;
         }
         $scope.alertRows = response.data;
-        $scope.getCurrent();
+        $scope.getCurrentAlertValue();
       });
-      $scope.getLevel = alertMgrSrv.getLevel;
-      datasourceSrv.get('opentsdb').then(function(datasource) {
+    };
+
+    $scope.getCurrentAlertValue = function () {
+      _.each($scope.alertRows, function (alertItem) {
+        var tags = {
+          host: alertItem.status.monitoredEntity
+        };
+        _.each(alertItem.definition.alertDetails.tags, function (tag) {
+          tags[tag.name] = tag.value;
+        });
+
+        var queries = [{
+          "metric": alertItem.metric,
+          "aggregator": alertItem.definition.alertDetails.hostQuery.metricQueries[0].aggregator.toLowerCase(),
+          "downsample": "1m-avg",
+          "tags": tags
+        }];
+        datasourceSrv.getHostStatus(queries, 'now-2m').then(function (response) {
+          alertItem.curr = Math.floor(response.status * 1000) / 1000;
+          if (isNaN(alertItem.curr)) { alertItem.curr = "没有数据"; }
+        });
+      });
+    };
+
+    $scope.getDataSource = function () {
+      datasourceSrv.get('opentsdb').then(function (datasource) {
         $scope.datasource = datasource;
       });
     };
+
+    $scope.getAlertHistory = function(time) {
+      var host = $location.search().name;
+      if (time.type === 'now') {
+        $scope.alertStatusShow = true;
+      } else {
+        var timestemp = Date.parse(moment().subtract(time.num, time.type));
+        alertMgrSrv.loadAlertHistory(timestemp, host).then(function (response) {
+          $scope.alertHistory = response.data;
+        });
+        $scope.alertStatusShow = false;
+      }
+    };
+
     $scope.resetCurrentThreshold = function (alertDetail) {
       var metric = _.getMetricName(alertDetail.metric);
       var def_zh = alertDetail.definition.name;
@@ -108,7 +178,7 @@ function (angular, moment, _) {
     $scope.closeAlert = function() {
       var status = $scope.alertData.status;
 
-      if($scope.reason) {
+      if ($scope.reason) {
         alertMgrSrv.closeAlert(status.alertId, status.monitoredEntity, $scope.reason, contextSrv.user.name).then(function(response) {
           _.remove($scope.$parent.alertRows, function(alertDetail) {
             return (alertDetail.definition.id === status.alertId) &&  (alertDetail.status.monitoredEntity === status.monitoredEntity);
@@ -120,7 +190,8 @@ function (angular, moment, _) {
       }
 
       $scope.addCause($scope.causeMetric,$scope.causeHost,$scope.confidenceLevel);
-      if($scope.rootCauseMetrics.length) {
+
+      if ($scope.rootCauseMetrics.length) {
         var rcaFeedback = {};
         rcaFeedback.timestampInSec = Math.round(status.levelChangedTime/1000);
         rcaFeedback.alertIds = [status.alertId];
@@ -176,6 +247,7 @@ function (angular, moment, _) {
       options.annotations = [start_anno];
       $location.path("/integrate");
     };
+
     $scope.handleSnooze = function(alertDetails) {
       var newScope = $scope.$new();
       newScope.alertDetails = alertDetails;
@@ -185,40 +257,9 @@ function (angular, moment, _) {
         scope: newScope
       });
     };
-    $scope.formatDate = function (mSecond) {
-      return moment(mSecond).format("YYYY-MM-DD HH:mm:ss");
-    };
-
-    $scope.timeFrom = function (mSecond, snoozeMin) {
-      return moment(mSecond).add(snoozeMin, 'm').format("YYYY-MM-DD HH:mm");
-    };
-
-    $scope.getCurrent = function () {
-      _.each($scope.alertRows, function (alertData) {
-        var tags = {};
-        _.each(alertData.definition.alertDetails.tags, function(tag) {
-          tags[tag.name] = tag.value;
-        });
-        tags.host = alertData.status.monitoredEntity;
-        var queries = [{
-          "metric": alertData.metric,
-          "aggregator": alertData.definition.alertDetails.hostQuery.metricQueries[0].aggregator.toLowerCase(),
-          "downsample": "1m-avg",
-          "tags": tags
-        }];
-        datasourceSrv.getHostStatus(queries, 'now-2m').then(function(response) {
-          alertData.curr = Math.floor(response.status * 1000) / 1000;
-          if(isNaN(alertData.curr)) {
-            throw Error;
-          }
-        }).catch(function (err) {
-          alertData.curr = "没有数据";
-        });
-      });
-    };
 
     $scope.addCause = function (causeMetric,causeHost,confidenceLevel) {
-      if(_.every([causeMetric,causeHost,confidenceLevel])) {
+      if (_.every([causeMetric, causeHost, confidenceLevel])) {
         $scope.causeMetric = '';
         $scope.causeHost = '';
         $scope.rootCauseMetrics.push({
@@ -233,6 +274,49 @@ function (angular, moment, _) {
       $scope.rootCauseMetrics.splice(index, 1);
     };
 
-    $scope.init();
+    $scope.getAlertType = function (alert) {
+      return alert.history.level === 'CRITICAL' ? 'crit' : 'warn';
+    };
+
+    $scope.getCloseOp = function (alert) {
+      return alert.history.closeOp === 'AUTO' ? '自动关闭' : alert.history.closeBy;
+    };
+
+    $scope.historyAnalysis = function (id) {
+      var target = {
+        tags: {},
+        downsampleAggregator: "avg",
+        downsampleInterval: "1m"
+      };
+      var alert = _.find($scope.alertHistory, {'id': id});
+      var details = alert.definition.alertDetails;
+      var history = alert.history;
+      var start_anno = _.cloneDeep(annotation_tpl);
+      var end_anno = _.cloneDeep(annotation_tpl);
+      var options = integrateSrv.options;
+
+      target.aggregator = details.hostQuery.metricQueries[0].aggregator.toLowerCase();
+      target.metric = details.hostQuery.metricQueries[0].metric;
+      target.tags.host = history.host;
+      for (var tag in alert.definition.tags) {
+        target.tags[tag.name] = tag.value;
+      }
+
+      start_anno.min = start_anno.max = history.createdTimeInMillis;
+      start_anno.title = "报警开始时间: ";
+
+      end_anno.min = end_anno.max = history.closedTimeInMillis;
+      end_anno.title = "报警结束时间: ";
+
+      options.targets = [target];
+      options.title = target.metric + "异常情况";
+
+      options.from = moment.utc(history.createdTimeInMillis - 3600000).format("YYYY-MM-DDTHH:mm:ss.SSS\\Z");
+      options.to = moment.utc(history.closedTimeInMillis + 3600000).format("YYYY-MM-DDTHH:mm:ss.SSS\\Z");
+      options.annotations = [start_anno, end_anno];
+      $location.path("/integrate");
+    };
+
+    this.init = $scope.init;
   });
 });

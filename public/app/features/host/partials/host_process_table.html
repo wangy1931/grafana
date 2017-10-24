@@ -1,0 +1,36 @@
+<table class="table table-hack"
+    data-pagination="true"
+    data-page-size="100"
+    data-sort-order="desc"
+    data-sort-name="cpuPercent"
+    data-row-style="rowStyle">
+    <thead>
+        <tr>
+            <th data-field="pid" data-sortable="true">进程 ID</th>
+            <th data-field="user" data-sortable="true">进程创建用户</th>
+            <th data-field="name" data-sortable="true" data-formatter="tooltipFormatter">进程</th>
+            <th data-field="cpuPercent" data-sortable="true" data-formatter="percentFormatter">CPU 使用率</th>
+            <th data-field="memPercent" data-sortable="true" data-formatter="percentFormatter">内存占用率</th>
+            <th data-field="diskIoRead">读硬盘次数</th>
+            <th data-field="diskIoWrite">写硬盘次数</th>
+            <th data-field="createTime" data-sortable="true" data-formatter="timeFormatter">创建时间</th>
+            <th data-field="command" data-sortable="true" data-formatter="tooltipFormatter">命令</th>
+        </tr>
+    </thead>
+</table>
+<script>
+    function timeFormatter(value) {
+        return _.transformTime(value);
+    }
+    function tooltipFormatter(value, row, index) {
+        return '<span data-toggle="tooltip" data-container="body" title="' + value + '">' + value + '</span>';
+    }
+    function rowStyle() {
+        return {
+            classes: "fix-table-row-height"
+        };
+    }
+    function percentFormatter(value) {
+        return value.toFixed(2) + '%';
+    }
+</script>
