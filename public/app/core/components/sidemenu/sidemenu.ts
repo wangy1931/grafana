@@ -87,10 +87,6 @@ export class SideMenuCtrl {
           url: this.getUrl("/host_topology")
         },
         {
-          text: '服务状态',
-          url: this.getUrl("/service")
-        },
-        {
           text: '创建服务依赖',
           url: this.getUrl("/service_dependency")
         },

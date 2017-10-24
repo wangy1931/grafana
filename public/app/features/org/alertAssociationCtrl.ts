@@ -67,8 +67,6 @@ export class AlertAssociationCtrl {
       scope: 1
     };
 
-    this.isSingle = _.isEmpty(associationSrv.sourceAssociation);
-
     $controller('OpenTSDBQueryCtrl', {$scope: this.$scope});
     datasourceSrv.get('opentsdb').then(datasource => {
       this.$scope.datasource = datasource;

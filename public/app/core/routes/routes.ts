@@ -118,11 +118,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'AlertStatusCtrl',
     resolve: loadOrgBundle,
   })
-  .when('/alerts/association', {
-    templateUrl: 'public/app/features/org/partials/alertAssociation.html',
-    controller : 'AlertAssociationCtrl',
-    resolve: loadOrgBundle,
-  })
   .when('/oncallerschedule', {
     templateUrl: 'public/app/features/oncaller/partials/oncallerSchedule.html',
     controller : 'OnCallerScheduleCtrl',

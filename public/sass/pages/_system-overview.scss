@@ -285,21 +285,6 @@ $summary-border-color: #ECEFF1;
           color: #fff;
           background-color: #A0A0A0;
         }
-        // tbody {
-        //   tr:hover {
-        //     background-color: rgba(0, 166, 248, 0.16);
-        //   }
-        //   tr:nth-child(odd) {
-        //     td {
-        //       background-color: #fff;
-        //     }
-        //   }
-        //   tr:nth-child(even) {
-        //     td {
-        //       background-color: #F4F6F9;
-        //     }
-        //   }
-        // }
       }
       .pagination ul > li {
         &.active > a {
@@ -434,27 +419,19 @@ $summary-border-color: #ECEFF1;
   }
 }
 
-// ------------------------------------
-//     Slide Over Horizontal
-// ------------------------------------
 // .slide-show {
-//   #{$prev-slide} {  
-//       transition: transform .7s .1s ease-in, opacity .3s .6s, z-index .7s;
-//       transform:translateX(-100%);  
-//       opacity: 0;  
-//       z-index: 0;
+//   .slide.checked {
+//     transition: transform .6s ease-out, opacity .1s;
+//     transform:translateX(0);
+//     opacity: 1;
+//     z-index: 1;
 //   }
-//   #{$next-slide} { 
-//       transition: transform .7s .1s ease-in, opacity .3s .6s, z-index .7s;
-//       transform:translateX(100%);  
-//       opacity: 0; 
-//       z-index: 0;
-//   }    
-//   #{$selected-slide} { 
-//       transition: transform .6s ease-out, opacity .1s;
-//       transform:translateX(0); 
-//       opacity: 1;  
-//       z-index: 1;
+
+//   .slide {
+//     transition: transform .7s .1s ease-in, opacity .3s .6s, z-index .7s;
+//     transform:translateX(100%);
+//     opacity: 0;
+//     z-index: 0;
 //   }
 // }
 
