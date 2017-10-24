@@ -270,7 +270,7 @@ export class PanelCtrl {
       if (host && metric) {
         metric = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.' + metric;
         this.associationSrv.setSourceAssociation(metric, host, 300);
-        this.$_location.path("/alerts/association");
+        this.$_location.url("/alerts/association");
       }
     } catch (err) {
       var reg = /\'(.*?)\'/g;
