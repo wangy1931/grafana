@@ -9,7 +9,7 @@ function (angular, moment, _) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('AlertStatusCtrl', function ($scope, alertMgrSrv, datasourceSrv, contextSrv, integrateSrv, $location, backendSrv, $controller) {
+  module.controller('AlertStatusCtrl', function ($scope, alertMgrSrv, datasourceSrv, contextSrv, integrateSrv, $location, backendSrv, $controller, associationSrv) {
     var annotation_tpl = {
       source: {
         datasource: "elk",
@@ -127,7 +127,11 @@ function (angular, moment, _) {
       var metric = _.getMetricName(alertDetail.metric);
       var def_zh = alertDetail.definition.name;
       var host = alertDetail.status.monitoredEntity;
-      alertMgrSrv.resetCurrentThreshold(alertDetail.definition.alertDetails);
+      var threshold = {
+        warn: alertDetail.definition.alertDetails.warn.threshold,
+        crit: alertDetail.definition.alertDetails.crit.threshold,
+      }
+      alertMgrSrv.resetCurrentThreshold(threshold);
       alertMgrSrv.annotations = [{
         source: {
           datasource: "elk",
@@ -316,6 +320,12 @@ function (angular, moment, _) {
       options.annotations = [start_anno, end_anno];
       $location.path("/integrate");
     };
+
+    $scope.associateAnalysis = function(host, metric, alertDetail) {
+      $scope.resetCurrentThreshold(alertDetail);
+      associationSrv.setSourceAssociation(metric, host, 300);
+      $location.path("/alerts/association");
+    }
 
     this.init = $scope.init;
   });

@@ -28,7 +28,7 @@ func Register(r *macaron.Macaron) {
 	r.Get("/alerts/new", reqSignedIn, Index)
 	r.Get("/alerts/status", reqSignedIn, Index)
 	r.Get("/alerts/history", reqSignedIn, Index)
-	r.Get("/alerts/association/:host/:distance/:metric*", reqSignedIn, Index)
+	r.Get("/alerts/association", reqSignedIn, Index)
 	r.Get("/oncallerschedule", reqSignedIn, Index)
 	r.Get("/oncallers", reqSignedIn, Index)
 	r.Get("/oncallers/edit/:id", reqSignedIn, Index)

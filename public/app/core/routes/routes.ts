@@ -124,7 +124,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'AlertStatusCtrl',
     resolve: loadOrgBundle,
   })
-  .when('/alerts/association/:host/:distance/:metric*', {
+  .when('/alerts/association', {
     templateUrl: 'public/app/features/org/partials/alertAssociation.html',
     controller : 'AlertAssociationCtrl',
     resolve: loadOrgBundle,
@@ -304,25 +304,15 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'LogsCtrl',
     resolve: loadLogsBundle,
   })
-  .when('/analysis', {
-    templateUrl: 'public/app/features/analysis/partials/analysis.html',
-    controller : 'AnalysisCtrl',
-    resolve: loadAnalysisBundle,
-  })
   .when('/association', {
-    templateUrl: 'public/app/features/analysis/partials/single_association.html',
-    controller : 'SingleAssociationCtrl',
-    resolve: loadAnalysisBundle,
+    templateUrl: 'public/app/features/org/partials/alertAssociation.html',
+    controller : 'AlertAssociationCtrl',
+    resolve: loadOrgBundle,
   })
   .when('/knowledgebase', {
     templateUrl: 'public/app/features/logs/partials/knowledge_base.html',
     controller : 'KnowledgeBaseCtrl',
     resolve: loadLogsBundle,
-  })
-  .when('/install', {
-    templateUrl: 'public/app/partials/install.html',
-    controller : 'AnalysisCtrl',
-    resolve: loadAnalysisBundle,
   })
   .when('/customer', {
     templateUrl: 'public/app/features/summary/partials/customer.html',
