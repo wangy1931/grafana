@@ -30,7 +30,6 @@ $path-position:             $marker-size-half - ($path-height / 2);
 // Container element
 .progress-tracker {
   display: flex;
-  // margin: 20px auto;
   padding: 0;
   list-style: none;
 }
@@ -58,9 +57,9 @@ $path-position:             $marker-size-half - ($path-height / 2);
     right: - $marker-size-half;
     width: 100%;
     height: $path-height;
-    border-top: 2px solid $progress-color-grey-light;
+    border-top: 2px solid $gray-4;
     border-bottom: $progress-color-shadow;
-    background: $progress-color-grey-light;
+    background: $gray-4;
     cursor: default;
   }
 
@@ -172,11 +171,11 @@ a.progress-link {
   top: -300px;
   background-color: $panel-bg;
   height: 0;
-  width: 100%; // calc(100% - #{$side-menu-width});
+  width: 100%;
   z-index: 99;
   padding: 0;
   box-shadow: 0px 0px 4px 1px #d8d8d8;
-  transition: all 0.4s ease;
+  transition: all 0.2s ease;
   &.active {
     top: 0;
     height: auto;
@@ -207,7 +206,14 @@ a.progress-link {
 .guide.collapsed {
   .progress-step {
     &::after {
-      display: none;
+      top: $marker-size / 6;
+      width: 50%;
+      left: 170px;
+    }
+    &:last-child {
+      &::after {
+        display: none;
+      }
     }
   }
 }
@@ -219,6 +225,11 @@ a.progress-link {
   top: 52px;
   padding-left: $side-menu-width;
   &.collapsed {
-    padding: 2px 10px 10px $side-menu-width; //10px;
+    padding: 2px 10px 10px $side-menu-width;
+    .progress-step {
+      &::after {
+        left: 180px;
+      }
+    }
   }
 }

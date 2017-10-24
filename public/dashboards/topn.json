@@ -519,57 +519,23 @@
   "templating": {
     "list": [
       {
-        "allFormat": "glob",
         "current": {
-          "tags": [],
-          "text": "10-9-83-177",
-          "value": "10-9-83-177"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": null,
         "hide": 0,
-        "includeAll": false,
-        "label": "",
+        "includeAll": true,
         "multi": false,
-        "multiFormat": "glob",
         "name": "host",
         "options": [
           {
-            "selected": false,
-            "text": "*",
-            "value": "*"
-          },
-          {
-            "selected": false,
-            "text": "10-9-177-82",
-            "value": "10-9-177-82"
-          },
-          {
             "selected": true,
-            "text": "10-9-83-177",
-            "value": "10-9-83-177"
-          },
-          {
-            "selected": false,
-            "text": "10-9-126-97",
-            "value": "10-9-126-97"
-          },
-          {
-            "selected": false,
-            "text": "10-9-187-78",
-            "value": "10-9-187-78"
-          },
-          {
-            "selected": false,
-            "text": "10-9-178-177",
-            "value": "10-9-178-177"
-          },
-          {
-            "selected": false,
-            "text": "10-9-121-89",
-            "value": "10-9-121-89"
+            "text": "All",
+            "value": "$__all"
           }
         ],
-        "query": "*,10-9-177-82,10-9-83-177,10-9-126-97,10-9-187-78,10-9-178-177,10-9-121-89",
+        "query": "",
         "refresh": 0,
         "type": "custom"
       }

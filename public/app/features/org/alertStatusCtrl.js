@@ -316,7 +316,7 @@ function (angular, moment, _) {
       associationSrv.setSourceAssociation({
         metric: metric,
         host: host,
-        distance: 300,
+        distance: 200,
         start: alertDetail.status.levelChangedTime
       });
       $location.url(url);

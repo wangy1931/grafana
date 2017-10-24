@@ -12,10 +12,10 @@ export class AlertAssociationCtrl {
   isSingle: boolean;
   suggestTagHost: any;
   datasource: any;
-  dashboard: any;
   serviceEvents: Array<any>;
   tableParams: any;
   annotationTpl: any;
+  timeRange: any;
 
   // logs
   query: string;
@@ -41,7 +41,7 @@ export class AlertAssociationCtrl {
     this.targetObj = _.extend({}, {
       metric: "",
       host: "",
-      distance: 300,
+      distance: 200,
       start: ""
     }, this.$location.search());
 
@@ -67,12 +67,7 @@ export class AlertAssociationCtrl {
       scope: 1
     };
 
-    if (_.isEmpty(associationSrv.sourceAssociation)) {
-      this.isSingle = true;
-    } else {
-      this.isSingle = false;
-      // _.extend(this.targetObj, associationSrv.sourceAssociation);
-    }
+    this.isSingle = _.isEmpty(associationSrv.sourceAssociation);
 
     $controller('OpenTSDBQueryCtrl', {$scope: this.$scope});
     datasourceSrv.get('opentsdb').then(datasource => {
@@ -81,6 +76,14 @@ export class AlertAssociationCtrl {
 
     $scope.$on('destroy', () => {
       alertMgrSrv.resetCurrentThreshold({ warn: null, crit: null });
+    });
+
+    $scope.onAppEvent('time-range-changed', (e, params) => {
+      this.timeRange = {
+        start: timeSrv.timeRange().from.unix(),
+        end: timeSrv.timeRange().to.unix()
+      }
+      this.getServiceEvents();
     });
   }
 
@@ -102,35 +105,38 @@ export class AlertAssociationCtrl {
         this.$scope.dashboard.rows[0].panels[0].targets[0].tags.host = this.targetObj.host;
       }
     }
+
+    this.timeRange = (this.targetObj.start === "undefined")
+      ? { start: moment().subtract(6, 'hour').unix(), end: moment().unix() }
+      : { start: moment().unix(), end: this.targetObj.start }
+    this.getServiceEvents();
   }
 
   createAlertMetricsGraph(metric, host) {
     this.backendSrv.get('/api/static/alert_association').then(response => {
       // store & init dashboard
-      this.dashboard = response;
+      var dashboard = response;
 
       // association graph
-      this.dashboard.rows[0].panels[0].title = metric;
-      this.dashboard.rows[0].panels[0].targets[0].metric = metric;
-      this.dashboard.rows[0].panels[0].targets[0].tags.host = this.targetObj.host;
-      this.dashboard.rows[0].panels[0].grid.threshold1 = this.alertMgrSrv.currentCritialThreshold;
-      this.dashboard.rows[0].panels[0].grid.threshold2 = this.alertMgrSrv.currentWarningThreshold;
-      this.dashboard.rows[0].panels[0].thresholds[0].value = this.alertMgrSrv.currentCritialThreshold;
-      this.dashboard.rows[0].panels[0].thresholds[1].value = this.alertMgrSrv.currentWarningThreshold;
-      // this.dashboard.annotations.list[0] = this.alertMgrSrv.annotations;
+      dashboard.rows[0].panels[0].title = metric;
+      dashboard.rows[0].panels[0].targets[0].metric = metric;
+      dashboard.rows[0].panels[0].targets[0].tags.host = this.targetObj.host;
+      dashboard.rows[0].panels[0].grid.threshold1 = this.alertMgrSrv.currentCritialThreshold;
+      dashboard.rows[0].panels[0].grid.threshold2 = this.alertMgrSrv.currentWarningThreshold;
+      dashboard.rows[0].panels[0].thresholds[0].value = this.alertMgrSrv.currentCritialThreshold;
+      dashboard.rows[0].panels[0].thresholds[1].value = this.alertMgrSrv.currentWarningThreshold;
 
       // logs
       var type = _.metricPrefix2Type(metric.split(".")[0]);
-      this.query = `type:${type} AND host:${host}`; // error & exception
-      this.dashboard.rows[2].panels[0].targets[0].query = this.query;
-      this.dashboard.rows[2].panels[1].targets[0].query = this.query;
-      this.dashboard.rows[2].panels[2].targets[0].query = this.query;
-      this.dashboard.rows[2].panels[2].targets[1].query = this.query;
+      this.query = `type:${type} AND host:${host}`;  // error & exception
+      dashboard.rows[2].panels[0].targets[0].query = this.query;
+      dashboard.rows[2].panels[1].targets[0].query = this.query;
+      dashboard.rows[2].panels[2].targets[0].query = this.query;
+      dashboard.rows[2].panels[2].targets[1].query = this.query;
 
       this.$scope.initDashboard({
         meta: {canStar: false, canShare: false, canEdit: false, canSave: false},
-        dashboard: this.dashboard,
-        // manualAnnotation: this.alertMgrSrv.annotations
+        dashboard: dashboard,
       }, this.$scope);
     });
 
@@ -138,11 +144,6 @@ export class AlertAssociationCtrl {
       metric: this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.' + this.targetObj.metric
     }));
     this.$scope.$emit('analysis', this.associationSrv);
-
-    this.getServiceEvents({
-      start: this.targetObj.start === "undefined" ? moment().subtract(6, 'hour').unix() : this.targetObj.start,
-      // end: this.dashboard.time.to
-    });
   }
 
   analysis() {
@@ -155,11 +156,11 @@ export class AlertAssociationCtrl {
     this.$location.search(searchParams);
   }
 
-  getServiceEvents(params) {
+  getServiceEvents() {
     this.backendSrv.alertD({
       method: 'GET',
       url   : '/service/events',
-      params: params
+      params: this.timeRange
     }).then((response) => {
       response.data.forEach((item) => {
         item.type = (item.type === 'Start') ? '启动' : '停止';
@@ -195,7 +196,7 @@ export class AlertAssociationCtrl {
       metric: params.metric,
       host: params.host,
       start: params.start,
-      distance: 300,
+      distance: 200,
     };
     this.analysis();
   }
@@ -220,7 +221,7 @@ coreModule.directive('slider', () => {
     scope: false,
     link: function (scope, element) {
       noUiSlider.create(element[0], {
-        start: scope.ctrl.associationSrv.sourceAssociation.distance || 100,  // scope.$parent.targetObj.distance || 100,
+        start: scope.ctrl.associationSrv.sourceAssociation.distance || 100,
         connect: [true, false],
         tooltips: false,
         step: 10,
@@ -231,7 +232,6 @@ coreModule.directive('slider', () => {
       });
       scope.$parent.thresholdSlider = element[0].noUiSlider;
       scope.$parent.thresholdSlider.on('change', () => {
-        // scope.$parent.targetObj.distance = scope.$parent.thresholdSlider.get();
         scope.$emit('analysis', 'thresholdSlider');
       })
     }

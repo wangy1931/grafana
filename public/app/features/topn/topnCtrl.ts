@@ -9,25 +9,24 @@ declare var window: any;
 export class TopNCtrl {
   dashboard: any;
   tableParams: any;
+  hostlist: Array<any>;
+  host: any;
 
   /** @ngInject */
-  constructor(private backendSrv, private hostSrv, private $location, private $scope, private $rootScope, private NgTableParams) {
-  }
+  constructor(
+    private backendSrv,
+    private hostSrv,
+    private $location,
+    private $scope,
+    private $rootScope,
+    private NgTableParams,
+    private templateValuesSrv,
+    private dynamicDashboardSrv
+  ) {}
 
   init() {
-    this.getDashboard();
     this.getProcess();
-  }
-
-  getDashboard() {
-    this.backendSrv.get('/api/static/topn').then(response => {
-      // store & init dashboard
-      this.dashboard = response;
-      this.$scope.initDashboard({
-        dashboard: response,
-        meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
-      }, this.$scope);
-    });
+    this.getDashboard();
   }
 
   getProcess() {
@@ -35,9 +34,11 @@ export class TopNCtrl {
       "queries": [],
       "hostProperties": ["id"]
     }).then(response => {
+      this.hostlist = response.data;
+
       var host = this.$location.search().host;
-      var id = _.find(response.data, { hostname: host }).id;
-      return id;
+      this.host = _.find(response.data, { hostname: host });
+      return this.host.id;
     }).then(id => {
       id && this.hostSrv.getHostProcess(id).then(response => {
         response.data && response.data.forEach(item => {
@@ -51,6 +52,22 @@ export class TopNCtrl {
         //   dataset: response.data
         // });
       });
+    });
+  }
+
+  getDashboard() {
+    this.backendSrv.get('/api/static/topn').then(response => {
+      // store & init dashboard
+      this.dashboard = response;
+
+      var hostname = this.$location.search().host;
+      this.dashboard.templating.list[0].current = { "text": hostname || "All", "value": hostname || "$__all", "tags": [] };
+      this.dashboard.templating.list[0].query = hostname;
+
+      this.$scope.initDashboard({
+        dashboard: this.dashboard,
+        meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
+      }, this.$scope);
     });
   }
 

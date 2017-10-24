@@ -272,7 +272,7 @@ export class PanelCtrl {
         this.associationSrv.setSourceAssociation({
           metric: metric,
           host: host,
-          distance: 300,
+          distance: 200,
         });
         this.$_location.path("/alerts/association");
       }

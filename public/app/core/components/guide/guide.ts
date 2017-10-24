@@ -188,6 +188,8 @@ export class GuideCtrl {
       this.hostSrv.getHostInfo().then(response => {
         this.exceptionHosts = response;
       });
+    } else {
+      this.exceptionHosts = this.hostSrv.hostInfo;
     }
   }
 }
