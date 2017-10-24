@@ -117,7 +117,7 @@
         <td>{{ getCloseOp(alert) }}</td>
         <td><span ng-if="alert.history.closeOp === 'MANUAL'">{{ alert.history.reason }}</span></td>
         <td style="width: 120px;">
-          <a href="/rca?guide&host=alert.history.host&metric={{alert.definition.alertDetails.hostQuery.metricQueries[0].metric}}&start={{ alert.history.createdTimeInMillis }}"
+          <a href="/rca?guide&host={{ alert.history.host }}&metric={{alert.definition.alertDetails.hostQuery.metricQueries[0].metric}}&start={{ alert.history.createdTimeInMillis }}"
              class="btn btn-mini btn-primary">
              <i class="fa fa-signal"></i> 诊断分析
           </a>

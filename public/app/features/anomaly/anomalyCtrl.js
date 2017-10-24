@@ -33,6 +33,8 @@ define([
           });
           $scope.excludeMetricsData = healthSrv.floor(data.metricHostExcluded.elements);
 
+          $scope.summary.numMetrics = ($scope.summary.numMetrics > $scope.summary.numAnomalyMetrics ? $scope.summary.numMetrics : $scope.summary.numAnomalyMetrics);
+
           $scope.pieData = {
             'normalMetricNum': $scope.summary.numMetrics - $scope.summary.numAnomalyMetrics,
             'criticalMetricNum': $scope.summary.numAnomalyMetrics - $scope.summary.dangerMetricNum,
@@ -46,11 +48,19 @@ define([
           var dataPointNum = $scope.pieData.normalPointNum + $scope.pieData.anomalyPointNum;
           $scope.pieData.normalPointPer = Math.round($scope.pieData.normalPointNum / dataPointNum * 100);
           $scope.pieData.anomalyPointPer = Math.round($scope.pieData.anomalyPointNum / dataPointNum * 100);
-          var pieData = [
-            {label: "持续异常", data: $scope.pieData.dangerMetricNum},
-            {label: "临时异常", data: $scope.pieData.criticalMetricNum},
-            {label: "正常指标", data: $scope.pieData.normalMetricNum},
-          ];
+          if ($scope.checkZero([$scope.pieData.criticalMetricNum, $scope.pieData.criticalMetricNum, $scope.pieData.dangerMetricNum])) {
+            var pieData = [
+              {label: "持续异常", data: 0},
+              {label: "临时异常", data: 0},
+              {label: "正常指标", data: 1},
+            ];
+          } else {
+            var pieData = [
+              {label: "持续异常", data: $scope.pieData.dangerMetricNum},
+              {label: "临时异常", data: $scope.pieData.criticalMetricNum},
+              {label: "正常指标", data: $scope.pieData.normalMetricNum},
+            ];
+          }
           $.plot("#anomaly-pie", pieData, {
             series: {
               pie: {
@@ -68,10 +78,17 @@ define([
           });
 
           var numDataPoints = ($scope.summary.numDataPoints || $scope.summary.numAnomaliesInCache) - $scope.summary.numAnomaliesInCache;
-          var piePointData = [
-            {label: "异常点数", data: $scope.pieData.anomalyPointNum},
-            {label: "正常点数", data: $scope.pieData.normalPointNum},
-          ];
+          if ($scope.checkZero([$scope.pieData.anomalyPointNum, $scope.pieData.normalPointNum])) {
+            var piePointData = [
+              {label: "异常点数", data: 0},
+              {label: "正常点数", data: 1},
+            ];
+          } else {
+            var piePointData = [
+              {label: "异常点数", data: $scope.pieData.anomalyPointNum},
+              {label: "正常点数", data: $scope.pieData.normalPointNum},
+            ];
+          }
           $.plot("#anomaly-point-pie", piePointData, {
             series: {
               pie: {
@@ -132,6 +149,12 @@ define([
           $scope.selected = index;
         }
       };
+
+      $scope.checkZero = function(arr) {
+        return _.every(arr, function(n) {
+          return n === 0;
+        });
+      }
 
       $scope.init();
     });
