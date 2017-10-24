@@ -216,7 +216,7 @@ export function guideDirective() {
         scope.$digest();
       }
 
-      $scrollElement.on('scroll', _.throttle(scroll.bind(this), 100));
+      ctrl.show && $scrollElement.on('scroll', _.throttle(scroll.bind(this), 100));
     }
   };
 }

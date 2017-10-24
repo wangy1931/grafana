@@ -44,6 +44,10 @@ export class AlertAssociationCtrl {
       distance: 200,
       start: ""
     }, this.$location.search());
+    if (!this.targetObj.metric) {
+      this.targetObj = _.extend({}, associationSrv.sourceAssociation);
+      this.$location.search(this.targetObj);
+    }
 
     this.annotationTpl = {
       source: {
@@ -126,7 +130,7 @@ export class AlertAssociationCtrl {
 
       // logs
       var type = _.metricPrefix2Type(metric.split(".")[0]);
-      this.query = `type:${type} AND host:${host}`;  // error & exception
+      this.query = `type:${type} AND host:${host} AND (error OR exception)`;  // error & exception
       dashboard.rows[2].panels[0].targets[0].query = this.query;
       dashboard.rows[2].panels[1].targets[0].query = this.query;
       dashboard.rows[2].panels[2].targets[0].query = this.query;

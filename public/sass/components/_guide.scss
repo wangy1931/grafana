@@ -208,7 +208,7 @@ a.progress-link {
     &::after {
       top: $marker-size / 6;
       width: 50%;
-      left: 170px;
+      left: 74%;
     }
     &:last-child {
       &::after {
@@ -228,7 +228,7 @@ a.progress-link {
     padding: 2px 10px 10px $side-menu-width;
     .progress-step {
       &::after {
-        left: 180px;
+        left: 76%;
       }
     }
   }

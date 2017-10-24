@@ -1,4 +1,4 @@
-<div class="dashlist {{ ctrl.guideClass }}" ng-class="{ 'active': ctrl.show, 'collapsed': ctrl.collapsed, 'fixed': ctrl.fixed }">
+<div class="dashlist {{ ctrl.guideClass }}" ng-class="{ 'active': ctrl.show, 'collapsed': ctrl.collapsed, 'fixed': ctrl.fixed }" ng-if="ctrl.show">
     <div class="dashlist-section">
         <h6 class="dashlist-section-header">
             <button class="dashlist-cta-close-btn" ng-click="ctrl.dismiss()">

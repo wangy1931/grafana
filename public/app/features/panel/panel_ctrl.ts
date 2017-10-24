@@ -123,10 +123,7 @@ export class PanelCtrl {
     menu.push({text: '分享', click: 'ctrl.sharePanel(); dismiss();', role: 'Editor', icon: 'fa-external-link'});
     menu.push({text: '编辑', click: 'ctrl.editPanel(); dismiss();', role: 'Editor', icon: 'fa-pencil'});
     if (this.checkMenu('associate')) {
-      menu.push({text: '关联性分析', click: 'ctrl.associateLink(); dismiss();', icon: 'fa-line-chart'});
-    }
-    if (this.checkMenu('integrate')) {
-      menu.push({text: '整合分析', click: 'ctrl.toIntegrate(); dismiss();', icon: 'fa-book'});
+      menu.push({text: '关联性分析', click: 'ctrl.associateLink();', icon: 'fa-line-chart'});
     }
     return menu;
   }
@@ -139,9 +136,6 @@ export class PanelCtrl {
     switch (menu) {
       case 'associate':
         show = (/^\/anomaly/.test(pathname) || (/^\/integrate/.test(pathname)));
-        break;
-      case 'integrate':
-        show = !(/^\/integrate/.test(pathname));
         break;
     }
     return show && isGraph && isLine;
@@ -268,7 +262,6 @@ export class PanelCtrl {
       var host = this.panel.targets[0].tags.host;
       var metric = this.panel.targets[0].metric;
       if (host && metric) {
-        metric = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.' + metric;
         this.associationSrv.setSourceAssociation({
           metric: metric,
           host: host,
