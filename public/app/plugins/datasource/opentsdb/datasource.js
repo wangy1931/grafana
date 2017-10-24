@@ -73,7 +73,6 @@ function (angular, _, dateMath) {
     };
 
     this.annotationQuery = function(options) {
-      console.log(options);
       var annotation = options.annotation;
       var start = convertToTSDBTime(options.rangeRaw.from, false);
       var end = convertToTSDBTime(options.rangeRaw.to, true);
@@ -102,10 +101,10 @@ function (angular, _, dateMath) {
               tagsList += annotation.customTags;
             }
             tagsList = _.trimEnd(tagsList, ',');
-            _.each(result.dps, function(second) {
+            _.each(result.dps, function(value, key) {
               var event = {
                 title: annotation.name,
-                time: second * 1000,
+                time: key * 1000,
                 text: '',
                 tags: tagsList,
                 annotation: annotation

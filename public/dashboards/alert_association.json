@@ -97,7 +97,7 @@
     {
       "title": "logs",
       "height": "300px",
-      "collapse": false,
+      "collapse": true,
       "showTitle": true,
       "panels": [
         {
@@ -364,21 +364,9 @@
     }
   ],
   "time": { "from": "now-6h", "to": "now" },
-  "manualAnnotation": "",
+  "manualAnnotation": [],
   "annotations": {
     "list": [
-      {
-        "datasource": "opentsdb",
-        "enable": true,
-        "iconColor": "#C0C6BE",
-        "iconSize": 13,
-        "lineColor": "rgba(88, 110, 195, 0.86)",
-        "name": "服务启动时间",
-        "target": "",
-        "showLine": true,
-        "textField": "123",
-        "timeField": ""
-      }
     ]
   }
 }

@@ -15,6 +15,7 @@ export class AlertAssociationCtrl {
   dashboard: any;
   serviceEvents: Array<any>;
   tableParams: any;
+  annotationTpl: any;
 
   // logs
   query: string;
@@ -44,6 +45,28 @@ export class AlertAssociationCtrl {
       start: ""
     }, this.$location.search());
 
+    this.annotationTpl = {
+      source: {
+        "datasource": "opentsdb",
+        "enable": true,
+        "iconColor": "#C0C6BE",
+        "iconSize": 13,
+        "lineColor": "rgba(88, 110, 195, 0.86)",
+        "name": "ceshi",
+        "target": "cpu.usr",
+        "showLine": true,
+        "textField": "123",
+        "timeField": ""
+      },
+      min: 1495032982939,
+      max: 1495032982939,
+      eventType: "123",
+      title: ":",
+      tags: "事件触发时间: ",
+      text: "",
+      scope: 1
+    };
+
     if (_.isEmpty(associationSrv.sourceAssociation)) {
       this.isSingle = true;
     } else {
@@ -70,13 +93,13 @@ export class AlertAssociationCtrl {
     });
 
     if (this.targetObj.metric) {
-      if (!this.dashboard) {
+      if (!this.$scope.dashboard) {
         this.createAlertMetricsGraph(this.targetObj.metric, this.targetObj.host);
       } else {
         var metric = _.getMetricName(this.targetObj.metric)
-        this.dashboard.rows[0].panels[0].title = metric;
-        this.dashboard.rows[0].panels[0].targets[0].metric = metric;
-        this.dashboard.rows[0].panels[0].targets[0].tags.host = this.targetObj.host;
+        this.$scope.dashboard.rows[0].panels[0].title = metric;
+        this.$scope.dashboard.rows[0].panels[0].targets[0].metric = metric;
+        this.$scope.dashboard.rows[0].panels[0].targets[0].tags.host = this.targetObj.host;
       }
     }
   }
@@ -94,7 +117,7 @@ export class AlertAssociationCtrl {
       this.dashboard.rows[0].panels[0].grid.threshold2 = this.alertMgrSrv.currentWarningThreshold;
       this.dashboard.rows[0].panels[0].thresholds[0].value = this.alertMgrSrv.currentCritialThreshold;
       this.dashboard.rows[0].panels[0].thresholds[1].value = this.alertMgrSrv.currentWarningThreshold;
-      this.dashboard.annotations.list[0] = this.alertMgrSrv.annotations;
+      // this.dashboard.annotations.list[0] = this.alertMgrSrv.annotations;
 
       // logs
       var type = _.metricPrefix2Type(metric.split(".")[0]);
@@ -107,7 +130,7 @@ export class AlertAssociationCtrl {
       this.$scope.initDashboard({
         meta: {canStar: false, canShare: false, canEdit: false, canSave: false},
         dashboard: this.dashboard,
-        manualAnnotation: this.alertMgrSrv.annotations
+        // manualAnnotation: this.alertMgrSrv.annotations
       }, this.$scope);
     });
 
@@ -140,9 +163,9 @@ export class AlertAssociationCtrl {
     }).then((response) => {
       response.data.forEach((item) => {
         item.type = (item.type === 'Start') ? '启动' : '停止';
-        item.timestamp = _.transformTime(item.timestamp);
+        item.time = _.transformTime(item.timestamp);
       });
-      this.serviceEvents = response.data;
+      this.serviceEvents = _.filter(response.data, { hostname: this.targetObj.host });
       this.tableParams = new this.NgTableParams({ count: 5 }, {
         counts: [],
         dataset: this.serviceEvents
@@ -152,8 +175,19 @@ export class AlertAssociationCtrl {
 
   addAnnotation(row) {
     if (row.checked) {
-
+      this.$scope.dashboard.manualAnnotation.push(_.extend({}, this.annotationTpl, {
+        id: row.pid,
+        min: row.timestamp * 1000,
+        max: row.timestamp * 1000,
+        title: "事件触发时间",
+        tags: row.type,
+        text: "[事件] " + row.service,
+        eventType: row.type
+      }));
+    } else {
+      _.remove(this.$scope.dashboard.manualAnnotation, { id: row.pid, eventType: row.type });
     }
+    this.$scope.broadcastRefresh();
   }
 
   showGuideResult(e, params) {
@@ -169,7 +203,7 @@ export class AlertAssociationCtrl {
   // Logs
   // Note: 日志查询没有复用 日志搜索 的代码，因为日志搜索之后会大幅度重构，现在写暂时没有意义
   reQuery() {
-    var panels = this.dashboard.rows[2].panels;
+    var panels = this.$scope.dashboard.rows[2].panels;
     panels[0].targets[0].query = this.query;
     panels[1].targets[0].query = this.query;
     panels[2].targets[0].query = this.query;
@@ -193,7 +227,7 @@ coreModule.directive('slider', () => {
         range: {
           'min': 10,
           'max': 1000
-        }
+        },
       });
       scope.$parent.thresholdSlider = element[0].noUiSlider;
       scope.$parent.thresholdSlider.on('change', () => {
