@@ -23,6 +23,9 @@
   }
 
   .service-events {
+    .ng-table tbody > tr > td {
+      padding: 0;
+    }
   }
 
   .logs {

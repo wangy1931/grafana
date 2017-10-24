@@ -22,13 +22,11 @@ func Register(r *macaron.Macaron) {
 	//cloudwiz update
 	r.Get("/systems", reqSignedIn, Index)
 	r.Get("/summary", reqSignedIn, Index)
-	r.Get("/service", reqSignedIn, Index)
 	r.Get("/alerts", reqSignedIn, Index)
 	r.Get("/alerts/edit/:id", reqSignedIn, Index)
 	r.Get("/alerts/new", reqSignedIn, Index)
 	r.Get("/alerts/status", reqSignedIn, Index)
 	r.Get("/alerts/history", reqSignedIn, Index)
-	r.Get("/alerts/association", reqSignedIn, Index)
 	r.Get("/oncallerschedule", reqSignedIn, Index)
 	r.Get("/oncallers", reqSignedIn, Index)
 	r.Get("/oncallers/edit/:id", reqSignedIn, Index)

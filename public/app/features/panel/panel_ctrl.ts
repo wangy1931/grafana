@@ -267,7 +267,7 @@ export class PanelCtrl {
           host: host,
           distance: 200,
         });
-        this.$_location.path("/association");
+        this.$_location.url("/association");
       }
     } catch (err) {
       var reg = /\'(.*?)\'/g;
