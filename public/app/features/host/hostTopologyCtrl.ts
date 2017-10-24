@@ -1,7 +1,7 @@
 import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
-import 'd3.graph';
+// import 'd3.graph';
 import { coreModule } from 'app/core/core';
 import kbn from 'app/core/utils/kbn';
 
@@ -20,6 +20,7 @@ export class HostTopologyCtrl {
   predictionPanel: any;
   currentHost: any;  // one node information of relationshipGraph
   hostPanels: any;
+  tableParams: any;
 
   currentTab: number;
   hostSummary: Array<any>;
@@ -38,7 +39,8 @@ export class HostTopologyCtrl {
     private $scope,
     private $rootScope,
     private $controller,
-    private $location
+    private $location,
+    private NgTableParams
   ) {
     $scope.ctrl = this;
 
@@ -179,6 +181,10 @@ export class HostTopologyCtrl {
       });
       this.$scope.bsTableData = response.data;
       this.$scope.$broadcast('load-table');
+      // this.tableParams = new this.NgTableParams({ count: 100 }, {
+      //   counts: [],
+      //   dataset: response.data
+      // });
     });
   }
 
@@ -268,6 +274,8 @@ export class HostTopologyCtrl {
   }
 
   getDashboard(host) {
+    this.saveTopologyData();
+
     if (!this.dashboard) {
       this.backendSrv.get('/api/static/machine_host_topology').then(response => {
         // handle dashboard
@@ -366,6 +374,7 @@ export class HostTopologyCtrl {
 
   saveTopologyData() {
     this.data = this.hostSrv.topology;
+    this.hostlist = _.map(this.data, 'name');
   }
 
   clearSelected() {

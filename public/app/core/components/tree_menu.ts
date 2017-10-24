@@ -119,9 +119,14 @@ export class TreeMenuCtrl {
   showNewAssociationManual() {
     var newScope = this.$scope.$new();
     newScope.datasource = this.$scope.datasource;
-    this.$controller('OpenTSDBQueryCtrl', {$scope: newScope});
     newScope.addManualMetric = this.addManualMetric.bind(this);
-    this.$scope.suggestTagHost = this.backendSrv.suggestTagHost;
+    this.$controller('OpenTSDBQueryCtrl', {$scope: newScope});
+    this.backendSrv.getHosts({
+      "queries": [],
+      "hostProperties": ["id"]
+    }).then(response => {
+      this.$scope.suggestTagHost = _.map(response.data, 'hostname');
+    });
     this.$scope.appEvent('show-modal', {
       src: 'public/app/partials/manual_association.html',
       modalClass: 'modal-no-header confirm-modal',

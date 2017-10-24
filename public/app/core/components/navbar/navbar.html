@@ -12,8 +12,21 @@
 		{{ctrl.title}}
 	</a>
 
-	<a href="javascript:;" class="navbar-page-btn" ng-click="ctrl.showGuide();" ng-if="ctrl.showGuideNav">
-		<i class="iconfont fa-cwiz-search" bs-tooltip="'诊断引导'" data-placement="bottom" style="font-weight: bolder;"></i>
+	<a href="javascript:;" class="navbar-page-btn" ng-click="ctrl.showGuide();" ng-if="ctrl.showGuideNav"
+		bs-tooltip="'诊断引导'" data-placement="bottom">
+		<i class="iconfont fa-cwiz-search" style="font-weight: bolder;"></i>
+	</a>
+
+	<a href="/oncallerschedule" class="navbar-shortcut-btn pull-right">
+		<i class="fa fa-fw fa-calendar"></i>
+	</a>
+
+	<a href="javascript:;" class="navbar-shortcut-btn pull-right">
+		<toolbar></toolbar>
+	</a>
+
+	<a href="javascript:;" class="navbar-shortcut-btn pull-right">
+		<i class="iconfont fa-question-circle-o"></i>
 	</a>
 
 	<div ng-transclude></div>

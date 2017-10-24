@@ -18,12 +18,12 @@ $path-position:             $marker-size-half - ($path-height / 2);
   color: $text-color-weak;
   float: right;
   padding: 0;
-  margin: 0 2px 0 0;
+  margin: 0 6px 0 0;
   background-color: transparent;
   border: none;
 
   &:hover {
-    color: $white;
+    color: $dark-4;
   }
 }
 
@@ -61,6 +61,7 @@ $path-position:             $marker-size-half - ($path-height / 2);
     border-top: 2px solid $progress-color-grey-light;
     border-bottom: $progress-color-shadow;
     background: $progress-color-grey-light;
+    cursor: default;
   }
 
   &:first-child {
@@ -106,7 +107,7 @@ $path-position:             $marker-size-half - ($path-height / 2);
       }
     }
     .progress-text {
-      text-decoration: line-through;
+      text-decoration: none;
     }
     &::after {
       background: $progress-color-grey-light;
@@ -173,13 +174,13 @@ a.progress-link {
   height: 0;
   width: 100%; // calc(100% - #{$side-menu-width});
   z-index: 99;
-  padding: 0; // 20px 20px 0 20px;
+  padding: 0;
   box-shadow: 0px 0px 4px 1px #d8d8d8;
-  transition: bottom 0.4s ease;
+  transition: all 0.4s ease;
   &.active {
-    top: 0; // 52px
+    top: 0;
     height: auto;
-    padding: 20px;
+    padding:  2px 10px 10px 10px;
     margin-bottom: 20px;
   }
 
@@ -199,5 +200,25 @@ a.progress-link {
   }
   .dashlist-section {
     margin-bottom: 0;
+  }
+}
+
+// Collapsed
+.guide.collapsed {
+  .progress-step {
+    &::after {
+      display: none;
+    }
+  }
+}
+
+// Fixed to Top
+.guide.fixed {
+  position: absolute;
+  left: 0px;
+  top: 52px;
+  padding-left: $side-menu-width;
+  &.collapsed {
+    padding: 2px 10px 10px $side-menu-width; //10px;
   }
 }

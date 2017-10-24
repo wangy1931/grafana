@@ -1,5 +1,6 @@
 ///<reference path="../../../headers/common.d.ts" />
 
+import angular from 'angular';
 import config from 'app/core/config';
 import _ from 'lodash';
 import $ from 'jquery';
@@ -12,9 +13,21 @@ export class GuideCtrl {
   exceptionMetrics: any = [];
   exceptionHosts: any = [];
   selected: any = {};
+  collapsed: boolean = true;
+  fixed: boolean = false;
 
   /** @ngInject */
-  constructor(private $rootScope, private $scope, private hostSrv, private alertMgrSrv, private $timeout, private $q, private $location) {
+  constructor(
+    private $rootScope,
+    private $scope,
+    private hostSrv,
+    private alertMgrSrv,
+    private $timeout,
+    private $q,
+    private $location,
+    private $controller,
+    private datasourceSrv
+  ) {
     this.stepIndex = 0;
     this.steps = [];
 
@@ -25,16 +38,15 @@ export class GuideCtrl {
     searchParams.guide && (this.show = true);
     searchParams.host = searchParams.host || '*';
     _.extend(this.selected, searchParams);
-    // does not work
-    $timeout(this.located.bind(this), 0);
+    // TO FIX: does not work sometimes
+    $timeout(() => { this.located(); }, 100);
 
     this.steps.push({
-      title: '定位问题',
-      cta: '定位问题',
-      icon: 'icon-gf icon-gf-check',  // icon-gf 
+      title: '发现问题',
+      cta: '发现问题',
+      icon: 'icon-gf icon-gf-check',
       href: '/',
-      // target: '_blank',
-      note: '系统报警<br/>服务KPI<br/>机器KPI',
+      note: '1) 系统报警<br/>2) 服务KPI<br/>3) 机器KPI',
       check: () => $q.when(this.$location.path() === '/'),
       jumpTo: () => {
         this.$location.url('/');
@@ -46,8 +58,7 @@ export class GuideCtrl {
       cta: '故障溯源',
       icon: 'icon-gf icon-gf-apps',
       href: '/rca',
-      note: '根据故障问题，寻找根源',
-      // check: () => $q.when(false),
+      note: '根据故障问题，寻找根本原因',
       check: () => $q.when(this.$location.path() === '/rca'),
       jumpTo: () => {
         this.jump('/rca');
@@ -58,10 +69,11 @@ export class GuideCtrl {
       title: '关联分析',
       cta: '关联分析',
       icon: 'iconfont fa-association',
-      href: '/association#association',
-      check: () => $q.when(this.$location.path() === '/association' && this.$location.hash() === 'association'),
+      href: '/association',
+      note: '比较高相关性指标',
+      check: () => $q.when(this.$location.path() === '/association'),
       jumpTo: () => {
-        this.jump('/association', '#association');
+        this.jump('/association');
       }
     });
 
@@ -69,16 +81,16 @@ export class GuideCtrl {
       title: '日志分析',
       cta: '日志分析',
       icon: 'fa fa-fw fa-file-text-o',
-      href: '/association#logs',
-      check: () => $q.when(this.$location.path() === '/association' && this.$location.hash() === 'logs'),
+      href: '/logs',
+      note: '全文搜索系统日志',
+      check: () => $q.when(this.$location.path() === '/logs'),
       jumpTo: () => {
-        this.jump('/association', '#logs');
+        var type = _.metricPrefix2Type(this.selected.metric.split(".")[0]);
+        var query = `type:${type} AND host:${this.selected.host}`; // error & exception
+        var path = '/logs';
+        var url = `${path}?guide&metric=${this.selected.metric}&host=${this.selected.host}&start=${this.selected.start}&query=${query}`;
+        this.$location.url(url);
       }
-      // check: () => {
-      //   return  this.backendSrv.get('/api/org/users').then(res => {
-      //     return res.length > 1;
-      //   });
-      // }
     });
 
     this.steps.push({
@@ -86,10 +98,17 @@ export class GuideCtrl {
       cta: '高消耗进程',
       icon: 'iconfont fa-process',
       href: '/topn',
+      note: '查看资源消耗情况',
       check: () => $q.when(this.$location.path() === '/topn'),
       jumpTo: () => {
         this.jump('/topn');
       }
+    });
+
+    $scope.$on('$routeUpdate', () => {
+      var metric = this.$location.search().metric;
+      metric && !~this.exceptionMetrics.indexOf(metric) && this.exceptionMetrics.push(metric);
+      _.extend(this.selected, this.$location.search());
     });
 
     this.init();
@@ -101,7 +120,6 @@ export class GuideCtrl {
     this.getExceptionHost();
 
     return this.nextStep().then(res => {
-      // this.showGuide = true;
     });
   }
 
@@ -131,12 +149,17 @@ export class GuideCtrl {
     this.show = false;
   }
 
+  collapse() {
+    this.collapsed = !this.collapsed;
+  }
+
   located() {
     this.$rootScope.appEvent('exception-located', this.selected);
   }
 
   jump(path, hash?) {
-    var url = `${path}?guide&metric=${this.selected.metric}&host=${this.selected.host}&start=${this.selected.start}&hostId=${this.selected.hostId}${hash}`;
+    var url = `${path}?guide&metric=${this.selected.metric}&host=${this.selected.host}&start=${this.selected.start}`; // &hostId=${this.selected.hostId}
+    url += hash ? hash : '';
     this.$location.url(url);
   }
 
@@ -145,6 +168,7 @@ export class GuideCtrl {
     this.$location.search(search);
   }
 
+  // TO IMPROVE: how to get all exception metrics? here are only alert metrics
   getExceptionMetrics() {
     this.exceptionMetrics = [];
 
@@ -157,8 +181,6 @@ export class GuideCtrl {
         });
       });
     });
-
-    // kpi exception metrics
   }
 
   getExceptionHost() {
@@ -179,7 +201,20 @@ export function guideDirective() {
     controllerAs: 'ctrl',
     scope: {
       needHost: '@',
-      guideClass: '@'
+      guideClass: '@',
+      notMetric: '@'
+    },
+    link: function (scope, elem, attrs, ctrl) {
+      var $scrollElement = elem.parent('.page-container');
+
+      var scroll = function () {
+        var scroll = $scrollElement.scrollTop();
+        var shrinkHeader = ctrl.collapsed ? 90 : 230;
+        ctrl.fixed = (scroll >= shrinkHeader) ? true : false;
+        scope.$digest();
+      }
+
+      $scrollElement.on('scroll', _.throttle(scroll.bind(this), 100));
     }
   };
 }

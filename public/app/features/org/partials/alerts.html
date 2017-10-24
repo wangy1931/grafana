@@ -2,8 +2,8 @@
 <navbar icon="fa fa-fw fa-bell" title="智能检测">
 	<ul class="nav">
     <li><a href="alerts/status">总览</a></li>
-    <li><a href="alerts/new">新建报警规则</a></li>
     <li class="active"><a href="alerts">报警规则</a></li>
+    <li><a href="alerts/new">新建报警规则</a></li>
   </ul>
 </navbar>
 
@@ -34,13 +34,12 @@
         </td>
         <td style="width: 1%">
           <a href="alerts/edit/{{alertDef.id}}" class="btn btn-inverse btn-mini">
-            <i class="fa fa-edit"></i>
-            编辑
+            <i class="fa fa-edit"></i> 编辑
           </a>
         </td>
         <td style="width: 1%">
           <a ng-click="remove(alertDef.id)" class="btn btn-danger btn-mini">
-            <i class="fa fa-remove"></i>
+            <i class="fa fa-remove"></i> 删除
           </a>
         </td>
       </tr>

@@ -123,7 +123,7 @@ function (angular, moment, _) {
       }
     };
 
-    $scope.resetCurrentThreshold = function (alertDetail) {
+    $scope.resetAlertRule = function (alertDetail) {
       var metric = _.getMetricName(alertDetail.metric);
       var def_zh = alertDetail.definition.name;
       var host = alertDetail.status.monitoredEntity;
@@ -132,27 +132,13 @@ function (angular, moment, _) {
         crit: alertDetail.definition.alertDetails.crit.threshold,
       }
       alertMgrSrv.resetCurrentThreshold(threshold);
-      alertMgrSrv.annotations = [{
-        source: {
-          datasource: "elk",
-          enable: true,
-          iconColor: "#C0C6BE",
-          iconSize: 15,
-          lineColor: "rgba(255, 96, 96, 0.592157)",
-          name: "123",
-          query: "*",
-          showLine: true,
-          textField: "123",
-          timeField: ""
-        },
+      alertMgrSrv.annotations = [_.extend({}, annotation_tpl, {
         min: alertDetail.status.creationTime,
         max: alertDetail.status.creationTime,
-        eventType: "123",
         title: "报警时间",
         tags: metric + "," + host,
         text: "[警报] " + def_zh,
-        scope: 1
-      }];
+      })];
     };
 
     $scope.handleAlert = function (alertDetail) {
@@ -232,7 +218,6 @@ function (angular, moment, _) {
       var details = alert.definition.alertDetails;
       var host = alert.status.monitoredEntity;
       var anno_create = alert.status.creationTime;
-      var start_anno = _.cloneDeep(annotation_tpl);
       var options = integrateSrv.options;
 
       target.aggregator = details.hostQuery.metricQueries[0].aggregator.toLowerCase();
@@ -241,14 +226,16 @@ function (angular, moment, _) {
       for (var tag in alert.definition.tags) {
         target.tags[tag.name] = tag.value;
       }
-      start_anno.min = start_anno.max = anno_create;
-      start_anno.title = "报警开始时间: ";
       options.targets = [target];
       options.title = target.metric + "异常情况";
 
       options.from = moment.utc(anno_create - 3600000).format("YYYY-MM-DDTHH:mm:ss.SSS\\Z");
       options.to = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS\\Z");
-      options.annotations = [start_anno];
+      options.annotations = [_.extend({}, annotation_tpl, {
+        min: anno_create,
+        max: anno_create,
+        title: "报警开始时间: "
+      })];
       $location.path("/integrate");
     };
 
@@ -295,8 +282,6 @@ function (angular, moment, _) {
       var alert = _.find($scope.alertHistory, {'id': id});
       var details = alert.definition.alertDetails;
       var history = alert.history;
-      var start_anno = _.cloneDeep(annotation_tpl);
-      var end_anno = _.cloneDeep(annotation_tpl);
       var options = integrateSrv.options;
 
       target.aggregator = details.hostQuery.metricQueries[0].aggregator.toLowerCase();
@@ -306,25 +291,35 @@ function (angular, moment, _) {
         target.tags[tag.name] = tag.value;
       }
 
-      start_anno.min = start_anno.max = history.createdTimeInMillis;
-      start_anno.title = "报警开始时间: ";
-
-      end_anno.min = end_anno.max = history.closedTimeInMillis;
-      end_anno.title = "报警结束时间: ";
-
       options.targets = [target];
       options.title = target.metric + "异常情况";
 
       options.from = moment.utc(history.createdTimeInMillis - 3600000).format("YYYY-MM-DDTHH:mm:ss.SSS\\Z");
       options.to = moment.utc(history.closedTimeInMillis + 3600000).format("YYYY-MM-DDTHH:mm:ss.SSS\\Z");
-      options.annotations = [start_anno, end_anno];
+      options.annotations = [_.extend({}, annotation_tpl, {
+        min: history.createdTimeInMillis,
+        max: history.createdTimeInMillis,
+        title: "报警开始时间: "
+      }), _.extend({}, annotation_tpl, {
+        min: history.closedTimeInMillis,
+        max: history.closedTimeInMillis,
+        title: "报警结束时间: "
+      })];
       $location.path("/integrate");
     };
 
     $scope.associateAnalysis = function(host, metric, alertDetail) {
-      $scope.resetCurrentThreshold(alertDetail);
-      associationSrv.setSourceAssociation(metric, host, 300);
-      $location.path("/alerts/association");
+      var url = '/rca?guide&metric=' + _.getMetricName(metric) + '&host=' + host + '&start=' + alertDetail.status.levelChangedTime;
+
+      $scope.resetAlertRule(alertDetail);
+      metric = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.' + metric;
+      associationSrv.setSourceAssociation({
+        metric: metric,
+        host: host,
+        distance: 300,
+        start: alertDetail.status.levelChangedTime
+      });
+      $location.url(url);
     }
 
     this.init = $scope.init;

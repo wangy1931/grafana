@@ -11,6 +11,9 @@
                     <li>{{ host.cpu || '-' }}</li>
                     <li>{{ host.mem || '-' }}</li>
                     <li>{{ host.disk || '-' }}</li>
+                    <li>
+                        <i class="fa fa-search" ng-click="ctrl.toHostTopology(host.id, host.host)"></i>
+                    </li>
                 </ul>
             </a>
         </div>

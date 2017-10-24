@@ -819,7 +819,7 @@
   "annotations": {
     "list": []
   },
-  "refresh": null,
+  "refresh": "30s",
   "schemaVersion": 7,
   "version": 11,
   "links": []

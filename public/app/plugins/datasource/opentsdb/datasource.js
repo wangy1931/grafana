@@ -73,6 +73,7 @@ function (angular, _, dateMath) {
     };
 
     this.annotationQuery = function(options) {
+      console.log(options);
       var annotation = options.annotation;
       var start = convertToTSDBTime(options.rangeRaw.from, false);
       var end = convertToTSDBTime(options.rangeRaw.to, true);
@@ -84,7 +85,7 @@ function (angular, _, dateMath) {
       if(annotation.tags) {
         tags = JSON.parse(annotation.tags);
       }
-      qs.push({ aggregator:"sum", metric: metric, downsample: '10m-sum', tags: tags});
+      qs.push({ aggregator:"sum", metric: metric, downsample: '10m-sum', tags: tags });
 
       var queries = _.compact(qs);
 

@@ -301,6 +301,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/association', {
     templateUrl: 'public/app/features/org/partials/alertAssociation.html',
     controller : 'AlertAssociationCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOrgBundle,
   })
   .when('/knowledgebase', {

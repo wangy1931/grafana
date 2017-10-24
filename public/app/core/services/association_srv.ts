@@ -8,11 +8,12 @@ export class AssociationSrv {
   /** @ngInject */
   constructor(private alertMgrSrv) {}
 
-  setSourceAssociation(metric, host, distance) {
+  setSourceAssociation({ metric, host, distance, start }) {
     this.sourceAssociation = {
       metric: metric,
       host: host,
-      distance: distance
+      distance: distance,
+      start: start
     }
   }
 

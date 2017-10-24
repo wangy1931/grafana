@@ -60,18 +60,18 @@
         <td>{{ formatDate(alertDetail.status.levelChangedTime) }}</td>
         <td>{{ timeFrom(alertDetail.status.levelChangedTime, alertDetail.status.snoozeMinutes) }}</td>
         <td>
-          <a href="/rca?guide&metric={{_.getMetricName(alertDetail.metric)}}&host={{alertDetail.status.monitoredEntity}}&start={{alertDetail.status.levelChangedTime}}"
+          <a ng-click="associateAnalysis(alertDetail.status.monitoredEntity, alertDetail.metric, alertDetail)"
+             href="javascript:;"
              class="btn btn-mini btn-primary">
              <i class="fa fa-signal"></i> 诊断分析
           </a>
-          <!-- <a href="/alerts/association/{{alertDetail.status.monitoredEntity}}/{{correlationThreshold}}/{{alertDetail.metric}}" class="btn btn-mini btn-primary" ng-click="resetCurrentThreshold(alertDetail)">
-          <a ng-click="associateAnalysis(alertDetail.status.monitoredEntity, alertDetail.metric, alertDetail)" class="btn btn-mini btn-primary">
+          <!-- <a ng-click="associateAnalysis(alertDetail.status.monitoredEntity, alertDetail.metric, alertDetail)" class="btn btn-mini btn-primary">
             <i class="fa fa-signal"></i>
             关联性分析
           </a> -->
-          <a class="btn btn-mini btn-primary" ng-click="statusDetails(alertDetail)">
+          <!-- <a class="btn btn-mini btn-primary" ng-click="statusDetails(alertDetail)">
             整合分析
-          </a>
+          </a> -->
           <a class="btn btn-mini btn-success" ng-click="handleSnooze(alertDetail)">
             延迟报警
           </a>

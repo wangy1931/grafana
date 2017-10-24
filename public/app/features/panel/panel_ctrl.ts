@@ -269,7 +269,11 @@ export class PanelCtrl {
       var metric = this.panel.targets[0].metric;
       if (host && metric) {
         metric = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.' + metric;
-        this.associationSrv.setSourceAssociation(metric, host, 300);
+        this.associationSrv.setSourceAssociation({
+          metric: metric,
+          host: host,
+          distance: 300,
+        });
         this.$_location.path("/alerts/association");
       }
     } catch (err) {

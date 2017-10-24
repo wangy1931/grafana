@@ -169,6 +169,19 @@ function ($, moment) {
     return value && map[value];
   };
 
+  // Metric
+  _.metricPrefix2Type = function (prefix) {
+    if (_.isNull(prefix)) {
+      return "*";
+    }
+    if (/(iostat|cpu|df|net|proc)/.test(prefix)) {
+      return "system";
+    } else if (/(ssh_failed)/.test(prefix)) {
+      return "security";
+    }
+    return prefix;
+  };
+
   _.metricHelpMessage = {};
   _.metricMessage = {};
 

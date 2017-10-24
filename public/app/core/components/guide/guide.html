@@ -1,19 +1,22 @@
-<div class="dashlist {{ ctrl.guideClass }}" ng-class="{'active': ctrl.show}">
+<div class="dashlist {{ ctrl.guideClass }}" ng-class="{ 'active': ctrl.show, 'collapsed': ctrl.collapsed, 'fixed': ctrl.fixed }">
     <div class="dashlist-section">
         <h6 class="dashlist-section-header">
-        <button class="dashlist-cta-close-btn" ng-click="ctrl.dismiss()">
-            <i class="fa fa-remove"></i>
-        </button>
+            <button class="dashlist-cta-close-btn" ng-click="ctrl.dismiss()">
+                <i class="fa fa-remove"></i>
+            </button>
+            <button class="dashlist-cta-close-btn" ng-click="ctrl.collapse()">
+                <i class="fa" ng-class="{true: 'fa-plus', false: 'fa-minus'}[ctrl.collapsed]"></i>
+            </button>
         </h6>
-        <div class="guide-location">
+        <div class="guide-location" ng-hide="ctrl.collapsed">
             <form class="gf-form-group tidy-form">
                 <div>
                     <div class="gf-form">
                         <ul class="gf-form-list tidy-form-list" style="text-align:right; overflow: inherit; width: 100%;">
-                            <li class="tidy-form-item">
+                            <li class="tidy-form-item" ng-if="!ctrl.notMetric">
                                 定位到重要异常指标：
                             </li>
-                            <li class="tidy-form-item">
+                            <li class="tidy-form-item" ng-if="!ctrl.notMetric">
                                 <button type="button" class="btn btn-default" ng-model="ctrl.selected.metric" data-placement="bottom-auto"
                                         bs-options="f.name as f.name for f in ctrl.exceptionMetrics" bs-select ng-change="ctrl.onSelectChange();">
                                     请选择<span class="caret"></span>
@@ -23,7 +26,7 @@
                                 机器：
                             </li>
                             <li class="tidy-form-item" ng-if="ctrl.needHost">
-                                <button type="button" class="btn btn-default" ng-model="ctrl.selected.host" data-placement="bottom-auto"
+                                <button type="button" class="btn btn-default" ng-model="ctrl.selected.host"
                                         bs-options="f.host as f.host for f in ctrl.exceptionHosts" bs-select ng-change="ctrl.onSelectChange();">
                                     请选择<span class="caret"></span>
                                 </button>
@@ -45,15 +48,20 @@
             <p style="margin: 5px;">异常诊断引导：</p>
         </div>
         <ul class="progress-tracker">
-        <li class="progress-step" ng-repeat="step in ctrl.steps" ng-class="step.cssClass">
-            <a class="progress-link" href="javascript:;" target="{{step.target}}" ng-click="step.jumpTo()">
-            <span class="progress-marker" ng-class="step.cssClass"><i class="{{step.icon}}"></i></span>
-            <span class="progress-text" ng-href="{{step.href}}" target="{{step.target}}">
-                {{step.title}} <info-popover>{{step.note}}</info-popover>
-            </span>
-            </a>
-            <a class="btn progress-step-cta" ng-href="{{step.href}}" target="{{step.target}}" ng-click="step.jumpTo()">{{step.cta}}</a>
-        </li>
+            <li class="progress-step" ng-repeat="step in ctrl.steps" ng-class="step.cssClass">
+                <a class="progress-link" href="javascript:;" target="{{step.target}}" ng-click="step.jumpTo()">
+                    <span class="progress-marker" ng-class="step.cssClass" ng-hide="ctrl.collapsed">
+                        <i class="{{step.icon}}"></i>
+                    </span>
+                    <span class="progress-text" ng-href="{{step.href}}" target="{{step.target}}">
+                        {{step.title}}
+                        <info-popover>
+                            <div ng-bind-html="step.note"></div>
+                        </info-popover>
+                    </span>
+                </a>
+                <a class="btn progress-step-cta" ng-href="{{step.href}}" target="{{step.target}}" ng-click="step.jumpTo()">{{step.cta}}</a>
+            </li>
         </ul>
     </div>
 </div>

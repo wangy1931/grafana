@@ -52,3 +52,8 @@ declare module 'eventemitter3' {
   var config: any;
   export default config;
 }
+
+declare module 'slider' {
+  var config: any;
+  export default config;
+}

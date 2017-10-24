@@ -442,6 +442,10 @@ export class SystemOverviewCtrl {
     }
   }
 
+  toHostTopology(id, host) {
+    this.$location.url(`/host_topology?id=${id}&name=${host}&tabId=0`);
+  }
+
 };
 
 coreModule.filter('formatItemType', () => {

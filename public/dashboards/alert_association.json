@@ -1,11 +1,104 @@
-define(function() {
-  'use strict';
-
-  var panelMetas = [
+{
+  "title": "相关联指标",
+  "id": 1,
+  "rows": [
     {
-      "collapse": false,
-      "editable": false,
+      "title": "associationGraph",
       "height": "300px",
+      "panels": [
+        {
+          "title": "",
+          "error": false,
+          "span": 12,
+          "id": 1,
+          "editable": false,
+          "linewidth": 2,
+          "height": "500px",
+          "type": "graph",
+          "targets": [
+            {
+              "aggregator": "avg",
+              "metric": "",
+              "downsampleAggregator": "avg",
+              "downsampleInterval": "1m",
+              "tags": { "host": "" }
+            }
+          ],
+          "y-axis": false,
+          "yaxes": [
+              {
+                  "label": null,
+                  "show": false,
+                  "logBase": 1,
+                  "min": null,
+                  "max": null,
+                  "format": "short"
+              },
+              {
+                  "label": null,
+                  "show": false,
+                  "logBase": 1,
+                  "min": null,
+                  "max": null,
+                  "format": "short"
+              }
+          ],
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "current": true,
+            "total": true,
+            "show": false,
+            "values": true
+          },
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": "",
+            "threshold1Color": "rgba(216, 169, 27, 0.61)",
+            "threshold2": "",
+            "threshold2Color": "rgba(251, 0, 0, 0.57)",
+            "thresholdLine": true
+          },
+          "thresholds": [
+            {
+              "value": "",
+              "colorMode": "critical",
+              "op": "gt",
+              "fill": false,
+              "line": true
+            },
+            {
+              "value": "",
+              "colorMode": "warning",
+              "op": "gt",
+              "fill": false,
+              "line": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "serviceEvents",
+      "height": "150px",
+      "collapse": false,
+      "showTitle": true,
+      "panels": [
+        {}
+      ]
+    },
+    {
+      "title": "logs",
+      "height": "300px",
+      "collapse": false,
+      "showTitle": true,
       "panels": [
         {
           "columns": [
@@ -50,7 +143,7 @@ define(function() {
           "span": 12,
           "styles": [
             {
-              "dateFormat": "YYYY-MM-DD HH:mm:ss,sss",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "@timestamp",
               "type": "date"
             },
@@ -75,6 +168,7 @@ define(function() {
               "downsampleAggregator": "avg",
               "dsType": "elasticsearch",
               "errors": {},
+              "query": "",
               "metrics": [
                 {
                   "field": "select field",
@@ -84,10 +178,8 @@ define(function() {
                   "type": "raw_document"
                 }
               ],
-              "query": "$QUERY",
               "refId": "A",
-              "timeField": "@timestamp",
-              "size": "$SIZE"
+              "timeField": "@timestamp"
             }
           ],
           "tab": 1,
@@ -103,23 +195,10 @@ define(function() {
               "value": "count"
             },
             {
-              "text": "operator",
-              "value": "operator"
-            },
-            {
-              "text": "cid",
-              "value": "cid",
-              "hide": true
-            },
-            {
               "text": "message",
               "value": "message"
             }
           ],
-          "operator": {
-            "text": "delete",
-            "method": ""
-          },
           "datasource": "elk",
           "editable": true,
           "error": false,
@@ -131,7 +210,7 @@ define(function() {
             "title": ""
           },
           "hideTimeOverride": false,
-          "id": Math.random(),
+          "id": "logCluster",
           "isNew": true,
           "links": [],
           "pageSize": null,
@@ -144,6 +223,11 @@ define(function() {
           "span": 12,
           "styles": [
             {
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "@timestamp",
+              "type": "date"
+            },
+            {
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -155,10 +239,6 @@ define(function() {
               "thresholds": [],
               "type": "number",
               "unit": "short"
-            },
-            {
-              "type": "html",
-              "pattern": "/.*/"
             }
           ],
           "targets": [
@@ -168,19 +248,18 @@ define(function() {
               "downsampleAggregator": "avg",
               "dsType": "elasticsearch",
               "errors": {},
+              "query": "",
               "metrics": [
                 {
                   "field": "select field",
-                  "id": Math.random(),
+                  "id": "Math.random()",
                   "meta": {},
                   "settings": {},
                   "type": "raw_document"
                 }
               ],
-              "query": "$QUERY",
               "refId": "A",
-              "timeField": "@timestamp",
-              "size": "$SIZE"
+              "timeField": "@timestamp"
             }
           ],
           "title": "聚合数据",
@@ -188,7 +267,6 @@ define(function() {
           "transparent": false,
           "type": "table",
           "tab": 2,
-          "operate": "logReduce",
           "scopedVars": {
             "logCluster": true
           }
@@ -217,7 +295,7 @@ define(function() {
             "info": false,
             "title": ""
           },
-          "id": Math.random(),
+          "id": "logCompare",
           "isNew": true,
           "links": [],
           "pageSize": null,
@@ -230,7 +308,7 @@ define(function() {
           "span": 12,
           "styles": [
             {
-              "dateFormat": "YYYY-MM-DD HH:mm:ss,sss",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "Time",
               "type": "date"
             }
@@ -245,16 +323,15 @@ define(function() {
               "metrics": [
                 {
                   "field": "select field",
-                  "id": Math.random(),
+                  "id": "logCompare1",
                   "meta": {},
                   "settings": {},
                   "type": "raw_document"
                 }
               ],
-              "query": "$QUERY",
+              "query": "",
               "refId": "A",
-              "timeField": "@timestamp",
-              "size": "$SIZE"
+              "timeField": "@timestamp"
             },
             {
               "bucketAggs": [],
@@ -262,133 +339,47 @@ define(function() {
               "metrics": [
                 {
                   "field": "select field",
-                  "id": Math.random(),
+                  "id": "logCompare2",
                   "meta": {},
                   "settings": {},
                   "type": "raw_document"
                 }
               ],
-              "query": "$QUERY",
+              "query": "",
               "refId": "B",
               "timeField": "@timestamp",
-              "timeShift": "$TIMESHIFT",
-              "size": "$SIZE"
+              "timeShift": "-1d"
             }
           ],
           "tab": 3,
-          "operate": "logCompare",
           "title": "日志对比",
           "transform": "json",
           "type": "table",
           "scopedVars": {
             "logCompare": true,
-            "logFilter" : "$LOGFILTER"
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": true,
-          "datasource": "elk",
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 3,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": false,
-          "linewidth": 2,
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "aggregator": "sum",
-              "bucketAggs": [
-                {
-                  "field": "@timestamp",
-                  "id": "2",
-                  "settings": {
-                    "interval": "auto",
-                    "min_doc_count": 0
-                  },
-                  "type": "date_histogram"
-                }
-              ],
-              "downsampleAggregator": "avg",
-              "dsType": "elasticsearch",
-              "errors": {},
-              "metric": "internal.alert.state",
-              "metrics": [
-                {
-                  "field": "select field",
-                  "id": "1",
-                  "type": "count"
-                }
-              ],
-              "query": "$QUERY",
-              "refId": "A",
-              "timeField": "@timestamp"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "日志总数",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
-          },
-          "transparent": true,
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "links": [],
-          "helpInfo": {
-            "info": false,
-            "title": "",
-            "context": ""
+            "logFilter": ""
           }
         }
-      ],
-      "showTitle": false,
-      "title": "",
-      "id": 1,
-      "active": true
+      ]
     }
-  ];
-
-  return {
-    rows: panelMetas,
-    logResultPanel : panelMetas[0].panels[0],
-    logClusterPanel: panelMetas[0].panels[1],
-    logComparePanel: panelMetas[0].panels[2],
+  ],
+  "time": { "from": "now-6h", "to": "now" },
+  "manualAnnotation": "",
+  "annotations": {
+    "list": [
+      {
+        "datasource": "opentsdb",
+        "enable": true,
+        "iconColor": "#C0C6BE",
+        "iconSize": 13,
+        "lineColor": "rgba(88, 110, 195, 0.86)",
+        "name": "服务启动时间",
+        "target": "",
+        "showLine": true,
+        "textField": "123",
+        "timeField": ""
+      }
+    ]
   }
-});
+}
+

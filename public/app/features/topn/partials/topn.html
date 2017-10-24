@@ -1,7 +1,7 @@
 <navbar title="智能分析" icon="fa fa-fw fa-home"></navbar>
 
 <div class="page-container topn-page" ng-init="ctrl.init();">
-    <guide guide-class="guide" need-host=true></guide>
+    <guide guide-class="guide" need-host=true not-metric=true></guide>
 
     <div class="page-header">
         <h2>资源高消耗进程</h2>
@@ -9,7 +9,7 @@
 
     <div class="page-body">
 
-      <div class="process-table">  
+      <div class="process-table" style="overflow-x: auto;"> 
         <table-loader key='host' template="public/app/partials/host_process_table.html"></table-loader>
       </div>
       <div class="clearfix"></div>

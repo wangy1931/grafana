@@ -1,7 +1,6 @@
 <navbar title="系统总览" icon="fa fa-fw fa-home"></navbar>
 
-<div class="page-container summary-page" ng-init="ctrl.init();">
-    <guide guide-class="guide" need-host=true></guide>
+<div class="page-container summary-page" ng-init="ctrl.init()">
 
     <div class="overview-list" style="box-sizing:border-box;">
         <div class="main-view-container">
@@ -93,19 +92,7 @@
                             <a href="javascript:;">服务KPI</a>
                         </h3>
                         <em ng-if="!ctrl.servicePanel.currentService.name">点击上图某个服务，查看服务详情</em>
-                        <div class="mention">
-                            <!-- <button type="button" ng-if="ctrl.servicePanel.currentService.name"
-                                class="btn-item system-status status-color bg-{{ ctrl.servicePanel.currentService.status | lowercase }}">
-                                {{ ctrl.servicePanel.currentService.name }}
-                            </button> -->
-                            <span ng-if="ctrl.servicePanel.currentService.name">
-                                {{ ctrl.servicePanel.currentService.name }} 分布的机器：
-                                <button type="button" ng-repeat="host in ctrl.servicePanel.hosts" ng-click="ctrl.switchPanel('host', host.host);"
-                                    class="btn-item system-status status-color bg-{{ host.healthType }}">
-                                    {{ host.host }}
-                                </button>
-                            </span>
-                        </div>
+                        <div class="mention"></div>
                     </div>
                     <div class="table host-panel-table" ng-if="ctrl.servicePanel.currentService.name">
                         <ul>
@@ -115,6 +102,7 @@
                             <li>CPU 使用率</li>
                             <li>内存使用</li>
                             <li>磁盘剩余空间</li>
+                            <li>机器详细信息</li>
                         </ul>
                         <div ng-include="'public/app/features/systemoverview/partials/system_service_host_panel.html'"></div>
                     </div>
@@ -138,21 +126,7 @@
                             <a href="javascript:;">机器KPI</a>
                         </h3>
                         <em ng-if="!ctrl.hostPanel.currentHost.name">点击上图某个机器，查看机器详情</em>
-                        <div class="mention">
-                            <!-- <span ng-if="ctrl.hostPanel.currentHost.name">
-                                {{ ctrl.hostPanel.currentHost.name }} 部署的服务：
-                                <button type="button" ng-repeat="host in ctrl.host.hosts" ng-click="ctrl.switchPanel('host', host.host);"
-                                    class="btn-item system-status status-color bg-{{ host.healthType }}">
-                                    {{ host.host }}
-                                </button>
-                            </span> -->
-                            <a href="/host_topology?tabId=2&id={{ ctrl.hostPanel.currentHost.id }}&name={{ ctrl.hostPanel.currentHost.name }}">
-                                <button type="button" ng-if="ctrl.hostPanel.currentHost.name" style="margin-left: 16px;"
-                                    class="btn-item system-status status-color bg-{{ ctrl.hostPanel.currentHost.status | lowercase }}">
-                                        {{ ctrl.hostPanel.currentHost.name }}
-                                </button>
-                            </a>
-                        </div>
+                        <div class="mention"></div>
                     </div>
                     <div class="table host-panel-table" ng-if="ctrl.hostPanel.currentHost.name">
                         <ul>
@@ -161,6 +135,7 @@
                             <li>CPU 使用率</li>
                             <li>内存使用</li>
                             <li>磁盘剩余空间</li>
+                            <li>机器详细信息</li>
                         </ul>
                         <div ng-include="'public/app/features/systemoverview/partials/system_host_panel.html'"></div>
                     </div>

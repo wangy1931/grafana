@@ -8,31 +8,52 @@ import coreModule from '../../core_module';
 var template = `
   <div class="toolbar-content">
     <div class="popover-content">
-      <a href="javascript:;" class="toolbar-item" ng-click="guide();">
-        <p class="item-name">诊断引导</p>
+      <a href="{{ item.href }}" ng-repeat="item in toolbarItems" class="toolbar-item {{ item.class }}" ng-click="item.clickHandler()">
+        <i class="{{ item.icon }}"></i>
+        <p class="item-name">{{ item.itemname }}</p>
       </a>
     </div>
   </div>
 `;
 
 export class ToolbarCtrl {
+  toolbarItems: Array<any>;
 
   /** @ngInject */
   constructor(private $rootScope, private $scope, private popoverSrv, private backendSrv, private $q, private $location) {
+    this.toolbarItems = [];
+
+    this.toolbarItems.push({
+      class: '',
+      icon : 'fa fa-fw fa-book',
+      itemname: '运维知识库',
+      href: 'javascript:;',
+      clickHandler: () => {
+        $rootScope.appEvent('show-modal', {
+          src: 'public/app/features/logs/partials/logs_knowledge.html',
+          modalClass: 'modal-kb',
+          scope: $scope.$new(),
+        });
+      },
+    });
+
+    this.toolbarItems.push({
+      class: '',
+      icon : 'fa fa-fw fa-cloud-download',
+      itemname: '安装指南',
+      href: '/setting/agent',
+      clickHandler: () => {},
+    });
   }
 
   showPopover() {
     this.popoverSrv.show({
       element : $('.toolbar-icon')[0],
-      position: 'top center',
+      position: 'bottom center',
       template: template,
       classes : 'toolbar-popover',
       model : {
-        guide: () => {
-          this.$rootScope.appEvent('show-guide-book');
-        }
-        // tags: this.$scope.tags,
-        // id  : this.$scope.id
+        toolbarItems: this.toolbarItems,
       },
     });
   }
@@ -46,9 +67,6 @@ export function toolbarDirective() {
     bindToController: true,
     controllerAs: 'ctrl',
     scope: {},
-    link: function(scope, elem) {
-      // 
-    }
   };
 }
 

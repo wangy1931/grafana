@@ -59,7 +59,6 @@
               <tab heading="{{panel.title}}"
                    ng-repeat="(name, panel) in row.panels track by panel.id"
                    ng-if="panel.tab != graph"
-                   ng-click="logOperate(name)"
                    active="panel.active">
                   <ul ng-if="panel.regularResult.data[0].total">
                       <li style="color: #F9934E; list-style-type: disc; margin-left: 30px;">

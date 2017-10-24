@@ -4,3 +4,43 @@
     flex: 1;
   }
 }
+
+.association-page {
+
+  // override
+  .page-header {
+    padding: 0;
+  }
+  .row-control {
+    margin-bottom: 40px;
+  }
+  
+  .service-events table td {
+    padding: 0;
+    div {
+      text-align: center;
+    }
+  }
+
+  .service-events {
+  }
+
+  .logs {
+    .log-search-result {
+      padding: 20px 0;
+      border: none;
+      .nav-tabs {
+        margin: 0;
+        padding: 0;
+      }
+    }
+    .log-panel {
+      margin: 0;
+      padding: 0 0.4rem 0.8rem 0.4rem;
+      border: 1px solid #7B7B7B;
+      border-top: none;
+    }
+    // .log-association-search-result {}
+  }
+
+}

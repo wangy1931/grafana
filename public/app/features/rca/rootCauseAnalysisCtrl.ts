@@ -97,6 +97,12 @@ export class RootCauseAnalysisCtrl {
                   element: params.el
                 }).addClass('unselected');
                 $('.jtk-node').not(params.el).addClass('unselected');
+
+                // search
+                var searchParams = _.extend({}, this.$location.search(), {
+                  metric: params.el.getAttribute("data-jtk-node-id")
+                });
+                this.$location.search(searchParams);
               },
               click: this.nodeClickHandler.bind(this)
             }
