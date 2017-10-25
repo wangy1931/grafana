@@ -41,8 +41,8 @@ export class AlertAssociationCtrl {
     this.targetObj = _.extend({}, {
       metric: "",
       host: "",
+      start: "",
       distance: 200,
-      start: ""
     }, this.$location.search());
     if (!this.targetObj.metric) {
       this.targetObj = _.extend({}, associationSrv.sourceAssociation);
@@ -171,7 +171,7 @@ export class AlertAssociationCtrl {
       this.serviceEvents = _.filter(response.data, { hostname: this.targetObj.host });
       this.tableParams = new this.NgTableParams({ count: 5 }, {
         counts: [],
-        dataset: this.serviceEvents
+        dataset: this.serviceEvents,
       });
     });
   }
@@ -194,12 +194,7 @@ export class AlertAssociationCtrl {
   }
 
   showGuideResult(e, params) {
-    this.targetObj = {
-      metric: params.metric,
-      host: params.host,
-      start: params.start,
-      distance: 200,
-    };
+    _.extend(this.targetObj, params);
     this.analysis();
   }
 

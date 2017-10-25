@@ -68,6 +68,13 @@ export class HostTopologyCtrl {
       }
     };
 
+    this.tableParams = new this.NgTableParams({
+      count: 100,
+      sorting: { 'cpuPercent': 'desc' },
+    }, {
+      counts: [],
+    });
+
     this.currentHost = {};
 
     $scope.$on('topology-host-changed', (evt, payload) => {
@@ -180,11 +187,9 @@ export class HostTopologyCtrl {
         item.diskIoWrite = kbn.valueFormats.Bps(item.diskIoWrite);
       });
       this.$scope.bsTableData = response.data;
-      this.$scope.$broadcast('load-table');
-      // this.tableParams = new this.NgTableParams({ count: 100 }, {
-      //   counts: [],
-      //   dataset: response.data
-      // });
+      this.tableParams.settings({
+        dataset: response.data,
+      });
     });
   }
 

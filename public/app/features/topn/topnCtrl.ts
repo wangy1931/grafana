@@ -22,7 +22,14 @@ export class TopNCtrl {
     private NgTableParams,
     private templateValuesSrv,
     private dynamicDashboardSrv
-  ) {}
+  ) {
+    this.tableParams = new this.NgTableParams({
+      count: 10,
+      sorting: { 'cpuPercent': 'desc' }
+    }, {
+      counts: []
+    });
+  }
 
   init() {
     this.getProcess();
@@ -45,12 +52,10 @@ export class TopNCtrl {
           item.diskIoRead = kbn.valueFormats.Bps(item.diskIoRead);
           item.diskIoWrite = kbn.valueFormats.Bps(item.diskIoWrite);
         });
-        this.$scope.bsTableData = response.data;
-        this.$scope.$broadcast('load-table');
-        // this.tableParams = new this.NgTableParams({ count: 10 }, {
-        //   counts: [],
-        //   dataset: response.data
-        // });
+
+        this.tableParams.settings({
+          dataset: response.data,
+        });
       });
     });
   }

@@ -65,10 +65,17 @@ export class SystemOverviewCtrl {
       thresholds: [HEALTH_TYPE.GREEN.TEXT, HEALTH_TYPE.YELLOW.TEXT, HEALTH_TYPE.RED.TEXT, HEALTH_TYPE.GREY.TEXT],
       colors: [HEALTH_TYPE.GREEN.COLOR, HEALTH_TYPE.YELLOW.COLOR, HEALTH_TYPE.RED.COLOR, HEALTH_TYPE.GREY.COLOR],
       onClick: {
-        parent: this.hostGroupClickHandler.bind(this),
+        // parent: this.hostGroupClickHandler.bind(this),
         child: this.hostNodeClickHandler.bind(this)
       }
     };
+
+    this.tableParams = new this.NgTableParams({
+      count: 5,
+      sorting: { 'anomalyHealth': 'asc' }
+    }, {
+      counts: []
+    });
 
     this.toolkit = window.jsPlumbToolkit.newInstance();
     $scope.$on("$destroy", () => {
@@ -250,12 +257,11 @@ export class SystemOverviewCtrl {
       name: serviceName,
       status: serviceStatus
     };
+    this.servicePanel.hosts = [];
 
     this.serviceDepSrv.readHostStatus(serviceId, serviceName).then(response => {
       hosts = Object.keys(response.data.hostStatusMap);
     }).then(() => {
-      this.servicePanel.hosts = [];
-
       hosts.forEach(host => {
         !_.findWhere(this.hostPanels, { host: host }) && this.hostPanels.push({ host: host });
         var tmp = _.findWhere(this.hostPanels, { host: host }) || { host: host };
@@ -272,11 +278,6 @@ export class SystemOverviewCtrl {
     var service = serviceName.split(".")[0];
     this.backendSrv.readMetricHelpMessage(service);
   }
-
-  serviceNodeOverHandler(elem, node, evt) {
-  }
-
-  serviceNodeOutHandler() {}
 
   // 机器状态
   getHostSummary() {
@@ -309,8 +310,6 @@ export class SystemOverviewCtrl {
     });
   }
 
-  hostGroupClickHandler() {}
-
   selectHost(index, host, type) {
     if (type === 'service') {
       this.selected0 = (this.selected0 === index) ? -1 : index;
@@ -325,47 +324,45 @@ export class SystemOverviewCtrl {
   selectServiceKpi(host, item) {
     !this.serviceKpiPanel.hostStatusMap[host].itemStatusMap[item] &&  (item = 'ServiceState');
     var metrics = this.serviceKpiPanel.hostStatusMap[host].itemStatusMap[item].metricStatusMap;
-    var metric = [];
-
-    for (var name in metrics) {
-      metric.push({
-        name: name,
-        host: host,
-        hostId: _.findWhere(this.hostPanels, { host: host }).id,
-        alertRuleSet: metrics[name].alertRuleSet ? "有" : "无",
-        alertLevel: _.translateAlertLevel(metrics[name].alertLevel),
-        anomalyHealth: metrics[name].health
-      });
-    }
+    var metricsTable = this.handleKpiMetrics(metrics, host);
 
     this.servicePanel.currentItem = item;
     this.servicePanel.currentItemStatus = this.serviceKpiPanel.hostStatusMap[host].itemStatusMap[item].healthStatusType;
-    this.$scope.bsTableData = metric;
 
-    this.$scope.$broadcast('load-table');
-    // this.tableParams = new this.NgTableParams({}, { dataset: metric });
+    this.tableParams.settings({
+      dataset: metricsTable
+    });
   }
 
   selectHostKpi(host, item) {
     var metrics = this.hostKpiPanel.itemStatusMap[item].metricStatusMap;
-    var metric = [];
-
-    for (var name in metrics) {
-      metric.push({
-        name: name,
-        host: host,
-        hostId: _.findWhere(this.hostPanels, { host: host }).id,
-        alertRuleSet: metrics[name].alertRuleSet ? "有" : "无",
-        alertLevel: _.translateAlertLevel(metrics[name].alertLevel),
-        anomalyHealth: metrics[name].health
-      });
-    }
+    var metricsTable = this.handleKpiMetrics(metrics, host);
 
     this.hostPanel.currentItem = item;
     this.hostPanel.currentItemStatus = this.hostKpiPanel.healthStatusType;
-    this.$scope.bsTableData = metric;
 
-    this.$scope.$broadcast('load-table');
+    this.tableParams.settings({
+      dataset: metricsTable
+    });
+  }
+
+  handleKpiMetrics(metrics, host) {
+    var metricsTable = [];
+    _.each(metrics, (value, key) => {
+      var health = parseInt(value.health);
+      metricsTable.push({
+        name: key,
+        host: host,
+        alertRuleSet: value.alertRuleSet ? '有' : '无',
+        alertLevel: _.translateAlertLevel(value.alertLevel),
+        anomalyHealth: health,
+        snoozeState: value.snoozeState,
+        triggerRed: health === 0,
+        triggerYellow: health > 0 && health < 26 && !value.snoozeState,
+        metricHelp: _.metricHelpMessage[key] ? _.metricHelpMessage[key].definition : key
+      });
+    });
+    return metricsTable;
   }
 
   // 弹窗 查看历史情况
@@ -447,25 +444,5 @@ export class SystemOverviewCtrl {
   }
 
 };
-
-coreModule.filter('formatItemType', () => {
-  return (text) => {
-    return text && text.replace('Host', '').replace('Service', '');
-  };
-});
-
-coreModule.filter('translateItemType', () => {
-  return (text) => {
-    var map = {
-      "mem": "内存",
-      "io" : "磁盘",
-      "nw" : "网络",
-      "cpu": "CPU",
-      "kpi": "服务 KPI",
-      "state": "服务状态"
-    };
-    return text && map[text.toLowerCase()];
-  };
-});
 
 coreModule.controller('SystemOverviewCtrl', SystemOverviewCtrl);

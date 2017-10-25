@@ -19,7 +19,7 @@
         <h2>关联性分析</h2>
     </div>
 
-    <form class="tidy-form-box">  <!-- ng-if="ctrl.isSingle" -->
+    <form class="tidy-form-box">
         <div class="tidy-form">
             <ul class="tidy-form-list">
                 <li class="tidy-form-item">
@@ -73,7 +73,6 @@
                 </div>
 
                 <div class="panels-wrapper" ng-if="!row.collapse">
-                    <!-- <div class="row-text pointer" ng-click="toggleRow(row)" ng-if="row.showTitle" ng-bind="row.title | interpolateTemplateVars:this"></div> -->
 
                     <!-- 关联性分析 图 -->
                     <div ng-if="row.title === 'associationGraph'">

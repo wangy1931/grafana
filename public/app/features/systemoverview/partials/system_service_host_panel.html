@@ -31,7 +31,7 @@
             </a>
         </div>
 
-        <div id="service{{$index}}" class="accordion-body collapse">
+        <div id="service{{$index}}" class="accordion-body collapse"> <!-- ng-class="{ 'in': $index === 0 }" -->
 
             <div class="kpi-pane accordion-inner">
                 <ul class="item-type">
@@ -58,9 +58,7 @@
                         </p>
                     </div>
                     <div ng-show="host.itemStatusMap[ctrl.servicePanel.currentItem].healthStatusType !== 'GREY'" class="kpi-metrics">
-                        <table-loader
-                            key={{host.host}}
-                            template="public/app/features/systemoverview/partials/service_kpi_table.html"></table-loader>
+                        <div ng-include="'public/app/features/systemoverview/partials/service_kpi_table.html'"></div>
                     </div>
                 </div>
             </div>
