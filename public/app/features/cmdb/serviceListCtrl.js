@@ -55,7 +55,7 @@ define([
     $scope.serviceScan = function() {
       $scope.isScan = true;
       backendSrv.alertD({
-        url: '/host/service/state/update',
+        url: '/cmdb/service/state/update',
         method: 'post'
       }).then(function(response) {
         $scope.isScan = false;
