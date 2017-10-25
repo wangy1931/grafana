@@ -30,7 +30,7 @@ export class ToolbarCtrl {
       href: 'javascript:;',
       clickHandler: () => {
         $rootScope.appEvent('show-modal', {
-          src: 'public/app/features/logs/partials/logs_knowledge.html',
+          src: 'public/app/core/components/knowledge_base/knowledge.html', // public/app/features/logs/partials/logs_knowledge.html
           modalClass: 'modal-kb',
           scope: $scope.$new(),
         });

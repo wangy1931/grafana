@@ -77,5 +77,6 @@ export {
   guideDirective,
   toolbarDirective,
   cwizSwitchDirective,
-  treeMenu
+  treeMenu,
+  knowledgeBaseDirective
 };

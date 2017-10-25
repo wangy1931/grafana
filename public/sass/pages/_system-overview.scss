@@ -38,7 +38,7 @@ $summary-border-color: #ECEFF1;
     background-color: #fff;
     box-shadow: 0px 0px 4px 1px #d8d8d8;
     margin-bottom: 40px;
-    height: fit-content;
+    // height: fit-content;
   }
 
   .health-panel {
@@ -378,11 +378,10 @@ $summary-border-color: #ECEFF1;
 }
 
 .text-overflow {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  @include text-overflow();
 }
- 
+
+// SLIDE 
 .slide-show {
   margin: 20px auto;
   min-height: 500px;
@@ -403,22 +402,22 @@ $summary-border-color: #ECEFF1;
   }
 }
 
+// 翻转切换
 .slide-show {
   perspective: 1000;
   .slide { backface-visibility: hidden; }
 
   .slide.checked {
     transform: scale(1) rotateY(0);
-    border-radius: 0%;
   }
 
   .slide {
     transition: all .5s ease-in;
     transform: scale(.5) rotateY(180deg);
-    border-radius: 10%;
   }
 }
 
+// 左右切换
 // .slide-show {
 //   .slide.checked {
 //     transition: transform .6s ease-out, opacity .1s;
@@ -434,7 +433,3 @@ $summary-border-color: #ECEFF1;
 //     z-index: 0;
 //   }
 // }
-
-[hidden] {
-  display: none;
-}

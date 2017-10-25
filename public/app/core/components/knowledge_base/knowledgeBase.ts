@@ -5,14 +5,6 @@ import _ from 'lodash';
 import 'ng-quill';
 import coreModule from '../../core_module';
 
-var template = `
-  <div class="page-container kb-container">
-    <h2>运维知识库</h2>
-    <div ng-include="'public/app/core/components/knowledge_base/knowledge_body.html'"></div>
-    <div class="center"><button ng-click="dismiss();" class="btn">关闭</button></div>
-  </div>
-`;
-
 export class KnowledgeBaseCtrl {
   q: string;
   service: string;
@@ -55,14 +47,6 @@ export class KnowledgeBaseCtrl {
       params: params,
     }).then((result) => {
       this.knowledge = result.data;
-    });
-  }
-
-  newKnows() {
-    this.$scope.appEvent('show-modal', {
-      src: 'public/app/core/components/knowledge_base/new_knowledge.html',
-      modalClass: 'modal-no-header invite-modal',
-      scope: this.$scope.$new(),
     });
   }
 
@@ -134,7 +118,7 @@ export class KnowledgeBaseCtrl {
 export function knowledgeBaseDirective() {
   return {
     restrict: 'E',
-    template: template,
+    templateUrl: 'public/app/core/components/knowledge_base/knowledge_body.html',
     controller: KnowledgeBaseCtrl,
     bindToController: true,
     transclude: true,
