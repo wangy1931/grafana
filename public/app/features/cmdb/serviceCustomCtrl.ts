@@ -18,6 +18,7 @@ export class ServiceCustomCtrl {
   title: string;
   orgId: any;
   sysId: any;
+  pattern: any;
 
   /** @ngInject */
   constructor(private $scope, private backendSrv, private contextSrv, private $location) {
@@ -33,6 +34,7 @@ export class ServiceCustomCtrl {
       this.sysId = this.contextSrv.user.systemId;
     }
     this.hostProcess = [];
+    this.pattern = /^[\w.]+$/;
     this.getSoftwares();
     this.initEditSoftware('add');
     this.initEditSoftware('save');
@@ -79,14 +81,9 @@ export class ServiceCustomCtrl {
     }
   }
 
-  checkName(name, type) {
-    var process = _.find(this.hostProcess, {name: name});
-    if (!_.isEmpty(process)) {
-      if (type === 'add') {
-        this.newSoftware.command = process.command;
-      } else {
-        this.editSoftware.command = process.command;
-      }
+  checkName(name) {
+    if (!this.pattern.test(name)) {
+      this.$scope.appEvent('alert-warning', ['服务名称非法','请输入英文字母/数字/下划线/小数点组成的字符串']);
     }
   }
 
@@ -115,6 +112,10 @@ export class ServiceCustomCtrl {
     switch (type) {
       case 'add':
         if (_.every(this.newSoftware)) {
+          if (!this.pattern.test(this.newSoftware.name)) {
+            this.$scope.appEvent('alert-warning', ['服务名称非法','请输入英文字母/数字/下划线/小数点组成的字符串']);
+            return;
+          }
           this.softwareList.push(this.newSoftware);
           this.initEditSoftware(type);
           this.saveSoftware('添加');
@@ -124,6 +125,10 @@ export class ServiceCustomCtrl {
         break;
       case 'save':
         if (_.every(this.editSoftware)) {
+          if (!this.pattern.test(this.editSoftware.name)) {
+            this.$scope.appEvent('alert-warning', ['服务名称非法','请输入英文字母/数字/下划线/小数点组成的字符串']);
+            return;
+          }
           this.softwareList[this.editIndex] = _.cloneDeep(this.editSoftware);
           this.initEditSoftware(type);
           this.saveSoftware('保存');

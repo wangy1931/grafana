@@ -6,12 +6,16 @@ define([
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('ServiceListCtrl', function ($scope, backendSrv, $location, alertSrv, contextSrv) {
+  module.controller('ServiceListCtrl', function ($scope, backendSrv, $location, alertSrv, contextSrv, $timeout) {
     $scope.init = function() {
       $scope.searchHost = '';
       $scope.order = "'name'";
       $scope.desc = false;
-      $scope.refreshTxt = '刷新';
+      $scope.getService();
+      $scope.isScan = false;
+    };
+    
+    $scope.getService = function() {
       backendSrv.alertD({url:'/cmdb/service'}).then(function(result) {
         $scope.services = result.data;
       });
@@ -45,6 +49,19 @@ define([
             alertSrv.set("删除失败", err.data, "error", 2000);
           });
         }
+      });
+    };
+
+    $scope.serviceScan = function() {
+      $scope.isScan = true;
+      backendSrv.alertD({
+        url: '/host/service/state/update',
+        method: 'post'
+      }).then(function(response) {
+        $scope.isScan = false;
+        $scope.getService();
+      }, function() {
+        $scope.isScan = false;
       });
     };
 
