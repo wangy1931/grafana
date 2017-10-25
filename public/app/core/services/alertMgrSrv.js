@@ -67,11 +67,11 @@ function (angular, _, coreModule) {
       });
     };
 
-    this.loadAssociatedMetrics = function(alertMetric, alertHost, threshold) {
+    this.loadAssociatedMetrics = function(alertMetric, alertHost, threshold, group) {
       return backendSrv.alertD({
         method: "get",
         url: alertAssociationUrl,
-        params: {metric: alertMetric, host: alertHost, distance: threshold}
+        params: {metric: alertMetric, host: alertHost, distance: threshold, group: group}
       });
     };
 
@@ -90,9 +90,9 @@ function (angular, _, coreModule) {
       });
     };
 
-    this.resetCurrentThreshold = function (alertDetial) {
-      self.currentWarningThreshold = alertDetial.warn.threshold;
-      self.currentCritialThreshold = alertDetial.crit.threshold;
+    this.resetCurrentThreshold = function (threshold) {
+      self.currentWarningThreshold = threshold.warn;
+      self.currentCritialThreshold = threshold.crit;
     };
 
     this.loadAlertHistory = function(fromTime, host) {

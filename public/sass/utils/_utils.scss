@@ -75,3 +75,50 @@ button.close {
 .affix {
   position: fixed;
 }
+
+.status-color {
+  transition: all .2s ease;
+}
+.status-green {
+  color: nth($thresholds-color, 1) !important;
+  &:hover {
+    color: nth($thresholds-hover-color, 1) !important;
+  }
+}
+.status-yellow {
+  color: nth($thresholds-color, 3) !important;
+  &:hover {
+    color: nth($thresholds-hover-color, 3) !important;
+  }
+}
+.status-red {
+  color: nth($thresholds-color, 5) !important;
+  &:hover {
+    color: nth($thresholds-hover-color, 5) !important;
+  }
+}
+
+.bg-green {
+  background-color: nth($thresholds-color, 1) !important;
+  &:hover {
+    background-color: nth($thresholds-hover-color, 1) !important;
+  }
+}
+.bg-yellow {
+  background-color: nth($thresholds-color, 3) !important;
+  &:hover {
+    background-color: nth($thresholds-hover-color, 3) !important;
+  }
+}
+.bg-red {
+  background-color: nth($thresholds-color, 5) !important;
+  &:hover {
+    background-color: nth($thresholds-hover-color, 5) !important;
+  }
+}
+.bg-grey {
+  background-color: nth($thresholds-color, 6) !important;
+  &:hover {
+    background-color: nth($thresholds-hover-color, 6) !important;
+  }
+}

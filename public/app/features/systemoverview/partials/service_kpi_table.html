@@ -1,0 +1,77 @@
+<table class="table table-hack summary-kpi-table"
+    data-pagination="true"
+    data-page-size="5"
+    data-sort-name="anomalyHealth"
+    data-row-style="rowStyle">
+    <thead>
+        <tr>
+            <th data-field="name" data-sortable="true" data-formatter="tooltipFormat">指标</th>
+            <th data-field="alertRuleSet" data-sortable="true">报警规则</th>
+            <th data-field="alertLevel" data-sortable="true" data-formatter="alertsLinkFormat">报警级别</th>
+            <th data-field="anomalyHealth" data-sortable="true" data-formatter="healthLinkFormat" data-title-tooltip="正常: 100，临时异常: 25-100，持续异常: &lt;25" >健康值</th>
+            <th data-field="snoozeState" data-sortable="true" data-visible="false">是否暂缓报警</th>
+            <th data-field="host" data-sortable="false" data-visible="false">机器</th>
+            <th data-field="hostId" data-sortable="false" data-visible="false">机器id</th>
+            <th data-field="operator" data-sortable="false" data-formatter="operatorFormat">操作</th>
+        </tr>
+    </thead>
+</table>
+<script>
+function rowStyle(row) {
+    if (parseInt(row.anomalyHealth) === 0) {
+        return {
+           css: { "background-color": "rgba(246, 0, 0, 0.54)" }
+        };
+    }
+    if (parseInt(row.anomalyHealth) < 26 && !row.snoozeState) {
+        return {
+            css: { "background-color": "rgba(237,129,40,0.52)" }
+        };
+    }
+    return {};
+}
+function tooltipFormat(value, row, index) {
+    var message = _.metricHelpMessage[value] ? _.metricHelpMessage[value].definition : value;
+    return '<span data-toggle="tooltip" data-container="body" title="' + message + '">' + value + '</span>';
+}
+function alertsLinkFormat(value, row, index) {
+    var ruleSeted = (row.alertRuleSet == '有');
+    var link = ruleSeted ? "/alerts/status" : "javascript:;";
+        value = ruleSeted ? value : "无"; 
+    return '<a href="' + link + '">' + value + '</a>';
+}
+function healthLinkFormat(value, row, index) {
+    value = parseInt(value);
+    value = value === 100 ? value : (value < 25 ? value + " (持续异常)" : value + " (临时异常)");
+    return '<a href="javascript:;" ng-click="showModal(0)" >' + value + '</a>';
+}
+function operatorFormat(value, row, index) {
+    if (parseInt(row.anomalyHealth) === 0 || (parseInt(row.anomalyHealth) < 26 && !row.snoozeState)) {
+        return '<a href="/rca?guide&hostId=' + row.hostId + '&host=' + row.host + '&metric=' + row.name + '"><i class="fa fa-search" data-toggle="tooltip" title="诊断分析"></i></a>';
+    }
+}
+</script>
+
+<!-- <div>
+    <table ng-table="ctrl.tableParams" class="table" show-filter="true">
+        <tr ng-repeat="row in $data">
+            <td title="'指标'" filter="{ name: 'text'}" sortable="'name'">
+                <div>{{ row.name }}</div>
+            </td>
+            <td title="'报警规则'" filter="{ alertRuleSet: 'text'}" sortable="'alertRuleSet'">
+                <div>{{ row.alertRuleSet }}</div>
+            </td>
+            <td title="'报警级别'" filter="{ alertLevel: 'text'}" sortable="'alertLevel'">
+                <div>{{ row.alertLevel }}</div>
+            </td>
+            <td title="'健康值'" filter="{ anomalyHealth: 'number'}" sortable="'anomalyHealth'">
+                <div>{{ row.anomalyHealth }}</div>
+            </td>
+            <td title="'操作'">
+                <div ng-show="parseInt(row.anomalyHealth) === 0 || (parseInt(row.anomalyHealth) < 26 && !row.snoozeState)">
+                    <a href="/rca?guide&metric={{ row.name }}"><i class="fa fa-search" bs-tooltip="'诊断分析'"></i></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div> -->

@@ -1,4 +1,4 @@
-<div class="grafana-list-item" style="margin-bottom: 40px;">
+<div class="grafana-list-item" style="margin-bottom: 40px; min-width: auto;">
   <ul class="tight-form-list">
     <li class="tight-form-item">
       查询历史
@@ -60,13 +60,18 @@
         <td>{{ formatDate(alertDetail.status.levelChangedTime) }}</td>
         <td>{{ timeFrom(alertDetail.status.levelChangedTime, alertDetail.status.snoozeMinutes) }}</td>
         <td>
-          <a href="/alerts/association/{{alertDetail.status.monitoredEntity}}/{{correlationThreshold}}/{{alertDetail.metric}}" class="btn btn-mini btn-primary" ng-click="resetCurrentThreshold(alertDetail)">
+          <a ng-click="associateAnalysis(alertDetail.status.monitoredEntity, alertDetail.metric, alertDetail)"
+             href="javascript:;"
+             class="btn btn-mini btn-primary">
+             <i class="fa fa-signal"></i> 诊断分析
+          </a>
+          <!-- <a ng-click="associateAnalysis(alertDetail.status.monitoredEntity, alertDetail.metric, alertDetail)" class="btn btn-mini btn-primary">
             <i class="fa fa-signal"></i>
             关联性分析
-          </a>
-          <a class="btn btn-mini btn-primary" ng-click="statusDetails(alertDetail)">
+          </a> -->
+          <!-- <a class="btn btn-mini btn-primary" ng-click="statusDetails(alertDetail)">
             整合分析
-          </a>
+          </a> -->
           <a class="btn btn-mini btn-success" ng-click="handleSnooze(alertDetail)">
             延迟报警
           </a>
@@ -112,9 +117,13 @@
         <td>{{ getCloseOp(alert) }}</td>
         <td><span ng-if="alert.history.closeOp === 'MANUAL'">{{ alert.history.reason }}</span></td>
         <td style="width: 120px;">
-          <a class="btn btn-mini btn-primary" ng-click="historyAnalysis(alert.id)">
-            历史报警分析
+          <a href="/rca?guide&host={{ alert.history.host }}&metric={{alert.definition.alertDetails.hostQuery.metricQueries[0].metric}}&start={{ alert.history.createdTimeInMillis }}"
+             class="btn btn-mini btn-primary">
+             <i class="fa fa-signal"></i> 诊断分析
           </a>
+          <!-- <a class="btn btn-mini btn-primary" ng-click="historyAnalysis(alert.id)">
+            历史报警分析
+          </a> -->
         </td>
       </tr>
     </tbody>

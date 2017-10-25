@@ -84,7 +84,7 @@ function (angular, _, dateMath) {
       if(annotation.tags) {
         tags = JSON.parse(annotation.tags);
       }
-      qs.push({ aggregator:"sum", metric: metric, downsample: '10m-sum', tags: tags});
+      qs.push({ aggregator:"sum", metric: metric, downsample: '10m-sum', tags: tags });
 
       var queries = _.compact(qs);
 
@@ -101,10 +101,10 @@ function (angular, _, dateMath) {
               tagsList += annotation.customTags;
             }
             tagsList = _.trimEnd(tagsList, ',');
-            _.each(result.dps, function(second) {
+            _.each(result.dps, function(value, key) {
               var event = {
                 title: annotation.name,
-                time: second * 1000,
+                time: key * 1000,
                 text: '',
                 tags: tagsList,
                 annotation: annotation

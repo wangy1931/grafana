@@ -1,13 +1,14 @@
-<navbar title="关键指标" icon="fa fa-fw fa-home"></navbar>
+<navbar title="系统总览" icon="fa fa-fw fa-home"></navbar>
 
-<div class="page-container summary-page" ng-init="init();">
+<div class="page-container summary-page" ng-init="ctrl.init()">
+
     <div class="overview-list" style="box-sizing:border-box;">
         <div class="main-view-container">
 
             <div class="summary-panel view-panel">
                 <div class="health-panel panels-wrapper">
                     <h3 class="spec-tip">
-                        <a href="javascript:;" ng-click="showModal(0)" bs-tooltip="'点击查看历史指数'">健康指数趋势</a>
+                        <a href="javascript:;" ng-click="ctrl.showModal(0)" bs-tooltip="'点击查看历史指数'">健康指数趋势</a>
                         <tip placement="bottom">
                             优：系统运行状况良好<br />
                             良：存在报警或异常指标，不影响运行<br />
@@ -16,41 +17,41 @@
                         </tip>
                     </h3>
                     <div style="position: absolute; bottom: 50%; left: 50%; transform: translate(-50%, 80%); font-weight: bold;">
-                        <span style="font-size: 38px;">{{healthPanel.score}}</span>
-                        <span style="font-size: 20px;">{{healthPanel.level}}</span>
+                        <span style="font-size: 38px;">{{ ctrl.healthPanel.score }}</span>
+                        <span style="font-size: 20px;">{{ ctrl.healthPanel.level }}</span>
                     </div>
                     <div class="health-pie"></div>
                 </div>
                 <div class="health-panel">
                     <div class="alert-panel">
                         <div class="panels-wrapper">
-                            <h3 ng-click="showModal(1)" style="cursor: pointer;" bs-tooltip="'点击查看历史报警'">
+                            <h3 ng-click="ctrl.showModal(1)" style="cursor: pointer;" bs-tooltip="'点击查看历史报警'">
                                 报警情况
                             </h3>
-                            <div>
-                                <li ng-repeat="alert in alertPanel.status" ng-if="alert.count!=0">
-                                    <a href="{{alertPanel.href}}">{{alert.text}} <span class="status-{{alert.type}}">{{alert.count}}</span></a>
+                            <div><!-- /alerts/status -->
+                                <li ng-repeat="alert in ctrl.alertPanel.status" ng-if="alert.count!=0">
+                                    <a href="/host_topology?tabId=2">{{ alert.text }} <span class="status-color status-{{ alert.health }}">{{ alert.count }}</span></a>
                                 </li>
                             </div>
                         </div>
                         <div class="panels-wrapper">
                             <h3>系统资源高消耗</h3>
                             <div>
-                                <li ng-repeat="except in exceptionPanel.status"
+                                <li ng-repeat="except in ctrl.exceptionPanel.status"
                                     data-placement="center" bs-modal="modal" data-template-url="public/app/features/systemoverview/partials/system_anomaly_modal.html">
-                                    <a href="javascript:;">{{except.text}} <strong class=""> &gt;{{except.threadhold}}</strong></a>
-                                    <a href="javascript:;">进程: <span class="status-{{except.type}}">{{except.count}}</span></a>
+                                    <a href="javascript:;">{{ except.text }} <strong class=""> &gt;{{ except.threadhold }}</strong></a>
+                                    <a href="javascript:;">进程: <span class="status-color status-{{ except.health }}">{{ except.count }}</span></a>
                                 </li>
                             </div>
                         </div>
                     </div>
                     <div class="anomaly-panel panels-wrapper">
-                        <h3 ng-click="showModal(2)" style="cursor: pointer;" bs-tooltip="'点击查看历史情况'">
+                        <h3 ng-click="ctrl.showModal(2)" style="cursor: pointer;" bs-tooltip="'点击查看历史情况'">
                             智能检测异常指标
                         </h3>
                         <div>
-                            <li ng-repeat="anomaly in anomalyPanel.status" ng-if="anomaly.count!=-1">
-                                <a href="{{anomalyPanel.href}}">{{anomaly.text}} <span class="status-{{anomaly.type}}">{{anomaly.count}}</span></a>
+                            <li ng-repeat="anomaly in ctrl.anomalyPanel.status" ng-if="anomaly.count!=-1">
+                                <a href="/anomaly">{{ anomaly.text }} <span class="status-color status-{{ anomaly.health }}">{{ anomaly.count }}</span></a>
                             </li>
                         </div>
                     </div>
@@ -58,60 +59,86 @@
             </div>
 
 
-            <div class="detail-panel view-panel">
-                <div class="service-panel panels-wrapper">
-                    <h3>
-                        <a href="{{servicePanel.href}}">服务状态</a>
-                    </h3>
-                    <div class="mention center">
-                        <span><em class="bg-success"></em>正常</span>
-                        <span><em class="bg-warn"></em>警告</span>
-                        <span><em class="bg-danger"></em>严重</span>
-                        <span><em class="bg-down"></em>没有运行</span>
+            <div class="slide-show">
+                <cwiz-switch switch-class="summary-switch" enabled="ctrl.switchEnabled" on-change="ctrl.switch();"
+                    data-text-on="服务状态" data-text-off="机器状态"></cwiz-switch>
+                <div class="detail-panel view-panel slide" ng-class="{ 'checked': ctrl.switchEnabled }">
+                    <div class="service-panel panels-wrapper">
+                        <div class="mention center">
+                            <span><em class="bg-green"></em>正常</span>
+                            <span><em class="bg-yellow"></em>警告</span>
+                            <span><em class="bg-red"></em>严重</span>
+                            <span><em class="bg-grey"></em>没有运行</span>
+                        </div>
                     </div>
-                </div>
-                <div class="service-dependency">
-                    <div class="jtk-demo-canvas jtk-canvas">
-                        <jsplumb-toolkit init="getServices"
-                                            render-params="renderParams"
-                                            jtk-id="serviceToolkit"
-                                            style="width:100%;height:100%;position:relative;margin:0">
-                        </jsplumb-toolkit>
-                    </div>
-                    <script type="text/ng-template" id="node_template.tpl">
-                        <div>
-                            <div class="name">
-                                <i class="{{node.icon}} service-icon status-{{node.status | lowercase}}"></i>
-                                <span>{{node.name}}</span>
+                    <div class="service-dependency jtk-container">
+                        <script type="jtk" id="tmplNode">
+                            <div>
+                                <div class="name" bs-tooltip="'test'">
+                                    <i class="${icon} service-icon bg-${status}"></i>
+                                    <span>${name}</span>
+                                </div>
+                            </div>
+                        </script>
+                
+                        <div class="jtk-main">
+                            <div class="jtk-demo-canvas jtk-canvas canvas-wide">
                             </div>
                         </div>
-                        <jtk-source filter=".connect"></jtk-source>
-                        <jtk-target></jtk-target>
-                    </script>
-                </div>
-
-                <div class="host-panel panels-wrapper" >
-                    <h3>
-                        <a href="{{hostPanel.href}}">机器状态</a>
-                    </h3>
-                    <em ng-if="!hostPanel.currentService.name">点击上图某个服务，查看服务详情</em>
-                    <div class="mention">
-                        <button type="button" ng-if="hostPanel.currentService.name"
-                            class="btn-item system-status status-{{hostPanel.currentService.status | lowercase}}">
-                            {{hostPanel.currentService.name}}
-                        </button>
+                    </div>
+    
+                    <div class="kpi-panel panels-wrapper">
+                        <h3>
+                            <a href="javascript:;">服务KPI</a>
+                        </h3>
+                        <em ng-if="!ctrl.servicePanel.currentService.name">点击上图某个服务，查看服务详情</em>
+                        <div class="mention"></div>
+                    </div>
+                    <div class="table host-panel-table" ng-if="ctrl.servicePanel.currentService.name">
+                        <ul>
+                            <li>机器名</li>
+                            <li>服务运行状态</li>
+                            <li>机器在线状态</li>
+                            <li>CPU 使用率</li>
+                            <li>内存使用</li>
+                            <li>磁盘剩余空间</li>
+                            <li>机器详细信息</li>
+                        </ul>
+                        <div ng-include="'public/app/features/systemoverview/partials/system_service_host_panel.html'"></div>
                     </div>
                 </div>
-                <div class="table host-panel-table" ng-if="hostPanel.currentService.name">
-                    <ul>
-                        <li>机器名</li>
-                        <li>服务运行状态</li>
-                        <li>机器在线状态</li>
-                        <li>CPU 使用率</li>
-                        <li>内存使用</li>
-                        <li>磁盘剩余空间</li>
-                    </ul>
-                    <overview-panel template="public/app/features/systemoverview/partials/system_host_panel.html"></overview-panel>
+
+                <div class="detail-panel view-panel slide" ng-class="{ 'checked': !ctrl.switchEnabled }">
+                    <div class="host-panel panels-wrapper">
+                        <div class="mention center">
+                            <span><em class="bg-green"></em>正常</span>
+                            <span><em class="bg-yellow"></em>警告</span>
+                            <span><em class="bg-red"></em>严重</span>
+                            <span><em class="bg-grey"></em>没有运行</span>
+                        </div>
+                    </div>
+                    <div class="host-topology topology-graph">
+                        <topology-graph params="ctrl.topologyGraphParams"></topology-graph>
+                    </div>
+    
+                    <div class="kpi-panel panels-wrapper">
+                        <h3>
+                            <a href="javascript:;">机器KPI</a>
+                        </h3>
+                        <em ng-if="!ctrl.hostPanel.currentHost.name">点击上图某个机器，查看机器详情</em>
+                        <div class="mention"></div>
+                    </div>
+                    <div class="table host-panel-table" ng-if="ctrl.hostPanel.currentHost.name">
+                        <ul>
+                            <li>机器名</li>
+                            <li>机器在线状态</li>
+                            <li>CPU 使用率</li>
+                            <li>内存使用</li>
+                            <li>磁盘剩余空间</li>
+                            <li>机器详细信息</li>
+                        </ul>
+                        <div ng-include="'public/app/features/systemoverview/partials/system_host_panel.html'"></div>
+                    </div>
                 </div>
             </div>
 

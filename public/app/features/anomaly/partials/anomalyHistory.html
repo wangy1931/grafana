@@ -1,13 +1,15 @@
 
-<navbar icon="fa fa-fw fa-stethoscope" title="健康管理">
+<navbar icon="fa fa-fw fa-stethoscope" title="智能检测">
 	<ul class="nav">
     <li><a href="/anomaly">总览</a></li>
     <li class="active"><a>历史</a></li>
   </ul>
 </navbar>
 
-<div class="page-container" style="padding-bottom:300px;" ng-init="init();">
-    <h2>自动异常检测 <span style="font-size: 12px">历史</span></h2>
+<div class="page-container alert-status-page" style="padding-bottom:300px;" ng-init="init();">
+    <div class="page-header">
+      <h2>自动异常检测 <span style="font-size: 12px">历史</span></h2>
+    </div>
 
     <div ng-if="anomalyRows.length === 0">
       <em>还没有任何历史数据</em>

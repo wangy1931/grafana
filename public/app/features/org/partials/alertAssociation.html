@@ -1,110 +1,184 @@
-<navbar icon="fa fa-fw fa-bell" title="报警管理">
-	<ul class="nav">
-    <li><a href="alerts/status">总览</a></li>
-    <li><a href="alerts/new">新建报警规则</a></li>
-    <li><a href="alerts">报警规则</a></li>
-  </ul>
-  <ul class="nav pull-right">
-    <li ng-if="dashboard">
-        <gf-time-picker dashboard="dashboard"></gf-time-picker>
-    </li>
-  </ul>
+<navbar icon="fa fa-fw fa-signal" title="智能分析">
+    <ul class="nav pull-right">
+        <li ng-show="dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
+            <a ng-click="exitFullscreen()">
+                返回到仪表盘
+            </a>
+        </li>
+        <li ng-if="dashboard">
+             <gf-time-picker dashboard="dashboard"></gf-time-picker>
+        </li>
+    </ul>
 </navbar>
 <div dash-editor-view class="time-picker"></div>
 
-<div class="page-container">
-  <div ng-if="!isAssociation">
-    <h3 align="center">关联性分析结果尚未计算完成 <btn class="btn btn-small btn-primary" ng-click="flushResult()">刷新结果</btn></h3>
-  </div>
+<div class="page-container association-page" ng-init="ctrl.init()">
+    <guide guide-class="guide" need-host=true></guide>
 
-  <div ng-if="isAssociation" style="padding: 20px 20px 20px 20px;">
-    <h2>调整相关性分析参数</h2>
-    <table class="grafana-options-table">
-      <tr>
-        <td><strong>调整阈值</strong></td>
-        <td width="400px"><div class="sliders" slider></div></td>
-        <td>
-          <span ng-click="resetCorrelation()" class="btn btn-primary">
-            <i class="fa fa-edit"></i>过滤结果
-          </span>
-        </td>
-      </tr>
-    </table>
-  </div>
-
-  <div ng-if="submenuEnabled">
-    <dashboard-submenu></dashboard-submenu>
-  </div>
-  <div class="main-view-container">
-    <div class="grafana-row" ng-controller="RowCtrl"
-         ng-repeat="(row_name, row) in dashboard.rows" row-height>
-
-      <div class="row-control">
-        <div class="row-control-inner">
-          <div class="row-close" ng-show="row.collapse" data-placement="bottom">
-            <div class="row-close-buttons">
-                              <span class="row-button bgPrimary" ng-click="toggleRow(row)">
-                                  <i bs-tooltip="'Expand row'" data-placement="right" class="fa fa-caret-left pointer"></i>
-                              </span>
-            </div>
-            <div class="row-text pointer" ng-click="toggleRow(row)"
-                 ng-bind="row.title | interpolateTemplateVars:this"></div>
-          </div>
-        </div>
-
-        <div class="panels-wrapper" ng-if="!row.collapse">
-          <div class="row-text pointer" ng-click="toggleRow(row)" ng-if="row.showTitle"
-               ng-bind="row.title | interpolateTemplateVars:this">
-          </div>
-
-          <div ng-repeat="(name, panel) in row.panels track by panel.id" class="panel"
-               ui-draggable="!dashboardViewState.fullscreen" drag="panel.id"
-               ui-on-Drop="onDrop($data, row, panel)" drag-handle-class="drag-handle" panel-width>
-            <plugin-component type="panel" class="panel-margin"></plugin-component>
-          </div>
-
-          <div ng-if="isAssociation" class="panel panel-associatoin" style="padding: 20px 20px 20px 20px;">
-            <h2>
-              挑选推荐关联指标进行对比
-              <span ng-click="showNewAssociationManual()" class="btn btn-primary btn-association">新增任意指标</span>
-              <span ng-click="addRCA()" class="btn btn-success btn-association">添加选中关联信息至RCA</span>
-            </h2>
-            <p ng-if="correlatedMetrics.length">尝试将阈值调大, 匹配更多关联指标</p>
-            <div class="panel grafana-options-table">
-              <div controls controls-row>
-                <div class="span3" ng-repeat="(metricsName, metricsValue) in correlatedMetrics">
-                  <label class="checkbox">
-                      <input type="checkbox" ng-checked="isManualMetric(metricsName)" ng-click="addQuery(metricsName)" />
-                      <p class="max-width" title="{{_.getMetricName(metricsName)}}">
-                          {{_.getMetricName(metricsName)}}</p>
-                  </label>
-                  <div class="gf-form">
-                    <label class="gf-form-inline">
-                      <input class="gf-form-input" type="radio" name="{{_.getMetricName(metricsName)}}" value="100" ng-click="getConfidence(metricsName, 100);"/>
-                      <span class="gf-form-label gf-form-label-radio">非常确定</span>
-                    </label>
-                    <label class="gf-form-inline">
-                      <input class="gf-form-input" type="radio" name="{{_.getMetricName(metricsName)}}" value="50" ng-checked="true" ng-click="getConfidence(metricsName, 50);"/>
-                      <span class="gf-form-label gf-form-label-radio">可能</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div panel-drop-zone class="panel panel-drop-zone" ui-on-drop="onDrop($data, row)" data-drop="true">
-            <div class="panel-container" style="background: transparent">
-              <div style="text-align: center">
-                <em>点击这里(drop here)</em>
-              </div>
-            </div>
-          </div>
-
-          <div class="clearfix"></div>
-        </div>
-      </div>
+    <div class="page-header">
+        <h2>关联性分析</h2>
     </div>
-  </div>
+
+    <form class="tidy-form-box">  <!-- ng-if="ctrl.isSingle" -->
+        <div class="tidy-form">
+            <ul class="tidy-form-list">
+                <li class="tidy-form-item">
+                    指标
+                </li>
+                <li>
+                    <input type="text" class="tidy-form-input input-xlarge"
+                        style="margin-right: 40px;"
+                        ng-model='ctrl.targetObj.metric'
+                        spellcheck='false'
+                        bs-typeahead-old="suggestMetrics"
+                        placeholder="需要分析的指标" required/>
+                </li>
+            </ul>
+        </div>
+        <div class="tidy-form">
+            <ul class="tidy-form-list">
+                <li class="tidy-form-item">
+                    机器
+                </li>
+                <li>
+                    <input type="text" class="input-medium tidy-form-input ng-pristine ng-untouched ng-valid"
+                        style="margin-right: 40px;"
+                        spellcheck="false"
+                        placeholder="请键入主机名"
+                        bs-typeahead
+                        ng-model="ctrl.targetObj.host"
+                        bs-options="host for host in ctrl.suggestTagHost"
+                        data-min-length="0" data-items="100"
+                        data-html="1" data-auto-select="true">
+                </li>
+            </ul>
+        </div>
+        <button type="submit" class="btn btn-primary" ng-click="ctrl.analysis()"><i class="fa fa-search"></i>开始分析</button>
+    </form>
+
+    <div class="main-view-container">
+        <div class="grafana-row" ng-controller="RowCtrl" ng-repeat="(row_name, row) in dashboard.rows" row-height>
+
+            <!-- 关联性分析 图 -->
+            <div class="row-control">
+                <div class="row-control-inner">
+                    <div class="row-close" ng-show="row.collapse" data-placement="bottom">
+                        <div class="row-close-buttons">
+                            <span class="row-button bgPrimary" ng-click="toggleRow(row)">
+                                <i bs-tooltip="'Expand row'" data-placement="right" class="fa fa-caret-left pointer"></i>
+                            </span>
+                        </div>
+                        <div class="row-text pointer" ng-click="toggleRow(row)" ng-bind="row.title | interpolateTemplateVars:this"></div>
+                    </div>
+                </div>
+
+                <div class="panels-wrapper" ng-if="!row.collapse">
+                    <!-- <div class="row-text pointer" ng-click="toggleRow(row)" ng-if="row.showTitle" ng-bind="row.title | interpolateTemplateVars:this"></div> -->
+
+                    <!-- 关联性分析 图 -->
+                    <div ng-if="row.title === 'associationGraph'">
+                        <div ng-repeat="(name, panel) in row.panels track by panel.id" class="panel" ng-class="{true: 'association-container'}[panel.id === 1]"
+                            ui-draggable="!dashboardViewState.fullscreen" drag="panel.id"
+                            ui-on-Drop="onDrop($data, row, panel)" drag-handle-class="drag-handle" panel-width>
+                            <plugin-component type="panel" class="panel-margin"></plugin-component>
+                            <cw-tree-menu ng-if="panel.id === 1"></cw-tree-menu>
+                        </div>
+                    </div>
+
+                    <!-- 事件列表 -->
+                    <div ng-if="row.title === 'serviceEvents'">
+                        <div class="service-events" ng-if="ctrl.serviceEvents.length">
+                            <h3 ng-click="toggleRow(row)" class="pointer">事件列表</h3>    
+                            <table ng-table="ctrl.tableParams" class="table">
+                                <tr ng-repeat="row in $data">
+                                    <td>
+                                        <div>
+                                            <input type="checkbox" name="event" ng-click="ctrl.addAnnotation(row)" ng-model="row.checked" />
+                                        </div>
+                                    </td>
+                                    <td title="'名称'" sortable="'service'">
+                                        <div>{{ row.service }}</div>
+                                    </td>
+                                    <td title="'事件类型'" sortable="'type'">
+                                        <div>{{ row.type }}</div>
+                                    </td>
+                                    <td title="'发生时间'" sortable="'timestamp'">
+                                        <div>{{ row.time }}</div>
+                                    </td>
+                                    <td title="'其他信息'" sortable="'hostname'">
+                                        <div>{{ row.hostname }}</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="service-events no-events" ng-if="!ctrl.serviceEvents.length">
+                            <h3>事件列表</h3><p>暂无数据</p>
+                        </div>
+                    </div>
+
+                    <!-- 日志查询 -->
+                    <div ng-if="row.title === 'logs'">
+                        <div class="logs" id="logs">
+                            <h3 ng-click="toggleRow(row)" class="pointer">日志分析</h3>
+                            <form>
+                                <input type="text" class="input-xlarge tidy-form-input ng-pristine ng-untouched ng-valid ng-valid-required" ng-model="ctrl.query" required="">
+                                <button type="submit" class="btn btn-primary" ng-click="ctrl.reQuery()"><i class="fa fa-search"></i>查找</button>
+                                <a href="/logs?query={{ ctrl.query }}" class="btn btn-outline-primary pull-right">查看详细日志</a>
+                            </form>
+                            <div class="clearfix"></div>
+                            <div class="log-search-result log-association-search-result">
+                                <tabset>
+                                    <tab heading="{{ panel.title }}" ng-repeat="(name, panel) in row.panels track by panel.id" ng-if="panel.tab !== graph">
+                                        <ul ng-if="panel.regularResult.data[0].total">
+                                            <li style="color: #F9934E; list-style-type: disc; margin-left: 30px;">
+                                                该时间区域内共有 <strong>{{ panel.regularResult.data[0].total }}</strong> 条日志，当前显示前 {{ panel.regularResult.data[0].datapoints.length }} 条。放大时间区域，以查看更细日志数据。
+                                            </li>
+                                        </ul>
+                                        <!-- <div ng-if="name == 2" class="log-compare">
+                                            <div class="btn-group btn-log-compare">对比日志：
+                                                <button class="dropdown-toggle" data-toggle="dropdown">
+                                                    {{ ctrl.currentRelativeTime }}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-click="ctrl.logCompare('-1d')">1天以前</li>
+                                                    <li ng-click="ctrl.logCompare('-7d')">7天以前</li>
+                                                    <li ng-click="ctrl.logCompare('-30d')">1月以前</li>
+                                                    <li ng-click="ctrl.logCompare('-365d')">1年以前</li>
+                                                    <li ng-click="ctrl.showInputModal()">自定义</li>
+                                                </ul>
+                                            </div>
+                                            <div class="btn-group btn-log-filter">过滤条件：
+                                                <button class="dropdown-toggle" data-toggle="dropdown">
+                                                    {{ ctrl.currentFilter }}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-click="ctrl.logFilter('')">无</li>
+                                                    <li ng-click="ctrl.logFilter('增加')">增加日志</li>
+                                                    <li ng-click="ctrl.logFilter('减少')">减少日志</li>
+                                                    <li ng-click="ctrl.logFilter('新增')">新增日志</li>
+                                                    <li ng-click="ctrl.logFilter('消失')">消失日志</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <ul ng-if="name == 2">
+                                                    <li style="color: #F9934E;">当前日志时间段： <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:'now':0}} 至 {{tabsCache[row.id].timeRange | formatTimeRange:'now':1 }}</strong></li>
+                                                    <li style="color: #F9934E;">对比日志时间段： <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:0}} 至 {{tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:1 }}</strong></li>
+                                                </ul>
+                                            </div>
+                                        </div> -->
+                                        <div>
+                                            <plugin-component type="panel" class="panel-margin log-panel"></plugin-component>
+                                        </div>
+                                    </tab>
+                                </tabset>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
-<rca-add></rca-add>

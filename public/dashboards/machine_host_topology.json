@@ -1,7 +1,7 @@
 {
   "id": 187,
   "title": "machine",
-  "system": 0,
+  "system": 2,
   "manualAnnotation": null,
   "originalTitle": "machine",
   "tags": [],
@@ -552,7 +552,7 @@
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [],
-          "span": 7,
+          "span": 12,
           "stack": false,
           "steppedLine": false,
           "targets": [
@@ -972,8 +972,8 @@
     "list": [
       {
         "current": {
-          "text": "centos24",
-          "value": "centos24"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": null,
         "hide": 0,
@@ -996,8 +996,8 @@
   "annotations": {
     "list": []
   },
-  "refresh": null,
+  "refresh": "30s",
   "schemaVersion": 12,
-  "version": 6,
+  "version": 9,
   "links": []
 }

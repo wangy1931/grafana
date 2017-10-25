@@ -41,18 +41,15 @@ define([
           newAlert.name = target.name;
           newAlert.creationTime = milliseconds;
           newAlert.modificationTime = milliseconds;
-          alertMgrSrv.save(newAlert).then(function onSuccess() {
-            promiseArr.push(i);
-            return i;
-          }, function onFailed(response) {
+          var q = alertMgrSrv.save(newAlert).then(function () {}, function (err) {
             $scope.appEvent('alert-error', ['ERROR', '规则 "' + newAlert.name + '" 已经存在']);
             throw "Request failed";
           });
+          promiseArr.push(q);
         });
         $q.all(promiseArr).then(function (values) {
           if (values.length === alertDefs.length) {
             $scope.init();
-            $scope.dismiss();
             $scope.appEvent('alert-success', ['导入成功', '共导入' + alertDefs.length + '个报警设置']);
           }
         });
