@@ -1,0 +1,34 @@
+.time-window-container {
+	width: 100%;
+  min-height: 100px;
+  position: relative;
+  margin: 20px 0;
+}
+
+.time-window-content {
+	width: 100%;
+	height: 100%;
+}
+
+.time-window-pan {
+  width: 20px;
+  height: 100%;
+  line-height: 40;
+  background-color: Azure;
+  opacity: 0.4;
+  text-align: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: background-color 0.15s ease-in;
+  position: absolute;
+}
+
+.time-window-pan-left {
+  left: 0px;
+  top: 0px;
+}
+
+.time-window-pan-right {
+  right: 0px;
+  top: 0px;
+}
