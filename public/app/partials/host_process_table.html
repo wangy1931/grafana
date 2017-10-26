@@ -1,4 +1,4 @@
-<div class="fixed-table-container">
+<div class="fixed-table-container" ng-if="ctrl.tableData.length">
     <table ng-table="ctrl.tableParams" class="table fix-table-row-height">
         <tr ng-repeat="row in $data">
             <td title="'进程 ID'" sortable="'pid'">

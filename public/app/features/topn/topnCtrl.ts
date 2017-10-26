@@ -11,6 +11,7 @@ export class TopNCtrl {
   tableParams: any;
   hostlist: Array<any>;
   host: any;
+  tableData: any;
 
   /** @ngInject */
   constructor(
@@ -44,7 +45,7 @@ export class TopNCtrl {
       this.hostlist = response.data;
 
       var host = this.$location.search().host;
-      this.host = _.find(response.data, { hostname: host });
+      this.host = _.find(response.data, { hostname: host }) || {};
       return this.host.id;
     }).then(id => {
       id && this.hostSrv.getHostProcess(id).then(response => {
@@ -53,6 +54,7 @@ export class TopNCtrl {
           item.diskIoWrite = kbn.valueFormats.Bps(item.diskIoWrite);
         });
 
+        this.tableData = response.data;
         this.tableParams.settings({
           dataset: response.data,
         });
