@@ -20,9 +20,11 @@ function (angular) {
 
     $scope.remove = function(alertId) {
       $scope.appEvent('confirm-modal', {
-        title: '您是否需要删除这个报警规则',
+        title: '删除',
+        text: '您是否需要删除这个报警规则',
         icon: 'fa-trash',
-        yesText: 'Delete',
+        yesText: '确定',
+        noText: '关闭',
         onConfirm: function() {
           alertMgrSrv.remove(alertId).then(function onSuccess() {
             for (var i = $scope.alertDefList.length - 1; i >= 0; i--) {

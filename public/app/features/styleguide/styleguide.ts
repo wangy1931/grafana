@@ -10,7 +10,8 @@ class StyleGuideCtrl {
   buttonSizes = ['btn-small', '', 'btn-large'];
   buttonVariants = ['-', '-outline-'];
   page: any;
-  pages = ['colors', 'buttons', 'forms', 'dashboard', 'query-editors'];
+  pages = ['colors', 'buttons', 'forms', 'dashboard', 'query-editors', 'cloudwiz'];
+  cloudwiz: any;
 
   /** @ngInject **/
   constructor(private $http, $routeParams) {
@@ -26,7 +27,14 @@ class StyleGuideCtrl {
     if (this.page.colors) {
       this.loadColors();
     }
-   }
+
+    // $thresholds-color: (#66C2A5, #FEE08B, #FDAE61, #FE9805, #D53E4F, #DBE1EA, #6FCDFB);
+    // $thresholds-hover-color: (#3DB779, #FFD500, #FE9805, #ff4f45, #BB1144, #BABFC7, #18BEEA);
+    this.cloudwiz = {
+      thresholdsColor: ['#66C2A5', '#FEE08B', '#FDAE61', '#FE9805', '#D53E4F', '#DBE1EA', '#6FCDFB'],
+      thresholdsHoverColor: ['#3DB779', '#FFD500', '#FE9805', '#ff4f45', '#BB1144', '#BABFC7', '#18BEEA']
+    }
+  }
 
   loadColors() {
    this.$http.get('public/sass/styleguide.json').then(res => {

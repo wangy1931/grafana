@@ -27,6 +27,18 @@ function (angular, coreModule) {
       });
     };
 
+    this.setPie = function (element, pieData, colors, innerRadius) {
+      $.plot(element, pieData, {
+        series: {
+          pie: {
+            innerRadius: innerRadius || 0.7,
+            show: true,
+          }
+        },
+        colors: colors
+      });
+    }
+
   });
 
 });

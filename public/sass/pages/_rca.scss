@@ -1,5 +1,9 @@
 .rca-page {
-  padding: 0;
+
+  .page-header {
+    margin-bottom: 0;
+    padding: 0;
+  }
 
   .jtk-demo-canvas {
     max-height: 100%;

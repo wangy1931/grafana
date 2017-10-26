@@ -26,7 +26,8 @@ module.exports = function(grunt) {
       'lodash',
       'moment',
       'spectrum',
-      'eventemitter3'
+      'eventemitter3',
+      'ng-table'
     ].join(' + ');
 
     // thirdparty expected to be 'vendor/**/*', but the 'vendor' dir is toooo messy

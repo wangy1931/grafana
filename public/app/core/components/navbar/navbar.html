@@ -8,8 +8,25 @@
 
 	<a href="{{ctrl.titleUrl}}" class="navbar-page-btn" ng-show="ctrl.title">
 		<i class="{{ctrl.icon}}" ng-show="ctrl.icon"></i>
-		<img ng-src="{{ctrl.iconUrl}}" ng-show="ctrl.iconUrl"></i>
+		<img ng-src="{{ctrl.iconUrl}}" ng-show="ctrl.iconUrl" />
 		{{ctrl.title}}
+	</a>
+
+	<a href="javascript:;" class="navbar-page-btn" ng-click="ctrl.showGuide();" ng-if="ctrl.showGuideNav"
+		bs-tooltip="'诊断引导'" data-placement="bottom">
+		<i class="iconfont fa-cwiz-search" style="font-weight: bolder;"></i>
+	</a>
+
+	<a href="/oncallerschedule" class="navbar-shortcut-btn pull-right">
+		<i class="fa fa-fw fa-calendar"></i>
+	</a>
+
+	<a href="javascript:;" class="navbar-shortcut-btn pull-right">
+		<toolbar></toolbar>
+	</a>
+
+	<a href="javascript:;" class="navbar-shortcut-btn pull-right">
+		<i class="iconfont fa-question-circle-o" bs-tooltip="'即将开放'" data-placement="bottom"></i>
 	</a>
 
 	<div ng-transclude></div>

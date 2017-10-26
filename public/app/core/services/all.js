@@ -15,6 +15,8 @@ define([
   './integrateSrv',
   './oncallerMgrSrv',
   './service_dep_srv',
-  './host_srv'
+  './host_srv',
+  './association_srv',
+  './guide_srv',
 ],
 function () {});

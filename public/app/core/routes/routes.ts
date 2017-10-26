@@ -24,6 +24,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   var loadReportBundle = new BundleLoader('app/features/report/reportCtrl');
   var loadRcaBundle = new BundleLoader('app/features/rca/all');
   var loadHostBundle = new BundleLoader('app/features/host/all');
+  var loadKnowledgeBundle = new BundleLoader('app/features/knowledge/all');
 
   $routeProvider
   .when('/', {
@@ -52,12 +53,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller: 'ServiceCtrl',
     reloadOnSearch: false,
     resolve: loadSummaryBundle,
-  })
-  .when('/service_v2', {
-    templateUrl: 'public/app/features/service/partials/service.html',
-    controller: 'ServiceStatusCtrl',
-    reloadOnSearch: true,
-    resolve: loadServiceBundle,
   })
   .when('/dashboard/:type/:slug', {
     templateUrl: 'public/app/partials/dashboard.html',
@@ -122,11 +117,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/alerts/status', {
     templateUrl: 'public/app/features/org/partials/alertStatus.html',
     controller : 'AlertStatusCtrl',
-    resolve: loadOrgBundle,
-  })
-  .when('/alerts/association/:host/:distance/:metric*', {
-    templateUrl: 'public/app/features/org/partials/alertAssociation.html',
-    controller : 'AlertAssociationCtrl',
     resolve: loadOrgBundle,
   })
   .when('/oncallerschedule', {
@@ -304,25 +294,16 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'LogsCtrl',
     resolve: loadLogsBundle,
   })
-  .when('/analysis', {
-    templateUrl: 'public/app/features/analysis/partials/analysis.html',
-    controller : 'AnalysisCtrl',
-    resolve: loadAnalysisBundle,
-  })
   .when('/association', {
-    templateUrl: 'public/app/features/analysis/partials/single_association.html',
-    controller : 'SingleAssociationCtrl',
-    resolve: loadAnalysisBundle,
+    templateUrl: 'public/app/features/org/partials/alertAssociation.html',
+    controller : 'AlertAssociationCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadOrgBundle,
   })
   .when('/knowledgebase', {
-    templateUrl: 'public/app/features/logs/partials/knowledge_base.html',
-    controller : 'KnowledgeBaseCtrl',
-    resolve: loadLogsBundle,
-  })
-  .when('/install', {
-    templateUrl: 'public/app/partials/install.html',
-    controller : 'AnalysisCtrl',
-    resolve: loadAnalysisBundle,
+    templateUrl: 'public/app/features/knowledge/partials/knowledge_base.html',
+    controller : 'CreateKnowledgeCtrl',
+    resolve: loadKnowledgeBundle,
   })
   .when('/customer', {
     templateUrl: 'public/app/features/summary/partials/customer.html',
@@ -395,7 +376,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/rca', {
     templateUrl: 'public/app/features/rca/partials/rca.html',
     controller : 'RootCauseAnalysisCtrl',
-    reloadOnSearch: true,
+    reloadOnSearch: false,
     resolve: loadRcaBundle,
   })
   // Host Topology
@@ -410,9 +391,15 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controllerAs: 'ctrl',
     templateUrl: 'public/app/features/styleguide/styleguide.html',
   })
+  .when('/topn', {
+    controller: 'TopNCtrl',
+    controllerAs: 'ctrl',
+    templateUrl: 'public/app/features/topn/partials/topn.html'
+  })
   .otherwise({
     templateUrl: 'public/app/partials/error.html',
-    controller: 'ErrorCtrl'
+    controller: 'ErrorCtrl',
+    reloadOnSearch: false,
   });
 }
 
