@@ -47,5 +47,24 @@
 		forms
 	</div>
 
+	<div class="tab-pane" ng-if="ctrl.page.cloudwiz">
+		<div class="col-md-6">
+			<ul>
+				<li>Thresholds Colors: </li>
+				<li class="style-guide-color-card" ng-repeat="color in ctrl.cloudwiz.thresholdsColor" style="background-color: {{color}}">
+					<em>{{color}}</em>
+				</li>
+			</ul>
+		</div>
+		<div class="col-md-6">
+			<ul>
+				<li>Thresholds Hover Colors: </li>
+				<li class="style-guide-color-card" ng-repeat="color in ctrl.cloudwiz.thresholdsHoverColor" style="background-color: {{color}}">
+					<em>{{color}}</em>
+				</li>
+			</ul>
+		</div>
+	</div>
+
 </div>
 

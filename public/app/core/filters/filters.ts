@@ -73,4 +73,30 @@ coreModule.filter('interpolateTemplateVars', function (templateSrv) {
   return filterFunc;
 });
 
+coreModule.filter('formatItemType', () => {
+  return (text) => {
+    return text && text.replace('Host', '').replace('Service', '');
+  };
+});
+
+coreModule.filter('translateItemType', () => {
+  return (text) => {
+    var map = {
+      "mem": "内存",
+      "io" : "磁盘",
+      "nw" : "网络",
+      "cpu": "CPU",
+      "kpi": "服务 KPI",
+      "state": "服务状态"
+    };
+    return text && map[text.toLowerCase()];
+  };
+});
+
+coreModule.filter('formatAnomalyHealth', () => {
+  return (value) => {
+    return value === 100 ? value : (value < 26 ? value + " (持续异常)" : value + " (临时异常)")
+  };
+});
+
 export default {};

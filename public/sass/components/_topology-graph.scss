@@ -1,0 +1,149 @@
+
+// ------------------------------
+// D3.RelationshipGraph Style
+// ------------------------------
+.relationshipGraph-measurement {
+  position: absolute;
+  width: auto;
+  height: auto;
+  left: -100%;
+  top: -100%;
+}
+
+.relationshipGraph-tip {
+  font-weight: bold;
+  line-height: 1;
+  padding: 12px;
+  background: $tooltipBackgroundOpacity;
+  color: $tooltipColor;
+  border-radius: 2px;
+  z-index: 50;
+  max-width: 350px;
+  max-height: 300px;
+}
+
+.relationshipGraph-tip:after {
+  display: inline-block;
+  width: 100%;
+  height: 3px;
+  color: $tooltipBackgroundOpacity;
+  content: "\25B6";
+  position: absolute;
+  font-size: 10px;
+}
+
+.relationshipGraph-tip.n:after {
+  content: "\25BC";
+  margin: -2px 0 0 0;
+  top: 100%;
+  left: 9px;
+  text-align: center;
+}
+
+.relationshipGraph-tip.e {
+  margin-left: 15px;
+}
+
+.relationshipGraph-tip.e:after {
+  content: "\25C0";
+  margin: -2px 0 0 0;
+  top: 50%;
+  left: -9px;
+}
+
+.relationshipGraph-tip.s {
+  margin-top: 15px;
+}
+
+.relationshipGraph-tip.s:after {
+  content: "\25B2";
+  margin: 0 0 1px 0;
+  top: -10px;
+  left: 12px;
+  text-align: center;
+}
+
+.relationshipGraph-tip.w:after {
+  content: "\25B6";
+  margin: -4px 0 0 -1px;
+  top: 50%;
+  left: 100%;
+}
+
+.relationshipGraph-tip {
+  table td {
+    padding: 0 10px;
+  }
+}
+
+// ------------------------------
+// Topology Graph Component Style
+// ------------------------------
+.topology-graph {
+
+  // search head
+  .search {
+    padding: 5px 0;
+    background-color: #eee;
+    border-bottom: #ddd;
+  }
+
+  // heatmap
+  .heatmap {
+    min-height: 200px;
+    margin: 28px 0;
+    position: relative;
+    svg {
+      transition: transform 1s ease;
+      transform: translateX(50%);
+    }
+    svg g {
+      outline: none;
+    }
+  }
+
+  // override
+  .relationshipGraph-block {
+    stroke: transparent;
+    stroke-width: 1px;
+    pointer-events: all;
+  }
+  .relationshipGraph-block:hover {
+    cursor: pointer;
+    stroke: #4b9cdb;
+  }
+  .relationshipGraph-block.selected {
+    stroke: $black;
+    stroke-width: 1px;
+  }
+  .relationshipGraph-Text {
+    fill: #4b9cdb !important;
+    font-weight: bold;
+  }
+
+  // bootstrap override
+  .btn-default {
+    background-color: $white;
+    border-radius: 6px;
+    outline: none;
+  }
+  .caret {
+    vertical-align: middle;
+    margin-left: 1.6rem;
+  }
+  .tidy-form .tidy-form-list > li:nth-child(odd) {
+    line-height: 38px;
+    margin: 0 10px 0 30px;
+  }
+  .tidy-form .tidy-form-list .dropdown-menu {
+    border-radius: 4px;
+    text-align: center;
+  }
+  .tidy-form-item-dropdown .dropdown-menu {
+    width: 270px;
+  }
+  .tidy-form .tidy-form-list .tidy-form-input {
+    background-color: $white;
+  }
+
+}

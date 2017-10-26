@@ -39,7 +39,6 @@ export class AnnotationsSrv {
 
       // look for alert state for this panel
       // var alertState = _.find(results[2], {panelId: options.panel.id});
-
       return {
         annotations: annotations,
         // alertState: alertState,
@@ -125,12 +124,7 @@ export class AnnotationsSrv {
         // translate result
         return this.translateQueryResult(annotation, results);
       });
-    })).then(() => {
-      if (!_.isNull(dashboard.manualAnnotation)) {
-        this.list.push(dashboard.manualAnnotation[0])
-      }
-      return this.list;
-    });
+    }));
 
     return this.globalAnnotationsPromise;
   }

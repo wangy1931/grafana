@@ -196,31 +196,31 @@ table th[class*="span"],
 
 .table tbody tr {
   &.success > td {
-    background-color: $successBackground;
+    background-color: $bsSuccessBackground;
   }
   &.error > td {
-    background-color: $errorBackground;
+    background-color: $bsErrorBackground;
   }
   &.warning > td {
-    background-color: $warningBackground;
+    background-color: $bsWarningBackground;
   }
   &.info > td {
-    background-color: $infoBackground;
+    background-color: $bsInfoBackground;
   }
 }
 
 // Hover states for .table-hover
 .table-hover tbody tr {
   &.success:hover > td {
-    background-color: darken($successBackground, 5%);
+    background-color: darken($bsSuccessBackground, 5%);
   }
   &.error:hover > td {
-    background-color: darken($errorBackground, 5%);
+    background-color: darken($bsErrorBackground, 5%);
   }
   &.warning:hover > td {
-    background-color: darken($warningBackground, 5%);
+    background-color: darken($bsWarningBackground, 5%);
   }
   &.info:hover > td {
-    background-color: darken($infoBackground, 5%);
+    background-color: darken($bsInfoBackground, 5%);
   }
 }

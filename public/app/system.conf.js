@@ -48,7 +48,8 @@ System.config({
     'jsdiff':                   'vendor/jsdiff/index',
     'd3':                       'vendor/d3/d3.min',
     'd3.tip':                   'vendor/d3/d3.tip',
-    'd3.graph':                 'vendor/d3/d3.relationshipgraph'
+    'd3.graph':                 'vendor/d3/d3.relationshipgraph',
+    'ng-table':                 'vendor/angular-other/ng-table.min'
   },
 
   packages: {

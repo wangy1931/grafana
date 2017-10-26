@@ -8,6 +8,7 @@ import 'angular-route';
 import 'angular-sanitize';
 import 'angular-dragdrop';
 import 'angular-bindonce';
+import 'angular-animate';
 import 'angular-ui';
 import 'ui.calendar';
 
@@ -19,6 +20,7 @@ import 'jsPlumbToolkit';
 import 'jsPlumbToolkit-angular';
 
 import 'ng-quill';
+import 'ng-table';
 
 import $ from 'jquery';
 import angular from 'angular';
@@ -48,12 +50,12 @@ export class GrafanaApp {
   }
 
   init() {
-    var app = angular.module('grafana', ['mgcrea.ngStrap', '$jsPlumb']);
+    var app = angular.module('grafana', ['mgcrea.ngStrap', '$jsPlumb', 'ngAnimate', 'ngTable']);
     app.constant('grafanaVersion', "@grafanaVersion@");
 
     app.config(($locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) => {
       //$compileProvider.debugInfoEnabled(false);
-      $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|data|chrome-extension):/);
+      $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|data|chrome-extension|javascript):/);
 
       this.registerFunctions.controller = $controllerProvider.register;
       this.registerFunctions.directive  = $compileProvider.directive;

@@ -162,26 +162,26 @@ define(function() {
             }
           ],
           "targets": [
-            // {
-            //   "aggregator": "sum",
-            //   "bucketAggs": [],
-            //   "downsampleAggregator": "avg",
-            //   "dsType": "elasticsearch",
-            //   "errors": {},
-            //   "metrics": [
-            //     {
-            //       "field": "select field",
-            //       "id": Math.random(),
-            //       "meta": {},
-            //       "settings": {},
-            //       "type": "raw_document"
-            //     }
-            //   ],
-            //   "query": "$QUERY",
-            //   "refId": "A",
-            //   "timeField": "@timestamp",
-            //   "size": "$SIZE"
-            // }
+            {
+              "aggregator": "sum",
+              "bucketAggs": [],
+              "downsampleAggregator": "avg",
+              "dsType": "elasticsearch",
+              "errors": {},
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": Math.random(),
+                  "meta": {},
+                  "settings": {},
+                  "type": "raw_document"
+                }
+              ],
+              "query": "$QUERY",
+              "refId": "A",
+              "timeField": "@timestamp",
+              "size": "$SIZE"
+            }
           ],
           "title": "聚合数据",
           "transform": "json",
@@ -236,44 +236,44 @@ define(function() {
             }
           ],
           "targets": [
-            // {
-            //   "aggregator": "sum",
-            //   "bucketAggs": [],
-            //   "downsampleAggregator": "avg",
-            //   "dsType": "elasticsearch",
-            //   "errors": {},
-            //   "metrics": [
-            //     {
-            //       "field": "select field",
-            //       "id": Math.random(),
-            //       "meta": {},
-            //       "settings": {},
-            //       "type": "raw_document"
-            //     }
-            //   ],
-            //   "query": "$QUERY",
-            //   "refId": "A",
-            //   "timeField": "@timestamp",
-            //   "size": "$SIZE"
-            // },
-            // {
-            //   "bucketAggs": [],
-            //   "dsType": "elasticsearch",
-            //   "metrics": [
-            //     {
-            //       "field": "select field",
-            //       "id": Math.random(),
-            //       "meta": {},
-            //       "settings": {},
-            //       "type": "raw_document"
-            //     }
-            //   ],
-            //   "query": "$QUERY",
-            //   "refId": "B",
-            //   "timeField": "@timestamp",
-            //   "timeShift": "$TIMESHIFT",
-            //   "size": "$SIZE"
-            // }
+            {
+              "aggregator": "sum",
+              "bucketAggs": [],
+              "downsampleAggregator": "avg",
+              "dsType": "elasticsearch",
+              "errors": {},
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": Math.random(),
+                  "meta": {},
+                  "settings": {},
+                  "type": "raw_document"
+                }
+              ],
+              "query": "$QUERY",
+              "refId": "A",
+              "timeField": "@timestamp",
+              "size": "$SIZE"
+            },
+            {
+              "bucketAggs": [],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": Math.random(),
+                  "meta": {},
+                  "settings": {},
+                  "type": "raw_document"
+                }
+              ],
+              "query": "$QUERY",
+              "refId": "B",
+              "timeField": "@timestamp",
+              "timeShift": "$TIMESHIFT",
+              "size": "$SIZE"
+            }
           ],
           "tab": 3,
           "operate": "logCompare",
@@ -385,202 +385,10 @@ define(function() {
     }
   ];
 
-  var logClusterPanel = {
-    "columns": [
-      {
-        "text": "count",
-        "value": "count"
-      },
-      {
-        "text": "operator",
-        "value": "operator"
-      },
-      {
-        "text": "cid",
-        "value": "cid",
-        "hide": true
-      },
-      {
-        "text": "message",
-        "value": "message"
-      }
-    ],
-    "operator": {
-      "text": "delete",
-      "method": ""
-    },
-    "datasource": "elk",
-    "editable": true,
-    "error": false,
-    "fontSize": "100%",
-    "height": "500",
-    "helpInfo": {
-      "context": "",
-      "info": false,
-      "title": ""
-    },
-    "hideTimeOverride": false,
-    "id": Math.random(),
-    "isNew": true,
-    "links": [],
-    "pageSize": null,
-    "scroll": false,
-    "showHeader": true,
-    "sort": {
-      "col": 0,
-      "desc": true
-    },
-    "span": 12,
-    "styles": [
-      {
-        "colorMode": null,
-        "colors": [
-          "rgba(245, 54, 54, 0.9)",
-          "rgba(237, 129, 40, 0.89)",
-          "rgba(50, 172, 45, 0.97)"
-        ],
-        "decimals": 0,
-        "pattern": "/.*/",
-        "thresholds": [],
-        "type": "number",
-        "unit": "short"
-      },
-      {
-        "type": "html",
-        "pattern": "/.*/"
-      }
-    ],
-    "targets": [
-      {
-        "aggregator": "sum",
-        "bucketAggs": [],
-        "downsampleAggregator": "avg",
-        "dsType": "elasticsearch",
-        "errors": {},
-        "metrics": [
-          {
-            "field": "select field",
-            "id": Math.random(),
-            "meta": {},
-            "settings": {},
-            "type": "raw_document"
-          }
-        ],
-        "query": "$QUERY",
-        "refId": "A",
-        "timeField": "@timestamp",
-        "size": "$SIZE"
-      }
-    ],
-    "title": "聚合数据",
-    "transform": "json",
-    "transparent": false,
-    "type": "table",
-    "tab": 2,
-    "operate": "logReduce",
-    "scopedVars": {
-      "logCluster": true
-    },
-    "active": true
-  };
-
-  var logComparePanel = {
-    "columns": [
-      {
-        "text": "count",
-        "value": "count"
-      },
-      {
-        "text": "change",
-        "value": "change"
-      },
-      {
-        "text": "message",
-        "value": "message"
-      }
-    ],
-    "datasource": "elk",
-    "editable": true,
-    "error": false,
-    "fontSize": "100%",
-    "helpInfo": {
-      "context": "",
-      "info": false,
-      "title": ""
-    },
-    "id": Math.random(),
-    "isNew": true,
-    "links": [],
-    "pageSize": null,
-    "scroll": false,
-    "showHeader": true,
-    "sort": {
-      "col": 0,
-      "desc": true
-    },
-    "span": 12,
-    "styles": [
-      {
-        "dateFormat": "YYYY-MM-DD HH:mm:ss,sss",
-        "pattern": "Time",
-        "type": "date"
-      }
-    ],
-    "targets": [
-      {
-        "aggregator": "sum",
-        "bucketAggs": [],
-        "downsampleAggregator": "avg",
-        "dsType": "elasticsearch",
-        "errors": {},
-        "metrics": [
-          {
-            "field": "select field",
-            "id": Math.random(),
-            "meta": {},
-            "settings": {},
-            "type": "raw_document"
-          }
-        ],
-        "query": "$QUERY",
-        "refId": "A",
-        "timeField": "@timestamp",
-        "size": "$SIZE"
-      },
-      {
-        "bucketAggs": [],
-        "dsType": "elasticsearch",
-        "metrics": [
-          {
-            "field": "select field",
-            "id": Math.random(),
-            "meta": {},
-            "settings": {},
-            "type": "raw_document"
-          }
-        ],
-        "query": "$QUERY",
-        "refId": "B",
-        "timeField": "@timestamp",
-        "timeShift": "$TIMESHIFT",
-        "size": "$SIZE"
-      }
-    ],
-    "tab": 3,
-    "operate": "logCompare",
-    "title": "日志对比",
-    "transform": "json",
-    "type": "table",
-    "scopedVars": {
-      "logCompare": true,
-      "logFilter" : "$LOGFILTER"
-    },
-    "active": true
-  };
-
   return {
     rows: panelMetas,
-    logClusterPanel: logClusterPanel,
-    logComparePanel: logComparePanel
+    logResultPanel : panelMetas[0].panels[0],
+    logClusterPanel: panelMetas[0].panels[1],
+    logComparePanel: panelMetas[0].panels[2],
   }
 });
