@@ -1,0 +1,51 @@
+<div class="modal-log-parse">
+  <h2>新建解析器</h2>
+  <br>
+
+  <form class="gf-form-group">
+    <div class="parse-form-group no-border">
+      <div class="gf-form">
+        <span class="gf-form-label width-9">解析器名称</span>
+        <input class="gf-form-input max-width-30" type="text" required ng-model="pattern.name" placeholder="仅支持英文字母/数字/下划线/小数点"/>
+        <select class="gf-form-input max-width-7" ng-options="f for f in ['grok']" ng-model="pattern.type"></select>
+      </div>
+
+      <div class="gf-form">
+        <span class="gf-form-label width-9">匹配规则</span>
+        <input class="gf-form-input max-width-30" type="text" required ng-model="pattern.pattern" />
+      </div>
+      
+      <div class="gf-form">
+        <span class="gf-form-label width-9">测试文本</span>
+        <input class="gf-form-input max-width-30" type="text" required ng-model="pattern.log" />
+        <button class="btn btn-primary max-width-7" ng-click="testPattern(pattern)">测试</button>
+      </div>
+
+      <div class="gf-form">
+        <span class="gf-form-label width-9"></span>
+        <div class="gf-form-input max-width-30" style="border-radius: 0px; height: 15rem; overflow: scroll;">{{pattern.result}}</div>
+      </div>
+
+      <div class="gf-form">
+        <span class="gf-form-label width-9">是否添加指标</span>
+        <label class="multiline-label">
+          <input type="radio" name="ismetric" ng-value=true ng-model="pattern.isMetric" />
+          <span>是</span>
+        </label>
+        <label class="multiline-label">
+          <input type="radio" name="ismetric" ng-value=false ng-model="pattern.isMetric" />
+          <span>否</span>
+        </label>
+      </div>
+      
+      <div class="gf-form">
+        <span class="gf-form-label width-9"></span>
+        <div>
+          <button class="btn btn-success" ng-disabled="!pattern.name" ng-click="savePattern(oldPattern, pattern, isNew);dismiss();">保存</button>
+          <button class="btn btn-inverse" ng-click="dismiss();">取消</button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
