@@ -110,7 +110,7 @@ export class AlertAssociationCtrl {
 
     this.timeRange = (this.targetObj.start === "undefined")
       ? { start: moment().subtract(6, 'hour').unix(), end: moment().unix() }
-      : { start: moment().unix(), end: this.targetObj.start }
+      : { start: moment(+this.targetObj.start).subtract(6, 'hour').unix(), end: this.targetObj.start }
     this.getServiceEvents();
   }
 
