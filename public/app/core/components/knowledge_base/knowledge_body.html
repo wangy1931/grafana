@@ -1,20 +1,20 @@
-<div ng-controller="KnowledgeBaseCtrl" ng-init="init();">
+<div>
     <form class="kb-search-form">
         <div class="">
             <div class="tidy-form">
                 <ul class="tidy-form-list">
                     <li class="tidy-form-item"><h4>关键词</h4></li>
                     <li>
-                        <input placeholder="支持AND, OR, 空格表示OR" type="text" class="input-large tidy-form-input last" ng-model="q" required=""/>
+                        <input placeholder="支持AND, OR, 空格表示OR" type="text" class="input-large tidy-form-input last" ng-model="ctrl.q" required=""/>
                     </li>
                     <li class="tidy-form-item" style="margin-left:30px;"><h4>类型</h4></li>
                     <li>
-                        <select class="input-small tidy-form-input" ng-model="service" required>
-                            <option ng-repeat="s in services" value="{{s}}" ng-selected="service == s">{{s}}</option>
+                        <select class="input-small tidy-form-input" ng-model="ctrl.service" required>
+                            <option ng-repeat="s in ctrl.services" value="{{s}}" ng-selected="ctrl.service == s">{{s}}</option>
                         </select>
                     </li>
                     <li>
-                        <button style="margin:0 20px;" type="submit" class="btn btn-primary" ng-click="query()"><i class="fa fa-search"></i>查找</button>
+                        <button style="margin:0 20px;" type="submit" class="btn btn-primary" ng-click="ctrl.query()"><i class="fa fa-search"></i>查找</button>
                     </li>
                 </ul>
                 <div class="clearfix"></div>
@@ -24,8 +24,8 @@
         </div>
     </form>
 
-    <div class="kb-list" ng-show="knowledge.length && showList">
-        <a ng-repeat="knows in knowledge" ng-click="getDetail(knows)">
+    <div class="kb-list" ng-show="ctrl.knowledge.length && ctrl.showList">
+        <a ng-repeat="knows in ctrl.knowledge" ng-click="ctrl.getDetail(knows)">
             <ul class="kb-item kb-hover">
                 <li class="kb-symptom">
                     <div class="kb-header">
@@ -39,7 +39,7 @@
                         read-only="readOnly"
                         placeholder=""
                         scrolling-container="hidden"
-                        on-editor-created="editorCreated(editor, knows.symptom)">
+                        on-editor-created="ctrl.editorCreated(editor, knows.symptom)">
                     </ng-quill-editor>
                 </li>
                 <li class="kb-solution">
@@ -53,28 +53,28 @@
                         read-only="readOnly"
                         placeholder=""
                         scrolling-container="hidden"
-                        on-editor-created="editorCreated(editor, knows.solution)">
+                        on-editor-created="ctrl.editorCreated(editor, knows.solution)">
                     </ng-quill-editor>
                 </li>
             </ul>
         </a>
     </div>
 
-    <div class="kb-list" ng-if="knowledge.length && !showList">
+    <div class="kb-list" ng-if="ctrl.knowledge.length && !ctrl.showList">
         <ul class="kb-item">
             <li class="kb-symptom">
                 <div class="kb-header">
                     <div><i style="color:#32b2e1;" class="fa fa-question-circle kb-icon"></i><span>问题描述:</span></div>
-                    <div><span>类型:</span><button class="btn kb-type">{{detailKnowledge.service}}</button></div>
+                    <div><span>类型:</span><button class="btn kb-type">{{ctrl.detailKnowledge.service}}</button></div>
                 </div>
                 <ng-quill-editor 
                     class="kb-editor"
-                    ng-model="detailKnowledge.symptom"
+                    ng-model="ctrl.detailKnowledge.symptom"
                     modules="{toolbar: false}"
                     read-only="readOnly"
                     placeholder=""
                     scrolling-container="hidden"
-                    on-editor-created="editorCreated(editor, detailKnowledge.symptom, true)">
+                    on-editor-created="ctrl.editorCreated(editor, detailKnowledge.symptom, true)">
                 </ng-quill-editor>
             </li>
             <li class="kb-solution">
@@ -83,21 +83,22 @@
                 </div>
                 <ng-quill-editor 
                     class="kb-editor"
-                    ng-model="detailKnowledge.solution"
+                    ng-model="ctrl.detailKnowledge.solution"
                     modules="{toolbar: false}"
                     read-only="readOnly"
                     placeholder=""
                     scrolling-container="hidden"
-                    on-editor-created="editorCreated(editor, detailKnowledge.solution, true)">
+                    on-editor-created="ctrl.editorCreated(editor, detailKnowledge.solution, true)">
                 </ng-quill-editor>
             </li>
         </ul>
         <div class="kb-score">
             <div>
-                <a class="like-or-dislike"><i class="fa fa-thumbs-o-up" style="color: rgb(0, 111, 210);"></i>{{detailKnowledge.score}}</a>
+                <a class="like-or-dislike"><i class="fa fa-thumbs-o-up" style="color: rgb(0, 111, 210);"></i>{{ctrl.detailKnowledge.score}}</a>
                 <a class="like-or-dislike"><i class="fa fa-thumbs-o-down" style="color: rgb(144, 19, 254);"></i>0</a>
             </div>
-            <a ng-click="getList()">返回列表</a>
+            <a ng-click="ctrl.getList()">返回列表</a>
         </div>
     </div>
 </div>
+<!-- <div class="center"><button ng-click="ctrl.dismiss();" class="btn">关闭</button></div> -->

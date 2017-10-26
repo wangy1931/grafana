@@ -23,13 +23,17 @@ import './partials';
 
 //Cloudwiz 
 import "./directives/system_panel";
-import "./directives/overview_panel";
 import "./directives/service_dep";
-import "./directives/table_loader";
 import "./directives/log_tabpane";
 import {tagPicker} from './directives/tagpicker';
 import "./directives/loading";
 import "./directives/ng_enter";
+import {topologyGraphDirective} from './components/topology_graph';
+import {guideDirective} from './components/guide/guide';
+import {toolbarDirective} from './components/toolbar/toolbar';
+import {cwizSwitchDirective} from './components/cwiz_switch';
+import {treeMenu} from './components/tree_menu';
+import {knowledgeBaseDirective} from './components/knowledge_base/knowledgeBase';
 
 import {grafanaAppDirective} from './components/grafana_app';
 import {sideMenuDirective} from './components/sidemenu/sidemenu';
@@ -67,5 +71,11 @@ export {
   appEvents,
   dashboardSelector,
   tagPicker,
-  colors
+  colors,
+  topologyGraphDirective,
+  guideDirective,
+  toolbarDirective,
+  cwizSwitchDirective,
+  treeMenu,
+  knowledgeBaseDirective
 };

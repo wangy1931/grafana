@@ -12,4 +12,5 @@ define([
   './systemoverview/systemoverviewCtrl',
   './styleguide/styleguide',
   './rca/all',
+  './topn/all',
 ], function () {});

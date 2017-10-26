@@ -33,7 +33,7 @@ define([
       };
     });
 
-    module.controller('LogsCtrl', function ($scope, contextSrv, $rootScope, timeSrv, $modal, datasourceSrv, backendSrv, $q) {
+    module.controller('LogsCtrl', function ($scope, contextSrv, $rootScope, timeSrv, $modal, datasourceSrv, backendSrv, $q, $location) {
       var currentLogTab = 0;
       var panelMetas    = logsDash.rows;
       var logClusterPanel = logsDash.logClusterPanel;
@@ -156,7 +156,7 @@ define([
 
       $scope.isShowKnows = function(type) {
         $scope.appEvent('show-modal', {
-          src: 'public/app/features/logs/partials/logs_knowledge.html',
+          src: 'public/app/core/components/knowledge_base/knowledge.html',
           modalClass: 'modal-kb',
           scope: $scope.$new(),
         });
@@ -206,7 +206,7 @@ define([
       };
 
       $scope.init = function () {
-        $scope.query = "*";
+        $scope.query = $location.search().query || "*";
         $scope.size = 500;
         $scope.timeShift = "-1d";
         $scope.logFilter = "";
@@ -277,18 +277,19 @@ define([
       };
 
       // 懒加载 聚合&对比，只对第一次有用
-      $scope.logOperate = function (tab) {
-        if (tab === 0) return;
+      // $scope.logOperate = function (tab) {
+      //   console.log(tab);
+      //   if (tab === 0) return;
 
-        var row = tab === 1 ? _.cloneDeep(logClusterPanel) : _.cloneDeep(logComparePanel);
-        row = fillRowData(row, {
-          "\\$SIZE": $scope.size,
-          "\\$QUERY": $scope.query,
-          "\\$TIMESHIFT": $scope.timeShift,
-          "\\$LOGFILTER": $scope.logFilter
-        });
-        $scope.dashboard.rows[0].panels[tab] = row;
-      };
+      //   var row = tab === 1 ? _.cloneDeep(logClusterPanel) : _.cloneDeep(logComparePanel);
+      //   row = fillRowData(row, {
+      //     "\\$SIZE": $scope.size,
+      //     "\\$QUERY": $scope.query,
+      //     "\\$TIMESHIFT": $scope.timeShift,
+      //     "\\$LOGFILTER": $scope.logFilter
+      //   });
+      //   $scope.dashboard.rows[0].panels[tab] = row;
+      // };
 
       // 横向对比
       var textTitle = [];

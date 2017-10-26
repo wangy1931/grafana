@@ -1,0 +1,36 @@
+<div class="host-prediction">
+  <div></div>
+
+  <div class="predictions">
+      <div class="prediction-item">
+          <h4>
+              {{ ctrl.predictionPanel.disk.title }}
+              <select ng-model="ctrl.predictionPanel.disk.selectedOption"
+                      ng-change="ctrl.changePre('disk', ctrl.predictionPanel.disk.selectedOption)"
+                      ng-options="tip.time for tip in ctrl.predictionPanel.disk.tips"></select>
+          </h4>
+          <div class="prediction-item-pie prediction-item-{{ ctrl.currentHost.name }}disk"></div>
+          <em>{{ ctrl.predictionPanel.disk.selected }}</em>
+      </div>
+      <div class="prediction-item">
+          <h4>
+              {{ ctrl.predictionPanel.cpu.title }}
+              <select ng-model="ctrl.predictionPanel.cpu.selectedOption"
+                      ng-change="ctrl.changePre('cpu', ctrl.predictionPanel.cpu.selectedOption)"
+                      ng-options="tip.time for tip in ctrl.predictionPanel.cpu.tips"></select>
+          </h4>
+          <div class="prediction-item-pie prediction-item-{{ ctrl.currentHost.name }}cpu"></div>
+          <em>{{ ctrl.predictionPanel.cpu.selected }}</em>
+      </div>
+      <div class="prediction-item">
+          <h4>
+              {{ ctrl.predictionPanel.mem.title }}
+              <select ng-model="ctrl.predictionPanel.mem.selectedOption"
+                      ng-change="ctrl.changePre('mem', ctrl.predictionPanel.mem.selectedOption)"
+                      ng-options="tip.time for tip in ctrl.predictionPanel.mem.tips"></select>
+          </h4>
+          <div class="prediction-item-pie prediction-item-{{ ctrl.currentHost.name }}mem"></div>
+          <em>{{ ctrl.predictionPanel.mem.selected }}</em>
+      </div>
+  </div>
+</div>

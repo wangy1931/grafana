@@ -23,7 +23,7 @@
               "transform": null
             }
           ],
-          "expression": null
+          "expression": ">"
         },
         "overrideHostQuery": null,
         "crit": {
@@ -59,7 +59,7 @@
               "transform": null
             }
           ],
-          "expression": null
+          "expression": "<"
         },
         "overrideHostQuery": null,
         "crit": {
@@ -95,7 +95,7 @@
               "transform": null
             }
           ],
-          "expression": null
+          "expression": ">"
         },
         "overrideHostQuery": null,
         "crit": {
@@ -131,7 +131,7 @@
               "transform": null
             }
           ],
-          "expression": null
+          "expression": ">"
         },
         "overrideHostQuery": null,
         "crit": {

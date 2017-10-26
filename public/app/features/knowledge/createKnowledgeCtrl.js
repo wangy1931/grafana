@@ -15,17 +15,24 @@ define([
         $scope.knowledge.symptom = "";
         $scope.knowledge.solution = "";
         $scope.knowledge.service = "*";
+        $scope.services = ["*", "system", "hadoop", "hbase", "kafka", "mysql", "spark", "storm", "yarn", "zookeeper", "tomcat", "opentsdb", "mongo3", "nginx", "windows", "exchange"];
 
         $scope.toolbarOptions = [
           ['bold'],        // toggled buttons
           ['blockquote', 'code-block'],
-
           [{ 'header': 1 }, { 'header': 2 }],               // custom button values
           [{ 'list': 'ordered'}, { 'list': 'bullet' }],
           [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-
           ['clean']                                         // remove formatting button
         ];
+      };
+
+      $scope.newKnows = function() {
+        $scope.appEvent('show-modal', {
+          src: 'public/app/features/knowledge/partials/new_knowledge.html',
+          modalClass: 'modal-no-header invite-modal',
+          scope: $scope.$new(),
+        });
       };
 
       $scope.new = function() {

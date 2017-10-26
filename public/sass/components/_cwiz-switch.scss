@@ -1,0 +1,68 @@
+$switch-height: 30px;
+$switch-width: $switch-height*2;
+$switch-translate-distance: $switch-height;
+$switch-text-padding: 20px;
+
+.cwiz-switch {
+  background: #fff;
+  border: 1px solid #dfdfdf;
+  position: relative;
+  display: inline-block;
+  box-sizing: content-box;
+  overflow: visible;
+  height: $switch-height;
+  padding: 0px;
+  margin: 0px;
+  border-radius: 20px;
+  box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset;
+  transition: 0.3s ease-out all;
+  z-index: 2;
+
+  label {
+    cursor: pointer;
+    background: #fff;
+    border-radius: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    width: $switch-height;
+    height: $switch-height;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    transition: 0.3s ease-out all;
+  }
+
+  .switch-text {
+    .on {
+      display: none;
+      padding: 0 40px 0 20px;
+    }
+    .off {
+      display: block;
+      padding: 0 20px 0 40px;
+    }
+    span {
+      line-height: $switch-height;
+      border-radius: 20px;
+    }
+  }
+
+  [type=checkbox]:checked {
+    & + label {
+      left: calc(100% - #{$switch-height});
+    }
+    & ~ .switch-text {
+      .on {
+        display: block;
+        color: $white;
+        background-color: nth($thresholds-color, 1);
+      }
+      .off {
+        display: none;
+      }
+    }
+  }
+
+}
+
+.cwiz-switch.checked {
+}

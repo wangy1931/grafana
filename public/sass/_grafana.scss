@@ -30,6 +30,13 @@
 @import "layout/lists";
 @import "layout/page";
 
+// bootstrap
+@import "bootstrap/variables";
+@import "bootstrap/component-animations";
+@import "bootstrap/accordion";
+@import "bootstrap/pagination";
+@import "bootstrap/tables";
+
 // COMPONENTS
 @import "components/cards";
 @import "components/buttons";
@@ -73,13 +80,11 @@
 @import "components/query_part";
 @import "components/loading";
 @import "components/edit_sidemenu";
-
-// bootstrap
-@import "bootstrap/variables";
-@import "bootstrap/component-animations";
-@import "bootstrap/accordion";
-@import "bootstrap/pagination";
-@import "bootstrap/tables";
+@import "components/guide";
+@import "components/toolbar";
+@import "components/cwiz-switch";
+@import "components/topology-graph";
+@import "components/tree_menu";
 
 // PAGES
 @import "pages/login";
@@ -105,13 +110,13 @@
 @import "pages/anomaly";
 @import "pages/jsplumb";
 @import "pages/service_dep";
-@import "pages/service";
 @import "pages/kb";
 @import "pages/system-overview";
 @import "pages/logs";
 @import "pages/rca";
 @import "pages/host-topology";
 @import "pages/tag_picker";
-
+@import "pages/association";
+@import "pages/topn";
 
 @import "old_responsive";
