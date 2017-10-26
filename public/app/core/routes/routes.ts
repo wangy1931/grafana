@@ -360,6 +360,18 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'CMDBServiceDetailCtrl',
     resolve: loadCMDBBundle
   })
+  .when('/cmdb/config', {
+    templateUrl: 'public/app/features/cmdb/partials/uagent.html',
+    controller : 'UagentCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadCMDBBundle
+  })
+  .when('/cmdb/config/edit', {
+    templateUrl: 'public/app/features/cmdb/partials/uagent_edit.html',
+    controller : 'UagentCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadCMDBBundle
+  })
   .when('/cmdb/servicecustom', {
     templateUrl: 'public/app/features/cmdb/partials/service_custom.html',
     controller : 'ServiceCustomCtrl',
