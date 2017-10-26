@@ -100,10 +100,12 @@ export class HostTopologyCtrl {
 
     this.$scope.$on('topology-loaded', (evt, payload) => {
       this.data = payload;
-      search.id && (this.currentHost = _.find(this.data, { name: search.name }));
+      if (search.id) {
+        this.currentHost = _.find(this.data, { name: search.name });
+      } else {
+        this.switchTab(this.currentTab);
+      }
     });
-
-    // this.switchTab(this.currentTab);
 
     _.isEmpty(this.hostSummary) && this.hostSrv.getHostInfo().then(response => {
       this.hostPanels = response;
