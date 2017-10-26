@@ -21,6 +21,7 @@ export class HostTopologyCtrl {
   currentHost: any;  // one node information of relationshipGraph
   hostPanels: any;
   tableParams: any;
+  tableData: Array<any>;
 
   currentTab: number;
   hostSummary: Array<any>;
@@ -77,10 +78,6 @@ export class HostTopologyCtrl {
 
     this.currentHost = {};
 
-    $scope.$on('topology-host-changed', (evt, payload) => {
-      this.currentHost = payload;
-    });
-
     this.$rootScope.onAppEvent('exception-located', this.showGuideResult.bind(this), $scope);
 
     $scope.$watch('ctrl.currentHost', (newValue, oldValue) => {
@@ -100,7 +97,13 @@ export class HostTopologyCtrl {
     var search = this.$location.search();
     this.tabs[+search.tabId || 0].active = true;
     this.currentTab = +search.tabId || 0;
-    this.switchTab(this.currentTab);
+
+    this.$scope.$on('topology-loaded', (evt, payload) => {
+      this.data = payload;
+      search.id && (this.currentHost = _.find(this.data, { name: search.name }));
+    });
+
+    // this.switchTab(this.currentTab);
 
     _.isEmpty(this.hostSummary) && this.hostSrv.getHostInfo().then(response => {
       this.hostPanels = response;
@@ -186,7 +189,7 @@ export class HostTopologyCtrl {
         item.diskIoRead = kbn.valueFormats.Bps(item.diskIoRead);
         item.diskIoWrite = kbn.valueFormats.Bps(item.diskIoWrite);
       });
-      this.$scope.bsTableData = response.data;
+      this.tableData = response.data;
       this.tableParams.settings({
         dataset: response.data,
       });
@@ -319,18 +322,16 @@ export class HostTopologyCtrl {
   };
 
   switchTab(tabId) {
-    if (this.currentTab !== tabId) {
-      this.currentTab = tabId;
-      this.$location.search({
-        'tabId': tabId,
-        'panelId': null,
-        'fullscreen': null,
-        'edit': null,
-        'editview': null,
-        'id': this.currentHost.name ? this.currentHost._private_.id : '',
-        'name': this.currentHost.name ? this.currentHost.name : ''
-      });
-    }
+    this.currentTab = tabId;
+    this.$location.search({
+      'tabId': tabId,
+      'panelId': null,
+      'fullscreen': null,
+      'edit': null,
+      'editview': null,
+      'id': this.currentHost.name ? this.currentHost._private_.id : '',
+      'name': this.currentHost.name ? this.currentHost.name : ''
+    });
 
     if (tabId === 0) {
       this.getHostList(this.currentHost);

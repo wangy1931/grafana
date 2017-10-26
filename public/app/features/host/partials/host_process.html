@@ -1,9 +1,9 @@
 <div class="host-process host-tab-content">
-  <div ng-hide="bsTableData.length">
+  <div ng-hide="ctrl.tableData.length">
     <em>暂没有任何进程数据</em>
-    <cw-loading show="!bsTableData.length" duration=6000></cw-loading>
+    <cw-loading show="!ctrl.tableData.length" duration=6000></cw-loading>
   </div>
-  <div ng-show="bsTableData.length">
+  <div ng-show="ctrl.tableData.length">
     <div ng-include="'public/app/partials/host_process_table.html'"></div>
   </div>
 </div>
