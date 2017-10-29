@@ -38,7 +38,12 @@ export class TimeWindowCtrl {
       },
       xaxis: {
         // ticks: [],
-        mode: "time"
+        mode: "time",
+        from: this.range.from.valueOf(),
+        to: this.range.to.valueOf(),
+        min: this.range.from.valueOf(),
+        max: this.range.to.valueOf(),
+        timezone: "browser"
       },
       yaxis: {
         // ticks: [],
@@ -51,7 +56,7 @@ export class TimeWindowCtrl {
       grid: {
         minBorderMargin: 0,
         markings: [],
-        backgroundColor: null,// '#fbfbfb',
+        backgroundColor: null,
         borderWidth: 0,
         color: '#c8c8c8',
         margin: { left: 0, right: 0 },
@@ -77,7 +82,6 @@ export class TimeWindowCtrl {
       this.$scope.$emit('time-window-selected', args[1].xaxis);
     });
     $("#timeWindow").bind("plothover", (...args) => {
-      console.log(args[1]);
       if (!args[2]) {
         this.$tooltip.detach();
         return;
@@ -121,7 +125,7 @@ export class TimeWindowCtrl {
     var body = `
       <div class="graph-tooltip small topn-tooltip">
         <div class="graph-tooltip-time">${moment(params.x).format("YYYY-MM-DD HH:mm:ss")}</div>
-        <div class="graph-tooltip-value">健康值: ${params.y}</div>
+        <div class="graph-tooltip-value">使用率: ${params.y}</div>
       </div>
     `;
     this.$tooltip.html(body).place_tt(params.pageX + 20, params.pageY);
@@ -130,7 +134,7 @@ export class TimeWindowCtrl {
   issueQueries(datasource) {
     var targets = [
       {
-        "aggregator": "sum",
+        "aggregator": "avg",
         "currentTagKey": "",
         "currentTagValue": "",
         "downsampleAggregator": "avg",
@@ -138,7 +142,20 @@ export class TimeWindowCtrl {
         "errors": {},
         "hide": false,
         "isCounter": false,
-        "metric": "internal.system.health",
+        "metric": "cpu.usr",  // internal.system.health
+        "refID": "A",
+        "shouldComputeRate": false
+      },
+      {
+        "aggregator": "avg",
+        "currentTagKey": "",
+        "currentTagValue": "",
+        "downsampleAggregator": "avg",
+        "downsampleInterval": "1h",
+        "errors": {},
+        "hide": false,
+        "isCounter": false,
+        "metric": "proc.meminfo.percentused",
         "refID": "A",
         "shouldComputeRate": false
       }
@@ -157,12 +174,23 @@ export class TimeWindowCtrl {
     };
 
     return datasource.query(metricsQuery).then(results => {
-      _.each(results.data[0].datapoints, dps => {
-        _.reverse(dps);
+      _.each(results.data, data => {
+        if (data.target === "cpu.usr") {
+          _.each(data.datapoints, dps => {
+            _.reverse(dps);
+          });
+        } else {
+          _.each(data.datapoints, dps => {
+            _.reverse(dps);
+          });
+        }
       });
-      return results.data[0].datapoints;
+      return results.data;
     }).then(response => {
-      this.timeWindow = $.plot('#timeWindow', [response], this.options);
+      this.timeWindow = $.plot('#timeWindow', [
+        { label: response[0].target, data: response[0].datapoints },
+        { label: response[1].target, data: response[1].datapoints }
+      ], this.options);
     });
   }
 
