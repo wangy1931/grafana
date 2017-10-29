@@ -193,3 +193,9 @@ $btn-cmdb-color: rgb(25,165,228);
     overflow-y: scroll;
   }
 }
+
+.software-command {
+  display: inline-block;
+  width: 350px;
+  @include text-overflow();
+}
