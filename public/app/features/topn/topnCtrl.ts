@@ -3,15 +3,23 @@ import _ from 'lodash';
 import $ from 'jquery';
 import { coreModule } from  'app/core/core';
 import kbn from 'app/core/utils/kbn';
+import moment from 'moment';
 
 declare var window: any;
 
 export class TopNCtrl {
   dashboard: any;
   tableParams: any;
-  hostlist: Array<any>;
+  hostList: Array<any>;
   host: any;
   tableData: any;
+  pidList: any;
+  targetObj: any;
+  range: any;
+  selection: any;
+
+  currentPid: any;
+  selected: any;
 
   /** @ngInject */
   constructor(
@@ -22,7 +30,8 @@ export class TopNCtrl {
     private $rootScope,
     private NgTableParams,
     private templateValuesSrv,
-    private dynamicDashboardSrv
+    private dynamicDashboardSrv,
+    private $popover
   ) {
     this.tableParams = new this.NgTableParams({
       count: 10,
@@ -30,52 +39,123 @@ export class TopNCtrl {
     }, {
       counts: []
     });
+
+    this.targetObj = _.extend({}, {
+      metric: "",
+      host: "",
+      start: "",
+      pid: ""
+    }, this.$location.search());
+
+    $scope.$on('time-window-selected', this.render.bind(this), $scope);
+    $scope.$on('time-window-resize', this.init.bind(this), $scope);
   }
 
-  init() {
-    this.getProcess();
-    this.getDashboard();
+  init(event, payload) {
+    this.range = payload;
+    this.getProcess({});
   }
 
-  getProcess() {
-    this.backendSrv.getHosts({
-      "queries": [],
-      "hostProperties": ["id"]
-    }).then(response => {
-      this.hostlist = response.data;
+  render(event, payload) {
+    // this.selection = payload;
+    payload = {
+      from: moment(payload.from).valueOf(),
+      to  : moment(payload.to).valueOf()
+    }
+    this.getProcess(payload);
+  }
 
-      var host = this.$location.search().host;
-      this.host = _.find(response.data, { hostname: host }) || {};
-      return this.host.id;
-    }).then(id => {
-      id && this.hostSrv.getHostProcess(id).then(response => {
-        response.data && response.data.forEach(item => {
-          item.diskIoRead = kbn.valueFormats.Bps(item.diskIoRead);
-          item.diskIoWrite = kbn.valueFormats.Bps(item.diskIoWrite);
-        });
-
-        this.tableData = response.data;
-        this.tableParams.settings({
-          dataset: response.data,
-        });
+  getProcess(timeRange) {
+    var host = this.$location.search().host;
+    if (!host) {
+      return;
+    }
+    var params = _.extend({
+      hostname: host
+    }, timeRange);
+    this.hostSrv.getProcess(params).then(response => {
+      response.data && response.data.forEach(item => {
+        item.diskIoRead = kbn.valueFormats.Bps(item.diskIoRead);
+        item.diskIoWrite = kbn.valueFormats.Bps(item.diskIoWrite);
       });
-    });
+
+      this.tableData = _.orderBy(response.data, ['cpuPercent'], ['desc']);
+      this.pidList = _.map(this.tableData, 'pid');
+      this.hostList = _.map(this.hostSrv.hostInfo)
+      this.tableParams.settings({
+        dataset: this.tableData,
+      });
+    }).then(this.getDashboard.bind(this));
   }
 
   getDashboard() {
-    this.backendSrv.get('/api/static/topn').then(response => {
-      // store & init dashboard
-      this.dashboard = response;
+    if (!this.dashboard) {
+      this.backendSrv.get('/api/static/topn').then(response => {
+        // handle dashboard
+        this.addDashboardTemplating(response);
 
-      var hostname = this.$location.search().host;
-      this.dashboard.templating.list[0].current = { "text": hostname || "All", "value": hostname || "$__all", "tags": [] };
-      this.dashboard.templating.list[0].query = hostname;
+        // store & init dashboard
+        this.dashboard = response;
+        this.dashboard.time = this.range;
+        this.$scope.initDashboard({
+          dashboard: this.dashboard,
+          meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
+        }, this.$scope);
 
-      this.$scope.initDashboard({
-        dashboard: this.dashboard,
-        meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
-      }, this.$scope);
+        this.variableUpdated(this.targetObj);
+      });
+    } else {
+      this.variableUpdated(this.targetObj);
+    }
+  }
+
+  addDashboardTemplating(dashboard) {
+    // pid
+    this.pidList.forEach(pid => {
+      dashboard.templating.list[0].options.push({
+        "text": pid,
+        "value": pid,
+        "selected": false
+      });
     });
+    dashboard.templating.list[0].query = this.pidList.join(',');
+    // host
+    this.hostList.forEach(host => {
+      dashboard.templating.list[1].options.push({
+        "text": host,
+        "value": host,
+        "selected": false
+      });
+    });
+    dashboard.templating.list[1].query = this.hostList.join(',');
+  }
+
+  variableUpdated(obj) {
+    obj.host && (this.dashboard.templating.list[1].current = { "text": obj.host || "All", "value": obj.host || "$__all", "tags": [] });
+
+    this.templateValuesSrv.init(this.dashboard);
+    this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[1]).then(() => {
+      this.dynamicDashboardSrv.update(this.dashboard);
+      this.$rootScope.$emit('template-variable-value-updated');
+      this.$rootScope.$broadcast('refresh');
+    });
+  }
+
+  rowClick(pid, index) {
+    this.currentPid = pid;
+    if (this.selected !== index) {
+      this.selected = index;
+      this.dashboard.templating.list[0].current = { "text": pid.toString(), "value": pid.toString(), "tags": [] };
+
+      this.templateValuesSrv.init(this.dashboard);
+      this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
+        this.dynamicDashboardSrv.update(this.dashboard);
+        this.$rootScope.$emit('template-variable-value-updated');
+        this.$rootScope.$broadcast('refresh');
+      });
+    } else {
+      this.selected = -1;
+    }
   }
 
 };

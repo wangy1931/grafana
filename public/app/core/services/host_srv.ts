@@ -131,6 +131,7 @@ export class HostSrv {
 
   /**
    * Get the specific host's process.
+   * @param Object include hostId(or hostname) & from & to
    * @returns {Array} host's process information.
    */
   getHostProcess(hostId) {
@@ -138,6 +139,14 @@ export class HostSrv {
       method: 'GET',
       url   : '/host/state',
       params: { 'hostId': hostId }
+    });
+  }
+
+  getProcess(params) {
+    return this.backendSrv.alertD({
+      method: 'GET',
+      url   : '/host/state',
+      params: params
     });
   }
 
