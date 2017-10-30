@@ -354,7 +354,7 @@ $summary-border-color: #ECEFF1;
 //   }
 // }
 
-.panel-table {
+.host-panel-table, .panel-table {
   padding: 0 30px 34px 30px;
   box-sizing: border-box;
   & > ul {

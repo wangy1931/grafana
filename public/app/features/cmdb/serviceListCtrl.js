@@ -14,7 +14,7 @@ define([
       $scope.getService();
       $scope.isScan = false;
     };
-    
+
     $scope.getService = function() {
       backendSrv.alertD({url:'/cmdb/service'}).then(function(result) {
         $scope.services = result.data;
