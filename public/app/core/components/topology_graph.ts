@@ -180,27 +180,10 @@ export function topologyGraphDirective() {
     bindToController: true,
     controllerAs: 'ctrl',
     scope: {
-<<<<<<< HEAD
-      params: "="
-    },
-    link: function(scope, elem) {
-      scope.$watch('ctrl.currentHost', (newValue, oldValue) => {
-        if (!newValue) { return; }
-        if ((newValue === oldValue) && _.isEmpty(newValue)) { return; }
-
-        if (_.isString(newValue)) {
-          scope.$emit('topology-host-changed', newValue);
-        } else {
-          var host = newValue.name ? newValue : {};
-          scope.$emit('topology-host-changed', host);
-        }
-      });
-=======
       params: "=",
       currentHost: "="
     },
     link: function(scope, elem) {
->>>>>>> ca4dc2ad8229a02ff02c0f99031218e6cf6e7b9a
     }
   };
 }
