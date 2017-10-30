@@ -1,54 +1,33 @@
 <navbar title="智能分析" icon="fa fa-fw fa-home"></navbar>
 
-<div class="page-container topn-page" ng-init="ctrl.init();">
+<div class="page-container topn-page">
     <guide guide-class="guide" need-host=true not-metric=true></guide>
 
     <div class="page-header">
-        <h2>资源高消耗进程</h2>
+        <h2>资源消耗</h2>
     </div>
 
-    <div class="page-body">
+    <div>
+        <time-window></time-window>
+        <div class="clearfix"></div>
 
-      <div class="process-table" style="overflow-x: auto; width: 100%;"> 
-        <div ng-include="'public/app/partials/host_process_table.html'"></div>
-      </div>
-      <div class="clearfix"></div>
-
-      <div class="dashboard-container">
-        <div class="grafana-row" ng-controller="RowCtrl"
-          ng-repeat="(row_name, row) in dashboard.rows" row-height>
-
-          <div class="row-control">
-              <div class="row-control-inner">
-                  <div class="row-close" ng-show="row.collapse" data-placement="bottom">
-                      <div class="row-close-buttons">
-                              <span class="row-button bgPrimary" ng-click="toggleRow(row)">
-                                  <i bs-tooltip="'Expand row'" data-placement="right"
-                                  class="fa fa-caret-left pointer"></i>
-                              </span>
-                      </div>
-                      <div class="row-text pointer" ng-click="toggleRow(row)"
-                          ng-bind="row.title | interpolateTemplateVars:this"></div>
-                  </div>
-              </div>
-
-              <div class="panels-wrapper" ng-if="!row.collapse">
-                  <div class="row-text pointer" ng-click="toggleRow(row)" ng-if="row.showTitle"
-                      ng-bind="row.title | interpolateTemplateVars:this">
-                  </div>
-
-                  <div ng-repeat="(name, panel) in row.panels track by panel.id" class="panel" ng-class="{true: 'association-container'}[panel.id === 1]"
-                      ui-draggable="!dashboardViewState.fullscreen" drag="panel.id"
-                      ui-on-Drop="onDrop($data, row, panel)" drag-handle-class="drag-handle" panel-width>
-                      <plugin-component type="panel" class="panel-margin"></plugin-component>
-                  </div>
-
-                  <div class="clearfix"></div>
-              </div>
-          </div>
+        <div class="process-table" style="overflow-x: auto; width: 100%;">
+            <div class="table panel-table">
+                <ul>
+                    <li>进程 ID</li>
+                    <li>进程创建用户</li>
+                    <li>进程</li>
+                    <li>CPU 使用率</li>
+                    <li>内存占用率</li>
+                    <li>读硬盘次数</li>
+                    <li>写硬盘次数</li>
+                    <li>创建时间</li>
+                    <li>命令</li>
+                </ul>
+                <div ng-include="'public/app/features/topn/partials/process_topn_graph.html'"></div>
+            </div>
+            <div ng-if="!ctrl.tableData.length">该时间段暂无数据</div>
         </div>
-      </div>
-
     </div>
-    
+
 </div>

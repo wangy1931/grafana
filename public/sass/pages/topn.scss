@@ -3,9 +3,37 @@
   // override
   .dashboard-container {
     padding-left: 0;
+    height: auto;
   }
   .page-header {
     padding: 0;
   }
 
+  .panel-table {
+    padding: 0;
+  }
+
+  .accordion-heading {
+    ul {
+      li {
+        overflow: hidden;
+      }
+    }
+  }
+  .accordion-body {
+    height: auto !important;
+  }
+
+}
+
+.topn-tooltip {
+  padding: 10px;
+  border-radius: 5px;
+  .graph-tooltip-value {
+    padding: 0.2rem;
+  }
+}
+
+.grafana-tooltip {
+  background-color: $graph-tooltip-bg !important;
 }

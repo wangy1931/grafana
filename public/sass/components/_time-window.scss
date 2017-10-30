@@ -1,0 +1,43 @@
+$pan-width: 30px;
+.time-window-container {
+	width: 100%;
+  min-height: 100px;
+  position: relative;
+  margin: $pan-width 0;
+}
+
+.time-window-content {
+	width: calc(100% - 2*$pan-width);
+  height: 100px;
+  margin: 0 $pan-width;
+}
+
+.time-window-pan {
+  width: $pan-width;
+  height: 100%;
+  opacity: 0.4;
+  text-align: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: background-color 0.15s ease-in;
+  position: absolute;
+
+  i {
+    line-height: 3.5;
+    font-size: $pan-width;
+    &:hover {
+      color: #222222;
+    }
+  }
+
+}
+
+.time-window-pan-left {
+  left: 0px;
+  top: 0px;
+}
+
+.time-window-pan-right {
+  right: 0px;
+  top: 0px;
+}
