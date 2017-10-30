@@ -5,7 +5,7 @@
     <h1>日志配置管理<a href="/logs/rules/new" class="parse-btn parse-edit" style="margin-left: 10px;"><i class="fa fa-plus-square-o"></i></a></h1>
   </div>
   <br>
-  <table class="table parse-table">
+  <table class="table parse-table" ng-if="ctrl.ruleList.length">
     <tr>
       <th>规则名称</th>
       <th>服务</th>

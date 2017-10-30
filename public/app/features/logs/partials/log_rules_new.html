@@ -12,30 +12,31 @@
   <form class="gf-form-group">
     <div class="parse-form-group">
       <div class="gf-form">
-        <span class="gf-form-label width-9">规则名称<em>*</em></span>
+        <span class="gf-form-label width-10">规则名称<em>*</em></span>
         <input class="gf-form-input max-width-21" type="text" required ng-model="ctrl.rule.ruleName" />
       </div>
 
       <div class="gf-form">
-        <span class="gf-form-label width-9">服务<em>*</em></span>
+        <span class="gf-form-label width-10">服务<em>*</em></span>
         <select class="gf-form-input max-width-21" ng-options="s.name as s.name for s in ctrl.serviceList"
+          ng-change="ctrl.getTemplate(ctrl.rule.serviceName)"
           ng-model="ctrl.rule.serviceName"></select>
         <input class="gf-form-input max-width-21" type="text" ng-if="ctrl.rule.serviceName === '其他'"
           ng-model="ctrl.custom.serviceName" placeholder="自定义服务名称" required />
       </div>
 
       <div class="gf-form">
-        <span class="gf-form-label width-9">日志类型<em>*</em></span>
+        <span class="gf-form-label width-10">日志类型<em>*</em></span>
         <select class="gf-form-input max-width-21" ng-options="t for t in ctrl.rule.logTypes"
           ng-model="ctrl.rule.logType"></select>
         <input class="gf-form-input max-width-21" type="text" ng-if="ctrl.rule.logType === '其他'"
           ng-model="ctrl.custom.logType" placeholder="请输入英文字母" required />
-        <button class="btn btn-primary" 
+        <button class="btn btn-primary" ng-click="ctrl.getTemplate(ctrl.rule.serviceName, ctrl.rule.logType)"
           ng-if="ctrl.rule.serviceName !== '其他' && ctrl.rule.logType !== '其他'">应用模板</button>
       </div>
 
       <div class="gf-form parse-form section">
-        <span class="gf-form-label width-9">日志文件</span>
+        <span class="gf-form-label width-10">日志文件<em>*</em></span>
         <table class="table parse-table">
           <tr>
             <th>路径</th>
@@ -73,7 +74,7 @@
       </div>
 
       <div class="gf-form parse-form">
-        <span class="gf-form-label width-9">格式<em>*</em></span>
+        <span class="gf-form-label width-10">格式<em>*</em></span>
         <label class="multiline-label">
           <input type="radio" name="multiline" ng-value=false ng-model="ctrl.rule.multiline" />
           <span>单行</span>
@@ -84,19 +85,19 @@
         </label>
         <div class="multiline-box" ng-if="ctrl.rule.multiline">
           <span class="gf-form-label width-21">日志起始标识<em>*</em></span>
-          <input class="gf-form-input width-30" type="text" ng-model="ctrl.rule.multilinePattern" placeholder="请输入日志起始匹配规则" required />
+          <input class="gf-form-input width-30" type="text" ng-model="ctrl.rule['multiline.pattern']" placeholder="请输入日志起始匹配规则" required />
         </div>
       </div>
     </div>
 
     <div class="parse-form-group">
       <div class="gf-form parse-form section">
-        <span class="gf-form-label width-9">解析器
+        <span class="gf-form-label width-10">解析器<em>*</em>
           <a class="parse-btn parse-edit" ng-click="ctrl.editPattren()" style="margin-left: 10px;">
             <i class="fa fa-plus-square"></i>
           </a>
         </span>
-        <table class="table parse-table">
+        <table class="table parse-table" ng-if="ctrl.rule.patterns.length">
           <tr>
             <th>解析器名称</th>
             <th>操作</th>
@@ -114,24 +115,20 @@
 
     <div class="parse-form-group">
       <div class="gf-form parse-form section">
-        <span class="gf-form-label width-9">部署</span>
-        <table class="table parse-table">
+        <span class="gf-form-label width-10">部署机器<em>*</em>
+          <a class="parse-btn parse-edit" ng-click="ctrl.addHost()" style="margin-left: 10px;">
+            <i class="fa fa-plus-square"></i>
+          </a>
+        </span>
+        <table class="table parse-table" ng-if="ctrl.rule.hosts.length">
           <tr>
             <th>机器名称</th>
             <th>操作</th>
           </tr>
-          <tr ng-repeat="host in ctrl.rule.hosts">
-            <td style="width: 50%;"><span>{{host}}</span></td>
+          <tr ng-repeat="hostId in ctrl.rule.hosts | orderBy: hostId">
+            <td style="width: 50%;"><span>{{ctrl.getHostNameById(hostId)}}</span></td>
             <td style="width: 50%;">
-              <a class="parse-btn parse-delete"><i class="fa fa-times-circle"></i>删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td style="width: 50%;">
-              <input class="gf-form-input max-width-21" type="text" ng-model="ctrl.newHost"/>
-            </td>
-            <td style="width: 50%;">
-              <a class="parse-btn parse-add"><i class="fa fa-pencil"></i>添加</a>
+              <a class="parse-btn parse-delete" ng-click="ctrl.deleteHost(hostId)"><i class="fa fa-times-circle"></i>删除</a>
             </td>
           </tr>
         </table>
@@ -139,8 +136,8 @@
     </div>
 
     <div class="parse-form-group no-border">
-      <button class="btn btn-success">保存</button>
-      <button class="btn btn-inverse">取消</button>
+      <a class="btn btn-success" ng-click="ctrl.saveRule()">保存</a>
+      <a class="btn btn-inverse" href="/logs/rules">取消</a>
     </div>
 
   </form>

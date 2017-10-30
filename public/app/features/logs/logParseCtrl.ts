@@ -8,33 +8,20 @@ export class LogParseCtrl {
   ruleList: Array<any>;
 
   /** @ngInject */
-  constructor(private $scope, private contextSrv, private $location) {
-    // this.contextSrv.user.orgId
-    // this.contextSrv.user.systemId
+  constructor(private $scope, private contextSrv, private backendSrv) {
     this.getListRule();
   }
 
   getListRule() {
-    this.ruleList = [
-      {
-        "id": 1,
-        "orgId": 2,
-        "sysId": 2,
-        "ruleName": "nginx.access.1",
-        "serviceName": "nginx",
-        "logType": "access",
-        "type": "log-processor"
-      },
-      {
-        "id": 2,
-        "orgId": 2,
-        "sysId": 2,
-        "ruleName": "nginx.error.1",
-        "serviceName": "nginx",
-        "logType": "error",
-        "type": "log-processor"
+    this.backendSrv.alertD({
+      url: '/cmdb/pattern/list',
+      params: {
+        orgId: this.contextSrv.user.orgId,
+        sysId: this.contextSrv.user.systemId
       }
-    ];
+    }).then((response) => {
+      this.ruleList = response.data;
+    });
   }
 }
 

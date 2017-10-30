@@ -8,59 +8,73 @@ export class LogParseEditCtrl {
   rule: any;
   custom: any;
   hostList: Array<any>;
+  otherHost: Array<any>;
   newPath: any;
   serviceList: Array<any>;
   editLogPath: any;
 
   /** @ngInject */
-  constructor(private $scope, private contextSrv, private $routeParams, private backendSrv) {
-    // this.contextSrv.user.orgId
-    // this.contextSrv.user.systemId
+  constructor(private $scope, private contextSrv,
+    private $routeParams, private backendSrv,
+    private $location) {
     if ($routeParams.ruleId) {
       this.getRuleById($routeParams.ruleId);
+    } else {
+      this.rule = {
+        "id": 0,
+        "ruleName": "",
+        "serviceName": "",
+        "logType": "",
+        "logTypes": [],
+        "type": "",
+        "multiline": false,
+        "paths": [],
+        "hosts": [],
+        "patterns": []
+      }
     }
     this.editLog(-1, '');
     this.getServiceList();
+    this.getHostList();
     this.custom = {
       serviceName: '',
       logType: ''
     }
   }
 
-  getRuleById(id) {
-    this.rule = {
-      "id": 1,
-      "orgId": 2,
-      "sysId": 2,
-      "ruleName": "nginx.access.1",
-      "serviceName": "nginx",
-      "logType": "access",
-      "logTypes": ["access", "error"],
-      "type": "log-processor",
-      "multiline": false,
-      "paths": ["path1", "path2"],
-      "hosts": ["hostId1", "hostId2"],
-      "patterns":
-      [
-        {
-          "name": "parse1",
-          "log": "1.2.3.4",
-          "pattern": "%{IP:ip}",
-          "type": "grok",
-          "isMetric": false,
-          "fields": [ "field1", "field2" ]
-        },
-        {
-          "name": "parse2",
-          "log": "1.2.3.4",
-          "pattern": "%{IP:ip}",
-          "type": "grok",
-          "isMetric": true,
-          "fields": []
-        },
-      ]
+  getTemplate(serviceName, logType?) {
+    if (_.isEqual(serviceName, '其他')) { return; }
+    var url = '/cmdb/pattern/template?serviceName='+ serviceName;
+    if (logType) {
+      url += '&logType=' + logType;
     }
-    this.rule.logTypes.push('其他');
+    this.backendSrv.alertD({url: url}).then((response)=>{
+      var tmp = response.data;
+      if (_.isEmpty(tmp)) {
+        this.rule.logTypes = [];
+        this.rule.logType = '其他';
+        _.every(serviceName, logType) && this.$scope.appEvent('alert-warning', ['暂无相关模板']);
+      } else {
+        if (!_.every(serviceName, logType)) {
+          this.rule = _.cloneDeep(tmp[0]);
+        } else {
+          this.rule.logTypes = tmp[0].logTypes;
+          this.rule.logType = this.rule.logTypes[0];
+          this.rule.ruleName = tmp[0].ruleName;
+        }
+      }
+      this.rule.hosts = [];
+    });
+  }
+
+  getRuleById(id) {
+    this.backendSrv.alertD({
+      url: '/cmdb/pattern/getById?ruleId=' + id
+    }).then((response) => {
+      this.rule = response.data;
+      this.rule.hosts = this.rule.hosts || [];
+      this.rule.logTypes.push('其他');
+    });
   }
 
   getServiceList() {
@@ -74,6 +88,12 @@ export class LogParseEditCtrl {
     this.backendSrv.alertD({url: '/cmdb/host'}).then((result) => {
       this.hostList = result.data;
     });
+  }
+
+  getHostNameById(hostId) {
+    if (!_.isEmpty(this.hostList)) {
+      return _.find(this.hostList, {id: hostId}).hostname;
+    }
   }
 
   addLogPath(type) {
@@ -156,13 +176,13 @@ export class LogParseEditCtrl {
     var pattern = null;
     switch (type) {
       case 'parseName':
-        pattern = /^[\w.]+/;
+        pattern = /^[\w.]+$/;
         break;
       case 'logPath':
-        pattern = /(^\/\/.|^\/|^[a-zA-Z])?:?\/.+(\/$)?/;
+        pattern = /^([/][\w-.]+)*$/;
         break;
       case 'logType':
-        pattern = /^[\w]+/;
+        pattern = /^[\w]+$/;
         break;
     }
     if (pattern) {
@@ -183,7 +203,6 @@ export class LogParseEditCtrl {
       }
     }).then((res)=>{
       pattern.result = res.data;
-      console.log(res.data);
     });
   }
 
@@ -212,6 +231,97 @@ export class LogParseEditCtrl {
         this.$scope.appEvent('alert-success', ['删除成功', '请点击“保存”按钮保存该操作']);
       }
     });
+  }
+
+  addHost() {
+    if (this.rule.hosts.length === this.hostList.length) {
+      this.$scope.appEvent('alert-success', ['您已添加所有机器']);
+      return;
+    }
+    this.otherHost = _.cloneDeep(this.hostList);
+    _.each(this.rule.hosts, (id) => {
+      _.remove(this.otherHost, (item) => {
+        return item.id === id;
+      });
+    });
+    var newScope = this.$scope.$new();
+    newScope.allHosts = this.otherHost;
+    newScope.selectOne = function() {
+      newScope.select_all = _.every(newScope.allHosts,{'checked': true});
+    };
+    newScope.selectAll = this.selectAll.bind(this);
+    newScope.addHosts = this.saveHosts.bind(this);
+
+    this.$scope.appEvent('show-modal', {
+      src: 'public/app/features/cmdb/partials/service_add_host.html',
+      modalClass: 'modal-no-header invite-modal cmdb-modal',
+      scope: newScope,
+    });
+  }
+
+  selectAll(check) {
+    _.each(this.otherHost, function(host) {
+      host.checked = check;
+    });
+  }
+
+  saveHosts() {
+    _.each(this.otherHost, (host) => {
+      if (host.checked) {
+        this.rule.hosts.push(host.id);
+      }
+    })
+  }
+
+  deleteHost(hostId) {
+    this.$scope.appEvent('confirm-modal', {
+      title: '删除',
+      icon: 'fa-trash',
+      text: '您确定要删除该机器吗？',
+      yesText: '确定',
+      noText: '取消',
+      onConfirm: ()=>{
+        _.remove(this.rule.hosts, (id)=>{
+          return id === hostId;
+        });
+      }
+    });
+  }
+
+  saveRule() {
+    this.rule.orgId = this.contextSrv.user.orgId;
+    this.rule.sysId = this.contextSrv.user.systemId;
+    if (this.checkData(this.rule)) {
+      this.backendSrv.alertD({
+        url: '/cmdb/pattern/save',
+        method: 'post',
+        data: this.rule
+      }).then((res) => {
+        this.$scope.appEvent('alert-success', ['保存成功']);
+        this.$location.url('/logs/rules');
+      }, (err) => {
+        if (err.status === 400) {
+          this.$scope.appEvent('alert-warning', ['规则名称已存在', '请修改规则名称']);
+        } else {
+          this.$scope.appEvent('alert-danger', ['保存失败', '请稍后重试']);
+        }
+      });
+    } else {
+      this.$scope.appEvent('alert-warning', ['参数信息不完整', '带 * 选项为必填内容,请填写完整']);
+    }
+  }
+
+  checkData(rule) {
+    if (!rule.ruleName || !rule.serviceName || !rule.logType ||
+      _.isEmpty(rule.patterns) || _.isEmpty(rule.paths) || _.isEmpty(rule.hosts)) {
+      return false;
+    };
+    if (!_.isBoolean(rule.multiline)) {
+      return false;
+    } else if (rule.multiline && !rule['multiline.pattern']) {
+      return false;
+    }
+    return true;
   }
 }
 

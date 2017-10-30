@@ -297,6 +297,9 @@ table.diff {
 
 .parse-add, .parse-add:hover, .parse-add:focus {
   color: $btn-success-bg;
+  display: block;
+  height: 2.5rem;
+  line-height: 2.5rem;
 }
 
 .parse-form-group {
