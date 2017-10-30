@@ -24,7 +24,6 @@ import './partials';
 //Cloudwiz 
 import "./directives/system_panel";
 import "./directives/service_dep";
-import "./directives/table_loader";
 import "./directives/log_tabpane";
 import {tagPicker} from './directives/tagpicker';
 import "./directives/loading";
@@ -77,5 +76,6 @@ export {
   guideDirective,
   toolbarDirective,
   cwizSwitchDirective,
-  treeMenu
+  treeMenu,
+  knowledgeBaseDirective
 };

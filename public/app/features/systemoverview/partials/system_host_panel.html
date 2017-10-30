@@ -36,9 +36,7 @@
                         {{ ctrl.hostPanel.currentItem | formatItemType | translateItemType }}的重要指标：
                     </div>
                     <div ng-show="host.itemStatusMap[ctrl.hostPanel.currentItem].healthStatusType !== 'GREY'" class="kpi-metrics">
-                        <table-loader
-                            key={{host.host}}
-                            template="public/app/features/systemoverview/partials/service_kpi_table.html"></table-loader>
+                        <div ng-include="'public/app/features/systemoverview/partials/service_kpi_table.html'"></div>
                     </div>
                 </div>
             </div>

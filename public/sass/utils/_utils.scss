@@ -47,6 +47,10 @@ button.close {
 // Utility classes
 // --------------------------------------------------
 
+.text-overflow {
+  @include text-overflow();
+}
+
 
 // Quick floats
 .pull-right {
@@ -121,4 +125,10 @@ button.close {
   &:hover {
     background-color: nth($thresholds-hover-color, 6) !important;
   }
+}
+.trigger-red {
+  background-color: rgba(246, 0, 0, 0.54);
+}
+.trigger-yellow {
+  background-color: rgba(237, 129, 40, 0.52);
 }

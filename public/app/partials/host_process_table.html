@@ -1,69 +1,33 @@
-<table class="table table-hack"
-    data-pagination="true"
-    data-page-size="100"
-    data-sort-order="desc"
-    data-sort-name="cpuPercent"
-    data-row-style="rowStyle">
-    <thead>
-        <tr>
-            <th data-field="pid" data-sortable="true">进程 ID</th>
-            <th data-field="user" data-sortable="true">进程创建用户</th>
-            <th data-field="name" data-sortable="true" data-formatter="tooltipFormatter">进程</th>
-            <th data-field="cpuPercent" data-sortable="true" data-formatter="percentFormatter">CPU 使用率</th>
-            <th data-field="memPercent" data-sortable="true" data-formatter="percentFormatter">内存占用率</th>
-            <th data-field="diskIoRead">读硬盘次数</th>
-            <th data-field="diskIoWrite">写硬盘次数</th>
-            <th data-field="createTime" data-sortable="true" data-formatter="timeFormatter">创建时间</th>
-            <th data-field="command" data-sortable="true" data-formatter="tooltipFormatter">命令</th>
-        </tr>
-    </thead>
-</table>
-<script>
-    function timeFormatter(value) {
-        return _.transformTime(value);
-    }
-    function tooltipFormatter(value, row, index) {
-        return '<span data-toggle="tooltip" data-container="body" title="' + value + '">' + value + '</span>';
-    }
-    function rowStyle() {
-        return {
-            classes: "fix-table-row-height"
-        };
-    }
-    function percentFormatter(value) {
-        return value.toFixed(2) + '%';
-    }
-</script>
-<!-- <div class="fixed-table-container">
-    <table ng-table="ctrl.tableParams" class="table fix-table-row-height">
-        <tr ng-repeat="row in $data">
-            <td title="'进程 ID'" sortable="'pid'">
-                <div>{{ row.pid }}</div>
-            </td>
-            <td title="'进程创建用户'" sortable="'user'">
-                <div>{{ row.user }}</div>
-            </td>
-            <td title="'进程'" sortable="'name'">
-                <div bs-tooltip="'{{ row.name }}'">{{ row.name }}</div>
-            </td>
-            <td title="'CPU 使用率'" sortable="'cpuPercent'">
-                <div>{{ _.percentFormatter(row.cpuPercent) }}</div>
-            </td>
-            <td title="'内存占用率'" sortable="'memPercent'">
-                <div>{{ _.percentFormatter(row.memPercent) }}</div>
-            </td>
-            <td title="'读硬盘次数'" sortable="'diskIoRead'">
-                <div>{{ row.diskIoRead }}</div>
-            </td>
-            <td title="'写硬盘次数'" sortable="'diskIoWrite'">
-                <div>{{ row.diskIoWrite }}</div>
-            </td>
-            <td title="'创建时间'" sortable="'createTime'">
-                <div>{{ _.transformTime(row.createTime) }}</div>
-            </td>
-            <td title="'命令'" sortable="'command'">
-                <div bs-tooltip="'{{ row.command }}'">{{ row.command }}</div>
-            </td>
-        </tr>
-    </table>
-</div> -->
+<div class="fixed-table-container" ng-if="ctrl.tableData.length">
+        <table ng-table="ctrl.tableParams" class="table fix-table-row-height">
+            <tr ng-repeat="row in $data">
+                <td title="'进程 ID'" sortable="'pid'">
+                    <div>{{ row.pid }}</div>
+                </td>
+                <td title="'进程创建用户'" sortable="'user'">
+                    <div>{{ row.user }}</div>
+                </td>
+                <td title="'进程'" sortable="'name'">
+                    <div bs-tooltip="'{{ row.name }}'" data-container="body">{{ row.name }}</div>
+                </td>
+                <td title="'CPU 使用率'" sortable="'cpuPercent'">
+                    <div>{{ _.percentFormatter(row.cpuPercent) }}</div>
+                </td>
+                <td title="'内存占用率'" sortable="'memPercent'">
+                    <div>{{ _.percentFormatter(row.memPercent) }}</div>
+                </td>
+                <td title="'读硬盘次数'" sortable="'diskIoRead'">
+                    <div>{{ row.diskIoRead }}</div>
+                </td>
+                <td title="'写硬盘次数'" sortable="'diskIoWrite'">
+                    <div>{{ row.diskIoWrite }}</div>
+                </td>
+                <td title="'创建时间'" sortable="'createTime'">
+                    <div>{{ _.transformTime(row.createTime) }}</div>
+                </td>
+                <td title="'命令'" sortable="'command'">
+                    <div bs-tooltip="'{{ row.command }}'" data-container="body">{{ row.command }}</div>
+                </td>
+            </tr>
+        </table>
+    </div>

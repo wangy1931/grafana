@@ -84,7 +84,7 @@ $summary-border-color: #ECEFF1;
         content: '个';
         font-size: 14px;
       }
-      span.status-success:after {
+      span.status-green:after {
         display: none;
       }
     }
@@ -212,7 +212,6 @@ $summary-border-color: #ECEFF1;
 
   .host-panel-table {
     padding: 0 30px 34px 30px;
-    // border: 1px solid #979797;
     box-sizing: border-box;
     & > ul {
       display: flex;
@@ -272,11 +271,7 @@ $summary-border-color: #ECEFF1;
       }
     }
     .accordion-body {
-      // bootstrap-table override
-      .bootstrap-table {
-        margin: 28px auto;
-      }
-
+      // ng-table override
       .fixed-table-container tbody td {
         border-left: none;
       }
@@ -286,14 +281,8 @@ $summary-border-color: #ECEFF1;
           background-color: #A0A0A0;
         }
       }
-      .pagination ul > li {
-        &.active > a {
-          background-color: #6ECCFB;
-        }
-        & > a {
-          color: #fff;
-          background-color: #D8D8D8;
-        }
+      .ng-table th {
+        text-align: left;
       }
     }
 
@@ -340,16 +329,6 @@ $summary-border-color: #ECEFF1;
     }
   }
 
-  // bootstrap-table override
-  .bootstrap-table {
-    table tbody {
-      tr td > div:first-child {
-        height: 20px;
-        overflow: hidden;
-      }
-    }
-  }
-
   // angular-strap popover override
   .popover {
     outline: none;
@@ -377,12 +356,7 @@ $summary-border-color: #ECEFF1;
 
 }
 
-.text-overflow {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
- 
+// SLIDE 
 .slide-show {
   margin: 20px auto;
   min-height: 500px;
@@ -403,22 +377,22 @@ $summary-border-color: #ECEFF1;
   }
 }
 
+// 翻转切换
 .slide-show {
   perspective: 1000;
   .slide { backface-visibility: hidden; }
 
   .slide.checked {
     transform: scale(1) rotateY(0);
-    border-radius: 0%;
   }
 
   .slide {
     transition: all .5s ease-in;
     transform: scale(.5) rotateY(180deg);
-    border-radius: 10%;
   }
 }
 
+// 左右切换
 // .slide-show {
 //   .slide.checked {
 //     transition: transform .6s ease-out, opacity .1s;
@@ -434,7 +408,3 @@ $summary-border-color: #ECEFF1;
 //     z-index: 0;
 //   }
 // }
-
-[hidden] {
-  display: none;
-}

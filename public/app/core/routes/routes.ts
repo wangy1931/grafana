@@ -24,6 +24,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   var loadReportBundle = new BundleLoader('app/features/report/reportCtrl');
   var loadRcaBundle = new BundleLoader('app/features/rca/all');
   var loadHostBundle = new BundleLoader('app/features/host/all');
+  var loadKnowledgeBundle = new BundleLoader('app/features/knowledge/all');
 
   $routeProvider
   .when('/', {
@@ -300,9 +301,9 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     resolve: loadOrgBundle,
   })
   .when('/knowledgebase', {
-    templateUrl: 'public/app/features/logs/partials/knowledge_base.html',
-    controller : 'KnowledgeBaseCtrl',
-    resolve: loadLogsBundle,
+    templateUrl: 'public/app/features/knowledge/partials/knowledge_base.html',
+    controller : 'CreateKnowledgeCtrl',
+    resolve: loadKnowledgeBundle,
   })
   .when('/customer', {
     templateUrl: 'public/app/features/summary/partials/customer.html',
@@ -357,6 +358,18 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/cmdb/servicelist/servicedetail', {
     templateUrl: 'public/app/features/cmdb/partials/service_detail.html',
     controller : 'CMDBServiceDetailCtrl',
+    resolve: loadCMDBBundle
+  })
+  .when('/cmdb/config', {
+    templateUrl: 'public/app/features/cmdb/partials/uagent.html',
+    controller : 'UagentCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadCMDBBundle
+  })
+  .when('/cmdb/config/edit', {
+    templateUrl: 'public/app/features/cmdb/partials/uagent_edit.html',
+    controller : 'UagentCtrl',
+    controllerAs: 'ctrl',
     resolve: loadCMDBBundle
   })
   .when('/cmdb/servicecustom', {

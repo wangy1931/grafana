@@ -117,10 +117,7 @@ export class TopologyGraphCtrl {
       this.rendered = true;
       this.heatmap.data(this.data);
 
-      var search = this.$location.search();
-      if (search.id) {
-        this.currentHost = _.find(this.data, { name: search.name });
-      }
+      this.$scope.$emit('topology-loaded', this.data);
     });
   }
 
@@ -180,6 +177,7 @@ export function topologyGraphDirective() {
     bindToController: true,
     controllerAs: 'ctrl',
     scope: {
+<<<<<<< HEAD
       params: "="
     },
     link: function(scope, elem) {
@@ -194,6 +192,12 @@ export function topologyGraphDirective() {
           scope.$emit('topology-host-changed', host);
         }
       });
+=======
+      params: "=",
+      currentHost: "="
+    },
+    link: function(scope, elem) {
+>>>>>>> ca4dc2ad8229a02ff02c0f99031218e6cf6e7b9a
     }
   };
 }
