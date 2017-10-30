@@ -122,6 +122,7 @@ export class HostSrv {
           });
         }
       }
+      this.topology = _.orderBy(this.topology, ['name'], ['asc']);
 
       return this.topology;
     });
@@ -200,6 +201,7 @@ export class HostSrv {
           "version": item.version
         });
       });
+      this.hostInfo = _.orderBy(this.hostInfo, ['host'], ['asc']);
 
       return this.hostInfo;
     });
