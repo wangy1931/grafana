@@ -217,7 +217,16 @@ export class LogParseEditCtrl {
     });
   }
 
-  savePattern(oldPattern, pattern, isNew) {
+  savePattern(oldPattern, pattern, isNew, dismiss) {
+    if (!this.checkInput(pattern.parseName, 'parseName')) {
+      this.$scope.appEvent('alert-warning', ['解析器名称格式错误']);
+      return;
+    }
+    if (!pattern.result || pattern.result === '规则解析失败') {
+      this.$scope.appEvent('alert-warning', ['匹配规则不合法']);
+      return;
+    }
+    pattern.result = '';
     if (isNew) {
       this.rule.patterns.push(pattern);
     } else {
@@ -226,6 +235,7 @@ export class LogParseEditCtrl {
       }
     }
     this.$scope.appEvent('alert-success', ['保存成功', '请点击“保存”按钮保存该操作']);
+    dismiss();
   }
 
   deletePattern(pattern) {
