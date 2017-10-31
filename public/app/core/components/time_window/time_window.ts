@@ -1,5 +1,6 @@
 ///<reference path="../../../headers/common.d.ts" />
 
+import angular from 'angular';
 import config from 'app/core/config';
 import _ from 'lodash';
 import $ from 'jquery';
@@ -78,21 +79,21 @@ export class TimeWindowCtrl {
   }
 
   bindEvent() {
-    $("#timeWindow").bind("plotselected", (...args) => {
+    angular.element("#timeWindow").bind("plotselected", (...args) => {
       this.$scope.$emit('time-window-selected', args[1].xaxis);
     });
-    $("#timeWindow").bind("plothover", (...args) => {
+    angular.element("#timeWindow").bind("plothover", (...args) => {
       if (!args[2]) {
         this.$tooltip.detach();
         return;
       }
       this.showTooltip(args[1]);
     });
-    $('#next').bind('click', () => {
+    angular.element('#next').bind('click', () => {
       this.timeWindow.pan({ left: 100 });
       this.render('right');
     });
-    $('#prev').bind('click', () => {
+    angular.element('#prev').bind('click', () => {
       this.timeWindow.pan({ left: -100 });
       this.render('left');
     });
@@ -204,6 +205,12 @@ export function timeWindowDirective() {
     bindToController: true,
     controllerAs: 'ctrl',
     scope: {},
+    link: function (scope, elem, attrs, ctrl) {
+      scope.$on('$destroy', function() {
+        elem.off();
+        elem.remove();
+      });
+    }
   };
 }
 
