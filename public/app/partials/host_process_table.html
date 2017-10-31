@@ -4,7 +4,7 @@
             <td data-title="'进程 ID'" sortable="'pid'">
                 <div>{{ row.pid }}</div>
             </td>
-            <td data-title="'进程创建用户'" sortable="'user'">
+            <td data-title="'创建用户'" sortable="'user'">
                 <div>{{ row.user }}</div>
             </td>
             <td data-title="'进程'" sortable="'name'">
@@ -17,12 +17,12 @@
                 <div>{{ _.percentFormatter(row.memPercent) }}</div>
             </td>
             <td data-title="'读硬盘次数'" sortable="'diskIoRead'">
-                <div>{{ row.diskIoRead }}</div>
+                <div>{{ _.valueFormats.Bps(row.diskIoRead) }}</div>
             </td>
             <td data-title="'写硬盘次数'" sortable="'diskIoWrite'">
-                <div>{{ row.diskIoWrite }}</div>
+                <div>{{ _.valueFormats.Bps(row.diskIoWrite) }}</div>
             </td>
-            <td data-title="'创建时间'" sortable="'createTime'">
+            <td data-title="'进程创建的具体时间'" sortable="'createTime'">
                 <div>{{ _.transformTime(row.createTime) }}</div>
             </td>
             <td data-title="'命令'" sortable="'command'">

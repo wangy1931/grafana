@@ -188,10 +188,6 @@ export class HostTopologyCtrl {
   getProcess(host) {
     var id = this.$location.search().id;
     this.hostSrv.getHostProcess(id).then(response => {
-      response.data && response.data.forEach(item => {
-        item.diskIoRead = kbn.valueFormats.Bps(item.diskIoRead);
-        item.diskIoWrite = kbn.valueFormats.Bps(item.diskIoWrite);
-      });
       this.tableData = response.data;
       this.tableParams.settings({
         dataset: response.data,

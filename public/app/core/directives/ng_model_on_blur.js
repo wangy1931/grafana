@@ -6,6 +6,8 @@ define([
 function (coreModule, kbn, rangeUtil) {
   'use strict';
 
+  kbn = kbn.default;
+
   coreModule.default.directive('ngModelOnblur', function() {
     return {
       restrict: 'A',

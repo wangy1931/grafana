@@ -2,8 +2,8 @@ import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
 import { coreModule } from  'app/core/core';
-import kbn from 'app/core/utils/kbn';
 import moment from 'moment';
+import kbn from 'app/core/utils/kbn';
 
 declare var window: any;
 
@@ -17,6 +17,7 @@ export class TopNCtrl {
   targetObj: any;
   range: any;
   selection: any;
+  timePoint: any;
 
   currentPid: any;
   selected: any;
@@ -31,7 +32,8 @@ export class TopNCtrl {
     private NgTableParams,
     private templateValuesSrv,
     private dynamicDashboardSrv,
-    private $popover
+    private $popover,
+    private $timeout
   ) {
     this.tableParams = new this.NgTableParams({
       count: 10,
@@ -49,6 +51,11 @@ export class TopNCtrl {
 
     $scope.$on('time-window-selected', this.render.bind(this), $scope);
     $scope.$on('time-window-resize', this.init.bind(this), $scope);
+
+    // manual trigger
+    $timeout(() => {
+      if (!this.targetObj.host) { $('.guide-close-btn').click(); }
+    }, 100);
   }
 
   init(event, payload) {
@@ -66,19 +73,15 @@ export class TopNCtrl {
   }
 
   getProcess(timeRange) {
+    this.timePoint = timeRange.from ? (timeRange.from + (timeRange.to - timeRange.from) / 2) : moment().valueOf();
+
     var host = this.$location.search().host;
-    if (!host) {
-      return;
-    }
+    if (!host) { return; }
+
     var params = _.extend({
       hostname: host
     }, timeRange);
     this.hostSrv.getProcess(params).then(response => {
-      response.data && response.data.forEach(item => {
-        item.diskIoRead = kbn.valueFormats.Bps(item.diskIoRead);
-        item.diskIoWrite = kbn.valueFormats.Bps(item.diskIoWrite);
-      });
-
       this.tableData = _.orderBy(response.data, ['cpuPercent'], ['desc']);
       this.pidList = _.map(this.tableData, 'pid');
       this.hostList = _.map(this.hostSrv.hostInfo)

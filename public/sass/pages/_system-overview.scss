@@ -89,7 +89,7 @@ $summary-border-color: #ECEFF1;
       }
     }
     .panels-wrapper:last-child {
-      div {
+      & > div {
         display: flex;
         flex-direction: row;
         li {

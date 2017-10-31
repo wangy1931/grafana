@@ -8,8 +8,8 @@
                     <li>{{ row.name || '-' }}</li>
                     <li>{{ _.percentFormatter(row.cpuPercent) || '-' }}</li>
                     <li>{{ _.percentFormatter(row.memPercent) || '-' }}</li>
-                    <li>{{ row.diskIoRead || '-' }}</li>
-                    <li>{{ row.diskIoWrite || '-' }}</li>
+                    <li>{{ _.valueFormats.Bps(row.diskIoRead) || '-' }}</li>
+                    <li>{{ _.valueFormats.Bps(row.diskIoWrite) || '-' }}</li>
                     <li>{{ _.transformTime(row.createTime) || '-' }}</li>
                     <li bs-tooltip="'{{row.command}}'">{{ row.command || '-' }}</li>
                 </ul>
