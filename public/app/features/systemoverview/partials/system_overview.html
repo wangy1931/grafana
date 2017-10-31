@@ -28,7 +28,7 @@
                             <h3 ng-click="ctrl.showModal(1)" style="cursor: pointer;" bs-tooltip="'点击查看历史报警'">
                                 报警情况
                             </h3>
-                            <div><!-- /alerts/status -->
+                            <div>
                                 <li ng-repeat="alert in ctrl.alertPanel.status" ng-if="alert.count!=0">
                                     <a href="/host_topology?tabId=2">{{ alert.text }} <span class="status-color status-{{ alert.health }}">{{ alert.count }}</span></a>
                                 </li>

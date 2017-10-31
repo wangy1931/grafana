@@ -7,6 +7,8 @@ define([
   function (angular, _, kbn) {
     'use strict';
 
+    kbn = kbn.default;
+
     var module = angular.module('grafana.controllers');
 
     module.controller('OpenTSDBQueryCtrl', function($scope) {

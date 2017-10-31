@@ -8,6 +8,8 @@ define([
 ], function (angular, _, moment, config, kbn, dateMath) {
   'use strict';
 
+  kbn = kbn.default;
+
   var module = angular.module('grafana.services');
 
   module.service('timeSrv', function($rootScope, $timeout, $routeParams, timer) {
