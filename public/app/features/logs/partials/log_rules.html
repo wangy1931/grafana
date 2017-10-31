@@ -11,13 +11,12 @@
       <th>服务</th>
       <th>操作</th>
     </tr>
-    <tr ng-repeat="rule in ::ctrl.ruleList">
+    <tr ng-repeat="rule in ctrl.ruleList">
       <td style="width: 40%;"><span>{{rule.ruleName}}</span></td>
       <td style="width: 30%;"><span>{{rule.serviceName}}</span></td>
       <td style="width: 30%;">
         <a href="/logs/rules/new?ruleId={{rule.id}}" class="parse-btn parse-edit"><i class="fa fa-pencil"></i>修改</a>
-        <!-- <a><i></i>导出仪表盘</a> -->
-        <a class="parse-btn parse-delete"><i class="fa fa-times-circle"></i>删除</a>
+        <a class="parse-btn parse-delete" ng-click="ctrl.deleteRuleById(rule.id)"><i class="fa fa-times-circle"></i>删除</a>
       </td>
     </tr>
   </table>

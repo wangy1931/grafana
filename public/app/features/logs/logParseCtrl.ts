@@ -23,6 +23,27 @@ export class LogParseCtrl {
       this.ruleList = response.data;
     });
   }
+
+  deleteRuleById(ruleId) {
+    this.$scope.appEvent('confirm-modal', {
+      title: '删除',
+      text: '该操作将删除所有相关日志配置,您确定要删除该规则吗？',
+      icon: 'fa-trash',
+      yesText: '删除',
+      noText: '取消',
+      onConfirm: () => {
+        this.backendSrv.alertD({
+          url: '/cmdb/pattern/delete?ruleId=' + ruleId + '&userId='+ this.contextSrv.user.id,
+          method: 'delete'
+        }).then((res) => {
+          this.$scope.appEvent('alert-success', ['删除成功']);
+          this.getListRule();
+        }, () => {
+          this.$scope.appEvent('alert-danger', ['删除失败', '请稍后重试']);
+        });
+      }
+    });
+  }
 }
 
 coreModule.controller('LogParseCtrl', LogParseCtrl);

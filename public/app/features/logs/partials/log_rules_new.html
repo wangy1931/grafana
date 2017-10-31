@@ -22,14 +22,17 @@
           ng-change="ctrl.getTemplate(ctrl.rule.serviceName)"
           ng-model="ctrl.rule.serviceName"></select>
         <input class="gf-form-input max-width-21" type="text" ng-if="ctrl.rule.serviceName === '其他'"
-          ng-model="ctrl.custom.serviceName" placeholder="自定义服务名称" required />
+          ng-class="{false: 'error-input'}[!ctrl.custom.serviceName || ctrl.checkInput(ctrl.custom.serviceName, 'parseName')]"
+          ng-model="ctrl.custom.serviceName" placeholder="仅支持英文字母/数字/下划线/小数点" required />
       </div>
 
       <div class="gf-form">
         <span class="gf-form-label width-10">日志类型<em>*</em></span>
         <select class="gf-form-input max-width-21" ng-options="t for t in ctrl.rule.logTypes"
           ng-model="ctrl.rule.logType"></select>
-        <input class="gf-form-input max-width-21" type="text" ng-if="ctrl.rule.logType === '其他'"
+        <input class="gf-form-input max-width-21"
+          ng-class="{false: 'error-input'}[!ctrl.custom.logType || ctrl.checkInput(ctrl.custom.logType, 'logType')]"
+          type="text" ng-if="ctrl.rule.logType === '其他'"
           ng-model="ctrl.custom.logType" placeholder="请输入英文字母" required />
         <button class="btn btn-primary" ng-click="ctrl.getTemplate(ctrl.rule.serviceName, ctrl.rule.logType)"
           ng-if="ctrl.rule.serviceName !== '其他' && ctrl.rule.logType !== '其他'">应用模板</button>

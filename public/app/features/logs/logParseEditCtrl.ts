@@ -43,7 +43,11 @@ export class LogParseEditCtrl {
   }
 
   getTemplate(serviceName, logType?) {
-    if (_.isEqual(serviceName, '其他')) { return; }
+    if (_.isEqual(serviceName, '其他')) {
+      this.rule.logType = '其他';
+      this.rule.logTypes = ['其他'];
+      return;
+    }
     var url = '/cmdb/pattern/template?serviceName='+ serviceName;
     if (logType) {
       url += '&logType=' + logType;
@@ -51,16 +55,15 @@ export class LogParseEditCtrl {
     this.backendSrv.alertD({url: url}).then((response)=>{
       var tmp = response.data;
       if (_.isEmpty(tmp)) {
-        this.rule.logTypes = [];
+        this.rule.logTypes = ['其他'];
         this.rule.logType = '其他';
-        _.every(serviceName, logType) && this.$scope.appEvent('alert-warning', ['暂无相关模板']);
       } else {
         if (!_.every(serviceName, logType)) {
           this.rule = _.cloneDeep(tmp[0]);
         } else {
           this.rule.logTypes = tmp[0].logTypes;
           this.rule.logType = this.rule.logTypes[0];
-          this.rule.ruleName = tmp[0].ruleName;
+          this.rule.ruleName = this.rule.ruleName || tmp[0].ruleName;
         }
       }
       this.rule.hosts = [];
@@ -74,6 +77,12 @@ export class LogParseEditCtrl {
       this.rule = response.data;
       this.rule.hosts = this.rule.hosts || [];
       this.rule.logTypes.push('其他');
+      if (_.findIndex(this.serviceList, {name: this.rule.serviceName}) === -1) {
+        this.custom.serviceName = this.rule.serviceName;
+        this.custom.logType = this.rule.logType;
+        this.rule.serviceName = '其他';
+        this.rule.logType = '其他';
+      }
     });
   }
 
@@ -203,6 +212,8 @@ export class LogParseEditCtrl {
       }
     }).then((res)=>{
       pattern.result = res.data;
+    }, (err) => {
+      pattern.result = '规则解析失败';
     });
   }
 
@@ -292,10 +303,22 @@ export class LogParseEditCtrl {
     this.rule.orgId = this.contextSrv.user.orgId;
     this.rule.sysId = this.contextSrv.user.systemId;
     if (this.checkData(this.rule)) {
+      var data = _.cloneDeep(this.rule);
+      _.remove(data.logTypes, (type) => {
+        return type === '其他';
+      });
+      if (data.serviceName === '其他') {
+        data.serviceName = this.custom.serviceName;
+        data.logType = this.custom.logType;
+      }
+      if (data.multiline) {
+        data["multiline.negate"] = false;
+        data["multiline.match"] = "after";
+      }
       this.backendSrv.alertD({
         url: '/cmdb/pattern/save',
         method: 'post',
-        data: this.rule
+        data: data
       }).then((res) => {
         this.$scope.appEvent('alert-success', ['保存成功']);
         this.$location.url('/logs/rules');
@@ -312,10 +335,22 @@ export class LogParseEditCtrl {
   }
 
   checkData(rule) {
+    if (rule.serviceName === '其他') {
+      if (_.every(this.custom)) {
+        if (!this.checkInput(this.custom.serviceName, 'parseName')) {
+          return false;
+        }
+        if (!this.checkInput(this.custom.logType, 'logType')) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
     if (!rule.ruleName || !rule.serviceName || !rule.logType ||
       _.isEmpty(rule.patterns) || _.isEmpty(rule.paths) || _.isEmpty(rule.hosts)) {
       return false;
-    };
+    }
     if (!_.isBoolean(rule.multiline)) {
       return false;
     } else if (rule.multiline && !rule['multiline.pattern']) {
