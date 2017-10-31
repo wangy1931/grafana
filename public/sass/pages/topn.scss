@@ -24,6 +24,15 @@
     height: auto !important;
   }
 
+  .process-table .table {
+    li {
+      width: 10%;
+    }
+    li:last-child, li:nth-last-child(2) {
+      width: 15%;
+    }
+  }
+
 }
 
 .topn-tooltip {

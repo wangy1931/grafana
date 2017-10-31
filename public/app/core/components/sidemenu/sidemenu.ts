@@ -145,10 +145,10 @@ export class SideMenuCtrl {
           text: '关联性分析',
           url: this.getUrl("/association"),
         },
-        // {
-        //   text: '资源消耗分析',
-        //   url: this.getUrl("/topn"),
-        // },
+        {
+          text: '资源消耗',
+          url: this.getUrl("/topn?guide"),
+        },
         {
           text: '运维知识',
           url: this.getUrl("/knowledgebase"),

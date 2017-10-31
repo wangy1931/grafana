@@ -11,11 +11,12 @@
         <time-window></time-window>
         <div class="clearfix"></div>
 
+        <p>当前选中时间点：{{ _.transformMillionTime(ctrl.timePoint) }}</p>
         <div class="process-table" style="overflow-x: auto; width: 100%;">
             <div class="table panel-table">
                 <ul>
                     <li>进程 ID</li>
-                    <li>进程创建用户</li>
+                    <li>创建用户</li>
                     <li>进程</li>
                     <li>CPU 使用率</li>
                     <li>内存占用率</li>
@@ -26,7 +27,7 @@
                 </ul>
                 <div ng-include="'public/app/features/topn/partials/process_topn_graph.html'"></div>
             </div>
-            <div ng-if="!ctrl.tableData.length">该时间段暂无数据</div>
+            <div ng-if="!ctrl.tableData.length">该时间内暂无数据</div>
         </div>
     </div>
 

@@ -6,6 +6,8 @@ define([
 function (angular, coreModule, kbn) {
   'use strict';
 
+  kbn = kbn.default;
+
   coreModule.default.directive('tip', function($compile) {
     return {
       restrict: 'E',

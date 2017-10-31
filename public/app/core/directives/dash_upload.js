@@ -5,6 +5,8 @@ define([
 function (coreModule, kbn) {
   'use strict';
 
+  kbn = kbn.default;
+
   coreModule.default.directive('dashUpload', function(timer, alertSrv, $location) {
     return {
       restrict: 'A',
