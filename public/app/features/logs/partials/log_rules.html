@@ -20,4 +20,7 @@
       </td>
     </tr>
   </table>
+  <div ng-if="!ctrl.ruleList.length" class="no-data-box">
+    暂无日志规则,请<a href="/logs/rules/new" class="parse-btn parse-edit" style="margin-left: 10px;">添加日志规则</a>
+  </div>
 </div>

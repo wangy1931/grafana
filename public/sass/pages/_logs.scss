@@ -370,3 +370,12 @@ table.diff {
 .error-input {
   border-color: rgb(187, 17, 68);
 }
+
+.no-data-box {
+  font-size: 1.5rem;
+  text-align: center;
+  border: 1px dashed rgb(15, 171, 248);
+  border-radius: 5px;
+  height: 5rem;
+  line-height: 5rem;
+}

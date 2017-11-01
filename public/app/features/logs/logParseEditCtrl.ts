@@ -43,9 +43,16 @@ export class LogParseEditCtrl {
   }
 
   getTemplate(serviceName, logType?) {
+    this.rule.hosts = [];
+    this.rule.paths = [];
+    this.rule.patterns = [];
+    this.rule['multiline.pattern'] = '';
     if (_.isEqual(serviceName, '其他')) {
       this.rule.logType = '其他';
       this.rule.logTypes = ['其他'];
+      return;
+    }
+    if (_.isEqual(logType, '其他')) {
       return;
     }
     var url = '/cmdb/pattern/template?serviceName='+ serviceName;
@@ -58,15 +65,10 @@ export class LogParseEditCtrl {
         this.rule.logTypes = ['其他'];
         this.rule.logType = '其他';
       } else {
-        if (!_.every(serviceName, logType)) {
-          this.rule = _.cloneDeep(tmp[0]);
-        } else {
-          this.rule.logTypes = tmp[0].logTypes;
-          this.rule.logType = this.rule.logTypes[0];
-          this.rule.ruleName = this.rule.ruleName || tmp[0].ruleName;
-        }
+        this.rule = _.cloneDeep(tmp[0]);
+        this.rule.logType = logType || this.rule.logTypes[0];
+        this.rule.logTypes.push('其他');
       }
-      this.rule.hosts = [];
     });
   }
 
