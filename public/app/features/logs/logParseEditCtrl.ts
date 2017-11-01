@@ -328,7 +328,7 @@ export class LogParseEditCtrl {
         data["multiline.match"] = "after";
       }
       this.backendSrv.alertD({
-        url: '/cmdb/pattern/save',
+        url: '/cmdb/pattern/save?userId=' + this.contextSrv.user.id,
         method: 'post',
         data: data
       }).then((res) => {
