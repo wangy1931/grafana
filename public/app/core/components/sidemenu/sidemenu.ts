@@ -195,6 +195,10 @@ export class SideMenuCtrl {
           text: '服务列表',
           url: this.getUrl("/cmdb/servicelist")
         },
+        {
+          text: '指标概览',
+          url: this.getUrl("/cmdb/metrics")
+        },
       ]
     });
 

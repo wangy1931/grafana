@@ -1,0 +1,36 @@
+.metrics-def-container  {
+  .accordion-group {
+    margin: 1rem 0;
+  }
+
+  .accordion-heading {
+    padding: 0.5rem;
+  }
+
+  .gf-form-label {
+    background: none;
+    font-weight: bold;
+    cursor: default;
+  }
+
+  .gf-form-input, select {
+    background: none;
+    border-radius: 5px;
+  }
+
+  select {
+    margin-right: 5rem;
+  }
+
+  .gf-form-input:disabled {
+    border: none;
+    cursor: default;
+  }
+
+  .label {
+    border-radius: 5px;
+    margin: 0 0.7rem;
+    background: $blue;
+    cursor: default;
+  }
+}
