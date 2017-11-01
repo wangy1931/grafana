@@ -14,7 +14,7 @@ export class MetricsDefCtrl {
   query: any;
 
   /** @ngInject */
-  constructor(private $scope, private backendSrv) {
+  constructor(private $scope, private backendSrv, private contextSrv) {
     this.page = 0;
     this.size = 15;
     this.getMetricsList('next');
@@ -70,41 +70,6 @@ export class MetricsDefCtrl {
         page = (page === 1) ? 1 : (page - 1);
         break;
     }
-    // this.metricList = [
-    //   {
-    //     "id": 1,
-    //     "type": "type",
-    //     "key": "cpu.idle",
-    //     "subType": "subType",
-    //     "description": "description",
-    //     "unit": "unit",
-    //     "tags": ["tags"],
-    //     "customMetric": true,
-    //     "kpi": false
-    //   },
-    //   {
-    //     "id": 2,
-    //     "type": "type",
-    //     "key": "cpu.idle",
-    //     "subType": "subType",
-    //     "description": "description",
-    //     "unit": "unit",
-    //     "tags": ["tags"],
-    //     "customMetric": true,
-    //     "kpi": false
-    //   },
-    //   {
-    //     "id": 3,
-    //     "type": "type",
-    //     "key": "cpu.idle",
-    //     "subType": "subType",
-    //     "description": "description",
-    //     "unit": "unit",
-    //     "tags": ["tags"],
-    //     "customMetric": true,
-    //     "kpi": false
-    //   }
-    // ]
     this.backendSrv.alertD({url: '/metrictype/info?size=' + this.size + '&page=' + page}).then((res) => {
       if (!_.isEmpty(res.data)) {
         this.metricList = res.data;
@@ -116,28 +81,12 @@ export class MetricsDefCtrl {
   }
 
   getDetailById(id) {
-    // this.metricCur = {
-    //   "id": 1,
-    //   "type": "type",
-    //   "subType": "subType",
-    //   "description": "description",
-    //   "unit": "unit",
-    //   "tags": ["tags"],
-    //   "customMetric": true,
-    //   "kpi": false,
-    //   "disabled": true
-    // };
     if (this.metricCur && this.metricCur.id === id) {
       return;
     }
     this.backendSrv.alertD({url: '/metrictype/info?id=' + id}).then((res) => {
       this.metricCur = res.data;
       this.metricCur.disabled = true;
-      this.metricCur = _.each(res.data, (value, key) => {
-        if (key !== 'tags' && _.isNull(value)) {
-          res.data[key] = '暂无信息'
-        }
-      });
     });
   }
 
@@ -152,11 +101,12 @@ export class MetricsDefCtrl {
       }
     }
     this.backendSrv.alertD({url: url}).then((res) => {
-      if (!_.isEmpty(res.data)) {
-        if (this.query.metric) {
-          this.metricList = [res.data];
-        }
+      if (this.query.metric) {
+        this.metricList = [res.data];
       } else {
+        this.metricList = res.data;
+      }
+      if (_.isEmpty(res.data)) {
         this.$scope.appEvent('alert-warning', ['没有相关指标']);
       }
     });
@@ -169,15 +119,16 @@ export class MetricsDefCtrl {
 
   update() {
     this.metricCur.disabled = true;
-    // this.backendSrv.alertD({url: '/metrictype/info?id=' + id}).then((res) => {
-    //   this.metricCur = res.data;
-    //   this.metricCur.disabled = true;
-    //   this.metricCur = _.each(res.data, (value, key) => {
-    //     if (key !== 'tags' && _.isNull(value)) {
-    //       res.data[key] = '暂无信息'
-    //     }
-    //   });
-    // });
+    this.backendSrv.alertD({
+      url: '/metrictype/info?id=' + this.metricCur.id + '&userId=' + this.contextSrv.user.id,
+      method: 'post',
+      data: this.metricCur
+    }).then((res) => {
+      this.$scope.appEvent('alert-success', ['保存成功']);
+    }, () => {
+      this.cancel();
+      this.$scope.appEvent('alert-danger', ['保存失败']);
+    });
   }
 
   cancel() {

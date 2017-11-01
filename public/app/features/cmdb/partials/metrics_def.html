@@ -39,7 +39,7 @@
                 <span class="gf-form-label width-7">类型</span>
                 <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.type" ng-disabled="true">
                 <span class="gf-form-label width-7">子类型</span>
-                <input type="email" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.subType" ng-disabled="true">
+                <select ng-disabled="ctrl.metricCur.disabled" class="gf-form-input max-width-25" ng-options="subType for subType in ctrl.typeList[1].subType" ng-model="ctrl.metricCur.subType"></select>
               </div>
               <div class="gf-form">
                 <span class="gf-form-label width-7">描述</span>
@@ -62,13 +62,7 @@
                 <span class="gf-form-label width-7">自定义指标</span>
                 <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.customMetric" ng-disabled="true">
               </div>
-              <div class="gf-form">
-                <span class="gf-form-label width-7">是否为KPI</span>
-                <input type="radio" name="isKPI" ng-value=true ng-model="ctrl.metricCur.kpi"> 是
-                <input type="radio" name="isKPI" ng-value=false ng-model="ctrl.metricCur.kpi"> 否
-              </div>
-        
-              <div class="gf-form-button-row">
+              <div class="gf-form-button-row" ng-if="ctrl.metricCur.customMetric">
                 <button class="btn btn-outline-success" ng-click="ctrl.edit()" ng-show="ctrl.metricCur.disabled">编辑</button>
                 <button class="btn btn-success" ng-click="ctrl.update()" ng-show="!ctrl.metricCur.disabled">更新</button>
                 <button class="btn btn-outline-inverse" ng-click="ctrl.cancel()" ng-show="!ctrl.metricCur.disabled">取消</button>

@@ -25,6 +25,9 @@
   .gf-form-input:disabled {
     border: none;
     cursor: default;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
   }
 
   .label {
