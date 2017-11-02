@@ -17,24 +17,25 @@ export class LogParseEditCtrl {
   constructor(private $scope, private contextSrv,
     private $routeParams, private backendSrv,
     private $location) {
-    if ($routeParams.ruleId) {
-      this.getRuleById($routeParams.ruleId);
-    } else {
-      this.rule = {
-        "id": 0,
-        "ruleName": "",
-        "serviceName": "",
-        "logType": "",
-        "logTypes": [],
-        "type": "",
-        "multiline": false,
-        "paths": [],
-        "hosts": [],
-        "patterns": []
+    this.getServiceList().then(() => {
+      if ($routeParams.ruleId) {
+        this.getRuleById($routeParams.ruleId);
+      } else {
+        this.rule = {
+          "id": 0,
+          "ruleName": "",
+          "serviceName": "",
+          "logType": "",
+          "logTypes": [],
+          "type": "",
+          "multiline": false,
+          "paths": [],
+          "hosts": [],
+          "patterns": []
+        }
       }
-    }
+    });
     this.editLog(-1, '');
-    this.getServiceList();
     this.getHostList();
     this.custom = {
       serviceName: '',
@@ -78,6 +79,7 @@ export class LogParseEditCtrl {
     }).then((response) => {
       this.rule = response.data;
       this.rule.hosts = this.rule.hosts || [];
+      this.rule.logTypes = this.rule.logTypes || [];
       this.rule.logTypes.push('其他');
       if (_.findIndex(this.serviceList, {name: this.rule.serviceName}) === -1) {
         this.custom.serviceName = this.rule.serviceName;
@@ -89,7 +91,7 @@ export class LogParseEditCtrl {
   }
 
   getServiceList() {
-    this.backendSrv.alertD({url: '/cmdb/service'}).then((result) => {
+    return this.backendSrv.alertD({url: '/cmdb/service'}).then((result) => {
       this.serviceList = result.data;
       this.serviceList.push({name: '其他'});
     });
