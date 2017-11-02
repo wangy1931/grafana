@@ -9,8 +9,10 @@
       <div class="gf-form">
         <span class="gf-form-label width-7">指标名称</span>
         <input type="text" class="gf-form-input max-width-16" ng-model="ctrl.query.metric">
+        <button class="btn btn-primary" ng-click="ctrl.search()">搜索</button>
+        <button class="btn btn-inverse" ng-click="ctrl.clearQuery()">清空搜索</button>
       </div>
-      <div class="gf-form">
+      <!-- <div class="gf-form">
         <div class="gf-form">
           <span class="gf-form-label width-7">类型</span>
           <select class="max-width-16" ng-options="type.type for type in ctrl.typeList" ng-model="ctrl.query.type"></select>
@@ -23,7 +25,7 @@
       <div class="gf-form-button-row">
         <button class="btn btn-primary" ng-click="ctrl.search()">搜索</button>
         <button class="btn btn-inverse" ng-click="ctrl.clearQuery()">清空搜索</button>
-      </div>
+      </div> -->
     </form>
   </div>
   <div class="accordion" id="accordion2">
@@ -73,7 +75,7 @@
       </div>
     </div>
   </div>
-  <div class="pagination">
+  <div class="pagination" ng-if="!ctrl.searchStr">
     <ul class="pager">
       <li class="previous">
         <a ng-click="ctrl.getMetricsList('pre')" ng-disabled="ctrl.page === 1">&larr; 上一页</a>
