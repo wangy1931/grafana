@@ -34,7 +34,7 @@ export class MetricsDefCtrl {
       type: '服务',
       subType: []
     }];
-    // this.getService();
+    this.getService();
   }
 
   getService() {
