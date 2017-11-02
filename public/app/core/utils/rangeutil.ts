@@ -113,7 +113,6 @@ export function describeTextRange(expr: any) {
 }
 
 export function describeTimeRange(range) {
-  console.log
   var option = rangeIndex[range.from.toString() + ' to ' + range.to.toString()];
   if (option) {
     return option.display;

@@ -132,6 +132,7 @@ export class HostSrv {
 
   /**
    * Get the specific host's process.
+   * @param Object include hostId(or hostname) & from & to
    * @returns {Array} host's process information.
    */
   getHostProcess(hostId) {
@@ -139,6 +140,14 @@ export class HostSrv {
       method: 'GET',
       url   : '/host/state',
       params: { 'hostId': hostId }
+    });
+  }
+
+  getProcess(params) {
+    return this.backendSrv.alertD({
+      method: 'GET',
+      url   : '/host/state',
+      params: params
     });
   }
 
@@ -158,10 +167,10 @@ export class HostSrv {
           "metric": "collector.state"
         },
         {
-          "metric": "proc.meminfo.active"
+          "metric": "proc.meminfo.percentused"
         },
         {
-          "metric": "df.bytes.free",
+          "metric": "df.bytes.percentused",
           "tags": [
             {
               "name": "mount",
@@ -184,9 +193,9 @@ export class HostSrv {
           "host": item.hostname,
           "id": item.id,
           "status": _.statusFormatter(item["collector.state"]),
-          "disk": _.gbFormatter(item["df.bytes.free"]),
+          "disk": _.percentFormatter(item["df.bytes.percentused"]),
           "cpu": _.percentFormatter(item["cpu.usr"]),
-          "mem": _.gbFormatter(item["proc.meminfo.active"]),
+          "mem": _.percentFormatter(item["proc.meminfo.percentused"]),
           "commit": item.commit,
           "startTime": item.startTime,
           "version": item.version

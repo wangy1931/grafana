@@ -1,9 +1,9 @@
 {
-  "id": 244,
-  "title": "topN",
+  "id": 193,
+  "title": "processes",
   "system": 2,
   "manualAnnotation": null,
-  "originalTitle": "topN",
+  "originalTitle": "processes",
   "tags": [],
   "style": "dark",
   "timezone": "browser",
@@ -14,7 +14,7 @@
     {
       "collapse": false,
       "editable": true,
-      "height": "250px",
+      "height": "200px",
       "panels": [
         {
           "aliasColors": {},
@@ -23,18 +23,94 @@
           "editable": true,
           "error": false,
           "fill": 1,
-          "grid": {
-            "threshold1": 70,
-            "threshold1Color": "rgba(216, 200, 27, 0.69)",
-            "threshold2": 90,
-            "threshold2Color": "rgba(234, 112, 112, 0.8)",
-            "thresholdLine": true
+          "height": "200px",
+          "id": 1,
+          "isNew": true,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
           },
-          "helpInfo": {
-            "context": "",
-            "info": false,
-            "title": ""
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "cpu.topN{pid=2598}",
+              "yaxis": 2
+            }
+          ],
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "p99",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "metric": "cpu.topN",
+              "refId": "A",
+              "tags": {
+                "host": "$host",
+                "pid": "$pid"
+              }
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "进程: $pid 的 CPU使用率",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
           },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "height": "200px",
           "id": 2,
           "isNew": true,
           "legend": {
@@ -54,8 +130,13 @@
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 12,
+          "seriesOverrides": [
+            {
+              "alias": "cpu.topN{pid=2598}",
+              "yaxis": 2
+            }
+          ],
+          "span": 6,
           "stack": false,
           "steppedLine": false,
           "targets": [
@@ -64,23 +145,24 @@
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
-              "errors": {},
-              "metric": "cpu.usr",
+              "downsampleFillPolicy": "none",
+              "metric": "mem.topN",
               "refId": "A",
               "tags": {
-                "host": "$host"
+                "host": "$host",
+                "pid": "$pid"
               }
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "cpu.usr",
+          "title": "进程: $pid 内存使用率",
           "tooltip": {
             "msResolution": false,
             "shared": true,
             "sort": 0,
-            "value_type": "cumulative"
+            "value_type": "individual"
           },
           "type": "graph",
           "xaxis": {
@@ -91,7 +173,8 @@
           },
           "yaxes": [
             {
-              "format": "percent",
+              "format": "short",
+              "label": null,
               "logBase": 1,
               "max": null,
               "min": null,
@@ -99,96 +182,7 @@
             },
             {
               "format": "short",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "threshold1": 70,
-            "threshold1Color": "rgba(216, 200, 27, 0.69)",
-            "threshold2": 90,
-            "threshold2Color": "rgba(234, 112, 112, 0.8)",
-            "thresholdLine": true
-          },
-          "helpInfo": {
-            "context": "",
-            "info": false,
-            "title": ""
-          },
-          "id": 5,
-          "isNew": true,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "aggregator": "avg",
-              "currentTagKey": "",
-              "currentTagValue": "",
-              "downsampleAggregator": "avg",
-              "errors": {},
-              "metric": "proc.meminfo.percentused",
-              "refId": "A",
-              "tags": {
-                "host": "$host"
-              }
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "内存使用情况",
-          "tooltip": {
-            "msResolution": true,
-            "shared": true,
-            "sort": 0,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percent",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
+              "label": null,
               "logBase": 1,
               "max": null,
               "min": null,
@@ -198,114 +192,13 @@
         }
       ],
       "title": "Row"
-    },
-    {
-      "collapse": false,
-      "editable": true,
-      "height": "250px",
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "threshold1": 60,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": 80,
-            "threshold2Color": "rgba(234, 112, 112, 0.91)",
-            "thresholdLine": true
-          },
-          "helpInfo": {
-            "context": "",
-            "info": false,
-            "title": ""
-          },
-          "id": 4,
-          "isNew": true,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "aggregator": "p99",
-              "currentTagKey": "",
-              "currentTagValue": "",
-              "downsampleAggregator": "avg",
-              "errors": {},
-              "hide": false,
-              "metric": "iostat.percentage_util",
-              "refId": "A",
-              "tags": {
-                "host": "$host"
-              }
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "磁盘使用率",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percent",
-              "label": "",
-              "logBase": 1,
-              "max": 101,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        }
-      ],
-      "title": "New row"
     }
   ],
   "time": {
-    "from": "now-7d",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
-    "now": true,
     "refresh_intervals": [
       "5s",
       "10s",
@@ -334,22 +227,45 @@
     "list": [
       {
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "tags": [],
+          "text": "*",
+          "value": "*"
         },
         "datasource": null,
         "hide": 0,
-        "includeAll": true,
+        "includeAll": false,
+        "multi": false,
+        "name": "pid",
+        "options": [
+          {
+            "selected": true,
+            "text": "1",
+            "value": "1"
+          }
+        ],
+        "query": "1",
+        "refresh": 0,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "tags": [],
+          "text": "*",
+          "value": "*"
+        },
+        "datasource": null,
+        "hide": 0,
+        "includeAll": false,
         "multi": false,
         "name": "host",
         "options": [
           {
             "selected": true,
-            "text": "All",
-            "value": "$__all"
+            "text": "*",
+            "value": "*"
           }
         ],
-        "query": "",
+        "query": "*",
         "refresh": 0,
         "type": "custom"
       }
@@ -358,8 +274,8 @@
   "annotations": {
     "list": []
   },
-  "refresh": false,
+  "refresh": "30s",
   "schemaVersion": 12,
-  "version": 1,
+  "version": 4,
   "links": []
 }

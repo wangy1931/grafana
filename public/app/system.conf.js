@@ -32,6 +32,7 @@ System.config({
     "jquery.flot.crosshair":    "vendor/flot/jquery.flot.crosshair",
     "jquery.flot.fillbelow":    "vendor/flot/jquery.flot.fillbelow",
     'jquery.flot.fillbetween':  'vendor/flot/jquery.flot.fillbetween',
+    "jquery.flot.navigate":     "vendor/flot/jquery.flot.navigate",
 
     "highlight":                'vendor/angular-other/highlight',
     "slider":                   'vendor/angular-other/nouislider.min',

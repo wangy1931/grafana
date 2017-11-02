@@ -1,11 +1,11 @@
 <navbar title="配置管理库" icon="fa fa-fw fa-cubes">
   <ul class="nav">
-      <li class="active"><a>自定义服务</a></li>
+      <li class="active"><a>{{ctrl.title}}服务</a></li>
   </ul>
 </navbar>
 
 <div class="page-container">
-  <h2>添加自定义服务</h2>
+  <h2>添加{{ctrl.title}}服务</h2>
 
   <table class="table">
     <tr>
@@ -18,10 +18,8 @@
       <td>
         <span ng-if="ctrl.editIndex !== $index">{{software.name}}</span>
         <input style="width: 100%;" type="text"
-          placeholder="请输入服务名称"
-          data-min-length="0" data-html="1" data-auto-select="true" data-animation="am-flip-x" 
-          bs-typeahead bs-options="process.name as process.name for process in ctrl.hostProcess"
-          ng-blur="ctrl.checkName(ctrl.editSoftware.name, 'edit');"
+          placeholder="仅支持英文字母/数字/下划线/小数点"
+          ng-blur="ctrl.checkName(ctrl.editSoftware.name);"
           ng-if="ctrl.editIndex === $index"
           ng-model="ctrl.editSoftware.name">
       </td>
@@ -35,9 +33,9 @@
         </select>
       </td>
       <td>
-        <span ng-if="ctrl.editIndex !== $index">{{software.command}}</span>
+        <span class="software-command" bs-tooltip="'{{software.command}}'" data-placement="top" data-container="body" ng-if="ctrl.editIndex !== $index">{{software.command}}</span>
         <input style="width: 100%;" type="text"
-          placeholder="请输入匹配规则"
+          placeholder="请根据下列进程信息输入匹配规则"
           ng-if="ctrl.editIndex === $index"
           ng-model="ctrl.editSoftware.command">
       </td>
@@ -54,28 +52,27 @@
     </tr>
     <tr>
       <td>
-        <input style="width: 100%;" type="text" placeholder="请输入服务名称"
-          data-min-length="0" data-html="1" data-auto-select="true" data-animation="am-flip-x" 
-          bs-typeahead bs-options="process.name as process.name for process in ctrl.hostProcess"
-          ng-model="ctrl.newSoftware.name" ng-blur="ctrl.checkName(ctrl.newSoftware.name, 'add');">
+        <input style="width: 100%;" type="text" placeholder="仅支持英文字母/数字/下划线/小数点"
+        ng-model="ctrl.newSoftware.name" ng-blur="ctrl.checkName(ctrl.newSoftware.name);">
       </td>
       <td>
         <select
-          style="width: 100%;"
-          ng-options="p for p in ['linux', 'windows']"
-          ng-model="ctrl.newSoftware.platform">
-        </select>
+        style="width: 100%;"
+        ng-options="p for p in ['linux', 'windows']"
+        ng-model="ctrl.newSoftware.platform">
+      </select>
+    </td>
+    <td>
+      <input style="width: 100%;" type="text" placeholder="请根据下列进程信息输入匹配规则" 
+        ng-model="ctrl.newSoftware.command">
       </td>
-      <td><input style="width: 100%;" type="text" placeholder="请输入匹配规则" ng-model="ctrl.newSoftware.command"></td>
       <td>
         <button class="btn btn-outline-success" ng-click="ctrl.addSoftware('add')">添加</button>
       </td>
     </tr> 
   </table>
 
-  <button class="btn btn-success" ng-click="ctrl.saveSoftware()">保存</button>
-
-  <div class="cmdb-reference">
+  <div class="cmdb-reference" ng-show="!ctrl.isUnit">
     <h2>参考信息
       <span class="dropdown" style="color: #2962ff;">
         <span ng-if="!ctrl.host.hostname">请选择机器</span>
@@ -95,7 +92,7 @@
       <thead>
         <tr>
           <th data-field="name" data-sortable="true" data-width="300px">参考名称</th>
-          <th data-field="command" data-sortable="true">参考规则</th>
+          <th data-field="command" data-sortable="true">进程信息</th>
         </tr>
       </thead>
     </table>

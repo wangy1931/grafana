@@ -28,7 +28,7 @@
                             <h3 ng-click="ctrl.showModal(1)" style="cursor: pointer;" bs-tooltip="'点击查看历史报警'">
                                 报警情况
                             </h3>
-                            <div><!-- /alerts/status -->
+                            <div>
                                 <li ng-repeat="alert in ctrl.alertPanel.status" ng-if="alert.count!=0">
                                     <a href="/host_topology?tabId=2">{{ alert.text }} <span class="status-color status-{{ alert.health }}">{{ alert.count }}</span></a>
                                 </li>
@@ -100,10 +100,10 @@
                             <ul>
                                 <li>机器名</li>
                                 <li>服务运行状态</li>
-                                <li>机器在线状态</li>
+                                <li>机器在线</li>
                                 <li>CPU 使用率</li>
-                                <li>内存使用</li>
-                                <li>磁盘剩余空间</li>
+                                <li>内存使用率</li>
+                                <li>磁盘使用率</li>
                                 <li>机器详细信息</li>
                             </ul>
                             <div ng-include="'public/app/features/systemoverview/partials/system_service_host_panel.html'"></div>
@@ -135,10 +135,10 @@
                         <div class="table host-panel-table" ng-if="ctrl.hostPanel.currentHost.name">
                             <ul>
                                 <li>机器名</li>
-                                <li>机器在线状态</li>
+                                <li>机器在线</li>
                                 <li>CPU 使用率</li>
-                                <li>内存使用</li>
-                                <li>磁盘剩余空间</li>
+                                <li>内存使用率</li>
+                                <li>磁盘使用率</li>
                                 <li>机器详细信息</li>
                             </ul>
                             <div ng-include="'public/app/features/systemoverview/partials/system_host_panel.html'"></div>

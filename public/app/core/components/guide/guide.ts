@@ -94,8 +94,8 @@ export class GuideCtrl {
     });
 
     this.steps.push({
-      title: '高消耗进程',
-      cta: '高消耗进程',
+      title: '资源消耗',
+      cta: '资源消耗',
       icon: 'iconfont fa-process',
       href: '/topn',
       note: '查看资源消耗情况',
