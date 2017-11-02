@@ -12,12 +12,12 @@ export class MetricsDefCtrl {
   size: number;
   typeList: Array<any>;
   query: any;
+  searchStr: any;
 
   /** @ngInject */
   constructor(private $scope, private backendSrv, private contextSrv) {
-    this.page = 0;
     this.size = 15;
-    this.getMetricsList('next');
+    this.clearQuery();
     this.typeList = [{
       type: '系统',
       subType: [
@@ -31,33 +31,19 @@ export class MetricsDefCtrl {
       ]
     },{
       type: '服务',
-      subType: [
-        'apache',
-        'collector',
-        'docker',
-        'elastic search',
-        'hadoop',
-        'hbase [Master]',
-        'hbase [RegionServer]',
-        'kafka',
-        'mongodb',
-        'mysql',
-        'nginx',
-        'opentsdb',
-        'oracle',
-        'postgresql',
-        'rabbitmq',
-        'redis',
-        'weblogic',
-        'zookeeper'
-      ]
+      subType: []
     }];
+    this.getService();
+  }
 
-    this.query = {
-      metric: '',
-      type: null,
-      subType: ''
-    };
+  getService() {
+    this.backendSrv.alertD({
+      url: '/cmdb/service'
+    }).then((res) => {
+      _.each(res.data, (service) => {
+        this.typeList[1].subType.push(service.name);
+      });
+    });
   }
 
   getMetricsList(type) {
@@ -70,7 +56,9 @@ export class MetricsDefCtrl {
         page = (page === 1) ? 1 : (page - 1);
         break;
     }
-    this.backendSrv.alertD({url: '/metrictype/info?size=' + this.size + '&page=' + page}).then((res) => {
+    var url = '/metrictype/info?size=' + this.size + '&page=' + page;
+    url += this.searchStr;
+    this.backendSrv.alertD({url: url}).then((res) => {
       if (!_.isEmpty(res.data)) {
         this.metricList = res.data;
         this.page = page;
@@ -91,15 +79,17 @@ export class MetricsDefCtrl {
   }
 
   search() {
-    var url = '/metrictype/info';
+    this.page = 1;
+    var url = '/metrictype/info?size=' + this.size + '&page=' + this.page;
     if (this.query.metric) {
-      url += '?name=' + this.query.metric;
+      this.searchStr = '&name=' + this.query.metric;
     } else if (this.query.type) {
-      url += '?type=' + this.query.type.type
+      this.searchStr = '&type=' + this.query.type.type
       if (this.query.subType) {
-        url += '&subtype=' + this.query.subType;
+        this.searchStr += '&subtype=' + this.query.subType;
       }
     }
+    url += this.searchStr;
     this.backendSrv.alertD({url: url}).then((res) => {
       if (this.query.metric) {
         this.metricList = [res.data];
@@ -134,6 +124,17 @@ export class MetricsDefCtrl {
   cancel() {
     this.metricCur = _.cloneDeep(this.metricEdit);
     this.metricCur.disabled = true;
+  }
+
+  clearQuery() {
+    this.searchStr = '';
+    this.query = {
+      metric: '',
+      type: null,
+      subType: ''
+    };
+    this.page = 0;
+    this.getMetricsList('next');
   }
 
 }
