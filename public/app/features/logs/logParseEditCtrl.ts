@@ -24,10 +24,10 @@ export class LogParseEditCtrl {
         this.rule = {
           "id": 0,
           "ruleName": "",
-          "serviceName": "",
+          "logServiceName": "",
           "logType": "",
           "logTypes": [],
-          "type": "",
+          "serviceName": "",
           "multiline": false,
           "paths": [],
           "hosts": [],
@@ -38,17 +38,17 @@ export class LogParseEditCtrl {
     this.editLog(-1, '');
     this.getHostList();
     this.custom = {
-      serviceName: '',
+      logServiceName: '',
       logType: ''
     }
   }
 
-  getTemplate(serviceName, logType?) {
+  getTemplate(logServiceName, logType?) {
     this.rule.hosts = [];
     this.rule.paths = [];
     this.rule.patterns = [];
     this.rule['multiline.pattern'] = '';
-    if (_.isEqual(serviceName, '其他')) {
+    if (_.isEqual(logServiceName, '其他')) {
       this.rule.logType = '其他';
       this.rule.logTypes = ['其他'];
       return;
@@ -56,7 +56,7 @@ export class LogParseEditCtrl {
     if (_.isEqual(logType, '其他')) {
       return;
     }
-    var url = '/cmdb/pattern/template?serviceName='+ serviceName;
+    var url = '/cmdb/pattern/template?logServiceName='+ logServiceName;
     if (logType) {
       url += '&logType=' + logType;
     }
@@ -81,10 +81,10 @@ export class LogParseEditCtrl {
       this.rule.hosts = this.rule.hosts || [];
       this.rule.logTypes = this.rule.logTypes || [];
       this.rule.logTypes.push('其他');
-      if (_.findIndex(this.serviceList, {name: this.rule.serviceName}) === -1) {
-        this.custom.serviceName = this.rule.serviceName;
+      if (_.findIndex(this.serviceList, {name: this.rule.logServiceName}) === -1) {
+        this.custom.logServiceName = this.rule.logServiceName;
         this.custom.logType = this.rule.logType;
-        this.rule.serviceName = '其他';
+        this.rule.logServiceName = '其他';
         this.rule.logType = '其他';
       }
     });
@@ -321,8 +321,8 @@ export class LogParseEditCtrl {
       _.remove(data.logTypes, (type) => {
         return type === '其他';
       });
-      if (data.serviceName === '其他') {
-        data.serviceName = this.custom.serviceName;
+      if (data.logServiceName === '其他') {
+        data.logServiceName = this.custom.logServiceName;
         data.logType = this.custom.logType;
       }
       if (data.multiline) {
@@ -349,9 +349,9 @@ export class LogParseEditCtrl {
   }
 
   checkData(rule) {
-    if (rule.serviceName === '其他') {
+    if (rule.logServiceName === '其他') {
       if (_.every(this.custom)) {
-        if (!this.checkInput(this.custom.serviceName, 'parseName')) {
+        if (!this.checkInput(this.custom.logServiceName, 'parseName')) {
           return false;
         }
         if (!this.checkInput(this.custom.logType, 'logType')) {
@@ -361,7 +361,7 @@ export class LogParseEditCtrl {
         return false;
       }
     }
-    if (!rule.ruleName || !rule.serviceName || !rule.logType ||
+    if (!rule.ruleName || !rule.logServiceName || !rule.logType ||
       _.isEmpty(rule.patterns) || _.isEmpty(rule.paths) || _.isEmpty(rule.hosts)) {
       return false;
     }
