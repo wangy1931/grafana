@@ -4,19 +4,20 @@ import angular from 'angular';
 import _ from 'lodash';
 import coreModule from 'app/core/core_module';
 
+const SIZE = 15;
 export class MetricsDefCtrl {
   metricList: Array<any>;
   metricCur: any;
   metricEdit: any;
-  page: number;
-  size: number;
   typeList: Array<any>;
   query: any;
-  searchStr: any;
+  params: any;
 
   /** @ngInject */
   constructor(private $scope, private backendSrv, private contextSrv) {
-    this.size = 15;
+    this.params = {
+      size: SIZE,
+    };
     this.clearQuery();
     this.typeList = [{
       type: '系统',
@@ -33,7 +34,7 @@ export class MetricsDefCtrl {
       type: '服务',
       subType: []
     }];
-    this.getService();
+    // this.getService();
   }
 
   getService() {
@@ -46,24 +47,36 @@ export class MetricsDefCtrl {
     });
   }
 
-  getMetricsList(type) {
-    var page = this.page;
-    switch (type) {
-      case 'next':
-        page++;
-        break;
-      case 'pre':
-        page = (page === 1) ? 1 : (page - 1);
-        break;
+  getMetricsList(page, query?) {
+    if (query) {
+      page = 1;
+      if (query.metric) {
+        this.params.name = query.metric;
+      } else if (query.type) {
+        this.params.type = query.type.type;
+        if (query.subType) {
+          this.params.subtype = query.subtype;
+        }
+      }
+    } else if (page < 1) {
+      page = 1;
+      this.$scope.appEvent('alert-warning', ['已经是第一页了']);
+      return;
     }
-    var url = '/metrictype/info?size=' + this.size + '&page=' + page;
-    url += this.searchStr;
-    this.backendSrv.alertD({url: url}).then((res) => {
-      if (!_.isEmpty(res.data)) {
-        this.metricList = res.data;
-        this.page = page;
+    this.params.page = page;
+    this.backendSrv.getMetricInfo(this.params).then((res) => {
+      if (this.params.name) {
+        if (_.isNull(res.data)) {
+          this.metricList = [];
+        } else {
+          this.metricList = [res.data];
+        }
       } else {
-        this.$scope.appEvent('alert-warning', ['没有更多指标了']);
+        this.metricList = res.data;
+        if (res.data.length < SIZE) {
+          this.params.page--;
+          this.$scope.appEvent('alert-warning', ['已经是最后一页了']);
+        }
       }
     });
   }
@@ -72,33 +85,9 @@ export class MetricsDefCtrl {
     if (this.metricCur && this.metricCur.id === id) {
       return;
     }
-    this.backendSrv.alertD({url: '/metrictype/info?id=' + id}).then((res) => {
+    this.backendSrv.getMetricInfo({id: id}).then((res) => {
       this.metricCur = res.data;
       this.metricCur.disabled = true;
-    });
-  }
-
-  search() {
-    this.page = 1;
-    var url = '/metrictype/info?size=' + this.size + '&page=' + this.page;
-    if (this.query.metric) {
-      this.searchStr = '&name=' + this.query.metric;
-    } else if (this.query.type) {
-      this.searchStr = '&type=' + this.query.type.type
-      if (this.query.subType) {
-        this.searchStr += '&subtype=' + this.query.subType;
-      }
-    }
-    url += this.searchStr;
-    this.backendSrv.alertD({url: url}).then((res) => {
-      if (this.query.metric) {
-        this.metricList = [res.data];
-      } else {
-        this.metricList = res.data;
-      }
-      if (_.isEmpty(res.data)) {
-        this.$scope.appEvent('alert-warning', ['没有相关指标']);
-      }
     });
   }
 
@@ -109,11 +98,11 @@ export class MetricsDefCtrl {
 
   update() {
     this.metricCur.disabled = true;
-    this.backendSrv.alertD({
-      url: '/metrictype/info?id=' + this.metricCur.id + '&userId=' + this.contextSrv.user.id,
-      method: 'post',
-      data: this.metricCur
-    }).then((res) => {
+    var params = {
+      id: this.metricCur.id,
+      userId: this.contextSrv.user.id
+    };
+    this.backendSrv.updateMetricInfo(params, this.metricCur).then((res) => {
       this.$scope.appEvent('alert-success', ['保存成功']);
     }, () => {
       this.cancel();
@@ -127,16 +116,17 @@ export class MetricsDefCtrl {
   }
 
   clearQuery() {
-    this.searchStr = '';
     this.query = {
       metric: '',
       type: null,
       subType: ''
     };
-    this.page = 0;
-    this.getMetricsList('next');
+    this.params.name && delete this.params.name;
+    this.params.type && delete this.params.type;
+    this.params.subType && delete this.params.subType;
+    this.params.page = 1;
+    this.getMetricsList(this.params.page);
   }
-
 }
 
 coreModule.controller('MetricsDefCtrl', MetricsDefCtrl);

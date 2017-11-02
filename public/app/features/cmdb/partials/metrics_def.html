@@ -9,7 +9,7 @@
       <div class="gf-form">
         <span class="gf-form-label width-7">指标名称</span>
         <input type="text" class="gf-form-input max-width-16" ng-model="ctrl.query.metric">
-        <button class="btn btn-primary" ng-click="ctrl.search()">搜索</button>
+        <button class="btn btn-primary" ng-click="ctrl.getMetricsList(1, ctrl.query)">搜索</button>
         <button class="btn btn-inverse" ng-click="ctrl.clearQuery()">清空搜索</button>
       </div>
       <!-- <div class="gf-form">
@@ -28,61 +28,66 @@
       </div> -->
     </form>
   </div>
-  <div class="accordion" id="accordion2">
-    <div class="accordion-group" ng-repeat="metric in ctrl.metricList">
-      <div class="accordion-heading">
-        <a ng-click="ctrl.getDetailById(metric.id)" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{metric.id}}">
-          {{metric.key}}
-        </a>
-      </div>
-      <div id="{{metric.id}}" class="accordion-body collapse">
-        <div class="accordion-inner">
-          <form name="userForm" class="gf-form-group" ng-if="metric.id === ctrl.metricCur.id">
-              <div class="gf-form">
-                <span class="gf-form-label width-7">类型</span>
-                <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.type" ng-disabled="true">
-                <span class="gf-form-label width-7">子类型</span>
-                <select ng-disabled="ctrl.metricCur.disabled" class="gf-form-input max-width-25" ng-options="subType for subType in ctrl.typeList[1].subType" ng-model="ctrl.metricCur.subType"></select>
-              </div>
-              <div class="gf-form">
-                <span class="gf-form-label width-7">描述</span>
-                <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.description" ng-disabled="ctrl.metricCur.disabled">
-              </div>
-              <div class="gf-form">
-                <span class="gf-form-label width-7">单位</span>
-                <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.unit" ng-disabled="ctrl.metricCur.disabled">
-              </div>
-              <div class="gf-form">
-                <span class="gf-form-label width-7">标签</span>
-                <div ng-if="ctrl.metricCur.tags">
-                  <span class="tag label" ng-repeat="tag in ctrl.metricCur.tags"> <i class="fa fa-tag"></i>{{ tag }}</span>
+  <div ng-if="ctrl.metricList.length">
+    <div class="accordion" id="accordion2">
+      <div class="accordion-group" ng-repeat="metric in ctrl.metricList">
+        <div class="accordion-heading">
+          <a ng-click="ctrl.getDetailById(metric.id)" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{metric.id}}">
+            {{metric.key}}
+          </a>
+        </div>
+        <div id="{{metric.id}}" class="accordion-body collapse">
+          <div class="accordion-inner">
+            <form name="userForm" class="gf-form-group" ng-if="metric.id === ctrl.metricCur.id">
+                <div class="gf-form">
+                  <span class="gf-form-label width-7">类型</span>
+                  <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.type" ng-disabled="true">
+                  <span class="gf-form-label width-7">子类型</span>
+                  <select ng-disabled="ctrl.metricCur.disabled" class="gf-form-input max-width-25" ng-options="subType for subType in ctrl.typeList[1].subType" ng-model="ctrl.metricCur.subType"></select>
                 </div>
-                <div ng-if="!ctrl.metricCur.tags">
-                  <input type="text" class="gf-form-input max-width-25" value="暂无信息" ng-disabled="true">
+                <div class="gf-form">
+                  <span class="gf-form-label width-7">描述</span>
+                  <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.description" ng-disabled="ctrl.metricCur.disabled">
                 </div>
-              </div>
-              <div class="gf-form">
-                <span class="gf-form-label width-7">自定义指标</span>
-                <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.customMetric" ng-disabled="true">
-              </div>
-              <div class="gf-form-button-row" ng-if="ctrl.metricCur.customMetric">
-                <button class="btn btn-outline-success" ng-click="ctrl.edit()" ng-show="ctrl.metricCur.disabled">编辑</button>
-                <button class="btn btn-success" ng-click="ctrl.update()" ng-show="!ctrl.metricCur.disabled">更新</button>
-                <button class="btn btn-outline-inverse" ng-click="ctrl.cancel()" ng-show="!ctrl.metricCur.disabled">取消</button>
-              </div>
-          </form>
+                <div class="gf-form">
+                  <span class="gf-form-label width-7">单位</span>
+                  <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.unit" ng-disabled="ctrl.metricCur.disabled">
+                </div>
+                <div class="gf-form">
+                  <span class="gf-form-label width-7">标签</span>
+                  <div ng-if="ctrl.metricCur.tags">
+                    <span class="tag label" ng-repeat="tag in ctrl.metricCur.tags"> <i class="fa fa-tag"></i>{{ tag }}</span>
+                  </div>
+                  <div ng-if="!ctrl.metricCur.tags">
+                    <input type="text" class="gf-form-input max-width-25" value="暂无信息" ng-disabled="true">
+                  </div>
+                </div>
+                <div class="gf-form">
+                  <span class="gf-form-label width-7">自定义指标</span>
+                  <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.customMetric" ng-disabled="true">
+                </div>
+                <div class="gf-form-button-row" ng-if="ctrl.metricCur.customMetric">
+                  <button class="btn btn-outline-success" ng-click="ctrl.edit()" ng-show="ctrl.metricCur.disabled">编辑</button>
+                  <button class="btn btn-success" ng-click="ctrl.update()" ng-show="!ctrl.metricCur.disabled">更新</button>
+                  <button class="btn btn-outline-inverse" ng-click="ctrl.cancel()" ng-show="!ctrl.metricCur.disabled">取消</button>
+                </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
+    <div class="pagination">
+      <ul class="pager">
+        <li class="previous">
+          <a ng-click="ctrl.getMetricsList(ctrl.params.page-1)">&larr; 上一页</a>
+        </li>
+        <li class="next">
+          <a ng-click="ctrl.getMetricsList(ctrl.params.page+1)">下一页 &rarr;</a>
+        </li>
+      </ul>
+    </div>
   </div>
-  <div class="pagination" ng-if="!ctrl.searchStr">
-    <ul class="pager">
-      <li class="previous">
-        <a ng-click="ctrl.getMetricsList('pre')" ng-disabled="ctrl.page === 1">&larr; 上一页</a>
-      </li>
-      <li class="next">
-        <a ng-click="ctrl.getMetricsList('next')">下一页 &rarr;</a>
-      </li>
-    </ul>
+  <div class="no-data" ng-if="!ctrl.metricList.length">
+    没有相关指标
   </div>
 </div>
