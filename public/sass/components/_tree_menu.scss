@@ -1,7 +1,6 @@
 .tree-menu {
   border: $panel-border;
   display: flex;
-  // height: 100%;
   height: 500px;
   width: 350px;
 
@@ -59,7 +58,6 @@
 
 .tree-content{
   flex: 1;
-  max-height: 80%;
   overflow: scroll;
 
   &.no-data {

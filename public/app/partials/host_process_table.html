@@ -1,31 +1,31 @@
-<div class="fixed-table-container" ng-if="ctrl.tableData.length">
-    <table ng-table="ctrl.tableParams" class="table fix-table-row-height">
+<div class="fixed-table-container" ng-if="ctrl.tableData.length"><!-- bs-popover data-placement="bottom" data-template-url="public/app/features/topn/partials/process_topn_graph.html" ng-click="ctrl.rowClick(row.pid, $index)" -->
+    <table ng-table="ctrl.tableParams" class="table fix-table-row-height"><!-- class="topn-row-graph" ng-click="ctrl.showGraph(row.pid, $index)" -->
         <tr ng-repeat="row in $data">
-            <td title="'进程 ID'" sortable="'pid'">
+            <td data-title="'进程 ID'" sortable="'pid'">
                 <div>{{ row.pid }}</div>
             </td>
-            <td title="'进程创建用户'" sortable="'user'">
+            <td data-title="'创建用户'" sortable="'user'">
                 <div>{{ row.user }}</div>
             </td>
-            <td title="'进程'" sortable="'name'">
+            <td data-title="'进程'" sortable="'name'">
                 <div bs-tooltip="'{{ row.name }}'" data-container="body">{{ row.name }}</div>
             </td>
-            <td title="'CPU 使用率'" sortable="'cpuPercent'">
+            <td data-title="'CPU 使用率'" sortable="'cpuPercent'">
                 <div>{{ _.percentFormatter(row.cpuPercent) }}</div>
             </td>
-            <td title="'内存占用率'" sortable="'memPercent'">
+            <td data-title="'内存占用率'" sortable="'memPercent'">
                 <div>{{ _.percentFormatter(row.memPercent) }}</div>
             </td>
-            <td title="'读硬盘次数'" sortable="'diskIoRead'">
-                <div>{{ row.diskIoRead }}</div>
+            <td data-title="'读硬盘次数'" sortable="'diskIoRead'">
+                <div>{{ _.valueFormats.Bps(row.diskIoRead) }}</div>
             </td>
-            <td title="'写硬盘次数'" sortable="'diskIoWrite'">
-                <div>{{ row.diskIoWrite }}</div>
+            <td data-title="'写硬盘次数'" sortable="'diskIoWrite'">
+                <div>{{ _.valueFormats.Bps(row.diskIoWrite) }}</div>
             </td>
-            <td title="'创建时间'" sortable="'createTime'">
+            <td data-title="'进程创建的具体时间'" sortable="'createTime'">
                 <div>{{ _.transformTime(row.createTime) }}</div>
             </td>
-            <td title="'命令'" sortable="'command'">
+            <td data-title="'命令'" sortable="'command'">
                 <div bs-tooltip="'{{ row.command }}'" data-container="body">{{ row.command }}</div>
             </td>
         </tr>

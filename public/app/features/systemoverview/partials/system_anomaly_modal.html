@@ -2,7 +2,7 @@
 <div class="modal" tabindex="-1" role="dialog" aria-hidden="true" style="max-height:550px; overflow: scroll;">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="background-color: transparent;">
         <h4 class="modal-title" ng-if="except.message.length">
           异常进程
         </h4>
@@ -10,10 +10,26 @@
           系统状况正常，没有异常进程
         </h4>
       </div>
-      <div class="modal-body" style="background-color: #fff;">
-        <ul>
-          <li ng-repeat="msg in except.message" style="width:100%; text-align:left;">{{msg}}<hr/></li>
-        </ul>
+      <div class="modal-body">
+        <table class="table panel-table" ng-if="except.message.length">
+          <thead>
+            <tr>
+              <th>机器</th>
+              <th>进程 ID</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="msg in except.message"
+                style="text-align:left;">
+              <td>{{ msg.host }}</td>
+              <td>{{ msg.tag }}</td>
+              <td>
+                <a href="/topn?host={{ msg.host }}" style="justify-content: left;"><i class="fa fa-search" bs-tooltip="'查看'"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
