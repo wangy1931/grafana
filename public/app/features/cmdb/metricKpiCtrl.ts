@@ -3,7 +3,6 @@
 import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
-import 'app/plugins/datasource/opentsdb/queryCtrl';
 import coreModule from 'app/core/core_module';
 
 export class MetricKpiCtrl {
@@ -13,7 +12,7 @@ export class MetricKpiCtrl {
   kpi: any;
   serviceName: any;
 
-  /** ngInject */
+  /** @ngInject */
   constructor(private $scope, private backendSrv, private datasourceSrv, private $controller) {
     this.getService();
     this.$controller('OpenTSDBQueryCtrl', {$scope: this.$scope});
