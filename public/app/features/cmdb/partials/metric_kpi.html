@@ -13,7 +13,7 @@
       <h3>请选择服务:</h3>
       <ul>
         <li ng-repeat="service in ctrl.serviceList">
-          <a ng-click="ctrl.getKpi(service.name)">{{service.name}}</a>
+          <a ng-click="ctrl.getKpi(service)">{{service.key}}</a>
         </li>
       </ul>
     </div>
@@ -22,7 +22,7 @@
         请选择服务
       </div>
       <div ng-if="ctrl.kpiList">
-        <h3>{{ctrl.serviceName}}--KPI列表</h3>
+        <h3>{{ctrl.serviceSelected.key}}--KPI列表</h3>
         <table class="table">
           <tr ng-repeat="kpi in ctrl.kpiList">
             <td>{{kpi}}</td>

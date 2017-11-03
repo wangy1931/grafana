@@ -11,7 +11,7 @@ export class MetricKpiCtrl {
   serviceList: Array<any>;
   service: any;
   kpi: any;
-  serviceName: any;
+  serviceSelected: any;
 
   /** @ngInject */
   constructor(private $scope, private backendSrv, private datasourceSrv, private $controller) {
@@ -26,16 +26,32 @@ export class MetricKpiCtrl {
     this.backendSrv.alertD({
       url: '/cmdb/service'
     }).then((res) => {
-      this.serviceList = res.data;
+      var hostList = [{
+        key: '内存',
+        name: 'HostMem',
+      },{
+        key: 'CPU',
+        name: 'HostCpu',
+      },{
+        key: '网络',
+        name: 'HostNW',
+      },{
+        key: '磁盘',
+        name: 'HostIO',
+      }];
+      _.each(res.data, (service) => {
+        service.key = service.key.replace(/_linux/, '');
+      });
+      this.serviceList = _.concat(hostList, res.data);
     })
   }
 
   getKpi(service) {
-    this.serviceName = service;
+    this.serviceSelected = service;
     this.backendSrv.metricKpi({
       method: 'get',
       params: {
-        service: service
+        service: service.name
       }
     }).then((res) => {
       this.kpiList = res.data;
