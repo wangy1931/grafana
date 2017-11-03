@@ -69,7 +69,7 @@ export class MetricKpiCtrl {
         this.backendSrv.metricKpi({
           method: 'post',
           params: {
-            service: service,
+            service: service.name,
             metric: kpi,
             kpi: false
           }
@@ -89,7 +89,7 @@ export class MetricKpiCtrl {
     this.backendSrv.metricKpi({
       method: 'post',
       params: {
-        service: service,
+        service: service.name,
         metric: kpi
       }
     }).then((res) => {

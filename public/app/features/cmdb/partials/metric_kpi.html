@@ -27,7 +27,7 @@
           <tr ng-repeat="kpi in ctrl.kpiList">
             <td>{{kpi}}</td>
             <td>
-              <a class="delete-btn" ng-click="ctrl.removeKpi(kpi, ctrl.serviceName)"><i class="fa fa-trash"></i>删除</a>
+              <a class="delete-btn" ng-click="ctrl.removeKpi(kpi, ctrl.serviceSelected)"><i class="fa fa-trash"></i>删除</a>
             </td>
           </tr>
           <tr>
@@ -37,7 +37,7 @@
                 bs-typeahead-old="suggestMetrics">
             </td>
             <td>
-              <a class="edit-btn" ng-click="ctrl.addKpi(ctrl.kpi, ctrl.serviceName)"><i class="fa fa-edit"></i>添加</a>
+              <a class="edit-btn" ng-click="ctrl.addKpi(ctrl.kpi, ctrl.serviceSelected)"><i class="fa fa-edit"></i>添加</a>
             </td>
           </tr>
         </table>
