@@ -8,23 +8,40 @@
     <h1>KPI管理</h1>
   </div>
 
-  <div>
-    <select ng-options="service.name for service in ctrl.serviceList" ng-model="ctrl.service" ng-change="ctrl.getKpi(ctrl.service.name)"></select>
-    <table class="table">
-      <tr ng-repeat="kpi in ctrl.kpiList">
-        <td>{{kpi}}</td>
-        <td>
-          <a ng-click="ctrl.removeKpi(kpi, ctrl.service.name)">删除</a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <input type="text" ng-model="ctrl.kpi">
-        </td>
-        <td>
-          <a ng-click="ctrl.addKpi(ctrl.kpi, ctrl.service.name)">添加</a>
-        </td>
-      </tr>
-    </table>
+  <div class="metric-kpi-container">
+    <div class="sidebar service-list">
+      <h3>请选择服务:</h3>
+      <ul>
+        <li ng-repeat="service in ctrl.serviceList">
+          <a ng-click="ctrl.getKpi(service.name)">{{service.name}}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="kpi-list">
+      <div class="no-data" ng-if="!ctrl.kpiList">
+        请选择服务
+      </div>
+      <div ng-if="ctrl.kpiList">
+        <h3>{{ctrl.serviceName}}--KPI列表</h3>
+        <table class="table">
+          <tr ng-repeat="kpi in ctrl.kpiList">
+            <td>{{kpi}}</td>
+            <td>
+              <a class="delete-btn" ng-click="ctrl.removeKpi(kpi, ctrl.serviceName)"><i class="fa fa-trash"></i>删除</a>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input type="text" ng-model="ctrl.kpi" spellcheck='false'
+                class="width-25"
+                bs-typeahead-old="suggestMetrics">
+            </td>
+            <td>
+              <a class="edit-btn" ng-click="ctrl.addKpi(ctrl.kpi, ctrl.serviceName)"><i class="fa fa-edit"></i>添加</a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
   </div>
 </div>

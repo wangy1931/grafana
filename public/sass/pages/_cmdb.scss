@@ -199,3 +199,53 @@ $btn-cmdb-color: rgb(25,165,228);
   width: 350px;
   @include text-overflow();
 }
+
+.metric-kpi-container {
+  display: flex;
+  .service-list {
+    width: 11rem;
+    height: auto;
+    background: none;
+    border-right: 1px solid;
+    ul li {
+      border: none;
+      border-radius: 0;
+      border-bottom: 1px solid;
+      cursor: pointer;
+      &:hover {
+        border: none;
+        border-bottom: 1px solid;
+      }
+    }
+  }
+  .kpi-list {
+    flex: 1;
+    padding: 1rem;
+    .table {
+      border-bottom: 1px solid #ddd;
+      td, th {
+        font-size: 16px;
+        line-height: 30px;
+        padding-left: 1rem;
+        input {
+          background: none;
+        }
+      }
+    }
+  }
+  .no-data {
+    border: 1px dashed $blue;
+    border-radius: 5px;
+    height: 100%;
+    padding-top: 45%;
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .delete-btn {
+    color: $critical;
+  }
+  .edit-btn {
+    color: $online;
+  }
+}
