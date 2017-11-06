@@ -117,8 +117,8 @@ export class SideMenuCtrl {
         },
         {
           text: '日志管理',
-          url: this.getUrl("/cmdb/config?serviceName=filebeat")
-        },
+          url: this.getUrl("/logs/rules")
+        }
       ]
     });
 

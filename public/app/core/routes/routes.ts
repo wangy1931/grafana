@@ -294,6 +294,23 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'LogsCtrl',
     resolve: loadLogsBundle,
   })
+  .when('/logs/rules', {
+    templateUrl: 'public/app/features/logs/partials/log_rules.html',
+    controller : 'LogParseCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadLogsBundle,
+  })
+  .when('/logs/rules/new', {
+    templateUrl: 'public/app/features/logs/partials/log_rules_new.html',
+    controller : 'LogParseEditCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadLogsBundle,
+  })
+  .when('/analysis', {
+    templateUrl: 'public/app/features/analysis/partials/analysis.html',
+    controller : 'AnalysisCtrl',
+    resolve: loadAnalysisBundle,
+  })
   .when('/association', {
     templateUrl: 'public/app/features/org/partials/alertAssociation.html',
     controller : 'AlertAssociationCtrl',
