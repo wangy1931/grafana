@@ -34,20 +34,26 @@ export class UagentCtrl {
 
   getService() {
     this.backendSrv.alertD({
-      url: '/cmdb/config/configName?serviceName=' + this.serviceName + '&hostId=' + this.host.id
+      url: '/cmdb/config/configName',
+      params: {
+        serviceName: this.serviceName,
+        hostId: this.host.id
+      }
     }).then((response) => {
       this.configs = response.data;
     });
   }
 
   getConfig() {
-    var url = '';
-    if (this.configName === 'template') {
-      url = '/cmdb/config/configTemplate?serviceName=filebeat';
-    } else {
-      url = '/cmdb/config/service?serviceName='+ this.serviceName + '&configName=' + this.configName + '&hostId=' + this.host.id;
-    }
-    this.backendSrv.alertD({url: url}).then((response) => {
+    var url = '/cmdb/config/service';
+    this.backendSrv.alertD({
+      url: url,
+      params: {
+        serviceName: this.serviceName,
+        configName: this.configName,
+        hostId: this.host.id
+      }
+    }).then((response) => {
       this.config = response.data;
       _.orderBy(this.config.sections[0].props, ['name']);
     });

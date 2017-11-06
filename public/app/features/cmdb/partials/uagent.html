@@ -10,18 +10,13 @@
         </ul>
       </span>
     </h1>
-    <a ng-if="ctrl.serviceName === 'filebeat'" href="/cmdb/config/edit?configName=template&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}" class="btn btn-outline-primary">添加</a>
-    <form ng-if="ctrl.serviceName === 'collector'" class="form-search cmdb-search">
+    <form class="form-search cmdb-search">
       <i class="fa fa-search"></i>
       <input type="text" class="input-medium search-query" placeholder="搜索config" ng-model="ctrl.searchConf">
     </form>
 	</div>
 
   <div>
-    <div class="center" ng-if="!ctrl.configs.length && ctrl.serviceName === 'filebeat'">
-      尚未添加filebeat配置信息，请
-      <a href="/cmdb/config/edit?configName=template&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}" class="btn btn-outline-primary btn-cmdb">添加</a>
-    </div>    
     <table class="table uagent-table" ng-if="ctrl.configs.length">
       <tr>
         <th>服务名称</th>
@@ -32,7 +27,6 @@
         <td>{{config.name}}</td>
         <td>
           <a class="btn btn-outline-primary" href="/cmdb/config/edit?configName={{config.name}}&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}">编辑</a>
-          <a class="btn btn-outline-danger" ng-if="ctrl.serviceName === 'filebeat'" ng-click="ctrl.deleteConfig(config.id)">删除</a>
         </td>
         <td>
           <button type="button" class="btn btn-inverse" 
