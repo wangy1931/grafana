@@ -21,6 +21,7 @@ export class HostTopologyCtrl {
   currentHost: any;  // one node information of relationshipGraph
   hostPanels: any;
   tableParams: any;
+  tableData: Array<any>;
 
   currentTab: number;
   hostSummary: Array<any>;
@@ -43,6 +44,8 @@ export class HostTopologyCtrl {
     private NgTableParams
   ) {
     $scope.ctrl = this;
+    $scope.refresh_interval = '30s';
+    $scope.refresh_func = this.getProcess.bind(this);
 
     this.tabs = [
       { 'id': 0, 'title': '机器总览', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_list_table.html' },
@@ -77,10 +80,6 @@ export class HostTopologyCtrl {
 
     this.currentHost = {};
 
-    $scope.$on('topology-host-changed', (evt, payload) => {
-      this.currentHost = payload;
-    });
-
     this.$rootScope.onAppEvent('exception-located', this.showGuideResult.bind(this), $scope);
 
     $scope.$watch('ctrl.currentHost', (newValue, oldValue) => {
@@ -100,7 +99,15 @@ export class HostTopologyCtrl {
     var search = this.$location.search();
     this.tabs[+search.tabId || 0].active = true;
     this.currentTab = +search.tabId || 0;
-    this.switchTab(this.currentTab);
+
+    this.$scope.$on('topology-loaded', (evt, payload) => {
+      this.data = payload;
+      if (search.id) {
+        this.currentHost = _.find(this.data, { name: search.name });
+      } else {
+        this.switchTab(this.currentTab);
+      }
+    });
 
     _.isEmpty(this.hostSummary) && this.hostSrv.getHostInfo().then(response => {
       this.hostPanels = response;
@@ -179,14 +186,10 @@ export class HostTopologyCtrl {
     );
   }
 
-  getProcess(host) {
+  getProcess(host?) {
     var id = this.$location.search().id;
-    this.hostSrv.getHostProcess(id).then(response => {
-      response.data && response.data.forEach(item => {
-        item.diskIoRead = kbn.valueFormats.Bps(item.diskIoRead);
-        item.diskIoWrite = kbn.valueFormats.Bps(item.diskIoWrite);
-      });
-      this.$scope.bsTableData = response.data;
+    id && this.hostSrv.getHostProcess(id).then(response => {
+      this.tableData = response.data;
       this.tableParams.settings({
         dataset: response.data,
       });
@@ -243,12 +246,12 @@ export class HostTopologyCtrl {
         _.forIn(this.predictionPanel, (item, key) => {
           // when prediction api returns {}
           if (item.errTip) {
-            $('.prediction-item-' + $.escapeSelector(host + key)).html(item.errTip);
+            // $('.prediction-item-' + $.escapeSelector(host + key)).html(item.errTip);
             return;
           }
 
           var score = item.tips[0] && parseFloat(item.tips[0].data);
-          var colors = score > 75 ? [HEALTH_TYPE.GREEN.COLOR] : (score > 50 ? [HEALTH_TYPE.YELLOW.COLOR] : [HEALTH_TYPE.RED.COLOR]);
+          var colors = score > 75 ? [HEALTH_TYPE.RED.COLOR] : (score > 50 ? [HEALTH_TYPE.YELLOW.COLOR] : [HEALTH_TYPE.GREEN.COLOR]);
 
           this.utilSrv.setPie('.prediction-item-' + host + key, [
             { label: "", data: score },
@@ -270,8 +273,8 @@ export class HostTopologyCtrl {
     var score = parseFloat(panel.tips[selected].data);
 
     panel.selected = kbn.valueFormats.percent(score, 2);
+    var colors = score > 75 ? [HEALTH_TYPE.RED.COLOR] : (score > 50 ? [HEALTH_TYPE.YELLOW.COLOR] : [HEALTH_TYPE.GREEN.COLOR]);
 
-    var colors = score > 75 ? ['#BB1144'] : (score > 50 ? ['#FE9805'] : ['#3DB779']);
     this.utilSrv.setPie('.prediction-item-' + this.currentHost.name + type, [
       { label: "", data: score },
       { label: "", data: (100 - score) }
@@ -319,18 +322,16 @@ export class HostTopologyCtrl {
   };
 
   switchTab(tabId) {
-    if (this.currentTab !== tabId) {
-      this.currentTab = tabId;
-      this.$location.search({
-        'tabId': tabId,
-        'panelId': null,
-        'fullscreen': null,
-        'edit': null,
-        'editview': null,
-        'id': this.currentHost.name ? this.currentHost._private_.id : '',
-        'name': this.currentHost.name ? this.currentHost.name : ''
-      });
-    }
+    this.currentTab = tabId;
+    this.$location.search({
+      'tabId': tabId,
+      'panelId': null,
+      'fullscreen': null,
+      'edit': null,
+      'editview': null,
+      'id': this.currentHost.name ? this.currentHost._private_.id : '',
+      'name': this.currentHost.name ? this.currentHost.name : ''
+    });
 
     if (tabId === 0) {
       this.getHostList(this.currentHost);

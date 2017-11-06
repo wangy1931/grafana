@@ -44,7 +44,7 @@ var template = `
                           请选择<span class="caret"></span>
                       </button>
                   </li>
-                  <li class="tidy-form-item pull-right">
+                  <li class="tidy-form-item pull-right" ng-hide="ctrl.hideClear">
                       <button class="btn btn-primary" style="padding: 0.4rem 1rem;" ng-click="ctrl.clearSelected();">清除选中机器</button>
                   </li>
               </ul>
@@ -72,6 +72,7 @@ export class TopologyGraphCtrl {
   filter: string;
   groupOptions: any;
   filterOptions: any;
+  hideClear: any;
 
   /** @ngInject */
   constructor(
@@ -93,6 +94,8 @@ export class TopologyGraphCtrl {
       { 'text': '宕机', 'value': 'GREY' }
     ];
     this.heatmap = window.d3.select('#heatmap');
+
+    this.hideClear = (this.$location.path() === '/');
 
     this.getGraph();
     this.getAllTagsKey();
@@ -117,10 +120,7 @@ export class TopologyGraphCtrl {
       this.rendered = true;
       this.heatmap.data(this.data);
 
-      var search = this.$location.search();
-      if (search.id) {
-        this.currentHost = _.find(this.data, { name: search.name });
-      }
+      this.$scope.$emit('topology-loaded', this.data);
     });
   }
 
@@ -134,13 +134,13 @@ export class TopologyGraphCtrl {
 
   clearSelected() {
     this.currentHost = {};
+    this.heatmap.data(this.data);
   }
 
   searchHost() {
     // check this.query before sending request
     if (this.query === '' || this.query === '*') {
-      this.heatmap.data(this.data);
-      this.currentHost = {};
+      this.clearSelected();
     } else if (!~this.hostlist.indexOf(this.query)) {
       this.alertSrv.set("搜索条件输入不正确", '', "warning", 2000);
     } else {
@@ -180,20 +180,10 @@ export function topologyGraphDirective() {
     bindToController: true,
     controllerAs: 'ctrl',
     scope: {
-      params: "="
+      params: "=",
+      currentHost: "="
     },
     link: function(scope, elem) {
-      scope.$watch('ctrl.currentHost', (newValue, oldValue) => {
-        if (!newValue) { return; }
-        if ((newValue === oldValue) && _.isEmpty(newValue)) { return; }
-
-        if (_.isString(newValue)) {
-          scope.$emit('topology-host-changed', newValue);
-        } else {
-          var host = newValue.name ? newValue : {};
-          scope.$emit('topology-host-changed', host);
-        }
-      });
     }
   };
 }

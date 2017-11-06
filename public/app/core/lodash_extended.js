@@ -1,10 +1,13 @@
 define([
   'jquery',
   'moment',
+  'app/core/utils/kbn',
   'lodash-src'
 ],
-function ($, moment) {
+function ($, moment, kbn) {
   'use strict';
+
+  kbn = kbn.default;
 
   var _ = window._;
 
@@ -13,6 +16,9 @@ function ($, moment) {
   _.where = _.filter;
   _.pairs = _.toPairs;
   _.pluck = _.map;
+
+  // kbn
+  _.valueFormats = kbn.valueFormats;
 
   /*
     Mixins :)
@@ -142,13 +148,8 @@ function ($, moment) {
     return moment.unix(value).format("YYYY-MM-DD HH:mm:ss");
   };
 
-  _.statusFormatter = function (value) {
-    if (_.isNumber(value)) {
-      return value === 0 ? '正常' : '异常';
-    }
-    if (_.isString(value)) {
-      return value === 'GREEN' ? '正常' : (value === 'YELLOW' ? '警告' : (value === 'RED' ? '严重' : '异常'));
-    }
+  _.transformMillionTime = function (value) {
+    return moment(value).format("YYYY-MM-DD HH:mm:ss");
   };
 
   _.percentFormatter = function (value) {
@@ -159,6 +160,8 @@ function ($, moment) {
     return value && ((value / Math.pow(1024, 3)).toFixed(2) + 'GB');
   };
 
+  // _.valueFormats = kbn.valueFormats;
+
   // Translate
   _.translateAlertLevel = function (value) {
     var map = {
@@ -167,6 +170,15 @@ function ($, moment) {
       "NORMAL"  : "正常"
     };
     return value && map[value];
+  };
+
+  _.statusFormatter = function (value) {
+    if (_.isNumber(value)) {
+      return value === 0 ? '正常' : '异常';
+    }
+    if (_.isString(value)) {
+      return value === 'GREEN' ? '正常' : (value === 'YELLOW' ? '警告' : (value === 'RED' ? '严重' : '异常'));
+    }
   };
 
   // Metric

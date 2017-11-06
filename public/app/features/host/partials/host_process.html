@@ -1,9 +1,17 @@
-<div class="host-process host-tab-content">
-  <div ng-hide="bsTableData.length">
+<div class="host-process host-tab-content" auto-refresh>
+  <div ng-hide="ctrl.tableData.length">
     <em>暂没有任何进程数据</em>
-    <cw-loading show="!bsTableData.length" duration=6000></cw-loading>
+    <cw-loading show="!ctrl.tableData.length" duration=6000></cw-loading>
   </div>
-  <div ng-show="bsTableData.length">
+  <div ng-show="ctrl.tableData.length">
+    <p class="pull-right" ng-show="refresh_interval">
+      <i class="fa fa-clock-o"></i>
+      <span>现在</span>
+      <span class="text-warning">
+        &nbsp;
+        自动刷新 {{ refresh_interval }}
+      </span>
+    </p>
     <div ng-include="'public/app/partials/host_process_table.html'"></div>
   </div>
 </div>

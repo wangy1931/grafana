@@ -105,7 +105,7 @@ export class SystemOverviewCtrl {
     panel.seriesOverrides[2].alias = metric + ".prediction.max{host=" + hostname + "}";
     panel.seriesOverrides[2].fillBelowTo = metric + ".prediction.min{host=" + hostname + "}";
     panel.seriesOverrides[2].linewidth  = 0;
-    panel.seriesOverrides[2].fill = 5;
+    panel.seriesOverrides[2].fill = 0;
     return panelDef;
   }
 

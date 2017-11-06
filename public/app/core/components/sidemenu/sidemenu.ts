@@ -149,10 +149,10 @@ export class SideMenuCtrl {
           text: '关联性分析',
           url: this.getUrl("/association"),
         },
-        // {
-        //   text: '资源消耗分析',
-        //   url: this.getUrl("/topn"),
-        // },
+        {
+          text: '资源消耗',
+          url: this.getUrl("/topn?guide"),
+        },
         {
           text: '运维知识',
           url: this.getUrl("/knowledgebase"),
@@ -364,17 +364,6 @@ export class SideMenuCtrl {
     _self.$rootScope.appEvent('show-modal', {
       src: 'public/app/partials/select_system.html',
       scope: _self.$scope.$new(),
-    });
-  };
-
-  getSource(_self) {
-    _self.$rootScope.appEvent('confirm-modal', {
-      title: '故障溯源',
-      text: '功能暂未开放，敬请期待',
-      icon: 'fa-bell',
-      yesText: '确定',
-      noText: '关闭',
-      modalClass : 'contact-us',
     });
   };
 
