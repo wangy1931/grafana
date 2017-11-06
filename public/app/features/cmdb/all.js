@@ -3,5 +3,6 @@ define([
   './hostDetailCtrl',
   './serviceListCtrl',
   './cmdbServiceDetailCtrl',
+  './uagentCtrl',
   './serviceCustomCtrl',
 ], function() {});

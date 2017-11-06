@@ -37,6 +37,8 @@ func Register(r *macaron.Macaron) {
 	r.Get("/decompose", reqSignedIn, Index)
 	r.Get("/signupfree", reqSignedIn, Index)
 	r.Get("/logs", reqSignedIn, Index)
+	r.Get("/logs/rules", reqSignedIn, Index)
+	r.Get("/logs/rules/new", reqSignedIn, Index)
 	r.Get("/analysis", reqSignedIn, Index)
 	r.Get("/association", reqSignedIn, Index)
 	r.Get("/knowledgebase", reqSignedIn, Index)
@@ -59,6 +61,8 @@ func Register(r *macaron.Macaron) {
 	r.Get("/cmdb/hostlist/hostdetail", reqSignedIn, Index)
 	r.Get("/cmdb/servicelist", reqSignedIn, Index)
 	r.Get("/cmdb/servicelist/servicedetail", reqSignedIn, Index)
+	r.Get("/cmdb/config", reqSignedIn, Index)
+	r.Get("/cmdb/config/edit", reqSignedIn, Index)
 	r.Get("/cmdb/servicecustom", reqSignedIn, Index)
 
 	// not logged in views

@@ -172,7 +172,7 @@ $btn-cmdb-color: rgb(25,165,228);
   margin: 0 auto;
 }
 
-.btn-outline-primary {
+.cmdb-ul .btn-outline-primary {
   background: none;
   border: 1px solid rgb(25,165,228);
   color: rgb(25,165,228);
@@ -186,12 +186,46 @@ $btn-cmdb-color: rgb(25,165,228);
   right: 0;
 }
 
+.uagent-table {
+  th, td {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+  }
+  .btn-inverse {
+    width: 150px;
+    height: 35px;
+    @include text-overflow();
+    position: relative;
+    .caret {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+    }
+  }
+}
+
+.select-multiple {
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.gf-form-label-radio {
+  background: none;
+  padding-left: 0;
+}
+[type=radio].gf-form-input:focus {
+  box-shadow: none;
+}
 .cmdb-reference {
   margin-top: 20px;
   .dropdown-menu {
     max-height: 200px;
     overflow-y: scroll;
   }
+}
+
+.dropdown-menu > li > a {
+  width: 100%;
 }
 
 .software-command {
