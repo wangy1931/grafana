@@ -26,7 +26,7 @@
       <tr>
         <th>服务名称</th>
         <th>操作</th>
-        <th>同步机器</th>
+        <th>同步机器 &nbsp; <i bs-tooltip="'您可以将此配置文件同步至选定机器'" data-placement="top" class="fa fa-question-circle" ></i></th>
       </tr>
       <tr ng-repeat="config in ctrl.configs | filter: ctrl.searchConf" ng-if="config.name">
         <td>{{config.name}}</td>
