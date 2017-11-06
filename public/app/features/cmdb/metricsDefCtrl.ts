@@ -81,11 +81,12 @@ export class MetricsDefCtrl {
     });
   }
 
-  getDetailById(id) {
-    if (this.metricCur && this.metricCur.id === id) {
+  getDetailById(metric) {
+    if (this.metricCur && this.metricCur.id === metric.id) {
+      this.metricCur.id = -1;
       return;
     }
-    this.backendSrv.getMetricInfo({id: id}).then((res) => {
+    this.backendSrv.getMetricInfo({id: metric.id}).then((res) => {
       this.metricCur = res.data;
       this.metricCur.disabled = true;
     });
