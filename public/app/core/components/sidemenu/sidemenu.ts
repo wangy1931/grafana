@@ -199,6 +199,10 @@ export class SideMenuCtrl {
           text: '指标概览',
           url: this.getUrl("/cmdb/metrics")
         },
+        {
+          text: 'KPI',
+          url: this.getUrl("/cmdb/kpi")
+        },
       ]
     });
 

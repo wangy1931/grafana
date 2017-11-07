@@ -339,5 +339,12 @@ function (angular, _, coreModule, config) {
       })
     }
 
+    this.metricKpi = function(query) {
+      return this.alertD({
+        url: '/service/kpi',
+        method: query.method,
+        params: query.params
+      });
+    }
   });
 });

@@ -57,4 +57,16 @@
     border: none;
     margin-left: 2rem;
   }
+
+  .delete-btn, .edit-btn {
+    font-weight: bold;
+  }
+  
+  .delete-btn {
+    color: rgb(187, 17, 68);
+  }
+
+  .edit-btn {
+    color: rgb(0, 111, 210);
+  }
 }
