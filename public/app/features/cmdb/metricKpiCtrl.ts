@@ -27,15 +27,19 @@ export class MetricKpiCtrl {
       url: '/cmdb/service'
     }).then((res) => {
       var hostList = [{
+        id: 'HostMem',
         key: '内存',
         name: 'HostMem',
       },{
+        id: 'HostCpu',
         key: 'CPU',
         name: 'HostCpu',
       },{
+        id: 'HostNW',
         key: '网络',
         name: 'HostNW',
       },{
+        id: 'HostIO',
         key: '磁盘',
         name: 'HostIO',
       }];
@@ -47,7 +51,12 @@ export class MetricKpiCtrl {
   }
 
   getKpi(service) {
-    this.serviceSelected = service;
+    if (this.serviceSelected === service.id) {
+      this.serviceSelected = -1;
+      return;
+    } else {
+      this.serviceSelected = service.id;
+    }
     this.backendSrv.metricKpi({
       method: 'get',
       params: {
