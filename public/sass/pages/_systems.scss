@@ -143,6 +143,7 @@ $criticalBackground: rgb(224,76,65);
   align-items: center;
   justify-content: center;
   &>span{
+    width: 50%;    
     &:nth-child(1){
       background: $normalBackground;
     }
@@ -166,11 +167,13 @@ $criticalBackground: rgb(224,76,65);
     display: inline-block;
   }
   .status-normal{
+    width: 50%;
     &>span{
       background: $normalBackground;
     }
   }
   .status-unnormal{
+    width: 50%;
     &>span{
       background: $warningBackground;
     }
