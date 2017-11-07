@@ -190,7 +190,7 @@ export class AlertAssociationCtrl {
     } else {
       _.remove(this.$scope.dashboard.manualAnnotation, { id: row.pid, eventType: row.type });
     }
-    this.$scope.broadcastRefresh();
+    this.$rootScope.$broadcast('refresh', this.$scope.dashboard.rows[0].panels[0].id);
   }
 
   showGuideResult(e, params) {
@@ -207,7 +207,7 @@ export class AlertAssociationCtrl {
     panels[2].targets[0].query = this.query;
     panels[2].targets[1].query = this.query;
 
-    this.$rootScope.$broadcast('refresh');
+    this.$rootScope.$broadcast('refresh', [panels[0].id, panels[1].id, panels[2].id]);
   }
 }
 coreModule.controller('AlertAssociationCtrl', AlertAssociationCtrl);

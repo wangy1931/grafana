@@ -165,11 +165,7 @@ function (angular, _, coreModule, config) {
       var updateToken = this.get('/api/auth/keys').then(function (tokens) {
         self.tokens = tokens;
       });
-      var initCustomizedSource = this.get('/api/customized_sources').then(function (result) {
-        self.alertDUrl = result.alert;
-        contextSrv.elkUrl = result.elk;
-      });
-      return $q.all([updateToken, initCustomizedSource]);
+      return $q.all([updateToken, this.initCustomizedSources()]);
     };
 
     this.updateSystemId = function(id) {
