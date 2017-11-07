@@ -167,10 +167,10 @@ export class HostSrv {
           "metric": "collector.state"
         },
         {
-          "metric": "proc.meminfo.active"
+          "metric": "proc.meminfo.percentused"
         },
         {
-          "metric": "df.bytes.free",
+          "metric": "df.bytes.percentused",
           "tags": [
             {
               "name": "mount",
@@ -193,9 +193,9 @@ export class HostSrv {
           "host": item.hostname,
           "id": item.id,
           "status": _.statusFormatter(item["collector.state"]),
-          "disk": _.gbFormatter(item["df.bytes.free"]),
+          "disk": _.percentFormatter(item["df.bytes.percentused"]),
           "cpu": _.percentFormatter(item["cpu.usr"]),
-          "mem": _.gbFormatter(item["proc.meminfo.active"]),
+          "mem": _.percentFormatter(item["proc.meminfo.percentused"]),
           "commit": item.commit,
           "startTime": item.startTime,
           "version": item.version

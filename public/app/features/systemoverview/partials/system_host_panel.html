@@ -26,9 +26,8 @@
                         ng-click="ctrl.selectHostKpi(host.host, item.type)"
                         class="status-color bg-{{ item.healthStatusType | lowercase }}"
                         style="color: #fff;"
-                        bs-tooltip="'{{ item.type | formatItemType | translateItemType }}'"
                         data-container="body">
-                        {{ item.type | formatItemType | uppercase }}
+                        {{ item.type | formatItemType | translateItemType }}
                     </li>
                 </ul>
                 <div>

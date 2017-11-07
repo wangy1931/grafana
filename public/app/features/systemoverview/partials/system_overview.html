@@ -76,7 +76,7 @@
                         <div class="service-dependency jtk-container">
                             <script type="jtk" id="tmplNode">
                                 <div>
-                                    <div class="name" bs-tooltip="'test'">
+                                    <div class="name">
                                         <i class="${icon} service-icon bg-${status}"></i>
                                         <span>${name}</span>
                                     </div>
@@ -100,10 +100,10 @@
                             <ul>
                                 <li>机器名</li>
                                 <li>服务运行状态</li>
-                                <li>机器在线状态</li>
+                                <li>机器在线</li>
                                 <li>CPU 使用率</li>
-                                <li>内存使用</li>
-                                <li>磁盘剩余空间</li>
+                                <li>内存使用率</li>
+                                <li>磁盘使用率</li>
                                 <li>机器详细信息</li>
                             </ul>
                             <div ng-include="'public/app/features/systemoverview/partials/system_service_host_panel.html'"></div>
@@ -135,10 +135,10 @@
                         <div class="table host-panel-table" ng-if="ctrl.hostPanel.currentHost.name">
                             <ul>
                                 <li>机器名</li>
-                                <li>机器在线状态</li>
+                                <li>机器在线</li>
                                 <li>CPU 使用率</li>
-                                <li>内存使用</li>
-                                <li>磁盘剩余空间</li>
+                                <li>内存使用率</li>
+                                <li>磁盘使用率</li>
                                 <li>机器详细信息</li>
                             </ul>
                             <div ng-include="'public/app/features/systemoverview/partials/system_host_panel.html'"></div>

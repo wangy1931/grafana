@@ -44,6 +44,8 @@ export class HostTopologyCtrl {
     private NgTableParams
   ) {
     $scope.ctrl = this;
+    $scope.refresh_interval = '30s';
+    $scope.refresh_func = this.getProcess.bind(this);
 
     this.tabs = [
       { 'id': 0, 'title': '机器总览', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_list_table.html' },
@@ -185,9 +187,9 @@ export class HostTopologyCtrl {
     );
   }
 
-  getProcess(host) {
+  getProcess(host?) {
     var id = this.$location.search().id;
-    this.hostSrv.getHostProcess(id).then(response => {
+    id && this.hostSrv.getHostProcess(id).then(response => {
       this.tableData = response.data;
       this.tableParams.settings({
         dataset: response.data,

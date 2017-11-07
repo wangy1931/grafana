@@ -28,6 +28,7 @@ import "./directives/log_tabpane";
 import {tagPicker} from './directives/tagpicker';
 import "./directives/loading";
 import "./directives/ng_enter";
+import {autoRefresh} from './directives/auto_refresh';
 import {topologyGraphDirective} from './components/topology_graph';
 import {guideDirective} from './components/guide/guide';
 import {toolbarDirective} from './components/toolbar/toolbar';
@@ -79,5 +80,6 @@ export {
   cwizSwitchDirective,
   treeMenu,
   knowledgeBaseDirective,
-  timeWindowDirective
+  timeWindowDirective,
+  autoRefresh,
 };
