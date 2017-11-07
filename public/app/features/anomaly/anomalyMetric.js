@@ -147,7 +147,7 @@ define([
           }
           $timeout(function() {
             healthSrv.transformMetricType($scope.dashboard).then(function () {
-              $scope.$broadcast('render');
+              $scope.$broadcast('refresh');
             });
           });
         };
