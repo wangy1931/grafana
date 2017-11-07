@@ -1,0 +1,42 @@
+<navbar icon="fa fa-fw fa-cubes" title="配置管理库" title-url="/cmdb/hostlist">
+  <ul class="nav">
+    <li class="active"><a href="/cmdb/kpi">KPI管理</a></li>
+  </ul>
+</navbar>
+<div class="page-container">
+  <div class="page-header">
+    <h1>KPI管理</h1>
+  </div>
+
+  <div class="accordion metrics-def-container" id="accordion2">
+    <div class="accordion-group" ng-repeat="service in ctrl.serviceList">
+      <div class="accordion-heading">
+        <a ng-click="ctrl.getKpi(service)" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{service.id}}">
+          <i class="fa" ng-class="{true: 'fa-angle-up', false: 'fa-angle-down'}[service.id === ctrl.serviceSelected]"></i>{{service.key}}
+        </a>
+      </div>
+      <div id="{{service.id}}" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <table class="table">
+            <tr ng-repeat="kpi in ctrl.kpiList">
+              <td>{{kpi}}</td>
+              <td>
+                <a class="delete-btn" ng-click="ctrl.removeKpi(kpi, service)"><i class="fa fa-trash"></i>删除</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="text" ng-model="ctrl.kpi" spellcheck='false'
+                  class="width-25"
+                  bs-typeahead-old="suggestMetrics">
+              </td>
+              <td>
+                <a class="edit-btn" ng-click="ctrl.addKpi(ctrl.kpi, service)"><i class="fa fa-edit"></i>添加</a>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
