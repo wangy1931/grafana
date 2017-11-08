@@ -104,15 +104,7 @@ export class SideMenuCtrl {
       icon: "fa fa-fw fa-file-text-o",
       children: [
         {
-          text: '全文查询',
-          url: this.getUrl("/logs")
-        },
-        {
-          text: '聚合查询',
-          url: this.getUrl("/logs")
-        },
-        {
-          text: '日志对比',
+          text: '日志搜索',
           url: this.getUrl("/logs")
         },
         {
