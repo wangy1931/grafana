@@ -175,6 +175,7 @@ export class LogParseEditCtrl {
       newScope.isNew = false;
       newScope.pattern = _.cloneDeep(pattern);
       newScope.oldPattern = pattern;
+      newScope.rule = this.rule;
     }
     newScope.testPattern = this.testPattern.bind(this);
     newScope.savePattern = this.savePattern.bind(this);
@@ -334,7 +335,7 @@ export class LogParseEditCtrl {
         method: 'post',
         data: data
       }).then((res) => {
-        this.$scope.appEvent('alert-success', ['保存成功']);
+        this.$scope.appEvent('alert-success', ['保存成功', '配置将于6分钟之后生效, 请稍后查看']);
         this.$location.url('/logs/rules');
       }, (err) => {
         if (err.status === 400) {
