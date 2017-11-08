@@ -200,8 +200,8 @@ export class SideMenuCtrl {
           url: this.getUrl("/cmdb/servicelist")
         },
         {
-          text: '探针管理',
-          url: this.getUrl("/cmdb/config?serviceName=collector")
+          text: 'KPI',
+          url: this.getUrl("/cmdb/kpi")
         },
       ]
     });

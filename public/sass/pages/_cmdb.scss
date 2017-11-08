@@ -229,3 +229,89 @@ $btn-cmdb-color: rgb(25,165,228);
   width: 350px;
   @include text-overflow();
 }
+
+.metric-kpi-container {
+  display: flex;
+  .service-list {
+    width: 11rem;
+    height: auto;
+    background: none;
+    border-right: 1px solid;
+    ul li {
+      border: none;
+      border-radius: 0;
+      border-bottom: 1px solid;
+      cursor: pointer;
+      &:hover {
+        border: none;
+        border-bottom: 1px solid;
+      }
+    }
+  }
+  .kpi-list {
+    flex: 1;
+    padding: 1rem;
+    .table {
+      border-bottom: 1px solid #ddd;
+      td, th {
+        font-size: 16px;
+        line-height: 30px;
+        padding-left: 1rem;
+        input {
+          background: none;
+        }
+      }
+    }
+  }
+  .no-data {
+    border: 1px dashed $blue;
+    border-radius: 5px;
+    height: 100%;
+    padding-top: 25rem;
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .delete-btn {
+    color: $critical;
+  }
+  .edit-btn {
+    color: $online;
+  }
+}
+
+.metrics-def-container  {
+  .accordion-group {
+    margin: 1rem 0;
+    border-radius: 5px;
+    box-shadow: 1px 2px 10px #ccc;
+  }
+
+  .accordion-heading {
+    padding: 1rem;
+    i {
+      margin: 0 1rem;
+    }
+  }
+
+  .accordion-inner {
+    border: none;
+    margin-left: 2rem;
+  }
+
+  .delete-btn, .edit-btn {
+    font-weight: bold;
+  }
+  
+  .delete-btn {
+    color: rgb(187, 17, 68);
+  }
+
+  .edit-btn {
+    color: rgb(0, 111, 210);
+  }
+
+  .show-suggest {
+    overflow: visible;
+  }
+} 

@@ -27,7 +27,10 @@
                 </ul>
                 <div ng-include="'public/app/features/topn/partials/process_topn_graph.html'"></div>
             </div>
-            <div ng-if="!ctrl.tableData.length">该时间内暂无数据</div>
+            <div ng-hide="ctrl.tableData.length">
+                <em>该时间暂无数据</em>
+                <cw-loading show="!ctrl.tableData.length" duration=6000></cw-loading>
+            </div>
         </div>
     </div>
 
