@@ -161,30 +161,25 @@ export class UagentCtrl {
     });
   }
 
-  addCollectionValue(path, index) {
-    var values = this.config.sections[0].props[index].value;
-    if (path) {
-      if (_.indexOf(values, path) > -1) {
-        this.$scope.appEvent('alert-warning', ['参数重复', '请检查重复内容重新填写']);
-      } else {
-        this.config.sections[0].props[index].value.push(path);
-      }
-      this.newPath = '';
-      this.newPort = null;
+  addCollectionValue(path, prop) {
+    if (_.indexOf(prop.value, path) > -1) {
+      this.$scope.appEvent('alert-warning', ['添加失败', '请将参数填写完整']);
+    } else {
+      prop.value.push(path);
     }
   }
 
-  checkCollectionValue(path, i, index) {
-    var values = this.config.sections[0].props[index].value;
-    values[i] = path;
-    if (path) {
-      values = _.uniq(values);
-    } else {
-      _.remove(values, function(p) {
-        return p === "" || _.isNull(p);
+  checkCollectionValue(path, index, prop) {
+    prop.value[index] = path;
+    if (path === '') {
+      _.remove(prop.value, (value, i) => {
+        return index === i;
       });
     }
-    this.config.sections[0].props[index].value = values;
+    if (prop.value.length > _.uniq(prop.value).length) {
+      prop.value = _.uniq(prop.value);
+      this.$scope.appEvent('alert-warning', ['参数重复', '参数请勿重复']);
+    }
   }
 
   deleteConfig(id) {
