@@ -78,7 +78,7 @@ export class TimeWindowCtrl {
 
   bindEvent() {
     angular.element("#timeWindow").bind("plotselected", (...args) => {
-      this.$scope.$emit('time-window-selected', args[1].xaxis);
+      this.$scope.$emit('time-window-selected', { from: moment(args[1].xaxis.from), to: moment(args[1].xaxis.to) });
     });
     angular.element("#timeWindow").bind("plothover", (...args) => {
       if (!args[2]) {
@@ -128,7 +128,7 @@ export class TimeWindowCtrl {
     var body = `
       <div class="graph-tooltip small topn-tooltip">
         <div class="graph-tooltip-time">${moment(params.x).format("YYYY-MM-DD HH:mm:ss")}</div>
-        <div class="graph-tooltip-value">使用率: ${params.y}</div>
+        <div class="graph-tooltip-value">使用率: ${_.percentFormatter(params.y)}</div>
       </div>
     `;
     this.$tooltip.html(body).place_tt(params.pageX + 20, params.pageY);
