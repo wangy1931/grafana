@@ -15,7 +15,7 @@ export class LogParseEditCtrl {
 
   /** @ngInject */
   constructor(private $scope, private contextSrv,
-    private $routeParams, private backendSrv,
+    private $routeParams, private logParseSrv,
     private $location) {
     this.getServiceList().then(() => {
       if ($routeParams.ruleId) {
@@ -36,7 +36,9 @@ export class LogParseEditCtrl {
       }
     });
     this.editLog(-1, '');
-    this.getHostList();
+    this.logParseSrv.getHostList().then((result) => {
+      this.hostList = result.data;
+    });
     this.custom = {
       logServiceName: '',
       logType: ''
@@ -56,11 +58,13 @@ export class LogParseEditCtrl {
     if (_.isEqual(logType, '其他')) {
       return;
     }
-    var url = '/cmdb/pattern/template?logServiceName='+ logServiceName;
-    if (logType) {
-      url += '&logType=' + logType;
+    var params = {
+      logServiceName: logServiceName
     }
-    this.backendSrv.alertD({url: url}).then((response)=>{
+    if (logType) {
+      params[logType] = logType;
+    }
+    this.logParseSrv.getTemplate(params).then((response)=>{
       var tmp = response.data;
       if (_.isEmpty(tmp)) {
         this.rule.logTypes = ['其他'];
@@ -74,9 +78,7 @@ export class LogParseEditCtrl {
   }
 
   getRuleById(id) {
-    this.backendSrv.alertD({
-      url: '/cmdb/pattern/getById?ruleId=' + id
-    }).then((response) => {
+    this.logParseSrv.getRuleById(id).then((response) => {
       this.rule = response.data;
       this.rule.hosts = this.rule.hosts || [];
       this.rule.logTypes = this.rule.logTypes || [];
@@ -91,15 +93,9 @@ export class LogParseEditCtrl {
   }
 
   getServiceList() {
-    return this.backendSrv.alertD({url: '/cmdb/service'}).then((result) => {
+    return this.logParseSrv.getServiceList().then((result) => {
       this.serviceList = result.data;
       this.serviceList.push({name: '其他'});
-    });
-  }
-
-  getHostList() {
-    this.backendSrv.alertD({url: '/cmdb/host'}).then((result) => {
-      this.hostList = result.data;
     });
   }
 
@@ -205,17 +201,7 @@ export class LogParseEditCtrl {
   }
 
   testPattern(pattern) {
-    this.backendSrv.alertD({
-      url: '/cmdb/pattern/validate',
-      method: 'post',
-      data: {
-        log: pattern.log,
-        pattern: pattern.pattern,
-        type: pattern.type,
-        namedCaptureOnly: true,
-        isMetric: pattern.isMetric
-      }
-    }).then((res)=>{
+    this.logParseSrv.validatePattern(pattern).then((res)=>{
       pattern.result = res.data;
     }, (err) => {
       pattern.result = '规则解析失败';
@@ -330,11 +316,7 @@ export class LogParseEditCtrl {
         data["multiline.negate"] = false;
         data["multiline.match"] = "after";
       }
-      this.backendSrv.alertD({
-        url: '/cmdb/pattern/save?userId=' + this.contextSrv.user.id,
-        method: 'post',
-        data: data
-      }).then((res) => {
+      this.logParseSrv.savePattern(this.contextSrv.user.id, data).then((res) => {
         this.$scope.appEvent('alert-success', ['保存成功', '配置将于6分钟之后生效, 请稍后查看']);
         this.$location.url('/logs/rules');
       }, (err) => {

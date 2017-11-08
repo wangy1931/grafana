@@ -8,18 +8,8 @@ export class LogParseCtrl {
   ruleList: Array<any>;
 
   /** @ngInject */
-  constructor(private $scope, private contextSrv, private backendSrv) {
-    this.getListRule();
-  }
-
-  getListRule() {
-    this.backendSrv.alertD({
-      url: '/cmdb/pattern/list',
-      params: {
-        orgId: this.contextSrv.user.orgId,
-        sysId: this.contextSrv.user.systemId
-      }
-    }).then((response) => {
+  constructor(private $scope, private contextSrv, private logParseSrv) {
+    this.logParseSrv.getListRule(this.contextSrv.user.orgId, this.contextSrv.user.systemId).then((response) => {
       this.ruleList = response.data;
     });
   }
@@ -32,12 +22,11 @@ export class LogParseCtrl {
       yesText: '删除',
       noText: '取消',
       onConfirm: () => {
-        this.backendSrv.alertD({
-          url: '/cmdb/pattern/delete?ruleId=' + ruleId + '&userId='+ this.contextSrv.user.id,
-          method: 'delete'
-        }).then((res) => {
+        this.logParseSrv.deletePattern(ruleId, this.contextSrv.user.id).then((res) => {
           this.$scope.appEvent('alert-success', ['删除成功']);
-          this.getListRule();
+          _.remove(this.ruleList, (rule) => {
+            return rule.id === ruleId;
+          });
         }, () => {
           this.$scope.appEvent('alert-danger', ['删除失败', '请稍后重试']);
         });
