@@ -145,17 +145,15 @@ define([
           } else {
             $scope.changeAll();
           }
-          $timeout(function() {
-            healthSrv.transformMetricType($scope.dashboard).then(function () {
-              $scope.$broadcast('render');
-            });
-          });
         };
 
         $scope.addPanel = function(anomalyItem) {
           var metricName = setMetricName(_.getMetricName(anomalyItem.metric), anomalyItem.host);
           $scope.selections.push(metricName);
-          $scope.dashboard.addPanel(setPanelMetaHost(_.cloneDeep(panelMeta), anomalyItem.metric, anomalyItem.host), $scope.dashboard.rows[0]);
+          var panel = setPanelMetaHost(_.cloneDeep(panelMeta), anomalyItem.metric, anomalyItem.host);
+          healthSrv.transformPanelMetricType(panel).then(function() {
+            $scope.dashboard.addPanel(panel, $scope.dashboard.rows[0]);
+          });
         };
 
         $scope.removePanel = function(metricName) {

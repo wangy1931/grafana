@@ -203,6 +203,10 @@ export class SideMenuCtrl {
           text: '探针管理',
           url: this.getUrl("/cmdb/config?serviceName=collector")
         },
+        {
+          text: 'KPI',
+          url: this.getUrl("/cmdb/kpi")
+        },
       ]
     });
 
