@@ -15,6 +15,7 @@ export class TimeWindowCtrl {
   data: any;
   options: any;
   timeWindow: any;
+  timeWindowData: any;
 
   range: any;
   rangeRaw: any;
@@ -30,10 +31,13 @@ export class TimeWindowCtrl {
       : { from: moment(+start).add(-1, 'day'), to: moment(+start) };
 
     this.options = {
+      legend: {
+        show: false
+      },
       series: {
         lines: {
           show: true,
-          lineWidth: 1
+          lineWidth: 2
         },
         shadowSize: 0
       },
@@ -202,6 +206,7 @@ export class TimeWindowCtrl {
         { label: response[0].target, data: response[0].datapoints },
         { label: response[1].target, data: response[1].datapoints }
       ], this.options);
+      this.timeWindowData = this.timeWindow.getData();
     });
   }
 
