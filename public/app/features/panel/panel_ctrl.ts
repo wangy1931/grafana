@@ -52,7 +52,7 @@ export class PanelCtrl {
       this.pluginName = plugin.name;
     }
 
-    $scope.$on("refresh", () => this.refresh());
+    $scope.$on("refresh", (event, payload) => this.refresh(payload));
     $scope.$on("render", () => this.render());
     $scope.$on("$destroy", () => this.events.emit('panel-teardown'));
   }
@@ -67,8 +67,13 @@ export class PanelCtrl {
     this.$scope.$root.performance.panelsRendered++;
   }
 
-  refresh() {
-    this.events.emit('refresh', null);
+  refresh(payload?) {
+    // ignore if panel id is specified
+    if (this.specifiedPanelId(payload)) {
+      return;
+    }
+
+    this.events.emit('refresh', payload);
   }
 
   publishAppEvent(evtName, evt) {
@@ -154,6 +159,16 @@ export class PanelCtrl {
 
   otherPanelInFullscreenMode() {
     return this.dashboard.meta.fullscreen && !this.fullscreen;
+  }
+
+  specifiedPanelId(payload) {
+    if (_.isNumber(payload) || _.isString(payload)) {
+      return this.panel.id !== payload;
+    }
+    if (_.isArray(payload)) {
+      return !~payload.indexOf(this.panel.id);
+    }
+    return false;
   }
 
   calculatePanelHeight() {

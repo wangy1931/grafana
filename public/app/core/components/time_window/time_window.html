@@ -1,11 +1,25 @@
 <div class="time-window-container">
+
   <div class="time-window-content" id="timeWindow">
-    <!-- <div id="timeWindow"></div> -->
   </div>
+
+  <div class="graph-legend-wrapper">
+    <section class="graph-legend">
+      <div class="graph-legend-series" ng-repeat="legend in ctrl.timeWindowData" data-series-index="{{ $index }}">
+        <div class="graph-legend-icon">
+          <i class="fa fa-minus pointer" style="color: {{ legend.color }}"></i>
+        </div>
+        <span class="graph-legend-alias pointer">{{ legend.label }}</span>
+      </div>
+    </section>
+  </div>
+
   <div class="time-window-pan time-window-pan-left" id="prev">
     <i class="fa fa-angle-left"></i>
   </div>
+
   <div class="time-window-pan time-window-pan-right" id="next">
       <i class="fa fa-angle-right"></i>
   </div>
+
 </div>

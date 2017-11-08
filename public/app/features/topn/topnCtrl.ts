@@ -29,20 +29,12 @@ export class TopNCtrl {
     private $location,
     private $scope,
     private $rootScope,
-    private NgTableParams,
     private templateValuesSrv,
     private dynamicDashboardSrv,
     private $popover,
     private $timeout,
     private timeSrv
   ) {
-    this.tableParams = new this.NgTableParams({
-      count: 10,
-      sorting: { 'cpuPercent': 'desc' }
-    }, {
-      counts: []
-    });
-
     this.targetObj = _.extend({}, {
       metric: "",
       host: "",
@@ -61,25 +53,28 @@ export class TopNCtrl {
 
   init(event, payload) {
     this.range = payload;
-    this.getProcess({});
+    this.getProcess({
+      from: payload.from.valueOf(),
+      to  : payload.to.valueOf()
+    });
   }
 
   render(event, payload) {
     // this.selection = payload;
-    payload = {
-      from: moment(payload.from).valueOf(),
-      to  : moment(payload.to).valueOf()
-    }
-    this.getProcess(payload);
+    this.range = payload;
+    this.getProcess({
+      from: payload.from.valueOf(),
+      to  : payload.to.valueOf()
+    });
   }
 
   getProcess(timeRange) {
+    this.tableData = [];
+    this.selected = -1;
+
+    // To Fix
     if (timeRange.from) {
       this.timePoint = timeRange.from + (timeRange.to - timeRange.from) / 2;
-    } else if (this.targetObj.start && this.targetObj.start !== "undefined") {
-      this.timePoint = parseInt(this.targetObj.start);
-    } else {
-      this.timePoint = moment().valueOf();
     }
 
     var host = this.$location.search().host;
@@ -91,9 +86,6 @@ export class TopNCtrl {
     this.hostSrv.getProcess(params).then(response => {
       this.tableData = _.orderBy(response.data, ['cpuPercent'], ['desc']);
       this.pidList = _.map(this.tableData, 'pid');
-      this.tableParams.settings({
-        dataset: this.tableData,
-      });
     }).then(this.getDashboard.bind(this));
   }
 
@@ -148,8 +140,7 @@ export class TopNCtrl {
     this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[1]).then(() => {
       this.dynamicDashboardSrv.update(this.dashboard);
       this.$rootScope.$emit('template-variable-value-updated');
-      this.timeSrv.setTime(this.range);
-      // this.$rootScope.$broadcast('refresh');
+      // this.timeSrv.setTime(this.range);
     });
   }
 
@@ -163,8 +154,7 @@ export class TopNCtrl {
       this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
         this.dynamicDashboardSrv.update(this.dashboard);
         this.$rootScope.$emit('template-variable-value-updated');
-        this.timeSrv.setTime(this.range);
-        // this.$rootScope.$broadcast('refresh');
+        // this.timeSrv.setTime(this.range);
       });
     } else {
       this.selected = -1;
