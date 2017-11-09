@@ -101,7 +101,7 @@ export class TreeMenuCtrl {
           target.hide = true;
         }
       });
-      this.$scope.broadcastRefresh();
+      this.$rootScope.$broadcast('refresh', this.panel.id);
     }
     $('[type="checkbox"]').prop({checked: false});
     $('[disabled="disabled"]').prop({checked: true});
@@ -149,7 +149,7 @@ export class TreeMenuCtrl {
           this.panel.seriesOverrides.push(seriesOverride);
         }
         this.healthSrv.transformMetricType(this.$scope.dashboard).then(() => {
-          this.$scope.broadcastRefresh();
+          this.$rootScope.$broadcast('refresh', this.panel.id);
         });
       }
     }

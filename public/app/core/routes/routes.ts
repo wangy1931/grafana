@@ -366,6 +366,12 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controllerAs: 'ctrl',
     resolve: loadCMDBBundle
   })
+  .when('/cmdb/kpi', {
+    templateUrl: 'public/app/features/cmdb/partials/metric_kpi.html',
+    controller : 'MetricKpiCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadCMDBBundle
+  })
   .when('/service_dependency', {
     templateUrl: 'public/app/features/service/partials/service_dep.html',
     controller : 'BuildDependCtrl',

@@ -15,6 +15,7 @@ export class TimeWindowCtrl {
   data: any;
   options: any;
   timeWindow: any;
+  timeWindowData: any;
 
   range: any;
   rangeRaw: any;
@@ -30,10 +31,13 @@ export class TimeWindowCtrl {
       : { from: moment(+start).add(-1, 'day'), to: moment(+start) };
 
     this.options = {
+      legend: {
+        show: false
+      },
       series: {
         lines: {
           show: true,
-          lineWidth: 1
+          lineWidth: 2
         },
         shadowSize: 0
       },
@@ -42,8 +46,6 @@ export class TimeWindowCtrl {
         mode: "time",
         from: this.range.from.valueOf(),
         to: this.range.to.valueOf(),
-        min: this.range.from.valueOf(),
-        max: this.range.to.valueOf(),
         timezone: "browser"
       },
       yaxis: {
@@ -80,7 +82,7 @@ export class TimeWindowCtrl {
 
   bindEvent() {
     angular.element("#timeWindow").bind("plotselected", (...args) => {
-      this.$scope.$emit('time-window-selected', args[1].xaxis);
+      this.$scope.$emit('time-window-selected', { from: moment(args[1].xaxis.from), to: moment(args[1].xaxis.to) });
     });
     angular.element("#timeWindow").bind("plothover", (...args) => {
       if (!args[2]) {
@@ -110,11 +112,15 @@ export class TimeWindowCtrl {
         }
       } else if (direction === 'right') {
         // Note: 这里没有做精确的步长计算  如果又拉超过了就取现在的前一天
-        if (this.range.to.add(step, 'hour') > moment()) {
+        var from = this.range.from.add(step, 'hour');
+        var to = this.range.to.add(step, 'hour');
+        if (to > moment()) {
           this.range = {
             from: moment().add(-1, 'day'),
             to  : moment()
           }
+        } else {
+          _.extend(this.range, { from: from, to: to });
         }
       }
     }
@@ -126,14 +132,15 @@ export class TimeWindowCtrl {
     var body = `
       <div class="graph-tooltip small topn-tooltip">
         <div class="graph-tooltip-time">${moment(params.x).format("YYYY-MM-DD HH:mm:ss")}</div>
-        <div class="graph-tooltip-value">使用率: ${params.y}</div>
+        <div class="graph-tooltip-value">使用率: ${_.percentFormatter(params.y)}</div>
       </div>
     `;
     this.$tooltip.html(body).place_tt(params.pageX + 20, params.pageY);
   };
 
   issueQueries(datasource) {
-    var targets = [
+    var host = this.$location.search().host || '';
+    var targets: any = [
       {
         "aggregator": "avg",
         "currentTagKey": "",
@@ -143,7 +150,7 @@ export class TimeWindowCtrl {
         "errors": {},
         "hide": false,
         "isCounter": false,
-        "metric": "cpu.usr",  // internal.system.health
+        "metric": "cpu.usr",
         "refID": "A",
         "shouldComputeRate": false
       },
@@ -161,11 +168,16 @@ export class TimeWindowCtrl {
         "shouldComputeRate": false
       }
     ];
+    if (host && host !== "*") {
+      targets.forEach(target => {
+        target.tags = { "host": host }
+      });
+    }
 
     var metricsQuery = {
       panelId: 11,
-      range: this.range,  //range,
-      rangeRaw: this.range,  //rangeRaw,
+      range: this.range,
+      rangeRaw: this.range,
       interval: null,
       targets: targets,
       format: 'json',
@@ -188,10 +200,13 @@ export class TimeWindowCtrl {
       });
       return results.data;
     }).then(response => {
+      this.options.xaxis.from = this.range.from.valueOf();
+      this.options.xaxis.to = this.range.to.valueOf();
       this.timeWindow = $.plot('#timeWindow', [
         { label: response[0].target, data: response[0].datapoints },
         { label: response[1].target, data: response[1].datapoints }
       ], this.options);
+      this.timeWindowData = this.timeWindow.getData();
     });
   }
 

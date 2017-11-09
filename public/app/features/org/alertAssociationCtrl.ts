@@ -42,7 +42,7 @@ export class AlertAssociationCtrl {
       metric: "",
       host: "",
       start: "",
-      distance: 200,
+      distance: 800,
     }, this.$location.search());
     if (!this.targetObj.metric) {
       this.targetObj = _.extend({}, associationSrv.sourceAssociation);
@@ -190,7 +190,7 @@ export class AlertAssociationCtrl {
     } else {
       _.remove(this.$scope.dashboard.manualAnnotation, { id: row.pid, eventType: row.type });
     }
-    this.$scope.broadcastRefresh();
+    this.$rootScope.$broadcast('refresh', this.$scope.dashboard.rows[0].panels[0].id);
   }
 
   showGuideResult(e, params) {
@@ -207,7 +207,7 @@ export class AlertAssociationCtrl {
     panels[2].targets[0].query = this.query;
     panels[2].targets[1].query = this.query;
 
-    this.$rootScope.$broadcast('refresh');
+    this.$rootScope.$broadcast('refresh', [panels[0].id, panels[1].id, panels[2].id]);
   }
 }
 coreModule.controller('AlertAssociationCtrl', AlertAssociationCtrl);
@@ -218,7 +218,7 @@ coreModule.directive('slider', () => {
     scope: false,
     link: function (scope, element) {
       noUiSlider.create(element[0], {
-        start: scope.ctrl.associationSrv.sourceAssociation.distance || 100,
+        start: scope.ctrl.associationSrv.sourceAssociation.distance || 900,
         connect: [true, false],
         tooltips: false,
         step: 10,

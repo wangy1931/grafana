@@ -36,6 +36,7 @@ export class SystemOverviewCtrl {
   topology: any;
 
   tableParams: any;
+  dependencies: any;
 
   /** @ngInject */
   constructor(
@@ -207,10 +208,10 @@ export class SystemOverviewCtrl {
     var promiseList = [];
 
     this.serviceDepSrv.readServiceDependency().then(response => {
-      if (!_.isNull(response.data)) {
-        var dependencies = angular.fromJson(_.last(response.data).attributes[0].value);
+      if (!_.isEmpty(response.data)) {
+        this.dependencies = angular.fromJson(_.last(response.data).attributes[0].value);
 
-        _.each(dependencies.nodes, node => {
+        _.each(this.dependencies.nodes, node => {
           var q = this.serviceDepSrv.readServiceStatus(node.id, node.name)
           .then(resp => {
             node.status = resp.data.healthStatusType.toLowerCase();
@@ -232,8 +233,8 @@ export class SystemOverviewCtrl {
           promiseList.push(q);
         });
 
-        this.$q.all(promiseList).then(() => {
-          this.toolkit.load({ type: "json", data: dependencies }).render(this.renderFactory());
+        this.$q.all(promiseList).finally(() => {
+          this.toolkit.load({ type: "json", data: this.dependencies }).render(this.renderFactory());
         });
 
       } else {
@@ -259,19 +260,22 @@ export class SystemOverviewCtrl {
     };
     this.servicePanel.hosts = [];
 
-    this.serviceDepSrv.readHostStatus(serviceId, serviceName).then(response => {
+    this.serviceDepSrv.readMetricStatus(serviceId, serviceName).then(response => {
       hosts = Object.keys(response.data.hostStatusMap);
-    }).then(() => {
+      this.serviceKpiPanel = response.data;
+
+      return response.data;
+    }).then(resp => {
       hosts.forEach(host => {
         !_.findWhere(this.hostPanels, { host: host }) && this.hostPanels.push({ host: host });
         var tmp = _.findWhere(this.hostPanels, { host: host }) || { host: host };
         tmp.healthType = _.find(this.topology, { name: host }).value;
         this.servicePanel.hosts.push(tmp);
       });
-    });
 
-    this.serviceDepSrv.readMetricStatus(serviceId, serviceName).then(response => {
-      this.serviceKpiPanel = response.data;
+      // refresh service-dependency-graph, service status
+      // _.find(this.dependencies.nodes, { name: serviceName }).status = "red"; // resp.healthStatusType.toLowerCase();
+      // this.toolkit.updateNode(node.node.data.id, { status: "red" });
     });
 
     // 拿 servicekpi metric 的 message, 储存在 _.metricHelpMessage 中
