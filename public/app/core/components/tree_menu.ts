@@ -49,7 +49,10 @@ var template = `<div ng-init="ctrl.init()" class="tree-menu" ng-class="{true: 'o
       <p>还是没有？请点击"刷新结果"按钮</p>
       <button class="btn btn-outline-primary" ng-click="ctrl.init()">刷新结果</button>
     </div>
-    <div class="slider-container"><span>调整相似度</span><div class="sliders" slider></div></div>
+    <div class="slider-container">
+      <div class="sliders" slider></div>
+      <div class="slider-level"><span>低</span><span>相似度</span><span>高</span></div>
+    </div>
   </div>
   <cw-loading class="tree-container" ng-if="ctrl.isLoding" show="ctrl.isLoding" duration=6000></cw-loading>
 </div>`;
@@ -151,7 +154,7 @@ export class TreeMenuCtrl {
           target.hide = true;
         }
       });
-      this.$scope.broadcastRefresh();
+      this.$rootScope.$broadcast('refresh', this.panel.id);
     }
     $('[type="checkbox"]').prop({checked: false});
     $('[disabled="disabled"]').prop({checked: true});
@@ -199,7 +202,7 @@ export class TreeMenuCtrl {
           this.panel.seriesOverrides.push(seriesOverride);
         }
         this.healthSrv.transformMetricType(this.$scope.dashboard).then(() => {
-          this.$scope.broadcastRefresh();
+          this.$rootScope.$broadcast('refresh', this.panel.id);
         });
       }
     }

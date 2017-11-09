@@ -1,4 +1,5 @@
 <div class="accordion host-list" id="accordion0">
+    <cw-loading show="!ctrl.servicePanel.hosts.length" duration=6000></cw-loading>
     <div class="accordion-group host-item" ng-repeat="host in ctrl.servicePanel.hosts">
         <div class="accordion-heading">
             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion0" href="#service{{$index}}" ng-click="ctrl.selectHost($index, host.host, 'service');">

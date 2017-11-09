@@ -51,6 +51,8 @@ export class MetricKpiCtrl {
   }
 
   getKpi(service) {
+    this.kpi = '';
+    this.kpiList = null;
     if (this.serviceSelected === service.id) {
       this.serviceSelected = -1;
       return;
@@ -84,7 +86,9 @@ export class MetricKpiCtrl {
           }
         }).then(() => {
           this.$scope.appEvent('alert-success', ['删除成功']);
-          this.getKpi(service);
+          _.remove(this.kpiList, (kpiItem) => {
+            return kpiItem === kpi;
+          });
         });
       }
     });
@@ -103,7 +107,7 @@ export class MetricKpiCtrl {
       }
     }).then((res) => {
       this.$scope.appEvent('alert-success', ['添加成功']);
-      this.getKpi(service);
+      this.kpiList.push(kpi);
       this.kpi = '';
     })
   }

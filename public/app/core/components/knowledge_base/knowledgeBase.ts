@@ -16,6 +16,7 @@ export class KnowledgeBaseCtrl {
   knowledge: any;
   newKnowledge: any;
   detailKnowledge: any;
+  knowledgeCopy: any;
 
   /** @ngInject */
   constructor(private $scope, private $rootScope, private backendSrv, private contextSrv) {
@@ -47,6 +48,7 @@ export class KnowledgeBaseCtrl {
       params: params,
     }).then((result) => {
       this.knowledge = result.data;
+      this.knowledgeCopy = _.cloneDeep(result.data);
     });
   }
 
@@ -99,7 +101,7 @@ export class KnowledgeBaseCtrl {
 
   getDetail(knowledge) {
     this.showList = false;
-    this.detailKnowledge = knowledge;
+    this.detailKnowledge = _.find(this.knowledgeCopy, {id: knowledge.id});
     history.pushState(null, null, document.URL);
     window.addEventListener('popstate', this.pushState);
   }

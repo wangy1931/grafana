@@ -208,7 +208,7 @@ export class SystemOverviewCtrl {
     var promiseList = [];
 
     this.serviceDepSrv.readServiceDependency().then(response => {
-      if (!_.isNull(response.data)) {
+      if (!_.isEmpty(response.data)) {
         this.dependencies = angular.fromJson(_.last(response.data).attributes[0].value);
 
         _.each(this.dependencies.nodes, node => {

@@ -130,7 +130,7 @@
             "title": ""
           },
           "hideTimeOverride": false,
-          "id": 1,
+          "id": "logSearch",
           "isNew": true,
           "links": [],
           "pageSize": null,

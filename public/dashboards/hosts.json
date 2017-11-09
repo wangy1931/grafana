@@ -78,7 +78,8 @@
         }
       ],
       "status": -1,
-      "template": "hadoop"
+      "template": "hadoop",
+      "collectorName": "hadoop_data_node"
     },
     {
       "id": "hadoop.namenode",
@@ -114,7 +115,8 @@
         }
       ],
       "status": -1,
-      "template": "hadoop"
+      "template": "hadoop",
+      "collectorName": "hadoop_name_node"
     },
     {
       "id": "hbase.master",
@@ -151,7 +153,8 @@
         }
       ],
       "status": -1,
-      "template": "hbase"
+      "template": "hbase",
+      "collectorName": "hbase_master"
     },
     {
       "id": "hbase.regionserver",
@@ -188,7 +191,8 @@
         }
       ],
       "status": -1,
-      "template": "hbase"
+      "template": "hbase",
+      "collectorName": "hbase_regionserver"
     },
     {
       "id": "kafka",
@@ -228,7 +232,8 @@
         }
       ],
       "status": -1,
-      "template": "kafka"
+      "template": "kafka",
+      "collectorName": "kafka"
     },
     {
       "id": "mysql",
@@ -268,7 +273,8 @@
         }
       ],
       "status": -1,
-      "template": "mysql"
+      "template": "mysql",
+      "collectorName": "mysql"
     },
     {
       "id": "spark",
@@ -309,7 +315,8 @@
         }
       ],
       "status": -1,
-      "template": "spark"
+      "template": "spark",
+      "collectorName": "spark"
     },
     {
       "id": "storm",
@@ -347,7 +354,8 @@
         }
       ],
       "status": -1,
-      "template": "storm"
+      "template": "storm",
+      "collectorName": "storm"
     },
     {
       "id": "yarn",
@@ -386,6 +394,7 @@
       ],
       "status": -1,
       "template": "yarn_mapreduce",
+      "collectorName": "yarn",
       "alertDef": []
     },
     {
@@ -423,7 +432,8 @@
         }
       ],
       "status": -1,
-      "template": "zookeeper"
+      "template": "zookeeper",
+      "collectorName": "zookeeper"
     },
     {
       "id": "tomcat",
@@ -461,7 +471,8 @@
         }
       ],
       "status": -1,
-      "template": "tomcat"
+      "template": "tomcat",
+      "collectorName": "tomcat"
     },
     {
       "id": "opentsdb",
@@ -472,7 +483,8 @@
       "deploy": "",
       "metrics": [],
       "status": -1,
-      "template": "opentsdb"
+      "template": "opentsdb",
+      "collectorName": "opentsdb"
     },
     {
       "id": "mongo3",
@@ -528,7 +540,8 @@
         }
       ],
       "status": -1,
-      "template": "mongodb"
+      "template": "mongodb",
+      "collectorName": "mongo3"
     },
     {
       "id": "nginx",
@@ -571,7 +584,8 @@
         }
       ],
       "status": -1,
-      "template": "nginx"
+      "template": "nginx",
+      "collectorName": "nginx"
     },
     {
       "id": "postgresql",
@@ -590,7 +604,8 @@
       ],
       "metrics": [],
       "status": -1,
-      "template": "postgresql"
+      "template": "postgresql",
+      "collectorName": "postgresql"
     },{
       "id": "redis",
       "name": "Redis",
@@ -610,7 +625,8 @@
       ],
       "metrics": [],
       "status": -1,
-      "template": "redis"
+      "template": "redis",
+      "collectorName": "redisdb"
     },{
       "id": "rabbitmq",
       "name": "RabbitMQ",
@@ -650,7 +666,8 @@
         }
       ],
       "status": -1,
-      "template": "rabbitmq"
+      "template": "rabbitmq",
+      "collectorName": "rabbit_mq"
     },{
       "id": "oracle",
       "name": "Oracle",
@@ -704,7 +721,8 @@
       ],
       "metrics": [],
       "status": -1,
-      "template": ""
+      "template": "",
+      "collectorName": "oracle"
     },{
       "id": "weblogic",
       "name": "WebLogic",
@@ -722,7 +740,8 @@
       ],
       "metrics": [],
       "status": -1,
-      "template": ""
+      "template": "",
+      "collectorName": "weblogic"
     },{
       "id": "apache",
       "name": "Apache",
@@ -742,7 +761,8 @@
       ],
       "metrics": [],
       "status": -1,
-      "template": "apache"
+      "template": "apache",
+      "collectorName": "apache"
     },{
       "id": "ssdb",
       "name": "SSDB",
@@ -758,7 +778,8 @@
       ],
       "metrics": [],
       "status": -1,
-      "template": "ssdb"
+      "template": "ssdb",
+      "collectorName": "ssdb_state"
     },{
       "id": "play",
       "name": "Play Framework",
@@ -774,7 +795,8 @@
       ],
       "metrics": [],
       "status": -1,
-      "template": "play_framework"
+      "template": "play_framework",
+      "collectorName": "play_framework"
     },{
       "id": "elasticsearch",
       "name": "ElasticSearch",
@@ -790,7 +812,8 @@
       ],
       "metrics": [],
       "status": -1,
-      "template": "elasticsearch"
+      "template": "elasticsearch",
+      "collectorName": "elasticsearch"
     }
   ]
 }
