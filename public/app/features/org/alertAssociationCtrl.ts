@@ -42,7 +42,7 @@ export class AlertAssociationCtrl {
       metric: "",
       host: "",
       start: "",
-      distance: 200,
+      distance: 800,
     }, this.$location.search());
     if (!this.targetObj.metric) {
       this.targetObj = _.extend({}, associationSrv.sourceAssociation);
@@ -218,7 +218,7 @@ coreModule.directive('slider', () => {
     scope: false,
     link: function (scope, element) {
       noUiSlider.create(element[0], {
-        start: scope.ctrl.associationSrv.sourceAssociation.distance || 100,
+        start: scope.ctrl.associationSrv.sourceAssociation.distance || 900,
         connect: [true, false],
         tooltips: false,
         step: 10,
