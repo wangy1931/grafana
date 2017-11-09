@@ -102,7 +102,7 @@ define([
 
       $scope.save = function () {
         var graph = angular.toJson(toolkit.exportData());
-        if ($scope.updateId & $scope.graphId) {
+        if ($scope.updateId && $scope.graphId) {
           serviceDepSrv.updateServiceDependency(graph, $scope.updateId, $scope.graphId).then(function () {
             alertSrv.set("更新成功", "", "success", 4000);
           });

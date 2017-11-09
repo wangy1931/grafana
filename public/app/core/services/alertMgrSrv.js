@@ -71,7 +71,7 @@ function (angular, _, coreModule) {
       return backendSrv.alertD({
         method: "get",
         url: alertAssociationUrl,
-        params: {metric: alertMetric, host: alertHost, distance: threshold, group: group}
+        params: {metric: alertMetric, host: alertHost, distance: 1000 - threshold, group: group}
       });
     };
 

@@ -34,15 +34,12 @@
   .header {
     line-height: 30px;
     font-size: 18px;
-    margin: 0;
+    margin: 10px 0;
   }
 
   .slider-container {
-    display: flex;
-    align-items: center;
     .sliders {
-      flex: 1;
-      margin: 0 5px;
+      margin: 10px 5px;
       height: 10px;
     }
     .noUi-handle {
@@ -52,6 +49,11 @@
       &::before, &::after {
         background: none;
       }
+    }
+    .slider-level {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 5px;
     }
   }
 }
