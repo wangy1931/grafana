@@ -31,7 +31,12 @@ export class LogParseEditCtrl {
           "multiline": false,
           "paths": [],
           "hosts": [],
-          "patterns": []
+          "patterns": [{
+            "name": "",
+            "type": "grok",
+            "pattern": "",
+            "log": ""
+          }]
         }
       }
     });
@@ -48,7 +53,12 @@ export class LogParseEditCtrl {
   getTemplate(logServiceName, logType?) {
     this.rule.hosts = [];
     this.rule.paths = [];
-    this.rule.patterns = [];
+    this.rule.patterns = [{
+      "name": "",
+      "type": "grok",
+      "pattern": "",
+      "log": ""
+    }];
     this.rule['multiline.pattern'] = '';
     if (_.isEqual(logServiceName, '其他')) {
       this.rule.logType = '其他';
@@ -304,26 +314,35 @@ export class LogParseEditCtrl {
     this.rule.orgId = this.contextSrv.user.orgId;
     this.rule.sysId = this.contextSrv.user.systemId;
     if (this.checkData(this.rule)) {
-      var data = _.cloneDeep(this.rule);
-      _.remove(data.logTypes, (type) => {
-        return type === '其他';
-      });
-      if (data.logServiceName === '其他') {
-        data.logServiceName = this.custom.logServiceName;
-        data.logType = this.custom.logType;
-      }
-      if (data.multiline) {
-        data["multiline.negate"] = false;
-        data["multiline.match"] = "after";
-      }
-      this.logParseSrv.savePattern(this.contextSrv.user.id, data).then((res) => {
-        this.$scope.appEvent('alert-success', ['保存成功', '配置将于6分钟之后生效, 请稍后查看']);
-        this.$location.url('/logs/rules');
-      }, (err) => {
-        if (err.status === 400) {
-          this.$scope.appEvent('alert-warning', ['规则名称已存在', '请修改规则名称']);
-        } else {
-          this.$scope.appEvent('alert-danger', ['保存失败', '请稍后重试']);
+      this.$scope.appEvent('confirm-modal', {
+        title: '保存',
+        text: `该操作将<em class="warn-message">修改或覆盖</em><br>所选机器上的<em class="warn-message">filebeat配置文件</em><br>
+              请谨慎操作!!!<br>如有疑问,请事先询问管理员,并做好<em class="warn-message">备份</em>`,
+        yesText: '确定',
+        noText: '取消',
+        onConfirm: ()=>{
+          var data = _.cloneDeep(this.rule);
+          _.remove(data.logTypes, (type) => {
+            return type === '其他';
+          });
+          if (data.logServiceName === '其他') {
+            data.logServiceName = this.custom.logServiceName;
+            data.logType = this.custom.logType;
+          }
+          if (data.multiline) {
+            data["multiline.negate"] = false;
+            data["multiline.match"] = "after";
+          }
+          this.logParseSrv.savePattern(this.contextSrv.user.id, data).then((res) => {
+            this.$scope.appEvent('alert-success', ['保存成功', '配置将于6分钟之后生效, 请稍后查看']);
+            this.$location.url('/logs/rules');
+          }, (err) => {
+            if (err.status === 400) {
+              this.$scope.appEvent('alert-warning', ['规则名称已存在', '请修改规则名称']);
+            } else {
+              this.$scope.appEvent('alert-danger', ['保存失败', '请稍后重试']);
+            }
+          });
         }
       });
     } else {

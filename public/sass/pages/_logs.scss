@@ -364,7 +364,7 @@ table.diff {
 .modal-log-parse {
   background: $white;
   height: 100%;
-  padding: 2rem 2rem 0;
+  // padding: 2rem 2rem 0;
 }
 
 .error-input {
@@ -378,4 +378,10 @@ table.diff {
   border-radius: 5px;
   height: 5rem;
   line-height: 5rem;
+}
+
+.warn-message {
+  color: red;
+  font-weight: bold;
+  font-style: normal;
 }
