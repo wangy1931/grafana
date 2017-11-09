@@ -115,7 +115,6 @@ export class TreeMenuCtrl {
   }
 
   addQuery(event, metric, host, otherMetric?) {
-    console.log(event, metric, host, otherMetric);
     if (host === '自定义指标') {
       host = metric;
       metric = otherMetric;
