@@ -12,6 +12,7 @@ export class TreeMenuCtrl {
   correlationMetrics: any;
   prox: any;
   panel: any;
+  groupType: any;
 
   /** @ngInject */
   constructor(private $scope, private associationSrv,
@@ -21,6 +22,7 @@ export class TreeMenuCtrl {
     private alertMgrSrv
   ) {
     this.isOpen = false;
+    this.isLoding = true;
 
     var analysis = this.$rootScope.$on('analysis', (event, data) =>{
       if (_.isEqual(data, 'thresholdSlider')) {
@@ -39,12 +41,13 @@ export class TreeMenuCtrl {
   }
 
   init() {
+    this.groupType = this.groupType === 'metrics' ? 'hosts' : 'metrics';
     this.isOpen = true;
     this.isLoding = true;
     this.isAssociation = false;
     var association = this.associationSrv.sourceAssociation;
     if (!_.isEmpty(association)) {
-      this.alertMgrSrv.loadAssociatedMetrics(association.metric, association.host, association.distance, true)
+      this.alertMgrSrv.loadAssociatedMetrics(association.metric, association.host, association.distance, this.groupType)
       .then((response) => {
         this.correlationMetrics = response.data;
         if (!_.isEmpty(response.data)) {
@@ -89,7 +92,11 @@ export class TreeMenuCtrl {
     if (!_.hasIn(this.correlationMetrics, '自定义指标')) {
       this.correlationMetrics['自定义指标'] = {};
     }
-    this.correlationMetrics['自定义指标'][target.metric] = {hosts: [target.host]};
+    if (this.groupType === 'metrics') {
+      this.correlationMetrics['自定义指标'][target.metric] = {hosts: [target.host]};
+    } else {
+      this.correlationMetrics['自定义指标'][target.metric] = {metrics: [target.host]};
+    }
     this.isAssociation = true;
   }
 
@@ -107,7 +114,12 @@ export class TreeMenuCtrl {
     $('[disabled="disabled"]').prop({checked: true});
   }
 
-  addQuery(event, metric, host) {
+  addQuery(event, metric, host, otherMetric?) {
+    console.log(event, metric, host, otherMetric);
+    if (host === '自定义指标') {
+      host = metric;
+      metric = otherMetric;
+    }
     var _input = $(event.currentTarget).find('input');
     if (_input.prop('disabled')) {
       return;
