@@ -3,6 +3,7 @@ define([
   './hostDetailCtrl',
   './serviceListCtrl',
   './cmdbServiceDetailCtrl',
+  './uagentCtrl',
   './serviceCustomCtrl',
   './metricsDefCtrl',
   './metricKpiCtrl',

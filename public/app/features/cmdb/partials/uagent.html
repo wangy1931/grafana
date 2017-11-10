@@ -1,0 +1,43 @@
+<navbar icon="fa fa-fw fa-cubes" title="{{ctrl.title[ctrl.serviceName]}}" title-url=""></navbar>
+
+<div class="page-container">
+  <div class="page-header">
+    <h1>{{ctrl.title[ctrl.serviceName]}} -- 
+      <span class="dropdown">
+        <span class="dropdown-toggle pointer" data-toggle="dropdown">{{ctrl.host.hostname}} <i class="fa fa-caret-down" ng-if="ctrl.hostList.length > 1"></i></span>
+        <ul class="dropdown-menu" ng-if="ctrl.hostList.length > 1">
+            <li ng-repeat="host in ctrl.hostList"><a href="/cmdb/config?serviceName={{ctrl.serviceName}}&hostId={{host.id}}">{{host.hostname}}</a></li>
+        </ul>
+      </span>
+    </h1>
+    <form class="form-search cmdb-search">
+      <i class="fa fa-search"></i>
+      <input type="text" class="input-medium search-query" placeholder="搜索config" ng-model="ctrl.searchConf">
+    </form>
+	</div>
+
+  <div>
+    <table class="table uagent-table" ng-if="ctrl.configs.length">
+      <tr>
+        <th>服务名称</th>
+        <th>操作</th>
+        <th>同步机器 &nbsp; <i bs-tooltip="'您可以将此配置文件同步至选定机器'" data-placement="top" class="fa fa-question-circle" ></i></th>
+      </tr>
+      <tr ng-repeat="config in ctrl.configs | filter: ctrl.searchConf" ng-if="config.name">
+        <td>{{config.name}}</td>
+        <td>
+          <a class="btn btn-outline-primary" href="/cmdb/config/edit?configName={{config.name}}&serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}">编辑</a>
+        </td>
+        <td>
+          <button type="button" class="btn btn-inverse" 
+            ng-model="config.hosts"
+            data-html="1" data-multiple="1" data-animation="am-flip-x" 
+            bs-options="host.id as host.hostname for host in ctrl.hostList" bs-select>
+          </button>
+          <button class="btn btn-outline-secondary" ng-click="ctrl.copy(config.id, config.hosts)">确认同步</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</div>
