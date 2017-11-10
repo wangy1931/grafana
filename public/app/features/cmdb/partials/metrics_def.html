@@ -1,0 +1,93 @@
+<navbar icon="fa fa-fw fa-cubes" title="配置管理库" title-url="/cmdb/metrics">
+  <ul class="nav">
+    <li class="active"><a href="/cmdb/metrics">指标概览</a></li>
+  </ul>
+</navbar>
+<div class="page-container metrics-def-container">
+  <div>
+    <form name="searchForm" class="gf-form-group">
+      <div class="gf-form">
+        <span class="gf-form-label width-7">指标名称</span>
+        <input type="text" class="gf-form-input max-width-16" ng-model="ctrl.query.metric">
+        <button class="btn btn-primary" ng-click="ctrl.getMetricsList(1, ctrl.query)">搜索</button>
+        <button class="btn btn-inverse" ng-click="ctrl.clearQuery()">清空搜索</button>
+      </div>
+      <!-- <div class="gf-form">
+        <div class="gf-form">
+          <span class="gf-form-label width-7">类型</span>
+          <select class="max-width-16" ng-options="type.type for type in ctrl.typeList" ng-model="ctrl.query.type"></select>
+        </div>
+        <div class="gf-form" ng-if="ctrl.query.type">
+          <span class="gf-form-label width-7">子类型</span>
+          <select class="max-width-16" ng-options="subType for subType in ctrl.query.type.subType" ng-model="ctrl.query.subType"></select>
+        </div>
+      </div>
+      <div class="gf-form-button-row">
+        <button class="btn btn-primary" ng-click="ctrl.search()">搜索</button>
+        <button class="btn btn-inverse" ng-click="ctrl.clearQuery()">清空搜索</button>
+      </div> -->
+    </form>
+  </div>
+  <div ng-if="ctrl.metricList.length">
+    <div class="accordion">
+      <div class="accordion-group" ng-repeat="metric in ctrl.metricList">
+        <div class="accordion-heading">
+          <a ng-click="ctrl.getDetailById(metric)" class="accordion-toggle">
+            <i class="fa" ng-class="{true: 'fa-angle-up', false: 'fa-angle-down'}[metric.id === ctrl.metricCur.id]"></i>{{metric.key}}
+          </a>
+        </div>
+        <div class="accordion-body" ng-if="metric.id === ctrl.metricCur.id">
+          <div class="accordion-inner">
+            <form name="userForm" class="gf-form-group">
+              <div class="gf-form">
+                <span class="gf-form-label width-7">类型</span>
+                <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.type" ng-disabled="true">
+                <span class="gf-form-label width-7">子类型</span>
+                <select ng-disabled="ctrl.metricCur.disabled" class="gf-form-input max-width-25" ng-options="subType for subType in ctrl.typeList[1].subType" ng-model="ctrl.metricCur.subType"></select>
+              </div>
+              <div class="gf-form">
+                <span class="gf-form-label width-7">描述</span>
+                <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.description" ng-disabled="ctrl.metricCur.disabled">
+              </div>
+              <div class="gf-form">
+                <span class="gf-form-label width-7">单位</span>
+                <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.unit" ng-disabled="ctrl.metricCur.disabled">
+              </div>
+              <div class="gf-form">
+                <span class="gf-form-label width-7">标签</span>
+                <div ng-if="ctrl.metricCur.tags">
+                  <span class="tag label" ng-repeat="tag in ctrl.metricCur.tags"> <i class="fa fa-tag"></i>{{ tag }}</span>
+                </div>
+                <div ng-if="!ctrl.metricCur.tags">
+                  <input type="text" class="gf-form-input max-width-25" value="暂无信息" ng-disabled="true">
+                </div>
+              </div>
+              <div class="gf-form">
+                <span class="gf-form-label width-7">自定义指标</span>
+                <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.customMetric" ng-disabled="true">
+              </div>
+              <div class="gf-form-button-row" ng-if="metric.id === ctrl.metricCur.id && ctrl.metricCur.customMetric">
+                <button class="btn" ng-click="ctrl.edit()" ng-show="ctrl.metricCur.disabled">编辑</button>
+                <button class="btn" ng-click="ctrl.update()" ng-show="!ctrl.metricCur.disabled">更新</button>
+                <button class="btn btn-outline-inverse" ng-click="ctrl.cancel()" ng-show="!ctrl.metricCur.disabled">取消</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pagination">
+      <ul class="pager">
+        <li class="previous">
+          <a ng-click="ctrl.getMetricsList(ctrl.params.page-1)">&larr; 上一页</a>
+        </li>
+        <li class="next">
+          <a ng-click="ctrl.getMetricsList(ctrl.params.page+1)">下一页 &rarr;</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="no-data" ng-if="!ctrl.metricList.length">
+    没有相关指标
+  </div>
+</div>

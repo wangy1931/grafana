@@ -305,6 +305,36 @@ function (angular, _, coreModule, config) {
       });
     };
 
+    /**
+     * getMetricInfo params
+     *  size: size
+     *  page: page
+     *  id: metricId
+     *  name: metricName
+     *  type: 服务/系统
+     *  subtype: serviceName/CPU/IO/JVM/内存/存储/网络/运行状态  //系统下为hardcoded,动态加载请找张鹏
+     */
+    this.getMetricInfo = function(params) {
+      return this.alertD({
+        url: '/metrictype/info',
+        params: params
+      });
+    }
+
+    /**
+     * updateMetricInfo params
+     *  id: metricId
+     *  userId: userId
+     */
+    this.updateMetricInfo = function(params, data) {
+      return this.alertD({
+        method: 'post',
+        url   : '/metrictype/info',
+        params: params,
+        data  : data
+      })
+    }
+
     this.metricKpi = function(query) {
       return this.alertD({
         url: '/service/kpi',

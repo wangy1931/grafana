@@ -1,0 +1,81 @@
+.metrics-def-container  {
+  .accordion-group {
+    margin: 1rem 0;
+    border-radius: 5px;
+    box-shadow: 1px 2px 10px #ccc;
+    .btn {
+      background: rgb(0, 111, 210);
+      color: $white;
+      &.btn-outline-inverse {
+        background: $gray;
+      }
+    }
+  }
+
+  .accordion-heading {
+    padding: 1rem;
+    i {
+      margin: 0 1rem;
+    }
+  }
+
+  .gf-form-label {
+    background: none;
+    font-weight: bold;
+    cursor: default;
+  }
+
+  .gf-form-input, select {
+    background: none;
+    border-radius: 5px;
+  }
+
+  select {
+    margin-right: 5rem;
+  }
+
+  .gf-form-input:disabled {
+    border: none;
+    cursor: default;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .label {
+    margin: 0 0.7rem;
+    background: none;
+    color: rgb(0, 111, 210);
+    cursor: default;
+  }
+  .btn {
+    margin: 0 1rem;
+    border-radius: 5px;    
+  }
+
+  .accordion-inner {
+    border: none;
+    margin-left: 2rem;
+  }
+
+  .delete-btn, .edit-btn {
+    font-weight: bold;
+  }
+  
+  .delete-btn {
+    color: rgb(187, 17, 68);
+  }
+
+  .edit-btn {
+    color: rgb(0, 111, 210);
+  }
+
+  .no-data {
+    height: 10rem;
+    border: 1px dashed $blue;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    text-align: center;
+    line-height: 10rem;
+  }
+}
