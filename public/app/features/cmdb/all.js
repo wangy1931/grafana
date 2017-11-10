@@ -4,5 +4,6 @@ define([
   './serviceListCtrl',
   './cmdbServiceDetailCtrl',
   './serviceCustomCtrl',
+  './metricsDefCtrl',
   './metricKpiCtrl',
 ], function() {});
