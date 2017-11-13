@@ -83,6 +83,19 @@
     margin-right: 0.5rem;
     background: $white;
   }
+
+  span {
+    display: none;
+    margin-top: -2rem;
+    i {
+      margin: 0 5px;
+    }
+  }
+  &:hover {
+    & > span {
+      display: block;
+    }
+  }
 }
 
 .tree_leaf {
@@ -95,18 +108,6 @@
     width: 130px;
     margin: 0;
     @include text-overflow();
-  }
-  span {
-    display: none;
-    i {
-      margin: 0 5px;
-    }
-  }
-
-  &:hover {
-    span {
-      display: block;
-    }
   }
 }
 

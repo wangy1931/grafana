@@ -30,13 +30,18 @@ var template = `<div ng-init="ctrl.init()" class="tree-menu" ng-class="{true: 'o
               </a>
               <ul id="{{_.snakeCase(service) + $index}}" class="tree_ul accordion-body collapse">
                 <li class="tree_li" ng-repeat="host in hosts.hosts">
-                  <div class="tree_leaf" ng-click="ctrl.addQuery($event, _.getMetricName(metric), host)">
+                  <label class="tree_leaf">
                     <input type="checkbox" name="host"
+                      ng-model="model"
+                      ng-change="ctrl.addQuery(_.getMetricName(metric), host)"
                       ng-checked="ctrl.checkSource(metric, host)"
                       ng-disabled="ctrl.checkSource(metric, host)"/>
                     <p>{{host}}</p>
-                    <span ng-if="!ctrl.checkSource(metric, host)"><i class="fa fa-thumbs-o-up add-rca"></i><i class="fa fa-thumbs-o-down"></i></span>
-                  </div>
+                  </label>
+                  <span class="pull-right" ng-if="!ctrl.checkSource(metric, host)" ng-click="ctrl.toggleClass($event, _.getMetricName(metric), host)">
+                    <i class="fa fa-thumbs-o-up add-rca"></i>
+                    <i class="fa fa-thumbs-o-down"></i>
+                  </span>
                 </li>
               </ul>
             </li>
@@ -99,7 +104,7 @@ export class TreeMenuCtrl {
     if (!_.isEmpty(association)) {
       this.alertMgrSrv.loadAssociatedMetrics(association.metric, association.host, association.distance, true)
       .then((response) => {
-        this.correlationMetrics = response.data;
+        this.correlationMetrics = response.data || {};
         if (!_.isEmpty(response.data)) {
           this.isAssociation = true;
         }
@@ -138,7 +143,7 @@ export class TreeMenuCtrl {
   }
 
   addManualMetric(target) {
-    target.metric = this.contextSrv.user.orgId + "." + this.contextSrv.user.systemId + "." + target.metric;
+    target.metric = this.prox + target.metric;
     if (!_.hasIn(this.correlationMetrics, '自定义指标')) {
       this.correlationMetrics['自定义指标'] = {};
     }
@@ -160,51 +165,42 @@ export class TreeMenuCtrl {
     $('[disabled="disabled"]').prop({checked: true});
   }
 
-  addQuery(event, metric, host) {
-    var _input = $(event.currentTarget).find('input');
-    if (_input.prop('disabled')) {
+  addQuery(metric, host) {
+    if (this.checkSource(metric, host)) {
       return;
     } else {
-      if ($(event.target).is('i')) {
-        this.toggleClass(event, metric, host);
-      } else {
-        if (!$(event.target).is('input')) {
-          var checked = !_input.prop('checked');
-          _input.prop({checked : checked});
+      var targets = this.panel.targets;
+      var isHidden = true;
+      _.each(targets, (target) => {
+        if (target.metric === metric && target.tags.host === host) {
+          isHidden = false;
+          target.hide = !target.hide;
         }
-        var targets = this.panel.targets;
-        var isHidden = true;
-        _.each(targets, (target) => {
-          if (target.metric === metric && target.tags.host === host) {
-            isHidden = false;
-            target.hide = !target.hide;
-          }
-        });
-        if (isHidden) {
-          var target = {
-            "aggregator": "avg",
-            "currentTagKey": "",
-            "currentTagValue": "",
-            "downsampleAggregator": "avg",
-            "downsampleInterval": "1m",
-            "errors": {},
-            "hide": false,
-            "isCounter": false,
-            "metric": metric,
-            "shouldComputeRate": false,
-            "tags": {"host": host}
-          };
-          targets.push(target);
-          var seriesOverride = {
-            "alias": metric+"{host"+"="+host+"}",
-            "yaxis": this.yaxisNumber++
-          };
-          this.panel.seriesOverrides.push(seriesOverride);
-        }
-        this.healthSrv.transformMetricType(this.$scope.dashboard).then(() => {
-          this.$rootScope.$broadcast('refresh', this.panel.id);
-        });
+      });
+      if (isHidden) {
+        var target = {
+          "aggregator": "avg",
+          "currentTagKey": "",
+          "currentTagValue": "",
+          "downsampleAggregator": "avg",
+          "downsampleInterval": "1m",
+          "errors": {},
+          "hide": false,
+          "isCounter": false,
+          "metric": metric,
+          "shouldComputeRate": false,
+          "tags": {"host": host}
+        };
+        targets.push(target);
+        var seriesOverride = {
+          "alias": metric+"{host"+"="+host+"}",
+          "yaxis": this.yaxisNumber++
+        };
+        this.panel.seriesOverrides.push(seriesOverride);
       }
+      this.healthSrv.transformMetricType(this.$scope.dashboard).then(() => {
+        this.$rootScope.$broadcast('refresh', this.panel.id);
+      });
     }
   }
 
