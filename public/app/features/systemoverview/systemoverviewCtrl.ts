@@ -3,6 +3,7 @@ import _ from 'lodash';
 import $ from 'jquery';
 import {coreModule, appEvents} from  'app/core/core';
 import config from 'app/core/config';
+import store from 'app/core/store';
 
 declare var window: any;
 const HEALTH_TYPE = {
@@ -32,7 +33,7 @@ export class SystemOverviewCtrl {
   hostPanels: any;
   selected0: number = -1;
   selected1: number = -1;
-  switchEnabled: boolean = true;
+  switchEnabled: boolean; // = true;
   topology: any;
 
   tableParams: any;
@@ -78,8 +79,11 @@ export class SystemOverviewCtrl {
       counts: []
     });
 
+    this.switchEnabled = store.getBool('grafana.overview.mode');
+
     this.toolkit = window.jsPlumbToolkit.newInstance();
     $scope.$on("$destroy", () => {
+      store.set('grafana.overview.mode', this.switchEnabled);
       this.toolkit.clear();
     });
   }
@@ -444,7 +448,7 @@ export class SystemOverviewCtrl {
   }
 
   toHostTopology(id, host) {
-    this.$location.url(`/host_topology?id=${id}&name=${host}&tabId=0`);
+    this.$location.url(`/host_topology?id=${id}&name=${host}&tabId=1`);
   }
 
 };
