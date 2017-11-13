@@ -33,7 +33,7 @@ export class SystemOverviewCtrl {
   hostPanels: any;
   selected0: number = -1;
   selected1: number = -1;
-  switchEnabled: boolean; // = true;
+  switchEnabled: boolean;
   topology: any;
 
   tableParams: any;
@@ -67,7 +67,6 @@ export class SystemOverviewCtrl {
       thresholds: [HEALTH_TYPE.GREEN.TEXT, HEALTH_TYPE.YELLOW.TEXT, HEALTH_TYPE.RED.TEXT, HEALTH_TYPE.GREY.TEXT],
       colors: [HEALTH_TYPE.GREEN.COLOR, HEALTH_TYPE.YELLOW.COLOR, HEALTH_TYPE.RED.COLOR, HEALTH_TYPE.GREY.COLOR],
       onClick: {
-        // parent: this.hostGroupClickHandler.bind(this),
         child: this.hostNodeClickHandler.bind(this)
       }
     };

@@ -247,10 +247,7 @@ export class HostTopologyCtrl {
 
         _.forIn(this.predictionPanel, (item, key) => {
           // when prediction api returns {}
-          if (item.errTip) {
-            // $('.prediction-item-' + $.escapeSelector(host + key)).html(item.errTip);
-            return;
-          }
+          if (item.errTip) { return; }
 
           var score = item.tips[0] && parseFloat(item.tips[0].data);
           var colors = score > 75 ? [HEALTH_TYPE.RED.COLOR] : (score > 50 ? [HEALTH_TYPE.YELLOW.COLOR] : [HEALTH_TYPE.GREEN.COLOR]);
@@ -371,7 +368,6 @@ export class HostTopologyCtrl {
   //       Otherwise, the only way is stoping use templating.
   variableUpdated(host) {
     this.dashboard.templating.list[0].current = { "text": host.name || "All", "value": host.name || "$__all", "tags": [] };
-    // this.dashboard.templating.list[0].current = { "text": host.name || "*", "value": host.name || "*", "tags": [] };
 
     this.templateValuesSrv.init(this.dashboard);
     this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
