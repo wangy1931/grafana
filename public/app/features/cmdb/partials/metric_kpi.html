@@ -5,7 +5,7 @@
 </navbar>
 <div class="page-container">
   <div class="page-header">
-    <h1>KPI管理</h1>
+    <h1>KPI管理 <button ng-if="ctrl.contextSrv.isGrafanaAdmin" class="btn btn-success" ng-click="ctrl.importKpi()">导入KPI</button></h1>
   </div>
 
   <div class="metrics-def-container" ng-repeat="service in ctrl.serviceList">

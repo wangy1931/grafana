@@ -335,12 +335,24 @@ function (angular, _, coreModule, config) {
       })
     }
 
-    this.metricKpi = function(query) {
+    this.getKpi = function(params) {
       return this.alertD({
-        url: '/service/kpi',
-        method: query.method,
-        params: query.params
+        method: 'get',
+        url   : '/service/kpi',
+        params: params
       });
+    }
+
+    this.editKpi = function(params) {
+      return this.alertD({
+        method: 'post',
+        url   : '/service/kpi',
+        params: params
+      });
+    }
+
+    this.importMetricsKpi = function() {
+      return this.get('/api/static/metric/kpi');
     }
   });
 });
