@@ -410,7 +410,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/service_dependency', {
     templateUrl: 'public/app/features/service/partials/service_dep.html',
     controller : 'BuildDependCtrl',
-    reloadOnSearch: true,
+    controllerAs: 'ctrl',
     resolve: loadServiceBundle,
   })
   // RCA
