@@ -47,7 +47,6 @@ export class SystemOverviewCtrl {
     private alertMgrSrv,
     private healthSrv,
     private serviceDepSrv,
-    private jsPlumbService,
     private hostSrv,
     private utilSrv,
     private $location,

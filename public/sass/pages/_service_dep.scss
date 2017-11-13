@@ -71,7 +71,7 @@
 .build-service-depend .description {
     font-size: 13px;
     margin-top: 25px;
-    padding: 13px;
+    padding: 13px 26px;
     margin-bottom: 22px;
     background-color: #f4f5ef;
 }
@@ -80,7 +80,7 @@
     list-style-type: disc !important;
 }
 
-.jtk-demo-canvas {    
+.jtk-demo-canvas, .jtk-canvas {    
     height:555px;
     max-height:700px;
     border:1px solid #CCC;
@@ -144,7 +144,8 @@ li {
     text-align:center;
     height: 550px;
     background-color: #f3f7fa;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .sidebar ul li {
