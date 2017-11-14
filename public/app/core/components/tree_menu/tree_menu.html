@@ -6,8 +6,8 @@
   </div>
   <div class="tree-container" ng-show="ctrl.isOpen">
     <ul class="nav nav-tabs">
-      <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'metrics']"><button ng-click="ctrl.init()" ng-disabled="ctrl.groupType === 'metrics'">按服务分类</button></li>
-      <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'hosts']"><button ng-click="ctrl.init()" ng-disabled="ctrl.groupType === 'hosts'">按机器分类</button></li>
+      <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'metrics']"><button ng-click="ctrl.init('metrics')" ng-disabled="ctrl.groupType === 'metrics'">按服务分类</button></li>
+      <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'hosts']"><button ng-click="ctrl.init('hosts')" ng-disabled="ctrl.groupType === 'hosts'">按机器分类</button></li>
     </ul>
     <p class="header">关联指标
       <i class="fa fa-plus-square-o btn-add-metric" ng-click="ctrl.showNewAssociationManual()"></i>
@@ -19,7 +19,8 @@
           <a ng-click="ctrl.toggleAccordion($event)" class="tree_node accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
             href="#{{_.snakeCase(service)}}">
             <i class="fa fa-plus-square-o"></i>
-            <p>{{service + ' (' + _.keys(metrics).length + ')'}}</p>
+            <p ng-if="ctrl.groupType === 'metrics'">{{service + ' (' + _.keys(metrics).length + ')'}}</p>
+            <p ng-if="ctrl.groupType === 'hosts'">{{service}}</p>
           </a>
           <ul id="{{_.snakeCase(service)}}" class="tree_ul accordion-body collapse accordion">
             <li class="tree_li" ng-repeat="(metric, hosts) in metrics">

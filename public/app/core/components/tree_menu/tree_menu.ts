@@ -23,6 +23,7 @@ export class TreeMenuCtrl {
   ) {
     this.isOpen = false;
     this.isLoding = true;
+    this.groupType = 'metrics';
 
     var analysis = this.$rootScope.$on('analysis', (event, data) =>{
       if (_.isEqual(data, 'thresholdSlider')) {
@@ -40,8 +41,8 @@ export class TreeMenuCtrl {
     this.prox = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.';
   }
 
-  init() {
-    this.groupType = this.groupType === 'metrics' ? 'hosts' : 'metrics';
+  init(type?) {
+    this.groupType = type || this.groupType;
     this.isOpen = true;
     this.isLoding = true;
     this.isAssociation = false;
