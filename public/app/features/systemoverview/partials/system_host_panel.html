@@ -8,6 +8,7 @@
                         <i class="fa btn btn-primary" ng-class="{true: 'fa-minus', false: 'fa-plus'}[$index == ctrl.selected1]"></i>
                     </li>
                     <li style="padding-left: 5%; text-align: left;" class="text-overflow">{{ host.host }}</li>
+                    <li>{{ host.defaultIp || '-' }}</li>
                     <li>{{ host.status || '-' }}</li>
                     <li>{{ host.cpu || '-' }}</li>
                     <li>{{ host.mem || '-' }}</li>

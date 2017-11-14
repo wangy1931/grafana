@@ -57,7 +57,7 @@
           },
           "targets": [
             {
-              "aggregator": "p99",
+              "aggregator": "avg",
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
@@ -125,7 +125,7 @@
           },
           "targets": [
             {
-              "aggregator": "p99",
+              "aggregator": "avg",
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
