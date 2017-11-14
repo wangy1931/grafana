@@ -30,25 +30,33 @@
               </a>
               <ul id="{{_.snakeCase(service) + $index}}" class="tree_ul accordion-body collapse">
                 <li class="tree_li" ng-repeat="host in hosts.hosts" ng-if="ctrl.groupType === 'metrics'">
-                  <div class="tree_leaf" ng-click="ctrl.addQuery($event, _.getMetricName(metric), host)">
-                    <input type="checkbox" name="host" ng-checked="ctrl.checkSource(metric, host)" ng-disabled="ctrl.checkSource(metric, host)"/>
+                  <label class="tree_leaf">
+                    <input type="checkbox" name="host"
+                      ng-model="model"
+                      ng-change="ctrl.addQuery(_.getMetricName(metric), host)"
+                      ng-checked="ctrl.checkSource(metric, host)"
+                      ng-disabled="ctrl.checkSource(metric, host)"/>
                     <p>{{host}}</p>
-                    <span ng-if="!ctrl.checkSource(metric, host)">
-                      <i class="fa fa-thumbs-o-up add-rca"></i>
-                      <i class="fa fa-thumbs-o-down"></i>
-                    </span>
-                  </div>
+                  </label>
+                  <span class="pull-right" ng-if="!ctrl.checkSource(metric, host)" ng-click="ctrl.toggleClass($event, _.getMetricName(metric), host)">
+                    <i class="fa fa-thumbs-o-up add-rca"></i>
+                    <i class="fa fa-thumbs-o-down"></i>
+                  </span>
                 </li>
 
                 <li class="tree_li" ng-repeat="metricsitem in hosts.metrics" ng-if="ctrl.groupType === 'hosts'">
-                  <div class="tree_leaf" ng-click="ctrl.addQuery($event, _.getMetricName(metricsitem), service, _.getMetricName(metric))">
-                    <input type="checkbox" name="service" ng-checked="ctrl.checkSource(metricsitem, service)" ng-disabled="ctrl.checkSource(metricsitem, service)"/>
+                  <label class="tree_leaf">
+                    <input type="checkbox" name="host"
+                      ng-model="model"
+                      ng-change="ctrl.addQuery(_.getMetricName(metricsitem), service, _.getMetricName(metric))"
+                      ng-checked="ctrl.checkSource(metricsitem, service)"
+                      ng-disabled="ctrl.checkSource(metricsitem, service)"/>
                     <p bs-tooltip="'{{_.getMetricName(metricsitem)}}'" data-placement="top" data-container="body" bs-enabled="ctrl.groupType === 'hosts'">{{_.getMetricName(metricsitem)}}</p>
-                    <span ng-if="!ctrl.checkSource(metricsitem, service)">
-                      <i class="fa fa-thumbs-o-up add-rca"></i>
-                      <i class="fa fa-thumbs-o-down"></i>
-                    </span>
-                  </div>
+                  </label>
+                  <span class="pull-right" ng-if="!ctrl.checkSource(metricsitem, service)" ng-click="ctrl.toggleClass($event, _.getMetricName(metricsitem), service)">
+                    <i class="fa fa-thumbs-o-up add-rca"></i>
+                    <i class="fa fa-thumbs-o-down"></i>
+                  </span>
                 </li>
               </ul>
             </li>

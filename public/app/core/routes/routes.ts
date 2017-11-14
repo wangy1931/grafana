@@ -294,6 +294,23 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'LogsCtrl',
     resolve: loadLogsBundle,
   })
+  .when('/logs/rules', {
+    templateUrl: 'public/app/features/logs/partials/log_rules.html',
+    controller : 'LogParseCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadLogsBundle,
+  })
+  .when('/logs/rules/new', {
+    templateUrl: 'public/app/features/logs/partials/log_rules_new.html',
+    controller : 'LogParseEditCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadLogsBundle,
+  })
+  .when('/analysis', {
+    templateUrl: 'public/app/features/analysis/partials/analysis.html',
+    controller : 'AnalysisCtrl',
+    resolve: loadAnalysisBundle,
+  })
   .when('/association', {
     templateUrl: 'public/app/features/org/partials/alertAssociation.html',
     controller : 'AlertAssociationCtrl',
@@ -360,9 +377,27 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'CMDBServiceDetailCtrl',
     resolve: loadCMDBBundle
   })
+  .when('/cmdb/config', {
+    templateUrl: 'public/app/features/cmdb/partials/uagent.html',
+    controller : 'UagentCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadCMDBBundle
+  })
+  .when('/cmdb/config/edit', {
+    templateUrl: 'public/app/features/cmdb/partials/uagent_edit.html',
+    controller : 'UagentCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadCMDBBundle
+  })
   .when('/cmdb/servicecustom', {
     templateUrl: 'public/app/features/cmdb/partials/service_custom.html',
     controller : 'ServiceCustomCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadCMDBBundle
+  })
+  .when('/cmdb/metrics', {
+    templateUrl: 'public/app/features/cmdb/partials/metrics_def.html',
+    controller : 'MetricsDefCtrl',
     controllerAs: 'ctrl',
     resolve: loadCMDBBundle
   })
@@ -375,7 +410,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/service_dependency', {
     templateUrl: 'public/app/features/service/partials/service_dep.html',
     controller : 'BuildDependCtrl',
-    reloadOnSearch: true,
+    controllerAs: 'ctrl',
     resolve: loadServiceBundle,
   })
   // RCA

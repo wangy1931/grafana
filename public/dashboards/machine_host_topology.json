@@ -71,7 +71,7 @@
             }
           ],
           "thresholds": "30,70",
-          "title": "Cpu使用率",
+          "title": "CPU使用率",
           "transparent": true,
           "type": "singlestat",
           "valueFontSize": "80%",
@@ -82,7 +82,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -150,7 +150,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -219,7 +219,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -287,7 +287,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         }
       ],
       "title": "New row"

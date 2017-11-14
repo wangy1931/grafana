@@ -6,7 +6,7 @@ import coreModule from 'app/core/core_module';
 
 var template = `
 <span class="cwiz-switch {{ ctrl.switchClass }}" ng-class="{ 'checked': ctrl.enabled }">
-  <input type="checkbox" id="check1" ng-model="ctrl.enabled" ng-change="ctrl.internalOnChange();" hidden />
+  <input type="checkbox" id="check1" ng-class="{ 'checked': ctrl.enabled }" ng-model="ctrl.enabled" ng-change="ctrl.internalOnChange();" hidden />
   <label for="check1"></label>
   <span class="switch-text">
     <span class="on">{{ ctrl.textOn }}</span>

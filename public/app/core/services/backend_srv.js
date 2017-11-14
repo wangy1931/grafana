@@ -305,12 +305,54 @@ function (angular, _, coreModule, config) {
       });
     };
 
-    this.metricKpi = function(query) {
+    /**
+     * getMetricInfo params
+     *  size: size
+     *  page: page
+     *  id: metricId
+     *  name: metricName
+     *  type: 服务/系统
+     *  subtype: serviceName/CPU/IO/JVM/内存/存储/网络/运行状态  //系统下为hardcoded,动态加载请找张鹏
+     */
+    this.getMetricInfo = function(params) {
       return this.alertD({
-        url: '/service/kpi',
-        method: query.method,
-        params: query.params
+        url: '/metrictype/info',
+        params: params
       });
+    }
+
+    /**
+     * updateMetricInfo params
+     *  id: metricId
+     *  userId: userId
+     */
+    this.updateMetricInfo = function(params, data) {
+      return this.alertD({
+        method: 'post',
+        url   : '/metrictype/info',
+        params: params,
+        data  : data
+      })
+    }
+
+    this.getKpi = function(params) {
+      return this.alertD({
+        method: 'get',
+        url   : '/service/kpi',
+        params: params
+      });
+    }
+
+    this.editKpi = function(params) {
+      return this.alertD({
+        method: 'post',
+        url   : '/service/kpi',
+        params: params
+      });
+    }
+
+    this.importMetricsKpi = function() {
+      return this.get('/api/static/metric/kpi');
     }
   });
 });

@@ -14,7 +14,14 @@ export class MetricKpiCtrl {
   serviceSelected: any;
 
   /** @ngInject */
-  constructor(private $scope, private backendSrv, private datasourceSrv, private $controller) {
+  constructor(
+    private $scope,
+    private backendSrv,
+    private datasourceSrv,
+    private $controller,
+    private $q,
+    private contextSrv
+  ) {
     this.getService();
     this.$controller('OpenTSDBQueryCtrl', {$scope: this.$scope});
     datasourceSrv.get('opentsdb').then(datasource => {
@@ -59,11 +66,8 @@ export class MetricKpiCtrl {
     } else {
       this.serviceSelected = service.id;
     }
-    this.backendSrv.metricKpi({
-      method: 'get',
-      params: {
-        service: service.name
-      }
+    this.backendSrv.getKpi({
+      service: service.name
     }).then((res) => {
       this.kpiList = res.data;
     });
@@ -77,13 +81,10 @@ export class MetricKpiCtrl {
       yesText: '删除',
       noText: '取消',
       onConfirm: () => {
-        this.backendSrv.metricKpi({
-          method: 'post',
-          params: {
-            service: service.name,
-            metric: kpi,
-            kpi: false
-          }
+        this.backendSrv.editKpi({
+          service: service.name,
+          metric: kpi,
+          kpi: false
         }).then(() => {
           this.$scope.appEvent('alert-success', ['删除成功']);
           _.remove(this.kpiList, (kpiItem) => {
@@ -99,17 +100,37 @@ export class MetricKpiCtrl {
       this.$scope.appEvent('alert-warning', ['您已添加过该指标', '请勿重复添加']);
       return;
     }
-    this.backendSrv.metricKpi({
-      method: 'post',
-      params: {
-        service: service.name,
-        metric: kpi
-      }
+    this.backendSrv.editKpi({
+      service: service.name,
+      metric: kpi
     }).then((res) => {
       this.$scope.appEvent('alert-success', ['添加成功']);
       this.kpiList.push(kpi);
       this.kpi = '';
     })
+  }
+
+  importKpi() {
+    this.backendSrv.importMetricsKpi().then((data) => {
+      var all = [];
+      _.each(data, (metrics, service) => {
+        _.each(metrics, (metric) => {
+          var q = this.backendSrv.editKpi({
+            service: service,
+            metric: metric
+          });
+          all.push(q);
+        })
+      });
+      this.$q.all(all).then((response) => {
+        var counter = _.countBy(response, (result) => {
+          return result.status === 200;
+        });
+        this.$scope.appEvent('alert-success', ['导入成功', '共成功导入' + counter.true + '个KPI']);
+      }, () => {
+        this.$scope.appEvent('alert-danger', ['导入失败']);
+      });
+    });
   }
 }
 

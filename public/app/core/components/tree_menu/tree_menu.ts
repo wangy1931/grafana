@@ -49,7 +49,7 @@ export class TreeMenuCtrl {
     if (!_.isEmpty(association)) {
       this.alertMgrSrv.loadAssociatedMetrics(association.metric, association.host, association.distance, this.groupType)
       .then((response) => {
-        this.correlationMetrics = response.data;
+        this.correlationMetrics = response.data || {};
         if (!_.isEmpty(response.data)) {
           this.isAssociation = true;
         }
@@ -88,7 +88,7 @@ export class TreeMenuCtrl {
   }
 
   addManualMetric(target) {
-    target.metric = this.contextSrv.user.orgId + "." + this.contextSrv.user.systemId + "." + target.metric;
+    target.metric = this.prox + target.metric;
     if (!_.hasIn(this.correlationMetrics, '自定义指标')) {
       this.correlationMetrics['自定义指标'] = {};
     }
@@ -114,55 +114,46 @@ export class TreeMenuCtrl {
     $('[disabled="disabled"]').prop({checked: true});
   }
 
-  addQuery(event, metric, host, otherMetric?) {
+  addQuery(metric, host, otherMetric?) {
     if (host === '自定义指标') {
       host = metric;
       metric = otherMetric;
     }
-    var _input = $(event.currentTarget).find('input');
-    if (_input.prop('disabled')) {
+    if (this.checkSource(metric, host)) {
       return;
     } else {
-      if ($(event.target).is('i')) {
-        this.toggleClass(event, metric, host);
-      } else {
-        if (!$(event.target).is('input')) {
-          var checked = !_input.prop('checked');
-          _input.prop({checked : checked});
+      var targets = this.panel.targets;
+      var isHidden = true;
+      _.each(targets, (target) => {
+        if (target.metric === metric && target.tags.host === host) {
+          isHidden = false;
+          target.hide = !target.hide;
         }
-        var targets = this.panel.targets;
-        var isHidden = true;
-        _.each(targets, (target) => {
-          if (target.metric === metric && target.tags.host === host) {
-            isHidden = false;
-            target.hide = !target.hide;
-          }
-        });
-        if (isHidden) {
-          var target = {
-            "aggregator": "avg",
-            "currentTagKey": "",
-            "currentTagValue": "",
-            "downsampleAggregator": "avg",
-            "downsampleInterval": "1m",
-            "errors": {},
-            "hide": false,
-            "isCounter": false,
-            "metric": metric,
-            "shouldComputeRate": false,
-            "tags": {"host": host}
-          };
-          targets.push(target);
-          var seriesOverride = {
-            "alias": metric+"{host"+"="+host+"}",
-            "yaxis": this.yaxisNumber++
-          };
-          this.panel.seriesOverrides.push(seriesOverride);
-        }
-        this.healthSrv.transformMetricType(this.$scope.dashboard).then(() => {
-          this.$rootScope.$broadcast('refresh', this.panel.id);
-        });
+      });
+      if (isHidden) {
+        var target = {
+          "aggregator": "avg",
+          "currentTagKey": "",
+          "currentTagValue": "",
+          "downsampleAggregator": "avg",
+          "downsampleInterval": "1m",
+          "errors": {},
+          "hide": false,
+          "isCounter": false,
+          "metric": metric,
+          "shouldComputeRate": false,
+          "tags": {"host": host}
+        };
+        targets.push(target);
+        var seriesOverride = {
+          "alias": metric+"{host"+"="+host+"}",
+          "yaxis": this.yaxisNumber++
+        };
+        this.panel.seriesOverrides.push(seriesOverride);
       }
+      this.healthSrv.transformMetricType(this.$scope.dashboard).then(() => {
+        this.$rootScope.$broadcast('refresh', this.panel.id);
+      });
     }
   }
 

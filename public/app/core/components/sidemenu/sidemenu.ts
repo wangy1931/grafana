@@ -100,21 +100,17 @@ export class SideMenuCtrl {
     });
 
     this.mainLinks.push({
-      text: "日志查看",
+      text: "日志分析",
       icon: "fa fa-fw fa-file-text-o",
       children: [
         {
-          text: '全文查询',
+          text: '日志搜索',
           url: this.getUrl("/logs")
         },
         {
-          text: '聚合查询',
-          url: this.getUrl("/logs")
-        },
-        {
-          text: '日志对比',
-          url: this.getUrl("/logs")
-        },
+          text: '日志管理',
+          url: this.getUrl("/logs/rules")
+        }
       ]
     });
 
@@ -194,6 +190,14 @@ export class SideMenuCtrl {
         {
           text: '服务列表',
           url: this.getUrl("/cmdb/servicelist")
+        },
+        {
+          text: '探针管理',
+          url: this.getUrl("/cmdb/config?serviceName=collector")
+        },
+        {
+          text: '指标概览',
+          url: this.getUrl("/cmdb/metrics")
         },
         {
           text: 'KPI',

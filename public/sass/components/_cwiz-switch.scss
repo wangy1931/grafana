@@ -46,7 +46,7 @@ $switch-text-padding: 20px;
     }
   }
 
-  [type=checkbox]:checked {
+  [type=checkbox].checked {
     & + label {
       left: calc(100% - #{$switch-height});
     }
