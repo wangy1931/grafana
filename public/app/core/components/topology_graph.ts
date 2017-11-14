@@ -133,6 +133,7 @@ export class TopologyGraphCtrl {
   }
 
   clearSelected() {
+    this.query = '';
     this.currentHost = {};
     this.heatmap.data(this.data);
   }

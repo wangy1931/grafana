@@ -8,6 +8,7 @@
       <thead>
         <tr>
           <th>机器名</th>
+          <th>机器 IP</th>
           <th>机器在线</th>
           <th>CPU 使用率</th>
           <th>内存使用率</th>
@@ -22,6 +23,7 @@
             ng-class="{active: host.host==ctrl.currentHost.name}"
             ng-click="ctrl.nodeClickHandle(host);">
           <td>{{ host.host }}</td>
+          <td>{{ host.defaultIp || '-' }}</td>
           <td>{{ host.status || '-' }}</td>
           <td>{{ host.cpu || '-' }}</td>
           <td>{{ host.mem || '-' }}</td>

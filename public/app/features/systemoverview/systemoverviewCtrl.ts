@@ -78,12 +78,16 @@ export class SystemOverviewCtrl {
     });
 
     this.switchEnabled = store.getBool('grafana.overview.mode');
-
     this.toolkit = window.jsPlumbToolkit.newInstance();
+
     $scope.$on("$destroy", () => {
-      store.set('grafana.overview.mode', this.switchEnabled);
+      this.setOverviewMode();
       this.toolkit.clear();
     });
+  }
+
+  setOverviewMode() {
+    store.set('grafana.overview.mode', this.switchEnabled);
   }
 
   // copy from anomalyMetic.js

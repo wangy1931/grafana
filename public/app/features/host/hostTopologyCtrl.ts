@@ -172,7 +172,7 @@ export class HostTopologyCtrl {
         return !!~hosts.indexOf(item.host);
       });
     } else {
-      tableData = host.name ? _.filter(this.hostSummary, { host: host.name }) : this.hostSummary;
+      tableData = host.name ? _.filter(this.hostSummary, { id: host._private_.id }) : this.hostSummary;
     }
 
     this.hostPanels = tableData;
@@ -380,10 +380,6 @@ export class HostTopologyCtrl {
   saveTopologyData() {
     this.data = this.hostSrv.topology;
     this.hostlist = _.map(this.data, 'name');
-  }
-
-  clearSelected() {
-    this.currentHost = {};
   }
 
   showGuideResult(e, params) {
