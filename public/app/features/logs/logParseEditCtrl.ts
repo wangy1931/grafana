@@ -199,7 +199,7 @@ export class LogParseEditCtrl {
         pattern = /^[\w.]+$/;
         break;
       case 'logPath':
-        pattern = /^([/][\w-.]+)*$/;
+        pattern = /^([a-zA-Z]:(\/\/|\\\\)([\w+.-]+(\/|\\)?)*)|(([/][\w-.*]+)*)$/;
         break;
       case 'logType':
         pattern = /^[\w]+$/;
