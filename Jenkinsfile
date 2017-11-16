@@ -14,7 +14,12 @@ source ~/.bashrc
 
 go version
 npm --version
-git status'''
+git status
+
+
+echo pwd
+
+alias grunt='''
         }
         
         sh '''echo $GOPATH
@@ -33,7 +38,11 @@ git status'''
     }
     stage('package') {
       steps {
-        sh 'go run build.go package'
+        dir(path: '/root/Documents/cloudwiz/src/github.com/wangy1931/grafana') {
+          sh '''alias grunt="/usr/bin/grunt"
+go run build.go package'''
+        }
+        
       }
     }
     stage('copy file & deploy') {
