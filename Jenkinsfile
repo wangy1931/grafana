@@ -9,7 +9,10 @@ pipeline {
     stage('change directory and check') {
       steps {
         dir(path: '/root/Documents/cloudwiz/src/github.com/wangy1931/grafana') {
-          sh '''go version
+          sh '''source ~/.bash_profile
+source ~/.bashrc
+
+go version
 npm --version
 git status'''
         }
