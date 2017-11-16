@@ -14,8 +14,7 @@ npm --version
 git status'''
         }
         
-        sh '''export GOPATH=$PWD
-echo $GOPATH
+        sh '''echo $GOPATH
 '''
       }
     }
@@ -39,5 +38,8 @@ echo $GOPATH
         echo 'done'
       }
     }
+  }
+  environment {
+    GOPATH = '/root/Documents/cloudwiz/src/github.com/wangy1931/grafana'
   }
 }
