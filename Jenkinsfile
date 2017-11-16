@@ -14,6 +14,9 @@ npm --version
 git status'''
         }
         
+        sh '''export GOPATH=$PWD
+echo $GOPATH
+'''
       }
     }
     stage('pull') {
