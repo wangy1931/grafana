@@ -40,6 +40,6 @@ git status'''
     }
   }
   environment {
-    GOPATH = '/root/Documents/cloudwiz/src/github.com/wangy1931/grafana'
+    GOPATH = '/root/Documents/cloudwiz/src/github.com/wangy1931/grafana/Godeps/_workspace:/root/Documents/cloudwiz'
   }
 }
