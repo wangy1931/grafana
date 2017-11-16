@@ -43,7 +43,7 @@
                 <span class="gf-form-label width-7">类型</span>
                 <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.type" ng-disabled="true">
                 <span class="gf-form-label width-7">子类型</span>
-                <select ng-disabled="ctrl.metricCur.disabled" class="gf-form-input max-width-25" ng-options="subType for subType in ctrl.typeList[1].subType" ng-model="ctrl.metricCur.subType"></select>
+                <select ng-disabled="ctrl.metricCur.disabled" class="gf-form-input max-width-25" ng-options="subType for subType in ctrl.metricCur.subTypes" ng-model="ctrl.metricCur.subType"></select>
               </div>
               <div class="gf-form">
                 <span class="gf-form-label width-7">描述</span>

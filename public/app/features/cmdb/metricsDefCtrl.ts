@@ -89,6 +89,7 @@ export class MetricsDefCtrl {
     this.backendSrv.getMetricInfo({id: metric.id}).then((res) => {
       this.metricCur = res.data;
       this.metricCur.disabled = true;
+      this.metricCur.subTypes = _.find(this.typeList, {type: this.metricCur.type}).subType;
     });
   }
 
