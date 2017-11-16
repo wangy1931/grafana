@@ -156,7 +156,7 @@ function (angular, _, dateMath) {
     };
 
     this.suggestTagKeys = function(metric) {
-      return $q.when(this.tagKeys[metric] || []);
+      return $q.when(this.tagKeys[this.prefix + metric] || []);
     };
 
     this._saveTagKeys = function(metricData) {
