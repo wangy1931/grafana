@@ -45,11 +45,8 @@
                         style="margin-right: 40px;"
                         spellcheck="false"
                         placeholder="请键入主机名"
-                        bs-typeahead
-                        ng-model="ctrl.targetObj.host"
-                        bs-options="host for host in ctrl.suggestTagHost"
-                        data-min-length="0" data-items="100"
-                        data-html="1" data-auto-select="true">
+                        bs-typeahead-old="ctrl.suggestTagHost"
+                        ng-model="ctrl.targetObj.host">
                 </li>
             </ul>
         </div>
