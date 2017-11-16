@@ -18,7 +18,7 @@ git status'''
     }
     stage('pull') {
       steps {
-        sh 'git pull'
+        sh 'git pull origin master'
       }
     }
     stage('build') {
