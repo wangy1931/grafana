@@ -18,7 +18,7 @@ git status'''
     }
     stage('pull') {
       steps {
-        git(url: 'git@github.com:wangy1931/grafana.git', changelog: true, branch: 'master')
+        sh 'git pull'
       }
     }
     stage('build') {
