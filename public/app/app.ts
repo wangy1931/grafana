@@ -12,7 +12,6 @@ import 'angular-animate';
 import 'angular-ui';
 import 'ui.calendar';
 
-import 'bootstrap-table';
 import 'angular-strap.tpl';
 import 'angular-strap-old';
 
