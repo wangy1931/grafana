@@ -67,11 +67,17 @@ function (angular, _, coreModule) {
       });
     };
 
-    this.loadAssociatedMetrics = function(alertMetric, alertHost, threshold, group) {
+    this.loadAssociatedMetrics = function(alertMetric, alertHost, min, max, group) {
       return backendSrv.alertD({
         method: "get",
         url: alertAssociationUrl,
-        params: {metric: alertMetric, host: alertHost, distance: 1000 - threshold, group: group}
+        params: {
+          metric: alertMetric,
+          host: alertHost,
+          minDistance: 1000 - max,
+          maxDistance: 1000 - min,
+          group: group
+        }
       });
     };
 

@@ -27,7 +27,7 @@ export class TreeMenuCtrl {
 
     var analysis = this.$rootScope.$on('analysis', (event, data) =>{
       if (_.isEqual(data, 'thresholdSlider')) {
-        this.associationSrv.updateDistance(this.$scope.$parent.thresholdSlider.get());
+        this.associationSrv.updateRang(this.$scope.$parent.thresholdSlider.get());
       }
       this.init();
     });
@@ -48,7 +48,7 @@ export class TreeMenuCtrl {
     this.isAssociation = false;
     var association = this.associationSrv.sourceAssociation;
     if (!_.isEmpty(association)) {
-      this.alertMgrSrv.loadAssociatedMetrics(association.metric, association.host, association.distance, this.groupType)
+      this.alertMgrSrv.loadAssociatedMetrics(association.metric, association.host, association.min, association.max, this.groupType)
       .then((response) => {
         this.correlationMetrics = response.data || {};
         if (!_.isEmpty(response.data)) {
