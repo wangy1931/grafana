@@ -7,3 +7,32 @@
 .report-item:hover{
     color: $blue;
 }
+.template-container {
+    flex-wrap: wrap;
+    .template-item {
+        width: 50%;
+        padding: 1rem;
+        .template-img {
+            border: 5px solid $white;
+            &.active {
+                border-color: #8BC34A;
+                position: relative;
+                i {
+                    color: $white;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    z-index: 1;
+                }
+                &::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    border-bottom: 30px solid transparent;
+                    border-right: 30px solid #8BC34A
+                }
+            }
+        }
+    }
+}

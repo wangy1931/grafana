@@ -45,6 +45,8 @@ func Register(r *macaron.Macaron) {
 	r.Get("/install", reqSignedIn, Index)
 	r.Get("/customer", reqSignedIn, Index)
 	r.Get("/report", reqSignedIn, Index)
+	r.Get("/report/template", reqSignedIn, Index)
+	r.Get("/report/edit", reqSignedIn, Index)
 	r.Get("/cluster", reqSignedIn, Index)
 	r.Get("/integrate", reqSignedIn, Index)
 	r.Get("/setting/agent", reqSignedIn, Index)

@@ -1,0 +1,28 @@
+<navbar icon="fa fa-fw fa-list-alt" title="智能分析" title-url="/report">
+  <ul class="nav">
+    <li><a href="/report">健康报告</a></li>
+    <li><a href="/report/template">报告设置</a></li>
+    <li class="active"><a href="/report/edit">报告编辑</a></li>
+  </ul>
+</navbar>
+
+<div class="page-container" ng-init="ctrl.initEdit()">
+  <div class="page-header">
+      <h2>报告设置</h2>
+  </div>
+
+  <h4 class="report-title">多维度分析系统现状，为系统优化改进提供科学依据</h4>
+
+  <div>
+    <form class="gf-form-group">
+      <div class="parse-form-group">
+        <div class="gf-form"></div>
+  
+        <div class="parse-form-group no-border">
+          <a class="btn btn-success" ng-click="ctrl.saveRule()">保存</a>
+          <a class="btn btn-inverse" href="/logs/rules">取消</a>
+        </div>
+      </form>
+  </div>
+
+</div>
