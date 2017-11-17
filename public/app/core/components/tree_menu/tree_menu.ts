@@ -4,64 +4,6 @@ import _ from 'lodash';
 import $ from 'jquery';
 import coreModule from 'app/core/core_module';
 
-var template = `<div ng-init="ctrl.init()" class="tree-menu" ng-class="{true: 'open', false: 'close'}[ctrl.isOpen]">
-  <div class="open-tree">
-    <button ng-click="ctrl.showTree()" class="btn btn-primary btn-isopen">
-      <i class="fa" ng-class="{true: 'fa-chevron-right', false: 'fa-chevron-left'}[ctrl.isOpen]"></i>
-    </button>
-  </div>
-  <div class="tree-container" ng-show="ctrl.isOpen && !ctrl.isLoding">
-    <p class="header">关联指标
-      <i class="fa fa-plus-square-o btn-add-metric" ng-click="ctrl.showNewAssociationManual()"></i>
-      <button class="btn btn-outline-primary pull-right" ng-click="ctrl.clearSelected()">清除选中</button>
-    </p>
-    <div class="tree-content" id="tree-content" ng-show="ctrl.isAssociation">
-      <ul class="tree_ul accordion" id="accordion2">
-        <li class="tree_li" ng-repeat="(service, metrics) in ctrl.correlationMetrics">
-          <a ng-click="ctrl.toggleAccordion($event)" class="tree_node accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{_.snakeCase(service)}}">
-            <i class="fa fa-plus-square-o"></i>
-            <p>{{service + ' (' + _.keys(metrics).length + ')'}}</p>
-          </a>
-          <ul id="{{_.snakeCase(service)}}" class="tree_ul accordion-body collapse accordion">
-            <li class="tree_li" ng-repeat="(metric, hosts) in metrics">
-              <a ng-click="ctrl.toggleAccordion($event)" class="tree_node accordion-toggle" data-toggle="collapse" data-parent="#{{_.snakeCase(service)}}" href="#{{_.snakeCase(service) + $index}}">
-                <i class="fa fa-plus-square-o"></i>
-                <p bs-tooltip="'{{_.getMetricName(metric)}}'" data-placement="top" data-container="body">{{_.getMetricName(metric)}}</p>
-              </a>
-              <ul id="{{_.snakeCase(service) + $index}}" class="tree_ul accordion-body collapse">
-                <li class="tree_li" ng-repeat="host in hosts.hosts">
-                  <label class="tree_leaf">
-                    <input type="checkbox" name="host"
-                      ng-model="model"
-                      ng-change="ctrl.addQuery(_.getMetricName(metric), host)"
-                      ng-checked="ctrl.checkSource(metric, host)"
-                      ng-disabled="ctrl.checkSource(metric, host)"/>
-                    <p>{{host}}</p>
-                  </label>
-                  <span class="pull-right" ng-if="!ctrl.checkSource(metric, host)" ng-click="ctrl.toggleClass($event, _.getMetricName(metric), host)">
-                    <i class="fa fa-thumbs-o-up add-rca"></i>
-                    <i class="fa fa-thumbs-o-down"></i>
-                  </span>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div class="tree-content no-data" ng-show="!ctrl.isAssociation">
-      <p>没有关联结果？调整下相似度试试吧。</p>
-      <p>还是没有？请点击"刷新结果"按钮</p>
-      <button class="btn btn-outline-primary" ng-click="ctrl.init()">刷新结果</button>
-    </div>
-    <div class="slider-container">
-      <div class="sliders" slider></div>
-      <div class="slider-level"><span>低</span><span>相似度</span><span>高</span></div>
-    </div>
-  </div>
-  <cw-loading class="tree-container" ng-if="ctrl.isLoding" show="ctrl.isLoding" duration=6000></cw-loading>
-</div>`;
-
 export class TreeMenuCtrl {
   isAssociation: boolean;
   isOpen: boolean;
@@ -70,6 +12,8 @@ export class TreeMenuCtrl {
   correlationMetrics: any;
   prox: any;
   panel: any;
+  groupType: any;
+  correlationHosts: any;
 
   /** @ngInject */
   constructor(private $scope, private associationSrv,
@@ -79,10 +23,12 @@ export class TreeMenuCtrl {
     private alertMgrSrv
   ) {
     this.isOpen = false;
+    this.isLoding = true;
+    this.groupType = 'metrics';
 
     var analysis = this.$rootScope.$on('analysis', (event, data) =>{
       if (_.isEqual(data, 'thresholdSlider')) {
-        this.associationSrv.updateDistance(this.$scope.$parent.thresholdSlider.get());
+        this.associationSrv.updateRang(this.$scope.$parent.thresholdSlider.get());
       }
       this.init();
     });
@@ -96,19 +42,24 @@ export class TreeMenuCtrl {
     this.prox = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.';
   }
 
-  init() {
+  init(type?) {
+    this.groupType = type || this.groupType;
     this.isOpen = true;
     this.isLoding = true;
     this.isAssociation = false;
     var association = this.associationSrv.sourceAssociation;
+    this.clearSelected();
     if (!_.isEmpty(association)) {
-      this.alertMgrSrv.loadAssociatedMetrics(association.metric, association.host, association.distance, true)
+      this.alertMgrSrv.loadAssociatedMetrics(association.metric, association.host, association.min, association.max, this.groupType)
       .then((response) => {
-        this.correlationMetrics = response.data || {};
+        if (this.groupType === 'metrics') {
+          this.correlationMetrics = response.data || {};
+        } else {
+          this.correlationHosts = response.data || {};
+        }
         if (!_.isEmpty(response.data)) {
           this.isAssociation = true;
         }
-        this.clearSelected();
         this.isLoding = false;
       }, () => {
         this.isLoding = false;
@@ -147,7 +98,11 @@ export class TreeMenuCtrl {
     if (!_.hasIn(this.correlationMetrics, '自定义指标')) {
       this.correlationMetrics['自定义指标'] = {};
     }
-    this.correlationMetrics['自定义指标'][target.metric] = {hosts: [target.host]};
+    if (this.groupType === 'metrics') {
+      this.correlationMetrics['自定义指标'][target.metric] = {hosts: [target.host]};
+    } else {
+      this.correlationMetrics['自定义指标'][target.metric] = {metrics: [target.host]};
+    }
     this.isAssociation = true;
   }
 
@@ -165,10 +120,22 @@ export class TreeMenuCtrl {
     $('[disabled="disabled"]').prop({checked: true});
   }
 
-  addQuery(metric, host) {
+  addQuery(event, metric, host, otherMetric?) {
+    if (host === '自定义指标') {
+      host = metric;
+      metric = otherMetric;
+    }
     if (this.checkSource(metric, host)) {
       return;
     } else {
+      var $currentTarget = $(event.currentTarget);
+      var $target = $(event.target);
+      if (!$target.is('input')) {
+        var $input = $currentTarget.find('input')
+        var checked = $input.prop('checked');
+        $input.prop({checked: !checked});
+      }
+
       var targets = this.panel.targets;
       var isHidden = true;
       _.each(targets, (target) => {
@@ -183,7 +150,7 @@ export class TreeMenuCtrl {
           "currentTagKey": "",
           "currentTagValue": "",
           "downsampleAggregator": "avg",
-          "downsampleInterval": "1m",
+          "downsampleInterval": "",
           "errors": {},
           "hide": false,
           "isCounter": false,
@@ -260,7 +227,7 @@ export function treeMenu() {
     controller: TreeMenuCtrl,
     bindToController: true,
     controllerAs: 'ctrl',
-    template: template,
+    templateUrl: 'public/app/core/components/tree_menu/tree_menu.html',
     link: (scope, elem, attrs, ctrl) => {
       ctrl.panel = scope.$parent.panel;
     }
