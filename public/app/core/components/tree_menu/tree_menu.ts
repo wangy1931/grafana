@@ -13,6 +13,7 @@ export class TreeMenuCtrl {
   prox: any;
   panel: any;
   groupType: any;
+  correlationHosts: any;
 
   /** @ngInject */
   constructor(private $scope, private associationSrv,
@@ -47,14 +48,18 @@ export class TreeMenuCtrl {
     this.isLoding = true;
     this.isAssociation = false;
     var association = this.associationSrv.sourceAssociation;
+    this.clearSelected();
     if (!_.isEmpty(association)) {
       this.alertMgrSrv.loadAssociatedMetrics(association.metric, association.host, association.min, association.max, this.groupType)
       .then((response) => {
-        this.correlationMetrics = response.data || {};
+        if (this.groupType === 'metrics') {
+          this.correlationMetrics = response.data || {};
+        } else {
+          this.correlationHosts = response.data || {};
+        }
         if (!_.isEmpty(response.data)) {
           this.isAssociation = true;
         }
-        this.clearSelected();
         this.isLoding = false;
       }, () => {
         this.isLoding = false;
@@ -115,7 +120,7 @@ export class TreeMenuCtrl {
     $('[disabled="disabled"]').prop({checked: true});
   }
 
-  addQuery(metric, host, otherMetric?) {
+  addQuery(event, metric, host, otherMetric?) {
     if (host === '自定义指标') {
       host = metric;
       metric = otherMetric;
@@ -123,6 +128,14 @@ export class TreeMenuCtrl {
     if (this.checkSource(metric, host)) {
       return;
     } else {
+      var $currentTarget = $(event.currentTarget);
+      var $target = $(event.target);
+      if (!$target.is('input')) {
+        var $input = $currentTarget.find('input')
+        var checked = $input.prop('checked');
+        $input.prop({checked: !checked});
+      }
+
       var targets = this.panel.targets;
       var isHidden = true;
       _.each(targets, (target) => {

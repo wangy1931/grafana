@@ -13,47 +13,63 @@
       <i class="fa fa-plus-square-o btn-add-metric" ng-click="ctrl.showNewAssociationManual()"></i>
       <button class="btn btn-outline-primary pull-right" ng-click="ctrl.clearSelected()">清除选中</button>
     </p>
-    <div class="tree-content" id="tree-content" ng-show="!ctrl.isLoding && ctrl.isAssociation">
+    <div class="tree-content" id="tree-content" ng-if="ctrl.groupType === 'metrics' && !ctrl.isLoding && ctrl.isAssociation">
       <ul class="tree_ul accordion" id="accordion2">
         <li class="tree_li" ng-repeat="(service, metrics) in ctrl.correlationMetrics">
           <a ng-click="ctrl.toggleAccordion($event)" class="tree_node accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
             href="#{{_.snakeCase(service)}}">
             <i class="fa fa-plus-square-o"></i>
-            <p ng-if="ctrl.groupType === 'metrics'">{{service + ' (' + _.keys(metrics).length + ')'}}</p>
-            <p ng-if="ctrl.groupType === 'hosts'">{{service}}</p>
+            <p>{{service + ' (' + _.keys(metrics).length + ')'}}</p>
           </a>
           <ul id="{{_.snakeCase(service)}}" class="tree_ul accordion-body collapse accordion">
             <li class="tree_li" ng-repeat="(metric, hosts) in metrics">
               <a ng-click="ctrl.toggleAccordion($event)" class="tree_node accordion-toggle" data-toggle="collapse" data-parent="#{{_.snakeCase(service)}}"
                 href="#{{_.snakeCase(service) + $index}}">
                 <i class="fa fa-plus-square-o"></i>
-                <p bs-tooltip="'{{_.getMetricName(metric)}}'" data-placement="top" data-container="body" bs-enabled="ctrl.groupType === 'metrics'">{{_.getMetricName(metric)}}</p>
+                <p bs-tooltip="'{{_.getMetricName(metric)}}'" data-placement="top" data-container="body">{{_.getMetricName(metric)}}</p>
               </a>
               <ul id="{{_.snakeCase(service) + $index}}" class="tree_ul accordion-body collapse">
-                <li class="tree_li" ng-repeat="host in hosts.hosts" ng-if="ctrl.groupType === 'metrics'">
-                  <label class="tree_leaf">
+                <li class="tree_li" ng-repeat="host in hosts.hosts">
+                  <div class="tree_leaf" ng-click="ctrl.addQuery($event, _.getMetricName(metric), host)">
                     <input type="checkbox" name="host"
-                      ng-model="model"
-                      ng-change="ctrl.addQuery(_.getMetricName(metric), host)"
                       ng-checked="ctrl.checkSource(metric, host)"
                       ng-disabled="ctrl.checkSource(metric, host)"/>
                     <p>{{host}}</p>
-                  </label>
+                  </div>
                   <span class="pull-right" ng-if="!ctrl.checkSource(metric, host)" ng-click="ctrl.toggleClass($event, _.getMetricName(metric), host)">
                     <i class="fa fa-thumbs-o-up add-rca"></i>
                     <i class="fa fa-thumbs-o-down"></i>
                   </span>
                 </li>
-
-                <li class="tree_li" ng-repeat="metricsitem in hosts.metrics" ng-if="ctrl.groupType === 'hosts'">
-                  <label class="tree_leaf">
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="tree-content" id="tree-content" ng-if="ctrl.groupType === 'hosts' && !ctrl.isLoding && ctrl.isAssociation">
+      <ul class="tree_ul accordion" id="accordion2">
+        <li class="tree_li" ng-repeat="(service, metrics) in ctrl.correlationHosts">
+          <a ng-click="ctrl.toggleAccordion($event)" class="tree_node accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
+            href="#{{_.snakeCase(service)}}">
+            <i class="fa fa-plus-square-o"></i>
+            <p>{{service}}</p>
+          </a>
+          <ul id="{{_.snakeCase(service)}}" class="tree_ul accordion-body collapse accordion">
+            <li class="tree_li" ng-repeat="(metric, hosts) in metrics">
+              <a ng-click="ctrl.toggleAccordion($event)" class="tree_node accordion-toggle" data-toggle="collapse" data-parent="#{{_.snakeCase(service)}}"
+                href="#{{_.snakeCase(service) + $index}}">
+                <i class="fa fa-plus-square-o"></i>
+                <p>{{metric}}</p>
+              </a>
+              <ul id="{{_.snakeCase(service) + $index}}" class="tree_ul accordion-body collapse">
+                <li class="tree_li" ng-repeat="metricsitem in hosts.metrics">
+                  <div class="tree_leaf" ng-click="ctrl.addQuery($event, _.getMetricName(metricsitem), service, _.getMetricName(metric))">
                     <input type="checkbox" name="host"
-                      ng-model="model"
-                      ng-change="ctrl.addQuery(_.getMetricName(metricsitem), service, _.getMetricName(metric))"
                       ng-checked="ctrl.checkSource(metricsitem, service)"
                       ng-disabled="ctrl.checkSource(metricsitem, service)"/>
-                    <p bs-tooltip="'{{_.getMetricName(metricsitem)}}'" data-placement="top" data-container="body" bs-enabled="ctrl.groupType === 'hosts'">{{_.getMetricName(metricsitem)}}</p>
-                  </label>
+                    <p bs-tooltip="'{{_.getMetricName(metricsitem)}}'" data-placement="top" data-container="body">{{_.getMetricName(metricsitem)}}</p>
+                  </div>
                   <span class="pull-right" ng-if="!ctrl.checkSource(metricsitem, service)" ng-click="ctrl.toggleClass($event, _.getMetricName(metricsitem), service)">
                     <i class="fa fa-thumbs-o-up add-rca"></i>
                     <i class="fa fa-thumbs-o-down"></i>
