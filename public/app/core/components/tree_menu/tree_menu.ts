@@ -150,7 +150,7 @@ export class TreeMenuCtrl {
           "currentTagKey": "",
           "currentTagValue": "",
           "downsampleAggregator": "avg",
-          "downsampleInterval": "1m",
+          "downsampleInterval": "",
           "errors": {},
           "hide": false,
           "isCounter": false,
