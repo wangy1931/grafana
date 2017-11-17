@@ -165,7 +165,7 @@ export class TreeMenuCtrl {
         };
         this.panel.seriesOverrides.push(seriesOverride);
       }
-      this.healthSrv.transformMetricType(this.$scope.dashboard).then(() => {
+      this.healthSrv.transformPanelMetricType(this.panel).then(() => {
         this.$rootScope.$broadcast('refresh', this.panel.id);
       });
     }
