@@ -2,9 +2,9 @@ define([
   'angular',
   'lodash',
   'app/core/utils/datemath',
-  'moment',
+  'app/core/time_buckets/index'
 ],
-function (angular, _, dateMath) {
+function (angular, _, dateMath, TimeBuckets) {
   'use strict';
 
   /** @ngInject */
@@ -20,6 +20,8 @@ function (angular, _, dateMath) {
     this.supportMetrics = true;
     this.tagKeys = {};
     this.prefix = contextSrv.user.orgId + "." + contextSrv.user.systemId + ".";
+    TimeBuckets = TimeBuckets.TimeBuckets;
+
     // Called once per panel (graph)
     this.query = function(options) {
       this.prefix = contextSrv.user.orgId + "." + contextSrv.user.systemId + ".";
@@ -27,6 +29,12 @@ function (angular, _, dateMath) {
       var end = convertToTSDBTime(options.rangeRaw.to, true);
       var qs = [];
       var self = this;
+
+      // Custom Interval
+      var buckets = new TimeBuckets();
+      buckets.setInterval('auto');
+      buckets.setBounds(options.range);
+      options.calcInterval = buckets.getInterval().expression;
 
       _.each(options.targets, function(target) {
         if (!target.metric) { return; }
@@ -391,7 +399,7 @@ function (angular, _, dateMath) {
       }
 
       if (!target.disableDownsampling) {
-        var interval =  templateSrv.replace(target.downsampleInterval || options.interval);
+        var interval = templateSrv.replace(target.downsampleInterval || options.calcInterval);
 
         if (interval.match(/\.[0-9]+s/)) {
           interval = parseFloat(interval)*1000 + "ms";
