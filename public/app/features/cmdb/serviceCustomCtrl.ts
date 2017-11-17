@@ -19,11 +19,12 @@ export class ServiceCustomCtrl {
   orgId: any;
   sysId: any;
   pattern: any;
+  tableParams: any;
 
   /** @ngInject */
-  constructor(private $scope, private backendSrv, private contextSrv, private $location) {
+  constructor(private $scope, private backendSrv, private contextSrv, private $location, private NgTableParams) {
     this.hostId = parseInt(this.$location.search().hostId) || -1;
-    this.isUnit = this.contextSrv.isGrafanaAdmin && this.$location.search().unit;
+    this.isUnit = this.contextSrv.isGrafanaAdmin && (this.$location.search().unit === true);
     if (this.isUnit) {
       this.title = '默认';
       this.orgId = 0;
@@ -39,10 +40,16 @@ export class ServiceCustomCtrl {
     this.initEditSoftware('add');
     this.initEditSoftware('save');
     this.getHosts();
+
+    this.tableParams = new this.NgTableParams({
+      count: 20,
+      sorting: { 'command': 'desc' },
+    }, {
+      counts: [],
+    });
   }
 
   getHosts() {
-    $(".table-process").bootstrapTable();
     this.backendSrv.alertD({url: '/cmdb/host'}).then((result) => {
       this.hostList = result.data;
       if (this.hostId === -1) {
@@ -57,13 +64,15 @@ export class ServiceCustomCtrl {
     this.host = host;
     this.backendSrv.alertD({url: '/host/state?hostId=' + host.id}).then((response) => {
       this.hostProcess = response.data || [];
-      $(".table-process").bootstrapTable('load', this.hostProcess);
+      this.tableParams.settings({
+        dataset: this.hostProcess,
+      });
     });
   }
 
   getSoftwares() {
     this.backendSrv.alertD({url: '/cmdb/setting/software?default_config=' + this.isUnit}).then((response) => {
-      this.softwareList = _.find(response.data, {'orgId': this.orgId, 'sysId': this.sysId}).software;
+      this.softwareList = (_.find(response.data, {'orgId': this.orgId, 'sysId': this.sysId}) || {}).software || [];
     });
   }
 

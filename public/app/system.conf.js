@@ -39,7 +39,6 @@ System.config({
     'fullcalendar':             'vendor/fullcalendar/dist/fullcalendar.min',
     'ui.calendar':              'vendor/angular-ui-calendar/src/calendar',
     'zh-cn':                    'vendor/fullcalendar/dist/zh-cn',
-    'bootstrap-table':          'vendor/angular-other/bootstrap-table',
     'jsPlumbToolkit':           'vendor/jsPlumb/jsPlumbToolkit',
 
     "jquery.flot.gauge":        "vendor/flot/jquery.flot.gauge",
