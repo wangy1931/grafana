@@ -199,7 +199,7 @@ export class LogParseEditCtrl {
         pattern = /^[\w.]+$/;
         break;
       case 'logPath':
-        pattern = /^([/][\w-.]+)*$/;
+        pattern = /^([a-zA-Z]:(\/\/|\\\\)([\w+.-]+(\/|\\)?)*)|(([/][\w-.*]+)*)$/;
         break;
       case 'logType':
         pattern = /^[\w]+$/;
@@ -330,8 +330,8 @@ export class LogParseEditCtrl {
             data.logType = this.custom.logType;
           }
           if (data.multiline) {
-            data["multiline.negate"] = false;
-            data["multiline.match"] = "after";
+            data["multiline.negate"] = data["multiline.negate"] || true;
+            data["multiline.match"] = data["multiline.match"] || "after";
           }
           this.logParseSrv.savePattern(this.contextSrv.user.id, data).then((res) => {
             this.$scope.appEvent('alert-success', ['保存成功', '配置将于6分钟之后生效, 请稍后查看']);

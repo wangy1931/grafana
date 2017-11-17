@@ -78,12 +78,16 @@ export class SystemOverviewCtrl {
     });
 
     this.switchEnabled = store.getBool('grafana.overview.mode');
-
     this.toolkit = window.jsPlumbToolkit.newInstance();
+
     $scope.$on("$destroy", () => {
-      store.set('grafana.overview.mode', this.switchEnabled);
+      this.setOverviewMode();
       this.toolkit.clear();
     });
+  }
+
+  setOverviewMode() {
+    store.set('grafana.overview.mode', this.switchEnabled);
   }
 
   // copy from anomalyMetic.js
@@ -236,7 +240,7 @@ export class SystemOverviewCtrl {
         });
 
         this.$q.all(promiseList).finally(() => {
-          this.toolkit.load({ type: "json", data: this.dependencies }).render(this.renderFactory());
+          this.toolkit.load({ type: "json", data: _.cloneDeep(this.dependencies) }).render(this.renderFactory());
         });
 
       } else {
@@ -276,8 +280,9 @@ export class SystemOverviewCtrl {
       });
 
       // refresh service-dependency-graph, service status
-      // _.find(this.dependencies.nodes, { name: serviceName }).status = "red"; // resp.healthStatusType.toLowerCase();
-      // this.toolkit.updateNode(node.node.data.id, { status: "red" });
+      _.find(this.dependencies.nodes, { name: serviceName }).status = resp.healthStatusType.toLowerCase(); // "red"
+      this.toolkit.clear();
+      this.toolkit.load({ type: "json", data: _.cloneDeep(this.dependencies) });
     });
 
     // 拿 servicekpi metric 的 message, 储存在 _.metricHelpMessage 中

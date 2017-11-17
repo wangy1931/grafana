@@ -179,7 +179,7 @@ export class HostSrv {
           ]
         }
       ],
-      "hostProperties": ["version", "startTime", "commit", "id"]
+      "hostProperties": ["version", "startTime", "commit", "id", "defaultIp"]
     };
 
     this.hostInfo = [];
@@ -198,7 +198,8 @@ export class HostSrv {
           "mem": _.percentFormatter(item["proc.meminfo.percentused"]),
           "commit": item.commit,
           "startTime": item.startTime,
-          "version": item.version
+          "version": item.version,
+          "defaultIp": item.defaultIp
         });
       });
       this.hostInfo = _.orderBy(this.hostInfo, ['host'], ['asc']);

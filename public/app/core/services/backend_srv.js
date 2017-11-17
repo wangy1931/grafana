@@ -72,6 +72,11 @@ function (angular, _, coreModule, config) {
         options.hasSubUrl = true;
       }
 
+      if (self.isIE()) {
+        var bust = Date.now();
+        options.params ? options.params.bust = bust : options.params = {'bust': bust};
+      }
+
       return $http(options).then(function(results) {
         if (options.method !== 'GET') {
           if (results && results.data.message) {
@@ -97,6 +102,11 @@ function (angular, _, coreModule, config) {
       options.retry = options.retry || 0;
       var requestIsLocal = options.url.indexOf('/') === 0;
       var firstAttempt = options.retry === 0;
+
+      if (self.isIE()) {
+        var bust = Date.now();
+        options.params ? options.params.bust = bust : options.params = {'bust': bust};
+      }
 
       return $http(options).then(null, function(err) {
         // handle unauthorized for backend requests
@@ -353,6 +363,11 @@ function (angular, _, coreModule, config) {
 
     this.importMetricsKpi = function() {
       return this.get('/api/static/metric/kpi');
+    }
+
+    this.isIE = function() {
+      var userAgent = navigator.userAgent;
+      return userAgent.indexOf("MSIE ") > -1 || userAgent.indexOf("Trident/") > -1 || userAgent.indexOf("Edge/") > -1;
     }
   });
 });
