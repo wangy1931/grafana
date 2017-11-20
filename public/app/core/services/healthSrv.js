@@ -125,7 +125,9 @@ function (angular, _, coreModule) {
               _.forEach(row.panels, function (panel) {
                 _.forEach(panel.targets, function (target) {
                   if (_.excludeMetricSuffix(target.metric)) {
-                    targets[target.metric] = target;
+                    if (!_.isUndefined(target.metric)) {
+                      targets[target.metric] = target;
+                    }
                   }
                 });
               });

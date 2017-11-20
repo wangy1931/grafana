@@ -3,6 +3,7 @@
   display: flex;
   height: 500px;
   width: 350px;
+  overflow: hidden;
 
   &.open { 
     width: 350px;
@@ -54,6 +55,36 @@
       display: flex;
       justify-content: space-between;
       padding: 0 5px;
+    }
+  }
+
+  .nav-tabs {
+    display: flex;
+    margin: 0 -2.5rem 0 -1rem;
+    padding: 0;
+    border-bottom: $panel-border;
+    & > li {
+      flex: 1;
+      text-align: center;
+      margin-bottom: 0;
+      & > button {
+        border: none;
+        width: 100%;
+        line-height: 2rem;
+        font-weight: bold;
+        &:focus {
+          outline: none;
+        }
+      }
+      &.active > button {
+        color: $blue;
+        background: none;
+      }
+      
+      &.disabled > button {
+        color: $white;
+        background: #f4f5f8;
+      }
     }
   }
 }

@@ -8,17 +8,19 @@ export class AssociationSrv {
   /** @ngInject */
   constructor(private alertMgrSrv) {}
 
-  setSourceAssociation({ metric, host, distance, start }) {
+  setSourceAssociation({ metric, host, min, max, start}) {
     this.sourceAssociation = {
       metric: metric,
       host: host,
-      distance: distance,
-      start: start
+      start: start,
+      min: min,
+      max: max
     }
   }
 
-  updateDistance(distance) {
-    this.sourceAssociation.distance = distance;
+  updateRang(range) {
+    this.sourceAssociation.min = range[0];
+    this.sourceAssociation.max = range[1];
   }
 
 }

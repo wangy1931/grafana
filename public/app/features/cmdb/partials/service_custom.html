@@ -82,19 +82,17 @@
         </ul>
       </span>
     </h2>
-    <table class="table table-process"
-      data-toggle="table"
-      data-pagination="true"
-      data-sort-name="command"
-      data-sort-order="desc"
-      data-search="true"
-      data-page-size="10">
-      <thead>
-        <tr>
-          <th data-field="name" data-sortable="true" data-width="300px">参考名称</th>
-          <th data-field="command" data-sortable="true">进程信息</th>
-        </tr>
-      </thead>
-    </table>
+    <div ng-if="ctrl.hostProcess.length">
+      <table ng-table="ctrl.tableParams" class="table fixed-table-container table-no-bordered">
+          <tr ng-repeat="row in $data">
+              <td data-title="'参考名称'" sortable="'name'">
+                  <div>{{ row.name }}</div>
+              </td>
+              <td data-title="'进程信息'" sortable="'command'">
+                  <div>{{ row.command }}</div>
+              </td>
+          </tr>
+      </table>
+    </div>
   </div>
 </div>
