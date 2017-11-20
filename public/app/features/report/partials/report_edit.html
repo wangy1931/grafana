@@ -14,15 +14,18 @@
   <h4 class="report-title">多维度分析系统现状，为系统优化改进提供科学依据</h4>
 
   <div>
-    <form class="gf-form-group">
-      <div class="parse-form-group">
-        <div class="gf-form"></div>
-  
-        <div class="parse-form-group no-border">
-          <a class="btn btn-success" ng-click="ctrl.saveRule()">保存</a>
-          <a class="btn btn-inverse" href="/logs/rules">取消</a>
-        </div>
-      </form>
+    <ng-quill-editor
+      class="report-quil"
+      ng-model="ctrl.customReport"
+      modules="{toolbar: ctrl.toolbarOptions}"
+      placeholder=""
+      scrolling-container="hidden"
+      on-editor-created="ctrl.editorCreated(editor, knows.symptom)">
+    </ng-quill-editor>
+    <div class="parse-form-group no-border">
+      <a class="btn btn-success" ng-click="ctrl.saveCustomReport()">保存</a>
+      <a class="btn btn-inverse" href="/report">取消</a>
+    </div>
   </div>
 
 </div>
