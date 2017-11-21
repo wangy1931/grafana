@@ -2,7 +2,7 @@
 
 <div class="page-container kb-container">
     <div class="page-header">
-        <h2>运维知识库 <button class="btn btn-primary btn-success" ng-click="newKnows()">+ 运维经验</button></h2>
+        <h2>运维知识库 <button class="btn btn-primary btn-success" ng-click="newKnows()" ng-if="!contextSrv.isViewer">+ 运维经验</button></h2>
     </div>
 
     <knowledge-base></knowledge-base>

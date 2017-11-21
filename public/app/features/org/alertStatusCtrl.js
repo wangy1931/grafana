@@ -142,27 +142,31 @@ function (angular, moment, _) {
     };
 
     $scope.handleAlert = function (alertDetail) {
-      $controller('OpenTSDBQueryCtrl', {$scope: $scope});
-      var newScope = $scope.$new();
-      newScope.alertData = alertDetail;
-      newScope.closeAlert = $scope.closeAlert;
-      newScope.causeHost = alertDetail.status.monitoredEntity;
-      newScope.datasource = $scope.datasource;
-      newScope.suggestMetrics = $scope.suggestMetrics;
-      newScope.suggestTagHost = backendSrv.suggestTagHost;
-      newScope.confidenceLevel = '100';
-      newScope.confidences = {
-        '100': '非常确定',
-        '50': '可能'
+      if (contextSrv.isViewer) {
+        $scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      } else {
+        $controller('OpenTSDBQueryCtrl', {$scope: $scope});
+        var newScope = $scope.$new();
+        newScope.alertData = alertDetail;
+        newScope.closeAlert = $scope.closeAlert;
+        newScope.causeHost = alertDetail.status.monitoredEntity;
+        newScope.datasource = $scope.datasource;
+        newScope.suggestMetrics = $scope.suggestMetrics;
+        newScope.suggestTagHost = backendSrv.suggestTagHost;
+        newScope.confidenceLevel = '100';
+        newScope.confidences = {
+          '100': '非常确定',
+          '50': '可能'
+        }
+        newScope.rootCauseMetrics = [];
+        newScope.addCause = $scope.addCause;
+        newScope.removeCause = $scope.removeCause;
+        $scope.appEvent('show-modal', {
+          src: 'public/app/partials/handle_alert.html',
+          modalClass: 'modal-no-header confirm-modal',
+          scope: newScope
+        });
       }
-      newScope.rootCauseMetrics = [];
-      newScope.addCause = $scope.addCause;
-      newScope.removeCause = $scope.removeCause;
-      $scope.appEvent('show-modal', {
-        src: 'public/app/partials/handle_alert.html',
-        modalClass: 'modal-no-header confirm-modal',
-        scope: newScope
-      });
     };
 
     $scope.closeAlert = function() {
@@ -240,13 +244,17 @@ function (angular, moment, _) {
     };
 
     $scope.handleSnooze = function(alertDetails) {
-      var newScope = $scope.$new();
-      newScope.alertDetails = alertDetails;
-      $scope.appEvent('show-modal', {
-        src: 'public/app/partials/snooze_alert.html',
-        modalClass: 'modal-no-header confirm-modal',
-        scope: newScope
-      });
+      if (contextSrv.isViewer) {
+        $scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      } else {
+        var newScope = $scope.$new();
+        newScope.alertDetails = alertDetails;
+        $scope.appEvent('show-modal', {
+          src: 'public/app/partials/snooze_alert.html',
+          modalClass: 'modal-no-header confirm-modal',
+          scope: newScope
+        });
+      }
     };
 
     $scope.addCause = function (causeMetric,causeHost,confidenceLevel) {

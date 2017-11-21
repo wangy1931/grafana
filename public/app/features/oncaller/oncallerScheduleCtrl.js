@@ -12,7 +12,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('OnCallerScheduleCtrl', function ($scope, oncallerMgrSrv, $timeout, $q) {
+  module.controller('OnCallerScheduleCtrl', function ($scope, oncallerMgrSrv, $timeout, $q, contextSrv) {
     /* oncaller/events
       {
         title: name,            << 显示名称
@@ -138,17 +138,21 @@ function (moment, $, angular, _, uiCalendarConfig) {
     }
 
     function eventClick(date, jsEvent, view) {
-      var today = new Date();
-      if(date.end.valueOf() < today.valueOf()) {
-        $scope.appEvent('alert-warning', ['抱歉','不可以修改历史数据']);
-        return;
+      if (contextSrv.isViewer) {
+        $scope.appEvent('alert-warning', ['抱歉','您没有权限修改值班表']);
+      } else {
+        var today = new Date();
+        if(date.end.valueOf() < today.valueOf()) {
+          $scope.appEvent('alert-warning', ['抱歉','不可以修改历史数据']);
+          return;
+        }
+        $scope.showEditForm = true;
+        $scope.overwrite = true;
+        $scope.startTime = formatTime(date.start);
+        $scope.endTime = formatTime(date.end);
+        $scope.role = _.find($scope.roles,{key: date.className[0]});
+        $scope.oncallerSelcted = _.find($scope.oncallerDefList, {id: date.id});
       }
-      $scope.showEditForm = true;
-      $scope.overwrite = true;
-      $scope.startTime = formatTime(date.start);
-      $scope.endTime = formatTime(date.end);
-      $scope.role = _.find($scope.roles,{key: date.className[0]});
-      $scope.oncallerSelcted = _.find($scope.oncallerDefList, {id: date.id});
     }
 
     function viewRender(view, element) {

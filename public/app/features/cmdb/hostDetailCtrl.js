@@ -6,7 +6,7 @@ define([
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('HostDetailCtrl', function ($scope, backendSrv, $location, hostSrv) {
+  module.controller('HostDetailCtrl', function ($scope, backendSrv, $location, hostSrv, contextSrv) {
     $scope.init = function() {
       var id = $location.search().id;
       $scope.id = id;

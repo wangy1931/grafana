@@ -74,25 +74,29 @@ export class MetricKpiCtrl {
   }
 
   removeKpi(kpi, service) {
-    this.$scope.appEvent('confirm-modal', {
-      title: '删除',
-      text: '您确定要删除该KPI吗？',
-      icon: 'fa-trash',
-      yesText: '删除',
-      noText: '取消',
-      onConfirm: () => {
-        this.backendSrv.editKpi({
-          service: service.name,
-          metric: kpi,
-          kpi: false
-        }).then(() => {
-          this.$scope.appEvent('alert-success', ['删除成功']);
-          _.remove(this.kpiList, (kpiItem) => {
-            return kpiItem === kpi;
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限删除KPI']);
+    } else {
+      this.$scope.appEvent('confirm-modal', {
+        title: '删除',
+        text: '您确定要删除该KPI吗？',
+        icon: 'fa-trash',
+        yesText: '删除',
+        noText: '取消',
+        onConfirm: () => {
+          this.backendSrv.editKpi({
+            service: service.name,
+            metric: kpi,
+            kpi: false
+          }).then(() => {
+            this.$scope.appEvent('alert-success', ['删除成功']);
+            _.remove(this.kpiList, (kpiItem) => {
+              return kpiItem === kpi;
+            });
           });
-        });
-      }
-    });
+        }
+      });
+    }
   }
 
   addKpi(kpi, service) {

@@ -188,24 +188,26 @@ export class TreeMenuCtrl {
   }
 
   addRCA(metric, host) {
-    var rcaFeedback = {
-      alertIds: [],
-      timestampInSec: Math.round(new Date().getTime()/1000),
-      triggerMetric: {
-        name: this.associationSrv.sourceAssociation.metric,
-        host: this.associationSrv.sourceAssociation.host,
-      },
-      rootCauseMetrics: [{
-        name: this.prox + metric,
-        host: host,
-        confidenceLevel: 100
-      }],
-      relatedMetrics: [],
-      org: this.contextSrv.user.orgId,
-      sys: this.contextSrv.user.systemId
-    };
+    if (!this.contextSrv.isViewer) {
+      var rcaFeedback = {
+        alertIds: [],
+        timestampInSec: Math.round(new Date().getTime()/1000),
+        triggerMetric: {
+          name: this.associationSrv.sourceAssociation.metric,
+          host: this.associationSrv.sourceAssociation.host,
+        },
+        rootCauseMetrics: [{
+          name: this.prox + metric,
+          host: host,
+          confidenceLevel: 100
+        }],
+        relatedMetrics: [],
+        org: this.contextSrv.user.orgId,
+        sys: this.contextSrv.user.systemId
+      };
 
-    this.alertMgrSrv.rcaFeedback(rcaFeedback);
+      this.alertMgrSrv.rcaFeedback(rcaFeedback);
+    }
   }
 
   toggleAccordion(event) {

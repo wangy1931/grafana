@@ -31,6 +31,7 @@ export class ContextSrv {
   dashboardLink: any;
   systemsMap: any;
   hostNum: any;
+  isViewer: any;
 
   constructor() {
     this.pinned = store.getBool('grafana.sidemenu.pinned', false);
@@ -54,6 +55,7 @@ export class ContextSrv {
     this.dashboardLink = "";
     this.systemsMap = config.bootData.systems;
     this.hostNum = 0;
+    this.isViewer = this.hasRole('Viewer');
   }
 
   hasRole(role) {
