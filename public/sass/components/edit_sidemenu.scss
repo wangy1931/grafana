@@ -9,7 +9,8 @@
 }
 
 .edit-sidemenu-aside {
-  min-width: 15rem;
+  // min-width: 15rem;
+  margin-right: $spacer*2;
 }
 
 .edit-sidemenu {
@@ -24,6 +25,7 @@
     display: block;
     color: $text-color;
     margin: 0 0 1.5rem 1rem;
+    white-space: nowrap;
   }
 }
 

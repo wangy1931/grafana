@@ -64,11 +64,11 @@ function (angular, _) {
               "tags":{"host":"*"}
             }],
             "grid": {
-                "threshold1": "",
-                "threshold1Color": "rgba(251, 0, 0, 0.57)",
-                "threshold2": "" ,
-                "threshold2Color": "rgba(216, 169, 27, 0.61)",
-                "thresholdLine": true
+              "threshold1": "",
+              "threshold1Color": "rgba(251, 0, 0, 0.57)",
+              "threshold2": "" ,
+              "threshold2Color": "rgba(216, 169, 27, 0.61)",
+              "thresholdLine": true
             },
             "tooltip": {
               "shared": true,
@@ -157,7 +157,7 @@ function (angular, _) {
         $scope.updateThreshold($scope.dashboard.rows[0].panels[0], value, 'warning', 'op');
         $scope.$broadcast('render');
       }
-    }
+    };
 
     $scope.refreshPreview = function() {
       $scope.setTarget($scope.dashboard.rows[0],$scope.alertDef);

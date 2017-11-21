@@ -69,7 +69,7 @@
 			</div>
 		</div>
 
-		<div class="gf-form" ng-if="ctrl.tsdbVersion == 2">
+		<div class="gf-form" ng-if="ctrl.tsdbVersion >= 2">
 			<label class="gf-form-label query-keyword width-6">填充</label>
 			<div class="gf-form-select-wrapper">
 				<select ng-model="ctrl.target.downsampleFillPolicy" class="gf-form-input"
@@ -91,7 +91,7 @@
 		</div>
 	</div>
 
-	<div class="gf-form-inline" ng-if="ctrl.tsdbVersion == 2">
+	<div class="gf-form-inline" ng-if="ctrl.tsdbVersion >= 2">
 		<div class="gf-form">
 
 			<label class="gf-form-label query-keyword width-8">
@@ -170,7 +170,7 @@
 		<div class="gf-form">
 			<label class="gf-form-label query-keyword width-8">
 				标签
-				<info-popover mode="right-normal" ng-if="ctrl.tsdbVersion == 2">
+				<info-popover mode="right-normal" ng-if="ctrl.tsdbVersion >= 2">
 					Please use filters, tags are deprecated in opentsdb 2.2
 				</info-popover>
 			</label>
@@ -247,6 +247,11 @@
 						 placeholder="reset value" ng-model-onblur
 						 ng-blur="ctrl.targetBlur()">
 			</input>
+		</div>
+
+		<div class="gf-form" ng-if="ctrl.tsdbVersion > 2">
+			<gf-form-switch class="gf-form" label="Explicit tags" label-class="width-8 query-keyword" checked="ctrl.target.explicitTags" on-change="ctrl.targetBlur()">
+			</gf-form-switch>
 		</div>
 
 		<div class="gf-form gf-form--grow">

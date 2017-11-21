@@ -1666,14 +1666,16 @@ Licensed under the MIT license.
                 // Grafana fix: wide Y min and max using increased wideFactor
                 // when all series values are the same
                 var wideFactor = 0.25;
-                var widen = max == 0 ? 1 : max * wideFactor;
+                var widen = Math.abs(max == 0 ? 1 : max * wideFactor);
 
-                if (opts.min == null)
-                    min -= widen;
+                if (opts.min == null) {
+                  min -= widen;
+                }
                 // always widen max if we couldn't widen min to ensure we
                 // don't fall into min == max which doesn't work
-                if (opts.max == null || opts.min != null)
-                    max += widen;
+                if (opts.max == null || opts.min != null) {
+                  max += widen;
+                }
             }
             else {
                 // consider autoscaling
@@ -2972,6 +2974,10 @@ Licensed under the MIT license.
 
             pos.pageX = event.pageX;
             pos.pageY = event.pageY;
+
+            // Add ctrlKey and metaKey to event
+            pos.ctrlKey = event.ctrlKey;
+            pos.metaKey = event.metaKey;
 
             var item = findNearbyItem(canvasX, canvasY, seriesFilter);
 

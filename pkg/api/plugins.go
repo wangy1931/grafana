@@ -48,6 +48,7 @@ func GetPluginList(c *middleware.Context) Response {
 			LatestVersion: pluginDef.GrafanaNetVersion,
 			HasUpdate:     pluginDef.GrafanaNetHasUpdate,
 			DefaultNavUrl: pluginDef.DefaultNavUrl,
+			State:         pluginDef.State,
 		}
 
 		if pluginSetting, exists := pluginSettingsMap[pluginDef.Id]; exists {
@@ -97,6 +98,7 @@ func GetPluginSettingById(c *middleware.Context) Response {
 			DefaultNavUrl: def.DefaultNavUrl,
 			LatestVersion: def.GrafanaNetVersion,
 			HasUpdate:     def.GrafanaNetHasUpdate,
+			State:         def.State,
 		}
 
 		query := m.GetPluginSettingByIdQuery{PluginId: pluginId, OrgId: c.OrgId}
@@ -145,15 +147,16 @@ func GetPluginDashboards(c *middleware.Context) Response {
 	}
 }
 
-func GetPluginReadme(c *middleware.Context) Response {
+func GetPluginMarkdown(c *middleware.Context) Response {
 	pluginId := c.Params(":pluginId")
+	name := c.Params(":name")
 
-	if content, err := plugins.GetPluginReadme(pluginId); err != nil {
+	if content, err := plugins.GetPluginMarkdown(pluginId, name); err != nil {
 		if notfound, ok := err.(plugins.PluginNotFoundError); ok {
 			return ApiError(404, notfound.Error(), nil)
 		}
 
-		return ApiError(500, "Could not get readme", err)
+		return ApiError(500, "Could not get markdown file", err)
 	} else {
 		return Respond(200, content)
 	}
@@ -168,10 +171,11 @@ func ImportDashboard(c *middleware.Context, apiCmd dtos.ImportDashboardCommand) 
 		Path:      apiCmd.Path,
 		Inputs:    apiCmd.Inputs,
 		Overwrite: apiCmd.Overwrite,
+		Dashboard: apiCmd.Dashboard,
 	}
 
 	if err := bus.Dispatch(&cmd); err != nil {
-		return ApiError(500, "Failed to install dashboard", err)
+		return ApiError(500, "Failed to import dashboard", err)
 	}
 
 	return Json(200, cmd.Result)

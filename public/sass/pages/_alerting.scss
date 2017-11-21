@@ -1,23 +1,10 @@
-.copy-query {
-  display: block;
-  width: 30px;
-  height: 36px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent url(/img/CopyQuery.png) 50% 50% no-repeat;
-  cursor: pointer;
+.alert-state-paused,
+.alert-state-pending {
+  color: $text-muted;
 }
 
-.alert-state {
-  display: inline-block;
-  padding-left: 30px;
-  background: 0 50% no-repeat;
-  background-size: 20px auto;
-}
-
-.alert-state-online {
-  background-image: url('/img/online.svg');
+.alert-state-ok {
+  color: $online;
 }
 
 .alert-state-paused,
@@ -82,6 +69,19 @@
     }
   }
 
+  &--alerting::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 10px rgba($critical,1);
+    opacity: 0;
+    animation: alerting-panel 1.6s cubic-bezier(1,.1,.73,1) 0s infinite alternate;
+  }
+
+
   &--ok {
     .panel-alert-icon:before {
       color: $online;
@@ -92,6 +92,6 @@
 
 @keyframes alerting-panel {
   100% {
-    box-shadow: 0 0 15px $critical;
+    opacity: 1;
   }
 }

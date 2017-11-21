@@ -39,6 +39,8 @@ export class SystemOverviewCtrl {
   tableParams: any;
   dependencies: any;
 
+  navModel: any;
+
   /** @ngInject */
   constructor(
     private backendSrv,
@@ -53,9 +55,12 @@ export class SystemOverviewCtrl {
     private $scope,
     private $modal,
     private $q,
-    private NgTableParams
+    private NgTableParams,
+    private navModelSrv
   ) {
     $scope.ctrl = this;
+
+    this.navModel = navModelSrv.getAdminNav();
 
     this.topologyGraphParams = {
       blockSize: 36,

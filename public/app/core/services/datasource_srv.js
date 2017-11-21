@@ -22,6 +22,10 @@ function (angular, _, coreModule, config, dateMath) {
 
       name = templateSrv.replace(name);
 
+      if (name === 'default') {
+        return this.get(config.defaultDatasource);
+      }
+
       if (this.datasources[name]) {
         return $q.when(this.datasources[name]);
       }
@@ -67,14 +71,17 @@ function (angular, _, coreModule, config, dateMath) {
     };
 
     this.getAnnotationSources = function() {
-      return _.reduce(config.datasources, function(memo, value) {
+      var sources = [];
 
+      this.addDataSourceVariables(sources);
+
+      _.each(config.datasources, function(value) {
         if (value.meta && value.meta.annotations) {
-          memo.push(value);
+          sources.push(value);
         }
+      });
 
-        return memo;
-      }, []);
+      return sources;
     };
 
     this.getMetricSources = function(options) {
@@ -82,40 +89,30 @@ function (angular, _, coreModule, config, dateMath) {
 
       _.each(config.datasources, function(value, key) {
         if (value.meta && value.meta.metrics) {
-          metricSources.push({
-            value: key === config.defaultDatasource ? null : key,
-            name: key,
-            meta: value.meta,
-          });
+          metricSources.push({value: key, name: key, meta: value.meta});
+
+          if (key === config.defaultDatasource) {
+            metricSources.push({value: null, name: 'default', meta: value.meta});
+          }
         }
       });
 
       if (!options || !options.skipVariables) {
-        // look for data source variables
-        for (var i = 0; i < templateSrv.variables.length; i++) {
-          var variable = templateSrv.variables[i];
-          if (variable.type !== 'datasource') {
-            continue;
-          }
-
-          var first = variable.current.value;
-          var ds = config.datasources[first];
-
-          if (ds) {
-            metricSources.push({
-              name: '$' + variable.name,
-              value: '$' + variable.name,
-              meta: ds.meta,
-            });
-          }
-        }
+        this.addDataSourceVariables(metricSources);
       }
 
       metricSources.sort(function(a, b) {
-        if (a.meta.builtIn || a.name > b.name) {
+        // these two should always be at the bottom
+        if (a.meta.id === "mixed" || a.meta.id === "grafana") {
           return 1;
         }
-        if (a.name < b.name) {
+        if (b.meta.id === "mixed" || b.meta.id === "grafana") {
+          return -1;
+        }
+        if (a.name.toLowerCase() > b.name.toLowerCase()) {
+          return 1;
+        }
+        if (a.name.toLowerCase() < b.name.toLowerCase()) {
           return -1;
         }
         return 0;
@@ -172,6 +169,31 @@ function (angular, _, coreModule, config, dateMath) {
         });
         return result;
       });
+    };
+
+    this.addDataSourceVariables = function(list) {
+      // look for data source variables
+      for (var i = 0; i < templateSrv.variables.length; i++) {
+        var variable = templateSrv.variables[i];
+        if (variable.type !== 'datasource') {
+          continue;
+        }
+
+        var first = variable.current.value;
+        if (first === 'default') {
+          first = config.defaultDatasource;
+        }
+
+        var ds = config.datasources[first];
+
+        if (ds) {
+          list.push({
+            name: '$' + variable.name,
+            value: '$' + variable.name,
+            meta: ds.meta,
+          });
+        }
+      }
     };
 
     this.init();

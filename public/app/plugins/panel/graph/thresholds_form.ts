@@ -70,16 +70,20 @@ var template = `
           </select>
         </div>
       </div>
+
       <gf-form-switch class="gf-form" label="Fill" checked="threshold.fill"
                       on-change="ctrl.render()" ng-disabled="ctrl.disabled"></gf-form-switch>
+
       <div class="gf-form" ng-if="threshold.fill && threshold.colorMode === 'custom'">
         <label class="gf-form-label">Fill color</label>
         <span class="gf-form-label">
           <spectrum-picker ng-model="threshold.fillColor" ng-change="ctrl.render()" ></spectrum-picker>
         </span>
       </div>
+
       <gf-form-switch class="gf-form" label="Line" checked="threshold.line"
                       on-change="ctrl.render()" ng-disabled="ctrl.disabled"></gf-form-switch>
+
       <div class="gf-form" ng-if="threshold.line && threshold.colorMode === 'custom'">
         <label class="gf-form-label">Line color</label>
         <span class="gf-form-label">

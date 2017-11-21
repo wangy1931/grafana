@@ -11,9 +11,23 @@ export function GraphiteDatasource(instanceSettings, $q, backendSrv, templateSrv
   this.basicAuth = instanceSettings.basicAuth;
   this.url = instanceSettings.url;
   this.name = instanceSettings.name;
+  this.graphiteVersion = instanceSettings.jsonData.graphiteVersion || '0.9';
   this.cacheTimeout = instanceSettings.cacheTimeout;
   this.withCredentials = instanceSettings.withCredentials;
   this.render_method = instanceSettings.render_method || 'POST';
+
+  this.getQueryOptionsInfo = function() {
+    return {
+      "maxDataPoints": true,
+      "cacheTimeout": true,
+      "links": [
+        {
+          text: "Help",
+          url: "http://docs.grafana.org/features/datasources/graphite/#using-graphite-in-grafana"
+        }
+      ]
+    };
+  };
 
   this.query = function(options) {
     var graphOptions = {
@@ -30,17 +44,17 @@ export function GraphiteDatasource(instanceSettings, $q, backendSrv, templateSrv
       return $q.when({data: []});
     }
 
-    if (options.format === 'png') {
-      return $q.when({data: this.url + '/render' + '?' + params.join('&')});
-    }
+    var httpOptions: any = {
+      method: 'POST',
+      url: '/render',
+      data: params.join('&'),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+    };
 
-    var httpOptions: any = {method: this.render_method, url: '/render'};
-
-    if (httpOptions.method === 'GET') {
-      httpOptions.url = httpOptions.url + '?' + params.join('&');
-    } else {
-      httpOptions.data = params.join('&');
-      httpOptions.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    if (options.panelId) {
+      httpOptions.requestId = this.name + '.panelId.' + options.panelId;
     }
 
     return this.doGraphiteRequest(httpOptions).then(this.convertDataPointsToMs);
@@ -126,6 +140,10 @@ export function GraphiteDatasource(instanceSettings, $q, backendSrv, templateSrv
     }
   };
 
+  this.targetContainsTemplate = function(target) {
+    return templateSrv.variableExists(target.target);
+  };
+
   this.translateTime = function(date, roundUp) {
     if (_.isString(date)) {
       if (date === 'now') {
@@ -156,17 +174,27 @@ export function GraphiteDatasource(instanceSettings, $q, backendSrv, templateSrv
     return date.unix();
   };
 
-  this.metricFindQuery = function(query) {
-    var interpolated;
-    try {
-      interpolated = encodeURIComponent(templateSrv.replace(query));
-    } catch (err) {
-      return $q.reject(err);
+  this.metricFindQuery = function(query, optionalOptions) {
+    let options = optionalOptions || {};
+    let interpolatedQuery = templateSrv.replace(query);
+
+    let httpOptions: any =  {
+      method: 'GET',
+      url: '/metrics/find',
+      params: {
+        query: interpolatedQuery
+      },
+      // for cancellations
+      requestId: options.requestId,
+    };
+
+    if (options && options.range) {
+      httpOptions.params.from = this.translateTime(options.range.from, false);
+      httpOptions.params.until = this.translateTime(options.range.to, true);
     }
 
-    return this.doGraphiteRequest({method: 'GET', url: '/metrics/find/?query=' + interpolated })
-    .then(function(results) {
-      return _.map(results.data, function(metric) {
+    return this.doGraphiteRequest(httpOptions).then(results => {
+      return _.map(results.data, metric => {
         return {
           text: metric.text,
           expandable: metric.expandable ? true : false
@@ -177,19 +205,8 @@ export function GraphiteDatasource(instanceSettings, $q, backendSrv, templateSrv
 
   this.testDatasource = function() {
     return this.metricFindQuery('*').then(function () {
-      return { status: "success", message: "Data source is working", title: "Success" };
+      return { status: "success", message: "Data source is working"};
     });
-  };
-
-  this.listDashboards = function(query) {
-    return this.doGraphiteRequest({ method: 'GET',  url: '/dashboard/find/', params: {query: query || ''} })
-    .then(function(results) {
-      return results.data.dashboards;
-    });
-  };
-
-  this.loadDashboard = function(dashName) {
-    return this.doGraphiteRequest({method: 'GET', url: '/dashboard/load/' + encodeURIComponent(dashName) });
   };
 
   this.doGraphiteRequest = function(options) {
@@ -202,7 +219,7 @@ export function GraphiteDatasource(instanceSettings, $q, backendSrv, templateSrv
     }
 
     options.url = this.url + options.url;
-    options.inspect = { type: 'graphite' };
+    options.inspect = {type: 'graphite'};
 
     return backendSrv.datasourceRequest(options);
   };
@@ -217,9 +234,7 @@ export function GraphiteDatasource(instanceSettings, $q, backendSrv, templateSrv
     var intervalFormatFixRegex = /'(\d+)m'/gi;
     var hasTargets = false;
 
-    if (options.format !== 'png') {
-      options['format'] = 'json';
-    }
+    options['format'] = 'json';
 
     function fixIntervalFormat(match) {
       return match.replace('m', 'min').replace('M', 'mon');
@@ -241,7 +256,7 @@ export function GraphiteDatasource(instanceSettings, $q, backendSrv, templateSrv
     }
 
     function nestedSeriesRegexReplacer(match, g1) {
-      return targets[g1];
+      return targets[g1] || match;
     }
 
     for (i = 0; i < options.targets.length; i++) {

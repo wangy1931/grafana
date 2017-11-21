@@ -1,5 +1,6 @@
-<navbar title="公司" icon="icon-gf icon-gf-users">
-</navbar>
+<!-- <navbar title="公司" icon="icon-gf icon-gf-users">
+</navbar> -->
+<navbar model="navModel"></navbar>
 
 <div class="page-container" ng-form="playlistEditForm">
 	<div class="page-header">
@@ -12,7 +13,7 @@
 		<div class="gf-form-group">
 			<div class="gf-form">
 				<span class="gf-form-label width-10">公司名称</span>
-				<input type="text" ng-model="newOrg.name" required class="gf-form-input max-width-21" placeholder="请输入公司名称">
+				<input type="text" ng-model="newOrg.name" required class="gf-form-input max-width-21" placeholder="organization name">
 			</div>
 			<br>
 
@@ -25,8 +26,9 @@
 				<a ng-click="addSystem()">+ 增加子系统</a>
 			</div>
 			<br>
+
 			<div class="gf-form-buttons-row">
-				<button type="submit" class="btn btn-success pull-right" ng-click="createOrg()">新增</button>
+				<button type="submit" class="btn btn-success" ng-click="createOrg()">新增</button>
 			</div>
 		</div>
 	</form>

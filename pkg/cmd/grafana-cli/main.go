@@ -7,60 +7,64 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/wangy1931/grafana/pkg/cmd/grafana-cli/commands"
-	"github.com/wangy1931/grafana/pkg/cmd/grafana-cli/log"
+	"github.com/wangy1931/grafana/pkg/cmd/grafana-cli/logger"
+	"github.com/wangy1931/grafana/pkg/cmd/grafana-cli/services"
+	"github.com/wangy1931/grafana/pkg/cmd/grafana-cli/utils"
 )
 
 var version = "master"
 
-func getGrafanaPluginDir() string {
-	currentOS := runtime.GOOS
-	defaultNix := "public/plugins"
+// func getGrafanaPluginDir() string {
+// 	currentOS := runtime.GOOS
+// 	defaultNix := "public/plugins"
 
-	if currentOS == "windows" {
-		return "../data/plugins"
-	}
+// 	if currentOS == "windows" {
+// 		return "../data/plugins"
+// 	}
 
-	pwd, err := os.Getwd()
+// 	pwd, err := os.Getwd()
 
-	if err != nil {
-		log.Error("Could not get current path. using default")
-		return defaultNix
-	}
+// 	if err != nil {
+// 		log.Error("Could not get current path. using default")
+// 		return defaultNix
+// 	}
 
-	if isDevenvironment(pwd) {
-		return "../data/plugins"
-	}
+// 	if isDevenvironment(pwd) {
+// 		return "../data/plugins"
+// 	}
 
-	return defaultNix
-}
+// 	return defaultNix
+// }
 
-func isDevenvironment(pwd string) bool {
-	// if ../conf/defaults.ini exists, grafana is not installed as package
-	// that its in development environment.
-	_, err := os.Stat("../conf/defaults.ini")
-	return err == nil
-}
+// func isDevenvironment(pwd string) bool {
+// 	// if ../conf/defaults.ini exists, grafana is not installed as package
+// 	// that its in development environment.
+// 	_, err := os.Stat("../conf/defaults.ini")
+// 	return err == nil
+// }
 
 func main() {
-	SetupLogging()
+	setupLogging()
+
+	services.Init(version)
 
 	app := cli.NewApp()
 	app.Name = "Grafana cli"
 	app.Usage = ""
 	app.Author = "Grafana Project"
-	app.Email = "https://github.com/grafana/grafana"
+	app.Email = "https://github.com/wangy1931/grafana"
 	app.Version = version
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:   "pluginsDir",
 			Usage:  "path to the grafana plugin directory",
-			Value:  getGrafanaPluginDir(),
+			Value:  utils.GetGrafanaPluginDir(runtime.GOOS),
 			EnvVar: "GF_PLUGIN_DIR",
 		},
 		cli.StringFlag{
 			Name:   "repo",
 			Usage:  "url to the plugin repository",
-			Value:  "https://grafana.net/api/plugins",
+			Value:  "https://grafana.com/api/plugins",
 			EnvVar: "GF_PLUGIN_REPO",
 		},
 		cli.BoolFlag{
@@ -73,14 +77,14 @@ func main() {
 	app.CommandNotFound = cmdNotFound
 
 	if err := app.Run(os.Args); err != nil {
-		log.Errorf("%v", err)
+		logger.Errorf("%v", err)
 	}
 }
 
-func SetupLogging() {
+func setupLogging() {
 	for _, f := range os.Args {
 		if f == "-D" || f == "--debug" || f == "-debug" {
-			log.SetDebug(true)
+			logger.SetDebug(true)
 		}
 	}
 }

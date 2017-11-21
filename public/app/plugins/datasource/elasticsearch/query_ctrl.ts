@@ -31,11 +31,11 @@ export class ElasticQueryCtrl extends QueryCtrl {
 
   queryUpdated() {
     var newJson = angular.toJson(this.datasource.queryBuilder.build(this.target), true);
-    if (newJson !== this.rawQueryOld) {
-      this.rawQueryOld = newJson;
+    if (this.rawQueryOld && newJson !== this.rawQueryOld) {
       this.refresh();
     }
 
+    this.rawQueryOld = newJson;
     this.$rootScope.appEvent('elastic-query-updated');
   }
 
@@ -53,7 +53,7 @@ export class ElasticQueryCtrl extends QueryCtrl {
     text += 'Metrics: ';
 
     _.each(metricAggs, (metric, index) => {
-      var aggDef = _.findWhere(metricAggTypes, {value: metric.type});
+      var aggDef = _.find(metricAggTypes, {value: metric.type});
       text += aggDef.text + '(';
       if (aggDef.requiresField) {
         text += metric.field;
@@ -66,7 +66,7 @@ export class ElasticQueryCtrl extends QueryCtrl {
         text += ' Group by: ';
       }
 
-      var aggDef = _.findWhere(bucketAggTypes, {value: bucketAgg.type});
+      var aggDef = _.find(bucketAggTypes, {value: bucketAgg.type});
       text += aggDef.text + '(';
       if (aggDef.requiresField) {
         text += bucketAgg.field;

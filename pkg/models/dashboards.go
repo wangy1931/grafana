@@ -15,7 +15,16 @@ var (
 	ErrDashboardSnapshotNotFound   = errors.New("Dashboard snapshot not found")
 	ErrDashboardWithSameNameExists = errors.New("A dashboard with the same name already exists")
 	ErrDashboardVersionMismatch    = errors.New("The dashboard has been changed by someone else")
+	ErrDashboardTitleEmpty         = errors.New("Dashboard title cannot be empty")
 )
+
+type UpdatePluginDashboardError struct {
+	PluginId string
+}
+
+func (d UpdatePluginDashboardError) Error() string {
+	return "Dashboard belong to plugin"
+}
 
 var (
 	DashTypeJson     = "file"
@@ -26,10 +35,12 @@ var (
 
 // Dashboard model
 type Dashboard struct {
-	Id      int64
-	Slug    string
-	OrgId   int64
-	Version int
+	Id       int64
+	Slug     string
+	OrgId    int64
+	GnetId   int64
+	Version  int
+	PluginId string
 
 	Created time.Time
 	Updated time.Time
@@ -77,19 +88,29 @@ func NewDashboardFromJson(data *simplejson.Json) *Dashboard {
 		dash.Updated = time.Now()
 	}
 
+	if gnetId, err := dash.Data.Get("gnetId").Float64(); err == nil {
+		dash.GnetId = int64(gnetId)
+	}
+
 	return dash
 }
 
 // GetDashboardModel turns the command into the savable model
 func (cmd *SaveDashboardCommand) GetDashboardModel() *Dashboard {
 	dash := NewDashboardFromJson(cmd.Dashboard)
+	userId := cmd.UserId
 
-	if dash.Data.Get("version").MustInt(0) == 0 {
-		dash.CreatedBy = cmd.UserId
+	if userId == 0 {
+		userId = -1
 	}
 
-	dash.UpdatedBy = cmd.UserId
+	if dash.Data.Get("version").MustInt(0) == 0 {
+		dash.CreatedBy = userId
+	}
+
+	dash.UpdatedBy = userId
 	dash.OrgId = cmd.OrgId
+	dash.PluginId = cmd.PluginId
 	dash.UpdateSlug()
 	return dash
 }
@@ -110,10 +131,13 @@ func (dash *Dashboard) UpdateSlug() {
 //
 
 type SaveDashboardCommand struct {
-	Dashboard *simplejson.Json `json:"dashboard" binding:"Required"`
-	UserId    int64            `json:"userId"`
-	OrgId     int64            `json:"-"`
-	Overwrite bool             `json:"overwrite"`
+	Dashboard    *simplejson.Json `json:"dashboard" binding:"Required"`
+	UserId       int64            `json:"userId"`
+	Overwrite    bool             `json:"overwrite"`
+	Message      string           `json:"message"`
+	OrgId        int64            `json:"-"`
+	RestoredFrom int              `json:"-"`
+	PluginId     string           `json:"-"`
 
 	Result *Dashboard
 }
@@ -128,8 +152,9 @@ type DeleteDashboardCommand struct {
 //
 
 type GetDashboardQuery struct {
-	Slug  	 string
-	OrgId 	 int64
+	Slug  string // required if no Id is specified
+	Id    int64  // optional if slug is set
+	OrgId int64
 	SystemId int64
 
 	Result *Dashboard
@@ -147,7 +172,13 @@ type GetDashboardTagsQuery struct {
 
 type GetDashboardsQuery struct {
 	DashboardIds []int64
-	Result       *[]Dashboard
+	Result       []*Dashboard
+}
+
+type GetDashboardsByPluginIdQuery struct {
+	OrgId    int64
+	PluginId string
+	Result   []*Dashboard
 }
 
 type GetDashboardSlugByIdQuery struct {

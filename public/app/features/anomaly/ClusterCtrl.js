@@ -106,7 +106,8 @@ define([
         });
       }
 
-      function drawSymbol(ctx, x, y, radius, shadow) {
+      // ctx, x, y, radius, shadow
+      function drawSymbol(ctx, x, y, radius) {
         ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
         ctx.fillStyle = ctx.strokeStyle;
         ctx.fill();

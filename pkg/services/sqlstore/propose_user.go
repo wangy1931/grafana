@@ -14,7 +14,7 @@ func init() {
 }
 
 func CreateProposeUser(cmd *m.CreateProposeUserCommand) error {
-  return inTransaction2(func(sess *session) error {
+  return inTransaction(func(sess *DBSession) error {
 
     // create user
     user := &m.ProposeUser{
@@ -37,7 +37,7 @@ func CreateProposeUser(cmd *m.CreateProposeUserCommand) error {
 }
 
 func UpdateProposeUserStatus(cmd *m.UpdateProposeUserStatus) error {
-  return inTransaction2(func(sess *session) error {
+  return inTransaction(func(sess *DBSession) error {
     if _, err := sess.Exec("update propose_user set status=? where id=?", cmd.Status, cmd.Id); err != nil {
       return err
     }

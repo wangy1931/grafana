@@ -13,75 +13,77 @@ define([
         "collapse": false,
         "editable": false,
         "height": "260px",
-        "panels": [{
-          "title": "Panel Title",
-          "error": false,
-          "span": 12,
-          "editable": true,
-          "type": "graph",
-          "id": 1,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "rightLogBase": 1,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": true,
-          "fill": 1,
-          "linewidth": 2,
-          "points": false,
-          "pointradius": 5,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": true
-          },
-          "timeFrom": null,
-          "timeShift": null,
-          "targets": [
-            {
-              "errors": {},
-              "aggregator": "avg",
-              "downsampleAggregator": "avg",
-              "metric": "",
-              "downsampleInterval": "15m",
-              "tags": {"host":""}
+        "panels": [
+          {
+            "title": "Panel Title",
+            "error": false,
+            "span": 12,
+            "editable": true,
+            "type": "graph",
+            "id": 1,
+            "datasource": null,
+            "renderer": "flot",
+            "x-axis": true,
+            "y-axis": true,
+            "y_formats": [
+              "short",
+              "short"
+            ],
+            "grid": {
+              "leftLogBase": 1,
+              "leftMax": null,
+              "rightMax": null,
+              "leftMin": null,
+              "rightMin": null,
+              "rightLogBase": 1,
+              "threshold1": null,
+              "threshold2": null,
+              "threshold1Color": "rgba(216, 200, 27, 0.27)",
+              "threshold2Color": "rgba(234, 112, 112, 0.22)"
             },
-            {
-              "errors": {},
-              "aggregator": "avg",
-              "downsampleAggregator": "avg",
-              "metric": "",
-              "downsampleInterval": "",
-              "tags": {"host":""}
-            }],
+            "lines": true,
+            "fill": 1,
+            "linewidth": 2,
+            "points": false,
+            "pointradius": 5,
+            "bars": false,
+            "stack": false,
+            "percentage": false,
+            "legend": {
+              "show": true,
+              "values": false,
+              "min": false,
+              "max": false,
+              "current": false,
+              "total": false,
+              "avg": false
+            },
+            "nullPointMode": "connected",
+            "steppedLine": false,
+            "tooltip": {
+              "value_type": "cumulative",
+              "shared": true
+            },
+            "timeFrom": null,
+            "timeShift": null,
+            "targets": [
+              {
+                "errors": {},
+                "aggregator": "avg",
+                "downsampleAggregator": "avg",
+                "metric": "",
+                "downsampleInterval": "15m",
+                "tags": {"host":""}
+              },
+              {
+                "errors": {},
+                "aggregator": "avg",
+                "downsampleAggregator": "avg",
+                "metric": "",
+                "downsampleInterval": "",
+                "tags": {"host":""}
+              }
+            ],
             "aliasColors": {},
             "seriesOverrides": [
               {

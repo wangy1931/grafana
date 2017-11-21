@@ -6,7 +6,7 @@ import (
 
 	"github.com/wangy1931/grafana/pkg/components/renderer"
 	"github.com/wangy1931/grafana/pkg/middleware"
-	"github.com/wangy1931/grafana/pkg/setting"
+	// "github.com/wangy1931/grafana/pkg/setting"	
 	"github.com/wangy1931/grafana/pkg/util"
 )
 
@@ -27,18 +27,25 @@ func RenderToPng(c *middleware.Context) {
 	}
 
 	renderOpts := &renderer.RenderOpts{
-		Url:       c.Params("*") + queryParams,
-		Width:     queryReader.Get("width", "800"),
-		Height:    queryReader.Get("height", "400"),
-		SessionId: c.Session.ID(),
-		Timeout:   queryReader.Get("timeout", "30"),
+		// Url:       c.Params("*") + queryParams,
+		Path:     c.Params("*") + queryParams,
+		Width:    queryReader.Get("width", "800"),
+		Height:   queryReader.Get("height", "400"),
+		OrgId:    c.OrgId,
+		SessionId:c.Session.ID(),
+		Timeout:  queryReader.Get("timeout", "60"),
+		Timezone: queryReader.Get("tz", ""),
 	}
 
-	renderOpts.Url = setting.ToAbsUrl(renderOpts.Url)
+	// renderOpts.Url = setting.ToAbsUrl(renderOpts.Url)
 	pngPath, err := renderer.RenderToPng(renderOpts)
 
 	if err != nil {
-		c.Handle(500, "Failed to render to png", err)
+		if err == renderer.ErrTimeout {
+			c.Handle(500, err.Error(), err)
+		}
+
+		c.Handle(500, "Rendering failed.", err)
 		return
 	}
 

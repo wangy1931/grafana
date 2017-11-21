@@ -12,8 +12,11 @@ MAX_OPEN_FILES=10000
 
 CONF_DIR=/etc/grafana
 
-CONF_FILE=/etc/grafana/grafana.ini
+CONF_FILE=/etc/wangy1931/grafana.ini
 
-RESTART_ON_UPGRADE=false
+RESTART_ON_UPGRADE=true
 
 PLUGINS_DIR=/var/lib/grafana/plugins
+
+# Only used on systemd systems
+PID_FILE_DIR=/var/run/grafana

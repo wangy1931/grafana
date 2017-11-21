@@ -91,7 +91,7 @@ func CreateOrg(c *middleware.Context, cmd m.CreateOrgCommand) Response {
 		return ApiError(500, "Failed to create organization", err)
 	}
 
-	metrics.M_Api_Org_Create.Inc(1)
+	metrics.M_Api_Org_Create.Inc()
 
 	// We need to add the data source defined in config for this org to data_source table
 	if err := sqlstore.AddDatasourceForOrg(cmd.Result.Id); err != nil {
@@ -169,6 +169,9 @@ func DeleteOrgById(c *middleware.Context) Response {
 	}
 
 	if err := bus.Dispatch(&m.DeleteOrgCommand{Id: c.ParamsInt64(":orgId")}); err != nil {
+		if err == m.ErrOrgNotFound {
+			return ApiError(404, "Failed to delete organization. ID not found", nil)
+		}
 		return ApiError(500, "Failed to update organization", err)
 	}
 

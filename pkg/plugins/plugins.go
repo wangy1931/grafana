@@ -3,6 +3,7 @@ package plugins
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -25,6 +26,7 @@ var (
 
 	GrafanaLatestVersion string
 	GrafanaHasUpdate     bool
+	plog                 log.Logger
 )
 
 type PluginScanner struct {
@@ -33,6 +35,8 @@ type PluginScanner struct {
 }
 
 func Init() error {
+	plog = log.New("plugins")
+
 	DataSources = make(map[string]*DataSourcePlugin)
 	StaticRoutes = make([]*PluginStaticRoute, 0)
 	Panels = make(map[string]*PanelPlugin)
@@ -44,16 +48,16 @@ func Init() error {
 		"app":        AppPlugin{},
 	}
 
-	log.Info("Plugins: Scan starting")
+	plog.Info("Starting plugin search")
 	scan(path.Join(setting.StaticRootPath, "app/plugins"))
 
 	// check if plugins dir exists
 	if _, err := os.Stat(setting.PluginsPath); os.IsNotExist(err) {
-		log.Warn("Plugins: Plugin dir %v does not exist", setting.PluginsPath)
+		plog.Warn("Plugin dir does not exist", "dir", setting.PluginsPath)
 		if err = os.MkdirAll(setting.PluginsPath, os.ModePerm); err != nil {
-			log.Warn("Plugins: Failed to create plugin dir: %v, error: %v", setting.PluginsPath, err)
+			plog.Warn("Failed to create plugin dir", "dir", setting.PluginsPath, "error", err)
 		} else {
-			log.Info("Plugins: Plugin dir %v created", setting.PluginsPath)
+			plog.Info("Plugin dir created", "dir", setting.PluginsPath)
 			scan(setting.PluginsPath)
 		}
 	} else {
@@ -74,6 +78,8 @@ func Init() error {
 	}
 
 	go StartPluginUpdateChecker()
+	go updateAppDashboards()
+
 	return nil
 }
 
@@ -161,30 +167,24 @@ func (scanner *PluginScanner) loadPluginJson(pluginJsonFilePath string) error {
 	return loader.Load(jsonParser, currentDir)
 }
 
-func GetPluginReadme(pluginId string) ([]byte, error) {
+func GetPluginMarkdown(pluginId string, name string) ([]byte, error) {
 	plug, exists := Plugins[pluginId]
 	if !exists {
 		return nil, PluginNotFoundError{pluginId}
 	}
 
-	if plug.Readme != nil {
-		return plug.Readme, nil
+	path := filepath.Join(plug.PluginDir, fmt.Sprintf("%s.md", strings.ToUpper(name)))
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		path = filepath.Join(plug.PluginDir, fmt.Sprintf("%s.md", strings.ToLower(name)))
 	}
 
-	readmePath := filepath.Join(plug.PluginDir, "README.md")
-	if _, err := os.Stat(readmePath); os.IsNotExist(err) {
-		readmePath = filepath.Join(plug.PluginDir, "readme.md")
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return make([]byte, 0), nil
 	}
 
-	if _, err := os.Stat(readmePath); os.IsNotExist(err) {
-		plug.Readme = make([]byte, 0)
-		return plug.Readme, nil
-	}
-
-	if readmeBytes, err := ioutil.ReadFile(readmePath); err != nil {
+	if data, err := ioutil.ReadFile(path); err != nil {
 		return nil, err
 	} else {
-		plug.Readme = readmeBytes
-		return plug.Readme, nil
+		return data, nil
 	}
 }

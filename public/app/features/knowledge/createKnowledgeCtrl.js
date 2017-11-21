@@ -1,9 +1,8 @@
 define([
     'angular',
     'lodash',
-    'ng-quill'
   ],
-  function (angular, _, ngQuill) {
+  function (angular, _) {
     'use strict';
 
     var module = angular.module('grafana.controllers');

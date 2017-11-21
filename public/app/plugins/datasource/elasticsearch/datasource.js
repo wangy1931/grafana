@@ -13,6 +13,7 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
   'use strict';
 
   kbn = kbn.default;
+  ElasticResponse = ElasticResponse.ElasticResponse;
 
   /** @ngInject */
   function ElasticDatasource(instanceSettings, $q, backendSrv, templateSrv, timeSrv, contextSrv) {
@@ -56,10 +57,19 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
     };
 
     this._get = function(url) {
-      return this._request('GET', this.indexPattern.getIndexForToday() + url).then(function(results) {
-        results.data.$$config = results.config;
-        return results.data;
-      });
+      var range = timeSrv.timeRange();
+      var index_list = this.indexPattern.getIndexList(range.from.valueOf(), range.to.valueOf());
+      if (_.isArray(index_list) && index_list.length) {
+        return this._request('GET', index_list[0] + url).then(function(results) {
+          results.data.$$config = results.config;
+          return results.data;
+        });
+      } else {
+        return this._request('GET', this.indexPattern.getIndexForToday() + url).then(function(results) {
+          results.data.$$config = results.config;
+          return results.data;
+        });
+      }
     };
 
     this._post = function(url, data) {
@@ -81,20 +91,32 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
       range[timeField]= {
         from: options.range.from.valueOf(),
         to: options.range.to.valueOf(),
+        format: "epoch_millis",
       };
 
-      if (this.esVersion >= 2) {
-        range[timeField]["format"] = "epoch_millis";
-      }
+      var queryInterpolated = templateSrv.replace(queryString, {}, 'lucene');
+      var query = {
+        "bool": {
+          "filter": [
+            { "range": range },
+            {
+              "query_string": {
+                "query": queryInterpolated
+              }
+            }
+          ]
+        }
+      };
 
-      var queryInterpolated = templateSrv.replace(queryString);
-      var filter = { "bool": { "must": [{ "range": range }] } };
-      var query = { "bool": { "should": [{ "query_string": { "query": queryInterpolated } }] } };
       var data = {
-        "fields": [timeField, "_source"],
-        "query" : { "filtered": { "query" : query, "filter": filter } },
+        "query" : query,
         "size": 10000
       };
+
+      // fields field not supported on ES 5.x
+      if (this.esVersion < 5) {
+        data["fields"] = [timeField, "_source"];
+      }
 
       var header = {search_type: "query_then_fetch", "ignore_unavailable": true};
 
@@ -134,11 +156,12 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
 
         for (var i = 0; i < hits.length; i++) {
           var source = hits[i]._source;
-          var fields = hits[i].fields;
           var time = source[timeField];
-
-          if (_.isString(fields[timeField]) || _.isNumber(fields[timeField])) {
-            time = fields[timeField];
+          if (typeof hits[i].fields !== 'undefined') {
+            var fields = hits[i].fields;
+            if (_.isString(fields[timeField]) || _.isNumber(fields[timeField])) {
+              time = fields[timeField];
+            }
           }
 
           var event = {
@@ -156,13 +179,24 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
     };
 
     this.testDatasource = function() {
-      return this._get('/_stats').then(function() {
-        return { status: "success", message: "Data source is working", title: "Success" };
-      }, function(err) {
+      timeSrv.setTime({ from: 'now-1m', to: 'now' }, true);
+      // validate that the index exist and has date field
+      return this.getFields({type: 'date'}).then(function(dateFields) {
+        var timeField = _.find(dateFields, {text: this.timeField});
+        if (!timeField) {
+          return { status: "error", message: "No date field named " + this.timeField + ' found' };
+        }
+        return { status: "success", message: "Index OK. Time field name OK." };
+      }.bind(this), function(err) {
+        console.log(err);
         if (err.data && err.data.error) {
-          return { status: "error", message: angular.toJson(err.data.error), title: "Error" };
+          var message = angular.toJson(err.data.error);
+          if (err.data.error.reason) {
+            message = err.data.error.reason;
+          }
+          return { status: "error", message: message };
         } else {
-          return { status: "error", message: err.status, title: "Error" };
+          return { status: "error", message: err.status };
         }
       });
     };
@@ -179,6 +213,9 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
       var target;
       var sentTargets = [];
 
+      // add global adhoc filters to timeFilter
+      // var adhocFilters = templateSrv.getAdhocFilters(this.name);
+
       for (var i = 0; i < options.targets.length; i++) {
         target = options.targets[i];
         if (target.hide) {continue;}
@@ -193,10 +230,14 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
           timeTo = dateMath.parseDateMath(target.timeShift, timeTo);
         }
 
+        // NEW
+        // var queryString = templateSrv.replace(target.query || '*', options.scopedVars, 'lucene');
+        // var queryObj = this.queryBuilder.build(target, adhocFilters, queryString);
+
         var queryObj = this.queryBuilder.build(target);
         var esQuery = angular.toJson(queryObj);
         var luceneQuery = target.query;  // 取消默认值 "*", 否则新建一个日志搜索会有查询结果
-        if (!luceneQuery) continue;
+        if (!luceneQuery) { continue; }
         luceneQuery = templateSrv.replace(luceneQuery, options.scopedVars, 'lucene');
         luceneQuery = angular.toJson(luceneQuery);
 
@@ -206,7 +247,7 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
         esQuery = esQuery.replace(/\$timeFrom/g, timeFrom.valueOf());
         esQuery = esQuery.replace(/\$timeTo/g, timeTo.valueOf());
 
-        var searchType = queryObj.size === 0 ? 'count' : 'query_then_fetch';
+        var searchType = (queryObj.size === 0 && this.esVersion < 5) ? 'count' : 'query_then_fetch';
         var header = this.getQueryHeader(searchType, timeFrom, timeTo);
         payload +=  header + '\n';
         payload += esQuery + '\n';
@@ -261,8 +302,8 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
     };
 
     this.getFields = function(query) {
-      return this._get('/_mapping').then(function(res) {
-        var fields = {};
+      return this._get('/_mapping').then(function(result) {
+
         var typeMap = {
           'float': 'number',
           'double': 'number',
@@ -270,22 +311,65 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
           'long': 'number',
           'date': 'date',
           'string': 'string',
+          'text': 'string',
+          'scaled_float': 'number',
+          'nested': 'nested'
         };
 
-        for (var indexName in res) {
-          var index = res[indexName];
-          var mappings = index.mappings;
-          if (!mappings) { continue; }
-          for (var typeName in mappings) {
-            var properties = mappings[typeName].properties;
-            for (var field in properties) {
-              var prop = properties[field];
-              if (query.type && typeMap[prop.type] !== query.type) {
-                continue;
+        function shouldAddField(obj, key, query) {
+          if (key[0] === '_') {
+            return false;
+          }
+
+          if (!query.type) {
+            return true;
+          }
+
+          // equal query type filter, or via typemap translation
+          return query.type === obj.type || query.type === typeMap[obj.type];
+        }
+
+        // Store subfield names: [system, process, cpu, total] -> system.process.cpu.total
+        var fieldNameParts = [];
+        var fields = {};
+
+        function getFieldsRecursively(obj) {
+          for (var key in obj) {
+            var subObj = obj[key];
+
+            // Check mapping field for nested fields
+            if (_.isObject(subObj.properties)) {
+              fieldNameParts.push(key);
+              getFieldsRecursively(subObj.properties);
+            }
+
+            if (_.isObject(subObj.fields)) {
+              fieldNameParts.push(key);
+              getFieldsRecursively(subObj.fields);
+            }
+
+            if (_.isString(subObj.type)) {
+              var fieldName = fieldNameParts.concat(key).join('.');
+
+              // Hide meta-fields and check field type
+              if (shouldAddField(subObj, key, query)) {
+                fields[fieldName] = {
+                  text: fieldName,
+                  type: subObj.type
+                };
               }
-              if (prop.type && field[0] !== '_') {
-                fields[field] = {text: field, type: prop.type};
-              }
+            }
+          }
+          fieldNameParts.pop();
+        }
+
+        for (var indexName in result) {
+          var index = result[indexName];
+          if (index && index.mappings) {
+            var mappings = index.mappings;
+            for (var typeName in mappings) {
+              var properties = mappings[typeName].properties;
+              getFieldsRecursively(properties);
             }
           }
         }
@@ -299,10 +383,10 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
 
     this.getTerms = function(queryDef) {
       var range = timeSrv.timeRange();
-      var header = this.getQueryHeader('count', range.from, range.to);
+      var searchType = this.esVersion >= 5 ? 'query_then_fetch' : 'count' ;
+      var header = this.getQueryHeader(searchType, range.from, range.to);
       var esQuery = angular.toJson(this.queryBuilder.getTermsQuery(queryDef));
 
-      esQuery = esQuery.replace("$lucene_query", queryDef.query || '*');
       esQuery = esQuery.replace(/\$timeFrom/g, range.from.valueOf());
       esQuery = esQuery.replace(/\$timeTo/g, range.to.valueOf());
       esQuery = header + '\n' + esQuery + '\n';
@@ -310,60 +394,37 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
       return this._post('log/search?search_type=count', esQuery).then(function(res) {
         var buckets = res.responses[0].aggregations["1"].buckets;
         return _.map(buckets, function(bucket) {
-          return {text: bucket.key, value: bucket.key};
+          return {
+            text: bucket.key_as_string || bucket.key,
+            value: bucket.key
+          };
         });
       });
     };
 
     this.metricFindQuery = function(query) {
-      query = templateSrv.replace(query);
       query = angular.fromJson(query);
       if (!query) {
         return $q.when([]);
       }
 
       if (query.find === 'fields') {
+        query.field = templateSrv.replace(query.field, {}, 'lucene');
         return this.getFields(query);
       }
+
       if (query.find === 'terms') {
+        query.query = templateSrv.replace(query.query || '*', {}, 'lucene');
         return this.getTerms(query);
       }
     };
 
-    this.getDashboard = function(id) {
-      return this._get('/dashboard/' + id)
-      .then(function(result) {
-        return angular.fromJson(result._source.dashboard);
-      });
+    this.getTagKeys = function() {
+      return this.getFields({});
     };
 
-    this.searchDashboards = function() {
-      var query = {
-        query: { query_string: { query: '*' } },
-        size: 10000,
-        sort: ["_uid"],
-      };
-
-      return this._post(this.index + '/dashboard/_search', query)
-      .then(function(results) {
-        if(_.isUndefined(results.hits)) {
-          return { dashboards: [], tags: [] };
-        }
-
-        var resultsHits = results.hits.hits;
-        var displayHits = { dashboards: [] };
-
-        for (var i = 0, len = resultsHits.length; i < len; i++) {
-          var hit = resultsHits[i];
-          displayHits.dashboards.push({
-            id: hit._id,
-            title: hit._source.title,
-            tags: hit._source.tags
-          });
-        }
-
-        return displayHits;
-      });
+    this.getTagValues = function(options) {
+      return this.getTerms({field: options.key, query: '*'});
     };
   }
 
@@ -373,6 +434,7 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
   // 减少 count0 > 0 && count1 > 0 && count0 < count1
   // 没有变化 count0 == count1
   function compare(target) {
+    var num = 0;
     if (target.count0 === 0 && target.count1 > 0) {
       target.count = "消失日志:" + target.count1;
       target.change = "消失";
@@ -380,26 +442,26 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
       target.count = "新增日志:" + target.count0;
       target.change = "新增";
     } else if (target.count0 > 0 && target.count1 > 0 && target.count0 > target.count1) {
-      var num = ((Math.abs(target.count0 - target.count1) / target.count1)*100).toFixed();
+      num = ((Math.abs(target.count0 - target.count1) / target.count1)*100).toFixed();
       target.count = "出现次数:" + target.count0 + "\n同比增长" + num + "%";
       target.change = "增加";
     } else if (target.count0 > 0 && target.count1 > 0 && target.count0 < target.count1) {
-      var num = ((Math.abs(target.count0 - target.count1) / target.count0)*100).toFixed();
+      num = ((Math.abs(target.count0 - target.count1) / target.count0)*100).toFixed();
       target.count = "出现次数:" + target.count0 + "\n同比减少" + num + "%";
       target.change = "减少";
-    } else if (target.count0 > 0 && target.count1 > 0 && target.count0 == target.count1) {
+    } else if (target.count0 > 0 && target.count1 > 0 && target.count0 === target.count1) {
       target.count = "出现次数:" + target.count0;
       target.change = "没有变化";
     } else {
       target.count = "0";
       target.change = "没有变化";
     }
-  };
+  }
 
   function cluster(target, index) {
     target.operator = '<i class="fa fa-expand"></i>';
     target.cid = index;
-  };
+  }
 
   function MD5(e) {
     function h(a, b) {
@@ -436,7 +498,9 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
       var b = "",
         d = "",
         c;
-      for (c = 0; 3 >= c; c++) d = a >>> 8 * c & 255, d = "0" + d.toString(16), b += d.substr(d.length - 2, 2);
+      for (c = 0; 3 >= c; c++) {
+        d = a >>> 8 * c & 255, d = "0" + d.toString(16), b += d.substr(d.length - 2, 2);
+      }
       return b;
     }
 
@@ -464,7 +528,9 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
     b = 4023233417;
     c = 2562383102;
     d = 271733878;
-    for (e = 0; e < f.length; e += 16) q = a, r = b, s = c, t = d, a = k(a, b, c, d, f[e + 0], 7, 3614090360), d = k(d, a, b, c, f[e + 1], 12, 3905402710), c = k(c, d, a, b, f[e + 2], 17, 606105819), b = k(b, c, d, a, f[e + 3], 22, 3250441966), a = k(a, b, c, d, f[e + 4], 7, 4118548399), d = k(d, a, b, c, f[e + 5], 12, 1200080426), c = k(c, d, a, b, f[e + 6], 17, 2821735955), b = k(b, c, d, a, f[e + 7], 22, 4249261313), a = k(a, b, c, d, f[e + 8], 7, 1770035416), d = k(d, a, b, c, f[e + 9], 12, 2336552879), c = k(c, d, a, b, f[e + 10], 17, 4294925233), b = k(b, c, d, a, f[e + 11], 22, 2304563134), a = k(a, b, c, d, f[e + 12], 7, 1804603682), d = k(d, a, b, c, f[e + 13], 12, 4254626195), c = k(c, d, a, b, f[e + 14], 17, 2792965006), b = k(b, c, d, a, f[e + 15], 22, 1236535329), a = l(a, b, c, d, f[e + 1], 5, 4129170786), d = l(d, a, b, c, f[e + 6], 9, 3225465664), c = l(c, d, a, b, f[e + 11], 14, 643717713), b = l(b, c, d, a, f[e + 0], 20, 3921069994), a = l(a, b, c, d, f[e + 5], 5, 3593408605), d = l(d, a, b, c, f[e + 10], 9, 38016083), c = l(c, d, a, b, f[e + 15], 14, 3634488961), b = l(b, c, d, a, f[e + 4], 20, 3889429448), a = l(a, b, c, d, f[e + 9], 5, 568446438), d = l(d, a, b, c, f[e + 14], 9, 3275163606), c = l(c, d, a, b, f[e + 3], 14, 4107603335), b = l(b, c, d, a, f[e + 8], 20, 1163531501), a = l(a, b, c, d, f[e + 13], 5, 2850285829), d = l(d, a, b, c, f[e + 2], 9, 4243563512), c = l(c, d, a, b, f[e + 7], 14, 1735328473), b = l(b, c, d, a, f[e + 12], 20, 2368359562), a = m(a, b, c, d, f[e + 5], 4, 4294588738), d = m(d, a, b, c, f[e + 8], 11, 2272392833), c = m(c, d, a, b, f[e + 11], 16, 1839030562), b = m(b, c, d, a, f[e + 14], 23, 4259657740), a = m(a, b, c, d, f[e + 1], 4, 2763975236), d = m(d, a, b, c, f[e + 4], 11, 1272893353), c = m(c, d, a, b, f[e + 7], 16, 4139469664), b = m(b, c, d, a, f[e + 10], 23, 3200236656), a = m(a, b, c, d, f[e + 13], 4, 681279174), d = m(d, a, b, c, f[e + 0], 11, 3936430074), c = m(c, d, a, b, f[e + 3], 16, 3572445317), b = m(b, c, d, a, f[e + 6], 23, 76029189), a = m(a, b, c, d, f[e + 9], 4, 3654602809), d = m(d, a, b, c, f[e + 12], 11, 3873151461), c = m(c, d, a, b, f[e + 15], 16, 530742520), b = m(b, c, d, a, f[e + 2], 23, 3299628645), a = n(a, b, c, d, f[e + 0], 6, 4096336452), d = n(d, a, b, c, f[e + 7], 10, 1126891415), c = n(c, d, a, b, f[e + 14], 15, 2878612391), b = n(b, c, d, a, f[e + 5], 21, 4237533241), a = n(a, b, c, d, f[e + 12], 6, 1700485571), d = n(d, a, b, c, f[e + 3], 10, 2399980690), c = n(c, d, a, b, f[e + 10], 15, 4293915773), b = n(b, c, d, a, f[e + 1], 21, 2240044497), a = n(a, b, c, d, f[e + 8], 6, 1873313359), d = n(d, a, b, c, f[e + 15], 10, 4264355552), c = n(c, d, a, b, f[e + 6], 15, 2734768916), b = n(b, c, d, a, f[e + 13], 21, 1309151649), a = n(a, b, c, d, f[e + 4], 6, 4149444226), d = n(d, a, b, c, f[e + 11], 10, 3174756917), c = n(c, d, a, b, f[e + 2], 15, 718787259), b = n(b, c, d, a, f[e + 9], 21, 3951481745), a = h(a, q), b = h(b, r), c = h(c, s), d = h(d, t);
+    for (e = 0; e < f.length; e += 16) {
+      q = a, r = b, s = c, t = d, a = k(a, b, c, d, f[e + 0], 7, 3614090360), d = k(d, a, b, c, f[e + 1], 12, 3905402710), c = k(c, d, a, b, f[e + 2], 17, 606105819), b = k(b, c, d, a, f[e + 3], 22, 3250441966), a = k(a, b, c, d, f[e + 4], 7, 4118548399), d = k(d, a, b, c, f[e + 5], 12, 1200080426), c = k(c, d, a, b, f[e + 6], 17, 2821735955), b = k(b, c, d, a, f[e + 7], 22, 4249261313), a = k(a, b, c, d, f[e + 8], 7, 1770035416), d = k(d, a, b, c, f[e + 9], 12, 2336552879), c = k(c, d, a, b, f[e + 10], 17, 4294925233), b = k(b, c, d, a, f[e + 11], 22, 2304563134), a = k(a, b, c, d, f[e + 12], 7, 1804603682), d = k(d, a, b, c, f[e + 13], 12, 4254626195), c = k(c, d, a, b, f[e + 14], 17, 2792965006), b = k(b, c, d, a, f[e + 15], 22, 1236535329), a = l(a, b, c, d, f[e + 1], 5, 4129170786), d = l(d, a, b, c, f[e + 6], 9, 3225465664), c = l(c, d, a, b, f[e + 11], 14, 643717713), b = l(b, c, d, a, f[e + 0], 20, 3921069994), a = l(a, b, c, d, f[e + 5], 5, 3593408605), d = l(d, a, b, c, f[e + 10], 9, 38016083), c = l(c, d, a, b, f[e + 15], 14, 3634488961), b = l(b, c, d, a, f[e + 4], 20, 3889429448), a = l(a, b, c, d, f[e + 9], 5, 568446438), d = l(d, a, b, c, f[e + 14], 9, 3275163606), c = l(c, d, a, b, f[e + 3], 14, 4107603335), b = l(b, c, d, a, f[e + 8], 20, 1163531501), a = l(a, b, c, d, f[e + 13], 5, 2850285829), d = l(d, a, b, c, f[e + 2], 9, 4243563512), c = l(c, d, a, b, f[e + 7], 14, 1735328473), b = l(b, c, d, a, f[e + 12], 20, 2368359562), a = m(a, b, c, d, f[e + 5], 4, 4294588738), d = m(d, a, b, c, f[e + 8], 11, 2272392833), c = m(c, d, a, b, f[e + 11], 16, 1839030562), b = m(b, c, d, a, f[e + 14], 23, 4259657740), a = m(a, b, c, d, f[e + 1], 4, 2763975236), d = m(d, a, b, c, f[e + 4], 11, 1272893353), c = m(c, d, a, b, f[e + 7], 16, 4139469664), b = m(b, c, d, a, f[e + 10], 23, 3200236656), a = m(a, b, c, d, f[e + 13], 4, 681279174), d = m(d, a, b, c, f[e + 0], 11, 3936430074), c = m(c, d, a, b, f[e + 3], 16, 3572445317), b = m(b, c, d, a, f[e + 6], 23, 76029189), a = m(a, b, c, d, f[e + 9], 4, 3654602809), d = m(d, a, b, c, f[e + 12], 11, 3873151461), c = m(c, d, a, b, f[e + 15], 16, 530742520), b = m(b, c, d, a, f[e + 2], 23, 3299628645), a = n(a, b, c, d, f[e + 0], 6, 4096336452), d = n(d, a, b, c, f[e + 7], 10, 1126891415), c = n(c, d, a, b, f[e + 14], 15, 2878612391), b = n(b, c, d, a, f[e + 5], 21, 4237533241), a = n(a, b, c, d, f[e + 12], 6, 1700485571), d = n(d, a, b, c, f[e + 3], 10, 2399980690), c = n(c, d, a, b, f[e + 10], 15, 4293915773), b = n(b, c, d, a, f[e + 1], 21, 2240044497), a = n(a, b, c, d, f[e + 8], 6, 1873313359), d = n(d, a, b, c, f[e + 15], 10, 4264355552), c = n(c, d, a, b, f[e + 6], 15, 2734768916), b = n(b, c, d, a, f[e + 13], 21, 1309151649), a = n(a, b, c, d, f[e + 4], 6, 4149444226), d = n(d, a, b, c, f[e + 11], 10, 3174756917), c = n(c, d, a, b, f[e + 2], 15, 718787259), b = n(b, c, d, a, f[e + 9], 21, 3951481745), a = h(a, q), b = h(b, r), c = h(c, s), d = h(d, t);
+    }
     return (p(a) + p(b) + p(c) + p(d)).toLowerCase();
   }
 

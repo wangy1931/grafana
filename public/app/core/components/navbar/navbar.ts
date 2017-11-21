@@ -4,14 +4,32 @@ import config from 'app/core/config';
 import _ from 'lodash';
 import $ from 'jquery';
 import coreModule from '../../core_module';
+import {NavModel, NavModelItem}  from '../../nav_model_srv';
 
 export class NavbarCtrl {
+  model: NavModel;
+  section: NavModelItem;
+  hasMenu: boolean;
+
   showGuideNav: boolean = false;
 
   /** @ngInject */
-  constructor(private $scope, private $rootScope, private $location, private contextSrv) {
+  constructor(private $scope, private $rootScope, private contextSrv, private $location) {
+    this.section = this.model.section;
+    this.hasMenu = this.model.menu.length > 0;
+
     !!~['/rca', '/association', '/logs', '/topn'].indexOf(this.$location.path()) && (this.showGuideNav = true);
-    // this.$location.search().guide && (this.showGuideNav = true);
+  }
+
+  showSearch() {
+    this.$rootScope.appEvent('show-dash-search');
+  }
+
+  navItemClicked(navItem, evt) {
+    if (navItem.clickHandler) {
+      navItem.clickHandler();
+      evt.preventDefault();
+    }
   }
 
   showGuide() {
@@ -28,12 +46,9 @@ export function navbarDirective() {
     transclude: true,
     controllerAs: 'ctrl',
     scope: {
-      title: "@",
-      titleUrl: "@",
-      iconUrl: "@",
+      model: "=",
     },
-    link: function(scope, elem, attrs, ctrl) {
-      ctrl.icon = attrs.icon;
+    link: function(scope, elem) {
       elem.addClass('navbar');
     }
   };

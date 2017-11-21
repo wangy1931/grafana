@@ -33,7 +33,7 @@ function ($, moment, kbn) {
       return variable === value ? alt : value;
     },
     toggleInOut: function(array,value) {
-      if(_.contains(array,value)) {
+      if(_.includes(array,value)) {
         array = _.without(array,value);
       } else {
         array.push(value);
@@ -124,19 +124,19 @@ function ($, moment, kbn) {
       "weblogic": "iconfont fa-weblogic",
       "apache": "iconfont fa-Apacheyumao"
     };
-  }
+  };
 
   _.cmdbInitObj = function(obj) {
     if(_.isObject(obj)) {
       for(var i in obj) {
-        if(!_.isNumber(obj[i]) && (_.isNull(obj[i]) || _.isEmpty(obj[i]))){
+        if (!_.isNumber(obj[i]) && (_.isNull(obj[i]) || _.isEmpty(obj[i]))) {
           if(/^(memory|hosts|interfaces|devices|services)$/.test(i)) {
             obj[i] = null;
           } else {
             obj[i] = '暂无信息';
           }
-        };
-        if(_.isObject(obj[i])) {
+        }
+        if (_.isObject(obj[i])) {
           obj[i] = _.cmdbInitObj(obj[i]);
         }
       }

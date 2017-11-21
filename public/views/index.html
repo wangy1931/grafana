@@ -17,6 +17,7 @@
 		[[end]]
 
     <link rel="icon" type="image/png" href="[[.AppSubUrl]]/public/img/fav32.png">
+    <link rel="mask-icon" href="[[.AppSubUrl]]/public/grafana_mask_icon.svg" color="#F05A28">
 		<base href="[[.AppSubUrl]]/" />
 
 	</head>
@@ -30,17 +31,54 @@
 
 			<div class="page-alert-list">
 				<div ng-repeat='alert in dashAlerts.list' class="alert-{{alert.severity}} alert">
+					<div class="alert-icon"><i class="{{alert.icon}}"></i></div>
+					<div class="alert-body">
+						<div class="alert-title">{{alert.title}}</div>
+						<div class="alert-text" ng-bind='alert.text'></div>
+					</div>
 					<button type="button" class="alert-close" ng-click="dashAlerts.clear(alert)">
-						<i class="fa fa-times-circle"></i>
+						<i class="fa fa fa-remove"></i>
 					</button>
-					<div class="alert-title">{{alert.title}}</div>
-					<div ng-bind='alert.text'></div>
 				</div>
 			</div>
 
 			<div ng-view class="main-view"></div>
+			<footer class="footer">
+				<div class="row text-center">
+					<ul>
+						<li>
+							<a href="http://docs.grafana.org" target="_blank">
+								<i class="fa fa-file-code-o"></i>
+								Docs
+							</a>
+						</li>
+						<li>
+							<a href="https://grafana.com/services/support" target="_blank">
+								<i class="fa fa-support"></i>
+								Support Plans
+							</a>
+						</li>
+						<li>
+							<a href="https://community.grafana.com/" target="_blank">
+								<i class="fa fa-comments-o"></i>
+								Community
+							</a>
+						</li>
+						<li>
+							<a href="https://grafana.com" target="_blank">Grafana</a>
+							<span>v[[.BuildVersion]] (commit: [[.BuildCommit]])</span>
+						</li>
+						[[if .NewGrafanaVersionExists]]
+							<li>
+								<a href="https://grafana.com/get" target="_blank" bs-tooltip="'[[.NewGrafanaVersion]]'">
+									New version available!
+								</a>
+							</li>
+						[[end]]
+					</ul>
+				</div>
+			</footer>
 		</grafana-app>
-  </body>
 
 	<script>
 		window.grafanaBootData = {
@@ -65,18 +103,6 @@
 	<script src="[[.AppSubUrl]]/public/app/boot.js"></script>
 	<!-- endbuild -->
 
-	[[if .GoogleAnalyticsId]]
-	<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-		ga('create', '[[.GoogleAnalyticsId]]', 'auto');
-		ga('send', 'pageview');
-		</script>
-	[[end]]
-
 	[[if .GoogleTagManagerId]]
 		<script>
 			dataLayer = [{
@@ -95,4 +121,6 @@
 		})(window,document,'script','dataLayer','[[.GoogleTagManagerId]]');</script>
 		<!-- End Google Tag Manager -->
 	[[end]]
+
+	</body>
 </html>

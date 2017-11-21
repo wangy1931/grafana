@@ -55,7 +55,10 @@
 }
 
 .login-inner-box {
-  background: #f9f9f9;
+  // background: #f9f9f9;
+  background: $panel-bg;
+  text-align: center;
+  padding-bottom: 3rem;
 }
 
 .login-tab-header {
@@ -168,7 +171,13 @@
   margin: auto;
 }
 
-.login-content-form{
+.invite-box, .login-content-form {
+  text-align: center;
+  border: 1px solid $tight-form-func-bg;
+  background-color: $panel-bg;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 
   &>label{
     font-size: 24px;

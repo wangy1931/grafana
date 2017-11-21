@@ -1,8 +1,5 @@
 ///<reference path="../../../headers/common.d.ts" />
 
-import './query_part_editor';
-import './query_part_editor';
-
 import angular from 'angular';
 import _ from 'lodash';
 import InfluxQueryBuilder from './query_builder';
@@ -17,12 +14,12 @@ export class InfluxQueryCtrl extends QueryCtrl {
   queryBuilder: any;
   groupBySegment: any;
   resultFormats: any[];
+  orderByTime: any[];
   policySegment: any;
   tagSegments: any[];
   selectMenu: any;
   measurementSegment: any;
   removeTagFilterSegment: any;
-
 
   /** @ngInject **/
   constructor($scope, $injector, private templateSrv, private $q, private uiSegmentSrv) {
@@ -36,7 +33,6 @@ export class InfluxQueryCtrl extends QueryCtrl {
       {text: 'Time series', value: 'time_series'},
       {text: 'Table', value: 'table'},
     ];
-
     this.policySegment = uiSegmentSrv.newSegment(this.target.policy);
 
     if (!this.target.measurement) {
@@ -69,6 +65,10 @@ export class InfluxQueryCtrl extends QueryCtrl {
     this.removeTagFilterSegment = uiSegmentSrv.newSegment({fake: true, value: '-- remove tag filter --'});
   }
 
+  removeOrderByTime() {
+    this.target.orderByTime = 'ASC';
+  }
+
   buildSelectMenu() {
     var categories = queryPart.getCategories();
     this.selectMenu = _.reduce(categories, function(memo, cat, key) {
@@ -91,6 +91,15 @@ export class InfluxQueryCtrl extends QueryCtrl {
       if (!this.queryModel.hasFill()) {
         options.push(this.uiSegmentSrv.newSegment({value: 'fill(null)'}));
       }
+      if (!this.target.limit) {
+        options.push(this.uiSegmentSrv.newSegment({value: 'LIMIT'}));
+      }
+      if (!this.target.slimit) {
+        options.push(this.uiSegmentSrv.newSegment({value: 'SLIMIT'}));
+      }
+      if (this.target.orderByTime === 'ASC') {
+        options.push(this.uiSegmentSrv.newSegment({value: 'ORDER BY time DESC'}));
+      }
       if (!this.queryModel.hasGroupByTime()) {
         options.push(this.uiSegmentSrv.newSegment({value: 'time($interval)'}));
       }
@@ -102,15 +111,27 @@ export class InfluxQueryCtrl extends QueryCtrl {
   }
 
   groupByAction() {
-    this.queryModel.addGroupBy(this.groupBySegment.value);
+    switch (this.groupBySegment.value) {
+      case 'LIMIT': {
+        this.target.limit = 10;
+        break;
+      }
+      case 'SLIMIT': {
+        this.target.slimit = 10;
+        break;
+      }
+      case 'ORDER BY time DESC': {
+        this.target.orderByTime = 'DESC';
+        break;
+      }
+      default: {
+        this.queryModel.addGroupBy(this.groupBySegment.value);
+      }
+    }
+
     var plusButton = this.uiSegmentSrv.newPlusButton();
     this.groupBySegment.value  = plusButton.value;
     this.groupBySegment.html  = plusButton.html;
-    this.panelCtrl.refresh();
-  }
-
-  removeGroupByPart(part, index) {
-    this.queryModel.removeGroupByPart(part, index);
     this.panelCtrl.refresh();
   }
 
@@ -119,13 +140,50 @@ export class InfluxQueryCtrl extends QueryCtrl {
     this.panelCtrl.refresh();
   }
 
-  removeSelectPart(selectParts, part) {
-    this.queryModel.removeSelectPart(selectParts, part);
-    this.panelCtrl.refresh();
+  handleSelectPartEvent(selectParts, part, evt) {
+    switch (evt.name) {
+      case "get-param-options": {
+        var fieldsQuery = this.queryBuilder.buildExploreQuery('FIELDS');
+        return this.datasource.metricFindQuery(fieldsQuery)
+        .then(this.transformToSegments(true))
+        .catch(this.handleQueryError.bind(this));
+      }
+      case "part-param-changed": {
+        this.panelCtrl.refresh();
+        break;
+      }
+      case "action": {
+        this.queryModel.removeSelectPart(selectParts, part);
+        this.panelCtrl.refresh();
+        break;
+      }
+      case "get-part-actions": {
+        return this.$q.when([{text: 'Remove', value: 'remove-part'}]);
+      }
+    }
   }
 
-  selectPartUpdated() {
-    this.panelCtrl.refresh();
+  handleGroupByPartEvent(part, index, evt) {
+    switch (evt.name) {
+      case "get-param-options": {
+        var tagsQuery = this.queryBuilder.buildExploreQuery('TAG_KEYS');
+        return this.datasource.metricFindQuery(tagsQuery)
+        .then(this.transformToSegments(true))
+        .catch(this.handleQueryError.bind(this));
+      }
+      case "part-param-changed": {
+        this.panelCtrl.refresh();
+        break;
+      }
+      case "action": {
+        this.queryModel.removeGroupByPart(part, index);
+        this.panelCtrl.refresh();
+        break;
+      }
+      case "get-part-actions": {
+        return this.$q.when([{text: 'Remove', value: 'remove-part'}]);
+      }
+    }
   }
 
   fixTagSegments() {
@@ -163,26 +221,11 @@ export class InfluxQueryCtrl extends QueryCtrl {
     this.target.rawQuery = !this.target.rawQuery;
   }
 
-  getMeasurements() {
-    var query = this.queryBuilder.buildExploreQuery('MEASUREMENTS');
+  getMeasurements(measurementFilter) {
+    var query = this.queryBuilder.buildExploreQuery('MEASUREMENTS', undefined, measurementFilter);
     return this.datasource.metricFindQuery(query)
       .then(this.transformToSegments(true))
       .catch(this.handleQueryError.bind(this));
-  }
-
-  getPartOptions(part) {
-    if (part.def.type === 'field') {
-      var fieldsQuery = this.queryBuilder.buildExploreQuery('FIELDS');
-      return this.datasource.metricFindQuery(fieldsQuery)
-      .then(this.transformToSegments(true))
-      .catch(this.handleQueryError.bind(this));
-    }
-    if (part.def.type === 'tag') {
-      var tagsQuery = this.queryBuilder.buildExploreQuery('TAG_KEYS');
-      return this.datasource.metricFindQuery(tagsQuery)
-      .then(this.transformToSegments(true))
-      .catch(this.handleQueryError.bind(true));
-    }
   }
 
   handleQueryError(err) {
@@ -215,7 +258,7 @@ export class InfluxQueryCtrl extends QueryCtrl {
       if (/^\/.*\/$/.test(nextValue)) {
         return this.$q.when(this.uiSegmentSrv.newOperators(['=~', '!~']));
       } else {
-        return this.$q.when(this.uiSegmentSrv.newOperators(['=', '<>', '<', '>']));
+        return this.$q.when(this.uiSegmentSrv.newOperators(['=', '!=', '<>', '<', '>']));
       }
     }
 
@@ -244,11 +287,6 @@ export class InfluxQueryCtrl extends QueryCtrl {
     return this.datasource.metricFindQuery(fieldsQuery)
     .then(this.transformToSegments(false))
     .catch(this.handleQueryError);
-  }
-
-  setFill(fill) {
-    this.target.fill = fill;
-    this.panelCtrl.refresh();
   }
 
   tagSegmentUpdated(segment, index) {
@@ -326,4 +364,3 @@ export class InfluxQueryCtrl extends QueryCtrl {
     return this.queryModel.render(false);
   }
 }
-

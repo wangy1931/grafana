@@ -390,5 +390,5 @@ define(function() {
     logResultPanel : panelMetas[0].panels[0],
     logClusterPanel: panelMetas[0].panels[1],
     logComparePanel: panelMetas[0].panels[2],
-  }
+  };
 });

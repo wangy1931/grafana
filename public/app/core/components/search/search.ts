@@ -5,6 +5,7 @@ import config from 'app/core/config';
 import _ from 'lodash';
 import $ from 'jquery';
 import coreModule from '../../core_module';
+import appEvents from 'app/core/app_events';
 
 export class SearchCtrl {
   isOpen: boolean;
@@ -17,6 +18,8 @@ export class SearchCtrl {
   showImport: boolean;
   dismiss: any;
   ignoreClose: any;
+  // triggers fade animation class
+  openCompleted: boolean;
 
   /** @ngInject */
   constructor(private $scope, private $location, private $timeout, private backendSrv, private contextSrv, private $rootScope) {
@@ -26,9 +29,10 @@ export class SearchCtrl {
 
   closeSearch() {
     this.isOpen = this.ignoreClose;
+    this.openCompleted = false;
   }
 
-  openSearch() {
+  openSearch(evt, payload) {
     if (this.isOpen) {
       this.isOpen = false;
       return;
@@ -42,10 +46,22 @@ export class SearchCtrl {
     this.currentSearchId = 0;
     this.ignoreClose = true;
 
+    if (payload && payload.starred) {
+      this.query.starred = true;
+    }
+
+    if (payload && payload.tagsMode) {
+      return this.$timeout(() => {
+        this.ignoreClose = false;
+        this.giveSearchFocus = this.giveSearchFocus + 1;
+        this.getTags();
+      }, 100);
+    }
+
     this.$timeout(() => {
+      this.openCompleted = true;
       this.ignoreClose = false;
       this.giveSearchFocus = this.giveSearchFocus + 1;
-      this.query.query = '';
       this.search();
     }, 100);
   }
@@ -61,7 +77,7 @@ export class SearchCtrl {
       this.moveSelection(-1);
     }
     if (evt.keyCode === 13) {
-      if (this.$scope.tagMode) {
+      if (this.tagsMode) {
         var tag = this.results[this.selectedIndex];
         if (tag) {
           this.filterByTag(tag.term, null);
@@ -105,7 +121,7 @@ export class SearchCtrl {
   queryHasNoFilters() {
     var query = this.query;
     return query.query === '' && query.starred === false && query.tag.length === 0;
-  };
+  }
 
   filterByTag(tag, evt) {
     this.query.tag.push(tag);
@@ -115,7 +131,7 @@ export class SearchCtrl {
       evt.stopPropagation();
       evt.preventDefault();
     }
-  };
+  }
 
   removeTag(tag, evt) {
     this.query.tag = _.without(this.query.tag, tag);
@@ -123,7 +139,7 @@ export class SearchCtrl {
     this.giveSearchFocus = this.giveSearchFocus + 1;
     evt.stopPropagation();
     evt.preventDefault();
-  };
+  }
 
   getTags() {
     return this.backendSrv.get('/api/dashboards/tags').then((results) => {
@@ -134,19 +150,19 @@ export class SearchCtrl {
         this.search();
       }
     });
-  };
+  }
 
   showStarred() {
     this.query.starred = !this.query.starred;
     this.giveSearchFocus = this.giveSearchFocus + 1;
     this.search();
-  };
+  }
 
   search() {
     this.showImport = false;
     this.selectedIndex = 0;
     this.searchDashboards();
-  };
+  }
 
   newDashboard() {
     this.$rootScope.appEvent('show-modal', {
@@ -163,6 +179,7 @@ export function searchDirective() {
     controller: SearchCtrl,
     bindToController: true,
     controllerAs: 'ctrl',
+    scope: {},
   };
 }
 

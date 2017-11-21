@@ -1,12 +1,15 @@
-<navbar>
+<div class="navbar">
+	<div class="navbar-inner">
+		<a class="navbar-brand-btn pointer" ng-click="ctrl.toggleSideMenu()">
+			<span class="navbar-brand-btn-background">
+				<img src="public/img/grafana_icon.svg"></img>
+			</span>
+			<i class="icon-gf icon-gf-grafana_wordmark"></i>
+			<i class="fa fa-caret-down"></i>
+			<i class="fa fa-chevron-left"></i>
+		</a>
 
-<a class="pointer navbar-page-btn" ng-if="::!dashboardMeta.isSnapshot" ng-click="openSearch()">
-	<i class="icon-gf icon-gf-dashboard"></i>
-	<span>{{dashboard.title}}</span>
-	<i class="fa fa-caret-down"></i>
-</a>
-
-<a class="pointer navbar-page-btn" ng-if="::dashboardMeta.isSnapshot" data-container="body" bs-tooltip="titleTooltip" data-placement="bottom" ng-click="openSearch()">
+<!-- <a class="pointer navbar-page-btn" ng-if="::dashboardMeta.isSnapshot" data-container="body" bs-tooltip="titleTooltip" data-placement="bottom" ng-click="openSearch()">
 	<i class="icon-gf icon-gf-snapshot"></i>
 	<span>
 		{{dashboard.title}}
@@ -51,21 +54,78 @@
 			<li ng-if="dashboardMeta.canSave"><a class="pointer" ng-click="deleteDashboard();">删除仪表盘</a></li>
 		</ul>
 	</li>
-</ul>
+</ul> -->
+		<div class="navbar-section-wrapper">
+			<a class="navbar-page-btn" ng-click="ctrl.showSearch()">
+				<i class="icon-gf icon-gf-dashboard"></i>
+				{{ctrl.dashboard.title}}
+				<i class="fa fa-caret-down"></i>
+			</a>
+		</div>
 
-<ul class="nav dash-playlist-actions" ng-if="playlistSrv">
-	<li>
-		<a ng-click="playlistSrv.prev()"><i class="fa fa-step-backward"></i></a>
-	</li>
-	<li>
-		<a ng-click="playlistSrv.stop()"><i class="fa fa-stop"></i></a>
-	</li>
-	<li>
-		<a ng-click="playlistSrv.next()"><i class="fa fa-step-forward"></i></a>
-	</li>
-</ul>
+		<ul class="nav dash-playlist-actions" ng-if="ctrl.playlistSrv.isPlaying">
+			<li>
+				<a ng-click="ctrl.playlistSrv.prev()"><i class="fa fa-step-backward"></i></a>
+			</li>
+			<li>
+				<a ng-click="ctrl.playlistSrv.stop()"><i class="fa fa-stop"></i></a>
+			</li>
+			<li>
+				<a ng-click="ctrl.playlistSrv.next()"><i class="fa fa-step-forward"></i></a>
+			</li>
+		</ul>
 
-<ul class="nav pull-right">
+		<ul class="nav pull-left dashnav-action-icons">
+			<li ng-show="::ctrl.dashboard.meta.canStar">
+				<a class="pointer" ng-click="ctrl.starDashboard()">
+					<i class="fa" ng-class="{'fa-star-o': !ctrl.dashboard.meta.isStarred, 'fa-star': ctrl.dashboard.meta.isStarred}" style="color: orange;"></i>
+				</a>
+			</li>
+			<li ng-show="::ctrl.dashboard.meta.canShare" class="dropdown">
+				<a class="pointer" ng-click="ctrl.hideTooltip($event)" bs-tooltip="'Share dashboard'" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-share-square-o"></i></a>
+				<ul class="dropdown-menu">
+					<li>
+						<a class="pointer" ng-click="ctrl.shareDashboard(0)">
+							<i class="fa fa-link"></i> Link to Dashboard
+							<div class="dropdown-desc">Share an internal link to the current dashboard. Some configuration options available.</div>
+						</a>
+					</li>
+					<li>
+						<a class="pointer" ng-click="ctrl.shareDashboard(1)">
+							<i class="icon-gf icon-gf-snapshot"></i>Snapshot
+							<div class="dropdown-desc">Interactive, publically accessible dashboard. Sensitive data is stripped out.</div>
+						</a>
+					</li>
+					<li>
+						<a class="pointer" ng-click="ctrl.shareDashboard(2)">
+							<i class="fa fa-cloud-upload"></i>Export
+							<div class="dropdown-desc">Export the dashboard to a JSON file for others and to share on Grafana.com</div>
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li ng-show="::ctrl.dashboard.meta.canSave">
+				<a ng-click="ctrl.saveDashboard()" bs-tooltip="'Save dashboard <br> CTRL+S'" data-placement="bottom"><i class="fa fa-save"></i></a>
+			</li>
+			<li ng-if="::ctrl.dashboard.snapshot.originalUrl">
+				<a ng-href="{{ctrl.dashboard.snapshot.originalUrl}}" bs-tooltip="'Open original dashboard'" data-placement="bottom"><i class="fa fa-link"></i></a>
+			</li>
+			<li class="dropdown">
+				<a class="pointer" data-toggle="dropdown">
+					<i class="fa fa-cog"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-menu--navbar">
+					<li ng-repeat="navItem in ::ctrl.navModel.menu" ng-class="{active: navItem.active}">
+						<a class="pointer" ng-href="{{::navItem.url}}" ng-click="ctrl.navItemClicked(navItem, $event)">
+							<i class="{{::navItem.icon}}" ng-show="::navItem.icon"></i>
+							{{::navItem.title}}
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+<!-- <ul class="nav pull-right">
 	<li ng-show="dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
 		<a ng-click="exitFullscreen()">
 			返回仪表盘
@@ -74,6 +134,18 @@
 	<li ng-if="dashboard">
 		<gf-time-picker dashboard="dashboard"></gf-time-picker>
 	</li>
-</ul>
+</ul> -->
+		<ul class="nav pull-right">
+			<li ng-show="ctrl.dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
+				<a ng-click="ctrl.exitFullscreen()">
+					返回仪表盘
+				</a>
+			</li>
+			<li>
+				<gf-time-picker dashboard="ctrl.dashboard"></gf-time-picker>
+			</li>
+		</ul>
+	</div>
+</div>
 
-</navbar>
+<dashboard-search></dashboard-search>

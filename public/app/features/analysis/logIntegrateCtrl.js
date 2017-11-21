@@ -12,10 +12,10 @@ define([
 
     module.filter('formatTimeRange', function () {
       return function (text) {
-        if (!text) return;
+        if (!text) { return; }
 
         var from = text.from, to = text.to;
-        var args = Array.prototype.slice.call(arguments), time = args[0], relative = args[1], index = args[2];
+        var args = Array.prototype.slice.call(arguments), relative = args[1], index = args[2];
         moment.isMoment(from) && (from = moment(from));
         moment.isMoment(to) && (to = moment(to));
 
@@ -35,30 +35,30 @@ define([
     module.controller('LogIntegrateCtrl', function ($scope, $rootScope, contextSrv, integrateSrv) {
       var option = {
         "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "rightLogBase": 1,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "legend": {
-            "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": true
-          }
+          "leftLogBase": 1,
+          "leftMax": null,
+          "rightMax": null,
+          "leftMin": null,
+          "rightMin": null,
+          "rightLogBase": 1,
+          "threshold1": null,
+          "threshold2": null,
+          "threshold1Color": "rgba(216, 200, 27, 0.27)",
+          "threshold2Color": "rgba(234, 112, 112, 0.22)"
+        },
+        "legend": {
+          "show": true,
+          "values": false,
+          "min": false,
+          "max": false,
+          "current": false,
+          "total": false,
+          "avg": false
+        },
+        "tooltip": {
+          "value_type": "cumulative",
+          "shared": true
+        }
       };
       var panelMetas = [
         {
@@ -537,7 +537,7 @@ define([
 
       // cache repsonse data when datasource.query successed
       $scope.tabsCache = {};
-      $scope.$on('data-saved', function (event, payload) {
+      $scope.$on('data-saved', function () {
         var curTabId = $scope.dashboard.rows[0].id;
         $scope.tabsCache[curTabId] = {
           "query": $scope.query,

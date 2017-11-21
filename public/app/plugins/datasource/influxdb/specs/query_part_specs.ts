@@ -5,7 +5,7 @@ import queryPart from '../query_part';
 
 describe('InfluxQueryPart', () => {
 
-  describe('series with mesurement only', () => {
+  describe('series with measurement only', () => {
     it('should handle nested function parts', () => {
       var part = queryPart.create({
         type: 'derivative',
@@ -16,7 +16,16 @@ describe('InfluxQueryPart', () => {
       expect(part.render('mean(value)')).to.be('derivative(mean(value), 10s)');
     });
 
-    it('should handle suffirx parts', () => {
+    it('should nest spread function', () => {
+      var part = queryPart.create({
+        type: 'spread'
+      });
+
+      expect(part.text).to.be('spread()');
+      expect(part.render('value')).to.be('spread(value)');
+    });
+
+    it('should handle suffix parts', () => {
       var part = queryPart.create({
         type: 'math',
         params: ['/ 100'],

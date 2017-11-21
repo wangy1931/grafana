@@ -3,7 +3,7 @@ define([
     'lodash',
     '../core_module',
 ],
-function (angular, _,coreModule) {
+  function (angular, _,coreModule) {
     'use strict';
 
     coreModule.default.controller('InstallCtrl', function ($scope, backendSrv, datasourceSrv, contextSrv) {
@@ -29,5 +29,5 @@ function (angular, _,coreModule) {
         });
       };
     });
-
-  });
+  }
+);

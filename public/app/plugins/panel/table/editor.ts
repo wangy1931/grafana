@@ -13,15 +13,13 @@ export class TablePanelEditorCtrl {
   panel: any;
   panelCtrl: any;
   transformers: any;
-  colorModes: any;
-  columnStyles: any;
-  columnTypes: any;
   fontSizes: any;
-  dateFormats: any;
   addColumnSegment: any;
   operatorModes: any;
   unitFormats: any;
   getColumnNames: any;
+  canSetColumns: boolean;
+  columnsHelpMessage: string;
 
   /** @ngInject */
   constructor($scope, private $q, private uiSegmentSrv) {
@@ -29,37 +27,35 @@ export class TablePanelEditorCtrl {
     this.panelCtrl = $scope.ctrl;
     this.panel = this.panelCtrl.panel;
     this.transformers = transformers;
-    this.unitFormats = kbn.getUnitFormats();
-    this.colorModes = [
-      {text: 'Disabled', value: null},
-      {text: 'Cell', value: 'cell'},
-      {text: 'Value', value: 'value'},
-      {text: 'Row', value: 'row'},
-    ];
-    this.columnTypes = [
-      {text: 'Number', value: 'number'},
-      {text: 'String', value: 'string'},
-      {text: 'Date', value: 'date'},
-    ];
     this.fontSizes = ['80%', '90%', '100%', '110%', '120%', '130%', '150%', '160%', '180%', '200%', '220%', '250%'];
-    this.dateFormats = [
-      {text: 'YYYY-MM-DD HH:mm:ss', value: 'YYYY-MM-DD HH:mm:ss'},
-      {text: 'MM/DD/YY h:mm:ss a', value: 'MM/DD/YY h:mm:ss a'},
-      {text: 'MMMM D, YYYY LT',  value: 'MMMM D, YYYY LT'},
-    ];
+    // this.dateFormats = [
+    //   {text: 'YYYY-MM-DD HH:mm:ss', value: 'YYYY-MM-DD HH:mm:ss'},
+    //   {text: 'MM/DD/YY h:mm:ss a', value: 'MM/DD/YY h:mm:ss a'},
+    //   {text: 'MMMM D, YYYY LT',  value: 'MMMM D, YYYY LT'},
+    // ];
 
     this.operatorModes = ['=', '>', '<'];
     this.addColumnSegment = uiSegmentSrv.newPlusButton();
+    this.updateTransformHints();
+  }
 
-    // this is used from bs-typeahead and needs to be instance bound
-    this.getColumnNames = () => {
-      if (!this.panelCtrl.table) {
-        return [];
+  updateTransformHints() {
+    this.canSetColumns = false;
+    this.columnsHelpMessage = '';
+
+    switch (this.panel.transform) {
+      case "timeseries_aggregations": {
+        this.canSetColumns = true;
+        break;
       }
-      return _.map(this.panelCtrl.table.columns, function(col: any) {
-        return col.text;
-      });
-    };
+      case "json": {
+        this.canSetColumns = true;
+        break;
+      }
+      case "table": {
+        this.columnsHelpMessage = "Columns and their order are determined by the data query";
+      }
+    }
   }
 
   getColumnOptions() {
@@ -73,7 +69,7 @@ export class TablePanelEditorCtrl {
 
   addColumn() {
     var columns = transformers[this.panel.transform].getColumns(this.panelCtrl.dataRaw);
-    var column = _.findWhere(columns, {text: this.addColumnSegment.value});
+    var column = _.find(columns, {text: this.addColumnSegment.value});
 
     if (column) {
       this.panel.columns.push(column);
@@ -87,6 +83,11 @@ export class TablePanelEditorCtrl {
 
   transformChanged() {
     this.panel.columns = [];
+    if (this.panel.transform === 'timeseries_aggregations') {
+      this.panel.columns.push({text: 'Avg', value: 'avg'});
+    }
+
+    this.updateTransformHints();
     this.render();
   }
 

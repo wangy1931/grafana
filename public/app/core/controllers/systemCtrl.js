@@ -1,13 +1,12 @@
 define([
-    'angular',
-    '../core_module',
-    'lodash',
+  'angular',
+  '../core_module',
+  'lodash',
 ],
-function (angular, coreModule, _) {
+  function (angular, coreModule, _) {
     'use strict';
 
     coreModule.default.controller('SystemCtrl', function ($scope, backendSrv, $location, contextSrv) {
-
       $scope.dashboardSetting = {title: "新的仪表盘", system: contextSrv.user.systemId};
       $scope.init = function () {
         $scope.getCurrentUserSystem();
@@ -37,4 +36,5 @@ function (angular, coreModule, _) {
         $location.url('/org');
       };
     });
-  });
+  }
+);

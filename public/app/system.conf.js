@@ -33,6 +33,8 @@ System.config({
     "jquery.flot.fillbelow":    "vendor/flot/jquery.flot.fillbelow",
     'jquery.flot.fillbetween':  'vendor/flot/jquery.flot.fillbetween',
     "jquery.flot.navigate":     "vendor/flot/jquery.flot.navigate",
+    "jquery.flot.dashes":       "vendor/flot/jquery.flot.dashes",
+    "jquery.flot.gauge":        "vendor/flot/jquery.flot.gauge",
 
     "highlight":                'vendor/angular-other/highlight',
     "slider":                   'vendor/angular-other/nouislider.min',
@@ -41,14 +43,18 @@ System.config({
     'zh-cn':                    'vendor/fullcalendar/dist/zh-cn',
     'jsPlumbToolkit':           'vendor/jsPlumb/jsPlumbToolkit',
 
-    "jquery.flot.gauge":        "vendor/flot/jquery.flot.gauge",
     'quill':                    'vendor/quill/quill.min',
     'ng-quill':                 'vendor/quill/ng-quill',
     'jsdiff':                   'vendor/jsdiff/index',
     'd3':                       'vendor/d3/d3.min',
     'd3.tip':                   'vendor/d3/d3.tip',
     'd3.graph':                 'vendor/d3/d3.relationshipgraph',
-    'ng-table':                 'vendor/angular-other/ng-table.min'
+    'ng-table':                 'vendor/angular-other/ng-table.min',
+
+    'virtual-scroll': 'vendor/npm/virtual-scroll/src/index.js',
+    'mousetrap': 'vendor/npm/mousetrap/mousetrap.js',
+
+    // "ace": "vendor/npm/ace-builds/src-noconflict/ace"
   },
 
   packages: {
@@ -72,6 +78,10 @@ System.config({
   },
 
   meta: {
+    'vendor/npm/virtual-scroll/src/indx.js': {
+      format: 'cjs',
+      exports: 'VirtualScroll',
+    },
     'vendor/angular/angular.js': {
       format: 'global',
       deps: ['jquery'],
@@ -95,5 +105,13 @@ System.config({
   bundles: {
     // 'public_gen/app/3party.js': ['public_gen/app/3party.js']
     // '33party.js': ['vendor/jquery/dist/jquery.js', 'vendor/moment.js', 'app/core/lodash_extended.js', 'vendor/lodash.js', 'vendor/bootstrap/bootstrap.js']
+    'vendor/npm/mousetrap/mousetrap.js': {
+      format: 'global',
+      exports: 'Mousetrap'
+    },
+    // 'vendor/npm/ace-builds/src-noconflict/ace.js': {
+    //   format: 'global',
+    //   exports: 'ace'
+    // }
   }
 });

@@ -4,9 +4,9 @@ import (
 	"strconv"
 
 	"github.com/wangy1931/grafana/pkg/bus"
+	"github.com/wangy1931/grafana/pkg/metrics"
 	"github.com/wangy1931/grafana/pkg/middleware"
 	"github.com/wangy1931/grafana/pkg/services/search"
-	m "github.com/wangy1931/grafana/pkg/models"
 )
 
 func Search(c *middleware.Context) {
@@ -43,21 +43,24 @@ func Search(c *middleware.Context) {
 		return
 	}
 
-	dashQuery := m.GetCurrentSystemDashboards{}
-	dashQuery.SystemId = c.SystemId
-	HitList := make([]*search.Hit, 0)
-	err = bus.Dispatch(&dashQuery)
-	if err != nil {
-		c.JsonApiErr(500, "Get Dasboard Id failed", err)
-		return
-	}
+	// OLD
+	// dashQuery := m.GetCurrentSystemDashboards{}
+	// dashQuery.SystemId = c.SystemId
+	// HitList := make([]*search.Hit, 0)
+	// err = bus.Dispatch(&dashQuery)
+	// if err != nil {
+	// 	c.JsonApiErr(500, "Get Dasboard Id failed", err)
+	// 	return
+	// }
 
-	for _, hit := range searchQuery.Result {
-		for _, dash := range dashQuery.Result {
-			if (dash.DashboardId == hit.Id) {
-				HitList = append(HitList, hit);
-			}
-		}
-	}
-	c.JSON(200, HitList)
+	// for _, hit := range searchQuery.Result {
+	// 	for _, dash := range dashQuery.Result {
+	// 		if (dash.DashboardId == hit.Id) {
+	// 			HitList = append(HitList, hit);
+	// 		}
+	// 	}
+	// }
+	// c.JSON(200, HitList)
+	c.TimeRequest(metrics.M_Api_Dashboard_Search)
+	c.JSON(200, searchQuery.Result)
 }

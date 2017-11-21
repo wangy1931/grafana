@@ -4,15 +4,19 @@ import config from 'app/core/config';
 import _ from 'lodash';
 import angular from 'angular';
 import $ from 'jquery';
+import {profiler} from 'app/core/profiler';
+import Remarkable from 'remarkable';
 
 const TITLE_HEIGHT = 25;
 const EMPTY_TITLE_HEIGHT = 9;
 const PANEL_PADDING = 5;
+const PANEL_BORDER = 2;
 
 import {Emitter} from 'app/core/core';
 
 export class PanelCtrl {
   panel: any;
+  error: any;
   row: any;
   dashboard: any;
   editorTabIndex: number;
@@ -26,7 +30,6 @@ export class PanelCtrl {
   fullscreen: boolean;
   inspector: any;
   editModeInitiated: boolean;
-  editorHelpIndex: number;
   editMode: any;
   height: any;
   containerHeight: any;
@@ -34,6 +37,7 @@ export class PanelCtrl {
   contextSrv: any;
   integrateSrv: any;
   associationSrv: any;
+  timing: any;
 
   constructor($scope, $injector) {
     this.$injector = $injector;
@@ -45,6 +49,7 @@ export class PanelCtrl {
     this.associationSrv = $injector.get('associationSrv');
     this.editorTabIndex = 0;
     this.events = new Emitter();
+    this.timing = {};
 
     var plugin = config.panels[this.panel.type];
     if (plugin) {
@@ -54,7 +59,16 @@ export class PanelCtrl {
 
     $scope.$on("refresh", (event, payload) => this.refresh(payload));
     $scope.$on("render", () => this.render());
-    $scope.$on("$destroy", () => this.events.emit('panel-teardown'));
+    $scope.$on("$destroy", () => {
+      this.events.emit('panel-teardown');
+      this.events.removeAllListeners();
+    });
+
+    // we should do something interesting
+    // with newly added panels
+    if (this.panel.isNew) {
+      delete this.panel.isNew;
+    }
   }
 
   init() {
@@ -64,7 +78,7 @@ export class PanelCtrl {
   }
 
   renderingCompleted() {
-    this.$scope.$root.performance.panelsRendered++;
+    profiler.renderingCompleted(this.panel.id, this.timing);
   }
 
   refresh(payload?) {
@@ -103,6 +117,22 @@ export class PanelCtrl {
     this.addEditorTab('概要', 'public/app/partials/panelgeneral.html');
     this.editModeInitiated = true;
     this.events.emit('init-edit-mode', null);
+
+    var urlTab = (this.$injector.get('$routeParams').tab || '').toLowerCase();
+    if (urlTab) {
+      this.editorTabs.forEach((tab, i) => {
+        if (tab.title.toLowerCase() === urlTab) {
+          this.editorTabIndex = i;
+        }
+      });
+    }
+  }
+
+  changeTab(newIndex) {
+    this.editorTabIndex = newIndex;
+    var route = this.$injector.get('$route');
+    route.current.params.tab = this.editorTabs[newIndex].title.toLowerCase();
+    route.updateParams();
   }
 
   addEditorTab(title, directiveFn, index?) {
@@ -174,8 +204,8 @@ export class PanelCtrl {
   calculatePanelHeight() {
     if (this.fullscreen) {
       var docHeight = $(window).height();
-      var editHeight = Math.floor(docHeight * 0.3);
-      var fullscreenHeight = Math.floor(docHeight * 0.7);
+      var editHeight = Math.floor(docHeight * 0.4);
+      var fullscreenHeight = Math.floor(docHeight * 0.8);
       this.containerHeight = this.editMode ? editHeight : fullscreenHeight;
     } else {
       this.containerHeight = this.panel.height || this.row.height;
@@ -184,7 +214,7 @@ export class PanelCtrl {
       }
     }
 
-    this.height = this.containerHeight - (PANEL_PADDING + (this.panel.title ? TITLE_HEIGHT : EMPTY_TITLE_HEIGHT));
+    this.height = this.containerHeight - (PANEL_BORDER + PANEL_PADDING + (this.panel.title ? TITLE_HEIGHT : EMPTY_TITLE_HEIGHT));
   }
 
   render(payload?) {
@@ -194,39 +224,28 @@ export class PanelCtrl {
     }
 
     this.calculatePanelHeight();
+    this.timing.renderStart = new Date().getTime();
     this.events.emit('render', payload);
-  }
-
-  toggleEditorHelp(index) {
-    if (this.editorHelpIndex === index) {
-      this.editorHelpIndex = null;
-      return;
-    }
-    this.editorHelpIndex = index;
   }
 
   duplicate() {
     this.dashboard.duplicatePanel(this.panel, this.row);
+    this.$timeout(() => {
+      this.$scope.$root.$broadcast('render');
+    });
   }
 
   updateColumnSpan(span) {
     this.panel.span = Math.min(Math.max(Math.floor(this.panel.span + span), 1), 12);
+    this.row.panelSpanChanged();
+
     this.$timeout(() => {
       this.render();
     });
   }
 
   removePanel() {
-    this.publishAppEvent('confirm-modal', {
-      title: '移除面板',
-      text: '您是否想移除这个面板？',
-      icon: 'fa-trash',
-      yesText: '删除',
-      noText: '取消',
-      onConfirm: () => {
-        this.row.panels = _.without(this.row.panels, this.panel);
-      }
-    });
+    this.row.removePanel(this.panel);
   }
 
   editPanelJson() {
@@ -260,14 +279,54 @@ export class PanelCtrl {
     });
   }
 
+  getInfoMode() {
+    if (this.error) {
+      return 'error';
+    }
+    if (!!this.panel.description) {
+      return 'info';
+    }
+    if (this.panel.links && this.panel.links.length) {
+      return 'links';
+    }
+    return '';
+  }
+
+  getInfoContent(options) {
+    var markdown = this.panel.description;
+
+    if (options.mode === 'tooltip') {
+      markdown = this.error || this.panel.description;
+    }
+
+    var linkSrv = this.$injector.get('linkSrv');
+    var templateSrv = this.$injector.get('templateSrv');
+    var interpolatedMarkdown = templateSrv.replace(markdown, this.panel.scopedVars);
+    var html = '<div class="markdown-html">';
+
+    html += new Remarkable().render(interpolatedMarkdown);
+
+    if (this.panel.links && this.panel.links.length > 0) {
+      html += '<ul>';
+      for (let link of this.panel.links) {
+        var info = linkSrv.getPanelLinkAnchorInfo(link, this.panel.scopedVars);
+        html += '<li><a class="panel-menu-link" href="' + info.href + '" target="' + info.target + '">' + info.title + '</a></li>';
+      }
+      html += '</ul>';
+    }
+
+    return html + '</div>';
+  }
+
   openInspector() {
     var modalScope = this.$scope.$new();
     modalScope.panel = this.panel;
     modalScope.dashboard = this.dashboard;
-    modalScope.inspector = angular.copy(this.inspector);
+    modalScope.panelInfoHtml = this.getInfoContent({mode: 'inspector'});
 
+    modalScope.inspector = $.extend(true, {}, this.inspector);
     this.publishAppEvent('show-modal', {
-      src: 'public/app/partials/inspector.html',
+      src: 'public/app/features/dashboard/partials/inspector.html',
       scope: modalScope
     });
   }

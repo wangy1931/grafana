@@ -80,7 +80,7 @@ type OrgDetailsDTO struct {
 	Id      int64   `json:"id"`
 	Name    string  `json:"name"`
 	Address Address `json:"address"`
-  	Systems []*Systems `json:"systems"`
+  Systems []*Systems `json:"systems"`
 }
 
 type UserOrgDTO struct {

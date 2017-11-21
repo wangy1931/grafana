@@ -1,8 +1,13 @@
-----
-page_title: Dashboard API
-page_description: Grafana Dashboard API Reference
-page_keywords: grafana, admin, http, api, documentation, dashboard
----
++++
+title = "Dashboard HTTP API "
+description = "Grafana Dashboard HTTP API"
+keywords = ["grafana", "http", "documentation", "api", "dashboard"]
+aliases = ["/http_api/dashboard/"]
+type = "docs"
+[menu.docs]
+name = "Dashboard"
+parent = "http_api"
++++
 
 # Dashboard API
 
@@ -14,43 +19,48 @@ Creates a new dashboard or updates an existing dashboard.
 
 **Example Request for new dashboard**:
 
-    POST /api/dashboards/db HTTP/1.1
-    Accept: application/json
-    Content-Type: application/json
-    Authorization: Bearer eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk
+```http
+POST /api/dashboards/db HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk
 
-    {
-      "dashboard": {
-        "id": null,
-        "title": "Production Overview",
-        "tags": [ "templated" ],
-        "timezone": "browser",
-        "rows": [
-          {
-          }
-        ],
-        "schemaVersion": 6,
-        "version": 0
-      },
-      "overwrite": false
-    }
+{
+  "dashboard": {
+    "id": null,
+    "title": "Production Overview",
+    "tags": [ "templated" ],
+    "timezone": "browser",
+    "rows": [
+      {
+      }
+    ],
+    "schemaVersion": 6,
+    "version": 0
+  },
+  "overwrite": false
+}
+```
 
 JSON Body schema:
 
 - **dashboard** – The complete dashboard model, id = null to create a new dashboard
 - **overwrite** – Set to true if you want to overwrite existing dashboard with newer version or with same dashboard title.
+- **message** - Set a commit message for the version history.
 
 **Example Response**:
 
-    HTTP/1.1 200 OK
-    Content-Type: application/json; charset=UTF-8
-    Content-Length: 78
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=UTF-8
+Content-Length: 78
 
-    {
-      "slug": "production-overview",
-      "status": "success",
-      "version": 1
-    }
+{
+  "slug": "production-overview",
+  "status": "success",
+  "version": 1
+}
+```
 
 Status Codes:
 
@@ -62,14 +72,16 @@ Status Codes:
 The **412** status code is used when a newer dashboard already exists (newer, its version is greater than the version that was sent). The
 same status code is also used if another dashboard exists with the same title. The response body will look like this:
 
-    HTTP/1.1 412 Precondition Failed
-    Content-Type: application/json; charset=UTF-8
-    Content-Length: 97
+```http
+HTTP/1.1 412 Precondition Failed
+Content-Type: application/json; charset=UTF-8
+Content-Length: 97
 
-    {
-      "message": "The dashboard has been changed by someone else",
-      "status": "version-mismatch"
-    }
+{
+  "message": "The dashboard has been changed by someone else",
+  "status": "version-mismatch"
+}
+```
 
 In in case of title already exists the `status` property will be `name-exists`.
 
@@ -81,34 +93,38 @@ Will return the dashboard given the dashboard slug. Slug is the url friendly ver
 
 **Example Request**:
 
-    GET /api/dashboards/db/production-overview HTTP/1.1
-    Accept: application/json
-    Content-Type: application/json
-    Authorization: Bearer eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk
+```http
+GET /api/dashboards/db/production-overview HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk
+```
 
 **Example Response**:
 
-    HTTP/1.1 200
-    Content-Type: application/json
+```http
+HTTP/1.1 200
+Content-Type: application/json
 
-    {
-      "meta": {
-        "isStarred": false,
-        "slug": "production-overview"
-      },
-      "model": {
-        "id": null,
-        "title": "Production Overview",
-        "tags": [ "templated" ],
-        "timezone": "browser",
-        "rows": [
-          {
-          }
-        ],
-        "schemaVersion": 6,
-        "version": 0
+{
+  "meta": {
+    "isStarred": false,
+    "slug": "production-overview"
+  },
+  "dashboard": {
+    "id": null,
+    "title": "Production Overview",
+    "tags": [ "templated" ],
+    "timezone": "browser",
+    "rows": [
+      {
       }
-    }
+    ],
+    "schemaVersion": 6,
+    "version": 0
+  }
+}
+```
 
 ## Delete dashboard
 
@@ -118,17 +134,21 @@ The above will delete the dashboard with the specified slug. The slug is the url
 
 **Example Request**:
 
-    DELETE /api/dashboards/db/test HTTP/1.1
-    Accept: application/json
-    Content-Type: application/json
-    Authorization: Bearer eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk
+```http
+DELETE /api/dashboards/db/test HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk
+```
 
 **Example Response**:
 
-    HTTP/1.1 200
-    Content-Type: application/json
+```http
+HTTP/1.1 200
+Content-Type: application/json
 
-    {"title": "Test"}
+{"title": "Test"}
+```
 
 ## Gets the home dashboard
 
@@ -195,7 +215,7 @@ Get all tags of dashboards
 
 **Example Request**:
 
-    GET /api/dashboards/home HTTP/1.1
+    GET /api/dashboards/tags HTTP/1.1
     Accept: application/json
     Content-Type: application/json
     Authorization: Bearer eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk
@@ -216,18 +236,14 @@ Get all tags of dashboards
       }
     ]
 
-## Dashboard from JSON file
-
-`GET /file/:file`
-
 ## Search Dashboards
 
 `GET /api/search/`
 
-Status Codes:
+Query parameters:
 
 - **query** – Search Query
-- **tags** – Tags to use
+- **tag** – Tag to use
 - **starred** – Flag indicating if only starred Dashboards should be returned
 - **tagcloud** - Flag indicating if a tagcloud should be returned
 
@@ -251,11 +267,5 @@ Status Codes:
         "type":"dash-db",
         "tags":[],
         "isStarred":false
-      }
-    ]
-
-        "email":"admin@mygraf.com",
-        "login":"admin",
-        "role":"Admin"
       }
     ]

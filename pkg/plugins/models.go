@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/wangy1931/grafana/pkg/log"
 	m "github.com/wangy1931/grafana/pkg/models"
 	"github.com/wangy1931/grafana/pkg/setting"
 )
@@ -39,6 +38,8 @@ type PluginBase struct {
 	Includes     []*PluginInclude   `json:"includes"`
 	Module       string             `json:"module"`
 	BaseUrl      string             `json:"baseUrl"`
+	HideFromList bool               `json:"hideFromList,omitempty"`
+	State        string             `json:"state,omitempty"`
 
 	IncludedInAppId string `json:"-"`
 	PluginDir       string `json:"-"`
@@ -47,9 +48,6 @@ type PluginBase struct {
 
 	GrafanaNetVersion   string `json:"-"`
 	GrafanaNetHasUpdate bool   `json:"-"`
-
-	// cache for readme file contents
-	Readme []byte `json:"-"`
 }
 
 func (pb *PluginBase) registerPlugin(pluginDir string) error {
@@ -58,7 +56,7 @@ func (pb *PluginBase) registerPlugin(pluginDir string) error {
 	}
 
 	if !strings.HasPrefix(pluginDir, setting.StaticRootPath) {
-		log.Info("Plugins: Registering plugin %v", pb.Name)
+		plog.Info("Registering plugin", "name", pb.Name)
 	}
 
 	if len(pb.Dependencies.Plugins) == 0 {

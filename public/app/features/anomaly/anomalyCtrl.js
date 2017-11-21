@@ -48,14 +48,15 @@ define([
           var dataPointNum = $scope.pieData.normalPointNum + $scope.pieData.anomalyPointNum;
           $scope.pieData.normalPointPer = Math.round($scope.pieData.normalPointNum / dataPointNum * 100);
           $scope.pieData.anomalyPointPer = Math.round($scope.pieData.anomalyPointNum / dataPointNum * 100);
+          var pieData = [];
           if ($scope.checkZero([$scope.pieData.criticalMetricNum, $scope.pieData.criticalMetricNum, $scope.pieData.dangerMetricNum])) {
-            var pieData = [
+            pieData = [
               {label: "持续异常", data: 0},
               {label: "临时异常", data: 0},
               {label: "正常指标", data: 1},
             ];
           } else {
-            var pieData = [
+            pieData = [
               {label: "持续异常", data: $scope.pieData.dangerMetricNum},
               {label: "临时异常", data: $scope.pieData.criticalMetricNum},
               {label: "正常指标", data: $scope.pieData.normalMetricNum},
@@ -67,7 +68,7 @@ define([
                 innerRadius: 0.5,
                 show: true,
                 label: {
-                    show: false,
+                  show: false,
                 }
               }
             },
@@ -77,14 +78,15 @@ define([
             colors: ['rgb(224,76,65)','rgb(255,197,58)','rgb(61,183,121)']
           });
 
-          var numDataPoints = ($scope.summary.numDataPoints || $scope.summary.numAnomaliesInCache) - $scope.summary.numAnomaliesInCache;
+          // var numDataPoints = ($scope.summary.numDataPoints || $scope.summary.numAnomaliesInCache) - $scope.summary.numAnomaliesInCache;
+          var piePointData = [];
           if ($scope.checkZero([$scope.pieData.anomalyPointNum, $scope.pieData.normalPointNum])) {
-            var piePointData = [
+            piePointData = [
               {label: "异常点数", data: 0},
               {label: "正常点数", data: 1},
             ];
           } else {
-            var piePointData = [
+            piePointData = [
               {label: "异常点数", data: $scope.pieData.anomalyPointNum},
               {label: "正常点数", data: $scope.pieData.normalPointNum},
             ];
@@ -95,7 +97,7 @@ define([
                 innerRadius: 0.5,
                 show: true,
                 label: {
-                    show: false,
+                  show: false,
                 }
               }
             },
@@ -154,7 +156,7 @@ define([
         return _.every(arr, function(n) {
           return n === 0;
         });
-      }
+      };
 
       $scope.init();
     });

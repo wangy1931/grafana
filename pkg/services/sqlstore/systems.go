@@ -1,7 +1,6 @@
 package sqlstore
 
 import (
-  "github.com/go-xorm/xorm"
   "github.com/gosimple/slug"
   "github.com/wangy1931/grafana/pkg/bus"
   m "github.com/wangy1931/grafana/pkg/models"
@@ -28,7 +27,7 @@ func init() {
 }
 
 func AddSystem(cmd *m.AddSystemsCommand) error {
-  return inTransaction(func(sess *xorm.Session) error {
+  return inTransaction(func(sess *DBSession) error {
     // check if service exists
     var err error
     for _, systemName := range cmd.SystemsName {
@@ -59,7 +58,7 @@ func AddSystem(cmd *m.AddSystemsCommand) error {
 }
 
 func AddSystemsUser(cmd *m.AddSystemsUserCommand) error {
-  return inTransaction(func(sess *xorm.Session) error {
+  return inTransaction(func(sess *DBSession) error {
     // check if service exists
     var err error
     for _, sid := range cmd.SystemsId {
@@ -75,7 +74,7 @@ func AddSystemsUser(cmd *m.AddSystemsUserCommand) error {
 }
 
 func AddSystemDash(cmd *m.AddSystemDashboardCommand) error {
-  return inTransaction(func(sess *xorm.Session) error {
+  return inTransaction(func(sess *DBSession) error {
     if res, err := sess.Query("select 1 from system_dash where dashboard_id = ?", cmd.DashId); err != nil {
       return err
     }else if len(res) == 1 {
@@ -97,7 +96,7 @@ func AddSystemDash(cmd *m.AddSystemDashboardCommand) error {
 }
 
 func AddSystemPick(cmd *m.AddOrUpdateSystemPick) error {
-  return inTransaction(func(sess *xorm.Session) error {
+  return inTransaction(func(sess *DBSession) error {
     if res, err := sess.Query("select 1 from system_pick where user_id = ?", cmd.UserId); err != nil {
       return err
     }else if len(res) == 1 {
@@ -117,7 +116,7 @@ func AddSystemPick(cmd *m.AddOrUpdateSystemPick) error {
 }
 
 func UpdateSystems(systems *dtos.UpdateSystems) error {
-  return inTransaction2(func(sess *session) error {
+  return inTransaction(func(sess *DBSession) error {
     for _, system := range systems.System {
       if _, err := sess.Id(system.Id).Update(&system); err != nil {
         return err
@@ -129,7 +128,7 @@ func UpdateSystems(systems *dtos.UpdateSystems) error {
 
 //TODO too much thing to do
 func UpdateUserSystems(system *m.UpdateUserSystemCommond) error {
-  return inTransaction2(func(sess *session) error {
+  return inTransaction(func(sess *DBSession) error {
     if _, err := sess.Exec("update system_user set user_id=? where user_id=?", system.UserId, system.InviteCode); err != nil {
       return err
     }
@@ -138,7 +137,7 @@ func UpdateUserSystems(system *m.UpdateUserSystemCommond) error {
 }
 
 func UpdateDashSystems(system_dash *m.UpdateSystemDashboardCommand) error {
-  return inTransaction2(func(sess *session) error {
+  return inTransaction(func(sess *DBSession) error {
     if _, err := sess.Exec("update system_dash set system_id=? where dashboard_id=?", system_dash.SystemId, system_dash.DashId); err != nil {
       return err
     }
@@ -147,7 +146,7 @@ func UpdateDashSystems(system_dash *m.UpdateSystemDashboardCommand) error {
 }
 
 func UpdatePickSystem(system_pick *m.SystemPick) error {
-  return inTransaction2(func(sess *session) error {
+  return inTransaction(func(sess *DBSession) error {
     if _, err := sess.Exec("update system_pick set system_id=? where user_id=?", system_pick.SystemId, system_pick.UserId); err != nil {
       return err
     }

@@ -130,7 +130,7 @@ function (angular, moment, _) {
       var threshold = {
         warn: alertDetail.definition.alertDetails.warn.threshold,
         crit: alertDetail.definition.alertDetails.crit.threshold,
-      }
+      };
       alertMgrSrv.resetCurrentThreshold(threshold);
       alertMgrSrv.annotations = [_.extend({}, annotation_tpl, {
         min: alertDetail.status.creationTime,
@@ -154,7 +154,7 @@ function (angular, moment, _) {
       newScope.confidences = {
         '100': '非常确定',
         '50': '可能'
-      }
+      };
       newScope.rootCauseMetrics = [];
       newScope.addCause = $scope.addCause;
       newScope.removeCause = $scope.removeCause;
@@ -169,12 +169,12 @@ function (angular, moment, _) {
       var status = $scope.alertData.status;
 
       if ($scope.reason) {
-        alertMgrSrv.closeAlert(status.alertId, status.monitoredEntity, $scope.reason, contextSrv.user.name).then(function(response) {
+        alertMgrSrv.closeAlert(status.alertId, status.monitoredEntity, $scope.reason, contextSrv.user.name).then(function() {
           _.remove($scope.$parent.alertRows, function(alertDetail) {
             return (alertDetail.definition.id === status.alertId) &&  (alertDetail.status.monitoredEntity === status.monitoredEntity);
           });
           $scope.appEvent('alert-success', ['报警处理成功']);
-        }).catch(function(err) {
+        }).catch(function() {
           $scope.appEvent('alert-error', ['报警处理失败','请检查网络连接状态']);
         });
       }
@@ -198,9 +198,9 @@ function (angular, moment, _) {
         rcaFeedback.org = contextSrv.user.orgId;
         rcaFeedback.sys = contextSrv.user.systemId;
         rcaFeedback.relatedMetrics = [];
-        alertMgrSrv.rcaFeedback(rcaFeedback).then(function(response) {
+        alertMgrSrv.rcaFeedback(rcaFeedback).then(function() {
           $scope.appEvent('alert-success', ['报警根源添加成功']);
-        }, function(err) {
+        }, function() {
           $scope.appEvent('alert-error', ['报警根源添加失败']);
         });
       }
@@ -320,7 +320,7 @@ function (angular, moment, _) {
         start: alertDetail.status.levelChangedTime
       });
       $location.url(url);
-    }
+    };
 
     this.init = $scope.init;
   });

@@ -1,8 +1,8 @@
 define([
-    'angular',
-    '../core_module',
+  'angular',
+  '../core_module',
 ],
-function (angular, coreModule) {
+  function (angular, coreModule) {
     'use strict';
 
     coreModule.default.controller('SignupFreeCtrl', function ($scope, $location, backendSrv, contextSrv) {
@@ -28,4 +28,5 @@ function (angular, coreModule) {
 
       $scope.init();
     });
-  });
+  }
+);

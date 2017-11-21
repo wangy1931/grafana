@@ -1,20 +1,18 @@
-Thank you! For helping us make Grafana even better.
+Read before posting: 
 
-To help us respond to your issues faster, please make sure to add as much information as possible.
+- Questions should be posted to https://community.grafana.com. Please search there and here on GitHub for similar issues before creating a new issue. 
+- Checkout FAQ: https://community.grafana.com/c/howto/faq
+- Checkout How to troubleshoot metric query issues: https://community.grafana.com/t/how-to-troubleshoot-metric-query-issues/50
 
-If this issue is about a plugin, please open the issue in that repository.
+Please prefix your title with [Bug] or [Feature request]. 
 
-Start your issues title with [Feature Request] / [Bug] / [Question] or no tag if your unsure. Also, please be aware that GitHub now supports uploading of screenshots; look at the bottom of this input field.
-
-Please include some basic information:
-- What grafana version are you using?
+Please include this information:
+- What Grafana version are you using?
 - What datasource are you using?
 - What OS are you running grafana on?
 - What did you do?
 - What was the expected result?
-- What happenend instead?
-
-If you question/bug relates to a metric query / unexpected data visualization, please include:
-- An image or text representation of your metric query
-- The raw query and response from your data source (check this in chrome dev tools network tab)
-
+- What happened instead?
+- If related to metric query / data viz:
+  - Include raw network request & response: get by opening Chrome Dev Tools (F12, Ctrl+Shift+I on windows, Cmd+Opt+I on Mac), go the network tab.
+ 

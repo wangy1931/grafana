@@ -1,5 +1,6 @@
 ///<reference path="../../headers/common.d.ts" />
 
+import angular from 'angular';
 import config from 'app/core/config';
 import $ from 'jquery';
 import _ from 'lodash';
@@ -10,9 +11,10 @@ import * as rangeUtil from 'app/core/utils/rangeutil';
 import * as dateMath from 'app/core/utils/datemath';
 
 import {Subject} from 'vendor/npm/rxjs/Subject';
+import {metricsTabDirective} from './metrics_tab';
 
 class MetricsPanelCtrl extends PanelCtrl {
-  error: boolean;
+  scope: any;
   loading: boolean;
   datasource: any;
   datasourceName: any;
@@ -25,11 +27,14 @@ class MetricsPanelCtrl extends PanelCtrl {
   range: any;
   rangeRaw: any;
   interval: any;
+  intervalMs: any;
   resolution: any;
   timeInfo: any;
   skipDataOnInit: boolean;
   dataStream: any;
   dataSubscription: any;
+  dataList: any;
+  nextRefId: string;
 
   constructor($scope, $injector) {
     super($scope, $injector);
@@ -40,6 +45,7 @@ class MetricsPanelCtrl extends PanelCtrl {
     this.datasourceSrv = $injector.get('datasourceSrv');
     this.timeSrv = $injector.get('timeSrv');
     this.templateSrv = $injector.get('templateSrv');
+    this.scope = $scope;
 
     if (!this.panel.targets) {
       this.panel.targets = [{}];
@@ -47,12 +53,21 @@ class MetricsPanelCtrl extends PanelCtrl {
 
     this.events.on('refresh', this.onMetricsPanelRefresh.bind(this));
     this.events.on('init-edit-mode', this.onInitMetricsPanelEditMode.bind(this));
+    this.events.on('panel-teardown', this.onPanelTearDown.bind(this));
+  }
+
+  private onPanelTearDown() {
+    if (this.dataSubscription) {
+      this.dataSubscription.unsubscribe();
+      this.dataSubscription = null;
+    }
   }
 
   private onInitMetricsPanelEditMode() {
-    this.addEditorTab('指标', 'public/app/partials/metrics.html');
-    this.addEditorTab('时间区间', 'public/app/features/panel/partials/panelTime.html');
-    // this.datasources = this.datasourceSrv.getMetricSources();
+    // this.addEditorTab('指标', 'public/app/partials/metrics.html');
+    // this.addEditorTab('时间区间', 'public/app/features/panel/partials/panelTime.html');
+    this.addEditorTab('Metrics', metricsTabDirective);
+    this.addEditorTab('Time range', 'public/app/features/panel/partials/panelTime.html');
   }
 
   private onMetricsPanelRefresh() {
@@ -84,20 +99,37 @@ class MetricsPanelCtrl extends PanelCtrl {
     // load datasource service
     this.setTimeQueryStart();
     this.datasourceSrv.get(this.panel.datasource)
+    .then(this.updateTimeRange.bind(this))
     .then(this.issueQueries.bind(this))
     .then(this.handleQueryResult.bind(this))
     .then(this.saveQueryResult.bind(this))
     .catch(err => {
+      // if cancelled  keep loading set to true
+      if (err.cancelled) {
+        console.log('Panel request cancelled', err);
+        return;
+      }
+
       this.loading = false;
-      this.error = err.message || "Timeseries data request error";
+      this.error = err.message || "Request Error";
       this.inspector = {error: err};
+
+      if (err.data) {
+        if (err.data.message) {
+          this.error = err.data.message;
+        }
+        if (err.data.error) {
+          this.error = err.data.error;
+        }
+      }
+
       this.events.emit('data-error', err);
       console.log('Panel data error:', err);
     });
   }
 
+
   setTimeQueryStart() {
-    this.timing = {};
     this.timing.queryStart = new Date().getTime();
   }
 
@@ -105,9 +137,9 @@ class MetricsPanelCtrl extends PanelCtrl {
     this.timing.queryEnd = new Date().getTime();
   }
 
-  updateTimeRange() {
+  updateTimeRange(datasource?) {
+    this.datasource = datasource || this.datasource;
     this.range = this.timeSrv.timeRange();
-    this.rangeRaw = this.timeSrv.timeRange(false);
 
     this.applyPanelTimeOverrides();
 
@@ -117,10 +149,25 @@ class MetricsPanelCtrl extends PanelCtrl {
       this.resolution = Math.ceil($(window).width() * (this.panel.span / 12));
     }
 
-    var panelInterval = this.panel.interval;
-    var datasourceInterval = (this.datasource || {}).interval;
-    this.interval = kbn.calculateInterval(this.range, this.resolution, panelInterval || datasourceInterval);
-  };
+    this.calculateInterval();
+
+    return this.datasource;
+  }
+
+  calculateInterval() {
+    var intervalOverride = this.panel.interval;
+
+    // if no panel interval check datasource
+    if (intervalOverride) {
+      intervalOverride = this.templateSrv.replace(intervalOverride, this.panel.scopedVars);
+    } else if (this.datasource && this.datasource.interval) {
+      intervalOverride = this.datasource.interval;
+    }
+
+    var res = kbn.calculateInterval(this.range, this.resolution, intervalOverride);
+    this.interval = res.interval;
+    this.intervalMs = res.intervalMs;
+  }
 
   applyPanelTimeOverrides() {
     this.timeInfo = '';
@@ -134,13 +181,13 @@ class MetricsPanelCtrl extends PanelCtrl {
         return;
       }
 
-      if (_.isString(this.rangeRaw.from)) {
+      if (_.isString(this.range.raw.from)) {
         var timeFromDate = dateMath.parse(timeFromInfo.from);
         this.timeInfo = timeFromInfo.display;
-        this.rangeRaw.from = timeFromInfo.from;
-        this.rangeRaw.to = timeFromInfo.to;
         this.range.from = timeFromDate;
         this.range.to = dateMath.parse(timeFromInfo.to);
+        this.range.raw.from = timeFromInfo.from;
+        this.range.raw.to = timeFromInfo.to;
       }
     }
 
@@ -156,47 +203,53 @@ class MetricsPanelCtrl extends PanelCtrl {
       this.timeInfo += ' timeshift ' + timeShift;
       this.range.from = dateMath.parseDateMath(timeShift, this.range.from, false);
       this.range.to = dateMath.parseDateMath(timeShift, this.range.to, true);
-
-      this.rangeRaw = this.range;
+      this.range.raw = {from: this.range.from, to: this.range.to};
     }
 
-    if (this.panel.timeForward) {
-      var timeShiftInterpolated = this.templateSrv.replace(this.panel.timeForward, this.panel.scopedVars);
-      var timeShiftInfo = rangeUtil.describeTextRange(timeShiftInterpolated);
-      if (timeShiftInfo.invalid) {
-        this.timeInfo = 'invalid timeForward';
-        return;
-      }
+    // if (this.panel.timeForward) {
+    //   var timeShiftInterpolated = this.templateSrv.replace(this.panel.timeForward, this.panel.scopedVars);
+    //   var timeShiftInfo = rangeUtil.describeTextRange(timeShiftInterpolated);
+    //   if (timeShiftInfo.invalid) {
+    //     this.timeInfo = 'invalid timeForward';
+    //     return;
+    //   }
 
-      var timeForward = '+' + timeShiftInterpolated;
-      this.timeInfo += ' timeForward ' + timeForward;
-      this.range.from = dateMath.parseDateMath(timeForward, this.range.from, false);
-      this.range.to = dateMath.parseDateMath(timeForward, this.range.to, true);
+    //   var timeForward = '+' + timeShiftInterpolated;
+    //   this.timeInfo += ' timeForward ' + timeForward;
+    //   this.range.from = dateMath.parseDateMath(timeForward, this.range.from, false);
+    //   this.range.to = dateMath.parseDateMath(timeForward, this.range.to, true);
 
-      this.rangeRaw = this.range;
-    }
+    //   this.rangeRaw = this.range;
+    // }
     if (this.panel.hideTimeOverride) {
       this.timeInfo = '';
     }
-  };
+  }
 
   issueQueries(datasource) {
-    this.updateTimeRange();
     this.datasource = datasource;
 
     if (!this.panel.targets || this.panel.targets.length === 0) {
       return this.$q.when([]);
     }
 
+    // make shallow copy of scoped vars,
+    // and add built in variables interval and interval_ms
+    var scopedVars = Object.assign({}, this.panel.scopedVars, {
+      "__interval":     {text: this.interval,   value: this.interval},
+      "__interval_ms":  {text: this.intervalMs, value: this.intervalMs},
+    });
+
     var metricsQuery = {
       panelId: this.panel.id,
       range: this.range,
-      rangeRaw: this.rangeRaw,
+      rangeRaw: this.range.raw,
       interval: this.interval,
+      intervalMs: this.intervalMs,
       targets: this.panel.targets,
       format: this.panel.renderer === 'png' ? 'png' : 'json',
       maxDataPoints: this.resolution,
-      scopedVars: this.panel.scopedVars,
+      scopedVars: scopedVars,
       cacheTimeout: this.panel.cacheTimeout
     };
 
@@ -230,9 +283,12 @@ class MetricsPanelCtrl extends PanelCtrl {
       this.panel.snapshotData = result.data;
     }
 
-    this.events.emit('data-received', result.data);
+    if (!result || !result.data) {
+      console.log('Data source query result invalid, missing data field:', result);
+      result = {data: []};
+    }
 
-    return result;
+    this.events.emit('data-received', result.data);
   }
 
   handleDataStream(stream) {
@@ -257,6 +313,7 @@ class MetricsPanelCtrl extends PanelCtrl {
       },
       complete: () => {
         console.log('panel: observer got complete');
+        this.dataStream = null;
       }
     });
   }
@@ -266,7 +323,7 @@ class MetricsPanelCtrl extends PanelCtrl {
     if (datasource.meta.mixed) {
       _.each(this.panel.targets, target => {
         target.datasource = this.panel.datasource;
-        if (target.datasource === null) {
+        if (!target.datasource) {
           target.datasource = config.defaultDatasource;
         }
       });
@@ -286,6 +343,25 @@ class MetricsPanelCtrl extends PanelCtrl {
     // (this.dashboard[result.id] = result.data[0].datapoints)
     result.data && result.data[0] && this.$scope.$emit('data-saved', { id: result.id, data: result.data[0].datapoints });
     (result.id === 'logSearch') && this.$scope.$emit('data-saved', { id: 'queryHeader', data: result.config.data });
+  }
+
+  addQuery(target) {
+    target.refId = this.dashboard.getNextQueryLetter(this.panel);
+
+    this.panel.targets.push(target);
+    this.nextRefId = this.dashboard.getNextQueryLetter(this.panel);
+  }
+
+  removeQuery(target) {
+    var index = _.indexOf(this.panel.targets, target);
+    this.panel.targets.splice(index, 1);
+    this.nextRefId = this.dashboard.getNextQueryLetter(this.panel);
+    this.refresh();
+  }
+
+  moveQuery(target, direction) {
+    var index = _.indexOf(this.panel.targets, target);
+    _.move(this.panel.targets, index, index + direction);
   }
 }
 

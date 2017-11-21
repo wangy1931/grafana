@@ -1,16 +1,22 @@
 define([
   'jquery',
-  'lodash'
+  'app/core/core',
 ],
-function ($) {
+function ($, core) {
   'use strict';
+
+  var appEvents = core.appEvents;
 
   function GraphTooltip(elem, dashboard, scope, getSeriesFn) {
     var self = this;
     var ctrl = scope.ctrl;
     var panel = ctrl.panel;
 
-    var $tooltip = $('<div id="tooltip" class="graph-tooltip">');
+    var $tooltip = $('<div class="graph-tooltip">');
+
+    this.destroy = function() {
+      $tooltip.remove();
+    };
 
     this.destroy = function() {
       $tooltip.remove();
@@ -32,16 +38,25 @@ function ($) {
     };
 
     this.findHoverIndexFromData = function(posX, series) {
-      var len = series.data.length;
-      for (var j = 0; j < len; j++) {
-        if (series.data[j][0] > posX) {
-          return Math.max(j - 1,  0);
+      var lower = 0;
+      var upper = series.data.length - 1;
+      var middle;
+      while (true) {
+        if (lower > upper) {
+          return Math.max(upper, 0);
+        }
+        middle = Math.floor((lower + upper) / 2);
+        if (series.data[middle][0] === posX) {
+          return middle;
+        } else if (series.data[middle][0] < posX) {
+          lower = middle + 1;
+        } else {
+          upper = middle - 1;
         }
       }
-      return j - 1;
     };
 
-    this.showTooltip = function(absoluteTime, innerHtml, pos, xMode) {
+    this.renderAndShow = function(absoluteTime, innerHtml, pos, xMode) {
       if (xMode === 'time') {
         innerHtml = '<div class="graph-tooltip-time">'+ absoluteTime + '</div>' + innerHtml;
       }
@@ -146,22 +161,58 @@ function ($) {
           plot.unhighlight();
         }
       }
-
-      if (dashboard.sharedCrosshair) {
-        ctrl.publishAppEvent('clearCrosshair');
-      }
+      appEvents.emit('graph-hover-clear');
     });
 
     elem.bind("plothover", function (event, pos, item) {
+      self.show(pos, item);
+
+      // broadcast to other graph panels that we are hovering!
+      pos.panelRelY = (pos.pageY - elem.offset().top) / elem.height();
+      appEvents.emit('graph-hover', {pos: pos, panel: panel});
+    });
+
+    elem.bind("plotclick", function (event, pos, item) {
+      appEvents.emit('graph-click', {pos: pos, panel: panel, item: item});
+    });
+
+    this.clear = function(plot) {
+      $tooltip.detach();
+      plot.clearCrosshair();
+      plot.unhighlight();
+    };
+
+    this.show = function(pos, item) {
       var plot = elem.data().plot;
       var plotData = plot.getData();
       var xAxes = plot.getXAxes();
       var xMode = xAxes[0].options.mode;
       var seriesList = getSeriesFn();
+      var allSeriesMode = panel.tooltip.shared;
       var group, value, absoluteTime, hoverInfo, i, series, seriesHtml, tooltipFormat;
 
-      if (dashboard.sharedCrosshair) {
-        ctrl.publishAppEvent('setCrosshair', {pos: pos, scope: scope});
+      // if panelRelY is defined another panel wants us to show a tooltip
+      // get pageX from position on x axis and pageY from relative position in original panel
+      if (pos.panelRelY) {
+        var pointOffset = plot.pointOffset({x: pos.x});
+        if (Number.isNaN(pointOffset.left) || pointOffset.left < 0 || pointOffset.left > elem.width()) {
+          self.clear(plot);
+          return;
+        }
+        pos.pageX = elem.offset().left + pointOffset.left;
+        pos.pageY = elem.offset().top + elem.height() * pos.panelRelY;
+        var isVisible = pos.pageY >= $(window).scrollTop() && pos.pageY <= $(window).innerHeight() + $(window).scrollTop();
+        if (!isVisible) {
+          self.clear(plot);
+          return;
+        }
+        plot.setCrosshair(pos);
+        allSeriesMode = true;
+
+        if (dashboard.sharedCrosshairModeOnly()) {
+          // if only crosshair mode we are done
+          return;
+        }
       }
 
       if (seriesList.length === 0) {
@@ -174,7 +225,7 @@ function ($) {
         tooltipFormat = 'YYYY-MM-DD HH:mm:ss';
       }
 
-      if (panel.tooltip.shared) {
+      if (allSeriesMode) {
         plot.unhighlight();
 
         var seriesHoverInfo = self.getMultiSeriesPlotHoverInfo(plotData, pos);
@@ -217,7 +268,7 @@ function ($) {
           plot.highlight(hoverInfo.index, hoverInfo.hoverIndex);
         }
 
-        self.showTooltip(absoluteTime, seriesHtml, pos, xMode);
+        self.renderAndShow(absoluteTime, seriesHtml, pos, xMode);
       }
       // single series tooltip
       else if (item) {
@@ -238,13 +289,13 @@ function ($) {
 
         group += '<div class="graph-tooltip-value">' + value + '</div>';
 
-        self.showTooltip(absoluteTime, group, pos, xMode);
+        self.renderAndShow(absoluteTime, group, pos, xMode);
       }
       // no hit
       else {
         $tooltip.detach();
       }
-    });
+    };
   }
 
   return GraphTooltip;

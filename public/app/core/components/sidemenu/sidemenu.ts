@@ -16,14 +16,20 @@ export class SideMenuCtrl {
   submenu: any;
   $rootScope: any;
   configMenu: any;
+  loginUrl: string;
+  orgFilter: string;
+  orgItems: any;
+  orgs: any;
+  maxShownOrgs: number;
 
   /** @ngInject */
   constructor($rootScope, private $scope, private $location, private contextSrv, private backendSrv, private $element) {
     this.isSignedIn = contextSrv.isSignedIn;
     this.user = contextSrv.user;
     this.appSubUrl = config.appSubUrl;
-    this.showSignout = this.contextSrv.isSignedIn && !config['authProxyEnabled'];
-    this.mainLinks = [];
+    this.showSignout = this.contextSrv.isSignedIn && !config['disableSignoutMenu'];
+    this.maxShownOrgs = 10;
+    this.mainLinks = [];  // config.bootData.mainNavLinks;
     this.bottomLinks = [];
     this.contextSrv.setPinnedState(true);
     this.contextSrv.sidemenu = true;
@@ -37,7 +43,15 @@ export class SideMenuCtrl {
 
     this.$scope.$on('$routeChangeSuccess', () => {
       $scope.showSubmenu = false;
+
+      // this.loginUrl = 'login?redirect=' + encodeURIComponent(this.$location.path());
+      // if (!this.contextSrv.pinned) {
+      //   this.contextSrv.sidemenu = false;
+      // }
+      // this.loginUrl = 'login?redirect=' + encodeURIComponent(this.$location.path());
     });
+
+    this.orgFilter = '';
 
     $scope.updateSubmenu = (item) => {
       if (item.url) {
@@ -230,18 +244,18 @@ export class SideMenuCtrl {
       url: this.getUrl('/systems')
     });
 
-  };
+  }
 
   getUrl(url) {
     return config.appSubUrl + url;
-  };
+  }
 
   switchOrg(orgId, _self) {
     this.backendSrv.post('/api/user/using/' + orgId).then(() => {
       _self.contextSrv.sidemenu = false;
       window.location.href = this.getUrl('/systems');
     });
-  };
+  }
 
   getMsgManagementMenu() {
     var item = [];
@@ -316,7 +330,7 @@ export class SideMenuCtrl {
     });
 
     return item;
-  };
+  }
 
   getOrgsMenu(item, _self) {
     _self.backendSrv.get('/api/user/orgs').then(orgs => {
@@ -336,7 +350,7 @@ export class SideMenuCtrl {
       });
       _self.$scope.submenu = item;
     });
-  };
+  }
 
   loadDashboardList(item, _self) {
     var submenu = [];
@@ -365,7 +379,7 @@ export class SideMenuCtrl {
       src: 'public/app/partials/select_system.html',
       scope: _self.$scope.$new(),
     });
-  };
+  }
 
   updateMenu() {
     var currentPath = this.$location.path();
@@ -397,6 +411,78 @@ export class SideMenuCtrl {
       return;
     }
   };
+
+//     this.openUserDropdown();
+//     this.loginUrl = 'login?redirect=' + encodeURIComponent(this.$location.path());
+
+//     this.$scope.$on('$routeChangeSuccess', () => {
+//       if (!this.contextSrv.pinned) {
+//         this.contextSrv.sidemenu = false;
+//       }
+//       this.loginUrl = 'login?redirect=' + encodeURIComponent(this.$location.path());
+//     });
+
+//     this.orgFilter = '';
+//   }
+
+
+//  openUserDropdown() {
+//    this.orgMenu = [
+//      {section: 'You', cssClass: 'dropdown-menu-title'},
+//      {text: 'Profile', url: this.getUrl('/profile')},
+//    ];
+
+//    if (this.showSignout) {
+//      this.orgMenu.push({text: "Sign out", url: this.getUrl("/logout"), target: "_self"});
+//    }
+
+//    if (this.contextSrv.hasRole('Admin')) {
+//      this.orgMenu.push({section: this.user.orgName, cssClass: 'dropdown-menu-title'});
+//      this.orgMenu.push({
+//        text: "Preferences",
+//        url: this.getUrl("/org")
+//      });
+//      this.orgMenu.push({
+//        text: "Users",
+//        url: this.getUrl("/org/users")
+//      });
+//      this.orgMenu.push({
+//        text: "API Keys",
+//        url: this.getUrl("/org/apikeys")
+//      });
+//    }
+
+//    this.orgMenu.push({cssClass: "divider"});
+//    this.backendSrv.get('/api/user/orgs').then(orgs => {
+//      this.orgs = orgs;
+//      this.loadOrgsItems();
+//    });
+//  }
+
+//  loadOrgsItems(){
+//    this.orgItems = [];
+//    this.orgs.forEach(org => {
+//      if (org.orgId === this.contextSrv.user.orgId) {
+//        return;
+//      }
+
+//      if (this.orgItems.length === this.maxShownOrgs) {
+//        return;
+//      }
+
+//      if (this.orgFilter === '' || (org.name.toLowerCase().indexOf(this.orgFilter.toLowerCase()) !== -1)) {
+//        this.orgItems.push({
+//          text: "Switch to " + org.name,
+//          icon: "fa fa-fw fa-random",
+//          url: this.getUrl('/profile/switch-org/' + org.orgId),
+//          target: '_self'
+//        });
+//      }
+//    });
+//    if (config.allowOrgCreate) {
+//      this.orgItems.push({text: "New organization", icon: "fa fa-fw fa-plus", url: this.getUrl('/org/new')});
+//    }
+//  }
 }
 
 export function sideMenuDirective() {

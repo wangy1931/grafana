@@ -3,8 +3,8 @@ package sqlstore
 import (
 	"bytes"
 	"fmt"
+	"time"
 
-	"github.com/go-xorm/xorm"
 	"github.com/wangy1931/grafana/pkg/bus"
 	"github.com/wangy1931/grafana/pkg/metrics"
 	m "github.com/wangy1931/grafana/pkg/models"
@@ -21,10 +21,11 @@ func init() {
 	bus.AddHandler("sql", SearchDashboards)
 	bus.AddHandler("sql", GetDashboardTags)
 	bus.AddHandler("sql", GetDashboardSlugById)
+	bus.AddHandler("sql", GetDashboardsByPluginId)
 }
 
 func SaveDashboard(cmd *m.SaveDashboardCommand) error {
-	return inTransaction(func(sess *xorm.Session) error {
+	return inTransaction(func(sess *DBSession) error {
 		dash := cmd.GetDashboardModel()
 
 		// try get existing dashboard
@@ -47,6 +48,11 @@ func SaveDashboard(cmd *m.SaveDashboardCommand) error {
 					return m.ErrDashboardVersionMismatch
 				}
 			}
+
+			// do not allow plugin dashboard updates without overwrite flag
+			if existing.PluginId != "" && cmd.Overwrite == false {
+				return m.UpdatePluginDashboardError{PluginId: existing.PluginId}
+			}
 		}
 
 		sameTitleExists, err := sess.Where("org_id=? AND slug=?", dash.OrgId, dash.Slug).Get(&sameTitle)
@@ -54,6 +60,7 @@ func SaveDashboard(cmd *m.SaveDashboardCommand) error {
 			return err
 		}
 
+		// OLD
 		if sameTitleExists {
 			// another dashboard with same name
 			if dash.Id != sameTitle.Id {
@@ -65,6 +72,7 @@ func SaveDashboard(cmd *m.SaveDashboardCommand) error {
 				if dashSysId == sameSysId  {
 					if cmd.Overwrite {
 						dash.Id = sameTitle.Id
+						dash.Version = sameTitle.Version
 					} else {
 						return m.ErrDashboardWithSameNameExists
 					}
@@ -72,10 +80,26 @@ func SaveDashboard(cmd *m.SaveDashboardCommand) error {
 			}
 		}
 
+		// NEW
+		// if sameTitleExists {
+		// 	// another dashboard with same name
+		// 	if dash.Id != sameTitle.Id {
+		// 		if cmd.Overwrite {
+		// 			dash.Id = sameTitle.Id
+		// 			dash.Version = sameTitle.Version
+		// 		} else {
+		// 			return m.ErrDashboardWithSameNameExists
+		// 		}
+		// 	}
+		// }
+
+		parentVersion := dash.Version
 		affectedRows := int64(0)
 
 		if dash.Id == 0 {
-			metrics.M_Models_Dashboard_Insert.Inc(1)
+			dash.Version = 1
+			metrics.M_Api_Dashboard_Insert.Inc()
+			dash.Data.Set("version", dash.Version)
 			affectedRows, err = sess.Insert(dash)
 		} else {
 			dash.Version += 1
@@ -83,7 +107,29 @@ func SaveDashboard(cmd *m.SaveDashboardCommand) error {
 			affectedRows, err = sess.Id(dash.Id).Update(dash)
 		}
 
+		if err != nil {
+			return err
+		}
+
 		if affectedRows == 0 {
+			return m.ErrDashboardNotFound
+		}
+
+		dashVersion := &m.DashboardVersion{
+			DashboardId:   dash.Id,
+			ParentVersion: parentVersion,
+			RestoredFrom:  cmd.RestoredFrom,
+			Version:       dash.Version,
+			Created:       time.Now(),
+			CreatedBy:     dash.UpdatedBy,
+			Message:       cmd.Message,
+			Data:          dash.Data,
+		}
+
+		// insert version entry
+		if affectedRows, err = sess.Insert(dashVersion); err != nil {
+			return err
+		} else if affectedRows == 0 {
 			return m.ErrDashboardNotFound
 		}
 
@@ -110,11 +156,12 @@ func SaveDashboard(cmd *m.SaveDashboardCommand) error {
 }
 
 func GetDashboard(query *m.GetDashboardQuery) error {
+	// OLD
 	dashboards := make([]*m.Dashboard, 0)
 	sess := x.Table("dashboard")
 	sess.Where("dashboard.slug=? and dashboard.org_id=?", query.Slug, query.OrgId)
 	err :=sess.Find(&dashboards)
-
+	
 	if err != nil {
 		return err
 	}
@@ -130,11 +177,18 @@ func GetDashboard(query *m.GetDashboardQuery) error {
 		}
 	}
 
+	// NEW
+	// dashboard := m.Dashboard{Slug: query.Slug, OrgId: query.OrgId, Id: query.Id}
+	// has, err := x.Get(&dashboard)
+
+	// dashboard.Data.Set("id", dashboard.Id)
+	// query.Result = &dashboard
+
 	return nil
 }
 
 func typeSwitch(dash *simplejson.Json) (int64, error) {
-	switch system := dash.Get("system").Interface().(type) {
+	switch system:= dash.Get("system").Interface().(type) {
 	default:
 		return dash.Get("system").MustInt64(), nil
 	case string:
@@ -247,7 +301,7 @@ func GetDashboardTags(query *m.GetDashboardTagsQuery) error {
 }
 
 func DeleteDashboard(cmd *m.DeleteDashboardCommand) error {
-	return inTransaction2(func(sess *session) error {
+	return inTransaction(func(sess *DBSession) error {
 		dashboard := m.Dashboard{Slug: cmd.Slug, OrgId: cmd.OrgId}
 		has, err := sess.Get(&dashboard)
 		if err != nil {
@@ -260,6 +314,8 @@ func DeleteDashboard(cmd *m.DeleteDashboardCommand) error {
 			"DELETE FROM dashboard_tag WHERE dashboard_id = ? ",
 			"DELETE FROM star WHERE dashboard_id = ? ",
 			"DELETE FROM dashboard WHERE id = ?",
+			"DELETE FROM playlist_item WHERE type = 'dashboard_by_id' AND value = ?",
+			"DELETE FROM dashboard_version WHERE dashboard_id = ?",
 		}
 
 		for _, sql := range deletes {
@@ -267,6 +323,10 @@ func DeleteDashboard(cmd *m.DeleteDashboardCommand) error {
 			if err != nil {
 				return err
 			}
+		}
+
+		if err := DeleteAlertDefinition(dashboard.Id, sess); err != nil {
+			return nil
 		}
 
 		return nil
@@ -278,10 +338,23 @@ func GetDashboards(query *m.GetDashboardsQuery) error {
 		return m.ErrCommandValidationFailed
 	}
 
-	var dashboards = make([]m.Dashboard, 0)
+	var dashboards = make([]*m.Dashboard, 0)
 
 	err := x.In("id", query.DashboardIds).Find(&dashboards)
-	query.Result = &dashboards
+	query.Result = dashboards
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func GetDashboardsByPluginId(query *m.GetDashboardsByPluginIdQuery) error {
+	var dashboards = make([]*m.Dashboard, 0)
+
+	err := x.Where("org_id=? AND plugin_id=?", query.OrgId, query.PluginId).Find(&dashboards)
+	query.Result = dashboards
 
 	if err != nil {
 		return err

@@ -65,7 +65,7 @@ define([
               } else {
                 metric.state = "正常";
               }
-            },function(err) {
+            }, function() {
               metric.state = "尚未工作";
             });
           });

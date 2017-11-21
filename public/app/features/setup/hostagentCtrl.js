@@ -91,7 +91,7 @@ function (angular, _) {
             $scope.alertDefs = result.alertd;
             $scope.importAlerts($scope.alertDefs);
             return $scope.alertDef;
-          }).catch(function(err) {
+          }).catch(function() {
             $scope.appEvent('alert-warning', ['暂无报警规则', '请联系管理员']);
           });
           break;
@@ -102,13 +102,14 @@ function (angular, _) {
     $scope.createTemp = function(options) {
       // 添加模板
       $scope.hostDashboard = true;
+      var tmp;
       if ($scope.selected.addr === 'windows') {
-        var tmp = ["windows"];
+        tmp = ["windows"];
       } else {
-        var tmp = ["iostat","machine"];
+        tmp = ["iostat","machine"];
       }
       var promiseArr = [];
-      _.each(tmp,function(template) {
+      _.each(tmp, function(template) {
         var p = backendSrv.get('/api/static/template/'+template).then(function(result) {
           result.system = contextSrv.user.systemId;
           result.id = null;

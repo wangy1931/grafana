@@ -1,14 +1,26 @@
 package dtos
 
 type IndexViewData struct {
-	User               *CurrentUser
-	Systems		   interface{}
-	Settings           map[string]interface{}
-	AppUrl             string
-	AppSubUrl          string
-	GoogleAnalyticsId  string
-	GoogleTagManagerId string
-	MainNavLinks       []*NavLink
+	// User               *CurrentUser
+	// Systems		   interface{}
+	// Settings           map[string]interface{}
+	// AppUrl             string
+	// AppSubUrl          string
+	// GoogleAnalyticsId  string
+	// GoogleTagManagerId string
+	// MainNavLinks       []*NavLink
+	User                    *CurrentUser
+	Systems		              interface{}
+	Settings                map[string]interface{}
+	AppUrl                  string
+	AppSubUrl               string
+	GoogleAnalyticsId       string
+	GoogleTagManagerId      string
+	MainNavLinks            []*NavLink
+	BuildVersion            string
+	BuildCommit             string
+	NewGrafanaVersionExists bool
+	NewGrafanaVersion       string
 }
 
 type PluginCss struct {

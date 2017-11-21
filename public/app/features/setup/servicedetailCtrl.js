@@ -46,7 +46,7 @@ function (angular) {
       datasourceSrv.getHostStatus(queries, 'now-10m').then(function(response) {
         $scope.saveDashboard();
         $scope.detail.status = response.status > 0 ? NO_DATA : GET_DATA;
-      },function(err) {
+      }, function() {
         $scope.appEvent('alert-warning', ['服务探针未正确部署', '请检查您的探针部署信息']);
       });
     };
@@ -69,7 +69,7 @@ function (angular) {
         } else {
           $scope.appEvent('alert-warning', ['暂无报警规则', '请联系管理员']);
         }
-      }).catch(function(err) {
+      }).catch(function() {
         $scope.appEvent('alert-warning', ['暂无报警规则', '请联系管理员']);
       });
     };

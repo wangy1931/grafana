@@ -1,7 +1,6 @@
 {
   "id": null,
   "title": "Home",
-  "originalTitle": "Home",
   "tags": [],
   "style": "dark",
   "timezone": "browser",
@@ -10,6 +9,7 @@
   "sharedCrosshair": false,
   "rows": [
    {
+      "title": "Home Dashboard",
       "collapse": false,
       "editable": true,
       "height": "25px",
@@ -26,8 +26,7 @@
           "transparent": true,
           "type": "text"
         }
-      ],
-      "title": "New row"
+     ]
    },
    {
       "collapse": false,
@@ -102,6 +101,6 @@
     "list": []
   },
   "schemaVersion": 12,
-  "version": 2,
+  "version": 0,
   "links": []
 }

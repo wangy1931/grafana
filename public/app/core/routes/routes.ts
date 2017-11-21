@@ -25,6 +25,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   var loadRcaBundle = new BundleLoader('app/features/rca/all');
   var loadHostBundle = new BundleLoader('app/features/host/all');
   var loadKnowledgeBundle = new BundleLoader('app/features/knowledge/all');
+  var loadAlertingBundle = new BundleLoader('app/features/alerting/all');
 
   $routeProvider
   .when('/', {
@@ -63,11 +64,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/dashboard-solo/:type/:slug', {
     templateUrl: 'public/app/features/panel/partials/soloPanel.html',
     controller : 'SoloPanelCtrl',
-    pageClass: 'page-dashboard',
-  })
-  .when('/dashboard-import/:file', {
-    templateUrl: 'public/app/partials/dashboard.html',
-    controller : 'DashFromImportCtrl',
     reloadOnSearch: false,
     pageClass: 'page-dashboard',
   })
@@ -77,9 +73,9 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     reloadOnSearch: false,
     pageClass: 'page-dashboard',
   })
-  .when('/import/dashboard', {
-    templateUrl: 'public/app/features/dashboard/partials/import.html',
-    controller : 'DashboardImportCtrl',
+  .when('/dashboards/list', {
+    templateUrl: 'public/app/features/dashboard/partials/dash_list.html',
+    controller : 'DashListCtrl',
   })
   .when('/datasources', {
     templateUrl: 'public/app/features/plugins/partials/ds_list.html',
@@ -200,11 +196,13 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/admin', {
     templateUrl: 'public/app/features/admin/partials/admin_home.html',
     controller : 'AdminHomeCtrl',
+    controllerAs: 'ctrl',
     resolve: loadAdminBundle,
   })
   .when('/admin/settings', {
     templateUrl: 'public/app/features/admin/partials/settings.html',
     controller : 'AdminSettingsCtrl',
+    controllerAs: 'ctrl',
     resolve: loadAdminBundle,
   })
   .when('/admin/stats', {
@@ -216,6 +214,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/admin/users', {
     templateUrl: 'public/app/features/admin/partials/users.html',
     controller : 'AdminListUsersCtrl',
+    controllerAs: 'ctrl',
     resolve: loadAdminBundle,
   })
   .when('/admin/users/create', {
@@ -231,11 +230,13 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/admin/orgs', {
     templateUrl: 'public/app/features/admin/partials/orgs.html',
     controller : 'AdminListOrgsCtrl',
+    controllerAs: 'ctrl',
     resolve: loadAdminBundle,
   })
   .when('/admin/orgs/edit/:id', {
     templateUrl: 'public/app/features/admin/partials/edit_org.html',
     controller : 'AdminEditOrgCtrl',
+    controllerAs: 'ctrl',
     resolve: loadAdminBundle,
   })
   // LOGIN / SIGNUP
@@ -436,6 +437,33 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller: 'TopNCtrl',
     controllerAs: 'ctrl',
     templateUrl: 'public/app/features/topn/partials/topn.html'
+  })
+  .when('/alerting', {
+    redirectTo: '/alerting/list'
+  })
+  .when('/alerting/list', {
+    templateUrl: 'public/app/features/alerting/partials/alert_list.html',
+    controller: 'AlertListCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadAlertingBundle,
+  })
+  .when('/alerting/notifications', {
+    templateUrl: 'public/app/features/alerting/partials/notifications_list.html',
+    controller: 'AlertNotificationsListCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadAlertingBundle,
+  })
+  .when('/alerting/notification/new', {
+    templateUrl: 'public/app/features/alerting/partials/notification_edit.html',
+    controller: 'AlertNotificationEditCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadAlertingBundle,
+  })
+  .when('/alerting/notification/:id/edit', {
+    templateUrl: 'public/app/features/alerting/partials/notification_edit.html',
+    controller: 'AlertNotificationEditCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadAlertingBundle,
   })
   .otherwise({
     templateUrl: 'public/app/partials/error.html',

@@ -9,12 +9,14 @@ class StyleGuideCtrl {
   buttonNames = ['primary', 'secondary', 'inverse', 'success', 'warning', 'danger'];
   buttonSizes = ['btn-small', '', 'btn-large'];
   buttonVariants = ['-', '-outline-'];
+  icons: any = [];
   page: any;
-  pages = ['colors', 'buttons', 'forms', 'dashboard', 'query-editors', 'cloudwiz'];
+  pages = ['colors', 'buttons', 'icons', 'plugins', 'query-editors', 'cloudwiz'];
   cloudwiz: any;
 
   /** @ngInject **/
-  constructor(private $http, $routeParams) {
+  constructor(private $http, private $routeParams, private $location, private backendSrv, navModelSrv) {
+    // this.navModel = navModelSrv.getAdminNav();
     this.theme = config.bootData.user.lightTheme ? 'light': 'dark';
     this.page = {};
 
@@ -26,6 +28,10 @@ class StyleGuideCtrl {
 
     if (this.page.colors) {
       this.loadColors();
+    }
+
+    if (this.page.icons) {
+      this.loadIcons();
     }
 
     // $thresholds-color: (#66C2A5, #FEE08B, #FDAE61, #FE9805, #D53E4F, #DBE1EA, #6FCDFB);
@@ -44,9 +50,22 @@ class StyleGuideCtrl {
     });
   }
 
+  loadIcons() {
+   this.$http.get('public/sass/icons.json').then(res => {
+      this.icons = res.data;
+    });
+  }
+
   switchTheme() {
-    var other = this.theme === 'dark' ? 'light' : 'dark';
-    window.location.href = window.location.href + '?theme=' + other;
+    this.$routeParams.theme = this.theme === 'dark' ? 'light' : 'dark';
+
+    var cmd = {
+      theme: this.$routeParams.theme
+    };
+
+    this.backendSrv.put('/api/user/preferences', cmd).then(() => {
+      window.location.href = window.location.href;
+    });
   }
 
 }

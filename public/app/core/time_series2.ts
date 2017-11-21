@@ -35,6 +35,7 @@ export default class TimeSeries {
   isOutsideRange: boolean;
 
   lines: any;
+  dashes: any;
   bars: any;
   points: any;
   yaxis: any;
@@ -62,6 +63,9 @@ export default class TimeSeries {
 
   applySeriesOverrides(overrides) {
     this.lines = {};
+    this.dashes = {
+      dashLength: []
+    };
     this.points = {};
     this.bars = {};
     this.yaxis = 1;
@@ -75,11 +79,20 @@ export default class TimeSeries {
         continue;
       }
       if (override.lines !== void 0) { this.lines.show = override.lines; }
+      if (override.dashes !== void 0) {
+         this.dashes.show = override.dashes;
+         this.lines.lineWidth = 0;
+      }
       if (override.points !== void 0) { this.points.show = override.points; }
       if (override.bars !== void 0) { this.bars.show = override.bars; }
       if (override.fill !== void 0) { this.lines.fill = translateFillOption(override.fill); }
       if (override.stack !== void 0) { this.stack = override.stack; }
-      if (override.linewidth !== void 0) { this.lines.lineWidth = override.linewidth; }
+      if (override.linewidth !== void 0) {
+         this.lines.lineWidth = this.dashes.show ? 0: override.linewidth;
+         this.dashes.lineWidth = override.linewidth;
+      }
+      if (override.dashLength !== void 0) { this.dashes.dashLength[0] = override.dashLength; }
+      if (override.spaceLength !== void 0) { this.dashes.dashLength[1] = override.spaceLength; }
       if (override.nullPointMode !== void 0) { this.nullPointMode = override.nullPointMode; }
       if (override.pointradius !== void 0) { this.points.radius = override.pointradius; }
       if (override.steppedLine !== void 0) { this.lines.steps = override.steppedLine; }
@@ -94,7 +107,7 @@ export default class TimeSeries {
         this.yaxis = override.yaxis;
       }
     }
-  };
+  }
 
   getFlotPairs(fillStyle) {
     var result = [];
@@ -102,8 +115,13 @@ export default class TimeSeries {
     this.stats.total = 0;
     this.stats.max = -Number.MAX_VALUE;
     this.stats.min = Number.MAX_VALUE;
+    this.stats.logmin = Number.MAX_VALUE;
     this.stats.avg = null;
     this.stats.current = null;
+    this.stats.first = null;
+    this.stats.delta = 0;
+    this.stats.diff = null;
+    this.stats.range = null;
     this.stats.timeStep = Number.MAX_VALUE;
     this.allIsNull = true;
     this.allIsZero = true;
@@ -114,6 +132,8 @@ export default class TimeSeries {
     var currentValue;
     var nonNulls = 0;
     var previousTime;
+    var previousValue = 0;
+    var previousDeltaUp = true;
 
     for (var i = 0; i < this.datapoints.length; i++) {
       currentValue = this.datapoints[i][0];
@@ -150,10 +170,32 @@ export default class TimeSeries {
         if (currentValue < this.stats.min) {
           this.stats.min = currentValue;
         }
-      }
+        if (this.stats.first === null){
+          this.stats.first = currentValue;
+        }else{
+          if (previousValue > currentValue) {   // counter reset
+            previousDeltaUp = false;
+            if (i === this.datapoints.length-1) {  // reset on last
+                this.stats.delta += currentValue;
+            }
+          }else{
+            if (previousDeltaUp) {
+              this.stats.delta += currentValue - previousValue;    // normal increment
+            } else {
+              this.stats.delta += currentValue;   // account for counter reset
+            }
+            previousDeltaUp = true;
+          }
+        }
+        previousValue = currentValue;
 
-      if (currentValue !== 0) {
-        this.allIsZero = false;
+        if (currentValue < this.stats.logmin && currentValue > 0) {
+          this.stats.logmin = currentValue;
+        }
+
+        if (currentValue !== 0) {
+          this.allIsZero = false;
+        }
       }
 
       result.push([currentTime, currentValue]);
@@ -168,6 +210,12 @@ export default class TimeSeries {
       if (this.stats.current === null && result.length > 1) {
         this.stats.current = result[result.length-2][1];
       }
+    }
+    if (this.stats.max !== null && this.stats.min !== null) {
+      this.stats.range = this.stats.max - this.stats.min;
+    }
+    if (this.stats.current !== null && this.stats.first !== null) {
+      this.stats.diff = this.stats.current - this.stats.first;
     }
 
     this.stats.count = result.length;

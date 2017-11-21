@@ -5,6 +5,8 @@ import (
 
 	"github.com/wangy1931/grafana/pkg/bus"
 	m "github.com/wangy1931/grafana/pkg/models"
+
+	"github.com/wangy1931/grafana/pkg/setting"
 )
 
 func init() {
@@ -26,7 +28,8 @@ func GetPreferencesWithDefaults(query *m.GetPreferencesWithDefaultsQuery) error 
 	}
 
 	res := &m.Preferences{
-		Theme:           "light",
+		// Theme:           "light",
+		Theme:           setting.DefaultTheme,
 		Timezone:        "browser",
 		HomeDashboardId: 0,
 	}
@@ -66,7 +69,7 @@ func GetPreferences(query *m.GetPreferencesQuery) error {
 }
 
 func SavePreferences(cmd *m.SavePreferencesCommand) error {
-	return inTransaction2(func(sess *session) error {
+	return inTransaction(func(sess *DBSession) error {
 
 		var prefs m.Preferences
 		exists, err := sess.Where("org_id=? AND user_id=?", cmd.OrgId, cmd.UserId).Get(&prefs)

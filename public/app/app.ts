@@ -24,6 +24,7 @@ import $ from 'jquery';
 import angular from 'angular';
 import config from 'app/core/config';
 import _ from 'lodash';
+import moment from 'moment';
 import {coreModule} from './core/core';
 
 export class GrafanaApp {
@@ -49,11 +50,19 @@ export class GrafanaApp {
 
   init() {
     var app = angular.module('grafana', ['mgcrea.ngStrap', 'ngAnimate', 'ngTable']);
-    app.constant('grafanaVersion', "@grafanaVersion@");
 
-    app.config(($locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) => {
-      //$compileProvider.debugInfoEnabled(false);
-      $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|data|chrome-extension|javascript):/);
+    // moment.locale(config.bootData.user.locale);
+
+    app.config(($locationProvider, $controllerProvider, $compileProvider, $filterProvider, $httpProvider, $provide) => {
+      // pre assing bindings before constructor calls
+      $compileProvider.preAssignBindingsEnabled(true);
+      // $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|data|chrome-extension|javascript):/);
+
+      if (config.buildInfo.env !== 'development') {
+        $compileProvider.debugInfoEnabled(false);
+      }
+
+      $httpProvider.useApplyAsync(true);
 
       this.registerFunctions.controller = $controllerProvider.register;
       this.registerFunctions.directive  = $compileProvider.directive;
