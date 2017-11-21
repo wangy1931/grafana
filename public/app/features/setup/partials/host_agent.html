@@ -29,10 +29,10 @@
       <h5>* 您可以选择一键{{type}}</h5>
       <ul class="tight-form last">
         <li ng-if="selected.addr !== 'windows'" style="word-break: break-all">
-          sudo ORG_TOKEN={{token}} CLIENT_ID={{orgId}} SYSTEM_ID={{systemId}} METRIC_SERVER_HOST={{metricsServer}} ALERTD_SERVER={{alertServer}} AGENT_URL=https://download.cloudwiz.cn/agent bash -c "$(curl -kL https://download.cloudwiz.cn/agent/deploy_agent.sh)"{{updateAuto}}
+          sudo ORG_TOKEN={{token}} CLIENT_ID={{orgId}} SYSTEM_ID={{systemId}} METRIC_SERVER_HOST={{metricsServer}} ALERTD_SERVER={{alertServer}} AGENT_URL={{agentUrl}} bash -c "$(curl -kL {{agentUrl}}/deploy_agent.sh)"{{updateAuto}}
         </li>
         <li ng-if="selected.addr === 'windows'" style="word-break: break-all">
-          powershell -Command if ( !(Test-Path C:\tmp)){ new-item -path c:\  -name tmp -type directory;} Set-ExecutionPolicy unrestricted; $client = new-object System.Net.WebClient;$client.DownloadFile('https://download.cloudwiz.cn/agent/windows_deploy_agent.ps1','C:/tmp/windows_deploy_agent.ps1'); $ORG_TOKEN='{{token}}';$CLIENT_ID='{{orgId}}';$SYSTEM_ID='{{systemId}}';$METRIC_SERVER_HOST='{{metricsServer}}';$ALERTD_SERVER='{{alertServer}}';$AGENT_URL='https://download.cloudwiz.cn/agent';$ONLINE=1;$UPDATE={{updateAuto}};$OS_VERSION='{{selected.version}}';c:/tmp/windows_deploy_agent.ps1;
+          powershell -Command if ( !(Test-Path C:\tmp)){ new-item -path c:\  -name tmp -type directory;} Set-ExecutionPolicy unrestricted; $client = new-object System.Net.WebClient;$client.DownloadFile('{{agentUrl}}/windows_deploy_agent.ps1','C:/tmp/windows_deploy_agent.ps1'); $ORG_TOKEN='{{token}}';$CLIENT_ID='{{orgId}}';$SYSTEM_ID='{{systemId}}';$METRIC_SERVER_HOST='{{metricsServer}}';$ALERTD_SERVER='{{alertServer}}';$AGENT_URL='{{agentUrl}}';$ONLINE=1;$UPDATE={{updateAuto}};$OS_VERSION='{{selected.version}}';c:/tmp/windows_deploy_agent.ps1;
         </li>
       </ul>
 
@@ -47,9 +47,9 @@
         <li>
           <p style="word-break: break-all">下载相关文件</p>
           <div class="tight-form last">
-            <p style="word-break: break-all">wget https://download.cloudwiz.cn/agent/deploy_agent.sh</p>
-            <p style="word-break: break-all">wget https://download.cloudwiz.cn/agent/{{selected.addr}}/agent.tar.gz</p>
-            <p style="word-break: break-all">wget https://download.cloudwiz.cn/agent/{{selected.addr}}/agent.tar.gz.md5</p>
+            <p style="word-break: break-all">wget {{agentUrl}}/deploy_agent.sh</p>
+            <p style="word-break: break-all">wget {{agentUrl}}/{{selected.addr}}/agent.tar.gz</p>
+            <p style="word-break: break-all">wget {{agentUrl}}/{{selected.addr}}/agent.tar.gz.md5</p>
           </div>
         </li>
         <li>
@@ -69,15 +69,15 @@
         <li>
           <p style="word-break: break-all">下载相关文件至 c:/tmp/publish/windows/</p>
           <div class="tight-form last">
-            <p style="word-break: break-all"><a style="color: blue;" href="https://download.cloudwiz.cn/agent/windows_deploy_agent.ps1" download="windows_deploy_agent.ps1">windows_deploy_agent.ps1 https://download.cloudwiz.cn/agent/windows_deploy_agent.ps1;</a></p>
-            <p style="word-break: break-all"><a style="color: blue;" href="https://download.cloudwiz.cn/agent/windows/cloudwiz-agent-amd64.zip">cloudwiz-agent-amd64.zip https://download.cloudwiz.cn/agent/windows/cloudwiz-agent-amd64.zip</a></p>
+            <p style="word-break: break-all"><a style="color: blue;" href="{{agentUrl}}/windows_deploy_agent.ps1" download="windows_deploy_agent.ps1">windows_deploy_agent.ps1 {{agentUrl}}/windows_deploy_agent.ps1;</a></p>
+            <p style="word-break: break-all"><a style="color: blue;" href="{{agentUrl}}/windows/cloudwiz-agent-amd64.zip">cloudwiz-agent-amd64.zip {{agentUrl}}/windows/cloudwiz-agent-amd64.zip</a></p>
           </div>
         </li>
         <li>
           <p style="word-break: break-all">部署探针</p>
           <div class="tight-form last">
             <p style="word-break: break-all">
-              powershell -Command if ( !(Test-Path C:\tmp)){ new-item -path c:\  -name tmp -type directory;} Set-ExecutionPolicy unrestricted; $ORG_TOKEN='{{token}}';$CLIENT_ID='{{orgId}}';$SYSTEM_ID='{{systemId}}';$METRIC_SERVER_HOST='{{metricsServer}}';$ALERTD_SERVER='{{alertServer}}';$AGENT_URL='https://download.cloudwiz.cn/agent';$ONLINE=0;$UPDATE={{updateAuto}};$OS_VERSION='{{selected.version}}';c:/tmp/publish/windows/windows_deploy_agent.ps1;
+              powershell -Command if ( !(Test-Path C:\tmp)){ new-item -path c:\  -name tmp -type directory;} Set-ExecutionPolicy unrestricted; $ORG_TOKEN='{{token}}';$CLIENT_ID='{{orgId}}';$SYSTEM_ID='{{systemId}}';$METRIC_SERVER_HOST='{{metricsServer}}';$ALERTD_SERVER='{{alertServer}}';$AGENT_URL='{{agentUrl}}';$ONLINE=0;$UPDATE={{updateAuto}};$OS_VERSION='{{selected.version}}';c:/tmp/publish/windows/windows_deploy_agent.ps1;
             </p>
           </div>
         </li>
