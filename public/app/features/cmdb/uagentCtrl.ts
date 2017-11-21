@@ -171,7 +171,7 @@ export class UagentCtrl {
 
   checkCollectionValue(path, index, prop) {
     prop.value[index] = path;
-    if (path === '') {
+    if (path === '' || _.isNull(path) || _.isUndefined(path)) {
       _.remove(prop.value, (value, i) => {
         return index === i;
       });
