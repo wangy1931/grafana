@@ -348,11 +348,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'ServiceAgentCtrl',
     resolve: loadSetupBundle,
   })
-  .when('/setting/filebeat', {
-    templateUrl: 'public/app/features/setup/partials/filebeat.html',
-    controller : 'FilebeatCtrl',
-    resolve: loadSetupBundle,
-  })
   .when('/setting/proxy', {
     templateUrl: 'public/app/features/setup/partials/proxy.html',
     reloadOnSearch: false,
