@@ -272,9 +272,7 @@ function (angular, _, coreModule, config) {
     this.getHostsNum = function () {
       return this.alertD({
         method: "get",
-        url: "/summary",
-        params: {metrics:"collector.summary"},
-        headers: {'Content-Type': 'text/plain'},
+        url: "/cmdb/host"
       }).then(function (response) {
         return response.data.length;
       });
