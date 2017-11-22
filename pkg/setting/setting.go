@@ -146,7 +146,10 @@ var (
   Alert AlertSettings
 
   // ELK settings
-  ElkSource  ElkSourceSettings
+	ElkSource  ElkSourceSettings
+	
+	// Agent settings
+  Agent  AgentSettings
 )
 
 type CommandLineArgs struct {
@@ -502,7 +505,8 @@ func NewConfigContext(args *CommandLineArgs) error {
   //manual settings
   readDataSourceSettings()
   readAlertSettings()
-  readElkSourceSettings()
+	readElkSourceSettings()
+	readAgentSettings()
 
 	if VerifyEmailEnabled && !Smtp.Enabled {
 		log.Warn("require_email_validation is enabled but smpt is disabled")
