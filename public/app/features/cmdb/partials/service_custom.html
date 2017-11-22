@@ -81,6 +81,10 @@
             <li ng-repeat="host in ctrl.hostList"><a ng-click="ctrl.setHost(host)">{{host.hostname}}</a></li>
         </ul>
       </span>
+      <form class="form-search cmdb-search" ng-submit="ctrl.applySearch()">
+        <i class="fa fa-search"></i>
+        <input type="text" class="input-medium search-query" placeholder="搜索进程信息" ng-model="ctrl.searchCommand">
+      </form>
     </h2>
     <div ng-if="ctrl.hostProcess.length">
       <table ng-table="ctrl.tableParams" class="table fixed-table-container table-no-bordered">
