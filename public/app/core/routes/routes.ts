@@ -348,6 +348,10 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'ServiceAgentCtrl',
     resolve: loadSetupBundle,
   })
+  .when('/setting/log', {
+    templateUrl: 'public/app/features/setup/partials/log.html',
+    reloadOnSearch: false,
+  })
   .when('/setting/proxy', {
     templateUrl: 'public/app/features/setup/partials/proxy.html',
     reloadOnSearch: false,

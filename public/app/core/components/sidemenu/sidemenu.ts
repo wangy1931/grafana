@@ -169,6 +169,10 @@ export class SideMenuCtrl {
           url: this.getUrl("/setting/service"),
         },
         {
+          text: '配置日志服务',
+          url: this.getUrl("/setting/log"),
+        },
+        {
           text: '内网代理设置',
           url: this.getUrl("/setting/proxy"),
         },
