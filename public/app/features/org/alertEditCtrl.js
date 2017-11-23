@@ -222,6 +222,10 @@ function (angular, _) {
     };
 
     $scope.saveChanges = function() {
+      if (contextSrv.isViewer) {
+        $scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+        return;
+      }
       if($scope.checkStatus.checkForm) {
         var milliseconds = (new Date).getTime();
         if ($scope.isNew) {
