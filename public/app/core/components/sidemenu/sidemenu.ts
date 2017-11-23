@@ -74,26 +74,19 @@ export class SideMenuCtrl {
   }
 
   getMenus() {
-    var sumChildren = [
-      {
-        text: '关键指标',
-        url: this.getUrl("/")
-      },
-      {
-        text: '机器状态',
-        url: this.getUrl("/host_topology")
-      }
-    ];
-    if (!this.contextSrv.isViewer) {
-      sumChildren.push({
-        text: '创建服务依赖',
-        url: this.getUrl("/service_dependency")
-      });
-    }
     this.mainLinks.push({
       text: "系统总览",
       icon: "fa fa-fw fa-home",
-      children: sumChildren,
+      children: [
+        {
+          text: '关键指标',
+          url: this.getUrl("/")
+        },
+        {
+          text: '机器状态',
+          url: this.getUrl("/host_topology")
+        }
+      ]
     });
 
     this.mainLinks.push({
