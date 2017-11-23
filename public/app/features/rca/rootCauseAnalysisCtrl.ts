@@ -90,6 +90,7 @@ export class RootCauseAnalysisCtrl {
         },
         nodes: {
           "default": {
+            template: "tmplNode",
             events: {
               tap: (params) => {
                 this.resetGraph();
@@ -104,7 +105,9 @@ export class RootCauseAnalysisCtrl {
                 });
                 this.$location.search(searchParams);
               },
-              click: this.nodeClickHandler.bind(this)
+              click: this.nodeClickHandler.bind(this),
+              // mouseover: this.serviceNodeOverHandler.bind(this),
+              // mouseout : this.serviceNodeOutHandler.bind(this)
             }
           }
         }

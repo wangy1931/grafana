@@ -36,6 +36,7 @@ import {cwizSwitchDirective} from './components/cwiz_switch';
 import {treeMenu} from './components/tree_menu/tree_menu';
 import {knowledgeBaseDirective} from './components/knowledge_base/knowledgeBase';
 import {timeWindowDirective} from './components/time_window/time_window';
+import {elkTable} from "./components/elk_table/elk_table";
 
 import {grafanaAppDirective} from './components/grafana_app';
 import {sideMenuDirective} from './components/sidemenu/sidemenu';
@@ -82,4 +83,5 @@ export {
   knowledgeBaseDirective,
   timeWindowDirective,
   autoRefresh,
+  elkTable,
 };

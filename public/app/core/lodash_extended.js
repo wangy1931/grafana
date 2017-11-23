@@ -160,8 +160,6 @@ function ($, moment, kbn) {
     return value && ((value / Math.pow(1024, 3)).toFixed(2) + 'GB');
   };
 
-  // _.valueFormats = kbn.valueFormats;
-
   // Translate
   _.translateAlertLevel = function (value) {
     var map = {

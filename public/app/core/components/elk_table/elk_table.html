@@ -1,0 +1,53 @@
+<div
+  class="elk-table-container"
+  ng-if="hits.length"
+>
+  <div ng-if="!infiniteScroll">
+    <table class="kbn-table table" ng-if="indexPattern">
+      <thead
+        kbn-table-header
+        columns="columns"
+        index-pattern="indexPattern"
+        sort-order="sorting"
+        on-change-sort-order="onChangeSortOrder"
+        on-move-column="onMoveColumn"
+        on-remove-column="onRemoveColumn"
+      ></thead>
+      <tbody>
+        <tr ng-repeat="row in pageOfItems|limitTo:limit track by $index"
+          kbn-table-row="row"
+          columns="columns"
+          sorting="sorting"
+          index-pattern="indexPattern"
+          filter="filter"
+          filters="filters"
+          class="log-table-row"
+          on-add-column="onAddColumn"
+          on-change-sort-order="onChangeSortOrder"
+          on-remove-column="onRemoveColumn"
+        ></tr>
+      </tbody>
+    </table>
+    <!-- ToolBarFooter -->
+    <div class="elkTableBar">
+      <div class="">
+        <div
+          ng-if="shouldShowLimitedResultsWarning()"
+          class="kuiToolBarText kuiSubduedText"
+        >
+          {{ limitedResultsWarning }}
+        </div>
+        <elk-table-pager-buttons
+          on-page-change="onPageChange"
+          total-pages="pager.totalPages"
+          current-page="pager.currentPage"
+        ></elk-table-pager-buttons>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div ng-if="hits != null && !hits.length" class="table-vis-error">
+  <h2><i class="fa fa-meh-o"></i></h2>
+  <h4>No results found</h4>
+</div>

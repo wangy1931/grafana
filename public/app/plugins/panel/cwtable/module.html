@@ -1,0 +1,19 @@
+
+<div class="elk-table">
+	<elk-table
+		hits="ctrl.rows"
+		index-pattern="ctrl.indexPattern"
+		sorting="ctrl.sorting"
+		columns="ctrl.columns"
+		filter="ctrl.elkTable.filterQuery"
+		filters="ctrl.elkTable.state.filters"
+		data-title="{{ctrl.elkTable.opts.savedSearch.lastSavedTitle}}"
+		data-description="{{ctrl.elkTable.opts.savedSearch.description}}"
+		minimum-visible-rows="ctrl.elkTable.minimumVisibleRows"
+		render-counter
+		on-add-column="ctrl.elkTable.addColumn"
+		on-change-sort-order="ctrl.setSortOrder"
+		on-move-column="ctrl.elkTable.moveColumn"
+		on-remove-column="ctrl.elkTable.removeColumn"
+	></elk-table>
+</div>
