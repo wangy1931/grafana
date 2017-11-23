@@ -33,4 +33,24 @@
     </div>
   </div>
 
+  <div class="build-service-depend">
+    <div class="description" ng-if="detail">
+      <h4>结点详情</h4>
+      <p>名称：{{ detail.name }}</p>
+      <p>类型：{{ detail.type | formatRCAType }}</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th ng-repeat="(name, value) in detail.description[0]">{{ name }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="desp in detail.description">
+            <td ng-repeat="(name, value) in desp">{{ value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>

@@ -122,4 +122,10 @@ coreModule.filter('formatTimeRange', () => {
   };
 });
 
+coreModule.filter('formatRCAType', () => {
+  return (value) => {
+    return (value === 1) ? '指标' : ((value === 2) ? '日志' : '其他');
+  };
+});
+
 export default {};

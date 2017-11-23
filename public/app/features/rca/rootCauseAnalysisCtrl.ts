@@ -14,7 +14,10 @@ export class RootCauseAnalysisCtrl {
   traceList: Array<string> = [];
 
   /** @ngInject */
-  constructor(private backendSrv, private $location, private $scope, private $rootScope) {
+  constructor(
+    private backendSrv, private popoverSrv,
+    private $location, private $scope, private $rootScope
+  ) {
     this.toolkit = window.jsPlumbToolkit.newInstance();
     this.renderer = this.renderFactory();
 
@@ -75,7 +78,7 @@ export class RootCauseAnalysisCtrl {
         miniviewElement = mainElement.querySelector(".miniview");
 
     // reset canvas height
-    $(".jtk-canvas").css({ "height": window.innerHeight - 52 });
+    // $(".jtk-canvas").css({ "height": window.innerHeight - 52 });
 
     return this.toolkit.render({
       container: canvasElement,
@@ -104,10 +107,29 @@ export class RootCauseAnalysisCtrl {
                   metric: params.el.getAttribute("data-jtk-node-id")
                 });
                 this.$location.search(searchParams);
+
+                // show node details
+                this.$scope.detail = {
+                  name: params.node.data.name,
+                  type: params.node.data.type,
+                  description: []
+                };
+                if (params.node.data.desc) {
+                  try {
+                    this.$scope.detail.description = JSON.parse(params.node.data.desc);
+                  } catch (e) {
+                    this.$scope.detail.description = [
+                      { '描述': params.node.data.desc }
+                    ];
+                  }
+                } else {
+                  this.$scope.detail.description = [
+                    { '描述': params.node.data.desc }
+                  ];
+                }
+                this.$scope.$digest();
               },
               click: this.nodeClickHandler.bind(this),
-              // mouseover: this.serviceNodeOverHandler.bind(this),
-              // mouseout : this.serviceNodeOutHandler.bind(this)
             }
           }
         }
