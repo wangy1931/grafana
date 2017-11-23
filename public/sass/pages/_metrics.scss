@@ -30,6 +30,10 @@
     border-radius: 5px;
   }
 
+  div.gf-form-input {
+    border: none;
+  }
+
   select {
     margin-right: 5rem;
   }
@@ -77,5 +81,14 @@
     font-size: 1.5rem;
     text-align: center;
     line-height: 10rem;
+  }
+
+  .accordion-toggle {
+    display: flex;
+    align-items: center;
+    .metric-name {
+      margin: 0;
+      width: 1000px;
+    }
   }
 }

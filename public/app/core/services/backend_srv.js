@@ -10,6 +10,7 @@ function (angular, _, coreModule, config) {
   coreModule.default.service('backendSrv', function($http, alertSrv, $timeout, contextSrv, $q) {
     var self = this;
     this.alertDUrl;
+    this.agentUrl;
     this.tokens = null;
 
     this.get = function(url, params) {
@@ -185,6 +186,7 @@ function (angular, _, coreModule, config) {
     this.initCustomizedSources = function () {
       return this.get('/api/customized_sources').then(function (result) {
         self.alertDUrl = result.alert;
+        self.agentUrl = result.agent;
         contextSrv.elkUrl = result.elk;
       });
     };
@@ -270,9 +272,7 @@ function (angular, _, coreModule, config) {
     this.getHostsNum = function () {
       return this.alertD({
         method: "get",
-        url: "/summary",
-        params: {metrics:"collector.summary"},
-        headers: {'Content-Type': 'text/plain'},
+        url: "/cmdb/host"
       }).then(function (response) {
         return response.data.length;
       });

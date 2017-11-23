@@ -20,6 +20,7 @@ export class ServiceCustomCtrl {
   sysId: any;
   pattern: any;
   tableParams: any;
+  searchCommand: any;
 
   /** @ngInject */
   constructor(private $scope, private backendSrv, private contextSrv, private $location, private NgTableParams) {
@@ -154,6 +155,10 @@ export class ServiceCustomCtrl {
         this.$scope.appEvent('alert-success', [type + '成功']);
       }
     });
+  }
+
+  applySearch() {
+    this.tableParams.filter({ $: this.searchCommand });
   }
 }
 

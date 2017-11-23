@@ -174,7 +174,7 @@ export class SideMenuCtrl {
           },
           {
             text: '配置日志服务',
-            url: this.getUrl("/setting/filebeat"),
+            url: this.getUrl("/setting/log"),
           },
           {
             text: '内网代理设置',

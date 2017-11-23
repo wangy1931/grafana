@@ -33,7 +33,8 @@
       <div class="accordion-group" ng-repeat="metric in ctrl.metricList">
         <div class="accordion-heading">
           <a ng-click="ctrl.getDetailById(metric)" class="accordion-toggle">
-            <i class="fa" ng-class="{true: 'fa-angle-up', false: 'fa-angle-down'}[metric.id === ctrl.metricCur.id]"></i>{{metric.key}}
+            <i class="fa" ng-class="{true: 'fa-angle-up', false: 'fa-angle-down'}[metric.id === ctrl.metricCur.id]"></i>
+            <p class="text-overflow metric-name">{{metric.key}}</p>
           </a>
         </div>
         <div class="accordion-body" ng-if="metric.id === ctrl.metricCur.id">
@@ -47,7 +48,8 @@
               </div>
               <div class="gf-form">
                 <span class="gf-form-label width-7">描述</span>
-                <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.description" ng-disabled="ctrl.metricCur.disabled">
+                <div ng-if="ctrl.metricCur.disabled" class="gf-form-input">{{ctrl.metricCur.description}}</div>
+                <textarea ng-if="!ctrl.metricCur.disabled" type="text" class="gf-form-input" ng-model="ctrl.metricCur.description"></textarea>
               </div>
               <div class="gf-form">
                 <span class="gf-form-label width-7">单位</span>
