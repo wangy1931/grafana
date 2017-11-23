@@ -219,14 +219,18 @@ define([
 
         //TODO should not use index in anyway
         $scope.exclude = function (anomalyItem) {
-          var metricName = setMetricName(_.getMetricName(anomalyItem.metric), anomalyItem.host);
-          var index = _.findIndex($scope.anomalyList,{'metric': anomalyItem.metric});
-          healthSrv.exclude(anomalyItem.metric, anomalyItem.host);
-          $scope.anomalyList.splice(index,1);
-          var id = $scope.selections.indexOf(metricName);
-          if(id !== -1) {
-            $scope.removePanel(metricName);
-            $scope.selections.splice(id,1);
+          if (contextSrv.isViewer) {
+            $scope.appEvent('alert-warning', ['抱歉','您没有权限执行该操作']);
+          } else {
+            var metricName = setMetricName(_.getMetricName(anomalyItem.metric), anomalyItem.host);
+            var index = _.findIndex($scope.anomalyList,{'metric': anomalyItem.metric});
+            healthSrv.exclude(anomalyItem.metric, anomalyItem.host);
+            $scope.anomalyList.splice(index,1);
+            var id = $scope.selections.indexOf(metricName);
+            if(id !== -1) {
+              $scope.removePanel(metricName);
+              $scope.selections.splice(id,1);
+            }
           }
         };
 

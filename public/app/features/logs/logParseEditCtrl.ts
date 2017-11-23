@@ -311,6 +311,10 @@ export class LogParseEditCtrl {
   }
 
   saveRule() {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     this.rule.orgId = this.contextSrv.user.orgId;
     this.rule.sysId = this.contextSrv.user.systemId;
     if (this.checkData(this.rule)) {

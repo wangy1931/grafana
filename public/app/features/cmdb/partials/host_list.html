@@ -32,11 +32,11 @@
                 <td><p class="text-overflow" style="width: 200px;">{{host.osName}}</p></td>
                 <td>{{host.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                 <td>
-                    <a href=""><span class="cmdb-icon-text" bs-tooltip="'敬请期待'" data-placement="top">编辑</span></a>
+                    <a href="" ng-if="!contextSrv.isViewer"><span class="cmdb-icon-text" bs-tooltip="'敬请期待'" data-placement="top">编辑</span></a>
                     <a href="/cmdb/hostlist/hostdetail?id={{host.id}}">
                         <span class="cmdb-icon-text">详情</span>
                     </a>
-                    <a ng-click="deleteHost(host.id);">
+                    <a ng-if="!contextSrv.isViewer" ng-click="deleteHost(host.id);">
                         <span class="cmdb-icon-text">删除</span>
                     </a>
                 </td>

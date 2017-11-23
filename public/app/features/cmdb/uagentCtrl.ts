@@ -89,6 +89,10 @@ export class UagentCtrl {
   }
 
   showConfirm() {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     if (_.isEmpty(this.configs)) {
       this.getService()
     }
@@ -104,6 +108,10 @@ export class UagentCtrl {
   }
 
   confirmSave() {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     var url = '/cmdb/config/service';
     var param = {
       serviceName : this.serviceName,
@@ -183,6 +191,10 @@ export class UagentCtrl {
   }
 
   deleteConfig(id) {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     this.$scope.appEvent('confirm-modal', {
       title: '删除',
       text: '您确定要删除该配置吗？',
@@ -210,6 +222,10 @@ export class UagentCtrl {
   }
 
   copy(id, hosts) {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     this.$scope.appEvent('confirm-modal', {
       title: '同步',
       text: '您确定要同步该配置吗？',

@@ -20,7 +20,7 @@ export class ToolbarCtrl {
   toolbarItems: Array<any>;
 
   /** @ngInject */
-  constructor(private $rootScope, private $scope, private popoverSrv, private backendSrv, private $q, private $location) {
+  constructor(private $rootScope, private $scope, private popoverSrv, private backendSrv, private $q, private $location, private contextSrv) {
     this.toolbarItems = [];
 
     this.toolbarItems.push({
@@ -37,13 +37,16 @@ export class ToolbarCtrl {
       },
     });
 
-    this.toolbarItems.push({
-      class: '',
-      icon : 'fa fa-fw fa-cloud-download',
-      itemname: '安装指南',
-      href: '/setting/agent',
-      clickHandler: () => {},
-    });
+    if (!contextSrv.isViewer) {
+      this.toolbarItems.push({
+        class: '',
+        icon : 'fa fa-fw fa-cloud-download',
+        itemname: '安装指南',
+        href: '/setting/agent',
+        clickHandler: () => {},
+      });
+    }
+
   }
 
   showPopover() {
