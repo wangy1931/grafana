@@ -292,6 +292,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/logs', {
     templateUrl: 'public/app/features/logs/partials/logs.html',
     controller : 'LogsCtrl',
+    controllerAs: 'ctrl',
     resolve: loadLogsBundle,
   })
   .when('/logs/rules', {

@@ -1,0 +1,17 @@
+{
+  "type": "panel",
+  "name": "表格",
+  "id": "cwtable",
+
+  "info": {
+    "author": {
+      "name": "Cloudwiz Project",
+      "url": "https://www.cloudwiz.cn"
+},
+    "logos": {
+      "small": "img/icn-table-panel.svg",
+      "large": "img/icn-table-panel.svg"
+    }
+  }
+}
+

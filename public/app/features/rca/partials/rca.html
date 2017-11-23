@@ -11,11 +11,11 @@
   <div class="jtk-page-container">
     <div class="jtk-container">
 
-      <script type="jtk" id="jtk-template-default">
+      <script type="jtk" id="tmplNode">
         <div style="height: ${sigVal + 20}px;">
-          <div class="name bg-${healthType} status-color" style="height: ${sigVal}px; width: ${sigVal}px;">
+          <div class="name bg-${healthType} status-color node-type-${type}" style="height: ${sigVal}px; width: ${sigVal}px;">
           </div>
-          <div class="status-color status-${healthType}">${name}</div>
+          <div class="status-color status-${healthType} text-overflow">${name}</div>
         </div>
       </script>
 
