@@ -91,4 +91,13 @@
       width: 1000px;
     }
   }
+
+  .query-label {
+    display: flex;
+    & > label{
+      display: flex;
+      align-items: center;
+      margin-right: 2rem;
+    }
+  }
 }

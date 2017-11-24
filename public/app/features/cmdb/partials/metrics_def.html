@@ -8,24 +8,46 @@
     <form name="searchForm" class="gf-form-group">
       <div class="gf-form">
         <span class="gf-form-label width-7">指标名称</span>
-        <input type="text" class="gf-form-input max-width-16" ng-model="ctrl.query.metric">
-        <button class="btn btn-primary" ng-click="ctrl.getMetricsList(1, ctrl.query)">搜索</button>
-        <button class="btn btn-inverse" ng-click="ctrl.clearQuery()">清空搜索</button>
+        <input type="text" class="gf-form-input max-width-16" ng-model="ctrl.query.metric"
+          ng-keyup="ctrl.getSuggest(ctrl.query.metric);"
+          spellcheck='false' bs-typeahead-old="ctrl.suggestMetrics">
       </div>
-      <!-- <div class="gf-form">
+      <div class="gf-form">
         <div class="gf-form">
           <span class="gf-form-label width-7">类型</span>
-          <select class="max-width-16" ng-options="type.type for type in ctrl.typeList" ng-model="ctrl.query.type"></select>
+          <select class="max-width-16" ng-options="type.name for type in ctrl.typeList" ng-change="ctrl.changeType();" ng-model="ctrl.query.type"></select>
         </div>
         <div class="gf-form" ng-if="ctrl.query.type">
           <span class="gf-form-label width-7">子类型</span>
-          <select class="max-width-16" ng-options="subType for subType in ctrl.query.type.subType" ng-model="ctrl.query.subType"></select>
+          <select class="max-width-16" ng-options="subType.alias for subType in ctrl.query.type.software" ng-model="ctrl.query.subType"></select>
+        </div>
+      </div>
+      <div class="gf-form">
+        <span class="gf-form-label width-7">KPI</span>
+        <div class="width-16 query-label">
+          <label>
+            <input type="radio" name="kpi" ng-value=1 ng-model="ctrl.query.isKpi" checked>是
+          </label>
+          <label>
+            <input type="radio" name="kpi" ng-value=0 ng-model="ctrl.query.isKpi" checked>否
+          </label>
+        </div>
+      </div>
+      <div class="gf-form">
+        <span class="gf-form-label width-7">自定义指标</span>
+        <div class="width-16 query-label">
+          <label>
+            <input type="radio" name="custom" ng-value=true ng-model="ctrl.query.isCustom" checked>是
+          </label>
+          <label>
+            <input type="radio" name="custom" ng-value=false ng-model="ctrl.query.isCustom" checked>否
+          </label>
         </div>
       </div>
       <div class="gf-form-button-row">
-        <button class="btn btn-primary" ng-click="ctrl.search()">搜索</button>
+        <button class="btn btn-primary" ng-click="ctrl.getMetricsList(1, ctrl.query)">搜索</button>
         <button class="btn btn-inverse" ng-click="ctrl.clearQuery()">清空搜索</button>
-      </div> -->
+      </div>
     </form>
   </div>
   <div ng-if="ctrl.metricList.length">
@@ -42,14 +64,14 @@
             <form name="userForm" class="gf-form-group">
               <div class="gf-form">
                 <span class="gf-form-label width-7">类型</span>
-                <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.type" ng-disabled="true">
+                <input type="text" class="gf-form-input max-width-25" ng-model="metric.type" ng-disabled="true">
                 <span class="gf-form-label width-7">子类型</span>
-                <select ng-disabled="ctrl.metricCur.disabled" class="gf-form-input max-width-25" ng-options="subType for subType in ctrl.metricCur.subTypes" ng-model="ctrl.metricCur.subType"></select>
+                <select ng-disabled="ctrl.metricCur.disabled" class="gf-form-input max-width-25" ng-options="subType.alias for subType in ctrl.metricCur.subTypes" ng-model="ctrl.metricCur.subType"></select>
               </div>
               <div class="gf-form">
                 <span class="gf-form-label width-7">描述</span>
-                <div ng-if="ctrl.metricCur.disabled" class="gf-form-input">{{ctrl.metricCur.description}}</div>
-                <textarea ng-if="!ctrl.metricCur.disabled" type="text" class="gf-form-input" ng-model="ctrl.metricCur.description"></textarea>
+                <div ng-if="ctrl.metricCur.disabled" class="gf-form-input">{{metric.description}}</div>
+                <textarea ng-if="!ctrl.metricCur.disabled" style="overflow-x: hidden;" type="text" class="gf-form-input" ng-model="ctrl.metricCur.description"></textarea>
               </div>
               <div class="gf-form">
                 <span class="gf-form-label width-7">单位</span>
@@ -57,20 +79,29 @@
               </div>
               <div class="gf-form">
                 <span class="gf-form-label width-7">标签</span>
-                <div ng-if="ctrl.metricCur.tags">
-                  <span class="tag label" ng-repeat="tag in ctrl.metricCur.tags"> <i class="fa fa-tag"></i>{{ tag }}</span>
+                <div ng-if="metric.tags">
+                  <span class="tag label" ng-repeat="tag in metric.tags"> <i class="fa fa-tag"></i>{{ tag }}</span>
                 </div>
-                <div ng-if="!ctrl.metricCur.tags">
+                <div ng-if="!metric.tags">
                   <input type="text" class="gf-form-input max-width-25" value="暂无信息" ng-disabled="true">
                 </div>
               </div>
               <div class="gf-form">
                 <span class="gf-form-label width-7">自定义指标</span>
-                <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.customMetric" ng-disabled="true">
+                <input type="text" class="gf-form-input max-width-25" ng-model="metric.customMetric" ng-disabled="true">
               </div>
-              <div class="gf-form-button-row" ng-if="!ctrl.contextSrv.isViewer && metric.id === ctrl.metricCur.id && ctrl.metricCur.customMetric">
+              <div class="gf-form query-label">
+                <span class="gf-form-label width-7">KPI</span>
+                <label>
+                  <input type="radio" name="iskpi" ng-value=true ng-model="ctrl.metricCur.kpi" checked>是
+                </label>
+                <label>
+                  <input type="radio" name="iskpi" ng-value=false ng-model="ctrl.metricCur.kpi" checked>否
+                </label>
+              </div>
+              <div class="gf-form-button-row" ng-if="!ctrl.contextSrv.isViewer && ctrl.metricCur.customMetric || ctrl.contextSrv.isEditor">
                 <button class="btn" ng-click="ctrl.edit()" ng-show="ctrl.metricCur.disabled">编辑</button>
-                <button class="btn" ng-click="ctrl.update()" ng-show="!ctrl.metricCur.disabled">更新</button>
+                <button class="btn" ng-click="ctrl.update(metric)" ng-show="!ctrl.metricCur.disabled">更新</button>
                 <button class="btn btn-outline-inverse" ng-click="ctrl.cancel()" ng-show="!ctrl.metricCur.disabled">取消</button>
               </div>
             </form>
