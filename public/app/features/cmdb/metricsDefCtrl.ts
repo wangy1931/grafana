@@ -39,11 +39,6 @@ export class MetricsDefCtrl {
   }
 
   getMetricsList(page, query?) {
-    this.params.name && delete this.params.name;
-    this.params.type && delete this.params.type;
-    this.params.subType && delete this.params.subType;
-    delete this.params.kpi;
-    delete this.params.custom;
     if (query) {
       page = 1;
       if (query.metric) {
@@ -54,12 +49,6 @@ export class MetricsDefCtrl {
           if (query.subType) {
             this.params.subtype = query.subType.name;
           }
-        }
-        if (_.isNumber(query.isKpi)) {
-          this.params.kpi = query.isKpi;
-        }
-        if (_.isBoolean(query.isCustom)) {
-          this.params.custom = query.isCustom;
         }
       }
     } else if (page < 1) {
@@ -126,11 +115,16 @@ export class MetricsDefCtrl {
   }
 
   clearQuery() {
-    this.query = {
-      metric: '',
-      type: null,
-      subType: ''
-    };
+    if (this.query) {
+      delete this.query.metric;
+      delete this.query.type;
+      delete this.query.subType;
+    }
+    delete this.params.name;
+    delete this.params.type;
+    delete this.params.subtype;
+    delete this.params.kpi;
+    delete this.params.custom;
     this.params.page = 1;
     this.getMetricsList(this.params.page);
   }
