@@ -25,7 +25,7 @@ export class ServiceCustomCtrl {
   /** @ngInject */
   constructor(private $scope, private backendSrv, private contextSrv, private $location, private NgTableParams) {
     this.hostId = parseInt(this.$location.search().hostId) || -1;
-    this.isUnit = this.contextSrv.isGrafanaAdmin && (this.$location.search().unit === true);
+    this.isUnit = this.contextSrv.isGrafanaAdmin && this.$location.search().unit;
     if (this.isUnit) {
       this.title = '默认';
       this.orgId = 0;
