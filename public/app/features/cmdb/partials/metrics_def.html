@@ -57,6 +57,8 @@
           <a ng-click="ctrl.getDetailById(metric)" class="accordion-toggle">
             <i class="fa" ng-class="{true: 'fa-angle-up', false: 'fa-angle-down'}[metric.id === ctrl.metricCur.id]"></i>
             <p class="text-overflow metric-name">{{metric.key}}</p>
+            <span>{{metric.subType}}</span>
+            <span ng-if="metric.kpi">KPI指标</span>
           </a>
         </div>
         <div class="accordion-body" ng-if="metric.id === ctrl.metricCur.id">

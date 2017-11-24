@@ -88,7 +88,12 @@
     align-items: center;
     .metric-name {
       margin: 0;
-      width: 1000px;
+      width: 800px;
+    }
+    span {
+      display: block;
+      width: 100px;
+      margin-right: 50px;
     }
   }
 
