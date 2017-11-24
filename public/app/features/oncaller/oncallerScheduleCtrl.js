@@ -361,6 +361,10 @@ function (moment, $, angular, _, uiCalendarConfig) {
       }
     }
 
+    $scope.showSchedule = function() {
+      $scope.showScheduling = !$scope.showScheduling
+    }
+
     $scope.init();
   });
 });
