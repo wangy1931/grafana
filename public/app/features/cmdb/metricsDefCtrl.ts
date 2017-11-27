@@ -8,7 +8,6 @@ const SIZE = 15;
 export class MetricsDefCtrl {
   metricList: Array<any>;
   metricCur: any;
-  metricEdit: any;
   typeList: Array<any>;
   query: any;
   params: any;
@@ -87,22 +86,23 @@ export class MetricsDefCtrl {
 
   edit() {
     this.metricCur.disabled = false;
-    this.metricEdit = _.cloneDeep(this.metricCur);
   }
 
-  update(metric) {
-    this.metricCur.disabled = true;
+  update(metric, index) {
+    var subTypes = _.cloneDeep(this.metricCur.subTypes);
     delete this.metricCur.subTypes;
-    var tmp = this.metricCur.subType;
+    var tmp = _.cloneDeep(this.metricCur.subType);
     this.metricCur.subType = this.metricCur.subType.name;
     var params = {
       id: this.metricCur.id,
       userId: this.contextSrv.user.id
     };
     this.metricSrv.updateMetricInfo(params, this.metricCur).then((res) => {
+      this.metricCur.disabled = true;
       this.$scope.appEvent('alert-success', ['保存成功']);
-      this.metricCur.subType = tmp;
-      metric = _.cloneDeep(this.metricCur);
+      this.metricList[index] = _.cloneDeep(this.metricCur);
+      this.metricCur.subType = _.cloneDeep(tmp);
+      this.metricCur.subTypes = _.cloneDeep(subTypes);
     }, () => {
       this.cancel();
       this.$scope.appEvent('alert-danger', ['保存失败']);
@@ -110,7 +110,6 @@ export class MetricsDefCtrl {
   }
 
   cancel() {
-    this.metricCur = _.cloneDeep(this.metricEdit);
     this.metricCur.disabled = true;
   }
 

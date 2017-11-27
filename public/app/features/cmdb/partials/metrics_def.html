@@ -88,22 +88,25 @@
                   <input type="text" class="gf-form-input max-width-25" value="暂无信息" ng-disabled="true">
                 </div>
               </div>
-              <div class="gf-form">
+              <div class="gf-form query-label">
                 <span class="gf-form-label width-7">自定义指标</span>
-                <input type="text" class="gf-form-input max-width-25" ng-model="metric.customMetric" ng-disabled="true">
+                <label ng-if="metric.customMetric">是</label>
+                <label ng-if="!metric.customMetric">否</label>
               </div>
               <div class="gf-form query-label">
                 <span class="gf-form-label width-7">KPI</span>
-                <label>
+                <label ng-if="ctrl.metricCur.kpi && ctrl.metricCur.disabled">是</label>
+                <label ng-if="!ctrl.metricCur.kpi && ctrl.metricCur.disabled">否</label>
+                <label ng-if="!ctrl.metricCur.disabled">
                   <input type="radio" name="iskpi" ng-value=true ng-model="ctrl.metricCur.kpi" checked>是
                 </label>
-                <label>
+                <label ng-if="!ctrl.metricCur.disabled">
                   <input type="radio" name="iskpi" ng-value=false ng-model="ctrl.metricCur.kpi" checked>否
                 </label>
               </div>
               <div class="gf-form-button-row" ng-if="!ctrl.contextSrv.isViewer && ctrl.metricCur.customMetric || ctrl.contextSrv.isEditor">
                 <button class="btn" ng-click="ctrl.edit()" ng-show="ctrl.metricCur.disabled">编辑</button>
-                <button class="btn" ng-click="ctrl.update(metric)" ng-show="!ctrl.metricCur.disabled">更新</button>
+                <button class="btn" ng-click="ctrl.update(metric, $index)" ng-show="!ctrl.metricCur.disabled">更新</button>
                 <button class="btn btn-outline-inverse" ng-click="ctrl.cancel()" ng-show="!ctrl.metricCur.disabled">取消</button>
               </div>
             </form>
