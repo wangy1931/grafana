@@ -306,4 +306,20 @@ export class PanelCtrl {
       this.publishAppEvent('alert-warning', ['日志分析跳转失败', '可能缺少指标名']);
     }
   }
+
+  getDownsamplesMenu() {
+    var downsamples = [];
+    _.each(this.panel.downsamples, (downsample) => {
+      downsamples.push({text: 'downsample - ' + downsample + 'm', click: 'ctrl.setDownsample(' + downsample + '); dismiss();'});
+    })
+    return downsamples;
+  }
+
+  setDownsample(interval) {
+    this.panel.downsample = 'downsample - ' + interval + 'm';
+    this.panel.targets[0].downsampleInterval = interval + 'm';
+    this.$timeout(() => {
+      this.$scope.$broadcast('refresh', this.panel.id);
+    });
+  }
 }
