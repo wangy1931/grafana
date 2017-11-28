@@ -1,5 +1,5 @@
 {
-  "id": 160,
+  "id": 15,
   "title": "elasticsearch",
   "system": 0,
   "manualAnnotation": null,
@@ -12,7 +12,7 @@
   "sharedCrosshair": false,
   "rows": [
     {
-      "collapse": false,
+      "collapse": true,
       "editable": true,
       "height": "250px",
       "panels": [
@@ -58,15 +58,14 @@
             {
               "aggregator": "p99",
               "downsampleAggregator": "max",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.state",
+              "metric": "elasticsearch.milkyway.status",
               "refId": "A",
               "shouldComputeRate": false
             }
           ],
           "thresholds": "1,2",
-          "title": "Cluster Status",
+          "title": "Milkyway Status",
           "type": "singlestat",
           "valueFontSize": "80%",
           "valueMaps": [
@@ -128,34 +127,33 @@
             {
               "aggregator": "min",
               "downsampleAggregator": "min",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.node.data",
+              "metric": "elasticsearch.milkyway.node.data",
               "refId": "A"
             },
             {
               "aggregator": "min",
               "downsampleAggregator": "min",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.node.total",
+              "metric": "elasticsearch.milkyway.node.total",
               "refId": "B"
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "node.count",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -173,8 +171,7 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
+          ]
         },
         {
           "aliasColors": {},
@@ -216,58 +213,54 @@
             {
               "aggregator": "min",
               "downsampleAggregator": "min",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.shards.total",
+              "metric": "elasticsearch.milkyway.shards.total",
               "refId": "A"
             },
             {
               "aggregator": "min",
               "downsampleAggregator": "min",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.shards.primary",
+              "metric": "elasticsearch.milkyway.shards.primary",
               "refId": "B"
             },
             {
               "aggregator": "avg",
               "downsampleAggregator": "avg",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.shards.relocating",
+              "metric": "elasticsearch.milkyway.shards.relocating",
               "refId": "C"
             },
             {
               "aggregator": "avg",
               "downsampleAggregator": "avg",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.shards.initializing",
+              "metric": "elasticsearch.milkyway.shards.initializing",
               "refId": "D"
             },
             {
               "aggregator": "avg",
               "downsampleAggregator": "avg",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.shards.unassigned",
+              "metric": "elasticsearch.milkyway.shards.unassigned",
               "refId": "E"
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "shards.count",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -285,8 +278,7 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
+          ]
         },
         {
           "aliasColors": {},
@@ -330,26 +322,26 @@
               "currentTagKey": "host",
               "currentTagValue": "",
               "downsampleAggregator": "max",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.nodes.indices.index_failed",
+              "metric": "elasticsearch.milkyway.nodes.indices.index_failed",
               "refId": "A"
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "index.failed",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -367,14 +359,334 @@
               "min": null,
               "show": true
             }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "id": 23,
+          "isNew": true,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "avg",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "metric": "elasticsearch.milkyway.nodes.os.cpu_pct",
+              "refId": "A",
+              "tags": {
+                "node": "*"
+              }
+            }
           ],
-          "thresholds": []
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Cpu used percentage",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percent",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "id": 24,
+          "isNew": true,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "avg",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "metric": "elasticsearch.milkyway.nodes.jvm.heap_used_pct",
+              "refId": "A",
+              "tags": {
+                "node": "*"
+              }
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Heap used percentage",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percent",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "id": 25,
+          "isNew": true,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "avg",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "metric": "elasticsearch.milkyway.nodes.os.cpu_load",
+              "refId": "A",
+              "tags": {
+                "node": "*"
+              }
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "需要CPU的个数",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "id": 26,
+          "isNew": true,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "avg",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "metric": "elasticsearch.milkyway.nodes.os.mem_swap_used",
+              "refId": "A",
+              "tags": {
+                "node": "*"
+              }
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Swap used",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "bytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
         }
       ],
-      "title": "Row"
+      "showTitle": true,
+      "title": "summary"
     },
     {
-      "collapse": false,
+      "collapse": true,
       "editable": true,
       "height": "250px",
       "panels": [
@@ -419,30 +731,30 @@
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
-              "downsampleFillPolicy": "none",
               "downsampleInterval": "",
               "errors": {},
-              "metric": "elasticsearch.nodes.jvm.young_avg",
+              "metric": "elasticsearch.milkyway.nodes.jvm.young_avg",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "gc.young.avg (ms)",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -460,8 +772,7 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
+          ]
         },
         {
           "aliasColors": {},
@@ -504,30 +815,30 @@
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
-              "downsampleFillPolicy": "none",
               "downsampleInterval": "",
               "errors": {},
-              "metric": "elasticsearch.nodes.jvm.old_avg",
+              "metric": "elasticsearch.milkyway.nodes.jvm.old_avg",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "gc.old.avg (ms)",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -545,14 +856,14 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
+          ]
         }
       ],
-      "title": "New row"
+      "showTitle": true,
+      "title": "GC"
     },
     {
-      "collapse": false,
+      "collapse": true,
       "editable": true,
       "height": "250px",
       "panels": [
@@ -597,29 +908,29 @@
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.nodes.indices.index_avg",
+              "metric": "elasticsearch.milkyway.nodes.indices.index_avg",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "index avg (ms)",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -637,8 +948,7 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
+          ]
         },
         {
           "aliasColors": {},
@@ -681,30 +991,30 @@
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
-              "downsampleFillPolicy": "none",
               "downsampleInterval": "",
               "errors": {},
-              "metric": "elasticsearch.nodes.indices.query_avg",
+              "metric": "elasticsearch.milkyway.nodes.indices.query_avg",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "query avg (ms)",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -722,8 +1032,7 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
+          ]
         },
         {
           "aliasColors": {},
@@ -762,33 +1071,34 @@
           "steppedLine": false,
           "targets": [
             {
-              "aggregator": "p99",
+              "aggregator": "avg",
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.nodes.indices.fetch_avg",
+              "metric": "elasticsearch.milkyway.nodes.indices.fetch_avg",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "fetch avg (ms)",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -806,14 +1116,14 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
+          ]
         }
       ],
-      "title": "New row"
+      "showTitle": true,
+      "title": "Search performance"
     },
     {
-      "collapse": false,
+      "collapse": true,
       "editable": true,
       "height": "250px",
       "panels": [
@@ -860,27 +1170,28 @@
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.nodes.indices.index_current",
+              "metric": "elasticsearch.milkyway.nodes.indices.index_current",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "index current",
+          "title": "当前indexing的数量",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -898,8 +1209,7 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
+          ]
         },
         {
           "aliasColors": {},
@@ -944,27 +1254,28 @@
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.nodes.indices.query_current",
+              "metric": "elasticsearch.milkyway.nodes.indices.query_current",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "query current",
+          "title": "当前query的数量",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -982,8 +1293,259 @@
               "min": null,
               "show": true
             }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 29,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 4,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "avg",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "errors": {},
+              "metric": "elasticsearch.milkyway.nodes.indices.fetch_current",
+              "refId": "A",
+              "tags": {
+                "node": "*"
+              }
+            }
           ],
-          "thresholds": []
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "当前fetch的数量",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 27,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 4,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "avg",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "errors": {},
+              "metric": "elasticsearch.milkyway.nodes.indices.index_total",
+              "refId": "A",
+              "tags": {
+                "node": "*"
+              }
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "所有indexing的数量",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 28,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 4,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "avg",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "errors": {},
+              "metric": "elasticsearch.milkyway.nodes.indices.query_total",
+              "refId": "A",
+              "tags": {
+                "node": "*"
+              }
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "所有query的数量",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
         },
         {
           "aliasColors": {},
@@ -1028,27 +1590,28 @@
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.nodes.indices.fetch_current",
+              "metric": "elasticsearch.milkyway.nodes.indices.fetch_total",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "fetch current",
+          "title": "所有fetch的数量",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -1066,14 +1629,182 @@
               "min": null,
               "show": true
             }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 30,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 4,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "avg",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "errors": {},
+              "metric": "elasticsearch.milkyway.nodes.indices.index_failed",
+              "refId": "A",
+              "tags": {
+                "node": "*"
+              }
+            }
           ],
-          "thresholds": []
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "失败indexing的数量",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 31,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 4,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "avg",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "errors": {},
+              "metric": "elasticsearch.milkyway.nodes.indices.query_evictions",
+              "refId": "A",
+              "tags": {
+                "node": "*"
+              }
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "evicted query的数量",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
         }
       ],
-      "title": "New row"
+      "showTitle": true,
+      "title": "Indexing，query，fetch 统计"
     },
     {
-      "collapse": false,
+      "collapse": true,
       "editable": true,
       "height": "250px",
       "panels": [
@@ -1120,27 +1851,28 @@
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.nodes.thread.bulk_queue",
+              "metric": "elasticsearch.milkyway.nodes.thread.bulk_queue",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "bulk queue",
+          "title": "The number of queued threads in the bulk pool",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -1158,8 +1890,7 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
+          ]
         },
         {
           "aliasColors": {},
@@ -1202,29 +1933,29 @@
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.nodes.thread.index_queue",
+              "metric": "elasticsearch.milkyway.nodes.thread.index_queue",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "index queue",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -1242,8 +1973,7 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
+          ]
         },
         {
           "aliasColors": {},
@@ -1286,29 +2016,29 @@
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.nodes.thread.search_queue",
+              "metric": "elasticsearch.milkyway.nodes.thread.search_queue",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "search queue",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -1326,14 +2056,14 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
+          ]
         }
       ],
-      "title": "New row"
+      "showTitle": true,
+      "title": "Threads in queue"
     },
     {
-      "collapse": false,
+      "collapse": true,
       "editable": true,
       "height": "250px",
       "panels": [
@@ -1383,29 +2113,29 @@
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.nodes.indices.docs_count",
+              "metric": "elasticsearch.milkyway.nodes.indices.docs_count",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "docs count",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -1423,8 +2153,7 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
+          ]
         },
         {
           "aliasColors": {},
@@ -1472,29 +2201,29 @@
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
-              "downsampleFillPolicy": "none",
               "errors": {},
-              "metric": "elasticsearch.nodes.indices.bytes_count",
+              "metric": "elasticsearch.milkyway.nodes.indices.bytes_count",
               "refId": "A",
               "tags": {
                 "node": "*"
               }
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "bytes count",
           "tooltip": {
             "msResolution": false,
             "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
+            "sort": 0,
+            "value_type": "cumulative"
           },
           "type": "graph",
           "xaxis": {
-            "show": true,
             "mode": "time",
             "name": null,
+            "show": true,
             "values": []
           },
           "yaxes": [
@@ -1512,269 +2241,14 @@
               "min": null,
               "show": true
             }
-          ],
-          "thresholds": []
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "helpInfo": {
-            "context": "",
-            "info": false,
-            "title": ""
-          },
-          "id": 20,
-          "isNew": true,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 4,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "aggregator": "max",
-              "downsampleAggregator": "max",
-              "downsampleFillPolicy": "none",
-              "errors": {},
-              "metric": "elasticsearch.shards.relocating",
-              "refId": "A"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Number of Relocating Shards",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
-          },
-          "type": "graph",
-          "xaxis": {
-            "show": true,
-            "mode": "time",
-            "name": null,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "thresholds": []
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "helpInfo": {
-            "context": "",
-            "info": false,
-            "title": ""
-          },
-          "id": 21,
-          "isNew": true,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 4,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "aggregator": "max",
-              "downsampleAggregator": "max",
-              "downsampleFillPolicy": "none",
-              "errors": {},
-              "metric": "elasticsearch.shards.unassigned",
-              "refId": "A"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Number of Unassigned Shards",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
-          },
-          "type": "graph",
-          "xaxis": {
-            "show": true,
-            "mode": "time",
-            "name": null,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "thresholds": []
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "helpInfo": {
-            "context": "",
-            "info": false,
-            "title": ""
-          },
-          "id": 22,
-          "isNew": true,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 4,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "aggregator": "max",
-              "downsampleAggregator": "max",
-              "downsampleFillPolicy": "none",
-              "errors": {},
-              "metric": "elasticsearch.shards.initializing",
-              "refId": "A"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Number of Initializing Shards",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "value_type": "cumulative",
-            "sort": 0
-          },
-          "type": "graph",
-          "xaxis": {
-            "show": true,
-            "mode": "time",
-            "name": null,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "thresholds": []
+          ]
         }
       ],
-      "title": "New row"
+      "showTitle": true,
+      "title": "document and bytes count"
     },
     {
-      "collapse": false,
+      "collapse": true,
       "editable": true,
       "height": "250px",
       "panels": [
@@ -1793,12 +2267,97 @@
           "type": "text"
         }
       ],
-      "title": "New row"
+      "showTitle": true,
+      "title": "Kibana stats"
+    },
+    {
+      "collapse": true,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "id": 32,
+          "isNew": true,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "sum",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "downsampleInterval": "",
+              "metric": "elasticsearch.",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Panel Title",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        }
+      ],
+      "showTitle": true,
+      "title": "Flush and merge"
     }
   ],
   "time": {
-    "from": "now-15m",
-    "to": "now"
+    "from": "2017-11-08T04:01:03.722Z",
+    "to": "2017-11-08T06:15:39.615Z"
   },
   "timepicker": {
     "now": true,
@@ -1832,8 +2391,8 @@
   "annotations": {
     "list": []
   },
-  "refresh": "1m",
+  "refresh": false,
   "schemaVersion": 12,
-  "version": 4,
+  "version": 63,
   "links": []
 }

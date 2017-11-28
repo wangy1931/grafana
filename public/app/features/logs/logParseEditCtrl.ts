@@ -96,8 +96,10 @@ export class LogParseEditCtrl {
       this.rule.logTypes.push('其他');
       if (_.findIndex(this.serviceList, {name: this.rule.logServiceName}) === -1) {
         this.custom.logServiceName = this.rule.logServiceName;
-        this.custom.logType = this.rule.logType;
         this.rule.logServiceName = '其他';
+      }
+      if (_.indexOf(this.rule.logTypes, this.rule.logType) === -1) {
+        this.custom.logType = this.rule.logType;
         this.rule.logType = '其他';
       }
     });
