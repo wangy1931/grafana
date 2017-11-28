@@ -77,9 +77,6 @@ export class RootCauseAnalysisCtrl {
         canvasElement = mainElement.querySelector(`.jtk-canvas`),
         miniviewElement = mainElement.querySelector(".miniview");
 
-    // reset canvas height
-    // $(".jtk-canvas").css({ "height": window.innerHeight - 52 });
-
     return this.toolkit.render({
       container: canvasElement,
       view: {

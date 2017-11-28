@@ -114,6 +114,7 @@ export class CWTableRenderer {
           this.colorState[column.style.colorMode] = this.getColorForValue(v, column.style);
         }
 
+        // need type <number> for sorting, so do not format value
         // return valueFormatter(v, column.style.decimals, null);
 
         return v;
@@ -139,7 +140,6 @@ export class CWTableRenderer {
 
   renderCell(columnIndex, value, addWidthHack = false) {
     value = this.formatColumnValue(columnIndex, value);
-    // format cell value
   }
 
   render(page) {
@@ -148,12 +148,10 @@ export class CWTableRenderer {
     for (var y = 0; y < this.table.rows.length; y++) {
       let row = this.table.rows[y];
       let new_row = {};
-      // var obj = {};
       var columnName = '';
       for (var i = 0; i < this.table.columns.length; i++) {
-        columnName = this.table.columns[i].value
-        new_row[columnName] = this.formatColumnValue(i, row[columnName])
-        // new_row.push(obj);
+        columnName = this.table.columns[i].value;
+        new_row[columnName] = this.formatColumnValue(i, row[columnName]);
       }
       rows.push(new_row);
     }

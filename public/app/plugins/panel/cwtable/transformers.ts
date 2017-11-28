@@ -208,12 +208,7 @@ transformers['json'] = {
         if (_.isObject(dp) && panel.columns.length > 0) {
           var flattened = flatten(dp, null);
           for (z = 0; z < panel.columns.length; z++) {
-            // custom 自定义的内容
-            if (panel.columns[z].type === 'custom') {
-              values[panel.columns[z].value] = _.find(panel.custom, { value: panel.columns[z].value }).html;
-            } else {
-              values[panel.columns[z].value] = flattened[panel.columns[z].value]
-            }
+            values[panel.columns[z].value] = flattened[panel.columns[z].value];
           }
         } else {
           values[JSON.stringify(dp)] = JSON.stringify(dp);

@@ -75,7 +75,7 @@ export class SystemOverviewCtrl {
       this.toolkit.clear();
     });
 
-    // mock data
+    // default data
     this.kpiPanel = {
       leftTableHeads: ['机器名', '机器状态'],
       leftTableBodys: [

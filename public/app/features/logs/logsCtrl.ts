@@ -348,7 +348,7 @@ export class LogsCtrl {
     this.resetRow(tabId);
   }
 
-  // 懒加载 聚合&对比，只对第一次有用
+  // 准备懒加载
   logOperate(tab) {
     this.currentTab = tab;
 
