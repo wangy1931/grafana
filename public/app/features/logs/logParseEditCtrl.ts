@@ -331,6 +331,8 @@ export class LogParseEditCtrl {
           });
           if (data.logServiceName === '其他') {
             data.logServiceName = this.custom.logServiceName;
+          }
+          if (data.logType === '其他') {
             data.logType = this.custom.logType;
           }
           if (data.multiline) {
