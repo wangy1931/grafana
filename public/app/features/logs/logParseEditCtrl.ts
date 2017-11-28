@@ -360,19 +360,16 @@ export class LogParseEditCtrl {
 
   checkData(rule) {
     if (rule.logServiceName === '其他') {
-      if (_.every(this.custom)) {
-        if (!this.checkInput(this.custom.logServiceName, 'parseName')) {
-          return false;
-        }
-        if (!this.checkInput(this.custom.logType, 'logType')) {
-          return false;
-        }
-      } else {
+      if (!this.checkInput(this.custom.logServiceName, 'parseName')) {
         return false;
       }
     }
-    if (!rule.ruleName || !rule.logServiceName || !rule.logType ||
-      _.isEmpty(rule.patterns) || _.isEmpty(rule.paths) || _.isEmpty(rule.hosts)) {
+    if (rule.logType === '其他') {
+      if (!this.checkInput(this.custom.logType, 'logType')) {
+        return false;
+      }
+    }
+    if (!rule.ruleName || !rule.logServiceName || !rule.logType || _.isEmpty(rule.paths) || _.isEmpty(rule.hosts)) {
       return false;
     }
     if (!_.isBoolean(rule.multiline)) {
