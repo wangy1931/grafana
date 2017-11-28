@@ -16,7 +16,7 @@ export class RootCauseAnalysisCtrl {
   /** @ngInject */
   constructor(
     private backendSrv, private popoverSrv,
-    private $location, private $scope, private $rootScope
+    private $location, private $scope, private $rootScope, private $timeout
   ) {
     this.toolkit = window.jsPlumbToolkit.newInstance();
     this.renderer = this.renderFactory();
@@ -95,40 +95,7 @@ export class RootCauseAnalysisCtrl {
           "default": {
             template: "tmplNode",
             events: {
-              tap: (params) => {
-                this.resetGraph();
-                this.renderer.selectAllEdges({
-                  element: params.el
-                }).addClass('unselected');
-                $('.jtk-node').not(params.el).addClass('unselected');
-
-                // search
-                var searchParams = _.extend({}, this.$location.search(), {
-                  metric: params.el.getAttribute("data-jtk-node-id")
-                });
-                this.$location.search(searchParams);
-
-                // show node details
-                this.$scope.detail = {
-                  name: params.node.data.name,
-                  type: params.node.data.type,
-                  description: []
-                };
-                if (params.node.data.desc) {
-                  try {
-                    this.$scope.detail.description = JSON.parse(params.node.data.desc);
-                  } catch (e) {
-                    this.$scope.detail.description = [
-                      { '描述': params.node.data.desc }
-                    ];
-                  }
-                } else {
-                  this.$scope.detail.description = [
-                    { '描述': params.node.data.desc }
-                  ];
-                }
-                this.$scope.$digest();
-              },
+              tap: this.nodeTapHandler.bind(this),
               click: this.nodeClickHandler.bind(this),
             }
           }
@@ -211,17 +178,57 @@ export class RootCauseAnalysisCtrl {
     });
   }
 
-  showGuideResult(e, params) {
-    var selectors = $(`[data-jtk-node-id="${params.metric}"]`)
-    if (selectors.length) {
-      this.resetGraph();
-      this.renderer.selectAllEdges({
-        element: selectors[0]
-      }).addClass('unselected');
-      $('.jtk-node').not(selectors[0]).addClass('unselected');
+  nodeTapHandler(params) {
+    this.resetGraph();
+    this.renderer.selectAllEdges({
+      element: params.el
+    }).addClass('unselected');
+    $('.jtk-node').not(params.el).addClass('unselected');
 
-      selectors[0].click();
+    // search
+    var searchParams = _.extend({}, this.$location.search(), {
+      metric: params.el.getAttribute("data-jtk-node-id")
+    });
+    this.$location.search(searchParams);
+
+    // show node details
+    this.$scope.detail = {
+      name: params.node.data.name,
+      type: params.node.data.type,
+      description: []
+    };
+    if (params.node.data.desc) {
+      try {
+        this.$scope.detail.description = JSON.parse(params.node.data.desc);
+      } catch (e) {
+        this.$scope.detail.description = [
+          { '描述': params.node.data.desc }
+        ];
+      }
+    } else {
+      this.$scope.detail.description = [
+        { '描述': params.node.data.desc }
+      ];
     }
+    this.$scope.$digest();
+  }
+
+  showGuideResult(e, params) {
+    this.$timeout(() => {
+      var selectors = $(`[data-jtk-node-id="${params.metric}"]`);
+      var node = this.toolkit.getNode(params.metric);
+
+      if (selectors.length && node) {
+        this.nodeTapHandler({
+          el: selectors[0],
+          node: node
+        });
+        selectors[0].click();
+      }
+    }, 100);
+  }
+
+  showNodeDetail(node) {
   }
 };
 

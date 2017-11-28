@@ -1,6 +1,6 @@
 {
   "type": "panel",
-  "name": "表格",
+  "name": "ELK表格",
   "id": "cwtable",
 
   "info": {

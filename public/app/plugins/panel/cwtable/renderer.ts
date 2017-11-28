@@ -99,7 +99,7 @@ export class CWTableRenderer {
     }
 
     if (column.style.type === 'number') {
-      let valueFormatter = kbn.valueFormats[column.unit || column.style.unit];
+      // let valueFormatter = kbn.valueFormats[column.unit || column.style.unit];
 
       return v =>  {
         if (v === null || v === void 0) {
@@ -114,7 +114,9 @@ export class CWTableRenderer {
           this.colorState[column.style.colorMode] = this.getColorForValue(v, column.style);
         }
 
-        return valueFormatter(v, column.style.decimals, null);
+        // return valueFormatter(v, column.style.decimals, null);
+
+        return v;
       };
     }
 

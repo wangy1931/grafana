@@ -28,7 +28,7 @@
               </li>
               <li>
                   <button type="submit" class="btn btn-primary" ng-click="ctrl.reQuery()" style="margin:0 20px;"><i class="fa fa-search"></i>查找</button>
-                  <button class="btn btn-primary btn-success" ng-click="ctrl.addRCA()" ng-show="ctrl.showAddRCA" ng-disabled="!ctrl.logsSelected.length">添加根源原因</button>
+                  <button class="btn btn-primary btn-success" ng-click="ctrl.addRCA()" ng-disabled="!ctrl.logsSelected.length" ng-if="ctrl.showAddRCA">添加根源原因</button>
               </li>
               <li class="search-guide" ng-if="ctrl.showSearchGuide">
                   <i class="fa fa-times pull-right pointer" ng-click="ctrl.hideGuide()"></i>
@@ -52,13 +52,13 @@
               ng-bind="row.title | interpolateTemplateVars:this">
           </div>
 
-          <div ng-repeat="(name, panel) in row.panels track by panel.id" class="panel"  ng-if="panel.tab === graph" panel-width>
+          <div ng-repeat="(name, panel) in row.panels track by panel.id" class="panel"  ng-if="panel.type === 'graph'" panel-width>
               <plugin-component type="panel" class="panel-margin"></plugin-component>
           </div>
           <tabset>
               <tab heading="{{panel.title}}"
                    ng-repeat="(name, panel) in row.panels track by panel.id"
-                   ng-if="panel.tab != graph"
+                   ng-if="panel.type !== 'graph'"
                    active="panel.active"
                    ng-click="ctrl.logOperate($index)">
                   <ul ng-if="panel.regularResult.data[0].total">

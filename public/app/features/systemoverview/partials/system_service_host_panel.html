@@ -1,70 +1,70 @@
-<div class="accordion host-list" id="accordion0">
-    <cw-loading show="!ctrl.servicePanel.hosts.length" duration=6000></cw-loading>
-    <div class="accordion-group host-item" ng-repeat="host in ctrl.servicePanel.hosts">
-        <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion0" href="#service{{$index}}" ng-click="ctrl.selectHost($index, host.host, 'service');">
+<div class="kpi-panel-service">
+    
+    <div class="list left">
+        <cw-loading show="!ctrl.kpiPanel.leftTableBodys.length" duration=6000></cw-loading>
+        <table class="table" ng-show="ctrl.kpiPanel.leftTableBodys.length">
+            <thead>
+                <tr>
+                    <th ng-repeat="head in ctrl.kpiPanel.leftTableHeads">{{ head }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in ctrl.kpiPanel.leftTableBodys"
+                    ng-class="{ active: item.name == ctrl.kpiPanel.leftSelected }"
+                    ng-click="ctrl.leftClickHandler(item, ctrl.kpiPanel.type)">
+                    <td class="text-overflow">
+                        <div>{{ item.name }}</div>
+                    </td>
+                    <td class="">
+                        <button type="button" 
+                            class="btn-item system-status status-color bg-{{ item.status | lowercase }}">
+                            {{ item.data }}
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="panel right">
+        <div class="panel-wrapper">
+            <div class="panel-header">
                 <ul>
-                    <li class="pull-left">
-                        <i class="fa btn btn-primary" ng-class="{true: 'fa-minus', false: 'fa-plus'}[$index == ctrl.selected0]"></i>
-                    </li>
-                    <li style="padding-left: 5%; text-align: left;"
-                        class="text-overflow"
-                        ng-click="ctrl.switchPanel('host', host.host);">
-                        <button type="button" style="margin: 8px 0; padding: 2px 10px; position:relative;"
-                            class="btn-item system-status status-color bg-{{ host.healthType }}">
-                            {{ host.host }}
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" style="margin: 8px 0; padding: 2px 10px; position:relative; left: 50%; transform: translateX(-50%);"
-                            class="btn-item system-status status-color bg-{{ ctrl.hostsResource[ctrl.servicePanel.currentService.name][host.host].status | lowercase }}">
-                            {{ ctrl.hostsResource[ctrl.servicePanel.currentService.name][host.host].statusText }}
-                        </button>
-                    </li>
-                    <li>{{ host.status || '-' }}</li>
-                    <li>{{ host.cpu || '-' }}</li>
-                    <li>{{ host.mem || '-' }}</li>
-                    <li>{{ host.disk || '-' }}</li>
-                    <li>
-                        <i class="fa fa-search" ng-click="ctrl.toHostTopology(host.id, host.host)"></i>
-                    </li>
+                    <li><h4>机器名：{{ ctrl.kpiPanel.rightPanelHead.name }}</h4></li>
+                    <li class="pull-right"><button class="btn btn-primary btn-small" ng-click="ctrl.toHostTopology(ctrl.kpiPanel.rightPanelHead)">查看机器详情</button></li>
                 </ul>
-            </a>
-        </div>
-
-        <div id="service{{$index}}" class="accordion-body collapse"> <!-- ng-class="{ 'in': $index === 0 }" -->
-
-            <div class="kpi-pane accordion-inner">
-                <ul class="item-type">
-                    <li ng-repeat="(name, item) in ctrl.serviceKpiPanel.hostStatusMap[host.host].itemStatusMap"
-                        ng-click="ctrl.selectServiceKpi(host.host, item.type)"
-                        class="status-color bg-{{ item.healthStatusType | lowercase }}"
-                        style="color: #fff;"
-                        bs-tooltip="'{{ item.type | formatItemType | translateItemType }}'"
-                        data-container="body">
-                        {{ item.type | formatItemType | uppercase }}
-                    </li>
-                </ul>
-                <div>
-                    <div ng-if="host.healthStatusType !== 'GREY'">
-                        <p ng-if="ctrl.servicePanel.currentItem!=='ServiceState'" style="margin: 20px 0 0;">{{ ctrl.servicePanel.currentItem | formatItemType | translateItemType }} 重要指标：</p>
-                        <p ng-if="ctrl.servicePanel.currentItem=='ServiceState'">
-                            <span ng-if="ctrl.servicePanel.currentItemStatus=='GREEN'">服务线程正常运行</span>
-                            <span ng-if="ctrl.servicePanel.currentItemStatus!=='GREEN'">服务线程中断</span>
-                        </p>
+            </div>
+            <div class="panel-content">
+                <div class="kpi-overview">
+                    <div class="section"
+                         ng-repeat="item in ctrl.kpiPanel.rightItemTypes"
+                         ng-class="{ active: item.id == ctrl.kpiPanel.rightSelected }"
+                         ng-click="ctrl.selectKpi(item.id)">
+                        <div class="section-head">
+                            <h6>{{ item.name }}</h6>
+                        </div>
+                        <div class="section-body">
+                            <h4 class="status-color status-{{ item.status | lowercase }}">{{ item.data }}</h4>
+                        </div>
                     </div>
-                    <div ng-if="host.healthStatusType === 'GREY'">
-                        <p ng-if="ctrl.servicePanel.currentItem=='ServiceState'">
-                            <strong>探针没有收集到数据. </strong> (可能原因有: 1. 该服务探针没有 enable, 2. 探针没有正确收集数据)
-                        </p>
+                </div>
+                <div class="kpi-detail">
+                    <div ng-if="ctrl.kpiPanel.rightSelected == 'ServiceState'">
+                        <div ng-switch="ctrl.kpiPanel.rightItemTypes[ctrl.kpiPanel.rightSelected].status" class="service-state-text">
+                            <div ng-switch-when="GREEN">服务线程正常运行</div>
+                            <div ng-switch-when="YELLOW">服务线程中断</div>
+                            <div ng-switch-when="RED">服务线程中断</div>
+                            <div ng-switch-when="GREY">
+                                <strong>探针没有收集到数据. </strong> (可能原因有: 1. 该服务探针没有 enable, 2. 探针没有正确收集数据)
+                            </div>
+                        </div>
                     </div>
-                    <div ng-show="host.itemStatusMap[ctrl.servicePanel.currentItem].healthStatusType !== 'GREY'" class="kpi-metrics">
+                    <div ng-if="ctrl.kpiPanel.rightSelected != 'ServiceState'">
                         <div ng-include="'public/app/features/systemoverview/partials/service_kpi_table.html'"></div>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
+
 </div>

@@ -8,12 +8,14 @@ import 'highlight';
 import {MetricsPanelCtrl} from 'app/plugins/sdk';
 import {transformDataToTable} from './transformers';
 import {CWTableRenderer} from './renderer';
+import * as columnActions from './columns';
 
 
 class CWTablePanelCtrl extends MetricsPanelCtrl {
   static templateUrl = 'module.html';
 
   pageIndex: number;
+  pageCounts: any;
   dataRaw: any;
   table: any;
   renderer: any;
@@ -21,7 +23,6 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
   indexPattern: any;
   rows: any;
   columns: any = [];
-  sorting: any = ['@timestamp', 'desc'];
 
   panelDefaults = {
     targets: [{}],
@@ -57,10 +58,17 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
     sort: {col: 0, desc: true},
   };
 
+  pager: any;
+  pageOfItems: any = [];
+
+  hideOperator: boolean;
+  operatorType: string;
+
   /** @ngInject */
-  constructor($scope, $injector, private annotationsSrv, private $sanitize) {
+  constructor($scope, $injector, private annotationsSrv, private $sanitize, private $filter) {
     super($scope, $injector);
     this.pageIndex = 0;
+    this.pageCounts = [];
 
     if (this.panel.styles === void 0) {
       this.panel.styles = this.panel.columns;
@@ -69,37 +77,18 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
       delete this.panel.fields;
     }
 
-    // TODO UPDATE 
-    !this.panel.styles && (this.panel.styles = []);
-    // 修正接口“数值转换”的数据
-    for (var i = 0; i < this.panel.styles.length; i++) {
-      this.panel.styles[i].valueMaps === void 0 && (this.panel.styles[i].valueMaps = [{ value: '', op: '=', text: '' }]);
-    }
-
     _.defaults(this.panel, this.panelDefaults);
+
+    this.hideOperator = this.panel.operator && this.panel.operator.hide;
+    this.operatorType = !this.hideOperator && this.panel.operator.type;
 
     this.events.on('data-received', this.onDataReceived.bind(this));
     this.events.on('data-error', this.onDataError.bind(this));
     this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
     this.events.on('init-panel-actions', this.onInitPanelActions.bind(this));
-
-    $scope.$watchCollection('sorting', function (sort) {
-      if (!sort) { return; }
-      // if the searchSource doesn't know, tell it so
-      if (!angular.equals(sort, this.sorting)) {
-        this.renderPanel();
-      }
-    });
   }
 
-  setSortOrder(columnName, direction) {
-    this.sorting = [columnName, direction];
-  }
-
-  onInitPanelActions(actions) {
-    actions.push({text: '导出 CSV', click: 'ctrl.exportCsv()'});
-  }
-
+  // Query
   issueQueries(datasource) {
     this.pageIndex = 0;
 
@@ -111,6 +100,11 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
     }
 
     return super.issueQueries(datasource);
+  }
+
+  // Events callback
+  onInitPanelActions(actions) {
+    actions.push({text: '导出 CSV', click: 'ctrl.exportCsv()'});
   }
 
   onDataError(err) {
@@ -140,18 +134,28 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
     this.render();
   }
 
-  render() {
-    this.table = transformDataToTable(this.dataRaw, this.panel);
-    console.log(this.table);
-    // this.table.sort(this.panel.sort);
-
-    this.renderer = new CWTableRenderer(this.panel, this.table, this.dashboard.isTimezoneUtc(), this.$sanitize);
-    return super.render(this.table);
+  // Columns
+  isSortableColumn(columnIndex) {
+    if (!this.indexPattern || !_.isFunction(this.toggleColumnSort)) {
+      return;
+    }
+    var sortable = this.columns[columnIndex].sortable !== false;
+    return sortable;
   }
 
-  toggleColumnSort(col, colIndex) {
+  headerClass(columnIndex) {
+    if (!this.isSortableColumn(columnIndex)) { return; }
+
+    const sortOrder = this.panel.sort;
+    const defaultClass = ['fa', 'fa-sort-down', 'table-header-sortchange'];
+
+    if (!sortOrder || columnIndex !== sortOrder.col) { return defaultClass; }
+    return ['fa', sortOrder.desc === true ? 'fa-sort-down' : 'fa-sort-up'];
+  }
+
+  toggleColumnSort(colIndex) {
     // if sortable set false in column, ignore
-    if (col.sortable === false) { return; }
+    if (!this.isSortableColumn(colIndex)) { return; }
 
     // remove sort flag from current column
     if (this.table.columns[this.panel.sort.col]) {
@@ -171,25 +175,80 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
     this.render();
   }
 
+  render() {
+    this.table = transformDataToTable(this.dataRaw, this.panel);
+    this.table.sort(this.panel.sort);
+
+    this.renderer = new CWTableRenderer(this.panel, this.table, this.dashboard.isTimezoneUtc(), this.$sanitize);
+    return super.render(this.table);
+  }
+
+  /**
+   * 为特定业务加的功能
+   */
+  selectLog(row) {
+    this.$scope.$emit('select-log', _.cloneDeep(row));
+  }
+
+  expandLog(row) {
+    this.$scope.$emit('expand-log', _.cloneDeep(row));
+  }
+
   link(scope, elem, attrs, ctrl) {
     var data;
     var panel = ctrl.panel;
     var pageCount = 0;
     var formaters = [];
 
-    function appendTableRows() {
-      ctrl.renderer.setTable(data);
-      var renderedData = ctrl.renderer.render(ctrl.pageIndex);
-
+    function renderTableRows(renderedData) {
       ctrl.rows = renderedData.rows;
       ctrl.columns = renderedData.columns;
       ctrl.indexPattern = ctrl.datasource;
-      console.log(ctrl);
+    }
+
+    function renderPaginationControls(renderedData) {
+      const limitTo = ctrl.$filter('limitTo');
+      const pageSize = panel.pageSize || 100;
+      const pageCount = Math.ceil(data.rows.length / pageSize);
+      var arr = [];
+
+      for (var i = 0; i < pageCount; i++) {
+        arr[i] = i + 1;
+      }
+
+      ctrl.pageCounts = arr;
+      ctrl.pageOfItems = limitTo(renderedData.rows, pageSize, ctrl.pageIndex*pageSize);
     }
 
     function renderPanel() {
-      var $target = elem.find('.elk-table');
-      appendTableRows();
+      ctrl.renderer.setTable(data);
+      const renderedData = ctrl.renderer.render(ctrl.pageIndex);
+
+      const panelElem = elem.parents('.panel');
+      const tbodyElem = elem.find('tbody');
+      elem.css({'font-size': panel.fontSize});
+
+      renderTableRows(renderedData);
+      renderPaginationControls(renderedData);
+
+      if (panel.targets.length) {
+        panelElem._highlight(panel.targets[0].query);
+      }
+
+      tbodyElem.on('click', '.expand-showmore', expandOrCollapse);
+      tbodyElem.on('click', '.collapse-showmore', expandOrCollapse);
+    }
+
+    function expandOrCollapse(e) {
+      var el = $(e.currentTarget);
+      el.css({ 'display': 'none' });
+      el.hasClass('expand-showmore') && el.next().css({ 'display': 'inline-block' }) && el.parent().prev().css({ 'max-height': 'none' });
+      el.hasClass('collapse-showmore') && el.prev().css({ 'display': 'inline-block' }) && el.parent().prev().css({ 'max-height': '125px' });
+    }
+
+    ctrl.changePage = (pageNumber) => {
+      ctrl.pageIndex = parseInt(pageNumber) - 1;
+      renderPanel();
     }
 
     ctrl.events.on('render', function(renderData) {
@@ -199,6 +258,7 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
       }
       ctrl.renderingCompleted();
     });
+
   }
 }
 
