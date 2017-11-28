@@ -98,8 +98,8 @@ export class LogParseEditCtrl {
         this.rule.logServiceName = '其他';
       }
       if (_.indexOf(this.rule.logTypes, this.rule.logType) === -1) {
-        this.rule.logType = '其他';
         this.custom.logType = this.rule.logType;
+        this.rule.logType = '其他';
       }
     });
   }
