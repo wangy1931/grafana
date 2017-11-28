@@ -92,8 +92,7 @@ elk-table {
  * TABLE
  */
 .elk-table {
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   padding-left: 0px !important;
   padding-right: 0px !important;
 
@@ -128,6 +127,15 @@ elk-table {
   th:hover {
     .table-header-move, .table-header-sortchange {
       opacity: 1;
+    }
+  }
+
+  .table-vis-error {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    h2 i {
+      padding: 0 10px; 
     }
   }
 }
@@ -168,6 +176,7 @@ elk-table {
 }
 
 .truncate-by-height {
+  max-height: 122px;
   overflow: hidden;
 }
 

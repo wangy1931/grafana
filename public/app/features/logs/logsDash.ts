@@ -23,6 +23,10 @@ var panelMetas = [
             "value": "message"
           }
         ],
+        "operator": {
+          "hide": true,
+          "type": "checkbox"
+        },
         "datasource": "elk",
         "editable": true,
         "error": false,
@@ -75,7 +79,7 @@ var panelMetas = [
             "metrics": [
               {
                 "field": "select field",
-                "id": "1",
+                "id": 11,
                 "meta": {},
                 "settings": {},
                 "type": "raw_document"
@@ -96,19 +100,18 @@ var panelMetas = [
       {
         "columns": [
           {
-            "text": "operator",
-            "value": "operator",
-            "sortable": false,
-          },
-          {
             "text": "count",
             "value": "count"
           },
           {
             "text": "message",
             "value": "message"
-          }
+          },
         ],
+        "operator": {
+          "hide": false,
+          "type": "expand"
+        },
         "datasource": "elk",
         "editable": true,
         "error": false,
@@ -120,7 +123,7 @@ var panelMetas = [
           "title": ""
         },
         "hideTimeOverride": false,
-        "id": Math.random(),
+        "id": 2,
         "isNew": true,
         "links": [],
         "pageSize": null,
@@ -160,7 +163,7 @@ var panelMetas = [
             "metrics": [
               {
                 "field": "select field",
-                "id": Math.random(),
+                "id": 21,
                 "meta": {},
                 "settings": {},
                 "type": "raw_document"
@@ -175,7 +178,7 @@ var panelMetas = [
         "title": "聚合数据",
         "transform": "json",
         "transparent": false,
-        "type": "table",
+        "type": "cwtable",
         "tab": 2,
         "operate": "logReduce",
         "scopedVars": {
@@ -197,6 +200,10 @@ var panelMetas = [
             "value": "message"
           }
         ],
+        "operator": {
+          "hide": true,
+          "type": ""
+        },
         "datasource": "elk",
         "editable": true,
         "error": false,
@@ -206,7 +213,7 @@ var panelMetas = [
           "info": false,
           "title": ""
         },
-        "id": Math.random(),
+        "id": 3,
         "isNew": true,
         "links": [],
         "pageSize": null,
@@ -234,7 +241,7 @@ var panelMetas = [
             "metrics": [
               {
                 "field": "select field",
-                "id": Math.random(),
+                "id": 31,
                 "meta": {},
                 "settings": {},
                 "type": "raw_document"
@@ -251,7 +258,7 @@ var panelMetas = [
             "metrics": [
               {
                 "field": "select field",
-                "id": Math.random(),
+                "id": 32,
                 "meta": {},
                 "settings": {},
                 "type": "raw_document"
@@ -268,7 +275,7 @@ var panelMetas = [
         "operate": "logCompare",
         "title": "日志对比",
         "transform": "json",
-        "type": "table",
+        "type": "cwtable",
         "scopedVars": {
           "logCompare": true,
           "logFilter" : "$LOGFILTER"
@@ -293,7 +300,7 @@ var panelMetas = [
           "threshold2": null,
           "threshold2Color": "rgba(234, 112, 112, 0.22)"
         },
-        "id": 3,
+        "id": 4,
         "legend": {
           "avg": false,
           "current": false,
@@ -320,7 +327,7 @@ var panelMetas = [
             "bucketAggs": [
               {
                 "field": "@timestamp",
-                "id": "2",
+                "id": 41,
                 "settings": {
                   "interval": "auto",
                   "min_doc_count": 0
@@ -335,7 +342,7 @@ var panelMetas = [
             "metrics": [
               {
                 "field": "select field",
-                "id": "1",
+                "id": 42,
                 "type": "count"
               }
             ],

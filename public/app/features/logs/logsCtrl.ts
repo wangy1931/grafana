@@ -12,6 +12,7 @@ export class LogsCtrl {
   private currentTab: number = 0;
   private currentLogTab: number = 0;
   private panelMetas: any = logsDash.rows;
+  private logResultPanel: any = logsDash.logResultPanel;
   private logClusterPanel: any = logsDash.logClusterPanel;
   private logComparePanel: any = logsDash.logComparePanel;
   private textTitle: any;
@@ -36,7 +37,7 @@ export class LogsCtrl {
   /** @ngInject */
   constructor(
     private $scope, private $rootScope, private $modal, private $q, private $location,
-    private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv
+    private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv, private alertSrv
   ) {
     this.tabs = [
       {
@@ -66,8 +67,6 @@ export class LogsCtrl {
       { key: 'NOT', helpInfo: '联合查询' }
     ];
 
-    this.$location.search().guide && (this.showAddRCA = true);
-
     // cache repsonse data when datasource.query successed
     $scope.$on('data-saved', (event, payload) => {
       var curTabId = $scope.dashboard.rows[0].id;
@@ -78,15 +77,27 @@ export class LogsCtrl {
     });
 
     $scope.$on('select-log', (event, payload) => {
-      if (payload.checked) {
+      if (_.isEmpty(_.find(this.logsSelected, payload))) {
         this.logsSelected.push(payload);
       } else {
         _.remove(this.logsSelected, payload);
       }
     });
 
-    $scope.$on('$destroy', function() {
-      $('body').off('click', '.tab-2 tbody tr td:nth-child(2)');
+    $scope.$on('expand-log', (event, payload) => {
+      var newScope = this.$scope.$new();
+      var curTabId = this.$scope.dashboard.rows[0].id;
+
+      payload.message = _.unescape(payload.message);
+
+      newScope.bsTableData = _.find(this.resultCache[curTabId].logCluster, payload).members;
+      var clusterLogSourceModal = this.$modal({
+        scope: newScope,
+        templateUrl: 'public/app/features/logs/partials/log_cluster_modal.html',
+        show: false
+      });
+
+      clusterLogSourceModal.$promise.then(clusterLogSourceModal.show);
     });
   }
 
@@ -254,7 +265,7 @@ export class LogsCtrl {
 
   // 查询
   reQuery() {
-    var ids = [this.$scope.dashboard.rows[0].panels[this.currentTab].id, this.$scope.dashboard.row[0].panels[4].id]
+    // var ids = [this.$scope.dashboard.rows[0].panels[this.currentTab].id, this.$scope.dashboard.rows[0].panels[3].id];
     var panels = this.$scope.dashboard.rows[0].panels;
     _.forEach(panels, (panel) => {
       _.forEach(panel.targets, (target) => {
@@ -262,7 +273,7 @@ export class LogsCtrl {
       });
     });
 
-    this.$rootScope.$broadcast('refresh', ids);
+    this.$rootScope.$broadcast('refresh');
   }
 
   getLogSize(size) {
@@ -280,6 +291,11 @@ export class LogsCtrl {
 
   init() {
     var row = _.cloneDeep(this.panelMetas[0]);
+
+    // 准备懒加载
+    // row.panels[1].targets = [];
+    // row.panels[2].targets = [];
+
     row = this.fillRowData(row, {
       "\\$SIZE": this.size,
       "\\$QUERY": this.query,
@@ -287,31 +303,28 @@ export class LogsCtrl {
       "\\$LOGFILTER": this.logFilter
     });
 
+    // 是否显示添加 rca 反馈
+    if (this.$location.search().guide) {
+      this.showAddRCA = true;
+      row.panels[0].operator.hide = false;
+    }
+
+    // 初始化时间
+    var start = this.$location.search().start;
+    var initTime = { from: "now-6h", to: "now" };
+    if (start && start !== 'undefined') {
+      initTime = { from: moment(+start).add(-6, 'hour'), to: moment(+start) }
+    }
+
     this.$scope.initDashboard({
       meta: {canStar: false, canShare: false, canEdit: false, canSave: false},
       dashboard: {
         title: "日志全文搜索",
         id: "123",
         rows: [row],
-        time: { from: moment.unix(1510640070), to: moment.unix(1511331270) }
+        time: initTime,
       }
     }, this.$scope);
-
-    // 优化: 绑定事件写在 panel table render 里
-    $('body').on('click', '.tab-2 tbody tr td:nth-child(2)', function () {
-      var newScope = this.$scope.$new();
-      var cid = parseInt($(this).next().find('div:eq(0)').text());
-      var curTabId = this.$scope.dashboard.rows[0].id;
-
-      newScope.bsTableData = _.findWhere(this.resultCache[curTabId].logCluster, {'cid': cid}).members;
-      var clusterLogSourceModal = this.$modal({
-        scope: newScope,
-        templateUrl: 'public/app/features/logs/partials/log_cluster_modal.html',
-        show: false
-      });
-
-      clusterLogSourceModal.$promise.then(clusterLogSourceModal.show);
-    });
   }
 
   // 新建 日志搜索tab
@@ -331,7 +344,7 @@ export class LogsCtrl {
     if (+this.$scope.dashboard.rows[0].id === +tabId) { return; }
     this.currentLogTab = tabId;
 
-    // 优化: 当前所有数据加载完成 才允许切换
+    // TODO 优化: 当前所有数据加载完成 才允许切换
     this.resetRow(tabId);
   }
 
@@ -339,14 +352,18 @@ export class LogsCtrl {
   logOperate(tab) {
     this.currentTab = tab;
 
-    // var row = tab === 1 ? _.cloneDeep(logClusterPanel) : _.cloneDeep(logComparePanel);
-    // row = fillRowData(row, {
-    //   "\\$SIZE": $scope.size,
-    //   "\\$QUERY": $scope.query,
-    //   "\\$TIMESHIFT": $scope.timeShift,
-    //   "\\$LOGFILTER": $scope.logFilter
+    // TO FIX: 第一次不会去请求
+    // var row = tab === 0 ? _.cloneDeep(this.logResultPanel) : ((tab === 1) ?_.cloneDeep(this.logClusterPanel) : _.cloneDeep(this.logComparePanel));
+    // row = this.fillRowData(row, {
+    //   "\\$SIZE": this.size,
+    //   "\\$QUERY": this.query,
+    //   "\\$TIMESHIFT": this.timeShift,
+    //   "\\$LOGFILTER": this.logFilter
     // });
-    // $scope.dashboard.rows[0].panels[tab] = row;
+    // this.$scope.dashboard.rows[0].panels[tab] = row;
+    // this.$scope.dashboard.rows[0].panels[tab].active = true;
+
+    // this.$rootScope.$broadcast('refresh', this.$scope.dashboard.rows[0].panels[tab].id);
   }
 
   // 隐藏 搜索提示框
@@ -384,7 +401,11 @@ export class LogsCtrl {
         sys: this.contextSrv.user.systemId
       };
 
-      this.alertMgrSrv.rcaFeedback(rcaFeedback);
+      this.alertMgrSrv.rcaFeedback(rcaFeedback).then(() => {
+        this.alertSrv.set("添加成功", '', "success", 2000);
+      }, (err) => {
+        this.alertSrv.set("添加失败", err.data, "error", 2000);
+      });
     };
 
     var rcaFeedbackModal = this.$modal({

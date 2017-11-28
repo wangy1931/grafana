@@ -247,20 +247,6 @@ table.diff {
 }
 
 // hard code
-.tab-2 tbody tr td:nth-child(2) {
-  cursor: pointer;
-  i {
-    padding-left: 14px;
-  }
-}
-.tab-2 thead tr th:nth-child(3) {
-  display: none;
-}
-.tab-2 tbody tr td:nth-child(3) {
-  display: none;
-}
-
-// hard code
 .log-integrate-search-result {
   border: none;
   .nav-tabs {
