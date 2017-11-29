@@ -242,9 +242,9 @@
       "img": "",
       "info": "MySQL是一个关系型数据库管理系统，其特点为体积小、速度快、总体拥有成本低，且开放源码。",
       "deploy": [
-        "安装mysql之前请先执行一下命令：",
+        "安装mysql探针之前请先执行一下命令：",
         "bash -c \"$(curl -kL https://download.cloudwiz.cn/agent/mysql/deploy.sh)\"",
-        "(注意, 这里需要获取您的root账号密码)",
+        "(注意, 这里需要获取mysql的root账号密码)",
         "路径:  /opt/cloudwiz-agent/agent/collectors/conf/mysql.conf",
         "User: cloudwiz_user",
         "Pass: cloudwiz_pass"
@@ -814,6 +814,21 @@
       "status": -1,
       "template": "elasticsearch",
       "collectorName": "elasticsearch"
+    },{
+      "id": "docker",
+      "name": "docker",
+      "icon": "iconfont fa-docker",
+      "img": "",
+      "info": "Docker 是一个开源的应用容器引擎,可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中,然后发布到任何流行的Linux机器上,也可以实现虚拟化。",
+      "deploy": [
+        "路径: /opt/cloudwiz-agent/agent/collectors/conf/dockerd.conf",
+        "<p class='code-block'> enabled = false </p>",
+        "<p class='code-block'> interval = 60 </p>"
+      ],
+      "metrics": [],
+      "status": -1,
+      "template": "docker",
+      "collectorName": "dockerd"
     }
   ]
 }
