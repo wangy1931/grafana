@@ -242,7 +242,7 @@
       "img": "",
       "info": "MySQL是一个关系型数据库管理系统，其特点为体积小、速度快、总体拥有成本低，且开放源码。",
       "deploy": [
-        "安装mysql探针之前请先执行一下命令：",
+        "安装mysql探针之前请先执行以下命令：",
         "bash -c \"$(curl -kL https://download.cloudwiz.cn/agent/mysql/deploy.sh)\"",
         "(注意, 这里需要获取mysql的root账号密码)",
         "路径:  /opt/cloudwiz-agent/agent/collectors/conf/mysql.conf",
@@ -442,8 +442,16 @@
       "img": "img/service_tomcat.png",
       "info": "Tomcat 服务器是一个免费的开放源代码的Web 应用服务器，属于轻量级应用服务器，在中小型系统和并发访问用户不是很多的场合下被普遍使用，是开发和调试JSP 程序的首选。使用 JMX 插件来获取内部的指标，支持多个端口号的配置。",
       "deploy": [
+        "安装Tomcat探针之前请先执行以下命令：",
+        "cd /opt/cloudwiz-agent/agent/local_config/collectors/tomcat/",
+        "sudo ./deploy.sh [tomcat项目绝对路径1]:[监听端口1] [tomcat项目绝对路径2]:[监听端口2]",
+        "例如 /soft/tomcat/webapps/ 绑定的端口为8080",
+        "cd /opt/cloudwiz-agent/agent/local_config/collectors/tomcat/",
+        "sudo ./deploy.sh /soft/tomcat/webapps/:8080",
+        "修改配置文件",
         "路径：/opt/cloudwiz-agent/agent/collectors/conf/tomcat.conf",
         "Interval: 60",
+        "tomcat_version:7",
         "Protocol: http",
         "Ports: 8080, 8081  (支持一台机器多个端口号的设置 用逗号来分割)"
       ],
