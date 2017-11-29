@@ -327,7 +327,7 @@ var panelMetas = [
             "bucketAggs": [
               {
                 "field": "@timestamp",
-                "id": 41,
+                "id": "2",
                 "settings": {
                   "interval": "auto",
                   "min_doc_count": 0
@@ -342,7 +342,7 @@ var panelMetas = [
             "metrics": [
               {
                 "field": "select field",
-                "id": 42,
+                "id": "1",
                 "type": "count"
               }
             ],
