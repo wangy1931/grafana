@@ -140,6 +140,12 @@ export class MetricsDefCtrl {
   changeType() {
     this.query.subType = this.query.type.software[0];
   }
+
+  getSubtypeAlias(metric) {
+    var subtypes = _.find(this.typeList, {name: metric.type}) || {};
+    var subtype = _.find(subtypes.software, {name: metric.subType}) || {};
+    return subtype.alias || metric.subType;
+  }
 }
 
 coreModule.controller('MetricsDefCtrl', MetricsDefCtrl);
