@@ -137,8 +137,9 @@ export class MetricsDefCtrl {
     });
   }
 
-  changeType() {
-    this.query.subType = this.query.type.software[0];
+  changeType(type?) {
+    type ? this.metricCur.subTypes = _.find(this.typeList, { name: type }).software
+    : this.query.subType = this.query.type.software[0];
   }
 
   getSubtypeAlias(metric) {

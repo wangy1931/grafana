@@ -66,7 +66,7 @@
             <form name="userForm" class="gf-form-group">
               <div class="gf-form">
                 <span class="gf-form-label width-7">类型</span>
-                <input type="text" class="gf-form-input max-width-25" ng-model="metric.type" ng-disabled="true">
+                <select ng-disabled="ctrl.metricCur.disabled" class="gf-form-input max-width-25"  ng-change="ctrl.changeType(ctrl.metricCur.type);" ng-options="type.name as type.name for type in ctrl.typeList" ng-model="ctrl.metricCur.type"></select>
                 <span class="gf-form-label width-7">子类型</span>
                 <select ng-disabled="ctrl.metricCur.disabled" class="gf-form-input max-width-25" ng-options="subType.alias for subType in ctrl.metricCur.subTypes" ng-model="ctrl.metricCur.subType"></select>
               </div>
