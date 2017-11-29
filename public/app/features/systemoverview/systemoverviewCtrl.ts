@@ -330,6 +330,11 @@ export class SystemOverviewCtrl {
     this.kpiPanel.leftTableBodys = [];
 
     this.getServicesOnHost(node._private_.id).then((response) => {
+      // 机器上可能没有服务
+      if (_.isEmpty(response.data.services)) {
+        this.leftClickHandler('', 'host');
+      }
+
       _.each(response.data.services, service => {
         var q = this.getServiceStatus(service.id, service.name)
         .then(resp => {
@@ -362,7 +367,13 @@ export class SystemOverviewCtrl {
       promise = this.getHostKpi(item.name);
     }
     if (type === 'host') {
-      promise = this.getServiceKpi(item.id, item.name);
+      if (_.isEmpty(item)) {
+        promise = this.$q.when([]).then(() => {
+          this.serviceKpi = {};
+        });
+      } else {
+        promise = this.getServiceKpi(item.id, item.name);
+      }
     }
     promise.then(() => {
       this.setServiceKpiPanel(this.kpiPanel.rightPanelHead.name);
@@ -390,25 +401,35 @@ export class SystemOverviewCtrl {
   }
 
   setServiceKpiPanel(hostname) {
-    _.each(this.serviceKpi.hostStatusMap[hostname].itemStatusMap, (itemMap, itemKey) => {
-      _.extend(this.kpiPanel.rightItemTypes[itemKey], {
-        id: itemKey,
-        // name: itemKey,
-        data: _.statusFormatter(itemMap.healthStatusType),
-        status: itemMap.healthStatusType,
-        metrics: itemMap.metricStatusMap
-      });
-
-      // hard code: 如果只有 ServiceState, 没有 ServiceKPI 的情况
-      if (_.isNull(itemMap.metricStatusMap)) {
-        _.extend(this.kpiPanel.rightItemTypes['ServiceKPI'], {
-          id: 'ServiceKPI',
-          data: _.statusFormatter('GREEN'),
-          status: 'GREEN',
+    if (_.isEmpty(this.serviceKpi)) {
+      ['ServiceKPI', 'ServiceState'].forEach(item => {
+        _.extend(this.kpiPanel.rightItemTypes[item], {
+          id: item,
+          data: '暂无',
+          status: 'GREY',
           metrics: null
         });
-      }
-    });
+      });
+    } else {
+      _.each(this.serviceKpi.hostStatusMap[hostname].itemStatusMap, (itemMap, itemKey) => {
+        _.extend(this.kpiPanel.rightItemTypes[itemKey], {
+          id: itemKey,
+          data: _.statusFormatter(itemMap.healthStatusType),
+          status: itemMap.healthStatusType,
+          metrics: itemMap.metricStatusMap
+        });
+
+        // hard code: 如果只有 ServiceState, 没有 ServiceKPI 的情况
+        if (_.isNull(itemMap.metricStatusMap)) {
+          _.extend(this.kpiPanel.rightItemTypes['ServiceKPI'], {
+            id: 'ServiceKPI',
+            data: _.statusFormatter('GREEN'),
+            status: 'GREEN',
+            metrics: null
+          });
+        }
+      });
+    }
   }
 
   getHostKpi(hostname) {
