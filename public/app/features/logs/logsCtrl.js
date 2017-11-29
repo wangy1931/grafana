@@ -40,6 +40,7 @@ define([
       var logComparePanel = logsDash.logComparePanel;
 
       $scope.tabsCache = {};
+      $scope.tabsFiled = {};
       $scope.resultCache = {};
       $scope.selectedCompare = [];
       $scope.tabs = [
@@ -254,6 +255,9 @@ define([
         $scope.resultCache[curTabId][payload.id] = payload.data;
 
         saveCurQueryInfo(curTabId);
+        if (payload.id === 'logSearch') {
+          getFiled(payload.data);
+        }
       });
 
       // 新建 日志搜索tab
@@ -337,6 +341,32 @@ define([
         list[0] = _.sortBy(list[0], ['timestamp']);
         list[1] = _.sortBy(list[1], ['timestamp']);
         return list;
+      }
+
+      function getFiled(filedData) {
+        $scope.tabsFiled[$scope.dashboard.rows[0].id] = [];
+        var filed = filedData ? filedData[0] : {};
+        _.each(filed, function(value, key) {
+          var obj = {text: key, value: key};
+          $scope.tabsFiled[$scope.dashboard.rows[0].id].push(obj);
+        });
+      }
+
+      $scope.updateColum = function(row, filed) {
+        if (filed.checked) {
+          if (_.findIndex(row.panels[0].columns, {text: filed.text}) === -1) {
+            row.panels[0].columns.push({
+              text: filed.text,
+              value: filed.value
+            });
+          }
+        } else {
+          _.remove(row.panels[0].columns, function(column) {
+            return column.text === filed.text;
+          });
+        }
+
+        $scope.$broadcast('render');
       }
 
     });

@@ -45,8 +45,15 @@
   </div>
 </form>
 
-<div class="grafana-row" ng-repeat="(row_name, row) in dashboard.rows track by row.id" ng-controller="RowCtrl" row-height>
-  <div class="row-control">
+<div class="grafana-row log-container" ng-repeat="(row_name, row) in dashboard.rows track by row.id" ng-controller="RowCtrl" row-height>
+    <div class="log-filed-container open">
+        <ul>
+            <li ng-repeat="filed in tabsFiled[row.id]">
+                <label><input type="checkbox" name="filed" ng-model="filed.checked" ng-change="updateColum(row, filed);">{{filed.text}}</label>
+            </li>
+        </ul>
+    </div>
+    <div class="row-control">
       <div class="panels-wrapper" ng-if="!row.collapse">
           <div class="row-text pointer" ng-click="toggleRow(row)" ng-if="row.showTitle"
               ng-bind="row.title | interpolateTemplateVars:this">

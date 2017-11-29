@@ -385,3 +385,16 @@ table.diff {
   font-weight: bold;
   font-style: normal;
 }
+
+.log-container {
+  display: flex;
+  .log-filed-container.open {
+    width: 200px;
+  }
+  .log-filed-container.hide {
+    width: 0;
+  }
+  .row-control {
+    flex: 1;
+  }
+}
