@@ -101,6 +101,12 @@ button.close {
     color: nth($thresholds-hover-color, 5) !important;
   }
 }
+.status-grey {
+  color: nth($thresholds-color, 6) !important;
+  &:hover {
+    color: nth($thresholds-hover-color, 6) !important;
+  }
+}
 
 .bg-green {
   background-color: nth($thresholds-color, 1) !important;

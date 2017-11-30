@@ -11,11 +11,11 @@
   <div class="jtk-page-container">
     <div class="jtk-container">
 
-      <script type="jtk" id="jtk-template-default">
+      <script type="jtk" id="tmplNode">
         <div style="height: ${sigVal + 20}px;">
-          <div class="name bg-${healthType} status-color" style="height: ${sigVal}px; width: ${sigVal}px;">
+          <div class="name bg-${healthType} status-color node-type-${type}" style="height: ${sigVal}px; width: ${sigVal}px;">
           </div>
-          <div class="status-color status-${healthType}">${name}</div>
+          <div class="status-color status-${healthType} text-overflow">${name}</div>
         </div>
       </script>
 
@@ -30,6 +30,26 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <div class="build-service-depend">
+    <div class="description" ng-if="detail">
+      <h4>结点详情</h4>
+      <p>名称：{{ detail.name }}</p>
+      <p>类型：{{ detail.type | formatRCAType }}</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th ng-repeat="(name, value) in detail.description[0]">{{ name }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="desp in detail.description">
+            <td ng-repeat="(name, value) in desp">{{ value }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 

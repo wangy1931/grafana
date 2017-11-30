@@ -226,9 +226,6 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
           url: "/log/clustering",
           data: payload
         }).then(function (res) {
-          _.each(res.data, function (target, index) {
-            cluster(target, index);
-          });
           res.data = [
             {target: 'docs', type: 'docs', datapoints: res.data}
           ];
@@ -394,11 +391,6 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
       target.count = "0";
       target.change = "没有变化";
     }
-  };
-
-  function cluster(target, index) {
-    target.operator = '<i class="fa fa-expand"></i>';
-    target.cid = index;
   };
 
   function MD5(e) {

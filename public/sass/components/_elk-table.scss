@@ -1,0 +1,271 @@
+
+/**
+ * 1. Stack content vertically so the table can scroll when its constrained by a fixed container height.
+ */
+elk-table {
+  overflow: auto;
+  flex: 1 1 100%;
+  flex-direction: column; /* 1 */
+
+  .log-table-datafield {
+    white-space: nowrap;
+
+    // break-word is what we really want but it hasn't been added to the standard and adopted by all browsers yet,
+    // so we provide break-all as a fallback
+    word-break: break-all;
+    word-break: break-word;
+  }
+
+  .log-table-timefield {
+    max-width: 200px;
+    width: 15%;
+  }
+
+  .log-table-sourcefield {
+    word-break: break-all;
+    word-break: break-word;
+  }
+
+  .log-table-row {
+    td {
+      position: relative;
+
+      .table-cell-filter {
+        position: absolute;
+        white-space: nowrap;
+        right: 0;
+      }
+
+      &:hover {
+        .elkTableRowFilterButton {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .log-table-row--highlight {
+    td,
+    .elkTableRowFilterButton {
+      background-color: #E2F1F6;
+    }
+  }
+}
+
+/**
+ * 1. Align icon with text in cell.
+ * 2. Use opacity to make this element accessible to screen readers and keyboard.
+ * 3. Show on focus to enable keyboard accessibility.
+ */
+.elkTableRowFilterButton {
+  appearance: none;
+  background-color: $panel-bg;
+  border: none;
+  padding: 0 3px;
+  font-size: 14px;
+  line-height: 1; /* 1 */
+  display: inline-block;
+  opacity: 0; /* 2 */
+
+  &:focus {
+    opacity: 1; /* 3 */
+  }
+}
+
+.elkTableHeaderButton {
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+
+/**
+ * TABLE ROW
+ * 1. Visually align the actions with the tabs. We can improve this by using flexbox instead, at a later point.
+ */
+ .documentTableRow__actions {
+  float: right;
+  padding-top: 8px; /* 1 */
+}
+
+/**
+ * TABLE
+ */
+.elk-table {
+  overflow: hidden;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+
+  tbody {
+    font-family: "Lucida Console", Monaco, monospace;
+  }
+
+  th {
+    white-space: nowrap;
+    padding-right: 10px;
+
+    .table-header-move {
+      border: none;
+      background: none;
+      padding: 0;
+    }
+
+    .table-header-move, .table-header-sortchange {
+      opacity: 0;
+
+      &:focus {
+        opacity: 1;
+      }
+    }
+
+    .fa {
+      font-size: 1.1em;
+    }
+
+  }
+
+  th:hover {
+    .table-header-move, .table-header-sortchange {
+      opacity: 1;
+    }
+  }
+
+  .table-vis-error {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    h2 i {
+      padding: 0 10px; 
+    }
+  }
+}
+
+.elk-table-footer {
+  padding: 5px 10px;
+  text-align: center;
+}
+
+.elk-table-details-toggle {
+  margin-bottom: 3px;
+}
+
+.elk-table-timefield {
+  white-space: nowrap;
+}
+
+/**
+  * 1. When switching between open and closed, the toggle changes size
+  *    slightly which is a problem because it forces the entire table to
+  *    re-render which is SLOW.
+  */
+.elk-table-open-button {
+  appearance: none;
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  width: 14px;
+  height: 14px;
+}
+
+.elk-field-filter {
+  margin-right: 10px;
+
+  .form-group {
+    margin-bottom: 0px;
+  }
+}
+
+.truncate-by-height {
+  max-height: 122px;
+  overflow: hidden;
+}
+
+/**
+ * Override gf-form-switch
+ */
+.elk-table {
+  .gf-form-label {
+    display: none;
+  }
+}
+
+/**
+ * ELK TABLE PAGER
+ */
+.elkTableBar {
+  margin: 5px 5px 0;
+}
+
+.kuiBar {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  min-height: 30px;
+}
+
+.kuiBarSection {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.kuiBarSection:not(:first-child):not(:last-child):not(:only-child) {
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+}
+
+.kuiBarSection:first-child {
+    margin-left: 0;
+}
+.kuiBarSection:last-child {
+  margin-right: 0;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 1 auto;
+      -ms-flex: 0 1 auto;
+          flex: 0 1 auto;
+
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+.kuiBarSection:only-child {
+  margin-left: auto;
+}
+.kuiBarSection > * + * {
+  margin-left: 10px;
+}
+
+/*
+ * 1. We don't want the text to take up two lines and overflow the ToolBar.
+ */
+.kuiToolBarText {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #5A5A5A;
+  white-space: nowrap;
+}
+
+

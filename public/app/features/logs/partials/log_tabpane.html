@@ -2,16 +2,16 @@
   <div>
       <div class="gf-form">
           <ul class="gf-form-list tidy-form-list" style="overflow: inherit">
-              <li ng-click="showSearchGuide = !showSearchGuide" class="gf-form-item" style="width: 76px">
+              <li ng-click="ctrl.showSearchGuide = !ctrl.showSearchGuide" class="gf-form-item" style="width: 76px">
                   关键词<tip>点击显示搜索指南</tip>
               </li>
               <li class="dropdown" style="width: 400px">
                   <input placeholder="支持AND, OR, 空格表示OR" type="text"
                          class="input-xlarge tidy-form-input last dropdown-toggle" id="dropdownMenu1"
-                         data-toggle="dropdown" autocomplete="off" ng-model="query" required=""
-                         ng-keypress="showQueryOption($event)">
+                         data-toggle="dropdown" autocomplete="off" ng-model="ctrl.query" required=""
+                         ng-keypress="ctrl.showQueryOption($event)">
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li ng-repeat="item in queryInputOptions" ng-click="selectQueryOption(item.key)">
+                        <li ng-repeat="item in ctrl.queryInputOptions" ng-click="ctrl.selectQueryOption(item.key)">
                             <a href="javascript:;">{{item.key}}<i>{{item.helpInfo}}</i></a>
                         </li>
                     </ul>
@@ -20,18 +20,17 @@
                   日志显示数量
               </li>
               <li class="tidy-form-item">
-                  <button type="button" class="input-small tidy-form-input last input" ng-model="size" 
+                  <button type="button" class="input-small tidy-form-input last input" ng-model="ctrl.size" 
                           bs-options="f for f in [500, 1000, 2000, 3000, 5000]" data-placeholder="请选择"
-                          bs-on-select="getLogSize" data-placement="bottom-auto" bs-select>
+                          bs-on-select="ctrl.getLogSize" data-placement="bottom-auto" bs-select>
                     请选择 <span class="caret"></span>
                   </button>
               </li>
               <li>
-                  <button type="submit" class="btn btn-primary" ng-click="reQuery()" style="margin:0 20px;"><i class="fa fa-search"></i>查找</button>
-                  <button class="btn btn-primary btn-success" ng-click="isShowKnows(true)">查询知识库</button>
+                  <button type="submit" class="btn btn-primary" ng-click="ctrl.reQuery()" style="margin:0 20px;"><i class="fa fa-search"></i>查找</button>
               </li>
-              <li class="search-guide" ng-if="showSearchGuide">
-                  <i class="fa fa-times pull-right pointer" ng-click="hideGuide();"></i>
+              <li class="search-guide" ng-if="ctrl.showSearchGuide">
+                  <i class="fa fa-times pull-right pointer" ng-click="ctrl.hideGuide()"></i>
                   <p>1、展示所有日志: *</p>
                   <p>2、展示特定host日志: host: host_name ("host_name"改为需要查询的host名称)</p>
                   <p>3、联合查询-AND: host:host_name AND Exception (查询"host_name"的"Exception"日志)</p>
@@ -59,48 +58,56 @@
               ng-bind="row.title | interpolateTemplateVars:this">
           </div>
 
-          <div ng-repeat="(name, panel) in row.panels track by panel.id" class="panel"  ng-if="panel.tab === graph" panel-width>
+          <div ng-repeat="(name, panel) in row.panels track by panel.id" class="panel"  ng-if="panel.type === 'graph'" panel-width>
               <plugin-component type="panel" class="panel-margin"></plugin-component>
           </div>
           <tabset>
               <tab heading="{{panel.title}}"
                    ng-repeat="(name, panel) in row.panels track by panel.id"
-                   ng-if="panel.tab != graph"
-                   active="panel.active">
-                  <ul ng-if="panel.regularResult.data[0].total">
-                      <li style="color: #F9934E; list-style-type: disc; margin-left: 30px;">
-                          该时间区域内共有 <strong>{{panel.regularResult.data[0].total}}</strong> 条日志，当前显示前 {{panel.regularResult.data[0].datapoints.length}} 条。放大时间区域，以查看更细日志数据。
-                      </li>
-                  </ul>
+                   ng-if="panel.type !== 'graph'"
+                   active="panel.active"
+                   ng-click="ctrl.logOperate($index)">
+                  <div ng-if="name == 0" class="log-search">
+                      <div class="btn-group">
+                            <button class="btn btn-primary btn-success" ng-click="ctrl.addRCA()" ng-disabled="!ctrl.logsSelected.length" ng-if="ctrl.showAddRCA">添加根源原因</button>
+                      </div>
+                      <div class="btn-group">
+                            <ul>
+                                <li style="color: #F9934E; text-align: right;">
+                                    该时间区域内共有 <strong>{{panel.regularResult.data[0].total || 0}}</strong> 条日志，当前显示前 {{panel.regularResult.data[0].datapoints.length || 0}} 条。放大时间区域，以查看更细日志数据。
+                                </li>
+                            </ul>
+                      </div>
+                  </div>
                   <div ng-if="name == 2" class="log-compare">
                     <div class="btn-group btn-log-compare">对比日志：
                         <button class="dropdown-toggle input" data-toggle="dropdown">
-                            {{currentRelativeTime}}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
+                            {{ ctrl.currentRelativeTime }}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li ng-click="logCompare('-1d')">1天以前</li>
-                            <li ng-click="logCompare('-7d')">7天以前</li>
-                            <li ng-click="logCompare('-30d')">1月以前</li>
-                            <li ng-click="logCompare('-365d')">1年以前</li>
-                            <li ng-click="showInputModal()">自定义</li>
+                            <li ng-click="ctrl.logCompare('-1d')">1天以前</li>
+                            <li ng-click="ctrl.logCompare('-7d')">7天以前</li>
+                            <li ng-click="ctrl.logCompare('-30d')">1月以前</li>
+                            <li ng-click="ctrl.logCompare('-365d')">1年以前</li>
+                            <li ng-click="ctrl.showInputModal()">自定义</li>
                         </ul>
                     </div>
                     <div class="btn-group btn-log-filter">过滤条件：
                         <button class="dropdown-toggle input" data-toggle="dropdown">
-                            {{currentFilter}}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
+                            {{ ctrl.currentFilter }}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li ng-click="logFilterOperator('')">无</li>
-                            <li ng-click="logFilterOperator('增加')">增加日志</li>
-                            <li ng-click="logFilterOperator('减少')">减少日志</li>
-                            <li ng-click="logFilterOperator('新增')">新增日志</li>
-                            <li ng-click="logFilterOperator('消失')">消失日志</li>
+                            <li ng-click="ctrl.logFilterOperator('')">无</li>
+                            <li ng-click="ctrl.logFilterOperator('增加')">增加日志</li>
+                            <li ng-click="ctrl.logFilterOperator('减少')">减少日志</li>
+                            <li ng-click="ctrl.logFilterOperator('新增')">新增日志</li>
+                            <li ng-click="ctrl.logFilterOperator('消失')">消失日志</li>
                         </ul>
                     </div>
                     <div>
                         <ul ng-if="name == 2">
-                            <li style="color: #F9934E;">当前日志时间段： <strong>{{tabsCache[row.id].timeRange | formatTimeRange:'now':0}} 至 {{tabsCache[row.id].timeRange | formatTimeRange:'now':1}}</strong></li>
-                            <li style="color: #F9934E;">对比日志时间段： <strong>{{tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:0}} 至 {{tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:1}}</strong></li>
+                            <li style="color: #F9934E;">当前日志时间段： <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:'now':0 }} 至 {{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:'now':1 }}</strong></li>
+                            <li style="color: #F9934E;">对比日志时间段： <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:0}} 至 {{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:1 }}</strong></li>
                         </ul>
                     </div>
                   </div>

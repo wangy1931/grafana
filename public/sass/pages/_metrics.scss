@@ -28,14 +28,11 @@
   .gf-form-input, select {
     background: none;
     border-radius: 5px;
+    margin-right: 5rem;
   }
 
   div.gf-form-input {
     border: none;
-  }
-
-  select {
-    margin-right: 5rem;
   }
 
   .gf-form-input:disabled {
@@ -88,7 +85,25 @@
     align-items: center;
     .metric-name {
       margin: 0;
-      width: 1000px;
+      width: 700px;
+    }
+    span {
+      display: block;
+      width: 150px;
+      margin-right: 50px;
+    }
+  }
+
+  .query-label {
+    display: flex;
+    & > label{
+      display: flex;
+      align-items: center;
+      margin-right: 2rem;
+      margin-left: 0.75rem;
+      & > input {
+        margin-right: 0.75rem;
+      }
     }
   }
 }
