@@ -388,11 +388,19 @@ table.diff {
 
 .log-container {
   display: flex;
-  .log-filed-container.open {
-    width: 200px;
-  }
-  .log-filed-container.hide {
-    width: 0;
+  .log-filed-container {
+    &.open {
+      width: 200px;
+      border-right: 1px solid;
+      margin-right: 1rem;
+    }
+    &.hide {
+      width: 0;
+    }
+    label {
+      display: flex;
+      align-items: center;
+    }
   }
   .row-control {
     flex: 1;
