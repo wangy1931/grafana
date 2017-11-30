@@ -104,7 +104,7 @@
                   <input type="radio" name="iskpi" ng-value=false ng-model="ctrl.metricCur.kpi" checked>否
                 </label>
               </div>
-              <div class="gf-form-button-row" ng-if="ctrl.contextSrv.isEditor">
+              <div class="gf-form-button-row" ng-if="ctrl.contextSrv.isEditor && (metric.customMetric || ctrl.contextSrv.user.orgId === 2)">
                 <button class="btn" ng-click="ctrl.edit()" ng-show="ctrl.metricCur.disabled">编辑</button>
                 <button class="btn" ng-click="ctrl.update(metric, $index)" ng-show="!ctrl.metricCur.disabled">更新</button>
                 <button class="btn btn-outline-inverse" ng-click="ctrl.cancel()" ng-show="!ctrl.metricCur.disabled">取消</button>
