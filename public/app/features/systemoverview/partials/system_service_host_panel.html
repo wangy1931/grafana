@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <div class="kpi-detail">
-                    <div ng-if="ctrl.kpiPanel.rightSelected == 'ServiceState'">
+                    <div ng-if="ctrl.kpiPanel.rightSelected == 'ServiceState'" class="kpi-detail-table">
                         <div ng-switch="ctrl.kpiPanel.rightItemTypes[ctrl.kpiPanel.rightSelected].status" class="service-state-text">
                             <div ng-switch-when="GREEN">服务线程正常运行</div>
                             <div ng-switch-when="YELLOW">服务线程中断</div>
