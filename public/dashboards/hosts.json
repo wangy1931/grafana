@@ -54,29 +54,6 @@
         "路径：/opt/cloudwiz-agent/agent/collectors/conf/hadoop_data_node.conf",
         "Interval: 15"
       ],
-      "metrics": [
-        {
-          "name": "hadoop.datanode.fsdatasetstate-null.Remaining",
-          "define": "datanode 文件系统剩余的容量",
-          "unit": "bytes",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "hadoop.datanode.activity.VolumeFailures",
-          "define": "单个磁盘簇出错导致服务异常的次数",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "hadoop.datanode.activity.BlocksRead",
-          "define": "从硬盘读块的次数",
-          "unit": "short",
-          "type": "counter",
-          "alert": ""
-        }
-      ],
       "status": -1,
       "template": "hadoop",
       "collectorName": "hadoop_data_node"
@@ -90,29 +67,6 @@
       "deploy": [
         "路径：/opt/cloudwiz-agent/agent/collectors/conf/hadoop_name_node.conf",
         "Interval：90"
-      ],
-      "metrics": [
-        {
-          "name": "hadoop.namenode.fsnamesystem.CapacityRemaining",
-          "define": "HDFS文件系统剩余的容量",
-          "unit": "bytes",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "hadoop.namenode.fsnamesystem.CapacityRemainingGB",
-          "define": "HDFS文件系统剩余的容量(单位GB)",
-          "unit": "gigabytes",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "hadoop.namenode.fsnamesystem.CapacityTotal",
-          "define": "HDFS文件系统总体容量",
-          "unit": "bytes",
-          "type": "number",
-          "alert": ""
-        }
       ],
       "status": -1,
       "template": "hadoop",
@@ -129,29 +83,6 @@
         "Interval: 90",
         "Port : 16010"
       ],
-      "metrics": [
-        {
-          "name": "hbase.master.server.numRegionServers",
-          "define": "regionserver 存活数量",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "hbase.master.server.numDeadRegionServers",
-          "define": "regionserver 不存活数量",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "hbase.master.ipc.numOpenConnections",
-          "define": "与master 连接数量",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        }
-      ],
       "status": -1,
       "template": "hbase",
       "collectorName": "hbase_master"
@@ -166,29 +97,6 @@
         "路径：/opt/cloudwiz-agent/agent/collectors/conf/hbase_regionserver.conf",
         "Interval: 15",
         "Port : 16030"
-      ],
-      "metrics": [
-        {
-          "name": "hbase.regionserver.server.regionCount",
-          "define": "region 的总数",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "hbase.regionserver.server.readRequestCount",
-          "define": "regionserver读请求的数量",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "hbase.regionserver.server.writeRequestCount",
-          "define": "regionserver写请求的数量",
-          "unit": "short",
-          "type": "counter",
-          "alert": ""
-        }
       ],
       "status": -1,
       "template": "hbase",
@@ -208,29 +116,6 @@
         "Process_name: AppMain (指consumer 的名称，可以通过逗号加入多个）",
         "Port：7777"
       ],
-      "metrics": [
-        {
-          "name": "kafka.bytesrate.BytesInPerSec.Count",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "kafka.bytesrate.BytesInPerSec.FifteenMinuteRate",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "kafka.bytesrate.BytesInPerSec.FiveMinuteRate",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        }
-      ],
       "status": -1,
       "template": "kafka",
       "collectorName": "kafka"
@@ -248,29 +133,6 @@
         "路径:  /opt/cloudwiz-agent/agent/collectors/conf/mysql.conf",
         "User: cloudwiz_user",
         "Pass: cloudwiz_pass"
-      ],
-      "metrics": [
-        {
-          "name": "mysql.connection_states",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "mysql.innodb.history_list_length",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "mysql.innodb.ibuf.free_list_len",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        }
       ],
       "status": -1,
       "template": "mysql",
@@ -291,29 +153,6 @@
         "spark_yarn_mode,",
         "spark_mesos_mode >"
       ],
-      "metrics": [
-        {
-          "name": "spark.executor.activeTasks",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "spark.executor.completedTasks",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "spark.executor.count",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        }
-      ],
       "status": -1,
       "template": "spark",
       "collectorName": "spark"
@@ -329,29 +168,6 @@
         "Interval: 30",
         "Host: localhost",
         "Port : 8080"
-      ],
-      "metrics": [
-        {
-          "name": "storm.cluster.executorsTotal",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "storm.cluster.slotsFree",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "storm.cluster.slotsTotal",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        }
       ],
       "status": -1,
       "template": "storm",
@@ -369,29 +185,6 @@
         "Host:localhost",
         "Port : 8088"
       ],
-      "metrics": [
-        {
-          "name": "yarn.apps.allocatedMB",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "yarn.apps.allocatedVCores",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "yarn.apps.elapsedTime",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        }
-      ],
       "status": -1,
       "template": "yarn_mapreduce",
       "collectorName": "yarn",
@@ -407,29 +200,6 @@
         "路径：/opt/cloudwiz-agent/agent/collectors/conf/zookeeper.conf",
         "SCAN_INTERVAL: 600",
         "USER: root"
-      ],
-      "metrics": [
-        {
-          "name": "zk_approximate_data_size",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "zk_avg_latency",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "zk_ephemerals_count",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        }
       ],
       "status": -1,
       "template": "zookeeper",
@@ -447,29 +217,6 @@
         "Protocol: http",
         "Ports: 8080, 8081  (支持一台机器多个端口号的设置 用逗号来分割)"
       ],
-      "metrics": [
-        {
-          "name": "tomcat.jsp.jspCount",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "tomcat.jsp.jspQueueLength",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "tomcat.jsp.jspReloadCount",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        }
-      ],
       "status": -1,
       "template": "tomcat",
       "collectorName": "tomcat"
@@ -481,7 +228,6 @@
       "img": "img/service_opentsdb.png",
       "info": "开源监控系统OpenTSDB，用hbase存储所有的时序（无须 采样）来构建一个分布式、可伸缩的时间序列数据库。",
       "deploy": "",
-      "metrics": [],
       "status": -1,
       "template": "opentsdb",
       "collectorName": "opentsdb"
@@ -516,29 +262,6 @@
         " ",
         "注意username 和password 默认是字符串, 不需要加入 “ 或 ‘"
       ],
-      "metrics": [
-        {
-          "name": "mongo.asserts.msg",
-          "define": "asserts出现的次数",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "mongo.asserts.regular",
-          "define": "有规律的asserts出现的次数",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "mongo.asserts.rollovers",
-          "define": "Number of times that the rollover counters roll over per second. The counters rollover to zero every 2 to the 30 assertions.",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        }
-      ],
       "status": -1,
       "template": "mongodb",
       "collectorName": "mongo3"
@@ -560,29 +283,6 @@
         "is_enable_https =  #是否启用https",
         "uri = /nginx_status   #默认是访问http://localhost:80/nginx_status 如有需要自行修改."
       ],
-      "metrics": [
-        {
-          "name": "nginx.active_connections",
-          "define": "已经连接上nginx server 的连接数(包括正在等待的链接)",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "nginx.exception",
-          "define": "",
-          "unit": "",
-          "type": "",
-          "alert": ""
-        },
-        {
-          "name": "nginx.number_requests_reading",
-          "define": "客户端读请求数量",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        }
-      ],
       "status": -1,
       "template": "nginx",
       "collectorName": "nginx"
@@ -602,7 +302,6 @@
         "<p class='code-block'> 5. 检查是否能够访问 psql -h localhost -U cloudwiz_user postgres -c \"select * from pg_stat_database LIMIT(1);\"</p>",
         "<p class='code-block'> 6. 如果出现任何问题,请联系管理员</p>"
       ],
-      "metrics": [],
       "status": -1,
       "template": "postgresql",
       "collectorName": "postgresql"
@@ -623,7 +322,6 @@
         "#redis port",
         "port = 6379"
       ],
-      "metrics": [],
       "status": -1,
       "template": "redis",
       "collectorName": "redisdb"
@@ -641,29 +339,6 @@
         "rabbitmq_pass = guest",
         "#queues = 'queue1'",
         "#nodes = 'node1','node2'"
-      ],
-      "metrics": [
-        {
-          "name": "rabbitmq.node.fd_used",
-          "define": "已使用的File Descriptors",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "rabbitmq.node.mem_used",
-          "define": "占用内存大小",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        },
-        {
-          "name": "rabbitmq.node.run_queue",
-          "define": "等待运行的Erlang进程平均数量",
-          "unit": "short",
-          "type": "number",
-          "alert": ""
-        }
       ],
       "status": -1,
       "template": "rabbitmq",
@@ -719,7 +394,6 @@
         "<p class='code-block indent2'> 加入了自定义的tag部分.与 sql 返回的值一一对应.例子如下:</p>",
         "<p class='code-block indent2'> slow.query|val|elapsed_time|cmd = select * from (select disk_reads, elapsed_time, sql_text from v$sqlarea order by elapsed_time desc) where rownum< 3</p>"
       ],
-      "metrics": [],
       "status": -1,
       "template": "",
       "collectorName": "oracle"
@@ -738,7 +412,6 @@
         "<p class='code-block indent2'> # name 任意值.标识这台机器的名字</p>",
         "<p class='code-block indent2'> # port jolokia 会占用一个端口来使用.</p>"
       ],
-      "metrics": [],
       "status": -1,
       "template": "",
       "collectorName": "weblogic"
@@ -759,7 +432,6 @@
         "<p class='code-block'> #apache_user= (如果有用户认证的话，可以添加上) </p>",
         "<p class='code-block'> #apache_password= </p>"
       ],
-      "metrics": [],
       "status": -1,
       "template": "apache",
       "collectorName": "apache"
@@ -776,7 +448,6 @@
         "<p class='code-block'> host = localhost </p>",
         "<p class='code-block'> port=8888,8889 # (多个服务，使用逗号隔开) </p>"
       ],
-      "metrics": [],
       "status": -1,
       "template": "ssdb",
       "collectorName": "ssdb_state"
@@ -793,7 +464,6 @@
         "<p class='code-block'> # 说明 process代表play_framework的唯一可以识出pid的字段，port是这个程序绑定的端口 </p>",
         "<p class='code-block'> process_names = [{\"process\": \"sbt-launch.jar\", \"name\": \"play_framework\", \"port\": \"7778\"}] </p>"
       ],
-      "metrics": [],
       "status": -1,
       "template": "play_framework",
       "collectorName": "play_framework"
@@ -810,7 +480,6 @@
         "<p class='code-block'> host= localhost </p>",
         "<p class='code-block'> port= 9200 </p>"
       ],
-      "metrics": [],
       "status": -1,
       "template": "elasticsearch",
       "collectorName": "elasticsearch"
@@ -825,7 +494,6 @@
         "<p class='code-block'> enabled = false </p>",
         "<p class='code-block'> interval = 60 </p>"
       ],
-      "metrics": [],
       "status": -1,
       "template": "docker",
       "collectorName": "dockerd"
