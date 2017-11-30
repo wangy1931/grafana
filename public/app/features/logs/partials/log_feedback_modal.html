@@ -12,11 +12,11 @@
         <div class="gf-form-inline">
           <div class="gf-form max-width-28">
             <span class="gf-form-label width-9">现象指标</span>
-            <input type="text" class="gf-form-input" ng-value="_.getMetricName(alertData.metric)" disabled/>
+            <input type="text" class="gf-form-input" ng-model="causeMetric" required bs-typeahead-old="suggestMetrics"/>
           </div>
           <div class="gf-form max-width-28">
             <span class="gf-form-label width-9">现象机器</span>
-            <input type="text" class="gf-form-input" ng-value="alertData.host" disabled/>
+            <input type="text" class="gf-form-input" ng-model="causeHost" required bs-typeahead-old="suggestTagHost"/>
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@
       </div>
   
       <div class="gf-form-button-row">
-        <button type="button" class="btn btn-success" ng-click="addCause('*', confidenceLevel, reason); $hide();">提交</button>
+        <button type="button" class="btn btn-success" ng-click="addCause(causeMetric, causeHost, confidenceLevel, reason); $hide();">提交</button>
       </div>
     </form>
   </div>

@@ -276,8 +276,6 @@ export class SystemOverviewCtrl {
   }
 
   serviceNodeClickHandler(node) {
-    $(node.el).addClass("active").siblings().removeClass("active");
-
     var serviceId = node.node.data.id;
     var serviceName = node.node.data.name;
     var serviceStatus = node.node.data.status;
@@ -313,6 +311,8 @@ export class SystemOverviewCtrl {
       _.find(this.dependencies.nodes, { name: serviceName }).status = resp.healthStatusType.toLowerCase(); // "red"
       this.toolkit.clear();
       this.toolkit.load({ type: "json", data: _.cloneDeep(this.dependencies) });
+
+      $(node.el).addClass("active").siblings().removeClass("active");
     });
   }
 
@@ -401,35 +401,16 @@ export class SystemOverviewCtrl {
   }
 
   setServiceKpiPanel(hostname) {
-    if (_.isEmpty(this.serviceKpi)) {
-      ['ServiceKPI', 'ServiceState'].forEach(item => {
-        _.extend(this.kpiPanel.rightItemTypes[item], {
-          id: item,
-          data: '暂无',
-          status: 'GREY',
-          metrics: null
-        });
+    // serviceKpi 为空 或者 ServiceKPI 为空
+    ['ServiceKPI', 'ServiceState'].forEach(itemKey => {
+      var itemMap = this.serviceKpi.hostStatusMap && this.serviceKpi.hostStatusMap[hostname].itemStatusMap[itemKey];
+      _.extend(this.kpiPanel.rightItemTypes[itemKey], {
+        id: itemKey,
+        data: itemMap ? _.statusFormatter(itemMap.healthStatusType) : '暂无',
+        status: itemMap ? itemMap.healthStatusType : 'GREY',
+        metrics: itemMap ? itemMap.metricStatusMap : null
       });
-    } else {
-      _.each(this.serviceKpi.hostStatusMap[hostname].itemStatusMap, (itemMap, itemKey) => {
-        _.extend(this.kpiPanel.rightItemTypes[itemKey], {
-          id: itemKey,
-          data: _.statusFormatter(itemMap.healthStatusType),
-          status: itemMap.healthStatusType,
-          metrics: itemMap.metricStatusMap
-        });
-
-        // hard code: 如果只有 ServiceState, 没有 ServiceKPI 的情况
-        if (_.isNull(itemMap.metricStatusMap)) {
-          _.extend(this.kpiPanel.rightItemTypes['ServiceKPI'], {
-            id: 'ServiceKPI',
-            data: _.statusFormatter('GREEN'),
-            status: 'GREEN',
-            metrics: null
-          });
-        }
-      });
-    }
+    });
   }
 
   getHostKpi(hostname) {

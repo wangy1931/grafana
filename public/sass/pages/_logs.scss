@@ -40,11 +40,19 @@
     float: none;
   }
 
-  .log-compare {
+  .log-compare, .log-search {
     display: flex;
     flex-direction: row;
     & > div {
       flex: auto;
+    }
+  }
+
+  .log-search {
+    margin-bottom: 10px;
+    .btn {
+      margin-left: 10px;
+      padding: 0.4rem 1rem;
     }
   }
 

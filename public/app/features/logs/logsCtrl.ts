@@ -7,6 +7,7 @@ import moment from 'moment';
 import Diff from 'jsdiff';
 import logsDash from './logsDash';
 import coreModule from '../../core/core_module';
+import 'app/plugins/datasource/opentsdb/queryCtrl';
 
 export class LogsCtrl {
   private currentTab: number = 0;
@@ -36,7 +37,7 @@ export class LogsCtrl {
 
   /** @ngInject */
   constructor(
-    private $scope, private $rootScope, private $modal, private $q, private $location,
+    private $scope, private $rootScope, private $modal, private $q, private $location, private $controller,
     private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv, private alertSrv
   ) {
     this.tabs = [
@@ -98,6 +99,11 @@ export class LogsCtrl {
       });
 
       clusterLogSourceModal.$promise.then(clusterLogSourceModal.show);
+    });
+
+    $controller('OpenTSDBQueryCtrl', {$scope: $scope});
+    datasourceSrv.get('opentsdb').then(datasource => {
+      $scope.datasource = datasource;
     });
   }
 
@@ -303,11 +309,9 @@ export class LogsCtrl {
       "\\$LOGFILTER": this.logFilter
     });
 
-    // 是否显示添加 rca 反馈
-    if (this.$location.search().guide) {
-      this.showAddRCA = true;
-      row.panels[0].operator.hide = false;
-    }
+    // 是否显示添加 rca 反馈: 目前任何条件都显示
+    this.showAddRCA = true;
+    row.panels[0].operator.hide = false;
 
     // 初始化时间
     var start = this.$location.search().start;
@@ -376,22 +380,26 @@ export class LogsCtrl {
     var newScope = this.$scope.$new();
     var searchParams = this.$location.search();
     var prefix = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.';
+
     _.extend(newScope, {
       logsSelected: this.logsSelected,
-      alertData: searchParams,
-      confidenceLevel: 100
+      causeMetric: _.getMetricName(searchParams.metric),
+      causeHost: searchParams.host,
+      confidenceLevel: 100,
+      suggestMetrics: this.$scope.suggestMetrics,
+      suggestTagHost: this.backendSrv.suggestTagHost
     });
-    newScope.addCause = (causeHost, confidenceLevel, reason) => {
+    newScope.addCause = (causeMetric, causeHost, confidenceLevel, reason) => {
       var rcaFeedback = {
         alertIds: [],
         timestampInSec: Math.round(new Date().getTime() / 1000),
         triggerMetric: {
-          name: prefix + searchParams.metric,
-          host: searchParams.host,
+          name: prefix + causeMetric,
+          host: causeHost
         },
         rootCauseMetrics: [{
           name: prefix + reason,
-          host: '*', // causeHost,
+          host: '*',
           confidenceLevel: confidenceLevel,
           type: "NUMERICAL_FROM_LOG",
           description: JSON.stringify(this.logsSelected)

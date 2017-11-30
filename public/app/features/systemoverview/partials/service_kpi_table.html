@@ -2,23 +2,23 @@
 <div class="fixed-table-container">
     <table ng-table="ctrl.tableParams" class="table fix-table-row-height">
         <tr ng-repeat="row in $data">
-            <td data-title="'指标'" sortable="'name'">
+            <td data-title="'指标'" sortable="'name'" style="width: 55%;">
                 <div data-container="body" bs-tooltip="'{{ row.metricHelp }}'">{{ row.name }}</div>
             </td>
-            <td data-title="'健康值'" sortable="'anomalyHealth'" ng-class="{ 'trigger-red': row.triggerRed, 'trigger-yellow': row.triggerYellow }">
+            <td data-title="'健康值'" sortable="'anomalyHealth'" ng-class="{ 'trigger-red': row.triggerRed, 'trigger-yellow': row.triggerYellow }" style="width: 15%;">
                 <div><a href="javascript:;" ng-click="ctrl.showModal(7, row.name, row.host)">{{ row.anomalyHealth | formatAnomalyHealth }}</a></div>
             </td>
             <td data-title="'报警情况'" sortable="'alertStatus'">
                 <div style="padding-left: 10px;">
-                    <a href="/host_topology?tabId=2&id=&name=" ng-if="row.alertStatus !== 'GREY'">
+                    <a href="/host_topology?tabId=2&id=&name=" ng-if="row.alertStatus !== 'GREY'" style="width: 15%;">
                         <i class="iconfont fa-status-{{ row.alertStatus | lowercase }} status-color status-{{ row.alertStatus | lowercase }}" style="font-weight: bolder;"></i>
                     </a>
                     <i class="iconfont fa-status-{{ row.alertStatus | lowercase }} status-color status-{{ row.alertStatus | lowercase }}" style="font-weight: bolder;" ng-if="row.alertStatus == 'GREY'"></i>
                 </div>
             </td>
-            <td data-title="'操作'">
+            <td data-title="'操作'" style="padding: 0 6px; width: 15%;">
                 <div ng-show="row.anomalyHealth !== 100">
-                    <a href="/rca?guide&metric={{ row.name }}&host={{ row.host }}"><i class="fa fa-search" bs-tooltip="'诊断分析'"></i></a>
+                    <a href="/rca?guide&metric={{ row.name }}&host={{ row.host }}" class="btn btn-primary btn-small" style="padding: 0.1rem 0.5rem;"><i class="fa fa-search"></i> 诊断分析</a>
                 </div>
             </td>
         </tr>

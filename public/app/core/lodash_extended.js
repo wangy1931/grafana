@@ -47,6 +47,8 @@ function ($, moment, kbn) {
    Note that a metric short name may also have '.' in it.
   */
   _.getMetricName = function (metricName) {
+    if (!metricName) { return ''; }
+
     var elem = metricName.split(".");
     if(elem.length < 3){
       return metricName;
