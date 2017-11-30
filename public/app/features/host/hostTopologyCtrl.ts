@@ -34,7 +34,7 @@ export class HostTopologyCtrl {
     private hostSrv,
     private backendSrv,
     private popoverSrv,
-    private templateValuesSrv,
+    private variableSrv,
     private dynamicDashboardSrv,
     private contextSrv,
     private utilSrv,
@@ -369,8 +369,8 @@ export class HostTopologyCtrl {
   variableUpdated(host) {
     this.dashboard.templating.list[0].current = { "text": host.name || "All", "value": host.name || "$__all", "tags": [] };
 
-    this.templateValuesSrv.init(this.dashboard);
-    this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
+    this.variableSrv.init(this.dashboard);
+    this.variableSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
       this.dynamicDashboardSrv.update(this.dashboard);
       this.$rootScope.$emit('template-variable-value-updated');
       this.$rootScope.$broadcast('refresh');

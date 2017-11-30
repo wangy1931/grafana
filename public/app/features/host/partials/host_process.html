@@ -5,7 +5,7 @@
   </div>
   <div ng-show="ctrl.tableData.length">
     <p class="pull-right">
-        <a href="/topn?guide&host={{ ctrl.currentHost.name }}" style="text-decoration: underline;">查看历史资源使用 &gt;&gt;</a>
+        <a class="btn btn-primary btn-small" href="/topn?guide&host={{ ctrl.currentHost.name }}">查看历史资源使用</a>
     </p>
     <p class="pull-right" ng-show="refresh_interval" style="margin-right: 50px;">
       <i class="fa fa-clock-o"></i>

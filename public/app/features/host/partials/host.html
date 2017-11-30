@@ -9,7 +9,22 @@
     <topology-graph params="ctrl.topologyGraphParams" current-host="ctrl.currentHost"></topology-graph>
 
     <div class="detail">
-        <tabset class="host-detail">
+        <div class="tabbed-view-header">
+            <ul class="gf-tabs">
+                <li class="gf-tabs-item" ng-repeat="tab in ctrl.tabs">
+                    <a class="gf-tabs-link"
+                        ng-click="ctrl.switchTab(tab.id)"
+                        ng-class="{active: ctrl.currentTab == $index}"
+                        ng-show="tab.show">
+                        {{ tab.title }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="tabbed-view-body">
+            <div ng-include src="ctrl.tabs[ctrl.currentTab].content" class="tab-content"></div>
+        </div>
+        <!-- <tabset class="host-detail">
             <tab heading="{{ tab.title }}"
                  ng-repeat="tab in ctrl.tabs"
                  active="tab.active"
@@ -17,6 +32,6 @@
                  ng-show="tab.show">
                  <div ng-include="tab.content"></div>
             </tab>
-        </tabset>
+        </tabset> -->
     </div>
 </div>

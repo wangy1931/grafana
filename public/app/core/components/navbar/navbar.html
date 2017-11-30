@@ -6,14 +6,14 @@
 		<i class="fa fa-caret-down"></i>
 	</a>
 
-	<!-- <a href="{{ctrl.titleUrl}}" class="navbar-page-btn" ng-show="ctrl.title">
+	<a href="{{ctrl.titleUrl}}" class="navbar-page-btn" ng-show="ctrl.title">
 		<i class="{{ctrl.icon}}" ng-show="ctrl.icon"></i>
 		<img ng-src="{{ctrl.iconUrl}}" ng-show="ctrl.iconUrl" />
 		{{ctrl.title}}
-	</a> -->
+	</a>
 
 	<!-- NEW -->
-	<div ng-if="::!ctrl.hasMenu">
+	<!-- <div ng-if="::!ctrl.hasMenu">
 		<a href="{{::ctrl.section.url}}" class="navbar-page-btn">
       <i class="{{::ctrl.section.icon}}" ng-show="::ctrl.section.icon"></i>
       <img ng-src="{{::ctrl.section.iconUrl}}" ng-show="::ctrl.section.iconUrl"></i>
@@ -36,7 +36,7 @@
         </a>
       </li>
     </ul>
-	</div>
+	</div> -->
 	
 	<a href="javascript:;" class="navbar-page-btn" ng-click="ctrl.showGuide();" ng-if="ctrl.showGuideNav"
 			bs-tooltip="'诊断引导'" data-placement="bottom">
