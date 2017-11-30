@@ -1,10 +1,10 @@
 
 @font-face {font-family: "iconfont";
-  src: url('../fonts/iconfont.eot?t=1508724600901'); /* IE9*/
-  src: url('../fonts/iconfont.eot?t=1508724600901#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('../fonts/iconfont.woff?t=1508724600901') format('woff'),
-  url('iconfont.ttf?t=1508724600901') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1508724600901#iconfont') format('svg'); /* iOS 4.1- */
+  src: url('../fonts/iconfont.eot?t=1511519795011'); /* IE9*/
+  src: url('../fonts/iconfont.eot?t=1511519795011#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../fonts/iconfont.woff?t=1511519795011') format('woff'),
+  url('iconfont.ttf?t=1511519795011') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1511519795011#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -51,11 +51,15 @@
 
 .fa-Kafka:before { content: "\e65a"; }
 
+.fa-status-grey:before { content: "\e727"; }
+
 .fa-kafka:before { content: "\e6a2"; }
 
 .fa-spark:before { content: "\e6a6"; }
 
 .fa-toolbar:before { content: "\e8a8"; }
+
+.fa-status-yellow:before { content: "\e6c8"; }
 
 .fa-image-icon_nginx:before { content: "\e64f"; }
 
@@ -104,3 +108,7 @@
 .fa-playframework:before { content: "\e605"; }
 
 .fa-cwiz-search:before { content: "\ed81"; }
+
+.fa-status-red:before { content: "\e684"; }
+
+.fa-status-green:before { content: "\e685"; }

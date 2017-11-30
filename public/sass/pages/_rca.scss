@@ -35,7 +35,6 @@
     padding: 0;
     text-align: center;
     line-height: 1.5;
-    border-radius: 50%;
     margin: 0 0 20px 0;
     transition: all ease-out .2s;
   }
@@ -122,6 +121,18 @@
          color: #DBE1EA;
        }
     }
+  }
+
+  .text-overflow {
+    width: auto;
+  }
+
+  // type: 1 - metric, 2 - log, 3 - normal text
+  .node-type-1 {
+    border-radius: 50%;
+  }
+
+  .node-type-2 {
   }
 
 }
