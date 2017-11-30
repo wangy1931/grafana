@@ -47,8 +47,8 @@
 <div class="grafana-row log-container" ng-repeat="(row_name, row) in dashboard.rows track by row.id" ng-controller="RowCtrl" row-height>
     <div class="log-filed-container open">
         <ul>
-            <li ng-repeat="filed in tabsFiled[row.id]">
-                <label><input type="checkbox" name="filed" ng-model="filed.checked" ng-change="updateColum(row, filed);">{{filed.text}}</label>
+            <li ng-repeat="filed in ctrl.tabsFiled[row.id]">
+                <label><input type="checkbox" name="filed" ng-model="filed.checked" ng-change="ctrl.updateColum(row, filed);">{{filed.text}}</label>
             </li>
         </ul>
     </div>
