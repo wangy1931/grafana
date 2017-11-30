@@ -128,8 +128,8 @@ export class MetricsDefCtrl {
     this.getMetricsList(this.params.page);
   }
 
-  getSuggest(query) {
-    this.metricSrv.getSuggest(query).then((res) => {
+  getSuggest() {
+    this.metricSrv.getSuggest(this.query.metric).then((res) => {
       this.suggestMetrics = res.data;
       _.each(this.suggestMetrics, (suggest, index) => {
         this.suggestMetrics[index] = _.getMetricName(suggest);

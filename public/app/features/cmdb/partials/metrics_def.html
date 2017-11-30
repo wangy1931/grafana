@@ -9,7 +9,7 @@
       <div class="gf-form">
         <span class="gf-form-label width-7">指标名称</span>
         <input type="text" class="gf-form-input max-width-16" ng-model="ctrl.query.metric"
-          ng-keyup="ctrl.getSuggest(ctrl.query.metric);"
+          ng-change="ctrl.getSuggest();"
           spellcheck='false' bs-typeahead-old="ctrl.suggestMetrics">
       </div>
       <div class="gf-form">
