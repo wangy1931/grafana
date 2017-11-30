@@ -73,8 +73,8 @@ export class MetricsDefCtrl {
     });
   }
 
-  getDetailById(metric) {
-    if (this.metricCur && this.metricCur.id === metric.id) {
+  getDetailById(metric, cancel?) {
+    if (!cancel && this.metricCur && this.metricCur.id === metric.id) {
       this.metricCur.id = -1;
       return;
     }
@@ -104,13 +104,9 @@ export class MetricsDefCtrl {
       this.metricCur.subType = _.cloneDeep(tmp);
       this.metricCur.subTypes = _.cloneDeep(subTypes);
     }, () => {
-      this.cancel();
+      this.getDetailById(metric, true);
       this.$scope.appEvent('alert-danger', ['保存失败']);
     });
-  }
-
-  cancel() {
-    this.metricCur.disabled = true;
   }
 
   clearQuery() {
