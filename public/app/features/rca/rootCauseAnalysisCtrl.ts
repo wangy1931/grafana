@@ -63,8 +63,11 @@ export class RootCauseAnalysisCtrl {
         data.edges.push({
           "source": item.dest.id,
           "target": item.src.id,
-          "data"  : { "type": null },
-          "score" : item.score * 4
+          "data"  : {
+            "type": null,
+            "score" : item.score * 4,
+            "solution": item.solutions
+          },
         });
       });
 
@@ -140,7 +143,7 @@ export class RootCauseAnalysisCtrl {
       window.jsPlumbToolkit.connect({
         source: $(`[data-jtk-node-id="${item.source}"]`).attr('id'),
         target: $(`[data-jtk-node-id="${item.target}"]`).attr('id'),
-        paintStyle: { strokeWidth: item.score }
+        paintStyle: { strokeWidth: item.data.score }
       });
     });
   }
@@ -192,22 +195,37 @@ export class RootCauseAnalysisCtrl {
     this.$scope.detail = {
       name: params.node.data.name,
       type: params.node.data.type,
-      description: []
+      description: this.nodeDescriptionHandler(params.node.data.desc)
     };
-    if (params.node.data.desc) {
-      try {
-        this.$scope.detail.description = JSON.parse(params.node.data.desc);
-      } catch (e) {
-        this.$scope.detail.description = [
-          { '描述': params.node.data.desc }
-        ];
-      }
+
+    // get directly relevant edges
+    this.$scope.relevantNodes = [];
+    params.node.getTargetEdges().forEach(edge => {
+      edge.source.data.description = this.nodeDescriptionHandler(edge.source.data.desc);
+      this.$scope.relevantNodes.push({ data: edge.source.data, edge: edge.data });
+    });
+
+    this.$scope.$digest();
+  }
+
+  nodeDescriptionHandler(desc) {
+    var description = [];
+
+    if (!_.isEmpty(desc)) {
+      _.each(desc, (item) => {
+        try {
+          description.push(JSON.parse(item));
+        } catch (e) {
+          description.push({ '描述': item });
+        }
+      });
     } else {
-      this.$scope.detail.description = [
-        { '描述': params.node.data.desc }
+      description = [
+        { '描述': desc.join('') }
       ];
     }
-    this.$scope.$digest();
+
+    return description;
   }
 
   showGuideResult(e, params) {

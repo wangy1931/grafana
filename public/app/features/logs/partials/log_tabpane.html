@@ -62,7 +62,7 @@
                    ng-click="ctrl.logOperate($index)">
                   <div ng-if="name == 0" class="log-search">
                       <div class="btn-group">
-                            <button class="btn btn-primary btn-success" ng-click="ctrl.addRCA()" ng-disabled="!ctrl.logsSelected.length" ng-if="ctrl.showAddRCA">添加根源原因</button>
+                            <button class="btn btn-primary" ng-click="ctrl.addRCA()" ng-class="{ 'btn-success': ctrl.logsSelected.length, 'btn-inverse': !ctrl.logsSelected.length }" ng-disabled="!ctrl.logsSelected.length" ng-if="ctrl.showAddRCA">添加根源原因</button>
                       </div>
                       <div class="btn-group">
                             <ul>
