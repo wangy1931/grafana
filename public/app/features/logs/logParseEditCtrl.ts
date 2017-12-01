@@ -32,12 +32,7 @@ export class LogParseEditCtrl {
           "multiline": false,
           "paths": [],
           "hosts": [],
-          "patterns": [{
-            "name": "",
-            "type": "grok",
-            "pattern": "",
-            "log": ""
-          }]
+          "patterns": []
         }
       }
     });
@@ -185,8 +180,10 @@ export class LogParseEditCtrl {
       if (!pattern) {
         newScope.isNew = true;
         newScope.pattern = {
-          isMetric: true,
-          type: 'grok'
+          "name": "",
+          "type": "grok",
+          "pattern": "",
+          "log": ""
         }
       } else {
         newScope.isNew = false;
