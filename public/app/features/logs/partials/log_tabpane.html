@@ -45,8 +45,9 @@
 </form>
 
 <div class="grafana-row log-container" ng-repeat="(row_name, row) in dashboard.rows track by row.id" ng-controller="RowCtrl" row-height>
-    <div class="log-filed-container open">
+    <div class="log-filed-container" ng-class="{true: 'open', false: 'hide'}[row.openfiled]">
         <ul>
+            <li class="log-filed-title"><i class="fa fa-filter"></i>筛选 <i ng-click="row.openfiled = !row.openfiled" class="fa pull-right" ng-class="{true: 'fa-angle-left', false: 'fa-angle-right'}[row.openfiled]"></i></li>
             <li ng-repeat="filed in ctrl.tabsFiled[row.id]">
                 <label><input type="checkbox" name="filed" ng-model="filed.checked" ng-change="ctrl.updateColum(row, filed);">{{filed.text}}</label>
             </li>

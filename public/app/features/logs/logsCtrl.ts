@@ -437,6 +437,7 @@ export class LogsCtrl {
       var obj = {text: key, value: key};
       this.tabsFiled[this.$scope.dashboard.rows[0].id].push(obj);
     });
+    this.$scope.dashboard.rows[0].openfiled = true;
   }
 
   updateColum (row, filed) {

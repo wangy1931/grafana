@@ -4,6 +4,10 @@
   & > .nav-tabs {
     padding: 0;
     margin: 0;
+    li.active > a, li.active > a:focus , .active > a:hover {
+      background: rgb(248, 248, 248);
+      border-bottom: 1px solid rgb(248, 248, 248);
+    }
   }
 
   // override btn
@@ -29,7 +33,7 @@
 .log-search-result {
   border: 1px solid #7B7B7B;
   border-top: none;
-  padding: 20px;
+  // padding: 20px;
 
   .panel:first-child {
     margin: 20px 0;
@@ -140,6 +144,13 @@
     &:last-child {
       word-break: break-all;
     }
+  }
+
+  .tidy-form {
+    margin: 0;
+    margin-left: 1px;
+    padding: 30px;
+    background: rgb(248, 248, 248);
   }
 }
 
@@ -383,17 +394,27 @@ table.diff {
 .log-container {
   display: flex;
   .log-filed-container {
-    &.open {
-      width: 200px;
-      border-right: 1px solid;
-      margin-right: 1rem;
-    }
-    &.hide {
-      width: 0;
-    }
+    background: rgb(236, 239, 241);
+    margin-right: 1rem;
+    margin-left: 1px;
+    border-right: 1px solid;
+    position: relative;
+    width: 200px;
     label {
       display: flex;
       align-items: center;
+    }
+    li {
+      padding: 0 20px;
+    }
+  }
+  .log-filed-title {
+    background: #38b7e6;
+    color: $white;
+    line-height: 3rem;
+    .pull-right {
+      font-size: 1.5rem;
+      line-height: 3rem;
     }
   }
   .row-control {
