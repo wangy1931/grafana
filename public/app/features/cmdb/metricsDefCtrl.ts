@@ -43,6 +43,7 @@ export class MetricsDefCtrl {
       if (query.metric) {
         this.params.name = query.metric;
       } else {
+        delete this.params.name;
         if (query.type) {
           this.params.type = query.type.name;
           if (query.subType) {
