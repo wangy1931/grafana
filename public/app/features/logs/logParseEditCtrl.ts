@@ -49,12 +49,7 @@ export class LogParseEditCtrl {
   getTemplate(logServiceName, logType?) {
     this.rule.hosts = [];
     this.rule.paths = [];
-    this.rule.patterns = [{
-      "name": "",
-      "type": "grok",
-      "pattern": "",
-      "log": ""
-    }];
+    this.rule.patterns = [];
     this.rule['multiline.pattern'] = '';
     if (_.isEqual(logServiceName, '其他')) {
       this.rule.logType = '其他';
@@ -183,7 +178,8 @@ export class LogParseEditCtrl {
           "name": "",
           "type": "grok",
           "pattern": "",
-          "log": ""
+          "log": "",
+          "isMetric": false
         }
       } else {
         newScope.isNew = false;
@@ -202,13 +198,16 @@ export class LogParseEditCtrl {
   }
 
   checkInput(inputText, type) {
+    if (_.isUndefined(inputText)) {
+      return false;
+    }
     var pattern = null;
     switch (type) {
       case 'parseName':
         pattern = /^[\w.]+$/;
         break;
       case 'logPath':
-        pattern = /^([a-zA-Z]:(\/\/|\\\\)([\w+.-]+(\/|\\)?)*)|(([/][\w-.*]+)*)$/;
+        pattern = /^([a-zA-Z]:[\\\\]?[\w*+-_.]*)|(([~/\w*+-_.])+)$/
         break;
       case 'logType':
         pattern = /^[\w.]+$/;
