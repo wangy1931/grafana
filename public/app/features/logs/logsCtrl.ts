@@ -49,7 +49,7 @@ export class LogsCtrl {
       }
     ];
 
-    this.query = $location.search().query || "*";
+    this.query = $location.search().query || "ERROR OR EXCEPTION";
     this.size = 500;
     this.timeShift = "-1d";
     this.logFilter = "";
