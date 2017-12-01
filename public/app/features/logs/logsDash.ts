@@ -378,7 +378,7 @@ var panelMetas = [
     "title": "",
     "id": 1,
     "active": true,
-    "openfiled": false
+    "openfiled": true
   }
 ];
 

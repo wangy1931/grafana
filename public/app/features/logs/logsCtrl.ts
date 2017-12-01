@@ -430,14 +430,17 @@ export class LogsCtrl {
   }
 
   getFiled(filedData) {
+    var panel = this.$scope.dashboard.rows[0].panels[0];
     this.tabsFiled = this.tabsFiled || {};
     this.tabsFiled[this.$scope.dashboard.rows[0].id] = [];
     var filed = filedData ? filedData[0] : {};
     _.each(filed, (value, key) => {
       var obj = {text: key, value: key};
+      if (_.find(panel.columns, obj)) {
+        obj['checked'] = true;
+      }
       this.tabsFiled[this.$scope.dashboard.rows[0].id].push(obj);
     });
-    this.$scope.dashboard.rows[0].openfiled = true;
   }
 
   updateColum (row, filed) {

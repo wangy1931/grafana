@@ -408,10 +408,18 @@ table.diff {
       padding: 0 20px;
     }
   }
+  .log-filed-contaienr-close {
+    padding: 10px;
+    cursor: pointer;
+    &:hover {
+      background: rgb(236, 239, 241);
+    }
+  }
   .log-filed-title {
     background: #38b7e6;
     color: $white;
     line-height: 3rem;
+    cursor: pointer;
     .pull-right {
       font-size: 1.5rem;
       line-height: 3rem;
@@ -419,5 +427,6 @@ table.diff {
   }
   .row-control {
     flex: 1;
+    padding: 20px;
   }
 }
