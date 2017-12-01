@@ -204,13 +204,13 @@ export class LogParseEditCtrl {
     var pattern = null;
     switch (type) {
       case 'parseName':
-        pattern = /^[\w.]+$/;
+        pattern = /^[\w._]+$/;
         break;
       case 'logPath':
         pattern = /^([a-zA-Z]:[\\\\]?[\w*+-_.]*)|(([~/\w*+-_.])+)$/
         break;
       case 'logType':
-        pattern = /^[\w.]+$/;
+        pattern = /^[\w._]+$/;
         break;
     }
     if (pattern) {
@@ -227,12 +227,12 @@ export class LogParseEditCtrl {
   }
 
   savePattern(oldPattern, pattern, isNew, dismiss) {
-    if (!this.checkInput(pattern.parseName, 'parseName')) {
+    if (!this.checkInput(pattern.name, 'parseName')) {
       this.$scope.appEvent('alert-warning', ['解析器名称格式错误']);
       return;
     }
     if (!pattern.result || pattern.result === '规则解析失败') {
-      this.$scope.appEvent('alert-warning', ['匹配规则不合法']);
+      this.$scope.appEvent('alert-warning', ['请测试正确的解析规则']);
       return;
     }
     pattern.result = '';
