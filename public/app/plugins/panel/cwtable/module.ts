@@ -64,6 +64,8 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
   hideOperator: boolean;
   operatorType: string;
 
+  MAX_CONTENT_LEN: number = 514;
+
   /** @ngInject */
   constructor($scope, $injector, private annotationsSrv, private $sanitize, private $filter) {
     super($scope, $injector);
@@ -183,6 +185,14 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
     return super.render(this.table);
   }
 
+  expandOrCollapse(e) {
+    var target = e.target || e.toElement;
+    var el = $(target);
+    el.css({ 'display': 'none' });
+    el.hasClass('expand-showmore') && el.next().css({ 'display': 'inline-block' }) && el.parent().prev().css({ 'max-height': 'none' });
+    el.hasClass('collapse-showmore') && el.prev().css({ 'display': 'inline-block' }) && el.parent().prev().css({ 'max-height': '122px' });
+  }
+
   /**
    * 为特定业务加的功能
    */
@@ -234,16 +244,6 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
       if (panel.targets.length) {
         panelElem._highlight(panel.targets[0].query);
       }
-
-      tbodyElem.on('click', '.expand-showmore', expandOrCollapse);
-      tbodyElem.on('click', '.collapse-showmore', expandOrCollapse);
-    }
-
-    function expandOrCollapse(e) {
-      var el = $(e.currentTarget);
-      el.css({ 'display': 'none' });
-      el.hasClass('expand-showmore') && el.next().css({ 'display': 'inline-block' }) && el.parent().prev().css({ 'max-height': 'none' });
-      el.hasClass('collapse-showmore') && el.prev().css({ 'display': 'inline-block' }) && el.parent().prev().css({ 'max-height': '125px' });
     }
 
     ctrl.changePage = (pageNumber) => {
