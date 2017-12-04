@@ -34,6 +34,7 @@
   border: 1px solid #7B7B7B;
   border-top: none;
   // padding: 20px;
+  overflow: hidden;
 
   .panel:first-child {
     margin: 20px 0;
@@ -395,7 +396,6 @@ table.diff {
   display: flex;
   .log-filed-container {
     background: rgb(236, 239, 241);
-    margin-right: 1rem;
     margin-left: 1px;
     border-right: 1px solid;
     position: relative;
@@ -427,7 +427,11 @@ table.diff {
     }
   }
   .row-control {
-    flex: 1;
     padding: 20px;
+    padding-right: 50px;
+    width: 100%;
+    &.active {
+      width: 90%;
+    }
   }
 }

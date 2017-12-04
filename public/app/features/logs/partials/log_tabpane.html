@@ -54,7 +54,7 @@
         </ul>
     </div>
     <div class="log-filed-contaienr-close" ng-click="row.openfiled = !row.openfiled" ng-if="!row.openfiled"><i class="fa fa-angle-right"></i></div>
-    <div class="row-control">
+    <div class="row-control" ng-class="{true: 'active'}[row.openfiled]">
       <div class="panels-wrapper" ng-if="!row.collapse">
           <div class="row-text pointer" ng-click="toggleRow(row)" ng-if="row.showTitle"
               ng-bind="row.title | interpolateTemplateVars:this">
