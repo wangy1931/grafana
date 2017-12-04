@@ -241,8 +241,13 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
       renderTableRows(renderedData);
       renderPaginationControls(renderedData);
 
+      panelElem._removeHighlight();
       if (panel.targets.length) {
-        panelElem._highlight(panel.targets[0].query);
+        var hilightTxt = panel.targets[0].query;
+        if (panel.title === 'ERROR|EXCEPTION') {
+          hilightTxt = _.replace(hilightTxt, ' AND (ERROR OR EXCEPTION)', '');
+        }
+        panelElem._highlight(hilightTxt);
       }
     }
 

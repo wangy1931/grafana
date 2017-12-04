@@ -44,8 +44,17 @@
   </div>
 </form>
 
-<div class="grafana-row" ng-repeat="(row_name, row) in dashboard.rows track by row.id" ng-controller="RowCtrl" row-height>
-  <div class="row-control">
+<div class="grafana-row log-container" ng-repeat="(row_name, row) in dashboard.rows track by row.id" ng-controller="RowCtrl" row-height>
+    <div class="log-filed-container" ng-if="row.openfiled">
+        <ul>
+            <li class="log-filed-title" ng-click="row.openfiled = !row.openfiled"><i class="fa fa-filter"></i>筛选 <i class="fa fa-angle-left pull-right"></i></li>
+            <li ng-repeat="filed in ctrl.tabsFiled[row.id]">
+                <label><input type="checkbox" name="filed" ng-model="filed.checked" ng-change="ctrl.updateColum(row, filed);">{{filed.text}}</label>
+            </li>
+        </ul>
+    </div>
+    <div class="log-filed-contaienr-close" ng-click="row.openfiled = !row.openfiled" ng-if="!row.openfiled"><i class="fa fa-angle-right"></i></div>
+    <div class="row-control" ng-class="{true: 'active'}[row.openfiled]">
       <div class="panels-wrapper" ng-if="!row.collapse">
           <div class="row-text pointer" ng-click="toggleRow(row)" ng-if="row.showTitle"
               ng-bind="row.title | interpolateTemplateVars:this">
@@ -111,5 +120,5 @@
           </tabset>
           <div class="clearfix"></div>
       </div>
-  </div>
+    </div>
 </div>

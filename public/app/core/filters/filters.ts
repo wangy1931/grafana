@@ -128,4 +128,18 @@ coreModule.filter('formatRCAType', () => {
   };
 });
 
+coreModule.filter('trustHtml', ($sce) => {
+  return (value) => {
+    value = _.replace(value, /\n/g, '<br>');
+    value = _.replace(value, /&lt;/g, '<');
+    value = _.replace(value, /&gt;/g, '>');
+    value = _.replace(value, /&gt;/g, '>');
+    value = _.replace(value, /\\&quot;/g, '');
+    value = _.replace(value, /&quot;/g, '"');
+    value = _.replace(value, /&amp;/g, '&');
+    var html = $sce.trustAsHtml('<div>' + value + '</div>');
+    return html;
+  };
+});
+
 export default {};

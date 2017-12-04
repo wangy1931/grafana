@@ -92,7 +92,8 @@ elk-table {
  * TABLE
  */
 .elk-table {
-  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: scroll;
   padding-left: 0px !important;
   padding-right: 0px !important;
 

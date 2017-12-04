@@ -2,6 +2,7 @@
 
 import angular from 'angular';
 import _ from 'lodash';
+import $ from 'jquery';
 import coreModule from '../../core/core_module';
 
 export class LogParseEditCtrl {
@@ -31,12 +32,7 @@ export class LogParseEditCtrl {
           "multiline": false,
           "paths": [],
           "hosts": [],
-          "patterns": [{
-            "name": "",
-            "type": "grok",
-            "pattern": "",
-            "log": ""
-          }]
+          "patterns": []
         }
       }
     });
@@ -53,12 +49,7 @@ export class LogParseEditCtrl {
   getTemplate(logServiceName, logType?) {
     this.rule.hosts = [];
     this.rule.paths = [];
-    this.rule.patterns = [{
-      "name": "",
-      "type": "grok",
-      "pattern": "",
-      "log": ""
-    }];
+    this.rule.patterns = [];
     this.rule['multiline.pattern'] = '';
     if (_.isEqual(logServiceName, '其他')) {
       this.rule.logType = '其他';
@@ -171,40 +162,55 @@ export class LogParseEditCtrl {
     });
   }
 
-  editPattren(pattern) {
-    var newScope = this.$scope.$new();
-    if (!pattern) {
-      newScope.isNew = true;
-      newScope.pattern = {
-        isMetric: true,
-        type: 'grok'
-      }
+  editPattren(pattern?) {
+    if (!pattern && this.rule.patterns.length >= 2) {
+      this.$scope.appEvent('confirm-modal', {
+        title: '抱歉',
+        text: '您最多只能添加两条解析规则',
+        yesText: '确定',
+        noText: '取消'
+      });
     } else {
-      newScope.isNew = false;
-      newScope.pattern = _.cloneDeep(pattern);
-      newScope.oldPattern = pattern;
-      newScope.rule = this.rule;
+      var newScope = this.$scope.$new();
+      if (!pattern) {
+        newScope.isNew = true;
+        newScope.pattern = {
+          "name": "",
+          "type": "grok",
+          "pattern": "",
+          "log": "",
+          "isMetric": false
+        }
+      } else {
+        newScope.isNew = false;
+        newScope.pattern = _.cloneDeep(pattern);
+        newScope.oldPattern = pattern;
+        newScope.rule = this.rule;
+      }
+      newScope.testPattern = this.testPattern.bind(this);
+      newScope.savePattern = this.savePattern.bind(this);
+      newScope.checkInput = this.checkInput;
+      this.$scope.appEvent('show-modal', {
+        src: '/public/app/features/logs/partials/log_rules_parse.html',
+        scope: newScope
+      });
     }
-    newScope.testPattern = this.testPattern.bind(this);
-    newScope.savePattern = this.savePattern.bind(this);
-    newScope.checkInput = this.checkInput;
-    this.$scope.appEvent('show-modal', {
-      src: '/public/app/features/logs/partials/log_rules_parse.html',
-      scope: newScope
-    });
   }
 
   checkInput(inputText, type) {
+    if (_.isUndefined(inputText)) {
+      return false;
+    }
     var pattern = null;
     switch (type) {
       case 'parseName':
-        pattern = /^[\w.]+$/;
+        pattern = /^[\w._]+$/;
         break;
       case 'logPath':
-        pattern = /^([a-zA-Z]:(\/\/|\\\\)([\w+.-]+(\/|\\)?)*)|(([/][\w-.*]+)*)$/;
+        pattern = /^([a-zA-Z]:[\\\\]?[\w*+-_.]*)|(([~/\w*+-_.])+)$/
         break;
       case 'logType':
-        pattern = /^[\w]+$/;
+        pattern = /^[\w._]+$/;
         break;
     }
     if (pattern) {
@@ -221,12 +227,12 @@ export class LogParseEditCtrl {
   }
 
   savePattern(oldPattern, pattern, isNew, dismiss) {
-    if (!this.checkInput(pattern.parseName, 'parseName')) {
+    if (!this.checkInput(pattern.name, 'parseName')) {
       this.$scope.appEvent('alert-warning', ['解析器名称格式错误']);
       return;
     }
     if (!pattern.result || pattern.result === '规则解析失败') {
-      this.$scope.appEvent('alert-warning', ['匹配规则不合法']);
+      this.$scope.appEvent('alert-warning', ['请测试正确的解析规则']);
       return;
     }
     pattern.result = '';
@@ -359,19 +365,31 @@ export class LogParseEditCtrl {
   }
 
   checkData(rule) {
+    // validate logServiceName
     if (rule.logServiceName === '其他') {
       if (!this.checkInput(this.custom.logServiceName, 'parseName')) {
         return false;
       }
+    } else {
+      if (!this.checkInput(rule.logServiceName, 'parseName')) {
+        return false;
+      }
     }
+    // validate logType
     if (rule.logType === '其他') {
       if (!this.checkInput(this.custom.logType, 'logType')) {
         return false;
       }
+    } else {
+      if (!this.checkInput(rule.logType, 'logType')) {
+        return false;
+      }
     }
+    // validate null
     if (!rule.ruleName || !rule.logServiceName || !rule.logType || _.isEmpty(rule.paths) || _.isEmpty(rule.hosts)) {
       return false;
     }
+    // validate multiline
     if (!_.isBoolean(rule.multiline)) {
       return false;
     } else if (rule.multiline && !rule['multiline.pattern']) {
@@ -379,6 +397,23 @@ export class LogParseEditCtrl {
     }
     return true;
   }
+
+  selectMetric(event, pattern, metric) {
+    var checked = $(event.currentTarget).find('input').prop('checked')
+    pattern.fields = pattern.fields || [];
+    if (checked) {
+      if (_.indexOf(pattern.fields, metric) === -1) {
+        pattern.fields.push(metric);
+      } else {
+        return;
+      }
+    } else {
+      _.remove(pattern.fields, (item) => {
+        return item === metric;
+      });
+    }
+  }
+
 }
 
 coreModule.controller('LogParseEditCtrl', LogParseEditCtrl);

@@ -282,6 +282,99 @@ var panelMetas = [
         }
       },
       {
+        "columns": [
+          {
+            "text": "@timestamp",
+            "value": "@timestamp"
+          },
+          {
+            "text": "host",
+            "value": "host"
+          },
+          {
+            "text": "_type",
+            "value": "_type"
+          },
+          {
+            "text": "message",
+            "value": "message"
+          }
+        ],
+        "operator": {
+          "hide": true,
+          "type": "checkbox"
+        },
+        "datasource": "elk",
+        "editable": true,
+        "error": false,
+        "fontSize": "100%",
+        "height": "500",
+        "helpInfo": {
+          "context": "",
+          "info": false,
+          "title": ""
+        },
+        "hideTimeOverride": false,
+        "id": 4,
+        "isNew": true,
+        "links": [],
+        "pageSize": null,
+        "scroll": false,
+        "showHeader": true,
+        "sort": {
+          "col": 0,
+          "desc": true
+        },
+        "span": 12,
+        "styles": [
+          {
+            "dateFormat": "YYYY-MM-DD HH:mm:ss,sss",
+            "pattern": "@timestamp",
+            "type": "date"
+          },
+          {
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "decimals": 2,
+            "pattern": "/.*/",
+            "thresholds": [],
+            "type": "number",
+            "unit": "short"
+          }
+        ],
+        "targets": [
+          {
+            "aggregator": "sum",
+            "bucketAggs": [],
+            "downsampleAggregator": "avg",
+            "dsType": "elasticsearch",
+            "errors": {},
+            "metrics": [
+              {
+                "field": "select field",
+                "id": 11,
+                "meta": {},
+                "settings": {},
+                "type": "raw_document"
+              }
+            ],
+            "query": "ERROR OR EXCEPTION",
+            "refId": "A",
+            "timeField": "@timestamp",
+            "size": "$SIZE"
+          }
+        ],
+        "tab": 4,
+        "title": "ERROR|EXCEPTION",
+        "transform": "json",
+        "transparent": false,
+        "type": "cwtable"
+      },
+      {
         "aliasColors": {},
         "bars": true,
         "datasource": "elk",
@@ -300,7 +393,7 @@ var panelMetas = [
           "threshold2": null,
           "threshold2Color": "rgba(234, 112, 112, 0.22)"
         },
-        "id": 4,
+        "id": 5,
         "legend": {
           "avg": false,
           "current": false,
@@ -377,7 +470,8 @@ var panelMetas = [
     "showTitle": false,
     "title": "",
     "id": 1,
-    "active": true
+    "active": true,
+    "openfiled": true
   }
 ];
 

@@ -34,6 +34,7 @@ export class LogsCtrl {
   showSearchGuide: boolean;
   showAddRCA: boolean;
   logsSelected: Array<any>;
+  tabsFiled: any;
 
   /** @ngInject */
   constructor(
@@ -75,6 +76,10 @@ export class LogsCtrl {
       this.resultCache[curTabId][payload.id] = payload.data;
 
       this.saveCurQueryInfo(curTabId);
+
+      if (payload.id === 'logSearch') {
+        this.getFiled(payload.data);
+      }
     });
 
     $scope.$on('select-log', (event, payload) => {
@@ -276,6 +281,9 @@ export class LogsCtrl {
     _.forEach(panels, (panel) => {
       _.forEach(panel.targets, (target) => {
         target.query = this.query;
+        if (panel.title === 'ERROR|EXCEPTION') {
+          target.query += ' AND (ERROR OR EXCEPTION)';
+        }
       });
     });
 
@@ -428,6 +436,37 @@ export class LogsCtrl {
       show: false
     });
     rcaFeedbackModal.$promise.then(rcaFeedbackModal.show);
+  }
+
+  getFiled(filedData) {
+    var panel = this.$scope.dashboard.rows[0].panels[0];
+    this.tabsFiled = this.tabsFiled || {};
+    this.tabsFiled[this.$scope.dashboard.rows[0].id] = [];
+    var filed = filedData ? filedData[0] : {};
+    _.each(filed, (value, key) => {
+      var obj = {text: key, value: key};
+      if (_.find(panel.columns, obj)) {
+        obj['checked'] = true;
+      }
+      this.tabsFiled[this.$scope.dashboard.rows[0].id].push(obj);
+    });
+  }
+
+  updateColum (row, filed) {
+    if (filed.checked) {
+      if (_.findIndex(row.panels[0].columns, {text: filed.text}) === -1) {
+        row.panels[0].columns.push({
+          text: filed.text,
+          value: filed.value
+        });
+      }
+    } else {
+      _.remove(row.panels[0].columns, (column) => {
+        return column.text === filed.text;
+      });
+    }
+
+    this.$scope.$broadcast('render');
   }
 }
 
