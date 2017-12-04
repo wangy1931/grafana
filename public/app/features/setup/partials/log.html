@@ -1,0 +1,42 @@
+<navbar icon="fa fa-fw fa-cloud-download" title="安装指南" title-url="/setting/agent">
+  <ul class="nav">
+    <li><a href="/setting/agent">安装探针</a></li>
+    <li><a href="/setting/service">安装服务</a></li>
+    <li class="active"><a href="/setting/log">日志收集配置</a></li>
+    <li><a href="/setting/proxy">内网代理设置</a></li>
+  </ul>
+</navbar>
+<div class="page-container">
+  <div class="settings-log">
+    <h1>日志收集配置</h1>
+    <p><br></p>
+
+    <h2>1.日志配置简介</h2>
+    <p><br></p>
+    <p>用户可以在 <a style="color: blue;" href="/logs/rules"><strong>日志分析>>日志管理</strong></a> 中配置日志信息</p>
+    <p><br></p>
+
+    <h2>2.参数说明</h2>
+    <p><br></p>
+    <p><strong>规则名称:</strong> 指定日志规则名称</p>
+    <p><strong>服务:</strong> 指定日志所属服务,支持用户所部署使用的服务,亦支持用户自主开发的自定义服务(请选择"其他",并填写自定义服务名称)</p>
+    <p><strong>日志类型:</strong> 指定日志类型,平台提供默认日志类型,亦支持用户自定义日志类型(请选择"其他",并填写自定义类型名称)</p>
+    <p><strong>日志文件:</strong> 指定日志在主机上的绝对路径,支持glob匹配规则,请点击"添加"按钮</p>
+    <p><strong>格式:</strong> 指定日志内容格式</p>
+    <p class="code-block indent2"><strong>单行:</strong> 指定日志内容格式为单行</p>
+    <p class="code-block indent2"><strong>多行:</strong> 指定日志内容格式为多行,请填写日志起始内容的匹配规则</p>
+    <p><strong>解析器:</strong></p>
+    <p class="code-block indent2"><strong>解析器名称:</strong> 指定解析器名称,仅支持英文字母/数字/下划线/小数点</p>
+    <p class="code-block indent2"><strong>匹配规则:</strong> 请填写grok规则的匹配规则</p>
+    <p class="code-block indent2"><strong>测试文本:</strong> 请粘贴日志文本,点击"测试"按钮,显示测试结果</p>
+    <p><strong>部署机器:</strong> 指定日志规则所部署的机器</p>
+    <p><br></p>
+
+    <h2>3.查询日志</h2>
+    <p><br></p>
+    <p>用户可以在 <a style="color: blue;" href="/logs"><strong>日志分析>>日志搜索</strong></a> 中查看日志信息</p>
+    <p>您可以在 <a style="color: blue;" href="http://cloudwiz.cn/document/part4/an-zhuang-zhi-nan/ri-zhi-cha-kan.html" target="_blank"><strong>帮助文档</strong></a> 查看操作指南</p>
+    
+  </div>
+
+</div>

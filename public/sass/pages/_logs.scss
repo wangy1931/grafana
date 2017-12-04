@@ -40,11 +40,19 @@
     float: none;
   }
 
-  .log-compare {
+  .log-compare, .log-search {
     display: flex;
     flex-direction: row;
     & > div {
       flex: auto;
+    }
+  }
+
+  .log-search {
+    margin-bottom: 10px;
+    .btn {
+      margin-left: 10px;
+      padding: 0.4rem 1rem;
     }
   }
 
@@ -244,20 +252,6 @@ table.diff {
       text-align: center;
     }
   }
-}
-
-// hard code
-.tab-2 tbody tr td:nth-child(2) {
-  cursor: pointer;
-  i {
-    padding-left: 14px;
-  }
-}
-.tab-2 thead tr th:nth-child(3) {
-  display: none;
-}
-.tab-2 tbody tr td:nth-child(3) {
-  display: none;
 }
 
 // hard code

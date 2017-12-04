@@ -1,5 +1,6 @@
 <navbar title="配置管理库" icon="fa fa-fw fa-cubes">
   <ul class="nav">
+      <li><a href="/cmdb/servicelist">服务列表</a></li>
       <li class="active"><a>{{ctrl.title}}服务</a></li>
   </ul>
 </navbar>
@@ -12,6 +13,7 @@
       <th>服务名称</th>
       <th>操作系统</th>
       <th>匹配规则</th>
+      <th>别名</th>
       <th>操作</th>
     </tr>
     <tr ng-repeat="software in ctrl.softwareList">
@@ -40,6 +42,13 @@
           ng-model="ctrl.editSoftware.command">
       </td>
       <td>
+        <span class="software-command" bs-tooltip="'{{software.alias}}'" data-placement="top" data-container="body" ng-if="ctrl.editIndex !== $index">{{software.alias}}</span>
+        <input style="width: 100%;" type="text"
+          placeholder="请输入服务别名"
+          ng-if="ctrl.editIndex === $index"
+          ng-model="ctrl.editSoftware.alias">
+      </td>
+      <td>
         <span ng-if="ctrl.editIndex !== $index">
           <button class="btn btn-outline-secondary" ng-click="ctrl.getEditSoftware(software, $index)">编辑</button>
           <button class="btn btn-outline-danger" ng-click="ctrl.deleteSoftware(software)">删除</button>
@@ -60,11 +69,15 @@
         style="width: 100%;"
         ng-options="p for p in ['linux', 'windows']"
         ng-model="ctrl.newSoftware.platform">
-      </select>
-    </td>
-    <td>
-      <input style="width: 100%;" type="text" placeholder="请根据下列进程信息输入匹配规则" 
-        ng-model="ctrl.newSoftware.command">
+        </select>
+      </td>
+      <td>
+        <input style="width: 100%;" type="text" placeholder="请根据下列进程信息输入匹配规则" 
+          ng-model="ctrl.newSoftware.command">
+      </td>
+      <td>
+        <input style="width: 100%;" type="text" placeholder="请根据服务别名" 
+          ng-model="ctrl.newSoftware.alias">
       </td>
       <td>
         <button class="btn btn-outline-success" ng-click="ctrl.addSoftware('add')">添加</button>
@@ -81,6 +94,10 @@
             <li ng-repeat="host in ctrl.hostList"><a ng-click="ctrl.setHost(host)">{{host.hostname}}</a></li>
         </ul>
       </span>
+      <form class="form-search cmdb-search" ng-submit="ctrl.applySearch()">
+        <i class="fa fa-search"></i>
+        <input type="text" class="input-medium search-query" placeholder="搜索进程信息" ng-model="ctrl.searchCommand">
+      </form>
     </h2>
     <div ng-if="ctrl.hostProcess.length">
       <table ng-table="ctrl.tableParams" class="table fixed-table-container table-no-bordered">

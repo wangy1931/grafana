@@ -61,9 +61,20 @@
 
 
             <div class="slide-show">
-                <cwiz-switch switch-class="summary-switch" enabled="ctrl.switchEnabled" on-change="ctrl.switch();"
-                    data-text-on="服务状态" data-text-off="机器状态"></cwiz-switch>
-                
+                <span class="overview-switch">
+                    <span class="switch-text" ng-click="ctrl.switch()">
+                        <span class="item" ng-class="{ 'on': ctrl.switchEnabled }">
+                            <i class="fa fa-check"></i>服务拓扑
+                        </span>
+                        <span>
+                            <i class="fa fa-exchange"></i>
+                        </span>
+                        <span class="item" ng-class="{ 'on': !ctrl.switchEnabled }">
+                            <i class="fa fa-check"></i>机器拓扑
+                        </span>
+                    </span>
+                </span>
+
                 <div class="slide" ng-class="{ 'checked': ctrl.switchEnabled }">
                     <div class="detail-panel view-panel">
                         <div class="service-panel panels-wrapper">
@@ -97,16 +108,7 @@
                             <em ng-if="!ctrl.servicePanel.currentService.name">点击上图某个服务，查看服务详情</em>
                             <div class="mention"></div>
                         </div>
-                        <div class="table host-panel-table" ng-if="ctrl.servicePanel.currentService.name">
-                            <ul>
-                                <li>机器名</li>
-                                <li>服务运行状态</li>
-                                <li>机器在线</li>
-                                <li>CPU 使用率</li>
-                                <li>内存使用率</li>
-                                <li>磁盘使用率</li>
-                                <li>机器详细信息</li>
-                            </ul>
+                        <div class="" ng-if="ctrl.servicePanel.currentService.name">
                             <div ng-include="'public/app/features/systemoverview/partials/system_service_host_panel.html'"></div>
                         </div>
                     </div>
@@ -133,17 +135,8 @@
                             <em ng-if="!ctrl.hostPanel.currentHost.name">点击上图某个机器，查看机器详情</em>
                             <div class="mention"></div>
                         </div>
-                        <div class="table host-panel-table" ng-if="ctrl.hostPanel.currentHost.name">
-                            <ul>
-                                <li>机器名</li>
-                                <li>机器 IP</li>
-                                <li>机器在线</li>
-                                <li>CPU 使用率</li>
-                                <li>内存使用率</li>
-                                <li>磁盘使用率</li>
-                                <li>机器详细信息</li>
-                            </ul>
-                            <div ng-include="'public/app/features/systemoverview/partials/system_host_panel.html'"></div>
+                        <div class="" ng-if="ctrl.hostPanel.currentHost.name">
+                            <div ng-include="'public/app/features/systemoverview/partials/system_service_host_panel.html'"></div>
                         </div>
                     </div>
                 </div>

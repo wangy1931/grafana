@@ -1,5 +1,4 @@
 define([
-  './filebeatCtrl',
   './hostagentCtrl',
   './serviceagentCtrl',
   './servicedetailCtrl',

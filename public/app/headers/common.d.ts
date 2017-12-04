@@ -82,3 +82,7 @@ declare module 'ace' {
   var ace: any;
   export default ace;
 }
+declare module 'jsdiff' {
+  var config: any;
+  export default config;
+}

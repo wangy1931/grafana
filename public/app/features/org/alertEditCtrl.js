@@ -222,6 +222,10 @@ function (angular, _) {
     };
 
     $scope.saveChanges = function() {
+      if (contextSrv.isViewer) {
+        $scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+        return;
+      }
       if($scope.checkStatus.checkForm) {
         var milliseconds = (new Date).getTime();
         if ($scope.isNew) {
@@ -234,7 +238,12 @@ function (angular, _) {
         $scope.alertDef.org = contextSrv.user.orgId;
         $scope.alertDef.service = contextSrv.user.systemId;
         $scope.getTags($scope.target.tags, $scope.alertDef.alertDetails);
-        $scope.alertDef.alertDetails.hosts = $scope.alertDef.alertDetails.hosts ? $scope.alertDef.alertDetails.hosts.split(',') : null;
+        if ($scope.alertDef.alertDetails.hosts) {
+          _.replace($scope.alertDef.alertDetails.hosts, ';', ',');
+          $scope.alertDef.alertDetails.hosts = $scope.alertDef.alertDetails.hosts.split(',');
+        } else {
+          $scope.alertDef.alertDetails.hosts = null;
+        }
 
         alertMgrSrv.save($scope.alertDef).then(function onSuccess() {
           $location.path("alerts");

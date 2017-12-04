@@ -95,8 +95,10 @@ export class LogParseEditCtrl {
       this.rule.logTypes.push('其他');
       if (_.findIndex(this.serviceList, {name: this.rule.logServiceName}) === -1) {
         this.custom.logServiceName = this.rule.logServiceName;
-        this.custom.logType = this.rule.logType;
         this.rule.logServiceName = '其他';
+      }
+      if (_.indexOf(this.rule.logTypes, this.rule.logType) === -1) {
+        this.custom.logType = this.rule.logType;
         this.rule.logType = '其他';
       }
     });
@@ -311,6 +313,10 @@ export class LogParseEditCtrl {
   }
 
   saveRule() {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     this.rule.orgId = this.contextSrv.user.orgId;
     this.rule.sysId = this.contextSrv.user.systemId;
     if (this.checkData(this.rule)) {
@@ -327,6 +333,8 @@ export class LogParseEditCtrl {
           });
           if (data.logServiceName === '其他') {
             data.logServiceName = this.custom.logServiceName;
+          }
+          if (data.logType === '其他') {
             data.logType = this.custom.logType;
           }
           if (data.multiline) {
@@ -352,19 +360,16 @@ export class LogParseEditCtrl {
 
   checkData(rule) {
     if (rule.logServiceName === '其他') {
-      if (_.every(this.custom)) {
-        if (!this.checkInput(this.custom.logServiceName, 'parseName')) {
-          return false;
-        }
-        if (!this.checkInput(this.custom.logType, 'logType')) {
-          return false;
-        }
-      } else {
+      if (!this.checkInput(this.custom.logServiceName, 'parseName')) {
         return false;
       }
     }
-    if (!rule.ruleName || !rule.logServiceName || !rule.logType ||
-      _.isEmpty(rule.patterns) || _.isEmpty(rule.paths) || _.isEmpty(rule.hosts)) {
+    if (rule.logType === '其他') {
+      if (!this.checkInput(this.custom.logType, 'logType')) {
+        return false;
+      }
+    }
+    if (!rule.ruleName || !rule.logServiceName || !rule.logType || _.isEmpty(rule.paths) || _.isEmpty(rule.hosts)) {
       return false;
     }
     if (!_.isBoolean(rule.multiline)) {

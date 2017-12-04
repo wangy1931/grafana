@@ -24,7 +24,7 @@
                 <a class="delete-btn" ng-click="ctrl.removeKpi(kpi, service)"><i class="fa fa-trash"></i>删除</a>
               </td>
             </tr>
-            <tr>
+            <tr ng-if="!ctrl.contextSrv.isViewer">
               <td>
                 <input type="text" ng-model="ctrl.kpi" spellcheck='false'
                   class="width-25"

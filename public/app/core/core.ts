@@ -34,7 +34,7 @@ import {topologyGraphDirective} from './components/topology_graph';
 import {guideDirective} from './components/guide/guide';
 import {toolbarDirective} from './components/toolbar/toolbar';
 import {cwizSwitchDirective} from './components/cwiz_switch';
-import {treeMenu} from './components/tree_menu';
+import {treeMenu} from './components/tree_menu/tree_menu';
 import {knowledgeBaseDirective} from './components/knowledge_base/knowledgeBase';
 import {timeWindowDirective} from './components/time_window/time_window';
 

@@ -6,7 +6,7 @@ function (angular, _) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
-  module.controller('ServiceAgentCtrl', function ($scope, backendSrv, datasourceSrv, contextSrv) {
+  module.controller('ServiceAgentCtrl', function ($scope, backendSrv, datasourceSrv, contextSrv, metricSrv) {
     var NO_DATA = 2;
     var GET_DATA = 0;
     $scope.init = function() {
@@ -39,13 +39,22 @@ function (angular, _) {
     };
 
     $scope.showDetail = function(detail) {
-      var detailScope = $scope.$new();
-      detailScope.datasource = $scope.datasource;
-      detailScope.detail = detail;
-      $scope.appEvent('show-modal', {
-        src: 'public/app/features/setup/partials/service_detail.html',
-        modalClass: 'modal-no-header invite-modal',
-        scope: detailScope,
+      metricSrv.getMetricInfo({
+        type: '服务',
+        subtype: detail.id,
+        kpi: 1
+      }).then(function(res) {
+        detail.metrics = res.data || [];
+        return detail;
+      }).then(function() {
+        var detailScope = $scope.$new();
+        detailScope.datasource = $scope.datasource;
+        detailScope.detail = detail;
+        $scope.appEvent('show-modal', {
+          src: 'public/app/features/setup/partials/service_detail.html',
+          modalClass: 'modal-no-header invite-modal',
+          scope: detailScope,
+        });
       });
     };
 

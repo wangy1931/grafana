@@ -23,7 +23,7 @@ var template = `
                             spellcheck='false'
                             bs-typeahead-old="ctrl.hostlist"
                             placeholder="机器名称，按 Enter 键查看结果"
-                            ng-enter="ctrl.searchHost()"
+                            ng-keyup="ctrl.searchHost($event)"
                             ng-blur="ctrl.searchHost()" />
                   </li>
                   <li class="tidy-form-item">
@@ -102,9 +102,6 @@ export class TopologyGraphCtrl {
   }
 
   getGraph() {
-    // 有 query 机器查询时, groupby 没有意义
-    if (this.query && this.query !== '*') { return; }
-
     var params = {};
     this.group && (params['groupby'] = this.group);
 
@@ -113,12 +110,18 @@ export class TopologyGraphCtrl {
 
     this.hostSrv.getHostTopologyData(params).then(response => {
       this.hostlist = _.map(response, 'name');
+      this.hostlist = _.uniq(this.hostlist);
       this.data = response;
 
       !this.rendered && (this.heatmap = window.d3.select('#heatmap').relationshipGraph(this.$scope.ctrl.params));
 
       this.rendered = true;
       this.heatmap.data(this.data);
+
+      // 有 query 机器查询时, 先做groupby 再filter
+      if (this.query && this.query !== '*') {
+        this.searchHost();
+      }
 
       this.$scope.$emit('topology-loaded', this.data);
     });
@@ -138,19 +141,28 @@ export class TopologyGraphCtrl {
     this.heatmap.data(this.data);
   }
 
-  searchHost() {
+  searchHost(event?) {
     // check this.query before sending request
-    if (this.query === '' || this.query === '*') {
-      this.clearSelected();
-    } else if (!~this.hostlist.indexOf(this.query)) {
-      this.alertSrv.set("搜索条件输入不正确", '', "warning", 2000);
-    } else {
-      var searchResult = this.heatmap.search({ name: this.query });
-      searchResult = !_.isEmpty(searchResult) ? searchResult : _.filter(this.data, { name: this.query });
-
-      this.heatmap.data(searchResult);
-      this.currentHost = searchResult[0];
+    if (event) {
+      var keycode = event.keyCode || event.which;
+      if (keycode !== 13) {
+        return;
+      }
     }
+
+    this.$timeout(() => {
+      if (this.query === '' || this.query === '*') {
+        this.clearSelected();
+      } else if (!~this.hostlist.indexOf(this.query)) {
+        this.alertSrv.set("搜索条件输入不正确", '', "warning", 2000);
+      } else {
+        var searchResult = this.heatmap.search({ name: this.query });
+        searchResult = !_.isEmpty(searchResult) ? searchResult : _.filter(this.data, { name: this.query });
+
+        this.heatmap.data(searchResult);
+        this.currentHost = searchResult[0];
+      }
+    });
   }
 
   getAllTagsKey() {

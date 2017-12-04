@@ -277,8 +277,8 @@
       
 
       <div class="pull-right" style="margin-top: 35px">
-        <button type="submit" class="btn" ng-class="{'btn-success':checkStatus.checkForm}" ng-show="isNew" ng-click="saveChanges()">增加</button>
-        <button type="submit" class="btn" ng-class="{'btn-success':checkStatus.checkForm}" ng-show="!isNew" ng-click="saveChanges()">保存</button>
+        <button type="submit" class="btn btn-success" ng-disabled="!checkStatus.checkForm" ng-show="isNew" ng-click="saveChanges()">增加</button>
+        <button type="submit" class="btn btn-success" ng-disabled="!checkStatus.checkForm" ng-show="!isNew" ng-click="saveChanges()">保存</button>
         <a class="btn btn-inverse" href="alerts">取消</a>
       </div>
       <br>

@@ -3,6 +3,7 @@
 import _ from 'lodash';
 import angular from 'angular';
 import moment from 'moment';
+import * as dateMath from 'app/core/utils/datemath';
 import coreModule from '../core_module';
 
 coreModule.filter('stringSort', function() {
@@ -96,6 +97,34 @@ coreModule.filter('translateItemType', () => {
 coreModule.filter('formatAnomalyHealth', () => {
   return (value) => {
     return value === 100 ? value : (value < 26 ? value + " (持续异常)" : value + " (临时异常)")
+  };
+});
+
+coreModule.filter('formatTimeRange', () => {
+  return function (text) {
+    if (!text) { return; }
+
+    var from = text.from, to = text.to;
+    var args = Array.prototype.slice.call(arguments), time = args[0], relative = args[1], index = args[2];
+    moment.isMoment(from) && (from = moment(from));
+    moment.isMoment(to) && (to = moment(to));
+
+    from = dateMath.parse(from, false);
+    to = dateMath.parse(to, true);
+
+    relative = parseInt(relative);
+    !_.isNaN(relative) && (
+      from = moment.utc(from).subtract(relative, 'days'),
+      to = moment.utc(to).subtract(relative, 'days')
+    );
+
+    return moment.utc(index === 0 ? from : to).format("YYYY-MM-DD");
+  };
+});
+
+coreModule.filter('formatRCAType', () => {
+  return (value) => {
+    return (value === 1) ? '指标' : ((value === 2) ? '日志' : '其他');
   };
 });
 

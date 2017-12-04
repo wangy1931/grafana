@@ -20,7 +20,7 @@
               "aggregator": "avg",
               "metric": "",
               "downsampleAggregator": "avg",
-              "downsampleInterval": "1m",
+              "downsampleInterval": "",
               "tags": { "host": "" }
             }
           ],
@@ -119,6 +119,10 @@
               "value": "message"
             }
           ],
+          "operator": {
+            "hide": true,
+            "type": "checkbox"
+          },
           "datasource": "elk",
           "editable": true,
           "error": false,
@@ -186,7 +190,7 @@
           "title": "日志查询",
           "transform": "json",
           "transparent": false,
-          "type": "table"
+          "type": "cwtable"
         },
         {
           "columns": [
@@ -199,6 +203,10 @@
               "value": "message"
             }
           ],
+          "operator": {
+            "hide": true,
+            "type": "expand"
+          },
           "datasource": "elk",
           "editable": true,
           "error": false,
@@ -265,7 +273,7 @@
           "title": "聚合数据",
           "transform": "json",
           "transparent": false,
-          "type": "table",
+          "type": "cwtable",
           "tab": 2,
           "scopedVars": {
             "logCluster": true
@@ -286,6 +294,10 @@
               "value": "message"
             }
           ],
+          "operator": {
+            "hide": true,
+            "type": ""
+          },
           "datasource": "elk",
           "editable": true,
           "error": false,
@@ -354,7 +366,7 @@
           "tab": 3,
           "title": "日志对比",
           "transform": "json",
-          "type": "table",
+          "type": "cwtable",
           "scopedVars": {
             "logCompare": true,
             "logFilter": ""
