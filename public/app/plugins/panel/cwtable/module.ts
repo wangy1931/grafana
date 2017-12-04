@@ -241,6 +241,7 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
       renderTableRows(renderedData);
       renderPaginationControls(renderedData);
 
+      panelElem._removeHighlight();
       if (panel.targets.length) {
         panelElem._highlight(panel.targets[0].query);
       }
