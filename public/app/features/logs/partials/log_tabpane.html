@@ -45,7 +45,10 @@
   </div>
 </form>
 
-<div class="grafana-row" ng-repeat="(row_name, row) in dashboard.rows track by row.id" ng-controller="RowCtrl" row-height>
+<dash-row class="dash-row" ng-repeat="row in dashboard.rows" row="row" dashboard="dashboard">
+</dash-row>
+
+<!-- <div class="grafana-row" ng-repeat="(row_name, row) in dashboard.rows track by row.id" ng-controller="RowCtrl" row-height>
   <div class="row-control">
       <div class="panels-wrapper" ng-if="!row.collapse">
           <div class="row-text pointer" ng-click="toggleRow(row)" ng-if="row.showTitle"
@@ -105,4 +108,4 @@
           <div class="clearfix"></div>
       </div>
   </div>
-</div>
+</div> -->

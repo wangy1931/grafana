@@ -43,9 +43,11 @@
   </div>
   
   <div ng-if="submenuEnabled">
-    <dashboard-submenu></dashboard-submenu>
+    <dashboard-submenu ng-if="dashboard.meta.submenuEnabled" dashboard="dashboard"></dashboard-submenu>
   </div>
-  <div class="grafana-row" ng-controller="RowCtrl"
+  <dash-row class="dash-row" ng-repeat="row in dashboard.rows" row="row" dashboard="dashboard">
+  </dash-row>
+  <!-- <div class="grafana-row" ng-controller="RowCtrl"
        ng-repeat="(row_name, row) in dashboard.rows" row-height style="margin-top: 180px;">
 
     <div class="row-control">
@@ -80,5 +82,5 @@
         <div class="clearfix"></div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
