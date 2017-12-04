@@ -49,7 +49,7 @@ export class LogsCtrl {
       }
     ];
 
-    this.query = $location.search().query || "ERROR OR EXCEPTION";
+    this.query = $location.search().query || "*";
     this.size = 500;
     this.timeShift = "-1d";
     this.logFilter = "";
@@ -281,6 +281,9 @@ export class LogsCtrl {
     _.forEach(panels, (panel) => {
       _.forEach(panel.targets, (target) => {
         target.query = this.query;
+        if (panel.title === 'ERROR|EXCEPTION') {
+          target.query += ' AND (ERROR OR EXCEPTION)';
+        }
       });
     });
 
