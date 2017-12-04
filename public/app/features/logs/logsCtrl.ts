@@ -392,15 +392,21 @@ export class LogsCtrl {
       causeHost: searchParams.host,
       confidenceLevel: 100,
       suggestMetrics: this.$scope.suggestMetrics,
-      suggestTagHost: this.backendSrv.suggestTagHost
+      suggestTagHost: this.backendSrv.suggestTagHost,
     });
-    newScope.addCause = (causeMetric, causeHost, confidenceLevel, reason) => {
+    newScope.addCause = (causeMetric, causeHost, confidenceLevel, reason, solution) => {
+      if (!causeMetric || !causeHost || !reason) {
+        this.alertSrv.set("请输入完整内容", '', "warning", 2000);
+        return;
+      }
+
       var rcaFeedback = {
         alertIds: [],
         timestampInSec: Math.round(new Date().getTime() / 1000),
         triggerMetric: {
           name: prefix + causeMetric,
-          host: causeHost
+          host: causeHost,
+          solution: solution || '无'
         },
         rootCauseMetrics: [{
           name: prefix + reason,
