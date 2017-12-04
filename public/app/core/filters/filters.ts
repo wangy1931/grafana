@@ -134,6 +134,7 @@ coreModule.filter('trustHtml', ($sce) => {
     value = _.replace(value, /&lt;/g, '<');
     value = _.replace(value, /&gt;/g, '>');
     value = _.replace(value, /&gt;/g, '>');
+    value = _.replace(value, /\\&quot;/g, '');
     value = _.replace(value, /&quot;/g, '"');
     value = _.replace(value, /&amp;/g, '&');
     var html = $sce.trustAsHtml('<div>' + value + '</div>');
