@@ -242,13 +242,18 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
       renderPaginationControls(renderedData);
 
       panelElem._removeHighlight();
-      if (panel.targets.length) {
-        var hilightTxt = panel.targets[0].query;
-        if (panel.title === 'ERROR|EXCEPTION') {
-          hilightTxt = _.replace(hilightTxt, ' AND (ERROR OR EXCEPTION)', '');
+      ctrl.$timeout(() => {
+        if (panel.targets.length) {
+          var highlight_txt = panel.targets[0].query;
+          highlight_txt = _.replace(highlight_txt, /( OR | AND | NOT |(message|type|host)[ ]*:)|(\(|\))/gi, ' ');
+          highlight_txt = _.replace(highlight_txt, /  /gi, ' ');
+          highlight_txt = _.trim(highlight_txt);
+          var highlight_arr = _.split(highlight_txt, ' ');
+          _.each(highlight_arr, (txt) => {
+            panelElem._highlight(txt);
+          });
         }
-        panelElem._highlight(hilightTxt);
-      }
+      });
     }
 
     ctrl.changePage = (pageNumber) => {
