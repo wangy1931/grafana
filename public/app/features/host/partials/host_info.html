@@ -13,7 +13,7 @@
                 </span>
                 <i class="fa fa-times-circle" ng-click="ctrl.removeTag(tag);"></i>
             </li>
-            <li class="tag-add" ng-click="ctrl.showPopover();">
+            <li class="tag-add" ng-click="ctrl.showPopover();" ng-if="!ctrl.contextSrv.isViewer">
                 <span class="tag-add-icon fa fa-plus-square-o" ng-show="tags.length"></span>
                 <span class="tag-add-tips" ng-hide="tags.length">待添加</span>
             </li>

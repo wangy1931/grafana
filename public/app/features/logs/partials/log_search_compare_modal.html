@@ -13,15 +13,15 @@
             <div style="display: inline-block">
                 <div class="tight-form-container">
                     <div class="tight-form">
-                        <button type="button" class="input-large tight-form-item input" ng-model="selectedCompare1" 
-                            bs-options="tab.title for tab in tabs" data-placeholder="请选择"
-                            bs-on-select="getSearchQuery(0);" data-placement="bottom-auto" bs-select>
+                        <button type="button" class="input-large tight-form-item input" ng-model="ctrl.selectedCompare1" 
+                            bs-options="tab.title for tab in ctrl.tabs" data-placeholder="请选择"
+                            bs-on-select="ctrl.getSearchQuery(0);" data-placement="bottom-auto" bs-select>
                             请选择 <span class="caret"></span>
                         </button>
                         对比
-                        <button type="button" class="input-large tight-form-item input" ng-model="selectedCompare2" 
-                            bs-options="tab.title for tab in tabs" data-placeholder="请选择"
-                            bs-on-select="getSearchQuery(1);" data-placement="bottom-auto" bs-select>
+                        <button type="button" class="input-large tight-form-item input" ng-model="ctrl.selectedCompare2" 
+                            bs-options="tab.title for tab in ctrl.tabs" data-placeholder="请选择"
+                            bs-on-select="ctrl.getSearchQuery(1);" data-placement="bottom-auto" bs-select>
                             请选择 <span class="caret"></span>
                         </button>
                         <div class="clearfix"></div>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div style="display: inline-block">
-                <button type="submit" class="btn btn-success" ng-click="logSearchCompare();">确定</button>
+                <button type="submit" class="btn btn-success" ng-click="ctrl.logSearchCompare()">确定</button>
             </div>
         </form>
 

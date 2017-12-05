@@ -15,6 +15,10 @@ export class LogParseCtrl {
   }
 
   deleteRuleById(ruleId) {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     this.$scope.appEvent('confirm-modal', {
       title: '删除',
       text: '该操作将删除所有相关日志配置,您确定要删除该规则吗？',

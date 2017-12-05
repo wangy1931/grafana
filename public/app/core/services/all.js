@@ -19,5 +19,6 @@ define([
   './association_srv',
   './guide_srv',
   './logParseSrv',
+  './metricSrv',
 ],
 function () {});

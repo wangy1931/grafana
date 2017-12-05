@@ -105,6 +105,7 @@ function (angular, moment, _) {
     };
 
     $scope.getDataSource = function () {
+      $controller('OpenTSDBQueryCtrl', {$scope: $scope});
       datasourceSrv.get('opentsdb').then(function (datasource) {
         $scope.datasource = datasource;
       });
@@ -142,10 +143,25 @@ function (angular, moment, _) {
     };
 
     $scope.handleAlert = function (alertDetail) {
-      $controller('OpenTSDBQueryCtrl', {$scope: $scope});
+      if (contextSrv.isViewer) {
+        $scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      } else {
+        var newScope = $scope.$new();
+        newScope.alertData = alertDetail;
+        newScope.closeAlert = $scope.closeAlert;
+
+        $scope.appEvent('show-modal', {
+          src: 'public/app/partials/handle_alert.html',
+          modalClass: 'modal-no-header confirm-modal',
+          scope: newScope
+        });
+      }
+    };
+
+    $scope.handleRCAFeedback = function (alertDetail) {
       var newScope = $scope.$new();
       newScope.alertData = alertDetail;
-      newScope.closeAlert = $scope.closeAlert;
+      newScope.alertData.metric = _.getMetricName(alertDetail.metric);
       newScope.causeHost = alertDetail.status.monitoredEntity;
       newScope.datasource = $scope.datasource;
       newScope.suggestMetrics = $scope.suggestMetrics;
@@ -154,15 +170,49 @@ function (angular, moment, _) {
       newScope.confidences = {
         '100': '非常确定',
         '50': '可能'
-      }
+      };
       newScope.rootCauseMetrics = [];
       newScope.addCause = $scope.addCause;
       newScope.removeCause = $scope.removeCause;
+      newScope.submitRCAFeedback = $scope.submitRCAFeedback;
+
       $scope.appEvent('show-modal', {
-        src: 'public/app/partials/handle_alert.html',
+        src: 'public/app/partials/rca_feedback_modal.html',
         modalClass: 'modal-no-header confirm-modal',
         scope: newScope
       });
+    };
+
+    $scope.submitRCAFeedback = function () {
+      var status = $scope.alertData.status;
+      var prefix = contextSrv.user.orgId + '.' + contextSrv.user.systemId + '.';
+
+      $scope.addCause($scope.causeMetric, $scope.causeHost, $scope.confidenceLevel);
+
+      if ($scope.rootCauseMetrics.length) {
+        var rcaFeedback = {};
+        rcaFeedback.timestampInSec = Math.round(status.levelChangedTime/1000);
+        rcaFeedback.alertIds = [status.alertId];
+        rcaFeedback.triggerMetric = {
+          name: prefix + $scope.alertData.metric,
+          host: $scope.alertData.status.monitoredEntity,
+        };
+        rcaFeedback.rootCauseMetrics = _.cloneDeep($scope.rootCauseMetrics);
+        _.each(rcaFeedback.rootCauseMetrics, function(cause) {
+          cause.name = prefix + cause.name;
+          cause.confidenceLevel = parseInt(cause.confidenceLevel);
+        });
+        rcaFeedback.org = contextSrv.user.orgId;
+        rcaFeedback.sys = contextSrv.user.systemId;
+        rcaFeedback.relatedMetrics = [];
+        alertMgrSrv.rcaFeedback(rcaFeedback).then(function(response) {
+          $scope.appEvent('alert-success', ['报警根源添加成功']);
+        }, function(err) {
+          $scope.appEvent('alert-error', ['报警根源添加失败']);
+        });
+      }
+
+      $scope.dismiss();
     };
 
     $scope.closeAlert = function() {
@@ -176,32 +226,6 @@ function (angular, moment, _) {
           $scope.appEvent('alert-success', ['报警处理成功']);
         }).catch(function(err) {
           $scope.appEvent('alert-error', ['报警处理失败','请检查网络连接状态']);
-        });
-      }
-
-      $scope.addCause($scope.causeMetric,$scope.causeHost,$scope.confidenceLevel);
-
-      if ($scope.rootCauseMetrics.length) {
-        var rcaFeedback = {};
-        rcaFeedback.timestampInSec = Math.round(status.levelChangedTime/1000);
-        rcaFeedback.alertIds = [status.alertId];
-        rcaFeedback.triggerMetric = {
-          name: $scope.alertData.metric,
-          host: status.monitoredEntity,
-          value: status.triggeredValue,
-        };
-        rcaFeedback.rootCauseMetrics = _.cloneDeep($scope.rootCauseMetrics);
-        _.each(rcaFeedback.rootCauseMetrics, function(cause) {
-          cause.name = contextSrv.user.orgId + '.' + contextSrv.user.systemId + '.' + cause.name;
-          cause.confidenceLevel = parseInt(cause.confidenceLevel);
-        });
-        rcaFeedback.org = contextSrv.user.orgId;
-        rcaFeedback.sys = contextSrv.user.systemId;
-        rcaFeedback.relatedMetrics = [];
-        alertMgrSrv.rcaFeedback(rcaFeedback).then(function(response) {
-          $scope.appEvent('alert-success', ['报警根源添加成功']);
-        }, function(err) {
-          $scope.appEvent('alert-error', ['报警根源添加失败']);
         });
       }
 
@@ -240,13 +264,17 @@ function (angular, moment, _) {
     };
 
     $scope.handleSnooze = function(alertDetails) {
-      var newScope = $scope.$new();
-      newScope.alertDetails = alertDetails;
-      $scope.appEvent('show-modal', {
-        src: 'public/app/partials/snooze_alert.html',
-        modalClass: 'modal-no-header confirm-modal',
-        scope: newScope
-      });
+      if (contextSrv.isViewer) {
+        $scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      } else {
+        var newScope = $scope.$new();
+        newScope.alertDetails = alertDetails;
+        $scope.appEvent('show-modal', {
+          src: 'public/app/partials/snooze_alert.html',
+          modalClass: 'modal-no-header confirm-modal',
+          scope: newScope
+        });
+      }
     };
 
     $scope.addCause = function (causeMetric,causeHost,confidenceLevel) {

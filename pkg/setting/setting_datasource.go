@@ -17,3 +17,12 @@ func readElkSourceSettings() {
   elk := Cfg.Section("elk")
   ElkSource.ElkSourceUrlRoot = elk.Key("elk_source_url").String()
 }
+
+type AgentSettings struct {
+	AgentUrlRoot string
+}
+
+func readAgentSettings() {
+	agent := Cfg.Section("agent")
+  Agent.AgentUrlRoot = agent.Key("agent_urlroot").String()
+}

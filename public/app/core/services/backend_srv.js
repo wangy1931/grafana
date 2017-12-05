@@ -10,6 +10,7 @@ function (angular, _, coreModule, config) {
   coreModule.default.service('backendSrv', function($http, alertSrv, $timeout, contextSrv, $q) {
     var self = this;
     this.alertDUrl;
+    this.agentUrl;
     this.tokens = null;
 
     this.get = function(url, params) {
@@ -185,6 +186,7 @@ function (angular, _, coreModule, config) {
     this.initCustomizedSources = function () {
       return this.get('/api/customized_sources').then(function (result) {
         self.alertDUrl = result.alert;
+        self.agentUrl = result.agent;
         contextSrv.elkUrl = result.elk;
       });
     };
@@ -270,9 +272,7 @@ function (angular, _, coreModule, config) {
     this.getHostsNum = function () {
       return this.alertD({
         method: "get",
-        url: "/summary",
-        params: {metrics:"collector.summary"},
-        headers: {'Content-Type': 'text/plain'},
+        url: "/cmdb/host"
       }).then(function (response) {
         return response.data.length;
       });
@@ -314,36 +314,6 @@ function (angular, _, coreModule, config) {
         data  : query
       });
     };
-
-    /**
-     * getMetricInfo params
-     *  size: size
-     *  page: page
-     *  id: metricId
-     *  name: metricName
-     *  type: 服务/系统
-     *  subtype: serviceName/CPU/IO/JVM/内存/存储/网络/运行状态  //系统下为hardcoded,动态加载请找张鹏
-     */
-    this.getMetricInfo = function(params) {
-      return this.alertD({
-        url: '/metrictype/info',
-        params: params
-      });
-    }
-
-    /**
-     * updateMetricInfo params
-     *  id: metricId
-     *  userId: userId
-     */
-    this.updateMetricInfo = function(params, data) {
-      return this.alertD({
-        method: 'post',
-        url   : '/metrictype/info',
-        params: params,
-        data  : data
-      })
-    }
 
     this.getKpi = function(params) {
       return this.alertD({

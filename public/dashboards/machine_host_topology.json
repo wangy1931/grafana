@@ -903,7 +903,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "网络流入数据量统计",
+          "title": "网络流出数据量统计",
           "tooltip": {
             "msResolution": false,
             "shared": true,

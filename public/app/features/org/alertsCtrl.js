@@ -6,7 +6,7 @@ function (angular) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('AlertsCtrl', function($scope, alertMgrSrv, alertSrv) {
+  module.controller('AlertsCtrl', function($scope, alertMgrSrv, alertSrv, contextSrv) {
 
     $scope.init = function() {
       alertMgrSrv.load().then(function onSuccess(response) {
@@ -19,6 +19,10 @@ function (angular) {
     };
 
     $scope.remove = function(alertId) {
+      if (contextSrv.isViewer) {
+        $scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+        return;
+      }
       $scope.appEvent('confirm-modal', {
         title: '删除',
         text: '您是否需要删除这个报警规则',
@@ -41,6 +45,10 @@ function (angular) {
     };
 
     $scope.importAlerts = function () {
+      if (contextSrv.isViewer) {
+        $scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+        return;
+      }
       var modalScope = $scope.$new();
       $scope.appEvent('show-modal', {
         src: 'public/app/partials/import_alerts.html',

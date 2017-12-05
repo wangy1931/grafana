@@ -57,3 +57,8 @@ declare module 'slider' {
   var config: any;
   export default config;
 }
+
+declare module 'jsdiff' {
+  var config: any;
+  export default config;
+}

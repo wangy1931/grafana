@@ -303,6 +303,10 @@ export class HostTopologyCtrl {
   }
 
   removeTag(tag) {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     _.remove(this.$scope.tags, tag);
     this.hostSrv.deleteTag({ hostId: this.$scope.id, key: tag.key, value: tag.value });
   };

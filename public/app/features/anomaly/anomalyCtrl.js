@@ -127,19 +127,27 @@ define([
       });
 
       $scope.exclude = function(anomaly) {
-        _.each($scope.metricHostClusters, function(cluster) {
-          _.remove(cluster.elements, function(element) {
-            return _.isEqual(anomaly, element);
+        if (contextSrv.isViewer) {
+          $scope.appEvent('alert-warning', ['抱歉','您没有权限执行该操作']);
+        } else {
+          _.each($scope.metricHostClusters, function(cluster) {
+            _.remove(cluster.elements, function(element) {
+              return _.isEqual(anomaly, element);
+            });
           });
-        });
-        healthSrv.exclude(anomaly.metric, anomaly.host);
-        $scope.excludeMetricsData.push(anomaly);
+          healthSrv.exclude(anomaly.metric, anomaly.host);
+          $scope.excludeMetricsData.push(anomaly);
+        }
       };
 
       $scope.include = function (anomalyDef) {
-        healthSrv.include(anomalyDef.metric, anomalyDef.host).then(function () {
-          $scope.reload();
-        });
+        if (contextSrv.isViewer) {
+          $scope.appEvent('alert-warning', ['抱歉','您没有权限执行该操作']);
+        } else {
+          healthSrv.include(anomalyDef.metric, anomalyDef.host).then(function () {
+            $scope.reload();
+          });
+        }
       };
 
       $scope.selectCluster = function(index) {

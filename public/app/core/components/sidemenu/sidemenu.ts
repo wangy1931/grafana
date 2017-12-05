@@ -85,12 +85,8 @@ export class SideMenuCtrl {
         {
           text: '机器状态',
           url: this.getUrl("/host_topology")
-        },
-        {
-          text: '创建服务依赖',
-          url: this.getUrl("/service_dependency")
-        },
-      ],
+        }
+      ]
     });
 
     this.mainLinks.push({
@@ -156,28 +152,30 @@ export class SideMenuCtrl {
       ]
     });
 
-    this.mainLinks.push({
-      text: "安装指南",
-      icon: "fa fa-fw fa-cloud-download",
-      children: [
-        {
-          text: '安装探针',
-          url: this.getUrl("/setting/agent"),
-        },
-        {
-          text: '安装服务',
-          url: this.getUrl("/setting/service"),
-        },
-        {
-          text: '配置日志服务',
-          url: this.getUrl("/setting/filebeat"),
-        },
-        {
-          text: '内网代理设置',
-          url: this.getUrl("/setting/proxy"),
-        },
-      ]
-    });
+    if (!this.contextSrv.isViewer) {
+      this.mainLinks.push({
+        text: "安装指南",
+        icon: "fa fa-fw fa-cloud-download",
+        children: [
+          {
+            text: '安装探针',
+            url: this.getUrl("/setting/agent"),
+          },
+          {
+            text: '安装服务',
+            url: this.getUrl("/setting/service"),
+          },
+          {
+            text: '配置日志服务',
+            url: this.getUrl("/setting/log"),
+          },
+          {
+            text: '内网代理设置',
+            url: this.getUrl("/setting/proxy"),
+          },
+        ]
+      });
+    }
 
     this.mainLinks.push({
       text: "配置管理",
@@ -341,14 +339,16 @@ export class SideMenuCtrl {
   loadDashboardList(item, _self) {
     var submenu = [];
     _self.backendSrv.search({query: "", starred: "false"}).then(function (result) {
-      submenu.push({
-        text: "+新建",
-        click: _self.newDashboard,
-      });
-      submenu.push({
-        text: "导入",
-        url: "/import/dashboard",
-      });
+      if (!_self.contextSrv.isViewer) {
+        submenu.push({
+          text: "+新建",
+          click: _self.newDashboard,
+        });
+        submenu.push({
+          text: "导入",
+          url: "/import/dashboard",
+        });
+      }
       _.each(result, function (dash) {
         submenu.push({
           text: dash.title,
