@@ -6,7 +6,9 @@ define([
     'use strict';
 
     var module = angular.module('grafana.controllers');
-    module.controller('AnomalyMetric', function ($scope, healthSrv, $routeParams) {
+    module.controller('AnomalyMetric', function ($scope, healthSrv, navModelSrv, $routeParams) {
+        $scope.navModel = navModelSrv.getAnomalyNav(0);
+
         var clusterId = $routeParams.clusterId;
         var panelMeta = {
           title: '指标健康异常状况',

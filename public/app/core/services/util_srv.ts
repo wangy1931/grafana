@@ -11,7 +11,7 @@ export class UtilSrv {
   modalScope: any;
 
   /** @ngInject */
-  constructor(private $rootScope, private $modal) {
+  constructor(private $rootScope, private $_modal) {
   }
 
   init() {
@@ -39,7 +39,7 @@ export class UtilSrv {
       this.modalScope = this.$rootScope.$new();
     }
 
-    var modal = this.$modal({
+    var modal = this.$_modal({
       modalClass: options.modalClass,
       template: options.src,
       templateHtml: options.templateHtml,

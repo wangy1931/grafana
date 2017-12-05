@@ -180,6 +180,11 @@ export class GuideCtrl {
           host: item.status.monitoredEntity
         });
       });
+    }).catch(err => {
+      if (!err.message && err.data && err.data.message) {
+        err.message = err.data.message;
+      }
+      this.$rootScope.appEvent('alert-error', ['获取数据失败', (err.message || err.statusText || err)]);
     });
   }
 

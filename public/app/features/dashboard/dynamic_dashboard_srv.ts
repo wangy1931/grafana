@@ -67,7 +67,7 @@ export class DynamicDashboardSrv {
         }
       }
 
-      row.panelSpanChanged();
+      row.panelSpanChanged && row.panelSpanChanged();
     }
   }
 

@@ -1,7 +1,6 @@
 import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
-// import 'd3.graph';
 import { coreModule } from 'app/core/core';
 import kbn from 'app/core/utils/kbn';
 
@@ -29,6 +28,8 @@ export class HostTopologyCtrl {
   topologyGraphParams: any;
   needHostnameTabs: Array<number>;  // don't modify this variable, except init
 
+  navModel: any;
+
   /** @ngInject */
   constructor (
     private hostSrv,
@@ -38,15 +39,17 @@ export class HostTopologyCtrl {
     private dynamicDashboardSrv,
     private contextSrv,
     private utilSrv,
+    private navModelSrv,
     private $scope,
     private $rootScope,
     private $controller,
     private $location,
     private NgTableParams
   ) {
-    $scope.ctrl = this;
     $scope.refresh_interval = '30s';
     $scope.refresh_func = this.getProcess.bind(this);
+
+    this.navModel = navModelSrv.getHostTopologyNav();
 
     this.tabs = [
       { 'id': 0, 'title': '机器总览', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_list_table.html' },
@@ -375,7 +378,7 @@ export class HostTopologyCtrl {
 
     this.variableSrv.init(this.dashboard);
     this.variableSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
-      this.dynamicDashboardSrv.update(this.dashboard);
+      this.dynamicDashboardSrv.init(this.dashboard);
       this.$rootScope.$emit('template-variable-value-updated');
       this.$rootScope.$broadcast('refresh');
     });

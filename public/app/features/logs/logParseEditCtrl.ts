@@ -13,10 +13,15 @@ export class LogParseEditCtrl {
   serviceList: Array<any>;
   editLogPath: any;
 
+  navModel: any;
+
   /** @ngInject */
-  constructor(private $scope, private contextSrv,
+  constructor(private $scope, private contextSrv, private navModelSrv,
     private $routeParams, private logParseSrv,
-    private $location) {
+    private $location
+  ) {
+    this.navModel = navModelSrv.getLogsParseNav(1);
+
     this.getServiceList().then(() => {
       if ($routeParams.ruleId) {
         this.getRuleById($routeParams.ruleId);

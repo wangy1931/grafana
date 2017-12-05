@@ -32,6 +32,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     templateUrl: 'public/app/features/systemoverview/partials/system_overview.html',
     controller : 'SystemOverviewCtrl',
     reloadOnSearch: false,
+    controllerAs: 'ctrl',
   })
   .when('/dashboardlist', {
     templateUrl: 'public/app/partials/dashboard.html',
@@ -294,6 +295,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     templateUrl: 'public/app/features/logs/partials/logs.html',
     controller : 'LogsCtrl',
     controllerAs: 'ctrl',
+    reloadOnSearch: false,
     resolve: loadLogsBundle,
   })
   .when('/logs/rules', {
@@ -426,6 +428,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     templateUrl: 'public/app/features/host/partials/host.html',
     controller : 'HostTopologyCtrl',
     reloadOnSearch: false,
+    controllerAs: 'ctrl',
     resolve: loadHostBundle
   })
   .when('/styleguide/:page?', {

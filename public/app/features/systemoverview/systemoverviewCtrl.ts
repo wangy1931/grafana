@@ -46,9 +46,7 @@ export class SystemOverviewCtrl {
     private hostSrv, private utilSrv, private $location, private $scope, private $modal, private $q,
     private NgTableParams, private navModelSrv
   ) {
-    $scope.ctrl = this;
-
-    this.navModel = navModelSrv.getAdminNav();
+    this.navModel = navModelSrv.getSystemOverviewNav();
 
     this.topologyGraphParams = {
       blockSize: 36,
@@ -180,6 +178,11 @@ export class SystemOverviewCtrl {
         this.alertPanel.status[0].text = '';
         this.alertPanel.status[0].count = '系统正常';
       }
+    }).catch(err => {
+      if (!err.message && err.data && err.data.message) {
+        err.message = err.data.message;
+      }
+      this.$scope.appEvent('alert-error', ['获取报警数据失败', (err.message || err.statusText || err)]);
     });
   }
 
@@ -488,8 +491,9 @@ export class SystemOverviewCtrl {
 
   // 弹窗 查看历史情况
   showModal(index, metric, host) {
-    this.$scope.row = this._dashboard.rows[index];
-    this.$scope.panel = this._dashboard.rows[index].panels[0];
+    this.$scope.ctrl.dashboard = this.$scope.dashboard;
+    this.$scope.ctrl.row = this.$scope.dashboard.rows[index];
+    this.$scope.panel = this.$scope.dashboard.rows[index].panels[0];
 
     if (index === 7) {
       this.setPanelMetaHost(this.$scope.panel, metric, host);

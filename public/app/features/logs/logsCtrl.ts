@@ -35,11 +35,16 @@ export class LogsCtrl {
   showAddRCA: boolean;
   logsSelected: Array<any>;
 
+  navModel: any;
+
   /** @ngInject */
   constructor(
     private $scope, private $rootScope, private $modal, private $q, private $location, private $controller,
-    private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv, private alertSrv
+    private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv, private alertSrv,
+    private navModelSrv
   ) {
+    this.navModel = navModelSrv.getLogsNav();
+
     this.tabs = [
       {
         "active": true,

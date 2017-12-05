@@ -18,38 +18,67 @@ function (angular, $, _, Tether) {
           '</span>';
 
       function createMenuTemplate(ctrl) {
-        // debugger
-        var template = '<div class="panel-right-menu drag-handle" ng-show="!ctrl.loading" ng-class="{panelError: ctrl.error}">';
+        // var template = '<div class="panel-right-menu drag-handle" ng-show="!ctrl.loading" ng-class="{panelError: ctrl.error}">';
+
+        var template = '<div class="panel-menu small">';
+
+        if (ctrl.dashboard.meta.canEdit) {
+          template += '<div class="panel-menu-inner">';
+          template += '<div class="panel-menu-row">';
+          if (!ctrl.dashboard.meta.fullscreen) {
+            template += '<a class="panel-menu-icon pull-left" ng-click="ctrl.updateColumnSpan(-1)"><i class="fa fa-minus"></i></a>';
+            template += '<a class="panel-menu-icon pull-left" ng-click="ctrl.updateColumnSpan(1)"><i class="fa fa-plus"></i></a>';
+          }
+          template += '<a class="panel-menu-icon pull-right" ng-click="ctrl.removePanel()"><i class="fa fa-trash"></i></a>';
+          template += '<div class="clearfix"></div>';
+          template += '</div>';
+        }
+
+        template += '<div class="panel-menu-row">';
+        template += '<a class="panel-menu-link" gf-dropdown="extendedMenu"><i class="fa fa-bars"></i></a>';
+
         _.each(ctrl.getMenu(), function (item) {
           if (item.role === 'Editor' && !ctrl.dashboard.meta.canEdit) {
             return;
           }
-          template += '<span class="';
-          var className = 'panel-right-menu-item';
-          if (item.hover) {
-            className += ' ' + item.hover;
-          }
-          template += className + '"';
-          template += ' ng-click="' + item.click + '" bs-tooltip="' + "'" + item.text + "'" + '" data-container="body">';
-          template += '<i class="fa ' + item.icon + '"></i>';
-          template += '</span>';
+
+          template += '<a class="panel-menu-link" ';
+          if (item.click) { template += ' ng-click="' + item.click + '"'; }
+          if (item.href) { template += ' href="' + item.href + '"'; }
+          template += '>';
+          template += item.text + '</a>';
+
+          // template += '<span class="';
+          // var className = 'panel-right-menu-item';
+          // if (item.hover) {
+          //   className += ' ' + item.hover;
+          // }
+          // template += className + '"';
+          // template += ' ng-click="' + item.click + '" bs-tooltip="' + "'" + item.text + "'" + '" data-container="body">';
+          // template += '<i class="fa ' + item.icon + '"></i>';
+          // template += '</span>';
         });
 
-        template += '<div class="dropdown pull-right panel-right-menu-item">';
-        template += '<a class="pointer" ng-click="hideTooltip($event)" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-bars"></i></a>';
-        template += '<ul class="dropdown-menu">';
-        _.each(ctrl.getExtendedMenu(), function (item) {
-          if (item.role === 'Editor' && !ctrl.dashboard.meta.canEdit) {
-            return;
-          }
-          template += '<li><a class="pointer"';
-          if (item.click) { template += ' ng-click="'+ item.click +'"'; }
-          template += '>' + item.text + '</a></li>';
-        });
-        template += '</ul>';
+        template += '</div>';
         template += '</div>';
         template += '</div>';
         return template;
+
+        // template += '<div class="dropdown pull-right panel-right-menu-item">';
+        // template += '<a class="pointer" ng-click="hideTooltip($event)" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-bars"></i></a>';
+        // template += '<ul class="dropdown-menu">';
+        // _.each(ctrl.getExtendedMenu(), function (item) {
+        //   if (item.role === 'Editor' && !ctrl.dashboard.meta.canEdit) {
+        //     return;
+        //   }
+        //   template += '<li><a class="pointer"';
+        //   if (item.click) { template += ' ng-click="'+ item.click +'"'; }
+        //   template += '>' + item.text + '</a></li>';
+        // });
+        // template += '</ul>';
+        // template += '</div>';
+        // template += '</div>';
+        // return template;
       }
 
       function getExtendedMenu(ctrl) {

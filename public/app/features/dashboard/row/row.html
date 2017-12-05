@@ -17,41 +17,43 @@
 </div>
 
 <div class="panels-wrapper" ng-if="!ctrl.row.collapse">
-  <div class="dash-row-menu-container" data-click-hide ng-hide="ctrl.dashboard.meta.fullscreen">
-    <ul class="dash-row-menu" role="menu">
-      <li>
-        <a ng-click="ctrl.toggleCollapse()">
-          <i class="fa fa-minus"></i> Collapse
-        </a>
-      </li>
-      <li ng-show="ctrl.dashboard.meta.canEdit">
-        <a ng-click="ctrl.onMenuAddPanel()">
-          <i class="fa fa-plus"></i> Add Panel
-        </a>
-      </li>
-      <li ng-show="ctrl.dashboard.meta.canEdit">
-        <a ng-click="ctrl.onMenuRowOptions()">
-          <i class="fa fa-cog"></i> Row Options
-        </a>
-      </li>
-      <li ng-show="ctrl.dashboard.meta.canEdit">
-        <a ng-click="ctrl.moveRow(-1)">
-          <i class="fa fa-arrow-up"></i> Move Up
-        </a>
-      </li>
-      <li ng-show="ctrl.dashboard.meta.canEdit">
-        <a ng-click="ctrl.moveRow(1)">
-          <i class="fa fa-arrow-down"></i> Move Down
-        </a>
-      </li>
-      <li ng-show="ctrl.dashboard.meta.canEdit">
-        <a ng-click="ctrl.onMenuDeleteRow()">
-          <i class="fa fa-trash"></i> Remove
-        </a>
-      </li>
-    </ul>
-    <div class="dash-row-menu-grip">
-      <i class="fa fa-ellipsis-v"></i>
+  <div ng-if="ctrl.dashboard.meta.canEdit">
+    <div class="dash-row-menu-container" data-click-hide ng-hide="ctrl.dashboard.meta.fullscreen">
+      <ul class="dash-row-menu" role="menu">
+        <li>
+          <a ng-click="ctrl.toggleCollapse()">
+            <i class="fa fa-minus"></i> Collapse
+          </a>
+        </li>
+        <li ng-show="ctrl.dashboard.meta.canEdit">
+          <a ng-click="ctrl.onMenuAddPanel()">
+            <i class="fa fa-plus"></i> Add Panel
+          </a>
+        </li>
+        <li ng-show="ctrl.dashboard.meta.canEdit">
+          <a ng-click="ctrl.onMenuRowOptions()">
+            <i class="fa fa-cog"></i> Row Options
+          </a>
+        </li>
+        <li ng-show="ctrl.dashboard.meta.canEdit">
+          <a ng-click="ctrl.moveRow(-1)">
+            <i class="fa fa-arrow-up"></i> Move Up
+          </a>
+        </li>
+        <li ng-show="ctrl.dashboard.meta.canEdit">
+          <a ng-click="ctrl.moveRow(1)">
+            <i class="fa fa-arrow-down"></i> Move Down
+          </a>
+        </li>
+        <li ng-show="ctrl.dashboard.meta.canEdit">
+          <a ng-click="ctrl.onMenuDeleteRow()">
+            <i class="fa fa-trash"></i> Remove
+          </a>
+        </li>
+      </ul>
+      <div class="dash-row-menu-grip">
+        <i class="fa fa-ellipsis-v"></i>
+      </div>
     </div>
   </div>
 

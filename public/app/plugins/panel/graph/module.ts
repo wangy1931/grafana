@@ -141,9 +141,10 @@ class GraphCtrl extends MetricsPanelCtrl {
     this.addEditorTab('图例', 'public/app/plugins/panel/graph/tab_legend.html', 3);
     this.addEditorTab('显示效果', 'public/app/plugins/panel/graph/tab_display.html', 4);
 
-    if (config.alertingEnabled) {
-      this.addEditorTab('Alert', alertTab, 5);
-    }
+    // Alert
+    // if (config.alertingEnabled) {
+    //   this.addEditorTab('Alert', alertTab, 5);
+    // }
 
     this.subTabIndex = 0;
   }

@@ -1,21 +1,17 @@
-<navbar icon="fa fa-fw fa-stethoscope" title="智能检测">
-    <ul class="nav">
-      <li><a href="anomaly">列表</a></li>
-      <li class="active"><a>指标</a></li>
-    </ul>
-    <ul class="nav pull-right">
-        <li ng-show="dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
-            <a ng-click="exitFullscreen()">
-                返回到仪表盘
-            </a>
-        </li>
-        <li ng-if="dashboard">
-            <gf-time-picker dashboard="dashboard"></gf-time-picker>
-        </li>
-    </ul>
+<navbar model="navModel">
+  <ul class="nav pull-right">
+    <li ng-show="dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
+      <a ng-click="exitFullscreen()">
+          返回到仪表盘
+      </a>
+    </li>
+    <li ng-if="dashboard">
+      <gf-time-picker dashboard="dashboard"></gf-time-picker>
+    </li>
+  </ul>
 </navbar>
 
-<div class="page-container">
+<div class="page-container anomaly-metric-page">
   <div class="table-container">
     <div class="table-head">
       <table>
@@ -42,10 +38,10 @@
     <div class="clearfix"></div>
   </div>
   
-  <div ng-if="submenuEnabled">
+  <!-- <div ng-if="submenuEnabled">
     <dashboard-submenu ng-if="dashboard.meta.submenuEnabled" dashboard="dashboard"></dashboard-submenu>
-  </div>
-  <dash-row class="dash-row" ng-repeat="row in dashboard.rows" row="row" dashboard="dashboard">
+  </div> -->
+  <dash-row class="dash-row" ng-repeat="row in dashboard.rows" row="row" dashboard="dashboard" style="margin-top: 180px;">
   </dash-row>
   <!-- <div class="grafana-row" ng-controller="RowCtrl"
        ng-repeat="(row_name, row) in dashboard.rows" row-height style="margin-top: 180px;">

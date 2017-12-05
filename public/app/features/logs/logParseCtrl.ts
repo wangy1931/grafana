@@ -7,11 +7,14 @@ import coreModule from '../../core/core_module';
 export class LogParseCtrl {
   ruleList: Array<any>;
 
+  navModel: any;
+
   /** @ngInject */
-  constructor(private $scope, private contextSrv, private logParseSrv) {
+  constructor(private $scope, private contextSrv, private logParseSrv, private navModelSrv) {
     this.logParseSrv.getListRule(this.contextSrv.user.orgId, this.contextSrv.user.systemId).then((response) => {
       this.ruleList = response.data;
     });
+    this.navModel = navModelSrv.getLogsParseNav(0);
   }
 
   deleteRuleById(ruleId) {

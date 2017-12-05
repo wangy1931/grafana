@@ -8,7 +8,9 @@ define([
 
     var module = angular.module('grafana.controllers');
 
-    module.controller('AnomalyHistory', function ($scope, healthSrv) {
+    module.controller('AnomalyHistory', function ($scope, healthSrv, navModelSrv) {
+      $scope.navModel = navModelSrv.getAnomalyNav(1);
+
       var panelMeta = [{
         "collapse": false,
         "editable": false,

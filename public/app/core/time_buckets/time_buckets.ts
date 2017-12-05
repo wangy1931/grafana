@@ -57,18 +57,18 @@ export class TimeBuckets {
 
     const resources = {
       bounds: {
-        setup: function () {
+        setup: () => {
           return [this._lb, this._ub];
         },
-        changes: function (prev) {
+        changes: (prev) => {
           return !sameMoment(prev[0], this._lb) || !sameMoment(prev[1], this._ub);
         }
       },
       interval: {
-        setup: function () {
+        setup: () => {
           return this._i;
         },
-        changes: function (prev) {
+        changes: (prev) => {
           return !sameDuration(prev, this._i);
         }
       }
@@ -76,7 +76,7 @@ export class TimeBuckets {
 
     function cachedGetter(prop) {
       return {
-        value: function cachedGetter() {
+        value: () => {
           if (cache.hasOwnProperty(prop)) {
             return cache[prop];
           }
@@ -94,9 +94,9 @@ export class TimeBuckets {
       const self = this;
 
       return {
-        value: function cacheBreaker() {
+        value: (...args) => {
           const prev = setup.call(self);
-          const ret = fn.apply(self, arguments);
+          const ret = fn.apply(self, args);
 
           if (changes.call(self, prev)) {
             cache = {};
@@ -116,13 +116,13 @@ export class TimeBuckets {
     }
 
 
-    _.forOwn(TimeBuckets.prototype, function (fn, prop) {
+    _.forOwn(TimeBuckets.prototype, (fn, prop) => {
       if (prop[0] === '_') {return;}
 
       if (breakers.hasOwnProperty(prop)) {
-        desc[prop] = cacheBreaker(prop);
+        desc[prop] = cacheBreaker.call(this, prop);
       } else {
-        desc[prop] = cachedGetter(prop);
+        desc[prop] = cachedGetter.call(this, prop);
       }
     });
   }

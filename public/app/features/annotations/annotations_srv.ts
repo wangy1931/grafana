@@ -50,7 +50,7 @@ export class AnnotationsSrv {
       });
 
       // look for alert state for this panel
-      var alertState = _.find(results[2], {panelId: options.panel.id});
+      // var alertState = _.find(results[2], {panelId: options.panel.id});
 
       return {
         annotations: annotations,
@@ -114,7 +114,7 @@ export class AnnotationsSrv {
     var dashboard = options.dashboard;
 
     if (dashboard.annotations.list.length === 0) {
-      if (!_.isNull(dashboard.manualAnnotation)) {
+      if (!_.isNull(dashboard.manualAnnotation) && !_.isUndefined(dashboard.manualAnnotation)) {
          return this.$q.when(dashboard.manualAnnotation);
       }
       return this.$q.when([]);

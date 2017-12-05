@@ -20,6 +20,8 @@ export class AlertAssociationCtrl {
   // logs
   query: string;
 
+  navModel: any;
+
   /** @ngInject */
   constructor(
     private $scope,
@@ -36,8 +38,11 @@ export class AlertAssociationCtrl {
     private associationSrv,
     private timeSrv,
     private integrateSrv,
+    private navModelSrv,
     private NgTableParams
   ) {
+    this.navModel = navModelSrv.getAssociationNav();
+
     this.targetObj = _.extend({}, {
       metric: "",
       host: "",

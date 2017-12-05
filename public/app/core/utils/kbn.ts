@@ -158,7 +158,10 @@ kbn.calculateInterval = function(range, resolution, userInterval) {
     intervalMs = lowLimitMs;
   }
 
-  return kbn.secondsToHms(intervalMs / 1000);
+  return {
+    intervalMs: intervalMs,
+    interval: kbn.secondsToHms(intervalMs / 1000),
+  };
 };
 
 kbn.describe_interval = function (str) {

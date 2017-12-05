@@ -13,11 +13,15 @@ export class RootCauseAnalysisCtrl {
   graph: any;
   traceList: Array<string> = [];
 
+  navModel: any;
+
   /** @ngInject */
   constructor(
-    private backendSrv, private popoverSrv,
+    private backendSrv, private popoverSrv, private navModelSrv,
     private $location, private $scope, private $rootScope, private $timeout
   ) {
+    this.navModel = navModelSrv.getRCANav();
+
     this.toolkit = window.jsPlumbToolkit.newInstance();
     this.renderer = this.renderFactory();
 

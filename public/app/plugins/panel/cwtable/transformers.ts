@@ -62,8 +62,8 @@ transformers['timeseries_to_columns'] = {
       var point = points[time];
       var values = [point.time];
 
-      for (var i = 0; i < data.length; i++) {
-        var value = point[i];
+      for (var k = 0; k < data.length; k++) {
+        var value = point[k];
         values.push(value);
       }
 

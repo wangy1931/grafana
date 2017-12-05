@@ -9,7 +9,9 @@ define([
 
     var module = angular.module('grafana.controllers');
 
-    module.controller('AnomalyCtrl', function ($scope, healthSrv, backendSrv, contextSrv, $controller, $rootScope) {
+    module.controller('AnomalyCtrl', function ($scope, healthSrv, backendSrv, contextSrv, navModelSrv, $controller, $rootScope) {
+      $scope.navModel = navModelSrv.getAnomalyNav(0);
+
       $scope.init = function () {
         $scope.system = backendSrv.getSystemById(contextSrv.user.systemId);
         healthSrv.load().then(function (data) {

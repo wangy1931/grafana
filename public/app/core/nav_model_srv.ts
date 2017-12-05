@@ -66,7 +66,7 @@ export class NavModelSrv {
   getProfileNav() {
     return {
       section: {
-        title: 'User Profile',
+        title: '用户档案',
         url: 'profile',
         icon: 'fa fa-fw fa-user'
       },
@@ -88,13 +88,13 @@ export class NavModelSrv {
   getOrgNav(subPage) {
     return {
       section: {
-        title: 'Organization',
+        title: '公司信息',
         url: 'org',
         icon: 'icon-gf icon-gf-users'
       },
       menu: [
-        {title: 'Preferences', active: subPage === 0, url: 'org', icon: 'fa fa-fw fa-cog'},
-        {title: 'Org Users', active: subPage === 1, url: 'org/users', icon: 'fa fa-fw fa-users'},
+        {title: '公司信息', active: subPage === 0, url: 'org', icon: 'fa fa-fw fa-cog'},
+        {title: '公司成员', active: subPage === 1, url: 'org/users', icon: 'fa fa-fw fa-users'},
         {title: 'API Keys', active: subPage === 2, url: 'org/apikeys', icon: 'fa fa-fw fa-key'},
       ]
     };
@@ -210,7 +210,6 @@ export class NavModelSrv {
         icon: 'fa fa-fw fa-trash',
         clickHandler: () => dashNavCtrl.deleteDashboard()
       });
-
     }
 
     return {
@@ -221,6 +220,103 @@ export class NavModelSrv {
       menu: menu
     };
   }
+
+  // Cloudwiz
+
+  getSystemOverviewNav() {
+    return {
+      section: {
+        title: '系统总览',
+        icon: 'fa fa-fw fa-home',
+        url: ''
+      },
+      menu: []
+    }
+  }
+
+  getHostTopologyNav() {
+    return {
+      section: {
+        title: '机器拓扑',
+        icon: 'fa fa-fw fa-home',
+        url: 'host_topology'
+      },
+      menu: []
+    }
+  }
+
+  getLogsNav() {
+    return {
+      section: {
+        title: '日志搜索',
+        icon: 'fa fa-fw fa-search',
+        url: 'logs'
+      },
+      menu: []
+    }
+  }
+
+  getLogsParseNav(subPage) {
+    return {
+      section: {
+        title: '日志管理',
+        icon: 'fa fa-fw fa-search',
+        url: 'logs/rules'
+      },
+      menu: [
+        {title: '日志配置管理', active: subPage === 0, url: 'logs/rules', icon: 'fa fa-fw fa-search'},
+        {title: '编辑日志规则', active: subPage === 1, url: 'logs/rules/new', icon: 'fa fa-fw fa-search'}
+      ]
+    }
+  }
+
+  getAnomalyNav(subPage) {
+    return {
+      section: {
+        title: '智能检测',
+        icon: 'fa fa-fw fa-stethoscope',
+        url: 'anomaly'
+      },
+      menu: [
+        {title: '异常探测', active: subPage === 0, url: 'anomaly', icon: 'fa fa-fw fa-stethoscope'},
+        {title: '异常历史', active: subPage === 1, url: 'anomaly/history', icon: 'fa fa-fw fa-stethoscope'}
+      ]
+    }
+  }
+
+  getRCANav() {
+    return {
+      section: {
+        title: '智能分析',
+        icon: 'fa fa-fw fa-cubes',
+        url: 'rca'
+      },
+      menu: []
+    }
+  }
+
+  getAssociationNav() {
+    return {
+      section: {
+        title: '智能分析',
+        icon: 'fa fa-fw fa-signal',
+        url: 'association'
+      },
+      menu: []
+    }
+  }
+
+  getTopnNav() {
+    return {
+      section: {
+        title: '智能分析',
+        icon: 'fa fa-fw fa-home',
+        url: 'topn'
+      },
+      menu: []
+    }
+  }
+
 }
 
 coreModule.service('navModelSrv', NavModelSrv);

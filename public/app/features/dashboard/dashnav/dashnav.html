@@ -4,7 +4,6 @@
 			<span class="navbar-brand-btn-background">
 				<img src="public/img/grafana_icon.svg"></img>
 			</span>
-			<i class="icon-gf icon-gf-grafana_wordmark"></i>
 			<i class="fa fa-caret-down"></i>
 			<i class="fa fa-chevron-left"></i>
 		</a>
@@ -82,30 +81,30 @@
 				</a>
 			</li>
 			<li ng-show="::ctrl.dashboard.meta.canShare" class="dropdown">
-				<a class="pointer" ng-click="ctrl.hideTooltip($event)" bs-tooltip="'Share dashboard'" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-share-square-o"></i></a>
+				<a class="pointer" ng-click="ctrl.hideTooltip($event)" bs-tooltip="'分享仪表盘'" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-share-square-o"></i></a>
 				<ul class="dropdown-menu">
 					<li>
 						<a class="pointer" ng-click="ctrl.shareDashboard(0)">
-							<i class="fa fa-link"></i> Link to Dashboard
-							<div class="dropdown-desc">Share an internal link to the current dashboard. Some configuration options available.</div>
+							<i class="fa fa-link"></i> 链接
+							<div class="dropdown-desc">生成一个网络链接地址到当前仪表盘. 某些配置选项是可使用的.</div>
 						</a>
 					</li>
 					<li>
 						<a class="pointer" ng-click="ctrl.shareDashboard(1)">
-							<i class="icon-gf icon-gf-snapshot"></i>Snapshot
+							<i class="icon-gf icon-gf-snapshot"></i> 快照
 							<div class="dropdown-desc">Interactive, publically accessible dashboard. Sensitive data is stripped out.</div>
 						</a>
 					</li>
 					<li>
 						<a class="pointer" ng-click="ctrl.shareDashboard(2)">
-							<i class="fa fa-cloud-upload"></i>Export
-							<div class="dropdown-desc">Export the dashboard to a JSON file for others and to share on Grafana.com</div>
+							<i class="fa fa-cloud-upload"></i> 导出
+							<div class="dropdown-desc">导出当前仪表盘数据为一个 JSON 文件.</div>
 						</a>
 					</li>
 				</ul>
 			</li>
 			<li ng-show="::ctrl.dashboard.meta.canSave">
-				<a ng-click="ctrl.saveDashboard()" bs-tooltip="'Save dashboard <br> CTRL+S'" data-placement="bottom"><i class="fa fa-save"></i></a>
+				<a ng-click="ctrl.saveDashboard()" bs-tooltip="'保存仪表盘 <br> CTRL+S'" data-placement="bottom"><i class="fa fa-save"></i></a>
 			</li>
 			<li ng-if="::ctrl.dashboard.snapshot.originalUrl">
 				<a ng-href="{{ctrl.dashboard.snapshot.originalUrl}}" bs-tooltip="'Open original dashboard'" data-placement="bottom"><i class="fa fa-link"></i></a>

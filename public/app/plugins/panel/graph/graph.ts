@@ -21,7 +21,7 @@ import {ThresholdManager} from './threshold_manager';
 import {EventManager} from 'app/features/annotations/all';
 import {convertValuesToHistogram, getSeriesValues} from './histogram';
 
-coreModule.directive('grafanaGraph', function($rootScope, timeSrv, popoverSrv) {
+coreModule.directive('grafanaGraph', function($rootScope, timeSrv, popoverSrv, integrateSrv) {
   return {
     restrict: 'A',
     template: '',
@@ -188,8 +188,8 @@ coreModule.directive('grafanaGraph', function($rootScope, timeSrv, popoverSrv) {
 
         thresholdManager.draw(plot);
 
-        this.integrateSrv.options.from = moment.utc(plot.getAxes().xaxis.min).format("YYYY-MM-DDTHH:mm:ss.SSS\\Z");
-        this.integrateSrv.options.to = moment.utc(plot.getAxes().xaxis.max).format("YYYY-MM-DDTHH:mm:ss.SSS\\Z");
+        integrateSrv.options.from = moment.utc(plot.getAxes().xaxis.min).format("YYYY-MM-DDTHH:mm:ss.SSS\\Z");
+        integrateSrv.options.to = moment.utc(plot.getAxes().xaxis.max).format("YYYY-MM-DDTHH:mm:ss.SSS\\Z");
       }
 
       function processOffsetHook(plot, gridMargin) {

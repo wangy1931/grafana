@@ -214,7 +214,7 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
       var sentTargets = [];
 
       // add global adhoc filters to timeFilter
-      // var adhocFilters = templateSrv.getAdhocFilters(this.name);
+      var adhocFilters = templateSrv.getAdhocFilters(this.name);
 
       for (var i = 0; i < options.targets.length; i++) {
         target = options.targets[i];
@@ -223,7 +223,7 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
         var timeFrom = options.range.from;
         var timeTo = options.range.to;
 
-        if(target.timeShift) {
+        if (target.timeShift) {
           timeFrom = timeFrom.clone();
           timeFrom = dateMath.parseDateMath(target.timeShift, timeFrom);
           timeTo = timeTo.clone();
@@ -231,25 +231,25 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
         }
 
         // NEW
-        // var queryString = templateSrv.replace(target.query || '*', options.scopedVars, 'lucene');
-        // var queryObj = this.queryBuilder.build(target, adhocFilters, queryString);
-
-        var queryObj = this.queryBuilder.build(target);
+        var queryString = templateSrv.replace(target.query, options.scopedVars, 'lucene');
+        var queryObj = this.queryBuilder.build(target, adhocFilters, queryString);
         var esQuery = angular.toJson(queryObj);
-        var luceneQuery = target.query;  // 取消默认值 "*", 否则新建一个日志搜索会有查询结果
-        if (!luceneQuery) { continue; }
-        luceneQuery = templateSrv.replace(luceneQuery, options.scopedVars, 'lucene');
-        luceneQuery = angular.toJson(luceneQuery);
+
+        // var luceneQuery = target.query;  // 取消默认值 "*", 否则新建一个日志搜索会有查询结果
+        // if (!luceneQuery) { continue; }
+        // luceneQuery = templateSrv.replace(luceneQuery, options.scopedVars, 'lucene');
+        // luceneQuery = angular.toJson(luceneQuery);
 
         // remove inner quotes
-        luceneQuery = luceneQuery.substr(1, luceneQuery.length - 2);
-        esQuery = esQuery.replace("$lucene_query", luceneQuery);
+        // luceneQuery = luceneQuery.substr(1, luceneQuery.length - 2);
+        // esQuery = esQuery.replace("$lucene_query", luceneQuery);
         esQuery = esQuery.replace(/\$timeFrom/g, timeFrom.valueOf());
         esQuery = esQuery.replace(/\$timeTo/g, timeTo.valueOf());
 
         var searchType = (queryObj.size === 0 && this.esVersion < 5) ? 'count' : 'query_then_fetch';
         var header = this.getQueryHeader(searchType, timeFrom, timeTo);
         payload +=  header + '\n';
+
         payload += esQuery + '\n';
         sentTargets.push(target);
       }
@@ -258,7 +258,7 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
         return $q.when([]);
       }
 
-      payload = payload.replace(/\$interval/g, options.interval);
+      payload = payload.replace(/\$__interval/g, options.interval);
       payload = templateSrv.replace(payload, options.scopedVars);
 
       if (options.scopedVars && options.scopedVars.logCluster) {

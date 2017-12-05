@@ -12,6 +12,7 @@ export class BackendSrv {
   private noBackendCache: boolean;
 
   private alertDUrl = '';
+  private agentUrl = '';
   private tokens = null;
 
   /** @ngInject */
@@ -266,7 +267,7 @@ export class BackendSrv {
 
   getToken () {
     return _.chain(this.tokens).filter({'name': this.contextSrv.user.systemId.toString()}).first().pick('key').values().first().value();
-  };
+  }
 
   updateTokens() {
     var updateToken = this.get('/api/auth/keys').then((tokens) => {
@@ -313,7 +314,7 @@ export class BackendSrv {
     options.withCredentials = true;
     options.url = this.contextSrv.elkUrl + options.url;
     return this.datasourceRequest(options);
-  };
+  }
 
   knowledge(options) {
     if (_.isEmpty(options.params)) {
@@ -322,7 +323,7 @@ export class BackendSrv {
     options.withCredentials = true;
     options.url = this.contextSrv.elkUrl + "/knowledgebase/article" + options.url;
     return this.datasourceRequest(options);
-  };
+  }
 
   suggestTagHost(query, callback) {
     this.alertD({
@@ -337,7 +338,7 @@ export class BackendSrv {
       });
       return hosts;
     }).then(callback);
-  };
+  }
 
   getPrediction(params) {
     return this.alertD({
@@ -346,7 +347,7 @@ export class BackendSrv {
       params: params,
       headers: {'Content-Type': 'application/json;'},
     });
-  };
+  }
 
   getPredictionPercentage(params) {
     return this.alertD({
@@ -355,7 +356,7 @@ export class BackendSrv {
       params: params,
       headers: {'Content-Type': 'application/json;'}
     });
-  };
+  }
 
   getHostsNum() {
     return this.alertD({
@@ -366,7 +367,7 @@ export class BackendSrv {
     }).then((response) => {
       return response.data.length;
     });
-  };
+  }
 
   saveCustomSoftware(params, url) {
     return this.alertD({
@@ -375,7 +376,7 @@ export class BackendSrv {
       data: angular.toJson(params),
       headers: {'Content-Type': 'application/json;'},
     });
-  };
+  }
 
   editServiceHost(params) {
     return this.alertD({
@@ -384,7 +385,7 @@ export class BackendSrv {
       data: angular.toJson(params),
       headers: {'Content-Type': 'application/json;'},
     });
-  };
+  }
 
   readMetricHelpMessage(key) {
     !_.metricMessage[key] && this.get('/api/static/metric/' + key).then((result) => {
@@ -395,7 +396,7 @@ export class BackendSrv {
       // set isHandled true, then alertSrv won't show
       err.isHandled = true;
     });
-  };
+  }
 
   getHosts(query) {
     return this.alertD({
@@ -403,7 +404,7 @@ export class BackendSrv {
       url   : "/host/metrics",
       data  : query
     });
-  };
+  }
 
   /**
    * getMetricInfo params

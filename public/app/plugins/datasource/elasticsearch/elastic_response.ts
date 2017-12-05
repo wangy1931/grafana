@@ -355,6 +355,6 @@ ElasticResponse.prototype.getTimeSeries = function() {
     }
   }
 
-  return { data: seriesList };
+  return {data: seriesList, regularities: this.response.regularities, id: this.response.id, config: this.response.$$config};
 };
 
