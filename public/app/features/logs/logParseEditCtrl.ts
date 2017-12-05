@@ -58,6 +58,8 @@ export class LogParseEditCtrl {
     }
     if (_.isEqual(logType, '其他')) {
       return;
+    } else {
+      this.custom.logType = '';
     }
     var params = {
       logServiceName: logServiceName
@@ -184,6 +186,7 @@ export class LogParseEditCtrl {
       } else {
         newScope.isNew = false;
         newScope.pattern = _.cloneDeep(pattern);
+        newScope.pattern.fields = [];
         newScope.oldPattern = pattern;
         newScope.rule = this.rule;
       }
