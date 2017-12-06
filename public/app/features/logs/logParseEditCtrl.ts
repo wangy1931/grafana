@@ -65,7 +65,7 @@ export class LogParseEditCtrl {
       logServiceName: logServiceName
     }
     if (logType) {
-      params[logType] = logType;
+      params['logType'] = logType;
     }
     this.logParseSrv.getTemplate(params).then((response)=>{
       var tmp = response.data;
