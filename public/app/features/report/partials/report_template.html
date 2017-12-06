@@ -20,7 +20,7 @@
           <span class="gf-form-label width-10">消息推送开启
             <em>*</em>
           </span>
-          <cwiz-switch switch-class="summary-switch" enabled="ctrl.reportTemplate.isOpen" on-change="ctrl.switch();"
+          <cwiz-switch switch-class="summary-switch" enabled="ctrl.reportTemplate.enabled" on-change="ctrl.switch();"
           data-text-on="开启" data-text-off="关闭"></cwiz-switch>
         </div>
 
@@ -28,14 +28,14 @@
           <span class="gf-form-label width-10">推送邮箱
             <em>*</em>
           </span>
-          <input ng-repeat="email in ctrl.reportTemplate.email" class="gf-form-input max-width-21" type="email" required ng-model="email" />
+          <input ng-repeat="email in ctrl.reportTemplate.recipients" class="gf-form-input max-width-21" type="email" required ng-model="email" />
         </div>
 
         <div class="gf-form">
           <span class="gf-form-label width-10">推送时间
             <em>*</em>
           </span>
-          <input class="gf-form-input max-width-21" type="text" required ng-model="ctrl.reportTemplate.time" />
+          <input class="gf-form-input max-width-21" type="number" required ng-model="ctrl.reportTemplate.deliverHour" />
         </div>
       </div>
 
@@ -47,11 +47,11 @@
         </div>
 
         <div class="gf-form template-container">
-          <div class="template-item" ng-click="ctrl.chooseTemplate(template)" ng-repeat="template in ctrl.reportTemplate.templates">
-            <p>{{template.name}}</p>
+          <div class="template-item" ng-click="ctrl.chooseTemplate(template)" ng-repeat="template in ctrl.reportTemplate.sections">
+            <p>{{template.name}}模板</p>
             <div class="template-img" ng-class="{true: 'active'}[template.selected]">
               <i class="fa fa-check" ng-if="template.selected"></i>
-              <img style="width: 100%; height: 100%;" src="public/img/service_hadoop.png" alt="">
+              <img style="width: 100%; height: 100%;" src="{{template.img}}" alt="">
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@
 
       <div class="parse-form-group no-border">
         <a class="btn btn-success" ng-click="ctrl.saveTemplate()">保存</a>
-        <a class="btn btn-inverse" href="">取消</a>
+        <a class="btn btn-inverse" href="/report">取消</a>
       </div>
     </form>
 

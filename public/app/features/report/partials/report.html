@@ -19,10 +19,10 @@
                 <th>健康报告</th>
                 <th>预览/下载</th>
             </tr>
-            <tr ng-repeat="report in ctrl.reports">
+            <tr ng-repeat="report in ctrl.reports | orderBy: '-startAt'">
                 <td>{{$index + 1}}</td>
-                <td width="50%"><a class="report-item" href="https://download.cloudwiz.cn/report/{{report.reportUrl}}" target="_blank">{{report.reportName}}</a></td>
-                <td><a class="report-item" href="https://download.cloudwiz.cn/report/{{report.reportUrl}}" target="_blank">预览/下载</a></td>
+                <td width="50%"><a class="report-item" ng-click="ctrl.getReport(report)" download="{{report.startAt | date:'yyyyMMdd'}}-{{report.createdAt | date:'yyyyMMdd'}}报告">{{report.startAt | date:'yyyyMMdd'}}-{{report.createdAt | date:'yyyyMMdd'}}报告</a></td>
+                <td><a class="report-item" ng-click="ctrl.getReport(report)">预览/下载</a></td>
             </tr>
         </tbody>
     </table>    

@@ -5,6 +5,21 @@ import coreModule from 'app/core/core_module';
 import _ from 'lodash';
 import 'ng-quill';
 
+const sections = [
+  {id: 1, name: '模板1', img: 'public/img/service_hadoop.png'},
+  {id: 2, name: '模板2', img: 'public/img/service_hadoop.png'},
+  {id: 3, name: '模板3', img: 'public/img/service_hadoop.png'},
+  {id: 4, name: '模板4', img: 'public/img/service_hadoop.png'},
+  {id: 5, name: '模板5', img: 'public/img/service_hadoop.png'},
+  {id: 6, name: '模板6', img: 'public/img/service_hadoop.png'},
+  {id: 7, name: '模板7', img: 'public/img/service_hadoop.png'},
+  {id: 8, name: '模板8', img: 'public/img/service_hadoop.png'},
+  {id: 9, name: '模板9', img: 'public/img/service_hadoop.png'},
+  {id: 10, name: '模板10', img: 'public/img/service_hadoop.png'},
+  {id: 11, name: '模板11', img: 'public/img/service_hadoop.png'},
+  {id: 12, name: '模板12', img: 'public/img/service_hadoop.png'}
+]
+
 export class ReportCtrl {
   reports: Array<any>;
   reportTemplate: any;
@@ -12,14 +27,22 @@ export class ReportCtrl {
   toolbarOptions: any;
 
   /** @ngInject */
-  constructor (private $scope, private backendSrv, private contextSrv) {}
+  constructor (private $scope, private $location, private reportSrv) {}
 
   /**
    * get report list
    */
   init() {
-    this.backendSrv.get('/api/static/template/' + this.contextSrv.user.orgId).then((result) => {
-      this.reports = result.reports;
+    this.reportSrv.getReportList().then((res) => {
+      this.reports = res.data;
+    });
+  }
+
+  getReport(report) {
+    this.reportSrv.getReportById(report.rowKey).then((res) => {
+      var blob = new Blob([res.data], {type: 'application/pdf'});
+      var fileUrl = URL.createObjectURL(blob);
+      window.open(fileUrl);
     });
   }
 
@@ -27,37 +50,15 @@ export class ReportCtrl {
    * eidt report template
    */
   initTemplate() {
-    this.reportTemplate = {
-      isOpen: false,
-      email: ['test.email'],
-      time: '周一 8:00',
-      templates: [
-        {
-          id: 1,
-          name: '模板1'
-        },
-        {
-          id: 2,
-          name: '模板2'
-        },
-        {
-          id: 3,
-          name: '模板3'
-        },
-        {
-          id: 4,
-          name: '模板4'
-        },
-        {
-          id: 5,
-          name: '模板5'
-        },
-        {
-          id: 6,
-          name: '模板6'
-        }
-      ]
-    };
+    this.reportSrv.getReportConfig().then((res) => {
+      this.reportTemplate = res.data;
+      var curSections = _.cloneDeep(sections);
+      _.each(this.reportTemplate.sections, (section) => {
+        _.find(curSections, {id: section.id}).selected = true;
+      });
+
+      this.reportTemplate.sections = curSections;
+    });
   }
 
   chooseTemplate(template) {
@@ -65,7 +66,14 @@ export class ReportCtrl {
   }
 
   saveTemplate() {
-    console.log(this.reportTemplate);
+    var data = _.cloneDeep(this.reportTemplate);
+    _.remove(data.sections, (section) => {
+      return !section.selected;
+    });
+    this.reportSrv.saveReportConfig(data).then((res) => {
+      this.$scope.appEvent('alert-success', ['保存成功']);
+      this.$location.url('/report');
+    });
   }
 
   switch() {}
