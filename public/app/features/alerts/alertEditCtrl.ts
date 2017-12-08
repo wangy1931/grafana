@@ -83,7 +83,8 @@ export class AlertEditCtrl {
 
   /** @ngInject */
   constructor (
-    private $scope, private $routeParams, private $controller, private $location, private $timeout,
+    private $scope, private $routeParams, private $controller, private $location,
+    private $timeout, private $rootScope,
     private alertMgrSrv, private alertSrv, private contextSrv, private datasourceSrv,
     private backendSrv, private timeSrv
   ) {
@@ -98,8 +99,8 @@ export class AlertEditCtrl {
     this.target = { tags: {} };
     this.errors = this.validateTarget();
 
-    this.alertDef = alertMgrSrv.get($routeParams.id);
     // new or modify
+    this.alertDef = alertMgrSrv.get($routeParams.id);
     this.isNew = !this.alertDef;
 
     if (this.isNew) {
@@ -149,7 +150,7 @@ export class AlertEditCtrl {
         },
       };
     } else {
-      // transform expression
+      // transform query expression
       if (this.alertDef.alertDetails.alertType === 'MUTI_ALERT') {
         var expression = this.alertDef.alertDetails.hostQuery.expression.split(';');
         this.alertDef.alertDetails.hostQuery.expression = expression[0];
@@ -163,9 +164,12 @@ export class AlertEditCtrl {
         status: false
       }
 
+      // set dashboard threshold
       this.setCritThreshold(this.panelMeta, this.alertDef);
       this.setWarnThreshold(this.panelMeta, this.alertDef);
     }
+
+    $rootScope.onAppEvent('time-range-changed', this.refreshPreview.bind(this), $scope);
   }
 
   init() {
@@ -203,6 +207,7 @@ export class AlertEditCtrl {
       metric.metric = this.prefix + metric.metric;
       metric.aggregator = metric.aggregator.toLowerCase();
     });
+    // get dahsboard time
     var time = this.$scope.dashboard ? moment(this.timeSrv.timeRange(true).from).valueOf() : '12h-ago';
 
     var tmpl = {
@@ -329,7 +334,7 @@ export class AlertEditCtrl {
   }
 
   // Part4: 报警 dashboard
-  refreshPreview() {
+  refreshPreview(time?) {
     // when multi metrics, need expression
     if ((this.alertDef.alertDetails.hostQuery.metricQueries.length > 1) && this.metricExpression) {
       var data = this.convertDataToQuery();
@@ -344,8 +349,11 @@ export class AlertEditCtrl {
         this.$scope.broadcastRefresh();
       }, err => this.appEventError);
     }
+
     // when single metrics, set panel's externalDatasource to be null
     if (this.alertDef.alertDetails.hostQuery.metricQueries.length === 1) {
+      // when time exists, timeSrv will execute broadcastRefresh
+      if (time) { return; }
       this.$scope.dashboard.rows[0].panels[0].externalDatasource = null;
       this.setDashboardTarget(this.$scope.dashboard.rows[0], this.alertDef);
       this.$scope.broadcastRefresh();
@@ -410,7 +418,7 @@ export class AlertEditCtrl {
       this.addThreshold(0);
       this.addThreshold(1);
 
-      // alert definition
+      // set threshold in alert definition
       this.alertDef.alertDetails.crit.threshold = 0;
       this.alertDef.alertDetails.warn.threshold = 0;
     } else {
