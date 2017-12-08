@@ -135,7 +135,12 @@ export class CWTableRenderer {
   }
 
   formatColumnValue(colIndex, value) {
-    return this.formatters[colIndex] ? this.formatters[colIndex](value) : value;
+    if (this.formatters[colIndex]) {
+      return this.formatters[colIndex](value);
+    }
+
+    this.formatters[colIndex] = this.defaultCellFormatter;
+    return this.formatters[colIndex](value);
   }
 
   renderCell(columnIndex, value, addWidthHack = false) {

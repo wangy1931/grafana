@@ -44,6 +44,14 @@
           <em ng-if="pattern.isMetric" class="warn-message"><i class="fa fa-info-circle"></i> 选中内容将转化为指标,其他内容将转化为tag</em>
         </div>
       </div>
+      
+      <div class="gf-form" ng-if="pattern.isMetric">
+        <span class="gf-form-label width-10">指标列表</span>
+        <div class="gf-form-input max-width-30" style="height: auto;min-height: 2.5rem;">
+          <p ng-repeat="filedname in pattern.fields">{{ctrl.custom.logType || ctrl.rule.logType}}.{{pattern.name}}.{{filedname}}</p>
+        </div>
+      </div>
+
 
       <div class="gf-form">
         <span class="gf-form-label width-10">是否添加指标<em>*</em></span>
@@ -51,7 +59,7 @@
           <input type="radio" name="ismetric" ng-value=true ng-model="pattern.isMetric" />
           <span>是</span>
         </label>
-        <label class="multiline-label">
+        <label class="multiline-label" ng-click="pattern.fields = [];">
           <input type="radio" name="ismetric" ng-value=false ng-model="pattern.isMetric" />
           <span>否</span>
         </label>
