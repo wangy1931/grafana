@@ -35,6 +35,7 @@ export class LogsCtrl {
   showAddRCA: boolean;
   logsSelected: Array<any>;
   tabsFiled: any;
+  tabsQuery: any;
 
   /** @ngInject */
   constructor(
@@ -280,10 +281,7 @@ export class LogsCtrl {
     var panels = this.$scope.dashboard.rows[0].panels;
     _.forEach(panels, (panel) => {
       _.forEach(panel.targets, (target) => {
-        target.query = this.query;
-        if (panel.title === 'ERROR|EXCEPTION') {
-          target.query += ' AND (ERROR OR EXCEPTION)';
-        }
+        target.query = this.query + this.getExtendQuery(this.$scope.dashboard.rows[0].id);
       });
     });
 
@@ -312,7 +310,7 @@ export class LogsCtrl {
 
     row = this.fillRowData(row, {
       "\\$SIZE": this.size,
-      "\\$QUERY": this.query,
+      "\\$QUERY": this.query + this.getExtendQuery(row.id),
       "\\$TIMESHIFT": this.timeShift,
       "\\$LOGFILTER": this.logFilter
     });
@@ -467,6 +465,38 @@ export class LogsCtrl {
     }
 
     this.$scope.$broadcast('render');
+  }
+
+  getExtendQuery(curTabId) {
+    !this.tabsQuery && (this.tabsQuery = {});
+    var extend_query = '';
+    if (!this.tabsQuery[curTabId]) {
+      this.tabsQuery[curTabId] = [{
+        text: 'ERROR',
+        checked: true,
+      },{
+        text: 'EXCEPTION',
+        checked: true,
+      }];
+    }
+    var checked = _.filter(this.tabsQuery[curTabId], ['checked', true]);
+    switch (checked.length) {
+      case 0:
+        extend_query = '';
+        break;
+      case 1:
+        extend_query = ' AND ' + checked[0].text;
+        break;
+      default:
+        extend_query = ' AND ('
+        _.forEach(checked, (item) => {
+          extend_query += item.text +' OR ';
+        });
+        extend_query += ')'
+        extend_query = _.replace(extend_query, ' OR )', ')');
+        break;
+    }
+    return extend_query;
   }
 }
 
