@@ -1,0 +1,93 @@
+
+<div class="elk-table">
+
+	<div class="elk-table-container" ng-if="ctrl.rows.length">
+		<div>
+			<table class="kbn-table table" ng-if="ctrl.indexPattern">
+				<thead>
+					<tr>
+						<td width="1%" ng-hide="ctrl.hideOperator"></td>
+						<th ng-repeat="column in ctrl.columns">
+							<span class="table-header-name">
+								{{ column.text }}
+								<button
+									id="docTableHeaderFieldSort{{column.text}}"
+									ng-if="ctrl.isSortableColumn($index)"
+									class="elkTableHeaderButton"
+									ng-class="ctrl.headerClass($index)"
+									ng-click="ctrl.toggleColumnSort($index)"
+								></button>
+							</span>
+							<!-- 移动 & 删除 column -->
+							<!-- <button
+								class="fa fa-remove table-header-move"
+								ng-click="ctrl.removeColumn(column)"
+								ng-if="ctrl.canRemoveColumn(column)"
+								bs-tooltip="'删除该栏'"
+								aria-label="Remove {{column.text}} column"
+							></button>
+							<button
+								class="fa fa-angle-double-left table-header-move"
+								ng-click="ctrl.moveColumnLeft(column)"
+								ng-if="ctrl.canMoveColumnLeft(column)"
+								bs-tooltip="'向左移动该栏'"
+								aria-label="Move {{column.text}} column to the left"
+							></button>
+							<button
+								class="fa fa-angle-double-right table-header-move"
+								ng-click="ctrl.moveColumnRight(column)"
+								ng-if="ctrl.canMoveColumnRight(column)"
+								bs-tooltip="'向右移动该栏'"
+								aria-label="Move {{column.text}} column to the right"
+							></button> -->
+						</th>
+					</tr>					
+				</thead>
+				<tbody>
+					<tr ng-repeat="row in ctrl.pageOfItems|limitTo:limit track by $index">
+						<td ng-hide="ctrl.hideOperator" ng-switch="ctrl.operatorType">
+							<div ng-switch-when="checkbox">
+								<gf-form-switch class="gf-form" label="" label-class="" checked="checked" on-change="ctrl.selectLog(row)"></gf-form-switch>
+							</div>
+							<div ng-switch-when="expand" style="padding: 8px; cursor: pointer;">
+								<i class="fa fa-expand" ng-click="ctrl.expandLog(row)"></i>
+							</div>
+						</td>
+						<td ng-repeat="(name, value) in row">
+							<div class="truncate-by-height" ng-bind-html="value"></div>
+							<div style="display: inline-block;" ng-if="value.length > ctrl.MAX_CONTENT_LEN" ng-click="ctrl.expandOrCollapse($event)">
+								<span class="expand-showmore" style="display: inline-block; padding: 0px 10px; cursor: pointer; background-color: rgb(230, 230, 230); font-size: 12px;">
+									...
+								</span>
+								<span class="collapse-showmore" style="display: none; padding: 0px 20px; cursor: pointer; background-color: rgb(230, 230, 230); font-size: 12px;">
+									-
+								</span>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- ToolBarFooter -->
+	<div class="elkTableBar">
+		<div class="">
+			<div class="table-panel-footer">
+				<ul>
+					<li ng-repeat="pageNumber in ctrl.pageCounts" ng-click="ctrl.changePage(pageNumber)">
+						<a class="table-panel-page-link pointer" ng-class="{ 'active': pageNumber == ctrl.pageIndex+1 }">
+							{{ pageNumber }}
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+		
+	<div ng-if="ctrl.rows != null && !ctrl.rows.length" class="table-vis-error">
+		<!-- <h2><i class="fa fa-meh-o"></i></h2> -->
+		<h4>No datapoints</h4>
+	</div>
+
+</div>

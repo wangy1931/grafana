@@ -5,54 +5,81 @@
   <form class="gf-form-group">
     <div class="parse-form-group no-border">
       <div class="gf-form">
-        <span class="gf-form-label width-10">解析器<em>*</em></span>
+        <span class="gf-form-label width-10">解析器</span>
       </div>
       <div class="gf-form">
         <span class="gf-form-label width-10">解析器名称<em>*</em></span>
-        <input class="gf-form-input max-width-30" type="text" required ng-model="ctrl.rule.patterns[0].name" placeholder="仅支持英文字母/数字/下划线/小数点"/>
-        <select class="gf-form-input max-width-7" ng-options="f for f in ['grok']" ng-model="ctrl.rule.patterns[0].type"></select>
+        <input class="gf-form-input max-width-30" type="text" required ng-model="pattern.name" placeholder="仅支持英文字母/数字/下划线/小数点"/>
+        <select class="gf-form-input max-width-7" ng-options="f for f in ['grok']" ng-model="pattern.type"></select>
       </div>
 
       <div class="gf-form">
         <span class="gf-form-label width-10">匹配规则<em>*</em></span>
-        <input class="gf-form-input max-width-30" type="text" required ng-model="ctrl.rule.patterns[0].pattern" />
+        <input class="gf-form-input max-width-30" type="text" required ng-model="pattern.pattern" />
       </div>
       
       <div class="gf-form">
         <span class="gf-form-label width-10">测试文本</span>
-        <input class="gf-form-input max-width-30" type="text" required ng-model="ctrl.rule.patterns[0].log" />
-        <button class="btn btn-primary max-width-7" ng-click="ctrl.testPattern(ctrl.rule.patterns[0])">测试</button>
+        <input class="gf-form-input max-width-30" type="text" required ng-model="pattern.log" />
+        <button class="btn btn-primary max-width-7" ng-click="ctrl.testPattern(pattern)">测试</button>
       </div>
 
       <div class="gf-form">
         <span class="gf-form-label width-10"></span>
-        <div class="gf-form-input max-width-30" style="border-radius: 0px; height: 15rem; overflow: scroll;">{{ctrl.rule.patterns[0].result}}</div>
+        <div class="gf-form-input max-width-30" style="border-radius: 0px; height: 15rem; overflow: scroll;">
+          <label class="multiline-label">
+            <em class="warn-message"><i class="fa fa-info-circle"></i>解析结果请包含"timestamp"</em>
+          </label>
+          <br>
+          <p ng-if="pattern.result === '规则解析失败'">{{pattern.result}}</p>
+          <label class="multiline-label" ng-click="ctrl.selectMetric($event, pattern, key)" ng-if="pattern.result !== '规则解析失败'" ng-repeat="(key, value) in pattern.result">
+            <input ng-if="pattern.isMetric" type="checkbox" name="pattern">{{key}}: {{value}}
+          </label>
+        </div>
       </div>
 
-      <!-- <div class="gf-form">
+      <div class="gf-form">
+        <span class="gf-form-label width-10"></span>
+        <div>
+          <em ng-if="pattern.isMetric" class="warn-message"><i class="fa fa-info-circle"></i> 选中内容将转化为指标,其他内容将转化为tag</em>
+        </div>
+      </div>
+      
+      <div class="gf-form" ng-if="pattern.isMetric">
+        <span class="gf-form-label width-10">指标列表</span>
+        <div class="gf-form-input max-width-30" style="height: auto;min-height: 2.5rem;">
+          <p ng-repeat="filedname in pattern.fields">{{ctrl.custom.logType || ctrl.rule.logType}}.{{pattern.name}}.{{filedname}}</p>
+        </div>
+      </div>
+
+
+      <div class="gf-form">
         <span class="gf-form-label width-10">是否添加指标<em>*</em></span>
         <label class="multiline-label">
           <input type="radio" name="ismetric" ng-value=true ng-model="pattern.isMetric" />
           <span>是</span>
         </label>
-        <label class="multiline-label">
+        <label class="multiline-label" ng-click="pattern.fields = [];">
           <input type="radio" name="ismetric" ng-value=false ng-model="pattern.isMetric" />
           <span>否</span>
         </label>
+        <label class="multiline-label">
+          <em class="warn-message"><i class="fa fa-info-circle"></i>(每个规则只能有一个添加指标的解析器)</em>
+        </label>
       </div>
 
-      <div class="gf-form">
+      <!-- <div class="gf-form">
         <span class="gf-form-label width-10">指标名称</span>
         <label>{{rule.logServiceName}}.{{rule.ruleName}}.{{pattern.name}} (服务名称.规则名称.解析器名称)</label>
       </div> -->
       
-      <!-- <div class="gf-form">
+      <div class="gf-form">
         <span class="gf-form-label width-10"></span>
         <div>
           <button class="btn btn-success" ng-disabled="!pattern.name" ng-click="savePattern(oldPattern, pattern, isNew, dismiss);">保存</button>
           <button class="btn btn-inverse" ng-click="dismiss();">取消</button>
         </div>
-      </div> -->
+      </div>
     </div>
 
   </form>
