@@ -154,6 +154,10 @@ function ($, moment, kbn) {
     return moment(value).format("YYYY-MM-DD HH:mm:ss");
   };
 
+  _.transformTimeFrom = function (mSecond, time, timeUnit) {
+    return moment(mSecond).add(time, timeUnit).format("YYYY-MM-DD HH:mm");
+  };
+
   _.percentFormatter = function (value) {
     return value && (value.toFixed(2) + '%');
   };

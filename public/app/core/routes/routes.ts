@@ -25,6 +25,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   var loadRcaBundle = new BundleLoader('app/features/rca/all');
   var loadHostBundle = new BundleLoader('app/features/host/all');
   var loadKnowledgeBundle = new BundleLoader('app/features/knowledge/all');
+  var loadAlertsBundle = new BundleLoader('app/features/alerts/all');
 
   $routeProvider
   .when('/', {
@@ -100,24 +101,28 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     resolve: loadPluginsBundle,
   })
   .when('/alerts', {
-    templateUrl: 'public/app/features/org/partials/alerts.html',
+    templateUrl: 'public/app/features/alerts/partials/alerts.html',
     controller : 'AlertsCtrl',
-    resolve: loadOrgBundle,
+    controllerAs: 'ctrl',
+    resolve: loadAlertsBundle,
   })
   .when('/alerts/edit/:id', {
-    templateUrl: 'public/app/features/org/partials/alertEdit.html',
+    templateUrl: 'public/app/features/alerts/partials/alertEdit.html',
     controller : 'AlertEditCtrl',
-    resolve: loadOrgBundle,
+    controllerAs: 'ctrl',
+    resolve: loadAlertsBundle,
   })
   .when('/alerts/new', {
-    templateUrl: 'public/app/features/org/partials/alertEdit.html',
+    templateUrl: 'public/app/features/alerts/partials/alertEdit.html',
     controller : 'AlertEditCtrl',
-    resolve: loadOrgBundle,
+    controllerAs: 'ctrl',
+    resolve: loadAlertsBundle,
   })
   .when('/alerts/status', {
-    templateUrl: 'public/app/features/org/partials/alertStatus.html',
+    templateUrl: 'public/app/features/alerts/partials/alertStatus.html',
     controller : 'AlertStatusCtrl',
-    resolve: loadOrgBundle,
+    controllerAs: 'ctrl',
+    resolve: loadAlertsBundle,
   })
   .when('/oncallerschedule', {
     templateUrl: 'public/app/features/oncaller/partials/oncallerSchedule.html',

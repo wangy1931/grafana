@@ -14,9 +14,9 @@ define([
 
   // cloudwiz
   './snoozeCtrl',
-  './alertsCtrl',
-  './alertEditCtrl',
-  './alertStatusCtrl',
+  // './alertsCtrl',
+  // './alertEditCtrl',
+  // './alertStatusCtrl',
   './alertAssociationCtrl',
   './importAlertsCtrl',
 ], function () {});
