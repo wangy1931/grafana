@@ -115,7 +115,7 @@
                   </label>
               </div>
           </div>
-          <div class="gf-form-inline">
+          <div class="gf-form-inline" ng-if="ctrl.alertDef.alertDetails.hostQuery.metricQueries.length > 1">
               <div class="gf-form">
                   <span class="gf-form-label query-keyword">计算上述指标值</span>
               </div>
@@ -137,7 +137,7 @@
           
           <div class="gf-form">
               <button class="btn btn-inverse gf-form-btn" ng-click="ctrl.addMetricQuery()">
-                  <i class="fa fa-plus"></i>&nbsp;查询
+                  <i class="fa fa-plus"></i>&nbsp;指标
               </button>
           </div>
         </div>

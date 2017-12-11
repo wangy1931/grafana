@@ -380,7 +380,7 @@ export class AlertEditCtrl {
             });
 
             newData.push({
-              target: `${data.meta[itemIndex].metrics.join(',')}${tagString}`,
+              target: `Exp(${data.meta[itemIndex].metrics.join(',')})${tagString}`,  // `${data.meta[itemIndex].metrics.join(',')}${tagString}`,
               datapoints: [[item, timestamp]]
             });
           } else {
@@ -495,6 +495,7 @@ export class AlertEditCtrl {
       this.alertDef.alertDetails.hostQuery.expression += `;(${this.metricExpression})`;
     } else {
       this.alertDef.alertDetails.alertType = 'SIGLE_ALERT';
+      this.alertDef.alertDetails.clusterwideAggregator = null;
     }
 
     // get tags
