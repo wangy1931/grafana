@@ -14,13 +14,14 @@ export class TreeMenuCtrl {
   panel: any;
   groupType: any;
   correlationHosts: any;
+  isExpert: boolean;
 
   /** @ngInject */
   constructor(private $scope, private associationSrv,
     private $rootScope, private $timeout,
     private $controller, private backendSrv,
     private contextSrv, private healthSrv,
-    private alertMgrSrv
+    private alertMgrSrv, private timeSrv
   ) {
     this.isOpen = false;
     this.isLoding = true;
@@ -40,6 +41,17 @@ export class TreeMenuCtrl {
 
     this.yaxisNumber = 3;
     this.prox = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.';
+
+    this.$scope.onAppEvent('time-range-changed', (e, params) => {
+      /**
+       * 这里会有两次query
+       * 1、panel 因时间改变而 refresh 的 query
+       * 2、penel 因清空选择而 refresh 的 query
+       */
+      if (this.isExpert) {
+        this.init();
+      }
+    });
   }
 
   init(type?) {
@@ -49,8 +61,19 @@ export class TreeMenuCtrl {
     this.isAssociation = false;
     var association = this.associationSrv.sourceAssociation;
     this.clearSelected();
+    var params = {
+      metric: association.metric,
+      host: association.host,
+      minDistance: 1000 - association.max,
+      maxDistance: 1000 - association.min,
+      group: this.groupType
+    }
+    if (this.isExpert) {
+      params['startSec'] = this.timeSrv.timeRange().from.unix();
+      params['endSec'] = this.timeSrv.timeRange().to.unix();
+    }
     if (!_.isEmpty(association)) {
-      this.alertMgrSrv.loadAssociatedMetrics(association.metric, association.host, association.min, association.max, this.groupType)
+      this.alertMgrSrv.loadAssociatedMetrics(params)
       .then((response) => {
         if (this.groupType === 'metrics') {
           this.correlationMetrics = response.data || {};
