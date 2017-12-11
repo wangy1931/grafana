@@ -157,11 +157,12 @@ export class LogsCtrl {
       panel.scopedVars && panel.scopedVars.logFilter && (panel.scopedVars.logFilter = tabId ? this.tabsCache[tabId].logFilter : "");
       _.forEach(panel.targets, (target) => {
         target.size && (target.size = tabId ? this.tabsCache[tabId].size : 500);
-        (typeof target.query !== "undefined") && (target.query = tabId ? this.tabsCache[tabId].query : "");
+        (typeof target.query !== "undefined") && (target.query = tabId ? this.tabsCache[tabId].query + this.getExtendQuery(tabId) : "");
         (typeof target.timeShift !== "undefined") && (target.timeShift = tabId ? this.tabsCache[tabId].timeShift : "-1d");
       });
     });
     this.$scope.dashboard.rows[0].id = tabId ? tabId : this.$scope.dashboard.rows[0].id + 1;
+    !tabId && this.getExtendQuery(this.$scope.dashboard.rows[0].id);
 
     // NOTE: 1) 直接修改 $scope.dashboard.time 且 broadcast refresh 了.没有作用. why?
     //       2) timeSrv.setTime() will broadcast "refresh", 所以在修改了 size/query/id 等设置之后调用. 否则上面的修改没有意义.
@@ -473,10 +474,10 @@ export class LogsCtrl {
     if (!this.tabsQuery[curTabId]) {
       this.tabsQuery[curTabId] = [{
         text: 'ERROR',
-        checked: true,
+        checked: false,
       },{
         text: 'EXCEPTION',
-        checked: true,
+        checked: false,
       }];
     }
     var checked = _.filter(this.tabsQuery[curTabId], ['checked', true]);
