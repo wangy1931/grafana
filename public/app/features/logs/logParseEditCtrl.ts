@@ -331,8 +331,7 @@ export class LogParseEditCtrl {
     if (this.checkData(this.rule)) {
       this.$scope.appEvent('confirm-modal', {
         title: '保存',
-        text: `该操作将<em class="warn-message">修改或覆盖</em><br>所选机器上的<em class="warn-message">filebeat配置文件</em><br>
-              请谨慎操作!!!<br>如有疑问,请事先询问管理员,并做好<em class="warn-message">备份</em>`,
+        text: '您确定要保存该配置吗？',
         yesText: '确定',
         noText: '取消',
         onConfirm: ()=>{
