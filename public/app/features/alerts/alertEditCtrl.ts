@@ -200,57 +200,6 @@ export class AlertEditCtrl {
   }
 
   // Part2: 报警指标设置
-  convertDataToQuery() {
-    // handle metric name with prefix
-    var metrics = angular.copy(this.alertDef.alertDetails.hostQuery.metricQueries);
-    metrics.forEach(metric => {
-      metric.metric = this.prefix + metric.metric;
-      metric.aggregator = metric.aggregator.toLowerCase();
-    });
-    // get dahsboard time
-    var time = this.$scope.dashboard ? moment(this.timeSrv.timeRange(true).from).valueOf() : '12h-ago';
-
-    var tmpl = {
-      "time": {
-        "start": time,
-        "aggregator": "sum",
-        "downsampler": {
-          "interval": "5m",
-          "aggregator": "avg"
-        }
-      },
-      "filters": [
-        {
-          "tags": [
-            {
-              "type": "wildcard",
-              "tagk": "host",
-              "filter": "*",
-              "groupBy": true
-            }
-          ],
-          "id": "f1"
-        }
-      ],
-      "metrics": metrics,
-      "expressions": [
-        {
-          "id": "e",
-          "expr": this.metricExpression, // "a + b"
-          "join": {
-            "operator": "intersection",
-            "useQueryTags": true,
-            "includeAggTags": false
-          }
-        }
-      ],
-      "outputs": [
-        { "id": "e", "alias": "Mega expression" }
-      ]
-    };
-    return tmpl;
-  }
-
   addMetricQuery() {
     var newId = String.fromCharCode(97 + this.alertDef.alertDetails.hostQuery.metricQueries.length);
     if (newId > 'z') { return; }
@@ -337,12 +286,24 @@ export class AlertEditCtrl {
   refreshPreview(time?) {
     // when multi metrics, need expression
     if ((this.alertDef.alertDetails.hostQuery.metricQueries.length > 1) && this.metricExpression) {
-      var data = this.convertDataToQuery();
-      this.backendSrv.datasourceRequest({
-        method: 'POST',
-        url: this.opentsdbUrl + '/api/query/exp',
-        data: data
-      }).then(response => {
+
+      // get dahsboard time
+      var timeFrom = this.$scope.dashboard ? moment(this.timeSrv.timeRange(true).from).valueOf() : '12h-ago';
+      var timeTo = this.$scope.dashboard ? moment(this.timeSrv.timeRange(true).to).valueOf() : 'now';
+      // handle metric name with prefix
+      var metrics = angular.copy(this.alertDef.alertDetails.hostQuery.metricQueries);
+      metrics.forEach(metric => {
+        metric.metric = this.prefix + metric.metric;
+        metric.aggregator = metric.aggregator.toLowerCase();
+      });
+
+      var query = {
+        timeRange: { from: timeFrom, to: timeTo },
+        metrics: metrics,
+        metricExpression: this.metricExpression
+      };
+
+      this.backendSrv.getOpentsdbExpressionQuery(query, this.opentsdbUrl).then(response => {
         // transform response's data structure
         var handledData = this.transformResponseData(response.data.outputs[0]);
         this.$scope.dashboard.rows[0].panels[0].externalDatasource = {data: handledData};

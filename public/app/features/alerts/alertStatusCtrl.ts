@@ -15,6 +15,8 @@ export class AlertStatusCtrl {
   alertStatusShow: any;
   alertHistory: any;
   alertData: any;
+  opentsdbUrl: string;
+  prefix: string;
 
   annotation_tpl: any = {
     source: {
@@ -52,6 +54,9 @@ export class AlertStatusCtrl {
     private backendSrv,
     private associationSrv
   ) {
+    // this.getDataSource();
+    this.prefix = contextSrv.user.orgId + "." + contextSrv.user.systemId + ".";
+
     this.alertHistoryRange = [
       { 'num': 0, 'type': 'now',  'value': '现在', },
       { 'num': 1, 'type': 'days',   'value': '过去一天' },
@@ -65,14 +70,13 @@ export class AlertStatusCtrl {
     this.correlationThreshold = 100;
     this.alertWarningCount = 0;
     this.alertCriticalCount = 0;
-
-    this.getDataSource();
   }
 
   private getDataSource() {
     this.$controller('OpenTSDBQueryCtrl', { $scope: this.$scope });
-    this.datasourceSrv.get('opentsdb').then(datasource => {
+    return this.datasourceSrv.get('opentsdb').then(datasource => {
       this.$scope.datasource = datasource;
+      this.opentsdbUrl = datasource.url;
     });
   }
 
@@ -105,22 +109,55 @@ export class AlertStatusCtrl {
 
   getCurrentAlertValue() {
     this.alertRows.forEach(alertItem => {
-      var tags = { host: alertItem.status.monitoredEntity };
 
-      alertItem.definition.alertDetails.tags.forEach(tag => {
-        tags[tag.name] = tag.value
-      });
+      // when multi metrics, need expression
+      if (alertItem.definition.alertDetails.alertType === 'MUTI_ALERT') {
+        var metrics = angular.copy(alertItem.definition.alertDetails.hostQuery.metricQueries);
+        metrics.forEach(metric => {
+          metric.metric = this.prefix + metric.metric;
+          metric.aggregator = metric.aggregator.toLowerCase();
+        });
+        let queries = {
+          timeRange: { from: '1m-ago', to: null },
+          metrics: metrics,
+          metricExpression: alertItem.definition.alertDetails.hostQuery.expression.split(';')[1],
+          tags: [{
+            "type": "iliteral_or",
+            "tagk": "host",
+            "filter": alertItem.status.monitoredEntity,
+            "groupBy": true
+          }]
+        };
 
-      var queries = [{
-        "metric": alertItem.metric,
-        "aggregator": alertItem.definition.alertDetails.hostQuery.metricQueries[0].aggregator.toLowerCase(),
-        "downsample": "1m-avg",
-        "tags": tags
-      }];
-      this.datasourceSrv.getHostStatus(queries, 'now-2m').then(response => {
-        alertItem.curAlertValue = Math.floor(response.status * 1000) / 1000;
-        if (isNaN(alertItem.curAlertValue)) { alertItem.curAlertValue = "没有数据"; }
-      });
+        this.getDataSource().then(() => {
+          this.backendSrv.getOpentsdbExpressionQuery(queries, this.opentsdbUrl).then(response => {
+            // var tt = response.data.outputs[0].meta.find()
+            var dps = 0;
+            if (!response.data.outputs[0].dps[0] || isNaN(response.data.outputs[0].dps[0][1])) {
+              dps = alertItem.status.triggeredValue;
+            } else {
+              dps = response.data.outputs[0].dps[0][1];
+            }
+            alertItem.curAlertValue = Math.floor(dps * 1000) / 1000;
+          });
+        });
+      } else {
+        var tags = { host: alertItem.status.monitoredEntity };
+        alertItem.definition.alertDetails.tags.forEach(tag => {
+          tags[tag.name] = tag.value
+        });
+
+        var queries = [{
+          "metric": alertItem.metric,
+          "aggregator": alertItem.definition.alertDetails.hostQuery.metricQueries[0].aggregator.toLowerCase(),
+          "downsample": "1m-avg",
+          "tags": tags
+        }];
+        this.datasourceSrv.getHostStatus(queries, 'now-2m').then(response => {
+          alertItem.curAlertValue = Math.floor(response.status * 1000) / 1000;
+          if (isNaN(alertItem.curAlertValue)) { alertItem.curAlertValue = "没有数据"; }
+        });
+      }
     });
   }
 
