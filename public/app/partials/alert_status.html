@@ -51,33 +51,44 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="alertDetail in ctrl.alertRows | filter: alertKey">
+        <tr ng-repeat="row in ctrl.alertRows | filter: alertKey">
           <td>
-            <i class="fa fa-bell" ng-class="{'CRITICAL':'system-legend-danger','WARNING':'system-legend-warning'}[alertDetail.status.level]"></i> &nbsp;
-            {{ alertDetail.definition.name }}
+            <i class="fa fa-bell" ng-class="{'CRITICAL':'system-legend-danger','WARNING':'system-legend-warning'}[row.status.level]"></i> &nbsp;
+            {{ row.definition.name }}
           </td>
-          <td>{{ alertDetail.status.monitoredEntity }}</td>
-          <td>{{ _.getMetricName(alertDetail.metric) }}</td>
-          <td>
-            <strong>{{ alertDetail.status.triggeredValue }}</strong>/{{ alertDetail.definition.alertDetails.threshold }}
+          <td>{{ row.status.monitoredEntity }}</td>
+          <td style="position: relative;">
+            <div ng-if="row.definition.alertDetails.alertType === 'MUTI_ALERT'">
+                {{ _.getMetricName(row.metric) }} 等
+                <info-popover mode="right-absolute">
+                  <div ng-repeat="metric in row.definition.alertDetails.hostQuery.metricQueries">{{ metric.id }} : {{ metric.metric }}</div>
+                  <div>计算方式：{{ row.definition.alertDetails.hostQuery.expression.split(';')[1] }}</div>
+                </info-popover>
+            </div>
+            <div ng-if="row.definition.alertDetails.alertType === 'SIGLE_ALERT'">
+                {{ _.getMetricName(row.metric) }}
+            </div>
           </td>
-          <td>{{ alertDetail.curAlertValue }}</td>
-          <td>{{ _.translateAlertLevel(alertDetail.status.level) }}</td>
-          <td>{{ _.transformMillionTime(alertDetail.status.levelChangedTime) }}</td>
-          <td>{{ _.transformTimeFrom(alertDetail.status.levelChangedTime, alertDetail.status.snoozeMinutes, 'm') }}</td>
           <td>
-            <a ng-click="ctrl.associateAnalysis(alertDetail.status.monitoredEntity, alertDetail.metric, alertDetail)"
+            <strong>{{ row.status.triggeredValue }}</strong>/{{ row.definition.alertDetails.threshold }}
+          </td>
+          <td>{{ row.curAlertValue }}</td>
+          <td>{{ _.translateAlertLevel(row.status.level) }}</td>
+          <td>{{ _.transformMillionTime(row.status.levelChangedTime) }}</td>
+          <td>{{ _.transformTimeFrom(row.status.levelChangedTime, row.status.snoozeMinutes, 'm') }}</td>
+          <td>
+            <a ng-click="ctrl.associateAnalysis(row.status.monitoredEntity, row.metric, row)"
               href="javascript:;"
               class="btn btn-mini btn-primary">
               <i class="fa fa-signal"></i> 诊断分析
             </a>
-            <a class="btn btn-mini btn-success" ng-click="ctrl.handleSnooze(alertDetail)">
+            <a class="btn btn-mini btn-success" ng-click="ctrl.handleSnooze(row)">
               延迟报警
             </a>
-            <a class="btn btn-mini btn-success" ng-click="ctrl.handleAlert(alertDetail)">
+            <a class="btn btn-mini btn-success" ng-click="ctrl.handleAlert(row)">
               处理警告
             </a>
-            <a class="btn btn-mini btn-success" ng-click="ctrl.handleRCAFeedback(alertDetail)">
+            <a class="btn btn-mini btn-success" ng-click="ctrl.handleRCAFeedback(row)">
               添加根源原因
             </a>
           </td>
