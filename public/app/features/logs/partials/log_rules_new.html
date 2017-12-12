@@ -34,8 +34,6 @@
           ng-class="{false: 'error-input'}[!ctrl.custom.logType || ctrl.checkInput(ctrl.custom.logType, 'logType')]"
           type="text" ng-if="ctrl.rule.logType === '其他'"
           ng-model="ctrl.custom.logType" placeholder="请输入英文字母" required />
-        <!-- <button class="btn btn-primary" ng-click="ctrl.getTemplate(ctrl.rule.logServiceName, ctrl.rule.logType)"
-          ng-if="ctrl.rule.logServiceName !== '其他' && ctrl.rule.logType !== '其他'">应用模板</button> -->
       </div>
 
       <div class="gf-form parse-form section">
@@ -94,8 +92,7 @@
     </div>
 
     <div class="parse-form-group">
-      <!-- <div ng-include="'/public/app/features/logs/partials/log_rules_parse.html'"></div> -->
-              
+        
       <div class="gf-form parse-form section">
         <span class="gf-form-label width-10">解析器
           <a class="parse-btn parse-edit" ng-click="ctrl.editPattren()" style="margin-left: 10px;">

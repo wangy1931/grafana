@@ -308,7 +308,7 @@ export class SystemOverviewCtrl {
       return resp;
     }).then(resp => {
       // refresh service-dependency-graph, service status
-      _.find(this.dependencies.nodes, { name: serviceName }).status = resp.healthStatusType.toLowerCase(); // "red"
+      _.find(this.dependencies.nodes, { name: serviceName }).status = resp.healthStatusType.toLowerCase();
       this.toolkit.clear();
       this.toolkit.load({ type: "json", data: _.cloneDeep(this.dependencies) });
 

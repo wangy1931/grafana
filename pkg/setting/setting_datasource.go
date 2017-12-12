@@ -18,11 +18,11 @@ func readElkSourceSettings() {
   ElkSource.ElkSourceUrlRoot = elk.Key("elk_source_url").String()
 }
 
-type AgentSettings struct {
-	AgentUrlRoot string
+type DownloadSettings struct {
+  DownloadUrlRoot string
 }
 
-func readAgentSettings() {
-	agent := Cfg.Section("agent")
-  Agent.AgentUrlRoot = agent.Key("agent_urlroot").String()
+func readDownloadSettings() {
+  download := Cfg.Section("download")
+  Download.DownloadUrlRoot = download.Key("download_urlroot").String()
 }
