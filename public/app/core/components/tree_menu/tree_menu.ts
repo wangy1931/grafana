@@ -15,6 +15,7 @@ export class TreeMenuCtrl {
   groupType: any;
   correlationHosts: any;
   isExpert: boolean;
+  timeRange: any;
 
   /** @ngInject */
   constructor(private $scope, private associationSrv,
@@ -42,16 +43,7 @@ export class TreeMenuCtrl {
     this.yaxisNumber = 3;
     this.prox = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.';
 
-    this.$scope.onAppEvent('time-range-changed', (e, params) => {
-      /**
-       * 这里会有两次query
-       * 1、panel 因时间改变而 refresh 的 query
-       * 2、penel 因清空选择而 refresh 的 query
-       */
-      if (this.isExpert) {
-        this.init();
-      }
-    });
+    this.timeRange = {};
   }
 
   init(type?) {
@@ -69,8 +61,8 @@ export class TreeMenuCtrl {
       group: this.groupType
     }
     if (this.isExpert) {
-      params['startSec'] = this.timeSrv.timeRange().from.unix();
-      params['endSec'] = this.timeSrv.timeRange().to.unix();
+      params['startSec'] = this.timeRange.from;
+      params['endSec'] = this.timeRange.to;
     }
     if (!_.isEmpty(association)) {
       this.alertMgrSrv.loadAssociatedMetrics(params)
@@ -243,6 +235,23 @@ export class TreeMenuCtrl {
   checkSource(metric, host) {
     return _.isEqual(metric, this.associationSrv.sourceAssociation.metric) &&
       _.isEqual(host, this.associationSrv.sourceAssociation.host)
+  }
+
+  initByTime(isExpert) {
+    this.$scope.appEvent('confirm-modal', {
+      title: '确定',
+      text: '您确定要重新计算关联指标吗？\n该计算过程可能较长,请耐心等待',
+      yesText: '确定',
+      noText: '取消',
+      onConfirm: () => {
+        this.isExpert = isExpert;
+        if (isExpert) {
+          this.timeRange.from = this.timeSrv.timeRange().from.unix();
+          this.timeRange.to = this.timeSrv.timeRange().to.unix();
+        }
+        this.init();
+      }
+    })
   }
 }
 
