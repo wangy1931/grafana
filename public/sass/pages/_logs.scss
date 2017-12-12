@@ -4,6 +4,10 @@
   & > .nav-tabs {
     padding: 0;
     margin: 0;
+    li.active > a, li.active > a:focus , .active > a:hover {
+      background: rgb(248, 248, 248);
+      border-bottom: 1px solid rgb(248, 248, 248);
+    }
   }
 
   // override btn
@@ -29,7 +33,8 @@
 .log-search-result {
   border: 1px solid #7B7B7B;
   border-top: none;
-  padding: 20px;
+  // padding: 20px;
+  overflow: hidden;
 
   .panel:first-child {
     margin: 20px 0;
@@ -140,6 +145,13 @@
     &:last-child {
       word-break: break-all;
     }
+  }
+
+  .tidy-form {
+    margin: 0;
+    margin-left: 1px;
+    padding: 30px;
+    background: rgb(248, 248, 248);
   }
 }
 
@@ -358,7 +370,7 @@ table.diff {
 .modal-log-parse {
   background: $white;
   height: 100%;
-  // padding: 2rem 2rem 0;
+  padding: 2rem 2rem 0;
 }
 
 .error-input {
@@ -378,4 +390,54 @@ table.diff {
   color: red;
   font-weight: bold;
   font-style: normal;
+}
+
+.log-container {
+  display: flex;
+  .log-filed-container {
+    background: rgb(236, 239, 241);
+    margin-left: 1px;
+    border-right: 1px solid;
+    position: relative;
+    width: 200px;
+    label {
+      color: $gray;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    li {
+      padding: 0 20px;
+    }
+  }
+  .log-filed-contaienr-close {
+    padding: 10px;
+    margin-left: 1px;
+    cursor: pointer;
+    &:hover {
+      background: rgb(236, 239, 241);
+    }
+  }
+  .log-filed-title {
+    background: #38b7e6;
+    color: $white;
+    line-height: 3rem;
+    cursor: pointer;
+    .pull-right {
+      font-size: 1.5rem;
+      line-height: 3rem;
+    }
+  }
+  .row-control {
+    padding: 20px;
+    padding-right: 50px;
+    width: 100%;
+    &.active {
+      width: 90%;
+    }
+  }
+  .log-filed-header, .log-filed-header > i{
+    font-weight: bold;
+    line-height: 3rem;
+  }
 }

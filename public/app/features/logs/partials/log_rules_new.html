@@ -7,7 +7,7 @@
 
 <div class="page-container">
   <div class="page-header">
-    <h1>编辑日志规则<em class="warn-message" style="font-size: 1rem;">(修改日志规则将会修改或覆盖所选机器上的filebeat配置文件,如有疑问,请事先联系管理员,并做好备份)</em></h1>
+    <h1>编辑日志规则</h1>
   </div>
   <form class="gf-form-group">
     <div class="parse-form-group">
@@ -95,10 +95,10 @@
     </div>
 
     <div class="parse-form-group">
-      <div ng-include="'/public/app/features/logs/partials/log_rules_parse.html'"></div>
-      <!--         
+      <!-- <div ng-include="'/public/app/features/logs/partials/log_rules_parse.html'"></div> -->
+              
       <div class="gf-form parse-form section">
-        <span class="gf-form-label width-10">解析器<em>*</em>
+        <span class="gf-form-label width-10">解析器
           <a class="parse-btn parse-edit" ng-click="ctrl.editPattren()" style="margin-left: 10px;">
             <i class="fa fa-plus-square"></i>
           </a>
@@ -116,7 +116,7 @@
             </td>
           </tr>
         </table>
-      </div> -->
+      </div>
     </div>
 
     <div class="parse-form-group">

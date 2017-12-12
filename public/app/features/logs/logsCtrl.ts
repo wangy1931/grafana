@@ -34,6 +34,8 @@ export class LogsCtrl {
   showSearchGuide: boolean;
   showAddRCA: boolean;
   logsSelected: Array<any>;
+  tabsFiled: any;
+  tabsQuery: any;
 
   navModel: any;
 
@@ -80,6 +82,10 @@ export class LogsCtrl {
       this.resultCache[curTabId][payload.id] = payload.data;
 
       this.saveCurQueryInfo(curTabId);
+
+      if (payload.id === 'logSearch') {
+        this.getFiled(payload.data);
+      }
     });
 
     $scope.$on('select-log', (event, payload) => {
@@ -156,11 +162,12 @@ export class LogsCtrl {
       panel.scopedVars && panel.scopedVars.logFilter && (panel.scopedVars.logFilter = tabId ? this.tabsCache[tabId].logFilter : "");
       _.forEach(panel.targets, (target) => {
         target.size && (target.size = tabId ? this.tabsCache[tabId].size : 500);
-        (typeof target.query !== "undefined") && (target.query = tabId ? this.tabsCache[tabId].query : "");
+        (typeof target.query !== "undefined") && (target.query = tabId ? this.tabsCache[tabId].query + this.getExtendQuery(tabId) : "");
         (typeof target.timeShift !== "undefined") && (target.timeShift = tabId ? this.tabsCache[tabId].timeShift : "-1d");
       });
     });
     this.$scope.dashboard.rows[0].id = tabId ? tabId : this.$scope.dashboard.rows[0].id + 1;
+    !tabId && this.getExtendQuery(this.$scope.dashboard.rows[0].id);
 
     // NOTE: 1) 直接修改 $scope.dashboard.time 且 broadcast refresh 了.没有作用. why?
     //       2) timeSrv.setTime() will broadcast "refresh", 所以在修改了 size/query/id 等设置之后调用. 否则上面的修改没有意义.
@@ -280,7 +287,7 @@ export class LogsCtrl {
     var panels = this.$scope.dashboard.rows[0].panels;
     _.forEach(panels, (panel) => {
       _.forEach(panel.targets, (target) => {
-        target.query = this.query;
+        target.query = this.query + this.getExtendQuery(this.$scope.dashboard.rows[0].id);
       });
     });
 
@@ -309,7 +316,7 @@ export class LogsCtrl {
 
     row = this.fillRowData(row, {
       "\\$SIZE": this.size,
-      "\\$QUERY": this.query,
+      "\\$QUERY": this.query + this.getExtendQuery(row.id),
       "\\$TIMESHIFT": this.timeShift,
       "\\$LOGFILTER": this.logFilter
     });
@@ -433,6 +440,69 @@ export class LogsCtrl {
       show: false
     });
     rcaFeedbackModal.$promise.then(rcaFeedbackModal.show);
+  }
+
+  getFiled(filedData) {
+    var panel = this.$scope.dashboard.rows[0].panels[0];
+    this.tabsFiled = this.tabsFiled || {};
+    this.tabsFiled[this.$scope.dashboard.rows[0].id] = [];
+    var filed = filedData ? filedData[0] : {};
+    _.each(filed, (value, key) => {
+      var obj = {text: key, value: key};
+      if (_.find(panel.columns, obj)) {
+        obj['checked'] = true;
+      }
+      this.tabsFiled[this.$scope.dashboard.rows[0].id].push(obj);
+    });
+  }
+
+  updateColum (row, filed) {
+    if (filed.checked) {
+      if (_.findIndex(row.panels[0].columns, {text: filed.text}) === -1) {
+        row.panels[0].columns.push({
+          text: filed.text,
+          value: filed.value
+        });
+      }
+    } else {
+      _.remove(row.panels[0].columns, (column) => {
+        return column.text === filed.text;
+      });
+    }
+
+    this.$scope.$broadcast('render');
+  }
+
+  getExtendQuery(curTabId) {
+    !this.tabsQuery && (this.tabsQuery = {});
+    var extend_query = '';
+    if (!this.tabsQuery[curTabId]) {
+      this.tabsQuery[curTabId] = [{
+        text: 'ERROR',
+        checked: false,
+      },{
+        text: 'EXCEPTION',
+        checked: false,
+      }];
+    }
+    var checked = _.filter(this.tabsQuery[curTabId], ['checked', true]);
+    switch (checked.length) {
+      case 0:
+        extend_query = '';
+        break;
+      case 1:
+        extend_query = ' AND ' + checked[0].text;
+        break;
+      default:
+        extend_query = ' AND ('
+        _.forEach(checked, (item) => {
+          extend_query += item.text +' OR ';
+        });
+        extend_query += ')'
+        extend_query = _.replace(extend_query, ' OR )', ')');
+        break;
+    }
+    return extend_query;
   }
 }
 

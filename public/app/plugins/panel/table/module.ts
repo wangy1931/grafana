@@ -247,6 +247,7 @@ class TablePanelCtrl extends MetricsPanelCtrl {
       appendPaginationControls(footerElem);
 
       rootElem.css({'max-height': panel.scroll ? getTableHeight() : '' });
+      panelElem._removeHighlight();
       if (panel.targets.length) {
         panelElem._highlight(panel.targets[0].query);
       }

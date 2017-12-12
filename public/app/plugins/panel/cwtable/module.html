@@ -54,7 +54,7 @@
 							</div>
 						</td>
 						<td ng-repeat="(name, value) in row">
-							<div class="truncate-by-height">{{ value }}</div>
+							<div class="truncate-by-height" ng-bind-html="value"></div>
 							<div style="display: inline-block;" ng-if="value.length > ctrl.MAX_CONTENT_LEN" ng-click="ctrl.expandOrCollapse($event)">
 								<span class="expand-showmore" style="display: inline-block; padding: 0px 10px; cursor: pointer; background-color: rgb(230, 230, 230); font-size: 12px;">
 									...

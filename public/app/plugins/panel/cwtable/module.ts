@@ -241,9 +241,19 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
       renderTableRows(renderedData);
       renderPaginationControls(renderedData);
 
-      if (panel.targets.length) {
-        panelElem._highlight(panel.targets[0].query);
-      }
+      panelElem._removeHighlight();
+      ctrl.$timeout(() => {
+        if (panel.targets.length) {
+          var highlight_txt = panel.targets[0].query;
+          highlight_txt = _.replace(highlight_txt, /( OR | AND | NOT |(message|type|host)[ ]*:)|(\(|\))/gi, ' ');
+          highlight_txt = _.replace(highlight_txt, /  /gi, ' ');
+          highlight_txt = _.trim(highlight_txt);
+          var highlight_arr = _.split(highlight_txt, ' ');
+          _.each(highlight_arr, (txt) => {
+            panelElem._highlight(txt);
+          });
+        }
+      });
     }
 
     ctrl.changePage = (pageNumber) => {

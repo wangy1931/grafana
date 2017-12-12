@@ -44,9 +44,24 @@
   </div>
 </form>
 
-<div class="grafana-row" ng-repeat="(row_name, row) in dashboard.rows track by row.id">
-    <div class="row-control">
+<div class="grafana-row log-container" ng-repeat="(row_name, row) in dashboard.rows track by row.id">
+    <div class="row-control log-filed-container" ng-if="row.openfiled">
+        <ul>
+            <li class="log-filed-title" ng-click="row.openfiled = !row.openfiled"><i class="fa fa-filter"></i>筛选 <i class="fa fa-angle-left pull-right"></i></li>
+            <li class="log-filed-header"><i class="fa fa-angle-down"></i> 日志筛选</li>
+            <li ng-repeat="query in ctrl.tabsQuery[row.id]">
+                <label><input type="checkbox" name="query" ng-model="query.checked" ng-change="ctrl.reQuery();">{{query.text}}</label>                
+            </li>
+            <li class="log-filed-header"><i class="fa fa-angle-down"></i> filed筛选</li>
+            <li ng-repeat="filed in ctrl.tabsFiled[row.id]">
+                <label><input type="checkbox" name="filed" ng-model="filed.checked" ng-change="ctrl.updateColum(row, filed);">{{filed.text}}</label>
+            </li>
+        </ul>
+    </div>
 
+    <div class="log-filed-contaienr-close" ng-click="row.openfiled = !row.openfiled" ng-if="!row.openfiled"><i class="fa fa-angle-right"></i></div>
+
+    <div class="row-control" ng-class="{true: 'active'}[row.openfiled]">
         <div ng-repeat="panel in row.panels track by panel.id"
              ng-if="panel.type === 'graph'"
              class="panel"
@@ -110,5 +125,6 @@
             </tab>
         </tabset>
 
+        <div class="clearfix"></div>
     </div>
 </div>
