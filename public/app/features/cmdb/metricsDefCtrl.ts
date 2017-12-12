@@ -12,9 +12,12 @@ export class MetricsDefCtrl {
   query: any;
   params: any;
   suggestMetrics: any;
+  navModel: any;
 
   /** @ngInject */
-  constructor(private $scope, private metricSrv, private contextSrv) {
+  constructor(private $scope, private metricSrv, private contextSrv, private navModelSrv) {
+    this.navModel = navModelSrv.getCMDBNav(3);
+
     this.params = {
       size: SIZE,
     };

@@ -21,9 +21,12 @@ export class ServiceCustomCtrl {
   pattern: any;
   tableParams: any;
   searchCommand: any;
+  navModel: any;
 
   /** @ngInject */
-  constructor(private $scope, private backendSrv, private contextSrv, private $location, private NgTableParams) {
+  constructor(private $scope, private backendSrv, private contextSrv, private $location, private NgTableParams, private navModelSrv) {
+    this.navModel = navModelSrv.getCMDBNav(1);
+
     this.hostId = parseInt(this.$location.search().hostId) || -1;
     this.isUnit = this.contextSrv.isGrafanaAdmin && this.$location.search().unit;
     if (this.isUnit) {

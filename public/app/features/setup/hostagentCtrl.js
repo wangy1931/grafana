@@ -8,7 +8,9 @@ function (angular, _) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('HostAgentCtrl', function ($scope, backendSrv, datasourceSrv, contextSrv, $interval, $location, $controller, $q) {
+  module.controller('HostAgentCtrl', function ($scope, backendSrv, datasourceSrv, contextSrv, $interval, $location, $controller, $q, navModelSrv) {
+
+    $scope.navModel = navModelSrv.getAgentNav(0);
 
     $scope.init = function() {
       $scope.type = '安装';

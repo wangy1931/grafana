@@ -6,7 +6,8 @@ function (angular) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('OnCallerEditCtrl', function($scope, $routeParams, $location, oncallerMgrSrv, alertSrv, contextSrv, backendSrv) {
+  module.controller('OnCallerEditCtrl', function($scope, $routeParams, $location, oncallerMgrSrv, alertSrv, contextSrv, backendSrv, navModelSrv) {
+    $scope.navModel = navModelSrv.getOnCallNav(1);
 
     $scope.init = function() {
       $scope.oncallerDef = oncallerMgrSrv.get($routeParams.id) || {};

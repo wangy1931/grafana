@@ -317,6 +317,75 @@ export class NavModelSrv {
     }
   }
 
+  getKnowledgeBaseNav() {
+    return {
+      section: {
+        title: '智能分析',
+        icon: 'fa fa-fw fa-book',
+        url: 'knowledgebase'
+      },
+      menu: []
+    }
+  }
+
+  getReportNav() {
+    return  {
+      section: {
+        title: '智能分析',
+        icon: 'fa fa-fw fa-list-alt',
+        url: 'report'
+      },
+      menu: []
+    }
+  }
+
+  getAgentNav(subPage) {
+    return {
+      section: {
+        title: '安装指南',
+        icon: 'fa fa-fw fa-cloud-download',
+        url: 'setting/agent'
+      },
+      menu: [
+        {title: '安装探针', active: subPage === 0, url: 'setting/agent', icon: ''},
+        {title: '安装服务', active: subPage === 1, url: 'setting/service', icon: ''},
+        {title: '日志收集配置', active: subPage === 2, url: 'setting/log', icon: ''},
+        {title: '内网代理设置', active: subPage === 3, url: 'setting/proxy', icon: ''}
+      ]
+    }
+  }
+
+  getCMDBNav(subPage) {
+    return {
+      section: {
+        title: '配置管理库',
+        icon: 'fa fa-fw fa-cubes',
+        url: 'cmdb/hostlist'
+      },
+      menu: [
+        {title: '设备列表', active: subPage === 0, url: 'cmdb/hostlist', icon: ''},
+        {title: '服务列表', active: subPage === 1, url: 'cmdb/servicelist', icon: ''},
+        {title: '探针管理', active: subPage === 2, url: 'cmdb/config?serviceName=collector', icon: ''},
+        {title: '指标概览', active: subPage === 3, url: 'cmdb/metrics', icon: ''},
+        {title: 'KPI管理', active: subPage === 4, url: 'cmdb/kpi', icon: ''}
+      ]
+    }
+  }
+
+  getOnCallNav(subPage) {
+    return {
+      section: {
+        title: '运维轮班',
+        icon: 'fa fa-fw fa-phone',
+        url: 'oncallerschedule'
+      },
+      menu: [
+        {title: '值班表', active: subPage === 0, url: 'oncallerschedule', icon: ''},
+        {title: '值班人员', active: subPage === 1, url: 'oncallers', icon: ''}
+      ]
+    }
+  }
+
 }
 
 coreModule.service('navModelSrv', NavModelSrv);

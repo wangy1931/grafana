@@ -1,19 +1,25 @@
 define([
-    'angular',
-  ],
-  function (angular) {
-    'use strict';
+  'angular',
+], function (angular) {
+  'use strict';
 
-    var module = angular.module('grafana.controllers');
+  var module = angular.module('grafana.controllers');
 
-    module.controller('ReportCtrl', function (
-      $scope, backendSrv, contextSrv) {
-      $scope.init = function () {
-        $scope.reports = [];
-        backendSrv.get('/api/static/template/'+contextSrv.user.orgId).then(function(result) {
-          $scope.reports = result.reports;
-        });
-      };
-      $scope.init();
-    });
+  module.controller('ReportCtrl', function (
+    $scope, backendSrv, contextSrv, navModelSrv
+  ) {
+    $scope.navModel = navModelSrv.getReportNav();
+
+    $scope.init = function () {
+      $scope.reports = [];
+      backendSrv.get('/api/static/template/'+contextSrv.user.orgId).then(function(result) {
+        $scope.reports = result.reports;
+      }, function(err) {
+        console.log('Error: ', err.message);
+      });
+    };
+
+    $scope.init();
+
   });
+});

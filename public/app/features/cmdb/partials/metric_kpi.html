@@ -1,8 +1,10 @@
-<navbar icon="fa fa-fw fa-cubes" title="配置管理库" title-url="/cmdb/hostlist">
+<!-- <navbar icon="fa fa-fw fa-cubes" title="配置管理库" title-url="/cmdb/hostlist">
   <ul class="nav">
     <li class="active"><a href="/cmdb/kpi">KPI管理</a></li>
   </ul>
-</navbar>
+</navbar> -->
+<navbar model="ctrl.navModel"></navbar>
+
 <div class="page-container">
   <div class="page-header">
     <h1>KPI管理 <button ng-if="ctrl.contextSrv.isGrafanaAdmin" class="btn btn-success" ng-click="ctrl.importKpi()">导入KPI</button></h1>

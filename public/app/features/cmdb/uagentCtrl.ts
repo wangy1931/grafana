@@ -15,9 +15,10 @@ export class UagentCtrl {
   searchConf: any;
   user: any;
   title: any;
+  navModel: any;
 
   /** @ngInject */
-  constructor(private $scope, private backendSrv, private $location, private contextSrv) {
+  constructor(private $scope, private backendSrv, private $location, private contextSrv, private navModelSrv) {
     this.user = this.contextSrv.user;
     var search = this.$location.search();
     this.serviceName = search.serviceName;
@@ -30,6 +31,7 @@ export class UagentCtrl {
       'filebeat': '日志管理',
       'collector': '探针管理'
     }
+    this.navModel = navModelSrv.getCMDBNav(2);
   }
 
   getService() {

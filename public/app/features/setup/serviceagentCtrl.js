@@ -6,9 +6,11 @@ function (angular, _) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
-  module.controller('ServiceAgentCtrl', function ($scope, backendSrv, datasourceSrv, contextSrv, metricSrv) {
+  module.controller('ServiceAgentCtrl', function ($scope, backendSrv, datasourceSrv, contextSrv, metricSrv, navModelSrv) {
     var NO_DATA = 2;
     var GET_DATA = 0;
+
+    $scope.navModel = navModelSrv.getAgentNav(1);
     $scope.init = function() {
       $scope.getService();
     };

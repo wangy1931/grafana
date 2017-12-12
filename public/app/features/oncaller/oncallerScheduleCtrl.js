@@ -12,7 +12,9 @@ function (moment, $, angular, _, uiCalendarConfig) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('OnCallerScheduleCtrl', function ($scope, oncallerMgrSrv, $timeout, $q, contextSrv) {
+  module.controller('OnCallerScheduleCtrl', function ($scope, oncallerMgrSrv, $timeout, $q, contextSrv, navModelSrv) {
+    $scope.navModel = navModelSrv.getOnCallNav(0);
+
     /* oncaller/events
       {
         title: name,            << 显示名称

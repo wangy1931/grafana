@@ -7,7 +7,9 @@ define([
 
     var module = angular.module('grafana.controllers');
 
-    module.controller('CreateKnowledgeCtrl', function ($scope, backendSrv, contextSrv) {
+    module.controller('CreateKnowledgeCtrl', function ($scope, backendSrv, contextSrv, navModelSrv) {
+      $scope.navModel = navModelSrv.getKnowledgeBaseNav();
+
       $scope.init = function () {
         $scope.check = { symptom: false, solution: false };
         $scope.knowledge = {};

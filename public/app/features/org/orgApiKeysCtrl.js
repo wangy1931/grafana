@@ -8,7 +8,7 @@ function (angular) {
 
   module.controller('OrgApiKeysCtrl', function($scope, $http, backendSrv, navModelSrv) {
 
-    $scope.navModel = navModelSrv.getOrgNav(0);
+    $scope.navModel = navModelSrv.getOrgNav(2);
     $scope.roleTypes = ['Viewer', 'Editor', 'Admin'];
     $scope.token = { role: 'Admin' };
 

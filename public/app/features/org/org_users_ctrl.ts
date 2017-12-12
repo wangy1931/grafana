@@ -23,7 +23,7 @@ export class OrgUsersCtrl {
       loginOrEmail: '',
       role: 'Viewer',
     };
-    this.navModel = navModelSrv.getOrgNav(0);
+    this.navModel = navModelSrv.getOrgNav(1);
 
     this.get();
     this.editor = { index: 0 };

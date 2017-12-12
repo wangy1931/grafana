@@ -12,6 +12,7 @@ export class MetricKpiCtrl {
   service: any;
   kpi: any;
   serviceSelected: any;
+  navModel: any;
 
   /** @ngInject */
   constructor(
@@ -20,8 +21,11 @@ export class MetricKpiCtrl {
     private datasourceSrv,
     private $controller,
     private $q,
-    private contextSrv
+    private contextSrv,
+    private navModelSrv
   ) {
+    this.navModel = navModelSrv.getCMDBNav(4);
+
     this.getService();
     this.$controller('OpenTSDBQueryCtrl', {$scope: this.$scope});
     datasourceSrv.get('opentsdb').then(datasource => {

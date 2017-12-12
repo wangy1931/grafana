@@ -1,8 +1,10 @@
-<navbar title="配置管理库" icon="fa fa-fw fa-cubes">
+<!-- <navbar title="配置管理库" icon="fa fa-fw fa-cubes">
     <ul class="nav">
         <li class="active"><a href="/cmdb/servicelist">服务列表</a></li>
     </ul>
-</navbar>
+</navbar> -->
+<navbar model="navModel"></navbar>
+
 <div class="page-container">
     <h2>服务列表
         <a ng-if="!contextSrv.isViewer" class="btn btn-primary btn-cmdb" style="margin-left: 12px;" href="/cmdb/servicecustom">添加拓展服务</a>

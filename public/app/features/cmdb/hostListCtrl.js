@@ -7,7 +7,9 @@ define([
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('HostListCtrl', function ($scope, backendSrv, $location, $controller, alertSrv, contextSrv) {
+  module.controller('HostListCtrl', function ($scope, backendSrv, $location, $controller, alertSrv, contextSrv, navModelSrv) {
+    $scope.navModel = navModelSrv.getCMDBNav(0);
+
     $scope.init = function() {
       $scope.searchHost = '';
       $scope.order = "'hostname'";

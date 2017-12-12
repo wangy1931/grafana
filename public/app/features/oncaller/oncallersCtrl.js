@@ -7,7 +7,8 @@ function (angular) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('OnCallersCtrl', function($scope, oncallerMgrSrv, alertSrv, backendSrv, contextSrv) {
+  module.controller('OnCallersCtrl', function($scope, oncallerMgrSrv, alertSrv, backendSrv, contextSrv, navModelSrv) {
+    $scope.navModel = navModelSrv.getOnCallNav(1);
 
     $scope.init = function() {
       oncallerMgrSrv.load().then(function onSuccess(response) {
