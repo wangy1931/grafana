@@ -309,27 +309,26 @@ func LoadConfig() {
 			DbCfg.Pwd, _ = userInfo.Password()
 		}
 	} else {
-		DbCfg.Type = sec.Key("type").String()
-		DbCfg.Host = sec.Key("host").String()
-		DbCfg.Name = sec.Key("name").String()
-		DbCfg.User = sec.Key("user").String()
+		DbCfg.Host = setting.Database.Host
+		DbCfg.Name = setting.Database.Name
+		DbCfg.User = setting.Database.User
+		DbCfg.Pwd  = setting.Database.Pwd
+		DbCfg.Path = setting.Database.Path
 		DbCfg.MaxOpenConn = sec.Key("max_open_conn").MustInt(0)
 		DbCfg.MaxIdleConn = sec.Key("max_idle_conn").MustInt(0)
-		if len(DbCfg.Pwd) == 0 {
-			DbCfg.Pwd = sec.Key("password").String()
-		}
 	}
 
+	DbCfg.Type = setting.Database.Type
 	if DbCfg.Type == "sqlite3" {
 		UseSQLite3 = true
 		// only allow one connection as sqlite3 has multi threading issues that cause table locks
-		// DbCfg.MaxIdleConn = 1
-		// DbCfg.MaxOpenConn = 1
+		DbCfg.MaxIdleConn = 1
+		DbCfg.MaxOpenConn = 1
 	}
-	DbCfg.SslMode = sec.Key("ssl_mode").String()
+
+	DbCfg.SslMode = setting.Database.SslMode
 	DbCfg.CaCertPath = sec.Key("ca_cert_path").String()
 	DbCfg.ClientKeyPath = sec.Key("client_key_path").String()
 	DbCfg.ClientCertPath = sec.Key("client_cert_path").String()
 	DbCfg.ServerCertName = sec.Key("server_cert_name").String()
-	DbCfg.Path = sec.Key("path").MustString("data/grafana.db")
 }

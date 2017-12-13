@@ -25,7 +25,6 @@ func (hs *HttpServer) registerRoutes() {
 
 	//cloudwiz update
 	r.Get("/systems", reqSignedIn, Index)
-	r.Get("/summary", reqSignedIn, Index)
 	r.Get("/alerts", reqSignedIn, Index)
 	r.Get("/alerts/edit/:id", reqSignedIn, Index)
 	r.Get("/alerts/new", reqSignedIn, Index)

@@ -18,7 +18,7 @@ function (angular, _) {
       $scope.orgId = contextSrv.user.orgId;
       $scope.systemId = contextSrv.user.systemId;
       $scope.alertServer = backendSrv.alertDUrl;
-      $scope.agentUrl = backendSrv.agentUrl;
+      $scope.agentUrl = backendSrv.downloadUrl + '/agent';
       $scope.token = backendSrv.getToken();
       $scope.system = _.find(contextSrv.systemsMap,{Id:contextSrv.user.systemId}).SystemsName;
       backendSrv.get('/api/static/hosts').then(function(result) {

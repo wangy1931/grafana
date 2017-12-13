@@ -342,7 +342,6 @@ class MetricsPanelCtrl extends PanelCtrl {
   }
 
   saveQueryResult(result) {
-    // (this.dashboard[result.id] = result.data[0].datapoints)
     result.data && result.data[0] && this.$scope.$emit('data-saved', { id: result.id, data: result.data[0].datapoints });
     (result.id === 'logSearch') && this.$scope.$emit('data-saved', { id: 'queryHeader', data: result.config.data });
   }

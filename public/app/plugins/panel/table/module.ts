@@ -87,8 +87,8 @@ class TablePanelCtrl extends MetricsPanelCtrl {
   }
 
   onInitEditMode() {
-    this.addEditorTab('Options', tablePanelEditor, 2);
-    this.addEditorTab('Column Styles', columnOptionsTab, 3);
+    this.addEditorTab('表格选项', tablePanelEditor, 2);
+    this.addEditorTab('列样式', columnOptionsTab, 3);
   }
 
   onInitPanelActions(actions) {
