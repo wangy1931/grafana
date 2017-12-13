@@ -1,4 +1,3 @@
-// Copyright 2014 Unknwon
 // Copyright 2014 Torkel Ödegaard
 
 package setting
@@ -14,7 +13,6 @@ import (
 	"regexp"
 	"runtime"
 	"strings"
-	"encoding/base64"
 
 	"github.com/go-macaron/session"
 	"gopkg.in/ini.v1"
@@ -107,6 +105,9 @@ var (
 
 	// Basic Auth
 	BasicAuthEnabled bool
+
+	// Database
+	Database DatabaseSettings
 
 	// Session settings.
 	SessionOptions session.Options
@@ -499,6 +500,7 @@ func NewConfigContext(args *CommandLineArgs) error {
 	LdapEnabled = ldapSec.Key("enabled").MustBool(false)
 	LdapConfigFile = ldapSec.Key("config_file").String()
 
+	readDatabaseSettings()
 	readSessionConfig()
 	readSmtpSettings()
 	readQuotaSettings()
@@ -529,16 +531,13 @@ func readSessionConfig() {
 	SessionOptions.IDLength = 16
 
 	if SessionOptions.Provider == "mysql" {
-		secMysql := Cfg.Section("database")
-		if secMysql.Key("type").String() == "mysql" {
+		cnnstr := ""
+		if Database.Type == "mysql" {
+			protocol := "tcp"
 			// e.g. `user:password@tcp(127.0.0.1:3306)/database_name`
-			b, err := base64.StdEncoding.DecodeString(secMysql.Key("password").String())
-			if err != nil {
-				return
-			}
-			secMysqlPwd := string(b)
-			secMysqlProviderCfg := []string{secMysql.Key("user").String(), ":", secMysqlPwd, "@tcp(", secMysql.Key("host").String(), ")/", secMysql.Key("name").String()}
-			SessionOptions.ProviderConfig = strings.Join(secMysqlProviderCfg, "")
+			cnnstr = fmt.Sprintf("%s:%s@%s(%s)/%s", 
+				Database.User, Database.Pwd, protocol, Database.Host, Database.Name)
+			SessionOptions.ProviderConfig = cnnstr
 		}
 	}
 
