@@ -9,11 +9,11 @@ import (
 func GetCustomizedSource(c *middleware.Context) {
   log.Info("Alert Url: %v", setting.Alert.AlertUrlRoot)
   log.Info("ELk Url : %v", setting.ElkSource.ElkSourceUrlRoot)
-  log.Info("Agent Url : %v", setting.Agent.AgentUrlRoot)
+  log.Info("Download Url : %v", setting.Download.DownloadUrlRoot)
   alert := make(map[string]interface{})
   alert["alert"] = setting.Alert.AlertUrlRoot
   alert["elk"] = setting.ElkSource.ElkSourceUrlRoot
-  alert["agent"] = setting.Agent.AgentUrlRoot
+  alert["download"] = setting.Download.DownloadUrlRoot
 
   c.JSON(200, alert)
 }

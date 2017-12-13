@@ -10,7 +10,7 @@ function (angular, _, coreModule, config) {
   coreModule.default.service('backendSrv', function($http, alertSrv, $timeout, contextSrv, $q) {
     var self = this;
     this.alertDUrl;
-    this.agentUrl;
+    this.downloadUrl;
     this.tokens = null;
 
     this.get = function(url, params) {
@@ -186,7 +186,7 @@ function (angular, _, coreModule, config) {
     this.initCustomizedSources = function () {
       return this.get('/api/customized_sources').then(function (result) {
         self.alertDUrl = result.alert;
-        self.agentUrl = result.agent;
+        self.downloadUrl = result.download;
         contextSrv.elkUrl = result.elk;
       });
     };

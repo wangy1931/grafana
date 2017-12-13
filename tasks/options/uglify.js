@@ -9,7 +9,6 @@ module.exports = function(config) {
         quite: true,
         compress: {},
         preserveComments: false,
-        banner: '<%= meta.banner %>'
       }
     }
   };
