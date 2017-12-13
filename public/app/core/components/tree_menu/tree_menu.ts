@@ -44,6 +44,8 @@ export class TreeMenuCtrl {
     this.prox = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.';
 
     this.timeRange = {};
+    this.timeRange.from = this.timeSrv.timeRange().from.unix();
+    this.timeRange.to = this.timeSrv.timeRange().to.unix();
   }
 
   init(type?) {
@@ -61,6 +63,7 @@ export class TreeMenuCtrl {
       group: this.groupType
     }
     if (this.isExpert) {
+      this.isExpert = false;
       params['startSec'] = this.timeRange.from;
       params['endSec'] = this.timeRange.to;
     }
@@ -237,18 +240,16 @@ export class TreeMenuCtrl {
       _.isEqual(host, this.associationSrv.sourceAssociation.host)
   }
 
-  initByTime(isExpert) {
+  initByTime() {
     this.$scope.appEvent('confirm-modal', {
       title: '确定',
       text: '您确定要重新计算关联指标吗？\n该计算过程可能较长,请耐心等待',
       yesText: '确定',
       noText: '取消',
       onConfirm: () => {
-        this.isExpert = isExpert;
-        if (isExpert) {
-          this.timeRange.from = this.timeSrv.timeRange().from.unix();
-          this.timeRange.to = this.timeSrv.timeRange().to.unix();
-        }
+        this.isExpert = true;
+        this.timeRange.from = this.timeSrv.timeRange().from.unix();
+        this.timeRange.to = this.timeSrv.timeRange().to.unix();
         this.init();
       }
     })

@@ -10,16 +10,13 @@
       <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'hosts']"><button ng-click="ctrl.init('hosts')" ng-disabled="ctrl.groupType === 'hosts'">按机器分类</button></li>
     </ul>
     <div class="header">关联指标
-      <span ng-if="!ctrl.isExpert" class="panel-time-info">(6小时之前)</span>
-      <span ng-if="ctrl.isExpert" class="panel-time-info">({{ctrl.timeRange.from*1000 | date:'short'}} - {{ctrl.timeRange.to*1000 | date:'short'}})</span>
-      <!-- <i class="fa fa-plus-square-o btn-add-metric" ng-click="ctrl.showNewAssociationManual()"></i> -->
+      <span class="panel-time-info">({{ctrl.timeRange.from*1000 | date:'short'}} - {{ctrl.timeRange.to*1000 | date:'short'}})</span>
       <div class="btn-group">
         <a class="btn dropdown-toggle" data-toggle="dropdown">
           <i class="fa fa-bars"></i>
         </a>
         <ul class="dropdown-menu">
-          <li><a tabindex="-1" ng-click="ctrl.initByTime(false)">关联当前6小时指标</a></li>
-          <li><a tabindex="-1" ng-click="ctrl.initByTime(true)">关联选中时间的指标</a></li>
+          <li><a tabindex="-1" ng-click="ctrl.initByTime()">关联选中时间的指标</a></li>
           <li><a tabindex="-1" ng-click="ctrl.showNewAssociationManual()">自定义关联指标</a></li>
           <li><a tabindex="-1" ng-click="ctrl.clearSelected()">清除选中</a></li>
         </ul>
