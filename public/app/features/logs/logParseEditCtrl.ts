@@ -12,12 +12,16 @@ export class LogParseEditCtrl {
   otherHost: Array<any>;
   newPath: any;
   serviceList: Array<any>;
-  editLogPath: any;
+  steps: Array<any>;
+  curStep: number;
+  inter: any;
+  checkId: any;
+  checkStatus: any;
 
   /** @ngInject */
   constructor(private $scope, private contextSrv,
     private $routeParams, private logParseSrv,
-    private $location) {
+    private $location, private $interval) {
     this.getServiceList().then(() => {
       if ($routeParams.ruleId) {
         this.getRuleById($routeParams.ruleId);
@@ -36,7 +40,6 @@ export class LogParseEditCtrl {
         }
       }
     });
-    this.editLog(-1, '');
     this.logParseSrv.getHostList().then((result) => {
       this.hostList = result.data;
     });
@@ -44,13 +47,17 @@ export class LogParseEditCtrl {
       logServiceName: '',
       logType: ''
     }
+    this.curStep = 1;
+    this.steps = ['填写基本信息', '填写日志路径', '校验日志', '设置日志解析'];
+
+    $scope.$on("$destroy", () => {
+      if (this.inter) {
+        $interval.cancel(this.inter);
+      }
+    });
   }
 
   getTemplate(logServiceName, logType?) {
-    this.rule.hosts = [];
-    this.rule.paths = [];
-    this.rule.patterns = [];
-    this.rule['multiline.pattern'] = '';
     if (_.isEqual(logServiceName, '其他')) {
       this.rule.logType = '其他';
       this.rule.logTypes = ['其他'];
@@ -73,7 +80,7 @@ export class LogParseEditCtrl {
         this.rule.logTypes = ['其他'];
         this.rule.logType = '其他';
       } else {
-        this.rule = _.cloneDeep(tmp[0]);
+        this.rule.logTypes = tmp[0].logTypes || [];
         this.rule.logType = logType || this.rule.logTypes[0];
         this.rule.logTypes.push('其他');
       }
@@ -110,44 +117,17 @@ export class LogParseEditCtrl {
     }
   }
 
-  addLogPath(type) {
-    switch (type) {
-      case 'save': {
-        if (this.checkInput(this.editLogPath.path, 'logPath')) {
-          if (_.isEqual(this.editLogPath.path, this.rule.paths[this.editLogPath.index])) {
-            this.editLog(-1, '');
-          } else if (_.includes(this.rule.paths, this.editLogPath.path)) {
-            this.$scope.appEvent('alert-warning', [this.editLogPath.path + '已存在', '请勿重复添加']);
-          } else {
-            this.rule.paths[this.editLogPath.index] = this.editLogPath.path;
-            this.editLog(-1, '');
-          }
-        } else {
-          this.$scope.appEvent('alert-warning', ['日志路径不合法', '请检查输入']);
-        }
-        break;
-      };
-      case 'add': {
-        if (this.checkInput(this.newPath, 'logPath')) {
-          if (_.includes(this.rule.paths, this.newPath)) {
-            this.$scope.appEvent('alert-warning', [this.newPath + '已存在', '请勿重复添加']);
-          } else {
-            this.rule.paths.push(this.newPath);
-            this.newPath = '';
-          }
-        } else {
-          this.$scope.appEvent('alert-warning', ['日志路径不合法', '请检查输入']);
-        }
-        break;
+  addLogPath() {
+    if (this.checkInput(this.newPath, 'logPath')) {
+      if (_.includes(this.rule.paths, this.newPath)) {
+        this.$scope.appEvent('alert-warning', [this.newPath + '已存在', '请勿重复添加']);
+      } else {
+        this.rule.paths.push(this.newPath);
+        this.newPath = '';
       }
+    } else {
+      this.$scope.appEvent('alert-warning', ['日志路径不合法', '请检查输入']);
     }
-  }
-
-  editLog(index, path) {
-    this.editLogPath = {
-      index: index,
-      path: path
-    };
   }
 
   deleteLog(path) {
@@ -272,9 +252,9 @@ export class LogParseEditCtrl {
       return;
     }
     this.otherHost = _.cloneDeep(this.hostList);
-    _.each(this.rule.hosts, (id) => {
+    _.each(this.rule.hosts, (host) => {
       _.remove(this.otherHost, (item) => {
-        return item.id === id;
+        return item.id === host.id;
       });
     });
     var newScope = this.$scope.$new();
@@ -301,7 +281,7 @@ export class LogParseEditCtrl {
   saveHosts() {
     _.each(this.otherHost, (host) => {
       if (host.checked) {
-        this.rule.hosts.push(host.id);
+        this.rule.hosts.push(host);
       }
     })
   }
@@ -314,8 +294,8 @@ export class LogParseEditCtrl {
       yesText: '确定',
       noText: '取消',
       onConfirm: ()=>{
-        _.remove(this.rule.hosts, (id)=>{
-          return id === hostId;
+        _.remove(this.rule.hosts, (host)=>{
+          return host.id === hostId;
         });
       }
     });
@@ -367,30 +347,47 @@ export class LogParseEditCtrl {
   }
 
   checkData(rule) {
-    // validate logServiceName
-    if (rule.logServiceName === '其他') {
-      if (!this.checkInput(this.custom.logServiceName, 'parseName')) {
-        return false;
-      }
-    } else {
-      if (!this.checkInput(rule.logServiceName, 'parseName')) {
-        return false;
-      }
+    switch (this.curStep) {
+      case 1:
+        if (!rule.ruleName) {
+          this.$scope.appEvent('alert-warning', ['警告', '请输入规则名称']);
+          return false;
+        }
+        // validate logServiceName
+        if (rule.logServiceName === '其他') {
+          if (!this.checkInput(this.custom.logServiceName, 'parseName')) {
+            this.$scope.appEvent('alert-warning', ['警告', '服务名称非法']);
+            return false;
+          }
+        } else if (!rule.logServiceName) {
+          this.$scope.appEvent('alert-warning', ['警告', '请选择服务']);
+          return false;
+        }
+        // validate logType
+        if (rule.logType === '其他') {
+          if (!this.checkInput(this.custom.logType, 'logType')) {
+            this.$scope.appEvent('alert-warning', ['警告', '日志类型非法']);
+            return false;
+          }
+        }
+        if (_.isEmpty(rule.hosts)) {
+          this.$scope.appEvent('alert-warning', ['警告', '请选择机器列表']);
+          return false;
+        }
+        break;
+      case 2:
+        // validate null
+        if (_.isEmpty(rule.paths)) {
+          this.$scope.appEvent('alert-warning', ['警告', '请输入日志路径']);
+          return false;
+        }
+        break;
+      case 3:
+        break;
+      case 4:
+        break;
     }
-    // validate logType
-    if (rule.logType === '其他') {
-      if (!this.checkInput(this.custom.logType, 'logType')) {
-        return false;
-      }
-    } else {
-      if (!this.checkInput(rule.logType, 'logType')) {
-        return false;
-      }
-    }
-    // validate null
-    if (!rule.ruleName || !rule.logServiceName || !rule.logType || _.isEmpty(rule.paths) || _.isEmpty(rule.hosts)) {
-      return false;
-    }
+
     // validate multiline
     if (!_.isBoolean(rule.multiline)) {
       return false;
@@ -416,6 +413,40 @@ export class LogParseEditCtrl {
     }
   }
 
+  selectStep(step?) {
+    if (step) {
+      if (step > this.curStep) {
+        return;
+      } else {
+        this.curStep = step;
+      }
+    } else {
+      if (this.checkData(this.rule)) {
+        this.curStep > 3 ? this.curStep = 4 : this.curStep++;
+        if (this.curStep === 3) {
+          this.checktask();
+        }
+      }
+    }
+  }
+
+  checktask() {
+    var params = {
+      hostKeys: [],
+      dir: this.rule.paths
+    }
+    _.each(this.rule.hosts, (host) => {
+      params.hostKeys.push(host.key);
+    });
+    this.logParseSrv.checktask(params).then((res) => {
+      this.checkId = res.data;
+      this.inter = this.$interval(() => {
+        this.logParseSrv.getChecktask(this.checkId).then((response) => {
+          this.checkStatus = response.data;
+        });
+      },5000);
+    });
+  }
 }
 
 coreModule.controller('LogParseEditCtrl', LogParseEditCtrl);
