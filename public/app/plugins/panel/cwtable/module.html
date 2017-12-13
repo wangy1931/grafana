@@ -18,28 +18,6 @@
 									ng-click="ctrl.toggleColumnSort($index)"
 								></button>
 							</span>
-							<!-- 移动 & 删除 column -->
-							<!-- <button
-								class="fa fa-remove table-header-move"
-								ng-click="ctrl.removeColumn(column)"
-								ng-if="ctrl.canRemoveColumn(column)"
-								bs-tooltip="'删除该栏'"
-								aria-label="Remove {{column.text}} column"
-							></button>
-							<button
-								class="fa fa-angle-double-left table-header-move"
-								ng-click="ctrl.moveColumnLeft(column)"
-								ng-if="ctrl.canMoveColumnLeft(column)"
-								bs-tooltip="'向左移动该栏'"
-								aria-label="Move {{column.text}} column to the left"
-							></button>
-							<button
-								class="fa fa-angle-double-right table-header-move"
-								ng-click="ctrl.moveColumnRight(column)"
-								ng-if="ctrl.canMoveColumnRight(column)"
-								bs-tooltip="'向右移动该栏'"
-								aria-label="Move {{column.text}} column to the right"
-							></button> -->
 						</th>
 					</tr>					
 				</thead>
@@ -70,7 +48,6 @@
 		</div>
 	</div>
 
-	<!-- ToolBarFooter -->
 	<div class="elkTableBar">
 		<div class="">
 			<div class="table-panel-footer">
@@ -86,7 +63,6 @@
 	</div>
 		
 	<div ng-if="ctrl.rows != null && !ctrl.rows.length" class="table-vis-error">
-		<!-- <h2><i class="fa fa-meh-o"></i></h2> -->
 		<h4>No datapoints</h4>
 	</div>
 

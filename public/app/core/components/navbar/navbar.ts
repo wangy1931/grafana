@@ -11,7 +11,6 @@ export class NavbarCtrl {
   /** @ngInject */
   constructor(private $scope, private $rootScope, private $location, private contextSrv) {
     !!~['/rca', '/association', '/logs', '/topn'].indexOf(this.$location.path()) && (this.showGuideNav = true);
-    // this.$location.search().guide && (this.showGuideNav = true);
   }
 
   showGuide() {

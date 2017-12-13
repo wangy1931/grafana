@@ -130,38 +130,6 @@
                                                 该时间区域内共有 <strong>{{ panel.regularResult.data[0].total }}</strong> 条日志，当前显示前 {{ panel.regularResult.data[0].datapoints.length }} 条。放大时间区域，以查看更细日志数据。
                                             </li>
                                         </ul>
-                                        <!-- <div ng-if="name == 2" class="log-compare">
-                                            <div class="btn-group btn-log-compare">对比日志：
-                                                <button class="dropdown-toggle" data-toggle="dropdown">
-                                                    {{ ctrl.currentRelativeTime }}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li ng-click="ctrl.logCompare('-1d')">1天以前</li>
-                                                    <li ng-click="ctrl.logCompare('-7d')">7天以前</li>
-                                                    <li ng-click="ctrl.logCompare('-30d')">1月以前</li>
-                                                    <li ng-click="ctrl.logCompare('-365d')">1年以前</li>
-                                                    <li ng-click="ctrl.showInputModal()">自定义</li>
-                                                </ul>
-                                            </div>
-                                            <div class="btn-group btn-log-filter">过滤条件：
-                                                <button class="dropdown-toggle" data-toggle="dropdown">
-                                                    {{ ctrl.currentFilter }}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li ng-click="ctrl.logFilter('')">无</li>
-                                                    <li ng-click="ctrl.logFilter('增加')">增加日志</li>
-                                                    <li ng-click="ctrl.logFilter('减少')">减少日志</li>
-                                                    <li ng-click="ctrl.logFilter('新增')">新增日志</li>
-                                                    <li ng-click="ctrl.logFilter('消失')">消失日志</li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <ul ng-if="name == 2">
-                                                    <li style="color: #F9934E;">当前日志时间段： <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:'now':0}} 至 {{tabsCache[row.id].timeRange | formatTimeRange:'now':1 }}</strong></li>
-                                                    <li style="color: #F9934E;">对比日志时间段： <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:0}} 至 {{tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:1 }}</strong></li>
-                                                </ul>
-                                            </div>
-                                        </div> -->
                                         <div>
                                             <plugin-component type="panel" class="panel-margin log-panel"></plugin-component>
                                         </div>
