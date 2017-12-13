@@ -1,4 +1,3 @@
-// Copyright 2014 Unknwon
 // Copyright 2014 Torkel Ödegaard
 
 package setting
@@ -106,6 +105,9 @@ var (
 
 	// Basic Auth
 	BasicAuthEnabled bool
+
+	// Database
+	Database DatabaseSettings
 
 	// Session settings.
 	SessionOptions session.Options
@@ -498,6 +500,7 @@ func NewConfigContext(args *CommandLineArgs) error {
 	LdapEnabled = ldapSec.Key("enabled").MustBool(false)
 	LdapConfigFile = ldapSec.Key("config_file").String()
 
+	readDatabaseSettings()
 	readSessionConfig()
 	readSmtpSettings()
 	readQuotaSettings()
@@ -526,6 +529,17 @@ func readSessionConfig() {
 	SessionOptions.Gclifetime = Cfg.Section("session").Key("gc_interval_time").MustInt64(86400)
 	SessionOptions.Maxlifetime = Cfg.Section("session").Key("session_life_time").MustInt64(86400)
 	SessionOptions.IDLength = 16
+
+	if SessionOptions.Provider == "mysql" {
+		cnnstr := ""
+		if Database.Type == "mysql" {
+			protocol := "tcp"
+			// e.g. `user:password@tcp(127.0.0.1:3306)/database_name`
+			cnnstr = fmt.Sprintf("%s:%s@%s(%s)/%s", 
+				Database.User, Database.Pwd, protocol, Database.Host, Database.Name)
+			SessionOptions.ProviderConfig = cnnstr
+		}
+	}
 
 	if SessionOptions.Provider == "file" {
 		SessionOptions.ProviderConfig = makeAbsolute(SessionOptions.ProviderConfig, DataPath)

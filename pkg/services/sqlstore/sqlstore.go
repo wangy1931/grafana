@@ -289,18 +289,17 @@ func getEngine() (*xorm.Engine, error) {
 func LoadConfig() {
 	sec := setting.Cfg.Section("database")
 
-	DbCfg.Type = sec.Key("type").String()
+	DbCfg.Type = setting.Database.Type
 	if DbCfg.Type == "sqlite3" {
 		UseSQLite3 = true
 	}
-	DbCfg.Host = sec.Key("host").String()
-	DbCfg.Name = sec.Key("name").String()
-	DbCfg.User = sec.Key("user").String()
-	if len(DbCfg.Pwd) == 0 {
-		DbCfg.Pwd = sec.Key("password").String()
-	}
-	DbCfg.SslMode = sec.Key("ssl_mode").String()
-	DbCfg.Path = sec.Key("path").MustString("data/grafana.db")
+
+	DbCfg.Host = setting.Database.Host
+	DbCfg.Name = setting.Database.Name
+	DbCfg.User = setting.Database.User
+	DbCfg.Pwd  = setting.Database.Pwd
+	DbCfg.SslMode = setting.Database.SslMode
+	DbCfg.Path = setting.Database.Path
 
 	if DbCfg.Type == "mysql" {
 		mysqlConfig.SslMode = DbCfg.SslMode
