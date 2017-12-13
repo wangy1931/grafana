@@ -14,6 +14,7 @@ import (
 	"regexp"
 	"runtime"
 	"strings"
+	"encoding/base64"
 
 	"github.com/go-macaron/session"
 	"gopkg.in/ini.v1"
@@ -526,6 +527,20 @@ func readSessionConfig() {
 	SessionOptions.Gclifetime = Cfg.Section("session").Key("gc_interval_time").MustInt64(86400)
 	SessionOptions.Maxlifetime = Cfg.Section("session").Key("session_life_time").MustInt64(86400)
 	SessionOptions.IDLength = 16
+
+	if SessionOptions.Provider == "mysql" {
+		secMysql := Cfg.Section("database")
+		if secMysql.Key("type").String() == "mysql" {
+			// e.g. `user:password@tcp(127.0.0.1:3306)/database_name`
+			b, err := base64.StdEncoding.DecodeString(secMysql.Key("password").String())
+			if err != nil {
+				return
+			}
+			secMysqlPwd := string(b)
+			secMysqlProviderCfg := []string{secMysql.Key("user").String(), ":", secMysqlPwd, "@tcp(", secMysql.Key("host").String(), ")/", secMysql.Key("name").String()}
+			SessionOptions.ProviderConfig = strings.Join(secMysqlProviderCfg, "")
+		}
+	}
 
 	if SessionOptions.Provider == "file" {
 		SessionOptions.ProviderConfig = makeAbsolute(SessionOptions.ProviderConfig, DataPath)

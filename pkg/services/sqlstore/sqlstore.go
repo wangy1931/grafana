@@ -6,6 +6,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"encoding/base64"
 
 	"github.com/wangy1931/grafana/pkg/bus"
 	"github.com/wangy1931/grafana/pkg/log"
@@ -296,9 +297,15 @@ func LoadConfig() {
 	DbCfg.Host = sec.Key("host").String()
 	DbCfg.Name = sec.Key("name").String()
 	DbCfg.User = sec.Key("user").String()
+
 	if len(DbCfg.Pwd) == 0 {
-		DbCfg.Pwd = sec.Key("password").String()
+		b, err := base64.StdEncoding.DecodeString(sec.Key("password").String())
+		if err != nil {
+			return
+		}
+		DbCfg.Pwd = string(b)
 	}
+
 	DbCfg.SslMode = sec.Key("ssl_mode").String()
 	DbCfg.Path = sec.Key("path").MustString("data/grafana.db")
 
