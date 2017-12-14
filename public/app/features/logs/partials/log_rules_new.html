@@ -46,7 +46,7 @@
           ng-model="ctrl.custom.logType" placeholder="请输入英文字母" required />
       </div>
 
-      <div class="gf-form parse-form section">
+      <div class="gf-form parse-form">
         <span class="gf-form-label width-10">部署机器<em>*</em>
           <a class="parse-btn parse-edit" ng-click="ctrl.addHost()" style="margin-left: 10px;">
             <i class="fa fa-plus-square"></i>
@@ -59,9 +59,9 @@
             <th>操作</th>
           </tr>
           <tr ng-repeat="host in ctrl.rule.hosts | orderBy: id">
-            <td style="width: 40%;"><span>{{host.hostname}}</span></td>
-            <td style="width: 30%;"><span>{{host.defaultIp}}</span></td>
-            <td style="width: 30%;">
+            <td><span>{{host.hostname}}</span></td>
+            <td><span>{{host.defaultIp}}</span></td>
+            <td>
               <a class="parse-btn parse-delete" ng-click="ctrl.deleteHost(host.id)"><i class="fa fa-times-circle"></i>删除</a>
             </td>
           </tr>
@@ -77,17 +77,15 @@
         <a class="parse-btn parse-add" ng-click="ctrl.addLogPath()"><i class="fa fa-pencil"></i>添加</a>
       </div>
 
-      <div class="gf-form parse-form section" ng-if="ctrl.rule.paths.length">
+      <div class="gf-form parse-form" ng-if="ctrl.rule.paths.length">
         <table class="table parse-table">
           <tr>
             <th>路径</th>
             <th>操作</th>
           </tr>
           <tr ng-repeat="path in ctrl.rule.paths">
-            <td style="width: 50%;">
-              <span>{{path}}</span>
-            </td>
-            <td style="width: 50%;">
+            <td><span>{{path}}</span></td>
+            <td>
               <span>
                 <a class="parse-btn parse-delete" ng-click="ctrl.deleteLog(path)"><i class="fa fa-times-circle"></i>删除</a>
               </span>
