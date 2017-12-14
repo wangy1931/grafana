@@ -262,7 +262,7 @@
         "<p class='code-block'> 2. 修改配置文件</p>",
         "<p class='code-block indent2'>interval = 30</p>",
         "<p class='code-block indent2'> db = []</p>",
-        "<p class='code-block indent2'> config = ['192.168.1.206:27017']</p>",
+        "<p class='code-block indent2'> config = ['<your_mongo_ip>:<your_mongo_port>']</p>",
         "<p class='code-block indent2'> mongos = []</p>",
         "<p class='code-block indent2'> replica = []</p>",
         "<p class='code-block indent2'> username = </p>",

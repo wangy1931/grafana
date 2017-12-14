@@ -125,9 +125,6 @@ export class LiveSrv {
       };
     });
 
-    // return this.init().then(() =>  {
-    //   this.send({action: 'subscribe', stream: name});
-    // });
   }
 
 }
