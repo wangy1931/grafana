@@ -301,6 +301,12 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controllerAs: 'ctrl',
     resolve: loadLogsBundle,
   })
+  .when('/logs/rule-detail', {
+    templateUrl: 'public/app/features/logs/partials/log_rule_detail.html',
+    controller : 'LogParseCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadLogsBundle,
+  })
   .when('/logs/rules/new', {
     templateUrl: 'public/app/features/logs/partials/log_rules_new.html',
     controller : 'LogParseEditCtrl',
