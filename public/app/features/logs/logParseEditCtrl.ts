@@ -334,7 +334,7 @@ export class LogParseEditCtrl {
         }
         this.logParseSrv.savePattern(this.contextSrv.user.id, data).then((res) => {
           this.$scope.appEvent('alert-success', ['保存成功', '配置将于6分钟之后生效, 请稍后查看']);
-          this.curStep++;
+          (this.curStep === 3) && this.curStep++;
         }, (err) => {
           if (err.status === 400) {
             this.$scope.appEvent('alert-warning', ['规则名称已存在', '请修改规则名称']);
@@ -443,11 +443,11 @@ export class LogParseEditCtrl {
       }
     } else {
       if (this.checkData(this.rule)) {
-        if (this.curStep === 3) {
+        if (this.curStep > 2) {
           this.saveRule();
           return;
         }
-        this.curStep > 3 ? this.curStep = 4 : this.curStep++;
+        this.curStep++;
         if (this.curStep === 3) {
           this.checktask();
         }
@@ -455,7 +455,7 @@ export class LogParseEditCtrl {
     }
   }
 
-  checktask() {
+  initCheckStatus(stat) {
     this.checkStatus = [];
     _.each(this.rule.hosts, (host) => {
       var obj = {
@@ -465,11 +465,15 @@ export class LogParseEditCtrl {
       _.each(this.rule.paths, (path) => {
         obj.directorys.push({
           directory: path,
-          status: '0'
+          status: stat
         });
       });
       this.checkStatus.push(obj);
     });
+  }
+
+  checktask() {
+    this.initCheckStatus('0');
     var params = {
       hostKeys: [],
       dir: this.rule.paths

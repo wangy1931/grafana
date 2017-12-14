@@ -159,7 +159,8 @@
     <div class="parse-form-group no-border">
       <a class="btn btn-primary" ng-if="ctrl.curStep > 1" ng-click="ctrl.selectStep(ctrl.curStep - 1)">上一步</a>
       <a class="btn btn-primary" ng-if="ctrl.curStep < 3" ng-click="ctrl.selectStep()">下一步</a>
-      <a class="btn btn-primary" ng-if="ctrl.curStep > 2" ng-click="ctrl.selectStep()">保存并下一步</a>
+      <a class="btn btn-primary" ng-if="ctrl.curStep === 3" ng-click="ctrl.selectStep()">保存并下一步</a>
+      <a class="btn btn-primary" ng-if="ctrl.curStep > 3" ng-click="ctrl.selectStep()">保存</a>
     </div>
 
   </form>
