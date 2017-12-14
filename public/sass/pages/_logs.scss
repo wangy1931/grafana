@@ -481,3 +481,64 @@ $log-step-size: 50px;
     background: $brand-primary;
   }
 }
+
+.log-check-container {
+  position: relative;
+  font-weight: bold;
+  &::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 100%;
+    position: absolute;
+    left: 25px;
+    border: 1px solid $gray-4;
+  }
+  & > li {
+    display: flex;
+    line-height: 40px;
+    i {
+      display: block;
+      width: $log-step-size;
+      height: $log-step-size;
+      line-height: 40px;
+      text-align: center;
+      border: 5px solid $white;
+      border-radius: 100%;
+      background: $gray-4;
+      color: $white;
+      font-weight: bold;
+      z-index: 1;
+    }
+    &.log-host {
+      line-height: $log-step-size;
+      margin-bottom: 20px;
+      i {
+        background: $brand-primary;
+      }
+    }
+    &.log-dir i{
+      width: 40px;
+      height: 40px;
+      line-height: 30px;
+      margin-left: 5px;
+    }
+    &.log-stat1 i{
+      background: $brand-primary;
+    }
+    &.log-stat-1 i{
+      background: rgb(187, 17, 68);
+    }
+    &.log-stat2 i{
+      color: $black;
+      background: rgb(255, 188, 51);
+    }
+    &:last-child {
+      position: relative;
+      background: $white;
+    }
+  }
+  p {
+    display: flex;
+  }
+}

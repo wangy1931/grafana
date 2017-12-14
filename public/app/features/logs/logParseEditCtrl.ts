@@ -17,6 +17,7 @@ export class LogParseEditCtrl {
   inter: any;
   checkId: any;
   checkStatus: any;
+  logStatus: any;
 
   /** @ngInject */
   constructor(private $scope, private contextSrv,
@@ -50,6 +51,12 @@ export class LogParseEditCtrl {
     this.curStep = 1;
     this.steps = ['填写基本信息', '填写日志路径', '校验日志', '设置日志解析'];
 
+    this.logStatus = {
+      '0': {txt: '校验日志中...', icon: 'fa fa-spinner fa-spin', class: 'log-stat0'},
+      '1': {txt: 'log文件存在并持续更新中...', icon: 'fa fa-check', class: 'log-stat1'},
+      '-1': {txt: 'log文件不存在', icon: 'fa fa-times', class: 'log-stat-1'},
+      '2': {txt: 'log文件存在,但最近5分钟没有值', icon: 'fa fa-exclamation-triangle', class: 'log-stat2'},
+    }
     $scope.$on("$destroy", () => {
       if (this.inter) {
         $interval.cancel(this.inter);
@@ -90,7 +97,9 @@ export class LogParseEditCtrl {
   getRuleById(id) {
     this.logParseSrv.getRuleById(id).then((response) => {
       this.rule = response.data;
-      this.rule.hosts = this.rule.hosts || [];
+      this.rule.hosts = _.map(this.rule.hosts, (host)=>{
+        return _.find(this.hostList, {id: host});
+      });
       this.rule.logTypes = this.rule.logTypes || [];
       this.rule.logTypes.push('其他');
       if (_.findIndex(this.serviceList, {name: this.rule.logServiceName}) === -1) {
@@ -109,12 +118,6 @@ export class LogParseEditCtrl {
       this.serviceList = result.data;
       this.serviceList.push({name: '其他'});
     });
-  }
-
-  getHostNameById(hostId) {
-    if (!_.isEmpty(this.hostList)) {
-      return _.find(this.hostList, {id: hostId}).hostname;
-    }
   }
 
   addLogPath() {
@@ -308,42 +311,39 @@ export class LogParseEditCtrl {
     }
     this.rule.orgId = this.contextSrv.user.orgId;
     this.rule.sysId = this.contextSrv.user.systemId;
-    if (this.checkData(this.rule)) {
-      this.$scope.appEvent('confirm-modal', {
-        title: '保存',
-        text: '您确定要保存该配置吗？',
-        yesText: '确定',
-        noText: '取消',
-        onConfirm: ()=>{
-          var data = _.cloneDeep(this.rule);
-          _.remove(data.logTypes, (type) => {
-            return type === '其他';
-          });
-          if (data.logServiceName === '其他') {
-            data.logServiceName = this.custom.logServiceName;
-          }
-          if (data.logType === '其他') {
-            data.logType = this.custom.logType;
-          }
-          if (data.multiline) {
-            data["multiline.negate"] = data["multiline.negate"] || true;
-            data["multiline.match"] = data["multiline.match"] || "after";
-          }
-          this.logParseSrv.savePattern(this.contextSrv.user.id, data).then((res) => {
-            this.$scope.appEvent('alert-success', ['保存成功', '配置将于6分钟之后生效, 请稍后查看']);
-            this.$location.url('/logs/rules');
-          }, (err) => {
-            if (err.status === 400) {
-              this.$scope.appEvent('alert-warning', ['规则名称已存在', '请修改规则名称']);
-            } else {
-              this.$scope.appEvent('alert-danger', ['保存失败', '请稍后重试']);
-            }
-          });
+    this.$scope.appEvent('confirm-modal', {
+      title: '保存',
+      text: '您确定要保存该配置吗？',
+      yesText: '确定',
+      noText: '取消',
+      onConfirm: ()=>{
+        var data = _.cloneDeep(this.rule);
+        data.hosts = _.map(this.rule.hosts, 'id');
+        _.remove(data.logTypes, (type) => {
+          return type === '其他';
+        });
+        if (data.logServiceName === '其他') {
+          data.logServiceName = this.custom.logServiceName;
         }
-      });
-    } else {
-      this.$scope.appEvent('alert-warning', ['参数信息不完整', '带 * 选项为必填内容,请填写完整']);
-    }
+        if (data.logType === '其他') {
+          data.logType = this.custom.logType;
+        }
+        if (data.multiline) {
+          data["multiline.negate"] = data["multiline.negate"] || true;
+          data["multiline.match"] = data["multiline.match"] || "after";
+        }
+        this.logParseSrv.savePattern(this.contextSrv.user.id, data).then((res) => {
+          this.$scope.appEvent('alert-success', ['保存成功', '配置将于6分钟之后生效, 请稍后查看']);
+          this.curStep++;
+        }, (err) => {
+          if (err.status === 400) {
+            this.$scope.appEvent('alert-warning', ['规则名称已存在', '请修改规则名称']);
+          } else {
+            this.$scope.appEvent('alert-danger', ['保存失败', '请稍后重试']);
+          }
+        });
+      }
+    });
   }
 
   checkData(rule) {
@@ -383,17 +383,35 @@ export class LogParseEditCtrl {
         }
         break;
       case 3:
-        break;
+        var check = true;
+        _.each(this.checkStatus, (status) => {
+          if (!check) {
+            return;
+          }
+          _.each(status.directorys, (directorys) => {
+            if (directorys.status === '0') {
+              this.$scope.appEvent('alert-warning', ['日志校验未完成', '请稍后']);
+              check = false;
+              return;
+            }
+            if (directorys.status === '-1') {
+              this.$scope.appEvent('alert-warning', ['存在错误日志路径', '请返回上一步修正日志路径']);
+              check = false;
+              return;
+            }
+          });
+        });
+        return check;
       case 4:
+        // validate multiline
+        if (!_.isBoolean(rule.multiline)) {
+          return false;
+        } else if (rule.multiline && !rule['multiline.pattern']) {
+          return false;
+        }
         break;
     }
 
-    // validate multiline
-    if (!_.isBoolean(rule.multiline)) {
-      return false;
-    } else if (rule.multiline && !rule['multiline.pattern']) {
-      return false;
-    }
     return true;
   }
 
@@ -414,6 +432,9 @@ export class LogParseEditCtrl {
   }
 
   selectStep(step?) {
+    if (this.inter) {
+      this.$interval.cancel(this.inter);
+    }
     if (step) {
       if (step > this.curStep) {
         return;
@@ -422,6 +443,10 @@ export class LogParseEditCtrl {
       }
     } else {
       if (this.checkData(this.rule)) {
+        if (this.curStep === 3) {
+          this.saveRule();
+          return;
+        }
         this.curStep > 3 ? this.curStep = 4 : this.curStep++;
         if (this.curStep === 3) {
           this.checktask();
@@ -431,6 +456,20 @@ export class LogParseEditCtrl {
   }
 
   checktask() {
+    this.checkStatus = [];
+    _.each(this.rule.hosts, (host) => {
+      var obj = {
+        hostKey: host.key,
+        directorys: []
+      };
+      _.each(this.rule.paths, (path) => {
+        obj.directorys.push({
+          directory: path,
+          status: '0'
+        });
+      });
+      this.checkStatus.push(obj);
+    });
     var params = {
       hostKeys: [],
       dir: this.rule.paths
@@ -443,9 +482,23 @@ export class LogParseEditCtrl {
       this.inter = this.$interval(() => {
         this.logParseSrv.getChecktask(this.checkId).then((response) => {
           this.checkStatus = response.data;
+          this.cancelInterval();
         });
       },5000);
     });
+  }
+
+  getHostKey(hostkey) {
+    return _.last(hostkey.split('@#'));
+  }
+
+  cancelInterval() {
+    var check = _.map(this.checkStatus, (stat) => {
+      return _.every(stat.directorys, (directory)=>{
+        return directory.status !== '0';
+      })
+    });
+    _.every(check) && this.$interval.cancel(this.inter);
   }
 }
 
