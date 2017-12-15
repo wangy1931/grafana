@@ -1,5 +1,5 @@
-<div class="fixed-table-container" ng-if="ctrl.tableData.length"><!-- bs-popover data-placement="bottom" data-template-url="public/app/features/topn/partials/process_topn_graph.html" ng-click="ctrl.rowClick(row.pid, $index)" -->
-    <table ng-table="ctrl.tableParams" class="table fix-table-row-height"><!-- class="topn-row-graph" ng-click="ctrl.showGraph(row.pid, $index)" -->
+<div class="fixed-table-container" ng-if="ctrl.tableData.length">
+    <table ng-table="ctrl.tableParams" class="table fix-table-row-height">
         <tr ng-repeat="row in $data">
             <td data-title="'进程 ID'" sortable="'pid'">
                 <div>{{ row.pid }}</div>

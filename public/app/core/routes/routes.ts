@@ -42,18 +42,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     templateUrl: 'public/app/partials/systems.html',
     reloadOnSearch: false,
   })
-  .when('/summary', {
-    templateUrl: 'public/app/features/summary/partials/summary.html',
-    controller: 'SummaryCtrl',
-    reloadOnSearch: false,
-    resolve: loadSummaryBundle,
-  })
-  .when('/service', {
-    templateUrl: 'public/app/features/summary/partials/service.html',
-    controller: 'ServiceCtrl',
-    reloadOnSearch: false,
-    resolve: loadSummaryBundle,
-  })
   .when('/dashboard/:type/:slug', {
     templateUrl: 'public/app/partials/dashboard.html',
     controller : 'LoadDashboardCtrl',

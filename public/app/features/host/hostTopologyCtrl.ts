@@ -1,7 +1,6 @@
 import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
-// import 'd3.graph';
 import { coreModule } from 'app/core/core';
 import kbn from 'app/core/utils/kbn';
 

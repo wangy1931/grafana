@@ -11,6 +11,7 @@ define([
       $scope.init = function () {
         $scope.reports = [];
         backendSrv.get('/api/static/template/'+contextSrv.user.orgId).then(function(result) {
+          $scope.reportDownloadUrl = backendSrv.downloadUrl + '/report';
           $scope.reports = result.reports;
         });
       };
