@@ -150,33 +150,33 @@ export class NavModelSrv {
 
     if (dashboard.meta.canEdit) {
       menu.push({
-        title: 'Settings',
+        title: '设置',
         icon: 'fa fa-fw fa-cog',
         clickHandler: () => dashNavCtrl.openEditView('settings')
       });
 
       menu.push({
-        title: 'Templating',
+        title: '模板',
         icon: 'fa fa-fw fa-code',
         clickHandler: () => dashNavCtrl.openEditView('templating')
       });
 
       menu.push({
-        title: 'Annotations',
+        title: '标注',
         icon: 'fa fa-fw fa-bolt',
         clickHandler: () => dashNavCtrl.openEditView('annotations')
       });
 
       if (!dashboard.meta.isHome) {
         menu.push({
-          title: 'Version history',
+          title: '版本历史',
           icon: 'fa fa-fw fa-history',
           clickHandler: () => dashNavCtrl.openEditView('history')
         });
       }
 
       menu.push({
-        title: 'View JSON',
+        title: '查看 JSON',
         icon: 'fa fa-fw fa-eye',
         clickHandler: () => dashNavCtrl.viewJson()
       });
@@ -184,21 +184,21 @@ export class NavModelSrv {
 
     if (this.contextSrv.isEditor && !dashboard.editable) {
       menu.push({
-        title: 'Make Editable',
+        title: '使可编辑',
         icon: 'fa fa-fw fa-edit',
         clickHandler: () => dashNavCtrl.makeEditable()
       });
     }
 
     menu.push({
-      title: 'Shortcuts',
+      title: '快捷键',
       icon: 'fa fa-fw fa-keyboard-o',
       clickHandler: () => dashNavCtrl.showHelpModal()
     });
 
     if (this.contextSrv.isEditor) {
       menu.push({
-        title: 'Save As ...',
+        title: '另存为',
         icon: 'fa fa-fw fa-save',
         clickHandler: () => dashNavCtrl.saveDashboardAs()
       });
@@ -206,7 +206,7 @@ export class NavModelSrv {
 
     if (dashboard.meta.canSave) {
       menu.push({
-        title: 'Delete',
+        title: '删除仪表盘',
         icon: 'fa fa-fw fa-trash',
         clickHandler: () => dashNavCtrl.deleteDashboard()
       });

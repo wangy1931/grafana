@@ -22,32 +22,32 @@
       <ul class="dash-row-menu" role="menu">
         <li>
           <a ng-click="ctrl.toggleCollapse()">
-            <i class="fa fa-minus"></i> Collapse
+            <i class="fa fa-minus"></i> 行折叠
           </a>
         </li>
         <li ng-show="ctrl.dashboard.meta.canEdit">
           <a ng-click="ctrl.onMenuAddPanel()">
-            <i class="fa fa-plus"></i> Add Panel
+            <i class="fa fa-plus"></i> 新增图表
           </a>
         </li>
         <li ng-show="ctrl.dashboard.meta.canEdit">
           <a ng-click="ctrl.onMenuRowOptions()">
-            <i class="fa fa-cog"></i> Row Options
+            <i class="fa fa-cog"></i> 行选项
           </a>
         </li>
         <li ng-show="ctrl.dashboard.meta.canEdit">
           <a ng-click="ctrl.moveRow(-1)">
-            <i class="fa fa-arrow-up"></i> Move Up
+            <i class="fa fa-arrow-up"></i> 整行向上移动
           </a>
         </li>
         <li ng-show="ctrl.dashboard.meta.canEdit">
           <a ng-click="ctrl.moveRow(1)">
-            <i class="fa fa-arrow-down"></i> Move Down
+            <i class="fa fa-arrow-down"></i> 整行向下移动
           </a>
         </li>
         <li ng-show="ctrl.dashboard.meta.canEdit">
           <a ng-click="ctrl.onMenuDeleteRow()">
-            <i class="fa fa-trash"></i> Remove
+            <i class="fa fa-trash"></i> 删除整行
           </a>
         </li>
       </ul>

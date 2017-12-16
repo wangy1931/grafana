@@ -106,8 +106,8 @@ export class AlertSrv {
     scope.onAltAction = payload.onAltAction;
     scope.altActionText = payload.altActionText;
     scope.icon = payload.icon || "fa-check";
-    scope.yesText = payload.yesText || "Yes";
-    scope.noText = payload.noText || "Cancel";
+    scope.yesText = payload.yesText || "确定";
+    scope.noText = payload.noText || "取消";
     scope.confirmTextValid = scope.confirmText ? false : true;
 
     var confirmModal = this.$_modal({

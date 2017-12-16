@@ -1,17 +1,17 @@
 <div class="tabbed-view-header">
 	<h2 class="tabbed-view-title">
-		Version history
+		版本历史
 	</h2>
 
 	<ul class="gf-tabs">
 		<li class="gf-tabs-item" >
 			<a class="gf-tabs-link" ng-click="ctrl.switchMode('list');" ng-class="{active: ctrl.mode === 'list'}">
-				List
+				列表
 			</a>
 		</li>
 		<li class="gf-tabs-item" ng-show="ctrl.mode === 'compare'">
 			<span class="active gf-tabs-link">
-				Version Comparison
+				版本比较
 			</span>
 		</li>
 	</ul>
@@ -35,10 +35,10 @@
           <thead>
             <tr>
               <th class="width-4"></th>
-              <th class="width-4">Version</th>
-              <th class="width-14">Date</th>
-              <th class="width-10">Updated By</th>
-              <th>Notes</th>
+              <th class="width-4">版本</th>
+              <th class="width-14">时间</th>
+              <th class="width-10">操作人</th>
+              <th>备注</th>
               <th></th>
             </tr>
           </thead>
@@ -57,10 +57,10 @@
               <td>{{revision.message}}</td>
               <td class="text-right">
                 <a class="btn btn-inverse btn-small" ng-show="revision.version !== ctrl.dashboard.version" ng-click="ctrl.restore(revision.version)">
-                  <i class="fa fa-history"></i>&nbsp;&nbsp;Restore
+                  <i class="fa fa-history"></i>&nbsp;&nbsp;恢复
                 </a>
                 <a class="btn btn-outline-disabled btn-small" ng-show="revision.version === ctrl.dashboard.version">
-                  <i class="fa fa-check"></i>&nbsp;&nbsp;Latest
+                  <i class="fa fa-check"></i>&nbsp;&nbsp;最新的
                 </a>
               </td>
             </tr>
@@ -80,14 +80,14 @@
                 ng-disabled="!ctrl.canCompare"
                 ng-click="ctrl.getDiff(ctrl.diff)"
 								bs-tooltip="ctrl.canCompare ? '' : 'Select 2 versions to start comparing'" data-placement="bottom">
-              <i class="fa fa-code-fork" ></i>&nbsp;&nbsp;Compare versions
+              <i class="fa fa-code-fork" ></i>&nbsp;&nbsp;版本比较
             </button>
             <button  type="button"
                 class="btn gf-form-button btn-inverse"
                 ng-if="ctrl.revisions.length >= ctrl.limit"
                 ng-click="ctrl.addToLog()"
                 ng-disabled="ctrl.isLastPage()">
-              Show more versions
+              显示更多版本
             </button>
           </div>
         </div>
@@ -98,7 +98,7 @@
 	<div class="edit-tab-with-sidemenu" ng-if="ctrl.mode === 'compare'">
     <aside class="edit-sidemenu-aside">
       <ul class="edit-sidemenu">
-        <li ng-class="{active: ctrl.diff === 'basic'}"><a ng-click="ctrl.getDiff('basic')" href="">Change Summary</a></li>
+        <li ng-class="{active: ctrl.diff === 'basic'}"><a ng-click="ctrl.getDiff('basic')" href="">变更总览</a></li>
         <li ng-class="{active: ctrl.diff === 'html'}"><a ng-click="ctrl.getDiff('json')" href="">JSON Diff</a></li>
       </ul>
     </aside>
@@ -114,17 +114,17 @@
             class="btn gf-form-button btn-secondary pull-right"
             ng-click="ctrl.restore(ctrl.baseInfo.version)"
             ng-if="ctrl.isNewLatest">
-          <i class="fa fa-history" ></i>&nbsp;&nbsp;Restore to version {{ctrl.baseInfo.version}}
+          <i class="fa fa-history" ></i>&nbsp;&nbsp;恢复到版本 {{ctrl.baseInfo.version}}
         </a>
         <h4>
-          Comparing Version {{ctrl.baseInfo.version}}
+          比较 版本 {{ctrl.baseInfo.version}}
           <i class="fa fa-arrows-h"></i>
-					Version {{ctrl.newInfo.version}}
-          <cite class="muted" ng-if="ctrl.isNewLatest">(Latest)</cite>
+					版本 {{ctrl.newInfo.version}}
+          <cite class="muted" ng-if="ctrl.isNewLatest">(最新的)</cite>
         </h4>
         <section>
           <p class="small muted">
-          <strong>Version {{ctrl.newInfo.version}}</strong> updated by
+          <strong>版本 {{ctrl.newInfo.version}}</strong> updated by
           <span>{{ctrl.newInfo.createdBy}} </span>
           <span>{{ctrl.newInfo.ageString}}</span>
           <span> - {{ctrl.newInfo.message}}</span>

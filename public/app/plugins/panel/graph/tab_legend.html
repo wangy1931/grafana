@@ -24,36 +24,36 @@
 
 		<div class="gf-form-inline">
 			<gf-form-switch class="gf-form"
-				label="Min" label-class="width-4"
+				label="最小值" label-class="width-6"
 				checked="ctrl.panel.legend.min" on-change="ctrl.legendValuesOptionChanged()">
 			</gf-form-switch>
 
 			<gf-form-switch class="gf-form max-width-12"
-				label="Max" label-class="width-6" switch-class="max-width-5"
+				label="最大值" label-class="width-6" switch-class="max-width-5"
 				checked="ctrl.panel.legend.max" on-change="ctrl.legendValuesOptionChanged()">
 			</gf-form-switch>
 		</div>
 
 		<div class="gf-form-inline">
 			<gf-form-switch class="gf-form"
-				label="Avg" label-class="width-4"
+				label="平均值" label-class="width-6"
 				checked="ctrl.panel.legend.avg" on-change="ctrl.legendValuesOptionChanged()">
 			</gf-form-switch>
 
 			<gf-form-switch class="gf-form max-width-12"
-				label="Current" label-class="width-6" switch-class="max-width-5"
+				label="当前值" label-class="width-6" switch-class="max-width-5"
 				checked="ctrl.panel.legend.current" on-change="ctrl.legendValuesOptionChanged()">
 			</gf-form-switch>
 		</div>
 
 		<div class="gf-form-inline">
 			<gf-form-switch class="gf-form"
-				label="Total" label-class="width-4"
+				label="总计值" label-class="width-6"
 				checked="ctrl.panel.legend.total" on-change="ctrl.legendValuesOptionChanged()">
 			</gf-form-switch>
 
 			<div class="gf-form">
-				<label class="gf-form-label width-6">Decimals</label>
+				<label class="gf-form-label width-6">数值精度</label>
 				<input type="number" class="gf-form-input width-5" placeholder="auto" bs-tooltip="'Override automatic decimal precision for legend and tooltips'" data-placement="right" ng-model="ctrl.panel.decimals" ng-change="ctrl.render()" ng-model-onblur>
 			</div>
 		</div>

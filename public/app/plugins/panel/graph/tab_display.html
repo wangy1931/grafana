@@ -38,7 +38,7 @@
 					<select class="gf-form-input" ng-model="ctrl.panel.linewidth" ng-options="f for f in [0,1,2,3,4,5,6,7,8,9,10]" ng-change="ctrl.render()"></select>
 				</div>
 			</div>
-			<gf-form-switch ng-show="ctrl.panel.lines" class="gf-form" label="Staircase" label-class="width-8" checked="ctrl.panel.steppedLine" on-change="ctrl.render()">
+			<gf-form-switch ng-show="ctrl.panel.lines" class="gf-form" label="梯形线" label-class="width-8" checked="ctrl.panel.steppedLine" on-change="ctrl.render()">
 			</gf-form-switch>
 			<div class="gf-form" ng-show="ctrl.panel.points">
 				<label class="gf-form-label width-8">点半径</label>

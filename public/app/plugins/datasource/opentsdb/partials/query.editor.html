@@ -30,7 +30,7 @@
 				<label class="gf-form-label query-keyword width-6">
 					别名:
 					<info-popover mode="right-normal">
-						Use patterns like $tag_tagname to replace part of the alias for a tag value
+						可以使用 $tag_tagname 类似模式的标签值来替换别名
 					</info-popover>
 				</label>
 				<input  type="text" class="gf-form-input"
@@ -48,7 +48,7 @@
 
 	<div class="gf-form-inline">
 		<div class="gf-form max-width-25">
-			<label class="gf-form-label query-keyword width-8">降低采样</label>
+			<label class="gf-form-label query-keyword width-8">采样间隔</label>
 			<input type="text" class="gf-form-input"
 						 ng-model="ctrl.target.downsampleInterval"
 						 ng-model-onblur
@@ -60,7 +60,7 @@
 		</div>
 
 		<div class="gf-form">
-			<label class="gf-form-label query-keyword">聚合</label>
+			<label class="gf-form-label query-keyword">采样聚合</label>
 			<div class="gf-form-select-wrapper">
 				<select ng-model="ctrl.target.downsampleAggregator" class="gf-form-input"
 								ng-options="agg for agg in ctrl.aggregators"
@@ -70,7 +70,7 @@
 		</div>
 
 		<div class="gf-form" ng-if="ctrl.tsdbVersion >= 2">
-			<label class="gf-form-label query-keyword width-6">填充</label>
+			<label class="gf-form-label query-keyword width-6">空值填充</label>
 			<div class="gf-form-select-wrapper">
 				<select ng-model="ctrl.target.downsampleFillPolicy" class="gf-form-input"
 								ng-options="agg for agg in ctrl.fillPolicies"
@@ -97,7 +97,7 @@
 			<label class="gf-form-label query-keyword width-8">
 				过滤
 				<info-popover mode="right-normal">
-					Filters does not work with tags, either of the two will work but not both.
+					过滤器不能和标签同时工作, 只能选其一.
 				</info-popover>
 			</label>
 
@@ -126,7 +126,7 @@
 			</div>
 
 			<div class="gf-form">
-				<label class="gf-form-label query-keyword">Type</label>
+				<label class="gf-form-label query-keyword">过滤类型</label>
 				<div class="gf-form-select-wrapper">
 					<select ng-model="ctrl.target.currentFilterType" class="gf-form-input" ng-options="filType for filType in ctrl.filterTypes">
 					</select>
@@ -134,7 +134,7 @@
 			</div>
 
 			<div class="gf-form">
-				<input type="text" class="gf-form-input" spellcheck='false' bs-typeahead-old="ctrl.suggestTagValues" data-min-length=0 data-items=100 ng-model="ctrl.target.currentFilterValue" placeholder="filter">
+				<input type="text" class="gf-form-input" spellcheck='false' bs-typeahead-old="ctrl.suggestTagValues" data-min-length=0 data-items=100 ng-model="ctrl.target.currentFilterValue" placeholder="过滤值">
 				</input>
 			</div>
 
@@ -152,7 +152,7 @@
 					</a>
 				</label>
 				<label class="gf-form-label">
-					<a ng-click="ctrl.addFilter()" ng-hide="ctrl.errors.filters">add filter</a>
+					<a ng-click="ctrl.addFilter()" ng-hide="ctrl.errors.filters">添加过滤器</a>
 					<a ng-click="ctrl.closeAddFilterMode()">
 						<i class="fa fa-remove"></i>
 					</a>
@@ -171,7 +171,7 @@
 			<label class="gf-form-label query-keyword width-8">
 				标签
 				<info-popover mode="right-normal" ng-if="ctrl.tsdbVersion >= 2">
-					Please use filters, tags are deprecated in opentsdb 2.2
+					标签在 opentsdb 2.2 版本及以上被弃用, 请使用过滤器功能.
 				</info-popover>
 			</label>
 		</div>
@@ -227,7 +227,7 @@
 		</gf-form-switch>
 
 		<gf-form-switch ng-hide="!ctrl.target.shouldComputeRate"
-										class="gf-form" label="Counter" label-class="query-keyword" checked="ctrl.target.isCounter" on-change="ctrl.targetBlur()">
+										class="gf-form" label="计数器" label-class="query-keyword" checked="ctrl.target.isCounter" on-change="ctrl.targetBlur()">
 		</gf-form-switch>
 
 

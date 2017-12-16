@@ -21,7 +21,7 @@
 
 			<li class="gf-tabs-item" >
         <a class="gf-tabs-link" ng-click="ctrl.mode = 'help';" ng-class="{active: ctrl.mode === 'help'}">
-          Help
+          帮助
         </a>
       </li>
 		</ul>
@@ -63,7 +63,7 @@
 					<td style="width: 1%">
 						<a ng-click="ctrl.edit(annotation)" class="btn btn-inverse btn-mini">
 							<i class="fa fa-edit"></i>
-							Edit
+							编辑
 						</a>
 					</td>
 					<td style="width: 1%">
@@ -83,7 +83,7 @@
 
 		<div class="annotations-basic-settings" ng-if="ctrl.mode === 'edit' || ctrl.mode === 'new'">
 			<div class="gf-form-group">
-				<h5 class="section-heading">Options</h5>
+				<h5 class="section-heading">标注信息</h5>
 					<div class="gf-form-inline">
 						<div class="gf-form">
 							<span class="gf-form-label width-9">标注名</span>
@@ -105,7 +105,7 @@
 							<!-- 	</div> -->
 							<!-- </div> -->
 							<gf-form-switch class="gf-form"
-															label="Hide toggle"
+															label="隐藏标注切换"
 															tooltip="Hides the annotation query toggle from showing at the top of the dashboard"
 															checked="ctrl.currentAnnotation.hide"
 															label-class="width-9">
@@ -118,7 +118,7 @@
 					</div>
 				</div>
 
-				<h5 class="section-heading">Query</h5>
+				<h5 class="section-heading">查询</h5>
 				<rebuild-on-change property="ctrl.currentDatasource">
 					<plugin-component type="annotations-query-ctrl">
 					</plugin-component>

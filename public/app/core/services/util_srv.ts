@@ -39,6 +39,17 @@ export class UtilSrv {
       this.modalScope = this.$rootScope.$new();
     }
 
+    // TODO: 想移除掉 $_modal，但是工作量有点大且繁琐，主要任务是需要将 src.html 中加上 modal modal-header modal-content
+    // var modal = this.$modal({
+    //   customClass: options.modalClass,
+    //   scope: this.modalScope,
+    //   templateUrl: options.src,
+    //   template: options.templateHtml,
+    //   show: false
+    // });
+
+    // modal.$promise.then(modal.show);
+
     var modal = this.$_modal({
       modalClass: options.modalClass,
       template: options.src,

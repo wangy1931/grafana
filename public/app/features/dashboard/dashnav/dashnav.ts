@@ -109,12 +109,12 @@ export class DashNavCtrl {
       }
 
       appEvents.emit('confirm-modal', {
-        title: 'Delete',
-        text: 'Do you want to delete this dashboard?',
+        title: '删除仪表盘',
+        text: '你确定要删除当前仪表盘吗?',
         text2: text2,
         icon: 'fa-trash',
         confirmText: confirmText,
-        yesText: 'Delete',
+        yesText: '删除',
         onConfirm: () => {
           this.dashboard.meta.canSave = false;
           this.deleteDashboardConfirmed();
@@ -124,7 +124,7 @@ export class DashNavCtrl {
 
     deleteDashboardConfirmed() {
       this.backendSrv.delete('/api/dashboards/db/' + this.dashboard.meta.slug).then(() => {
-        appEvents.emit('alert-success', ['Dashboard Deleted', this.dashboard.title + ' has been deleted']);
+        appEvents.emit('alert-success', ['已删除', this.dashboard.title + ' 仪表盘已成功删除']);
         this.$location.url('/');
       });
     }

@@ -25,7 +25,7 @@ const  template = `
 
 		<div class="gf-form-button-row text-center">
 			<button type="submit" class="btn btn-success" ng-disabled="ctrl.saveForm.$invalid">Save</button>
-			<a class="btn-text" ng-click="ctrl.dismiss();">Cancel</a>
+			<a class="btn-text" ng-click="ctrl.dismiss();">取消</a>
 		</div>
 	</form>
 </div>

@@ -309,6 +309,9 @@
     .page-container {
       margin-left: $side-menu-width;
     }
+    .search-container {
+      left: $side-menu-width;
+    }
   }
 
   .sidemenu > li > .dropdown-menu {

@@ -27,7 +27,7 @@
         <label class="gf-form-label width-13">列别名</label>
         <input type="text" class="gf-form-input width-13" ng-model="style.alias" ng-change="editor.render()" ng-model-onblur placeholder="Override header label">
       </div>
-      <gf-form-switch class="gf-form" label-class="width-13" label="Render value as link" checked="style.link" change="editor.render()"></gf-form-switch>
+      <gf-form-switch class="gf-form" label-class="width-13" label="设置列数据为链接" checked="style.link" change="editor.render()"></gf-form-switch>
     </div>
 
     <div class="section gf-form-group">
@@ -122,32 +122,32 @@
     </div>
 
     <div class="section gf-form-group" ng-if="style.link">
-      <h5 class="section-heading">Link</h5>
+      <h5 class="section-heading">链接</h5>
       <div class="gf-form">
         <label class="gf-form-label width-9">Url</label>
         <input type="text" class="gf-form-input width-29" ng-model="style.linkUrl" ng-blur="editor.render()" ng-model-onblur data-placement="right">
         <info-popover mode="right-absolute">
-          <p>Specify an URL (relative or absolute)</p>
+          <p>URL 地址 (相对路径 或 绝对路径)</p>
           <span>
-            Use special variables to specify cell values: <br>
-            <em>$__cell</em> refers to current cell value <br>
-            <em>$__cell_n</em> refers to Nth column value in current row. Column indexes are started from 0. For instance,
-              <em>$__cell_1</em> refers to second column's value.
+            使用特定的变量来具体说明每个单元格的值：<br>
+            <em>$__cell</em> 指当前单元格的值 <br>
+            <em>$__cell_n</em> 指当前行中，第 N 个单元格的值. 列索引从 0 开始. 例如,
+              <em>$__cell_1</em> 指第二列单元格的值.
           </span>
         </info-popover>
       </div>
       <div class="gf-form">
-        <label class="gf-form-label width-9">Tooltip</label>
+        <label class="gf-form-label width-9">提示语</label>
         <input type="text" class="gf-form-input width-29" ng-model="style.linkTooltip" ng-blur="editor.render()" ng-model-onblur data-placement="right">
         <info-popover mode="right-absolute">
-          <p>Specify text for link tooltip.</p>
+          <p>指示当前 URL 的提示.</p>
           <span>
-            This title appears when user hovers pointer over the cell with link.
-            Use the same variables as for URL.
+            当鼠标悬停到每个单元格上的提示语. 
+            使用的变量和 URL 设置的变量一致.
           </span>
         </info-popover>
       </div>
-      <gf-form-switch class="gf-form" label-class="width-9" label="Open in new tab" checked="style.linkTargetBlank"></gf-form-switch>
+      <gf-form-switch class="gf-form" label-class="width-9" label="在新页面中打开" checked="style.linkTargetBlank"></gf-form-switch>
     </div>
 
     <div class="clearfix"></div>

@@ -296,7 +296,7 @@ export class PanelCtrl {
     var markdown = this.panel.description;
 
     if (options.mode === 'tooltip') {
-      markdown = this.error || this.panel.description;
+      markdown = this.error.message || this.panel.description;
     }
 
     var linkSrv = this.$injector.get('linkSrv');
