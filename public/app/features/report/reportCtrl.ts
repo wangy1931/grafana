@@ -5,29 +5,31 @@ import coreModule from 'app/core/core_module';
 import _ from 'lodash';
 import 'ng-quill';
 
-const sections = [
-  {id: 1, name: '模板1', img: 'public/img/service_hadoop.png'},
-  {id: 2, name: '模板2', img: 'public/img/service_hadoop.png'},
-  {id: 3, name: '模板3', img: 'public/img/service_hadoop.png'},
-  {id: 4, name: '模板4', img: 'public/img/service_hadoop.png'},
-  {id: 5, name: '模板5', img: 'public/img/service_hadoop.png'},
-  {id: 6, name: '模板6', img: 'public/img/service_hadoop.png'},
-  {id: 7, name: '模板7', img: 'public/img/service_hadoop.png'},
-  {id: 8, name: '模板8', img: 'public/img/service_hadoop.png'},
-  {id: 9, name: '模板9', img: 'public/img/service_hadoop.png'},
-  {id: 10, name: '模板10', img: 'public/img/service_hadoop.png'},
-  {id: 11, name: '模板11', img: 'public/img/service_hadoop.png'},
-  {id: 12, name: '模板12', img: 'public/img/service_hadoop.png'}
+const SECTIONS = [
+  {id: 1, name: '总览', img: 'public/img/service_hadoop.png', icon: 'fa-line-chart'},
+  {id: 2, name: '告警情况', img: 'public/img/service_hadoop.png', icon: 'fa-bar-chart'},
+  {id: 3, name: '机器状态', img: 'public/img/service_hadoop.png', icon: 'fa-bar-chart'},
+  {id: 4, name: '服务状态', img: 'public/img/service_hadoop.png', icon: 'fa-server'}
 ]
+const TEMPLATE = {
+  "orgId": 0,
+  "sysId": 0,
+  "enabled": true,
+  "recipients": [],
+  "deliverHour": 8,
+  "sections": []
+}
 
 export class ReportCtrl {
   reports: Array<any>;
+  reportsOld: Array<any>;
   reportTemplate: any;
   customReport: any;
   toolbarOptions: any;
+  reportDownloadUrl: any;
 
   /** @ngInject */
-  constructor (private $scope, private $location, private reportSrv) {}
+  constructor (private $scope, private $location, private reportSrv, private contextSrv) {}
 
   /**
    * get report list
@@ -36,6 +38,10 @@ export class ReportCtrl {
     this.reportSrv.getReportList().then((res) => {
       this.reports = res.data;
     });
+    this.reportSrv.getReportOld().then((res) => {
+      this.reportDownloadUrl = res.url;
+      this.reportsOld = res.reports;
+    })
   }
 
   getReport(report) {
@@ -47,12 +53,13 @@ export class ReportCtrl {
   }
 
   /**
-   * eidt report template
+   * edit report template
    */
   initTemplate() {
     this.reportSrv.getReportConfig().then((res) => {
-      this.reportTemplate = res.data;
-      var curSections = _.cloneDeep(sections);
+      this.reportTemplate = res.data || _.cloneDeep(TEMPLATE);
+      var curSections = _.cloneDeep(SECTIONS);
+      _.find(curSections, {id: 1}).selected = true;
       _.each(this.reportTemplate.sections, (section) => {
         _.find(curSections, {id: section.id}).selected = true;
       });
@@ -62,11 +69,18 @@ export class ReportCtrl {
   }
 
   chooseTemplate(template) {
+    if (template.id === 1) {
+      this.$scope.appEvent('alert-warning', ['总览信息不可删除']);
+      return;
+    }
     template.selected = !template.selected;
   }
 
   saveTemplate() {
     var data = _.cloneDeep(this.reportTemplate);
+    this.reportTemplate.sysId = this.contextSrv.user.systemId;
+    this.reportTemplate.orgId = this.contextSrv.user.orgId;
+
     _.remove(data.sections, (section) => {
       return !section.selected;
     });
@@ -77,6 +91,20 @@ export class ReportCtrl {
   }
 
   switch() {}
+
+  addEmail() {
+    this.reportTemplate.recipients.push(null);
+  }
+
+  updateEmail(email, index) {
+    this.reportTemplate.recipients[index] = email;
+  }
+
+  removeEmail(index) {
+    _.remove(this.reportTemplate.recipients, (email, i) => {
+      return i === index;
+    })
+  }
 
   /**
    * edit custom report

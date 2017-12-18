@@ -28,14 +28,18 @@
           <span class="gf-form-label width-10">推送邮箱
             <em>*</em>
           </span>
-          <input ng-repeat="email in ctrl.reportTemplate.recipients" class="gf-form-input max-width-21" type="email" required ng-model="email" />
+          <div class="gf-form report-email" ng-repeat="email in ctrl.reportTemplate.recipients">
+            <input class="gf-form-input max-width-21" type="email" ng-model="email" ng-blur="ctrl.updateEmail(email, $index)" />
+            <i ng-click="ctrl.removeEmail($index)" class="fa fa-remove"></i>
+          </div>
+          <a class="btn btn-success" ng-click="ctrl.addEmail()"><i class="fa fa-plus"></i></a>
         </div>
 
         <div class="gf-form">
           <span class="gf-form-label width-10">推送时间
             <em>*</em>
           </span>
-          <input class="gf-form-input max-width-21" type="number" required ng-model="ctrl.reportTemplate.deliverHour" />
+          周一 <input class="gf-form-input width-5" type="number" min=0 max=24 required ng-model="ctrl.reportTemplate.deliverHour" /> 时
         </div>
       </div>
 
@@ -48,9 +52,10 @@
 
         <div class="gf-form template-container">
           <div class="template-item" ng-click="ctrl.chooseTemplate(template)" ng-repeat="template in ctrl.reportTemplate.sections">
-            <p>{{template.name}}模板</p>
+            <p>{{template.name}}</p>
             <div class="template-img" ng-class="{true: 'active'}[template.selected]">
               <i class="fa fa-check" ng-if="template.selected"></i>
+              <!-- <i class="fa" ng-class="template.icon"></i> -->
               <img style="width: 100%; height: 100%;" src="{{template.img}}" alt="">
             </div>
           </div>

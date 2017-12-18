@@ -12,19 +12,24 @@
     </div>
 
     <h4 class="report-title">多维度分析系统现状，为系统优化改进提供科学依据</h4>
-    <table class="grafana-options-table form-inline report-table" ng-if="ctrl.reports.length">
+    <table class="grafana-options-table form-inline report-table" ng-if="ctrl.reports.length || ctrl.reportsOld.length">
         <tbody>
             <tr>
                 <th>编号</th>
                 <th>健康报告</th>
                 <th>预览/下载</th>
             </tr>
-            <tr ng-repeat="report in ctrl.reports | orderBy: '-startAt'">
+            <tr ng-repeat="report in ctrl.reportsOld">
                 <td>{{$index + 1}}</td>
+                <td width="50%"><a class="report-item" href="{{ctrl.reportDownloadUrl}}/{{report.reportUrl}}" target="_blank">{{report.reportName}}</a></td>
+                <td><a class="report-item" href="{{ctrl.reportDownloadUrl}}/{{report.reportUrl}}" target="_blank">预览/下载</a></td>
+            </tr>
+            <tr ng-repeat="report in ctrl.reports | orderBy: '-startAt'">
+                <td>{{ctrl.reportsOld.length + $index + 1}}</td>
                 <td width="50%"><a class="report-item" ng-click="ctrl.getReport(report)" download="{{report.startAt | date:'yyyyMMdd'}}-{{report.createdAt | date:'yyyyMMdd'}}报告">{{report.startAt | date:'yyyyMMdd'}}-{{report.createdAt | date:'yyyyMMdd'}}报告</a></td>
                 <td><a class="report-item" ng-click="ctrl.getReport(report)">预览/下载</a></td>
             </tr>
         </tbody>
     </table>    
-    <p ng-if="!ctrl.reports.length">您暂时没有任何健康报告</p>
+    <p ng-if="!(ctrl.reports.length || ctrl.reportsOld.length)">您暂时没有任何健康报告</p>
 </div>
