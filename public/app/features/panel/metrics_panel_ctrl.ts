@@ -52,7 +52,6 @@ class MetricsPanelCtrl extends PanelCtrl {
   private onInitMetricsPanelEditMode() {
     this.addEditorTab('指标', 'public/app/partials/metrics.html');
     this.addEditorTab('时间区间', 'public/app/features/panel/partials/panelTime.html');
-    // this.datasources = this.datasourceSrv.getMetricSources();
   }
 
   private onMetricsPanelRefresh() {
@@ -283,7 +282,6 @@ class MetricsPanelCtrl extends PanelCtrl {
   }
 
   saveQueryResult(result) {
-    // (this.dashboard[result.id] = result.data[0].datapoints)
     result.data && result.data[0] && this.$scope.$emit('data-saved', { id: result.id, data: result.data[0].datapoints });
     (result.id === 'logSearch') && this.$scope.$emit('data-saved', { id: 'queryHeader', data: result.config.data });
   }
