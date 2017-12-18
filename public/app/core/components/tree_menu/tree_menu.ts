@@ -44,8 +44,8 @@ export class TreeMenuCtrl {
     this.prox = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.';
 
     this.timeRange = {};
-    this.timeRange.from = this.timeSrv.timeRange().from.unix();
-    this.timeRange.to = this.timeSrv.timeRange().to.unix();
+    // this.timeRange.from = this.timeSrv.timeRange().from.unix();
+    // this.timeRange.to = this.timeSrv.timeRange().to.unix();
   }
 
   init(type?) {
@@ -70,12 +70,15 @@ export class TreeMenuCtrl {
     if (!_.isEmpty(association)) {
       this.alertMgrSrv.loadAssociatedMetrics(params)
       .then((response) => {
+        var res = response.data;
+        this.timeRange.from = res.startSec;
+        this.timeRange.to = res.endSec;
         if (this.groupType === 'metrics') {
-          this.correlationMetrics = response.data || {};
+          this.correlationMetrics = res.data || {};
         } else {
-          this.correlationHosts = response.data || {};
+          this.correlationHosts = res.data || {};
         }
-        if (!_.isEmpty(response.data)) {
+        if (!_.isEmpty(res.data)) {
           this.isAssociation = true;
         }
         this.isLoding = false;
