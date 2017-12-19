@@ -45,8 +45,6 @@ export class TreeMenuCtrl {
     this.prox = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.';
 
     this.timeRange = {};
-    // this.timeRange.from = this.timeSrv.timeRange().from.unix();
-    // this.timeRange.to = this.timeSrv.timeRange().to.unix();
   }
 
   init(type?) {
@@ -75,11 +73,11 @@ export class TreeMenuCtrl {
         this.timeRange.from = res.startSec;
         this.timeRange.to = res.endSec;
         if (this.groupType === 'metrics') {
-          this.correlationMetrics = res.data || {};
+          this.correlationMetrics = res;
         } else {
-          this.correlationHosts = res.data || {};
+          this.correlationHosts = res;
         }
-        if (!_.isEmpty(res.data)) {
+        if (!_.isEmpty(res)) {
           this.isAssociation = true;
         }
         this.isLoding = false;
@@ -117,14 +115,22 @@ export class TreeMenuCtrl {
 
   addManualMetric(target) {
     target.metric = this.prox + target.metric;
-    if (!_.hasIn(this.correlationMetrics, '自定义指标')) {
-      this.correlationMetrics['自定义指标'] = {};
-    }
+    var custom = null;
     if (this.groupType === 'metrics') {
-      this.correlationMetrics['自定义指标'][target.metric] = {hosts: [target.host]};
+      (!this.correlationMetrics['自定义指标']) && (this.correlationMetrics['自定义指标'] = {});
+      custom = this.correlationMetrics['自定义指标'];
+      var key = target.metric;
+      var value = target.host;
+      var type = 'hosts';
     } else {
-      this.correlationMetrics['自定义指标'][target.metric] = {metrics: [target.host]};
+      (!this.correlationHosts['自定义指标']) && (this.correlationHosts['自定义指标'] = {});
+      custom = this.correlationHosts['自定义指标'];
+      key = target.host;
+      value = target.metric;
+      type = 'metrics';
     }
+    (!custom[key]) && (custom[key] = {});
+    custom[key][type] = _.union(custom[key][type], [value]);
     this.isAssociation = true;
   }
 
@@ -143,11 +149,10 @@ export class TreeMenuCtrl {
   }
 
   addQuery(event, metric, host, otherMetric?) {
-    if (host === '自定义指标') {
-      host = metric;
-      metric = otherMetric;
+    if (host === '自定义指标' && this.groupType === 'hosts') {
+      host = otherMetric;
     }
-    if (this.checkSource(metric, host)) {
+    if (this.checkSource(this.prox + metric, host)) {
       return;
     } else {
       var $currentTarget = $(event.currentTarget);
