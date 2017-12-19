@@ -2,6 +2,7 @@
 import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
+import moment from 'moment';
 import coreModule from 'app/core/core_module';
 
 export class TreeMenuCtrl {
@@ -244,6 +245,19 @@ export class TreeMenuCtrl {
   }
 
   initByTime() {
+    var start = this.timeSrv.timeRange().from.unix();
+    var from = moment(start * 1000);
+    var end = this.timeSrv.timeRange().to.unix();
+    var diff = moment().diff(from, 'days', true);
+    if (diff > 2) {
+      this.$scope.appEvent('alert-warning', ['您仅可以关联两天以内的数据', '请选择两天以内的时间区间']);
+      return;
+    }
+    diff = moment(end * 1000).diff(from, 'minutes');
+    if (diff < 20) {
+      this.$scope.appEvent('alert-warning', ['最小关联时间为20分钟', '请选择大于20分钟的时间区间']);
+      return;
+    }
     this.$scope.appEvent('confirm-modal', {
       title: '确定',
       text: '您确定要重新计算关联指标吗？\n该计算过程可能较长,请耐心等待',
@@ -251,8 +265,8 @@ export class TreeMenuCtrl {
       noText: '取消',
       onConfirm: () => {
         this.isExpert = true;
-        this.timeRange.from = this.timeSrv.timeRange().from.unix();
-        this.timeRange.to = this.timeSrv.timeRange().to.unix();
+        this.timeRange.from = start;
+        this.timeRange.to = end;
         this.init();
       }
     })
