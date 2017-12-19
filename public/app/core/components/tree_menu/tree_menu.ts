@@ -73,11 +73,11 @@ export class TreeMenuCtrl {
         this.timeRange.from = res.startSec;
         this.timeRange.to = res.endSec;
         if (this.groupType === 'metrics') {
-          this.correlationMetrics = res;
+          this.correlationMetrics = res.data;
         } else {
-          this.correlationHosts = res;
+          this.correlationHosts = res.data;
         }
-        if (!_.isEmpty(res)) {
+        if (!_.isEmpty(res.data)) {
           this.isAssociation = true;
         }
         this.isLoding = false;
