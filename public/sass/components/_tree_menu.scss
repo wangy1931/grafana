@@ -5,7 +5,7 @@
   width: 350px;
   overflow: hidden;
 
-  &.open { 
+  &.open {
     width: 350px;
   }
   &.close {
@@ -80,7 +80,7 @@
         color: $blue;
         background: none;
       }
-      
+
       &.disabled > button {
         color: $white;
         background: #f4f5f8;

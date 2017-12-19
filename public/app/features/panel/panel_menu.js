@@ -126,10 +126,6 @@ function (angular, $, _, Tether) {
             }
           }
 
-          // OLD
-          // elem.append(createMenuTemplate(ctrl));
-
-          // NEW
           var showMenu = function(e) {
             // if menu item is clicked and menu was just removed from dom ignore this event
             if (!$.contains(document, e.target)) {

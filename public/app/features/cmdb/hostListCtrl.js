@@ -54,7 +54,7 @@ define([
             text += item[i];
             text += ',';
           }
-          text += '\n'
+          text += '\n';
         });
         var blob = new Blob([text], { type: "text/csv;charset=utf-8" });
         window.saveAs(blob, 'cloudwiz_hosts_export.csv');
@@ -81,7 +81,7 @@ define([
           });
         }
       });
-    }
+    };
 
     var initArray = function(item) {
       var text = '';

@@ -22,7 +22,7 @@
   max-height: 300px;
 }
 
-.relationshipGraph-tip:after {
+.relationshipGraph-tip::after {
   display: inline-block;
   width: 100%;
   height: 3px;
@@ -32,7 +32,7 @@
   font-size: 10px;
 }
 
-.relationshipGraph-tip.n:after {
+.relationshipGraph-tip.n::after {
   content: "\25BC";
   margin: -2px 0 0 0;
   top: 100%;
@@ -44,7 +44,7 @@
   margin-left: 15px;
 }
 
-.relationshipGraph-tip.e:after {
+.relationshipGraph-tip.e::after {
   content: "\25C0";
   margin: -2px 0 0 0;
   top: 50%;
@@ -55,7 +55,7 @@
   margin-top: 15px;
 }
 
-.relationshipGraph-tip.s:after {
+.relationshipGraph-tip.s::after {
   content: "\25B2";
   margin: 0 0 1px 0;
   top: -10px;
@@ -63,7 +63,7 @@
   text-align: center;
 }
 
-.relationshipGraph-tip.w:after {
+.relationshipGraph-tip.w::after {
   content: "\25B6";
   margin: -4px 0 0 -1px;
   top: 50%;

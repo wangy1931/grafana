@@ -21,6 +21,5 @@ define([
     };
 
     $scope.init();
-
   });
 });

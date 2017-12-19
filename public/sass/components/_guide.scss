@@ -225,7 +225,7 @@ a.progress-link {
   top: 52px;
   padding-left: $side-menu-width;
   &.collapsed {
-    padding: 2px calc(10px + 1rem * 4) 10px $side-menu-width;
+    padding: 0 calc(10px + 1rem * 4) 0 $side-menu-width;
     .progress-step {
       &::after {
         left: 76%;

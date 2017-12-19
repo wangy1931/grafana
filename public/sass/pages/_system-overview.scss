@@ -44,7 +44,7 @@ $service-dep-bg-color: rgba(210, 235, 250, 0.5);
   .health-panel {
     position: relative;
     &:first-child{
-      width: 30%;
+      width: 0;
       border-right: 2px solid $summary-border-color;
       padding-bottom: 20px;
     }
@@ -510,7 +510,6 @@ $service-dep-bg-color: rgba(210, 235, 250, 0.5);
       .kpi-detail-table {
         min-height: 289px;
       }
-      .service-state-text {}
       // ng-table override
       .fixed-table-container {
         background-color: $white;

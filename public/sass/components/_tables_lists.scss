@@ -42,7 +42,7 @@
   background-color: $tight-form-bg;
   margin-bottom: 4px;
   cursor: pointer;
-  
+
   & > span {
     @include text-overflow();
     display: inline-block;

@@ -62,7 +62,7 @@
   margin: 0;
   background-color: $navbarButtonBackground;
   padding: 0.4rem 1.0rem 0.4rem 1rem;
-  min-height:: $navbarHeight;
+  min-height: $navbarHeight;
 
   .fa-caret-down {
     font-size: 70%;
@@ -114,7 +114,7 @@
   background-color: $navbarButtonBackground;
   font-size: $font-size-lg;
   padding: 1rem 1rem 0.75rem 1rem;
-  min-height:: $navbarHeight;
+  min-height: $navbarHeight;
 
   &:hover, &.active {
     background: $navbarButtonBackgroundHighlight;
@@ -154,7 +154,7 @@
 
   li a {
     padding: $spacer/2 $spacer;
-    border-left: 2px solid $side-menu-bg;
+    // border-left: 2px solid $side-menu-bg;
     background: $side-menu-bg;
 
     i {
@@ -167,6 +167,12 @@
       color: $link-hover-color;
       background: $input-label-bg;
     }
+  }
+
+  li.active a {
+    @include left-brand-border-gradient();
+    color: $link-hover-color;
+    background: $input-label-bg;
   }
 }
 

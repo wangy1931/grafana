@@ -1,5 +1,5 @@
 {
-  "title": "CloudWiz",
+  "title": "Cloudwiz 智能运维分析",
   "tags": [],
   "style": "dark",
   "timezone": "browser",
@@ -24,7 +24,7 @@
       ]
     },
     {
-      "title": "Welcome to CloudWiz",
+      "title": "Cloudwiz 智能运维分析",
       "height": "210px",
       "collapse": false,
       "editable": true,

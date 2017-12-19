@@ -8,13 +8,6 @@ import {appEvents} from 'app/core/core';
 
 var module = angular.module('grafana.directives');
 
-// OLD
-// <span class="panel-error small pointer" ng-if="ctrl.error" ng-click="ctrl.openInspector()">
-// <span data-placement="top" bs-tooltip="ctrl.error" data-container="body">
-//   <i class="fa fa-exclamation-circle"></i>
-// </span>
-// </span>
-
 var panelTemplate = `
   <div class="panel-container">
     <div class="panel-header">

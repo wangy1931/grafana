@@ -36,7 +36,7 @@
   }
   .dashboard-container {
     padding-left: $side-menu-width + 0.5rem;
-    padding-bottom: 5rem;    
+    padding-bottom: 5rem;
   }
   .page-container {
     margin-left: $side-menu-width;
@@ -93,7 +93,7 @@
       text-align: left;
     }
   }
-  &.sidemenu-small > li > .sidemenu-item > span, 
+  &.sidemenu-small > li > .sidemenu-item > span,
   &.submenu > li > .sidemenu-item > span {
     float: left;
   }

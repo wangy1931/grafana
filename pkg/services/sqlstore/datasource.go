@@ -12,10 +12,6 @@ import (
 func init() {
 	bus.AddHandler("sql", GetDataSources)
 	bus.AddHandler("sql", AddDataSource)
-	// OLD
-	// bus.AddHandler("sql", DeleteDataSource)
-	// bus.AddHandler("sql", DeleteAllDataSourceInOrg)
-	// bus.AddHandler("sql", UpdateDataSourceForAllOrg)
 	bus.AddHandler("sql", DeleteDataSourceById)
 	bus.AddHandler("sql", DeleteDataSourceByName)
 	bus.AddHandler("sql", DeleteAllDataSourceInOrg)

@@ -2,7 +2,7 @@
 	<div class="navbar-inner">
 		<a class="navbar-brand-btn pointer" ng-click="ctrl.toggleSideMenu()">
 			<span class="navbar-brand-btn-background">
-				<img src="public/img/grafana_icon.svg"></img>
+				<img src="public/img/fav32.png"></img>
 			</span>
 			<i class="fa fa-caret-down"></i>
 			<i class="fa fa-chevron-left"></i>
@@ -104,7 +104,7 @@
 				</ul>
 			</li>
 			<li ng-show="::ctrl.dashboard.meta.canSave">
-				<a ng-click="ctrl.saveDashboard()" bs-tooltip="'保存仪表盘 <br> CTRL+S'" data-placement="bottom"><i class="fa fa-save"></i></a>
+				<a ng-click="ctrl.saveDashboard()" bs-tooltip="'保存仪表盘 CTRL+S'" data-placement="bottom"><i class="fa fa-save"></i></a>
 			</li>
 			<li ng-if="::ctrl.dashboard.snapshot.originalUrl">
 				<a ng-href="{{ctrl.dashboard.snapshot.originalUrl}}" bs-tooltip="'Open original dashboard'" data-placement="bottom"><i class="fa fa-link"></i></a>

@@ -9,7 +9,7 @@ function (angular, $, _, moment) {
 
   var module = angular.module('grafana.services');
 
-  module.factory('dashboardSrv', function(contextSrv, alertSrv)  {
+  module.factory('dashboardSrv', function(contextSrv)  {
 
     function DashboardModel (data, meta) {
       if (!data) {

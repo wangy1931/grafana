@@ -6,7 +6,9 @@ define([
     'use strict';
 
     var module = angular.module('grafana.controllers');
-    module.controller('AnomalyMetric', function ($scope, healthSrv, navModelSrv, $routeParams) {
+    module.controller('AnomalyMetric', function (
+      $scope, healthSrv, navModelSrv, contextSrv, $routeParams
+    ) {
         $scope.navModel = navModelSrv.getAnomalyNav(0);
 
         var clusterId = $routeParams.clusterId;

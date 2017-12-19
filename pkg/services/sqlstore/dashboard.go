@@ -61,37 +61,37 @@ func SaveDashboard(cmd *m.SaveDashboardCommand) error {
 		}
 
 		// OLD
-		if sameTitleExists {
-			// another dashboard with same name
-			if dash.Id != sameTitle.Id {
-				dashSysId, err1 :=typeSwitch(dash.Data)
-				sameSysId, err :=typeSwitch(sameTitle.Data)
-				if err1 !=nil || err !=nil{
-					return err
-				}
-				if dashSysId == sameSysId  {
-					if cmd.Overwrite {
-						dash.Id = sameTitle.Id
-						dash.Version = sameTitle.Version
-					} else {
-						return m.ErrDashboardWithSameNameExists
-					}
-				}
-			}
-		}
-
-		// NEW
 		// if sameTitleExists {
 		// 	// another dashboard with same name
 		// 	if dash.Id != sameTitle.Id {
-		// 		if cmd.Overwrite {
-		// 			dash.Id = sameTitle.Id
-		// 			dash.Version = sameTitle.Version
-		// 		} else {
-		// 			return m.ErrDashboardWithSameNameExists
+		// 		dashSysId, err1 :=typeSwitch(dash.Data)
+		// 		sameSysId, err :=typeSwitch(sameTitle.Data)
+		// 		if err1 !=nil || err !=nil{
+		// 			return err
+		// 		}
+		// 		if dashSysId == sameSysId  {
+		// 			if cmd.Overwrite {
+		// 				dash.Id = sameTitle.Id
+		// 				dash.Version = sameTitle.Version
+		// 			} else {
+		// 				return m.ErrDashboardWithSameNameExists
+		// 			}
 		// 		}
 		// 	}
 		// }
+
+		// NEW
+		if sameTitleExists {
+			// another dashboard with same name
+			if dash.Id != sameTitle.Id {
+				if cmd.Overwrite {
+					dash.Id = sameTitle.Id
+					dash.Version = sameTitle.Version
+				} else {
+					return m.ErrDashboardWithSameNameExists
+				}
+			}
+		}
 
 		parentVersion := dash.Version
 		affectedRows := int64(0)
@@ -156,33 +156,17 @@ func SaveDashboard(cmd *m.SaveDashboardCommand) error {
 }
 
 func GetDashboard(query *m.GetDashboardQuery) error {
-	// OLD
-	dashboards := make([]*m.Dashboard, 0)
-	sess := x.Table("dashboard")
-	sess.Where("dashboard.slug=? and dashboard.org_id=?", query.Slug, query.OrgId)
-	err :=sess.Find(&dashboards)
-	
+	dashboard := m.Dashboard{Slug: query.Slug, OrgId: query.OrgId, Id: query.Id}
+	has, err := x.Get(&dashboard)
+
 	if err != nil {
 		return err
+	} else if has == false {
+		return m.ErrDashboardNotFound
 	}
 
-	for _, dash := range dashboards {
-		sysId, err := typeSwitch(dash.Data)
-		if err !=nil {
-			continue
-		}
-		if sysId == query.SystemId {
-			dash.Data.Set("id", dash.Id)
-			query.Result = dash
-		}
-	}
-
-	// NEW
-	// dashboard := m.Dashboard{Slug: query.Slug, OrgId: query.OrgId, Id: query.Id}
-	// has, err := x.Get(&dashboard)
-
-	// dashboard.Data.Set("id", dashboard.Id)
-	// query.Result = &dashboard
+	dashboard.Data.Set("id", dashboard.Id)
+	query.Result = &dashboard
 
 	return nil
 }

@@ -35,13 +35,12 @@ export class SideMenuCtrl {
     this.contextSrv.sidemenu = true;
     this.$rootScope = $rootScope;
     this.configMenu = config.bootData.mainNavLinks;
-    var _self = this;
     this.updateMenu.bind(this)();
-    if (this.contextSrv.isSignedIn) {
+    if (contextSrv.isSignedIn) {
       this.getMenus.bind(this)();
     }
 
-    this.$scope.$on('$routeChangeSuccess', () => {
+    $scope.$on('$routeChangeSuccess', () => {
       $scope.showSubmenu = false;
 
       // this.loginUrl = 'login?redirect=' + encodeURIComponent(this.$location.path());
@@ -60,7 +59,7 @@ export class SideMenuCtrl {
         return;
       }
       if (item.click) {
-        item.click(item, _self);
+        item.click(item);
       } else {
         $scope.submenu = item;
       }
@@ -82,7 +81,7 @@ export class SideMenuCtrl {
         return;
       }
       if (item.click) {
-        item.click(_self);
+        item.click();
       }
     };
   }
@@ -106,7 +105,7 @@ export class SideMenuCtrl {
     this.mainLinks.push({
       text: "指标浏览",
       icon: "fa fa-fw fa-sliders",
-      click: this.loadDashboardList
+      click: this.loadDashboardList.bind(this)
     });
 
     this.mainLinks.push({
@@ -233,7 +232,7 @@ export class SideMenuCtrl {
     this.bottomLinks.push({
       text: this.contextSrv.user.orgName,
       icon: "fa fa-fw fa-random",
-      click: this.getOrgsMenu,
+      click: this.getOrgsMenu.bind(this),
     });
 
     this.bottomLinks.push({
@@ -248,9 +247,9 @@ export class SideMenuCtrl {
     return config.appSubUrl + url;
   }
 
-  switchOrg(orgId, _self) {
+  switchOrg(orgId) {
     this.backendSrv.post('/api/user/using/' + orgId).then(() => {
-      _self.contextSrv.sidemenu = false;
+      this.contextSrv.sidemenu = false;
       window.location.href = this.getUrl('/systems');
     });
   }
@@ -330,54 +329,54 @@ export class SideMenuCtrl {
     return item;
   }
 
-  getOrgsMenu(item, _self) {
-    _self.backendSrv.get('/api/user/orgs').then(orgs => {
+  getOrgsMenu(item) {
+    this.backendSrv.get('/api/user/orgs').then(orgs => {
       item.children = [];
       orgs.forEach(org => {
-        if (org.orgId === _self.contextSrv.user.orgId) {
+        if (org.orgId === this.contextSrv.user.orgId) {
           return;
         }
 
         item.children.push({
           text: org.name,
           icon: "fa fa-fw fa-random",
-          click: (_self) => {
-            _self.switchOrg(org.orgId, _self);
+          click: () => {
+            this.switchOrg(org.orgId);
           }
         });
       });
-      _self.$scope.submenu = item;
+      this.$scope.submenu = item;
     });
   }
 
-  loadDashboardList(item, _self) {
+  loadDashboardList(item) {
     var submenu = [];
-    _self.backendSrv.search({query: "", starred: "false"}).then(function (result) {
-      if (!_self.contextSrv.isViewer) {
+    this.backendSrv.search({query: "", starred: "false"}).then((result) => {
+      if (!this.contextSrv.isViewer) {
         submenu.push({
-          text: "+新建",
-          click: _self.newDashboard,
+          text: "+ 新建",
+          click: this.newDashboard.bind(this),
         });
         submenu.push({
           text: "导入",
           url: "/import/dashboard",
         });
       }
-      _.each(result, function (dash) {
+      _.each(result, (dash) => {
         submenu.push({
           text: dash.title,
-          url: _self.getUrl("dashboard/"+dash.uri),
+          url: this.getUrl("dashboard/" + dash.uri),
         });
       });
       item.children = submenu;
-      _self.$scope.submenu = item;
+      this.$scope.submenu = item;
     });
   };
 
-  newDashboard(_self) {
-    _self.$rootScope.appEvent('show-modal', {
+  newDashboard() {
+    this.$rootScope.appEvent('show-modal', {
       src: 'public/app/partials/select_system.html',
-      scope: _self.$scope.$new(),
+      scope: this.$scope.$new(),
     });
   }
 

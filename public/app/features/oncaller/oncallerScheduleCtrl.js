@@ -7,7 +7,7 @@ define([
   'fullcalendar',
   'zh-cn',
 ],
-function (moment, $, angular, _, uiCalendarConfig) {
+function (moment, $, angular, _) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
@@ -139,7 +139,13 @@ function (moment, $, angular, _, uiCalendarConfig) {
       }
     }
 
-    function eventClick(date, jsEvent, view) {
+    /**
+     * please see fullcalendar.js for more details
+     * @param {*} date
+     * @param {*} jsEvent optional
+     * @param {*} view optional
+     */
+    function eventClick(date) {
       if (contextSrv.isViewer) {
         $scope.appEvent('alert-warning', ['抱歉','您没有权限修改值班表']);
       } else {
@@ -157,7 +163,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
       }
     }
 
-    function viewRender(view, element) {
+    function viewRender(view) {
       if($scope.inter) {
         $timeout.cancel($scope.inter);
       }
@@ -202,12 +208,12 @@ function (moment, $, angular, _, uiCalendarConfig) {
       });
     }
 
-    function eventMouseover(event, jsEvent, view) {
+    function eventMouseover() {
       this.style.color = '#000';
       this.style.backgroundColor = '#eee';
     }
 
-    function eventMouseout(event, jsEvent, view) {
+    function eventMouseout() {
       this.style.color = '#fff';
       this.style.backgroundColor = event.color;
     }
@@ -290,21 +296,21 @@ function (moment, $, angular, _, uiCalendarConfig) {
       $scope.zonesEnd = end || $scope.zonesEnd;
       $scope.clearReview();
       var oncallerLength = $scope.oncallerList.length;
-      if(oncallerLength) {
+      if (oncallerLength) {
         var zonesStart = new Date($scope.zonesStart);
         zonesStart.setHours($scope.changeTime.key);
         var zonesEnd = new Date($scope.zonesEnd);
         zonesEnd.setHours($scope.changeTime.key);
         var num = (zonesEnd.getTime() - zonesStart.getTime())/(1000*60*60*24)/$scope.range;
-        for(var i=0; i<num; i++) {
-          var start = new Date(zonesStart).setDate(zonesStart.getDate()+i*$scope.range);
-          var end = new Date(zonesStart).setDate(zonesStart.getDate()+(i+1)*$scope.range);
+        for (var i = 0; i < num; i++) {
+          var start_time = new Date(zonesStart).setDate(zonesStart.getDate()+i*$scope.range);
+          var end_time = new Date(zonesStart).setDate(zonesStart.getDate()+(i+1)*$scope.range);
           var pri = $scope.oncallerList[i % oncallerLength];
           var oncallerPri = {
             title: pri.name+$scope.primaryReview.type,
             className: ['primaryReview'],
-            start: formatTime(start),
-            end: formatTime(end),
+            start: formatTime(start_time),
+            end: formatTime(end_time),
             id: pri.id,
             color: pri.color,
           };
@@ -313,8 +319,8 @@ function (moment, $, angular, _, uiCalendarConfig) {
           var oncallerSec = {
             title: sec.name+$scope.secondaryReview.type,
             className: ['secondaryReview'],
-            start: formatTime(start+1000),
-            end: formatTime(end),
+            start: formatTime(start_time+1000),
+            end: formatTime(end_time),
             id: sec.id,
             color: sec.color,
           };
@@ -335,7 +341,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
         updateSecondaryList.push(s);
       }
       $scope.showScheduling = false;
-      oncallerMgrSrv.updateSchedule(_.concat(updatePrimaryList, updateSecondaryList)).then(function(response) {
+      oncallerMgrSrv.updateSchedule(_.concat(updatePrimaryList, updateSecondaryList)).then(function() {
         loadSchedule($scope.zonesStart, $scope.zonesEnd);
         $scope.appEvent('alert-success', ['保存成功']);
       });
@@ -353,9 +359,9 @@ function (moment, $, angular, _, uiCalendarConfig) {
         id: oncallerSelcted.id,
         startSec: getTimeSec(oncallerSelcted.start),
         endSec: getTimeSec(oncallerSelcted.end)
-      }
+      };
       if (type === 'update') {
-        oncallerMgrSrv.updateSchedule([event]).then(function(response) {
+        oncallerMgrSrv.updateSchedule([event]).then(function() {
           $scope.appEvent('alert-success', ['保存成功']);
         });
       } else {
@@ -364,8 +370,8 @@ function (moment, $, angular, _, uiCalendarConfig) {
     }
 
     $scope.showSchedule = function() {
-      $scope.showScheduling = !$scope.showScheduling
-    }
+      $scope.showScheduling = !$scope.showScheduling;
+    };
 
     $scope.init();
   });

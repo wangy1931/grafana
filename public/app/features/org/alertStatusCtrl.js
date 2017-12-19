@@ -219,12 +219,12 @@ function (angular, moment, _) {
       var status = $scope.alertData.status;
 
       if ($scope.reason) {
-        alertMgrSrv.closeAlert(status.alertId, status.monitoredEntity, $scope.reason, contextSrv.user.name).then(function(response) {
+        alertMgrSrv.closeAlert(status.alertId, status.monitoredEntity, $scope.reason, contextSrv.user.name).then(function() {
           _.remove($scope.$parent.alertRows, function(alertDetail) {
             return (alertDetail.definition.id === status.alertId) &&  (alertDetail.status.monitoredEntity === status.monitoredEntity);
           });
           $scope.appEvent('alert-success', ['报警处理成功']);
-        }).catch(function(err) {
+        }).catch(function() {
           $scope.appEvent('alert-error', ['报警处理失败','请检查网络连接状态']);
         });
       }

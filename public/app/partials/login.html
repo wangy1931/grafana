@@ -1,69 +1,44 @@
-<!-- OLD -->
-<div class="login-content">
-	<div ng-include="'public/app/partials/login_header.html'"></div>
-	<section class="login-inner-content">
-		<form name="loginForm" class="login-form login-content-form">
-			<label>登录名：</label>
-			<input type="text" name="username" required ng-model="formModel.user" placeholder="邮箱／用户名" />
 
-			<label>密码：<a href="user/password/send-reset-email" class="pull-right" tabindex="-1">忘记密码？</a></label>
-			<div class="clearfix"></div>
-			<input type="password" name="password" required ng-model="formModel.password" id="inputPassword" />
+<div ng-include="'public/app/partials/login_header.html'"></div>
 
-			<div class="btn-login-box">
-				<button type="submit" class="btn-link-login btn-login" ng-click="submit();">登录</button>
-			</div>
-
-			<span class="help-block go-register">还没有用户名？<a href="signupfree" class="btn-link-login">免费注册</a></span>
-
-		</form>
-	</section>
-
-	<div ng-include="'public/app/partials/login_footer.html'"></div>
-</div>
-
-<!-- <div class="login-container container">
+<div class="login-container container">
 
 	<div class="login-box">
 
 		<div class="login-box-logo">
-			<img class="logo-icon" src="public/img/grafana_icon.svg"></img><br>
-			<i class="icon-gf icon-gf-grafana_wordmark"></i>
+			<!-- 智能运维分析平台 -->
+			<!-- <img class="logo-icon" src="public/img/fav32.png"></img><br> -->
+			<!-- <i class="icon-gf icon-gf-grafana_wordmark"></i> -->
 		</div>
 
     <div class="login-inner-box">
 			<div class="login-tab-header">
-				<button class="btn-login-tab" ng-click="loginMode = true;" ng-class="{active: loginMode}">
-					Log in
-				</button>
-				<button class="btn-login-tab" ng-click="loginMode = false;" ng-class="{active: !loginMode}" ng-show="!disableUserSignUp">
-					Sign up
-				</button>
 			</div>
 
       <form name="loginForm" class="login-form gf-form-group" ng-hide="disableLoginForm">
 				<div class="gf-form" ng-if="loginMode">
-					<span class="gf-form-label width-7">User</span>
-					<input type="text" name="username" class="gf-form-input max-width-14" required ng-model='formModel.user' placeholder={{loginHint}}>
+					<span class="gf-form-label width-7">登录名</span>
+					<input type="text" name="username" class="gf-form-input max-width-14" required ng-model='formModel.user' placeholder="邮箱／用户名">
 				</div>
 				<div class="gf-form" ng-if="loginMode">
-					<span class="gf-form-label width-7">Password</span>
-					<input type="password" name="password" class="gf-form-input max-width-14" required ng-model="formModel.password" id="inputPassword" placeholder="password">
+					<span class="gf-form-label width-7">密码</span>
+					<input type="password" name="password" class="gf-form-input max-width-14" required ng-model="formModel.password" id="inputPassword" placeholder="">
 				</div>
 
 				<div class="gf-form" ng-if="!loginMode">
-						<span class="gf-form-label width-7">Email</span>
+						<span class="gf-form-label width-7">邮箱</span>
 						<input type="email" class="gf-form-input max-width-14" required ng-model='formModel.email' placeholder="email">
 				</div>
 
 				<div class="gf-form-button-row">
-					<button type="submit" class="btn btn-large p-x-3" ng-click="submit();" ng-class="{'btn-inverse': !loginForm.$valid, 'btn-primary': loginForm.$valid}">
+					<span class="pull-left"><a href="user/password/send-reset-email" class="" tabindex="-1">忘记密码？</a></span>
+					<button type="submit" class="btn gf-form-label width-7 pull-right" style="margin-right: 4rem; font-size: 1rem;" ng-click="submit();" ng-class="{'btn-inverse': !loginForm.$valid, 'btn-primary': loginForm.$valid}">
 						{{submitBtnText}}
 					</button>
 				</div>
 			</form>
 
-			<div ng-if="loginMode">
+			<!-- <div ng-if="loginMode">
 				<div class="text-center login-divider" ng-show="oauthEnabled">
 					<div class="login-divider-line">
 						<span class="login-divider-text">
@@ -92,18 +67,20 @@
 						{{oauth.generic_oauth.name}}
 					</a>
 				</div>
-			</div>
+			</div> -->
 		</div>
 
 		<div class="clearfix"></div>
-
-		<div class="text-center password-recovery" ng-hide="disableLoginForm">
-			<div class="text-center">
-				<a href="user/password/send-reset-email">
-					Forgot your password?
-				</a>
-			</div>
-		</div>
-
 	</div>
-</div> -->
+
+	<div class="text-center login-divider">
+		<div class="login-divider-line">
+			<span class="login-divider-text">
+				<span>还没有账号？<a href="signupfree" class="btn-link-login">免费注册</a></span>
+			</span>
+		</div>
+	</div>
+
+</div>
+
+<div ng-include="'public/app/partials/login_footer.html'"></div>

@@ -98,9 +98,10 @@ define([
               show: true,
               symbol: drawSymbol,
               fill: false,
-              radius: function (numElements) {
-                return (numElements > 20 ? 20 : numElements);
-              }(item.numElements)
+              radius: item.numElements > 20 ? 20 : item.numElements
+              // radius: function (numElements) {
+              //   return (numElements > 20 ? 20 : numElements);
+              // }(item.numElements)
             }
           };
         });

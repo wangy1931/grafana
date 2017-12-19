@@ -262,6 +262,9 @@ export class SystemOverviewCtrl {
                 "statusText": _.statusFormatter(item.healthStatusType)
               });
             });
+          })
+          .catch(err => {
+            console.log('Error when load service kpi status: ', err);
           });
 
           promiseList.push(q);
@@ -346,6 +349,8 @@ export class SystemOverviewCtrl {
         .then(resp => {
           service.healthStatusType = resp.data.healthStatusType;
           return resp.data;
+        }, err => {
+          console.log('Error when load service kpi status: ', err);
         });
         promiseList.push(q);
       });

@@ -202,6 +202,7 @@ coreModule.directive('grafanaGraph', function($rootScope, timeSrv, popoverSrv, i
         var yaxis = plot.getYAxes();
         for (var i = 0; i < yaxis.length; i++) {
           var axis = yaxis[i];
+          if (!axis) { continue; }
           var panelOptions = panel.yaxes[i];
           axis.options.max = axis.options.max !== null ? axis.options.max : panelOptions.max;
           axis.options.min = axis.options.min !== null ? axis.options.min : panelOptions.min;

@@ -7,7 +7,7 @@ const  template = `
 	<div class="modal-header">
 		<h2 class="modal-header-title">
 			<i class="fa fa-copy"></i>
-			<span class="p-l-1">Save As...</span>
+			<span class="p-l-1">另存为 ...</span>
 		</h2>
 
 		<a class="modal-header-close" ng-click="ctrl.dismiss();">
@@ -18,13 +18,13 @@ const  template = `
 	<form name="ctrl.saveForm" ng-submit="ctrl.save()" class="modal-content" novalidate>
 		<div class="p-t-2">
 			<div class="gf-form">
-				<label class="gf-form-label">New name</label>
+				<label class="gf-form-label">新名称</label>
 				<input type="text" class="gf-form-input" ng-model="ctrl.clone.title" give-focus="true" required>
 			</div>
 		</div>
 
 		<div class="gf-form-button-row text-center">
-			<button type="submit" class="btn btn-success" ng-disabled="ctrl.saveForm.$invalid">Save</button>
+			<button type="submit" class="btn btn-success" ng-disabled="ctrl.saveForm.$invalid">保存</button>
 			<a class="btn-text" ng-click="ctrl.dismiss();">取消</a>
 		</div>
 	</form>

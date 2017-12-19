@@ -78,13 +78,13 @@ define([
           if(response.status === 200) {
             return true;
           }
-        }, function(err) {
+        }, function() {
           return false;
         });
         promiseArr.push(p);
       });
 
-      $q.all(promiseArr).then(function(values) {
+      $q.all(promiseArr).then(function() {
         getServiceDetail();
       });
     };
@@ -117,16 +117,16 @@ define([
             host.state = "异常";
           });
 
-          if(host.isVirtual) {
+          if (host.isVirtual) {
             return host.isVirtual = '是';
-          } else if(host.isVirtual == false) {
+          } else if (host.isVirtual === false) {
             return host.isVirtual = '否';
           } else {
             return host.isVirtual = '未知';
-          };
+          }
         });
       });
-    }
+    };
 
     $scope.orderBy = function(order) {
       $scope.order = "'"+ order +"'";

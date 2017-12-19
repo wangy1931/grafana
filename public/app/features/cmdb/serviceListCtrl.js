@@ -59,7 +59,7 @@ define([
       backendSrv.alertD({
         url: '/cmdb/service/state/update',
         method: 'post'
-      }).then(function(response) {
+      }).then(function() {
         $scope.isScan = false;
         $scope.getService();
       }, function() {

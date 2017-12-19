@@ -592,7 +592,7 @@ func NewConfigContext(args *CommandLineArgs) error {
 	LdapConfigFile = ldapSec.Key("config_file").String()
 	LdapAllowSignup = ldapSec.Key("allow_sign_up").MustBool(true)
 
-	alerting := Cfg.Section("alerting")
+  alerting := Cfg.Section("alerting")
 	AlertingEnabled = alerting.Key("enabled").MustBool(true)
 	ExecuteAlerts = alerting.Key("execute_alerts").MustBool(true)
 
