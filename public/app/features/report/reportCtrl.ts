@@ -6,10 +6,10 @@ import _ from 'lodash';
 import 'ng-quill';
 
 const SECTIONS = [
-  {id: 1, name: '总览', img: 'public/img/service_hadoop.png', icon: 'fa-line-chart'},
-  {id: 2, name: '告警情况', img: 'public/img/service_hadoop.png', icon: 'fa-bar-chart'},
-  {id: 3, name: '机器状态', img: 'public/img/service_hadoop.png', icon: 'fa-bar-chart'},
-  {id: 4, name: '服务状态', img: 'public/img/service_hadoop.png', icon: 'fa-server'}
+  {id: 1, name: '总览', img: 'report-summary.png', icon: 'fa-line-chart'},
+  {id: 2, name: '告警情况', img: 'report-alert.png', icon: 'fa-bar-chart'},
+  {id: 3, name: '机器状态', img: 'report-host.png', icon: 'fa-bar-chart'},
+  {id: 4, name: '服务状态', img: 'report-service.png', icon: 'fa-server'}
 ]
 const TEMPLATE = {
   "orgId": 0,
@@ -22,7 +22,7 @@ const TEMPLATE = {
 
 export class ReportCtrl {
   reports: Array<any>;
-  reportsOld: Array<any>;
+  expertReports: Array<any>;
   reportTemplate: any;
   customReport: any;
   toolbarOptions: any;
@@ -35,12 +35,13 @@ export class ReportCtrl {
    * get report list
    */
   init() {
+    this.expertReports = [];
     this.reportSrv.getReportList().then((res) => {
-      this.reports = res.data;
+      this.reports = res.data || [];
     });
-    this.reportSrv.getReportOld().then((res) => {
+    this.reportSrv.getExpertReports().then((res) => {
       this.reportDownloadUrl = res.url;
-      this.reportsOld = res.reports;
+      this.expertReports = res.reports;
     })
   }
 
@@ -61,7 +62,14 @@ export class ReportCtrl {
       var curSections = _.cloneDeep(SECTIONS);
       _.find(curSections, {id: 1}).selected = true;
       _.each(this.reportTemplate.sections, (section) => {
-        _.find(curSections, {id: section.id}).selected = true;
+        var tmp = _.find(curSections, {id: section.id});
+        if (tmp) {
+          tmp.selected = true;
+        } else {
+          section.selected = true;
+          section.img = 'report-other.png';
+          curSections.push(section);
+        }
       });
 
       this.reportTemplate.sections = curSections;
