@@ -10,10 +10,10 @@
 .template-container {
     flex-wrap: wrap;
     .template-item {
-        width: 50%;
+        width: 20%;
         padding: 1rem;
         .template-img {
-            border: 5px solid $white;
+            border: 5px solid $gray-4;
             text-align: center;
             padding: 2rem 0;
             &.active {

@@ -6,15 +6,16 @@ import _ from 'lodash';
 import 'ng-quill';
 
 const SECTIONS = [
-  {id: 1, name: '总览', img: 'report-summary.png', icon: 'fa-line-chart'},
-  {id: 2, name: '告警情况', img: 'report-alert.png', icon: 'fa-bar-chart'},
-  {id: 3, name: '机器状态', img: 'report-host.png', icon: 'fa-bar-chart'},
-  {id: 4, name: '服务状态', img: 'report-service.png', icon: 'fa-server'}
+  {id: 1, name: '总览', img: 'report-summary.png'},
+  {id: 2, name: '告警情况', img: 'report-alert.png'},
+  {id: 3, name: '机器状态', img: 'report-host.png'},
+  {id: 4, name: '服务状态', img: 'report-service.png'}
 ]
 const TEMPLATE = {
   "orgId": 0,
   "sysId": 0,
-  "enabled": true,
+  "enabled": false,
+  "notificationEnabled": false,
   "recipients": [],
   "deliverHour": 8,
   "sections": []
@@ -27,6 +28,7 @@ export class ReportCtrl {
   customReport: any;
   toolbarOptions: any;
   reportDownloadUrl: any;
+  enabled: boolean;
 
   /** @ngInject */
   constructor (private $scope, private $location, private reportSrv, private contextSrv) {}
@@ -73,6 +75,7 @@ export class ReportCtrl {
       });
 
       this.reportTemplate.sections = curSections;
+      this.enabled = this.reportTemplate.enabled;
     });
   }
 
@@ -114,6 +117,19 @@ export class ReportCtrl {
     })
   }
 
+  disableReport() {
+    this.$scope.appEvent('confirm-modal', {
+      title: '取消订阅',
+      text: '取消订阅将不再收到巡检报告<br>您确定要取消订阅吗',
+      yesText: '确定',
+      noText: '取消',
+      onConfirm: () => {
+        this.reportTemplate.enabled = false;
+        this.saveTemplate();
+      }
+    });
+  }
+
   /**
    * edit custom report
    */
@@ -136,9 +152,7 @@ export class ReportCtrl {
   }
 
   editorCreated() {}
-  saveCustomReport() {
-    console.log(this.customReport);
-  }
+  saveCustomReport() {}
 
 }
 

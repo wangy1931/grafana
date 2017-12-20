@@ -2,7 +2,7 @@
   <ul class="nav">
     <li><a href="/report">健康报告</a></li>
     <li class="active"><a href="/report/template">报告设置</a></li>
-    <li><a href="/report/edit">报告编辑</a></li>
+    <!-- <li><a href="/report/edit">报告编辑</a></li> -->
   </ul>
 </navbar>
 
@@ -10,17 +10,20 @@
   <div class="page-header">
     <h2>报告设置</h2>
   </div>
-
-  <h4 class="report-title">多维度分析系统现状，为系统优化改进提供科学依据</h4>
-
-  <div>
+  <div ng-if="!ctrl.reportTemplate.enabled" class="no-data-box">
+      您暂未设置报告，请点击以下按钮进行设置报告内容
+      <p>
+        <button class="btn btn-primary" ng-click="ctrl.reportTemplate.enabled = true">设置报告</button>
+      </p>
+  </div>
+  <div ng-if="ctrl.reportTemplate.enabled">
     <form class="gf-form-group">
-      <div class="parse-form-group">
+      <!-- <div class="parse-form-group">
         <div class="gf-form">
           <span class="gf-form-label width-10">消息推送开启
             <em>*</em>
           </span>
-          <cwiz-switch switch-class="summary-switch" enabled="ctrl.reportTemplate.enabled" on-change="ctrl.switch();"
+          <cwiz-switch switch-class="summary-switch" enabled="ctrl.reportTemplate.notificationEnabled" on-change="ctrl.switch();"
           data-text-on="开启" data-text-off="关闭"></cwiz-switch>
         </div>
 
@@ -41,12 +44,12 @@
           </span>
           周一 <input class="gf-form-input width-5" type="number" min=0 max=24 required ng-model="ctrl.reportTemplate.deliverHour" /> 时
         </div>
-      </div>
+      </div> -->
 
       <div class="parse-form-group">
         <div class="gf-form">
           <span class="gf-form-label width-10">报告模板
-            <em>*</em>
+            <tip>请选择您需要定期查看的模板</tip>
           </span>
         </div>
 
@@ -55,8 +58,7 @@
             <p>{{template.name}}</p>
             <div class="template-img" ng-class="{true: 'active'}[template.selected]">
               <i class="fa fa-check" ng-if="template.selected"></i>
-              <!-- <i class="fa" ng-class="template.icon"></i> -->
-              <img style="width: 200px; height: 200px;" src="public/img/{{template.img}}" alt="">
+              <img style="width: 80%; height: 80%;" src="public/img/{{template.img}}" alt="">
             </div>
           </div>
         </div>
@@ -64,8 +66,9 @@
 
       <div class="parse-form-group no-border">
         <a class="btn btn-success" ng-click="ctrl.saveTemplate()">保存</a>
+        <a class="btn btn-primary" ng-click="ctrl.disableReport()" ng-if="ctrl.enabled">取消订阅</a>
         <a class="btn btn-inverse" href="/report">取消</a>
       </div>
     </form>
-
   </div>
+</div>

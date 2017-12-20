@@ -2,7 +2,7 @@
     <ul class="nav">
         <li class="active"><a href="/report">健康报告</a></li>
         <li><a href="/report/template">报告设置</a></li>
-        <li><a href="/report/edit">报告编辑</a></li>
+        <!-- <li><a href="/report/edit">报告编辑</a></li>b -->
     </ul>
 </navbar>
 
@@ -20,9 +20,9 @@
                 <th>健康报告</th>
                 <th>预览/下载</th>
             </tr>
-            <tr ng-repeat="report in ctrl.reports | orderBy: '-startAt'">
+            <tr ng-repeat="report in ctrl.reports | orderBy: '-createdAt'">
                 <td>{{$index + 1}}</td>
-                <td width="50%"><a class="report-item" ng-click="ctrl.getReport(report)" download="{{report.startAt | date:'yyyyMMdd'}}-{{report.createdAt | date:'yyyyMMdd'}}报告">{{report.startAt | date:'yyyyMMdd'}}-{{report.createdAt | date:'yyyyMMdd'}}报告</a></td>
+                <td width="50%"><a class="report-item" ng-click="ctrl.getReport(report)">{{report.startAt | date:'MM/dd/yyyy'}}-{{report.createdAt | date:'MM/dd/yyyy'}}报告</a></td>
                 <td><a class="report-item" ng-click="ctrl.getReport(report)">预览/下载</a></td>
             </tr>
         </tbody>
