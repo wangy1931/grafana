@@ -18,7 +18,8 @@ export class SignUpCtrl {
     $scope.formModel = {};
 
     var params = $location.search();
-    $scope.formModel.orgName = "";
+    $scope.formModel.orgName = contextSrv.signupUser.orgName;
+    $scope.formModel.name = contextSrv.signupUser.name;
     $scope.formModel.email = params.email;
     $scope.formModel.username = params.email;
     $scope.formModel.code = params.code;
