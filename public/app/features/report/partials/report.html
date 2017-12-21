@@ -1,24 +1,48 @@
-<navbar icon="fa fa-fw fa-list-alt" title="智能分析"></navbar>
+<navbar icon="fa fa-fw fa-list-alt" title="智能分析" title-url="/report">
+    <ul class="nav">
+        <li class="active"><a href="/report">健康报告</a></li>
+        <li><a href="/report/template">报告设置</a></li>
+        <!-- <li><a href="/report/edit">报告编辑</a></li>b -->
+    </ul>
+</navbar>
 
-<div class="page-container">
+<div class="page-container" ng-init="ctrl.init()">
     <div class="page-header">
         <h2>健康报告</h2>
     </div>
 
     <h4 class="report-title">多维度分析系统现状，为系统优化改进提供科学依据</h4>
-    <table class="grafana-options-table form-inline report-table">
-        <tbody ng-if="reports.length">
+    <h3 class="report-h3">巡检报告</h3> 
+    <table class="grafana-options-table form-inline report-table" ng-if="ctrl.reports.length">
+        <tbody>
             <tr>
                 <th>编号</th>
                 <th>健康报告</th>
                 <th>预览/下载</th>
             </tr>
-            <tr ng-repeat="report in reports">
+            <tr ng-repeat="report in ctrl.reports | orderBy: '-createdAt'">
                 <td>{{$index + 1}}</td>
-                <td width="50%"><a class="report-item" href="{{reportDownloadUrl}}/{{report.reportUrl}}" target="_blank">{{report.reportName}}</a></td>
-                <td><a class="report-item" href="{{reportDownloadUrl}}/{{report.reportUrl}}" target="_blank">预览/下载</a></td>
+                <td width="50%"><a class="report-item" ng-click="ctrl.getReport(report)">{{report.startAt | date:'MM/dd/yyyy'}}-{{report.createdAt | date:'MM/dd/yyyy'}}报告</a></td>
+                <td><a class="report-item" ng-click="ctrl.getReport(report)">预览/下载</a></td>
             </tr>
         </tbody>
-        <p ng-if="!reports.length">您暂时没有任何健康报告</p>
-    </table>   
+    </table>
+    <p ng-if="!ctrl.reports.length" >您暂时没有巡检报告,您可以通过<a href="/report/template">"报告设置"</a>获得巡检报告</p>
+
+    <h3 class="report-h3">专家报告</h3>
+    <table class="grafana-options-table form-inline report-table" ng-if="ctrl.expertReports.length">
+        <tbody>
+            <tr>
+                <th>编号</th>
+                <th>健康报告</th>
+                <th>预览/下载</th>
+            </tr>
+            <tr ng-repeat="report in ctrl.expertReports">
+                <td>{{$index + 1}}</td>
+                <td width="50%"><a class="report-item" href="{{ctrl.reportDownloadUrl}}/{{report.reportUrl}}" target="_blank">{{report.reportName}}</a></td>
+                <td><a class="report-item" href="{{ctrl.reportDownloadUrl}}/{{report.reportUrl}}" target="_blank">预览/下载</a></td>
+            </tr>
+        </tbody>
+    </table>
+    <p ng-if="!ctrl.expertReports.length">您暂时没有专家报告,您可以与Cloudwiz管理员联系获得专家报告</p>
 </div>

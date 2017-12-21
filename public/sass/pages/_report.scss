@@ -7,3 +7,58 @@
 .report-item:hover{
     color: $blue;
 }
+.template-container {
+    flex-wrap: wrap;
+    .template-item {
+        width: 20%;
+        padding: 1rem;
+        .template-img {
+            border: 5px solid $gray-4;
+            text-align: center;
+            padding: 2rem 0;
+            &.active {
+                border-color: #8BC34A;
+                position: relative;
+                i {
+                    color: $white;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    z-index: 1;
+                }
+                &::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    border-bottom: 30px solid transparent;
+                    border-right: 30px solid #8BC34A
+                }
+            }
+        }
+    }
+}
+.parse-form-group .gf-form.report-email {
+    position: relative;
+    margin: 0;
+    i {
+        position: absolute;
+        top: 0;
+        right: 6px;
+        display: none;
+        cursor: pointer;
+    }
+    &:hover {
+        i{
+            display: block;
+        }
+    }
+}
+
+.report-quil .ql-container.ql-snow {
+    min-height: 30rem;
+}
+
+.report-h3 {
+    margin-top: 3rem;
+}
