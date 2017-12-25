@@ -9,7 +9,7 @@ export class ReportSrv {
 
   getExpertReports() {
     return this.backendSrv.get('/api/static/template/' + this.contextSrv.user.orgId).then((res) => {
-              return {reports: res.reports, url: this.backendSrv.downloadUrl}
+              return {reports: res.reports, url: this.backendSrv.downloadUrl+'/report'}
             });
   }
 
