@@ -186,7 +186,6 @@ export class LogParseEditCtrl {
       } else {
         newScope.isNew = false;
         newScope.pattern = _.cloneDeep(pattern);
-        newScope.pattern.fields = [];
         newScope.oldPattern = pattern;
         newScope.rule = this.rule;
       }
@@ -238,13 +237,11 @@ export class LogParseEditCtrl {
       this.$scope.appEvent('alert-warning', ['请测试正确的解析规则']);
       return;
     }
-    pattern.result = '';
     if (isNew) {
       this.rule.patterns.push(pattern);
     } else {
-      for (var i in oldPattern) {
-        oldPattern[i] = pattern[i];
-      }
+      var index = _.findIndex(this.rule.patterns, oldPattern);
+      this.rule.patterns[index] = _.cloneDeep(pattern);
     }
     this.$scope.appEvent('alert-success', ['保存成功', '请点击“保存”按钮保存该操作']);
     dismiss();
