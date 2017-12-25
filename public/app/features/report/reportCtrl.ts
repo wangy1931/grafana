@@ -6,7 +6,7 @@ import _ from 'lodash';
 import 'ng-quill';
 
 const SECTIONS = [
-  {id: 1, name: '总览', img: 'report-summary.png'},
+  {id: 1, name: '系统总览', img: 'report-summary.png'},
   {id: 2, name: '告警情况', img: 'report-alert.png'},
   {id: 3, name: '机器状态', img: 'report-host.png'},
   {id: 4, name: '服务状态', img: 'report-service.png'}
