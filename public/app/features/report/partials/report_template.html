@@ -59,6 +59,8 @@
             <div class="template-img" ng-class="{true: 'active'}[template.selected]">
               <i class="fa fa-check" ng-if="template.selected"></i>
               <img style="width: 80%; height: 80%;" src="public/img/{{template.img}}" alt="">
+              <p ng-if="template.selected">已选定</p>
+              <p ng-if="!template.selected">选择此模板</p>
             </div>
           </div>
         </div>

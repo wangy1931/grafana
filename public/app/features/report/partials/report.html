@@ -13,16 +13,18 @@
 
     <h4 class="report-title">多维度分析系统现状，为系统优化改进提供科学依据</h4>
     <h3 class="report-h3">巡检报告</h3> 
-    <table class="grafana-options-table form-inline report-table" ng-if="ctrl.reports.length">
+    <table class="table table-striped report-table" ng-if="ctrl.reports.length">
         <tbody>
             <tr>
                 <th>编号</th>
                 <th>健康报告</th>
+                <th>时间</th>
                 <th>预览/下载</th>
             </tr>
             <tr ng-repeat="report in ctrl.reports | orderBy: '-createdAt'">
                 <td>{{$index + 1}}</td>
                 <td width="50%"><a class="report-item" ng-click="ctrl.getReport(report)">{{report.startAt | date:'MM/dd/yyyy'}}-{{report.createdAt | date:'MM/dd/yyyy'}}报告</a></td>
+                <td>{{report.createdAt | date:'MM/dd/yyyy'}}</td>                
                 <td><a class="report-item" ng-click="ctrl.getReport(report)">预览/下载</a></td>
             </tr>
         </tbody>
@@ -30,7 +32,7 @@
     <p ng-if="!ctrl.reports.length" >您暂时没有巡检报告,您可以通过<a href="/report/template">"报告设置"</a>获得巡检报告</p>
 
     <h3 class="report-h3">专家报告</h3>
-    <table class="grafana-options-table form-inline report-table" ng-if="ctrl.expertReports.length">
+    <table class="table table-striped report-table" ng-if="ctrl.expertReports.length">
         <tbody>
             <tr>
                 <th>编号</th>
