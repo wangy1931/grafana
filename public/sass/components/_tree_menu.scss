@@ -41,9 +41,12 @@
       top: 2.5rem;
       right: 0;
     }
-    .open > .dropdown-menu {
-      left: auto;
-      right: 0;
+    .btn-group.dropdown {
+      top: 3rem;
+      right: 2rem;
+      .dropdown-menu {
+        font-size: 10px;
+      }
     }
     .panel-time-info {
       font-size: 10px;

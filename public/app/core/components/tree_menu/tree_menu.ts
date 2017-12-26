@@ -15,8 +15,8 @@ export class TreeMenuCtrl {
   panel: any;
   groupType: any;
   correlationHosts: any;
-  isExpert: boolean;
   timeRange: any;
+  periods: any;
 
   /** @ngInject */
   constructor(private $scope, private associationSrv,
@@ -32,8 +32,16 @@ export class TreeMenuCtrl {
     var analysis = this.$rootScope.$on('analysis', (event, data) =>{
       if (_.isEqual(data, 'thresholdSlider')) {
         this.associationSrv.updateRang(this.$scope.$parent.thresholdSlider.get());
+        this.init();
+      } else {
+        var association = this.associationSrv.sourceAssociation;
+        this.loadAssociatedPeriods({
+          metric: association.metric,
+          host: association.host
+        }).then((res) => {
+          this.init();
+        });
       }
-      this.init();
     });
 
     this.$scope.$on('$destroy', () => {
@@ -44,7 +52,10 @@ export class TreeMenuCtrl {
     this.yaxisNumber = 3;
     this.prox = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.';
 
-    this.timeRange = {};
+    this.timeRange = {
+      from: this.timeSrv.timeRange().from.unix(),
+      to: this.timeSrv.timeRange().to.unix()
+    };
   }
 
   init(type?) {
@@ -59,33 +70,59 @@ export class TreeMenuCtrl {
       host: association.host,
       minDistance: 1000 - association.max,
       maxDistance: 1000 - association.min,
-      group: this.groupType
-    }
-    if (this.isExpert) {
-      this.isExpert = false;
-      params['startSec'] = this.timeRange.from;
-      params['endSec'] = this.timeRange.to;
+      group: this.groupType,
+      startSec: this.timeRange.from,
+      endSec: this.timeRange.to
     }
     if (!_.isEmpty(association)) {
-      this.alertMgrSrv.loadAssociatedMetrics(params)
-      .then((response) => {
-        var res = response.data;
-        this.timeRange.from = res.startSec;
-        this.timeRange.to = res.endSec;
-        if (this.groupType === 'metrics') {
-          this.correlationMetrics = res.data;
-        } else {
-          this.correlationHosts = res.data;
-        }
-        if (!_.isEmpty(res.data)) {
-          this.isAssociation = true;
-        }
-        this.isLoding = false;
-      }, () => {
-        this.isLoding = false;
-      });
+      if (this.periods) {
+        this.loadAssociatedMetrics(params);
+      } else {
+        this.loadAssociatedPeriods({
+          metric: association.metric,
+          host: association.host
+        }).then((res) => {
+          params.startSec = res.from;
+          params.endSec = res.to;
+          this.loadAssociatedMetrics(params);
+        });
+      }
     }
+  }
 
+  loadAssociatedPeriods(params) {
+    return this.alertMgrSrv.loadAssociatedPeriods(params).then((res) => {
+      this.periods = res.data.periods;
+      if (this.periods.length) {
+        this.timeRange.from = this.periods[0].startSec;
+        this.timeRange.to = this.periods[0].endSec;
+      } else {
+        this.periods = [];
+        this.periods.push({
+          startSec: this.timeRange.from,
+          endSec: this.timeRange.to,
+        });
+      }
+      return this.timeRange;
+    });
+  }
+
+  loadAssociatedMetrics(params) {
+    this.alertMgrSrv.loadAssociatedMetrics(params)
+    .then((response) => {
+      var res = response.data;
+      if (this.groupType === 'metrics') {
+        this.correlationMetrics = res.data;
+      } else {
+        this.correlationHosts = res.data;
+      }
+      if (!_.isEmpty(res.data)) {
+        this.isAssociation = true;
+      }
+      this.isLoding = false;
+    }, () => {
+      this.isLoding = false;
+    });
   }
 
   showTree() {
@@ -269,12 +306,21 @@ export class TreeMenuCtrl {
       yesText: '确定',
       noText: '取消',
       onConfirm: () => {
-        this.isExpert = true;
         this.timeRange.from = start;
         this.timeRange.to = end;
+        this.periods.push({
+          startSec: start,
+          endSec: end
+        });
         this.init();
       }
     })
+  }
+
+  updateTimeRange(period) {
+    this.timeRange.from = period.startSec;
+    this.timeRange.to = period.endSec;
+    this.init();
   }
 }
 

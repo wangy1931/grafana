@@ -10,12 +10,22 @@
       <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'hosts']"><button ng-click="ctrl.init('hosts')" ng-disabled="ctrl.groupType === 'hosts'">按机器分类</button></li>
     </ul>
     <div class="header">关联指标
-      <span class="panel-time-info">({{ctrl.timeRange.from*1000 | date:'short'}} - {{ctrl.timeRange.to*1000 | date:'short'}})</span>
+      <div class="btn-group dropdown">
+        <a class="dropdown-toggle panel-time-info" data-toggle="dropdown">
+          ({{ctrl.timeRange.from*1000 | date:'MM/dd/yyyy HH:mm'}} - {{ctrl.timeRange.to*1000 | date:'MM/dd/yyyy HH:mm'}})
+          <i class="fa fa-caret-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li ng-repeat="period in ctrl.periods">
+            <a ng-click="ctrl.updateTimeRange(period)">{{period.startSec*1000 | date:'MM/dd/yyyy HH:mm'}} - {{period.endSec*1000 | date:'MM/dd/yyyy HH:mm'}}</a>
+          </li>
+        </ul>
+      </div>
       <div class="btn-group">
         <a class="btn dropdown-toggle" data-toggle="dropdown">
           <i class="fa fa-bars"></i>
         </a>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu pull-right">
           <li><a tabindex="-1" ng-click="ctrl.initByTime()">关联选中时间的指标</a></li>
           <li><a tabindex="-1" ng-click="ctrl.showNewAssociationManual()">自定义关联指标</a></li>
           <li><a tabindex="-1" ng-click="ctrl.clearSelected()">清除选中</a></li>

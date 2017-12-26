@@ -15,6 +15,7 @@ function (angular, _, coreModule) {
     var closeAlertUrl = "/alert/status/close";
     var checkNameUrl = "/alert/definition/check";
     var rcaFeedbackUrl = "/rca/feedback/json";
+    var associationPeriodsUrl = "/alert/correlation/periods";
 
     this.currentCritialThreshold = 0;
     this.currentWarningThreshold = 0;
@@ -87,6 +88,14 @@ function (angular, _, coreModule) {
           reset: true
         },
         headers: {'Content-Type': 'text/plain'},
+      });
+    };
+
+    this.loadAssociatedPeriods = function(params) {
+      return backendSrv.alertD({
+        method: "get",
+        url: associationPeriodsUrl,
+        params: params
       });
     };
 
