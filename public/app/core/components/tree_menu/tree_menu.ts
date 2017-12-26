@@ -109,8 +109,7 @@ export class TreeMenuCtrl {
 
   loadAssociatedMetrics(params) {
     this.alertMgrSrv.loadAssociatedMetrics(params)
-    .then((response) => {
-      var res = response.data;
+    .then((res) => {
       if (this.groupType === 'metrics') {
         this.correlationMetrics = res.data;
       } else {
