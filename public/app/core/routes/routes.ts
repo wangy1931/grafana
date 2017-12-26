@@ -320,6 +320,21 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     templateUrl: 'public/app/features/report/partials/report.html',
     controller: 'ReportCtrl',
     reloadOnSearch: false,
+    controllerAs: 'ctrl',
+    resolve: loadReportBundle
+  })
+  .when('/report/template', {
+    templateUrl: 'public/app/features/report/partials/report_template.html',
+    controller: 'ReportCtrl',
+    reloadOnSearch: false,
+    controllerAs: 'ctrl',
+    resolve: loadReportBundle
+  })
+  .when('/report/edit', {
+    templateUrl: 'public/app/features/report/partials/report_edit.html',
+    controller: 'ReportCtrl',
+    reloadOnSearch: false,
+    controllerAs: 'ctrl',
     resolve: loadReportBundle
   })
   .when('/integrate', {

@@ -20,5 +20,6 @@ define([
   './guide_srv',
   './logParseSrv',
   './metricSrv',
+  './report_srv'
 ],
 function () {});
