@@ -20,11 +20,14 @@
                   日志显示数量
               </li>
               <li class="tidy-form-item">
-                  <button type="button" class="input-small tidy-form-input last input" ng-model="ctrl.size" 
-                          bs-options="f for f in [500, 1000, 2000, 3000, 5000]" data-placeholder="请选择"
-                          bs-on-select="ctrl.getLogSize" data-placement="bottom-auto" bs-select>
-                    请选择 <span class="caret"></span>
-                  </button>
+                <div class="dropdown input-small tidy-form-input last input">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                        {{ctrl.size}}<span class="caret pull-right"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-click="ctrl.getLogSize(f)" ng-repeat="f in [500, 1000, 2000, 3000, 5000]"><a>{{f}}</a></li>
+                    </ul>
+                </div>
               </li>
               <li>
                   <button type="submit" class="btn btn-primary" ng-click="ctrl.reQuery()" style="margin:0 20px;"><i class="fa fa-search"></i>查找</button>

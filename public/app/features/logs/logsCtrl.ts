@@ -292,6 +292,7 @@ export class LogsCtrl {
   getLogSize = (size) => {
     var panels = this.$scope.dashboard.rows[0].panels;
     size = parseInt(size);
+    this.size = size;
     _.forEach(panels, (panel) => {
       _.forEach(panel.targets, (target) => {
         if (parseInt(target.size) === size) { return; }
