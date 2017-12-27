@@ -289,7 +289,7 @@ export class LogsCtrl {
     this.$rootScope.$broadcast('refresh');
   }
 
-  getLogSize(size) {
+  getLogSize = (size) => {
     var panels = this.$scope.dashboard.rows[0].panels;
     size = parseInt(size);
     _.forEach(panels, (panel) => {
