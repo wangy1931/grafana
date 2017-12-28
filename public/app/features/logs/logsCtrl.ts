@@ -34,12 +34,11 @@ export class LogsCtrl {
   showSearchGuide: boolean;
   showAddRCA: boolean;
   logsSelected: Array<any>;
-  tabsFiled: any;
   tabsQuery: any;
 
   /** @ngInject */
   constructor(
-    private $scope, private $rootScope, private $modal, private $q, private $location, private $controller,
+    private $scope, private $rootScope, private $modal, private $q, private $location, private $controller, private logParseSrv,
     private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv, private alertSrv
   ) {
     this.tabs = [
@@ -439,15 +438,13 @@ export class LogsCtrl {
 
   getFiled(filedData) {
     var panel = this.$scope.dashboard.rows[0].panels[0];
-    this.tabsFiled = this.tabsFiled || {};
-    this.tabsFiled[this.$scope.dashboard.rows[0].id] = [];
     var filed = filedData ? filedData[0] : {};
     _.each(filed, (value, key) => {
       var obj = {text: key, value: key};
       if (_.find(panel.columns, obj)) {
         obj['checked'] = true;
       }
-      this.tabsFiled[this.$scope.dashboard.rows[0].id].push(obj);
+      this.tabsQuery[this.$scope.dashboard.rows[0].id].fileds.values.push(obj);
     });
   }
 
@@ -472,15 +469,66 @@ export class LogsCtrl {
     !this.tabsQuery && (this.tabsQuery = {});
     var extend_query = '';
     if (!this.tabsQuery[curTabId]) {
-      this.tabsQuery[curTabId] = [{
-        text: 'ERROR',
-        checked: false,
-      },{
-        text: 'EXCEPTION',
-        checked: false,
-      }];
+      this.tabsQuery[curTabId] = {
+        exception: {
+          name: '日志筛选',
+          values: [{
+            text: 'ERROR',
+            checked: false,
+          },{
+            text: 'EXCEPTION',
+            checked: false,
+          }],
+          select: false
+        },
+        host: {
+          name: '机器',
+          values: [],
+          select: false
+        },
+        service: {
+          name: '服务',
+          values: [],
+          select: false
+        },
+        fileds: {
+          name: 'filed筛选',
+          values: [],
+          select: false
+        }
+      }
+
+      this.logParseSrv.getServiceList().then((res) => {
+        this.tabsQuery[curTabId].service.values = _.map(res.data, (service) => {
+          return {
+            text: service.name,
+            checked: false
+          }
+        });
+      });
+
+      this.logParseSrv.getHostList().then((res) => {
+        this.tabsQuery[curTabId].host.values = _.map(res.data, (host) => {
+          return {
+            text: host.hostname,
+            checked: false
+          }
+        });
+      });
+    } else {
+      _.each(this.tabsQuery[curTabId], (query) => {
+        extend_query += this.getExtendText(query);
+      });
     }
-    var checked = _.filter(this.tabsQuery[curTabId], ['checked', true]);
+    return extend_query;
+  }
+
+  getExtendText(query) {
+    if (query.name === 'filed筛选') {
+      return '';
+    }
+    var extend_query = '';
+    var checked = _.filter(query.values, ['checked', true]);
     switch (checked.length) {
       case 0:
         extend_query = '';

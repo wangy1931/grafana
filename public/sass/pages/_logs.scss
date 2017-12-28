@@ -404,9 +404,9 @@ table.diff {
       color: $gray;
       display: flex;
       align-items: center;
-      cursor: pointer;
     }
-    li {
+    p, li {
+      cursor: pointer;
       padding: 0 20px;
     }
   }
@@ -436,7 +436,7 @@ table.diff {
       width: 90%;
     }
   }
-  .log-filed-header, .log-filed-header > i{
+  .log-filed-header {
     font-weight: bold;
     line-height: 3rem;
   }
