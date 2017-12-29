@@ -1,0 +1,23 @@
+<div class="modal-body">
+
+  <a class="modal-close" ng-click="dismiss();">
+      <i class="fa fa-remove"></i>
+  </a>
+
+  <h3>
+      添加部署服务
+  </h3>
+  <div class="modal-cmdb-list">
+    <table class="table">
+        <tr>
+            <th><input type="checkbox" ng-model="select_all" ng-change="selectAll(select_all)" /></th>
+            <th>服务名称</th>
+        </tr>
+        <tr ng-repeat="service in allService">
+            <td><input type="checkbox" ng-model="service.checked" ng-change="selectOne()" /></td>
+            <td>{{service.name}}</td>
+        </tr>
+    </table>
+  </div>
+    <button class="btn btn-primary" ng-click="addServices();dismiss();">添加</button>
+</div>
