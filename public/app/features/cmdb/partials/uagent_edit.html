@@ -55,6 +55,12 @@
           ng-options="f for f in [true, false]"
           ng-model="prop.value">
         </select>
+        <div ng-switch-when="password">
+          <input class="gf-form-input width-14" style="margin-bottom: 3px;" 
+            type="password" ng-model="prop.value" 
+            ng-disabled="{{prop.readOnly}}"
+          />
+        </div>
       </div>
     </div>
     <br/>

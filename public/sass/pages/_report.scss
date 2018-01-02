@@ -1,9 +1,86 @@
+$report-blue: rgb(22, 138, 233);
 .report-table{
-    max-width: 900px;
+    border: 1px solid #ddd;
+    border-top: none;
+    &.table-striped tbody > tr > th {
+        color: $white;
+        background: $report-blue;
+    }
 }
 .report-title{
     margin-bottom: 50px;
 }
 .report-item:hover{
-    color: $blue;
+    color: $report-blue;
+}
+.template-container {
+    flex-wrap: wrap;
+    .template-item {
+        width: 20%;
+        padding: 1rem;
+        .template-img {
+            position: relative;
+            border-radius: 5px;
+            text-align: center;
+            padding: 2rem 0;
+            box-shadow: 0 2px 3px #ddd;
+            p {
+                margin: 0;
+                position: absolute;
+                width: 100%;
+                bottom: 0;
+                border: 1px solid $report-blue;
+                color: $report-blue;
+                line-height: 2rem;
+            }
+            &.active {
+                box-shadow: none;
+                border: 3px solid $report-blue;
+                i {
+                    color: $white;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    z-index: 1;
+                }
+                &::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    border-bottom: 30px solid transparent;
+                    border-right: 30px solid $report-blue;
+                }
+                p {
+                    bottom: 0;
+                    color: $white;
+                    background: $report-blue;
+                }
+            }
+        }
+    }
+}
+.parse-form-group .gf-form.report-email {
+    position: relative;
+    margin: 0;
+    i {
+        position: absolute;
+        top: 0;
+        right: 6px;
+        display: none;
+        cursor: pointer;
+    }
+    &:hover {
+        i{
+            display: block;
+        }
+    }
+}
+
+.report-quil .ql-container.ql-snow {
+    min-height: 30rem;
+}
+
+.report-h3 {
+    margin-top: 3rem;
 }

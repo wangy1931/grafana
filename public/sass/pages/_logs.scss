@@ -382,7 +382,7 @@ table.diff {
   text-align: center;
   border: 1px dashed rgb(15, 171, 248);
   border-radius: 5px;
-  height: 5rem;
+  min-height: 5rem;
   line-height: 5rem;
 }
 
@@ -404,9 +404,9 @@ table.diff {
       color: $gray;
       display: flex;
       align-items: center;
-      cursor: pointer;
     }
-    li {
+    p, li {
+      cursor: pointer;
       padding: 0 20px;
     }
   }
@@ -436,7 +436,7 @@ table.diff {
       width: 90%;
     }
   }
-  .log-filed-header, .log-filed-header > i{
+  .log-filed-header {
     font-weight: bold;
     line-height: 3rem;
   }
