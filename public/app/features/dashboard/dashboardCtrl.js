@@ -20,7 +20,10 @@ function (angular, $, config, moment) {
       unsavedChangesSrv,
       dashboardViewStateSrv,
       contextSrv,
-      $timeout) {
+      backendSrv,
+      $timeout,
+      $controller
+    ) {
 
     $scope.editor = { index: 0 };
     $scope.panels = config.panels;
@@ -38,6 +41,10 @@ function (angular, $, config, moment) {
       $rootScope.performance.dashboardLoadStart = new Date().getTime();
       $rootScope.performance.panelsInitialized = 0;
       $rootScope.performance.panelsRendered = 0;
+
+      var dashboardPanelQueried = 0;
+      var showingPanelsLength = 0;
+      var exsitAllValue = 0;
 
       var dashboard = dashboardSrv.create(data.dashboard, data.meta);
       dashboardSrv.setCurrent(dashboard);
@@ -59,12 +66,43 @@ function (angular, $, config, moment) {
 
         $scope.updateSubmenuVisibility();
         $scope.setWindowTitleAndTheme();
-
-        $scope.appEvent("dashboard-loaded", $scope.dashboard);
       }).catch(function(err) {
         if (err.data && err.data.message) { err.message = err.data.message; }
         $scope.appEvent("alert-error", ['仪表盘初始化失败', '模板不能被正常的初始化: ' + err.message]);
       });
+
+      $scope.appEvent("dashboard-loaded", $scope.dashboard);
+
+      _.each(dashboard.rows, function (row) {
+        _.each(row.panels, function (panel) {
+          _.each(panel.targets, function (target) {
+            _.each(target.tags, function (val, key) {
+              console.log(val);
+              if (val === "*") {
+                exsitAllValue++;
+                return;
+              }
+            });
+          });
+        });
+      });
+
+      if (exsitAllValue) {
+        console.log(exsitAllValue);
+        $scope.appEvent('confirm-modal', {
+          title: '自动添加模板',
+          text: '检测到您仪表盘中标签的值过多，是否开启模板功能？',
+          icon: 'fa-warning',
+          yesText: '开启',
+          noText: '取消',
+          onConfirm: function() {
+            // backendSrv.saveDashboard(dashboard)
+            console.log($scope.dashboard);
+            $scope.broadcastRefresh();
+            // $scope.updateSubmenuVisibility();
+          }
+        });
+      }
     };
 
     $scope.updateSubmenuVisibility = function() {

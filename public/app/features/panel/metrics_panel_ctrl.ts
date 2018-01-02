@@ -31,6 +31,8 @@ class MetricsPanelCtrl extends PanelCtrl {
   dataStream: any;
   dataSubscription: any;
 
+  tagsKeyValue: any = {};
+
   constructor($scope, $injector) {
     super($scope, $injector);
 
@@ -91,6 +93,7 @@ class MetricsPanelCtrl extends PanelCtrl {
       this.error = err.message || "Timeseries data request error";
       this.inspector = {error: err};
       this.events.emit('data-error', err);
+      this.$scope.$emit('panel-query-start');
       console.log('Panel data error:', err);
     });
   }
@@ -184,6 +187,7 @@ class MetricsPanelCtrl extends PanelCtrl {
     this.datasource = datasource;
 
     if (!this.panel.targets || this.panel.targets.length === 0) {
+      this.$scope.$emit('panel-query-start');
       return this.$q.when([]);
     }
 
@@ -202,6 +206,7 @@ class MetricsPanelCtrl extends PanelCtrl {
     this.setTimeQueryStart();
     return datasource.query(metricsQuery).then((results) => {
       this.setTimeQueryEnd();
+      this.$scope.$emit('panel-query-start');
 
         if (this.dashboard.snapshot) {
           this.panel.snapshotData = results;
@@ -211,8 +216,68 @@ class MetricsPanelCtrl extends PanelCtrl {
           this.panel.regularResult = results;
         }
 
+        this.addAutoTemplating2(results);
+
         return results;
     });
+  }
+
+  addAutoTemplating2(results) {
+    // save kay value
+    results.data.forEach(item => {
+      var tags = item.target.match(/(?<=\{)[^}]*(?=\})/);
+      if (tags) {
+        tags[0].split(",").forEach(tag => {
+          var tagArr = tag.split("=");
+          !this.tagsKeyValue[tagArr[0]] && (this.tagsKeyValue[tagArr[0]] = []);
+          if (!~this.tagsKeyValue[tagArr[0]].indexOf(tagArr[1])) {
+            this.tagsKeyValue[tagArr[0]].push(tagArr[1]);
+          }
+        });
+      }
+    });
+    if (!!~[null, 'opentsdb'].indexOf(this.panel.datasource)) {
+      this.panel.targets.forEach(target => {
+        _.each(target.tags, (tagVal, tagKey) => {
+          if (tagVal === '*') {
+            target.tags[tagKey] = "$" + tagKey;
+            if (_.find(this.templateSrv.variables, { name: tagKey })) {
+              return;
+            } else {
+              var list = {
+                "current": {
+                  "text": "*",
+                  "value": "*"
+                },
+                "name": tagKey,
+                "datasource": null,
+                "includeAll": false,
+                "label": "",
+                "multi": false,
+                "refresh": 0,
+                "hide": 0,
+                "type": "custom",
+                "options": [{
+                  "text": "*",
+                  "value": "*",
+                  "selected": true
+                }],
+                "query": "*"
+              };
+              this.tagsKeyValue[tagKey].forEach(item => {
+                list.options.push({
+                  "text": item,
+                  "value": item,
+                  "selected": false
+                });
+                list.query += `,${item}`;
+              });
+              this.templateSrv.variables.push(list);
+            }
+          }
+        });
+      });
+    }
   }
 
   handleQueryResult(result) {
