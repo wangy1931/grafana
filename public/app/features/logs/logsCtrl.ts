@@ -439,6 +439,7 @@ export class LogsCtrl {
   getFiled(filedData) {
     var panel = this.$scope.dashboard.rows[0].panels[0];
     var field = filedData ? filedData[0] : {};
+    this.tabsQuery[this.$scope.dashboard.rows[0].id].fields.values = [];
     _.each(field, (value, key) => {
       var obj = {text: key, value: key};
       if (_.find(panel.columns, obj)) {
