@@ -1,7 +1,5 @@
-<div class="container">
+<div>
 	<div ng-include="'public/app/partials/login_header.html'"></div>
-	<div class="signup-page-background">
-	</div>
 
 	<div class="login-box">
 
@@ -23,25 +21,25 @@
 					<span class="gf-form-label width-9">
 						邮箱验证码<tip>请输入验证码: (已经发送到您的邮箱中)</tip>
 					</span>
-					<input type="text" class="gf-form-input max-width-14" ng-model="formModel.code" required></input>
+					<input type="text" class="gf-form-input max-width-20" ng-model="formModel.code" required></input>
 				</div>
 
 				<div class="gf-form" ng-if="!autoAssignOrg">
 					<span class="gf-form-label width-9">公司名称</span>
-					<input type="text" name="orgName" class="gf-form-input max-width-14" ng-model='formModel.orgName' placeholder="Name your organization">
+					<input type="text" name="orgName" class="gf-form-input max-width-20" ng-model='formModel.orgName' placeholder="Name your organization">
 				</div>
 
 				<div class="gf-form">
 					<span class="gf-form-label width-9">您的姓名</span>
-					<input type="text" name="name" class="gf-form-input max-width-14" ng-model='formModel.name' placeholder="(optional)">
+					<input type="text" name="name" class="gf-form-input max-width-20" ng-model='formModel.name' placeholder="(optional)">
 				</div>
 				<div class="gf-form">
 					<span class="gf-form-label width-9">账号</span>
-					<input type="text" class="gf-form-input max-width-14" required ng-model='formModel.username' placeholder="Username" autocomplete="off">
+					<input type="text" class="gf-form-input max-width-20" required ng-model='formModel.username' placeholder="Username" autocomplete="off">
 				</div>
 				<div class="gf-form">
 					<span class="gf-form-label width-9">密码</span>
-					<input type="password" class="gf-form-input max-width-14" required ng-model="formModel.password" id="inputPassword" placeholder="password" autocomplete="off">
+					<input type="password" class="gf-form-input max-width-20" required ng-model="formModel.password" id="inputPassword" placeholder="password" autocomplete="off">
 				</div>
 
 				<div style="margin-left: 7.5rem; width: 254px;">
@@ -55,7 +53,6 @@
 				</div>
 			</form>
 		</div>
-
 
 	</div>
 	<div ng-include="'public/app/partials/login_footer.html'"></div>

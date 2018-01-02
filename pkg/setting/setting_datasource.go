@@ -26,3 +26,12 @@ func readDownloadSettings() {
   download := Cfg.Section("download")
   Download.DownloadUrlRoot = download.Key("download_urlroot").String()
 }
+
+type AlertSettings struct {
+	AlertUrlRoot string
+}
+
+func readAlertSettings() {
+	alert := Cfg.Section("alert")
+  Alert.AlertUrlRoot = alert.Key("alert_urlroot").String()
+}

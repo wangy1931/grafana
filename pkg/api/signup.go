@@ -100,6 +100,7 @@ func SignUpStep2(c *middleware.Context, form dtos.SignUpStep2Form) Response {
 		Name:  user.NameOrFallback(),
 	})
 
+	// add first system
 	systems := m.AddSystemsCommand{
 		OrgId: 				user.OrgId,
 		SystemsName:	[]string{"默认系统"},
