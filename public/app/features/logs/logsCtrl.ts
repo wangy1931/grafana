@@ -438,27 +438,27 @@ export class LogsCtrl {
 
   getFiled(filedData) {
     var panel = this.$scope.dashboard.rows[0].panels[0];
-    var filed = filedData ? filedData[0] : {};
-    _.each(filed, (value, key) => {
+    var field = filedData ? filedData[0] : {};
+    _.each(field, (value, key) => {
       var obj = {text: key, value: key};
       if (_.find(panel.columns, obj)) {
         obj['checked'] = true;
       }
-      this.tabsQuery[this.$scope.dashboard.rows[0].id].fileds.values.push(obj);
+      this.tabsQuery[this.$scope.dashboard.rows[0].id].fields.values.push(obj);
     });
   }
 
-  updateColum (row, filed) {
-    if (filed.checked) {
-      if (_.findIndex(row.panels[0].columns, {text: filed.text}) === -1) {
+  updateColum (row, field) {
+    if (field.checked) {
+      if (_.findIndex(row.panels[0].columns, {text: field.text}) === -1) {
         row.panels[0].columns.push({
-          text: filed.text,
-          value: filed.value
+          text: field.text,
+          value: field.value
         });
       }
     } else {
       _.remove(row.panels[0].columns, (column) => {
-        return column.text === filed.text;
+        return column.text === field.text;
       });
     }
 
@@ -491,8 +491,8 @@ export class LogsCtrl {
           values: [],
           select: false
         },
-        fileds: {
-          name: 'filed筛选',
+        fields: {
+          name: 'field筛选',
           values: [],
           select: false
         }

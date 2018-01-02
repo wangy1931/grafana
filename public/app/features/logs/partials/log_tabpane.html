@@ -51,12 +51,12 @@
             <li class="log-filed-header" data-toggle="collapse" data-target="#{{index}}" ng-click="tabsQuery.select = !tabsQuery.select">
                 <i class="fa" ng-class="{true: 'fa-angle-down', false: 'fa-angle-up'}[tabsQuery.select]"></i> {{tabsQuery.name}}
             </li>
-            <li id="{{index}}" class="collapse" ng-if="index !== 'fileds'">
+            <li id="{{index}}" class="collapse" ng-if="index !== 'fields'">
                 <label ng-repeat="query in tabsQuery.values">
                     <input type="checkbox" name="query" ng-model="query.checked" ng-change="ctrl.reQuery();"> {{query.text}}
                 </label>                
             </li>
-            <li id="{{index}}" class="collapse" ng-if="index === 'fileds'">             
+            <li id="{{index}}" class="collapse" ng-if="index === 'fields'">             
                 <label ng-repeat="query in tabsQuery.values">
                     <input type="checkbox" name="query" ng-model="query.checked" ng-change="ctrl.updateColum(row, query);"> {{query.text}}
                 </label>                
