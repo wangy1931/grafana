@@ -216,26 +216,28 @@ class MetricsPanelCtrl extends PanelCtrl {
           this.panel.regularResult = results;
         }
 
-        this.addAutoTemplating2(results);
+        this.$scope.$on('auto-templating-start', () => {
+          this.addAutoTemplating(results);
+        });
 
         return results;
     });
   }
 
-  addAutoTemplating2(results) {
-    // save kay value
+  addAutoTemplating(results) {
+    // save key value from result.data
     results.data.forEach(item => {
       var tags = item.target.match(/(?<=\{)[^}]*(?=\})/);
       if (tags) {
         tags[0].split(",").forEach(tag => {
           var tagArr = tag.split("=");
-          !this.tagsKeyValue[tagArr[0]] && (this.tagsKeyValue[tagArr[0]] = []);
-          if (!~this.tagsKeyValue[tagArr[0]].indexOf(tagArr[1])) {
+          if (!~(this.tagsKeyValue[tagArr[0]] || (this.tagsKeyValue[tagArr[0]] = [])).indexOf(tagArr[1])) {
             this.tagsKeyValue[tagArr[0]].push(tagArr[1]);
           }
         });
       }
     });
+    // set templating key-value & change tags in panel
     if (!!~[null, 'opentsdb'].indexOf(this.panel.datasource)) {
       this.panel.targets.forEach(target => {
         _.each(target.tags, (tagVal, tagKey) => {

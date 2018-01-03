@@ -22,7 +22,7 @@ function (angular, $, config, moment) {
       contextSrv,
       backendSrv,
       $timeout,
-      $controller
+      $location
     ) {
 
     $scope.editor = { index: 0 };
@@ -41,10 +41,6 @@ function (angular, $, config, moment) {
       $rootScope.performance.dashboardLoadStart = new Date().getTime();
       $rootScope.performance.panelsInitialized = 0;
       $rootScope.performance.panelsRendered = 0;
-
-      var dashboardPanelQueried = 0;
-      var showingPanelsLength = 0;
-      var exsitAllValue = 0;
 
       var dashboard = dashboardSrv.create(data.dashboard, data.meta);
       dashboardSrv.setCurrent(dashboard);
@@ -73,33 +69,36 @@ function (angular, $, config, moment) {
 
       $scope.appEvent("dashboard-loaded", $scope.dashboard);
 
-      _.each(dashboard.rows, function (row) {
-        _.each(row.panels, function (panel) {
-          _.each(panel.targets, function (target) {
-            _.each(target.tags, function (val, key) {
-              console.log(val);
-              if (val === "*") {
-                exsitAllValue++;
-                return;
-              }
+      $scope.detectTemplatingNeeded(dashboard);
+    };
+
+    $scope.detectTemplatingNeeded = function(dashboard) {
+      var exsitAllValue = 0;
+      // 检测是否有标签值为 *, 只在 dashboard 页面
+      if (/\/dashboard\/db/.test($location.path())) {
+        _.each(dashboard.rows, function (row) {
+          _.each(row.panels, function (panel) {
+            _.each(panel.targets, function (target) {
+              _.each(target.tags, function (val, key) {
+                if (val === "*") {
+                  exsitAllValue++;
+                  return;
+                }
+              });
             });
           });
         });
-      });
-
+      }
       if (exsitAllValue) {
-        console.log(exsitAllValue);
         $scope.appEvent('confirm-modal', {
           title: '自动添加模板',
-          text: '检测到您仪表盘中标签的值过多，是否开启模板功能？',
+          text: '仪表盘中标签的值过多，是否开启模板功能？',
           icon: 'fa-warning',
           yesText: '开启',
           noText: '取消',
           onConfirm: function() {
-            // backendSrv.saveDashboard(dashboard)
-            console.log($scope.dashboard);
-            $scope.broadcastRefresh();
-            // $scope.updateSubmenuVisibility();
+            $scope.$broadcast('auto-templating-start');
+            $scope.updateSubmenuVisibility();
           }
         });
       }
