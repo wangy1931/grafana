@@ -525,7 +525,7 @@ export class LogsCtrl {
   }
 
   getExtendText(query) {
-    if (query.name === 'filed筛选') {
+    if (query.name === 'field筛选') {
       return '';
     }
     var extend_query = '';
