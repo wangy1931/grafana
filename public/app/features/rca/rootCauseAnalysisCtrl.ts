@@ -15,13 +15,21 @@ export class RootCauseAnalysisCtrl {
 
   /** @ngInject */
   constructor(
-    private backendSrv, private popoverSrv,
+    private backendSrv, private popoverSrv, private alertSrv,
     private $location, private $scope, private $rootScope, private $timeout
   ) {
     this.toolkit = window.jsPlumbToolkit.newInstance();
     this.renderer = this.renderFactory();
 
     this.loadGraph().then(response => {
+      if (_.isEmpty(response.edges)) {
+        this.alertSrv.set("暂无故障溯源关系图，即将前往关联性分析", '', "warning", 2000);
+        this.$timeout(() => {
+          this.$location.url(`/association${window.location.search}`);
+        }, 2000);
+        return;
+      }
+
       this.graph = response;
       this.toolkit.load({ type: "json", data: response });
       this.resetConnection(response);
