@@ -21,7 +21,11 @@
 					<span class="gf-form-label width-9">
 						邮箱验证码<tip>请输入验证码: (已经发送到您的邮箱中)</tip>
 					</span>
-					<input type="text" class="gf-form-input max-width-20" ng-model="formModel.code" required></input>
+					<input type="text" class="gf-form-input max-width-12" ng-model="formModel.code" required></input>
+					<button class="btn btn-inverse" ng-disabled="ctrl.leftTime !== 0" ng-click="ctrl.resendEmail();">
+						<span ng-if="!ctrl.leftTime">重发验证码</span>
+						<span ng-if="ctrl.leftTime">{{ctrl.leftTime}}s后重发</span>
+					</button>
 				</div>
 
 				<div class="gf-form" ng-if="!autoAssignOrg">

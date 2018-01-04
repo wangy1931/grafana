@@ -29,7 +29,7 @@ function (angular, coreModule) {
             window.location.href = config.appSubUrl + '/';
           }
         });
-        // backendSrv.post('/api/user/signup/propose', $scope.formModel).then(function () {});
+        backendSrv.post('/api/user/signup/propose', $scope.formModel).then(function () {});
       };
 
     });
