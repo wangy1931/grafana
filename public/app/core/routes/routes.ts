@@ -105,6 +105,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/alerts/status', {
     templateUrl: 'public/app/features/org/partials/alertStatus.html',
     controller : 'AlertStatusCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOrgBundle,
   })
   .when('/oncallerschedule', {
