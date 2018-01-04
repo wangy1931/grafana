@@ -1,18 +1,10 @@
-<div class="container">
+<div>
 	<div ng-include="'public/app/partials/login_header.html'"></div>
-	<div class="signup-page-background">
-	</div>
 
 	<div class="login-box">
 
     <div class="invite-box">
-			<h3>
-				您已经到这一步了
-			</h3>
-
-			<div class="modal-tagline">
-				我们只需要您<br> 继续完善您具体信息即可使用
-			</div>
+			<h3>请继续完善信息</h3>
 
 			<div style="display: inline-block; margin-top: 25px; width: 300px">
 					<div class="editor-option">
@@ -27,27 +19,31 @@
 
 				<div class="gf-form" ng-if="verifyEmailEnabled">
 					<span class="gf-form-label width-9">
-						Email code<tip>请输入验证码: (已经发送到您的邮箱中)</tip>
+						邮箱验证码<tip>请输入验证码: (已经发送到您的邮箱中)</tip>
 					</span>
-					<input type="text" class="gf-form-input max-width-14" ng-model="formModel.code" required></input>
+					<input type="text" class="gf-form-input max-width-12" ng-model="formModel.code" required></input>
+					<button class="btn btn-inverse" ng-disabled="ctrl.leftTime !== 0" ng-click="ctrl.resendEmail();">
+						<span ng-if="!ctrl.leftTime">重发验证码</span>
+						<span ng-if="ctrl.leftTime">{{ctrl.leftTime}}s后重发</span>
+					</button>
 				</div>
 
 				<div class="gf-form" ng-if="!autoAssignOrg">
 					<span class="gf-form-label width-9">公司名称</span>
-					<input type="text" name="orgName" class="gf-form-input max-width-14" ng-model='formModel.orgName' placeholder="Name your organization">
+					<input type="text" name="orgName" class="gf-form-input max-width-20" ng-model='formModel.orgName' placeholder="Name your organization">
 				</div>
 
 				<div class="gf-form">
 					<span class="gf-form-label width-9">您的姓名</span>
-					<input type="text" name="name" class="gf-form-input max-width-14" ng-model='formModel.name' placeholder="(optional)">
+					<input type="text" name="name" class="gf-form-input max-width-20" ng-model='formModel.name' placeholder="(optional)">
 				</div>
 				<div class="gf-form">
 					<span class="gf-form-label width-9">账号</span>
-					<input type="text" class="gf-form-input max-width-14" required ng-model='formModel.username' placeholder="Username" autocomplete="off">
+					<input type="text" class="gf-form-input max-width-20" required ng-model='formModel.username' placeholder="Username" autocomplete="off">
 				</div>
 				<div class="gf-form">
 					<span class="gf-form-label width-9">密码</span>
-					<input type="password" class="gf-form-input max-width-14" required ng-model="formModel.password" id="inputPassword" placeholder="password" autocomplete="off">
+					<input type="password" class="gf-form-input max-width-20" required ng-model="formModel.password" id="inputPassword" placeholder="password" autocomplete="off">
 				</div>
 
 				<div style="margin-left: 7.5rem; width: 254px;">
@@ -61,7 +57,6 @@
 				</div>
 			</form>
 		</div>
-
 
 	</div>
 	<div ng-include="'public/app/partials/login_footer.html'"></div>

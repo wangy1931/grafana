@@ -137,12 +137,16 @@ func AddDatasourceFromConfig() {
 			log.Fatal(3, "Could not add default datasource for OrgId 1 from config: %v", err)
 			return
 		}
-	} else {
-		log.Info("Update default datasource for all the Orgs")
-		if err := bus.Dispatch(&m.UpdateDataSourceForAllOrgCommand{
-			Url: setting.DataSource.DataSourceUrlRoot,
+
+		if err := bus.Dispatch(&m.AddDataSourceCommand{
+			OrgId:     MAINORG_ID,
+			Name:      "alert",
+			Type:      m.DS_ALERT,
+			Access:    m.DS_ACCESS_DIRECT,
+			Url:       setting.Alert.AlertUrlRoot,
+			IsDefault: false,
 		}); err != nil {
-			log.Fatal(3, "Could not update default datasource for all Orgs: %v", err)
+			log.Fatal(3, "Could not add default datasource for OrgId 1 from config: %v", err)
 			return
 		}
 	}
@@ -176,6 +180,18 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 		}),
 	}); err != nil {
 		log.Error(3, "Could not add default datasource from config: %v", err)
+		return err
+	}
+
+	if err := bus.Dispatch(&m.AddDataSourceCommand{
+		OrgId:     orgId,
+		Name:      "alert",
+		Type:      m.DS_ALERT,
+		Access:    m.DS_ACCESS_DIRECT,
+		Url:       setting.Alert.AlertUrlRoot,
+		IsDefault: false,
+	}); err != nil {
+		log.Fatal(3, "Could not add default datasource from config: %v", err)
 		return err
 	}
 	return nil

@@ -115,10 +115,10 @@ func Register(r *macaron.Macaron) {
 
 	// sign up
   //TODO comment out before we will strong
-	//r.Get("/signup", Index)
-	//r.Get("/api/user/signup/options", wrap(GetSignUpOptions))
-	//r.Post("/api/user/signup", quota("user"), bind(dtos.SignUpForm{}), wrap(SignUp))
-	//r.Post("/api/user/signup/step2", bind(dtos.SignUpStep2Form{}), wrap(SignUpStep2))
+	r.Get("/signup", Index)
+	r.Get("/api/user/signup/options", wrap(GetSignUpOptions))
+	r.Post("/api/user/signup", quota("user"), bind(dtos.SignUpForm{}), wrap(SignUp))
+	r.Post("/api/user/signup/step2", bind(dtos.SignUpStep2Form{}), wrap(SignUpStep2))
 
   r.Post("/api/user/signup/propose",quota("user"), bind(dtos.ProposeUsers{}), wrap(ProposeToUse))
 
