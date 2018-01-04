@@ -1,8 +1,7 @@
 <div class="alert-status host-alert-status host-tab-content">
-  <div ng-hide="alertRows.length || alertHistory.length">
-      <em>暂没有任何报警数据</em>
-      <cw-loading show="!alertRows.length" duration=6000></cw-loading>
+
+  <div ng-controller="AlertStatusCtrl as ctrl" ng-init="ctrl.init()">
+    <div ng-include="'public/app/partials/alert_status.html'"></div>
   </div>
 
-  <div ng-include="'public/app/partials/alert_status.html'"></div>
 </div>

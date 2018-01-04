@@ -6,12 +6,12 @@
   </ul>
 </navbar>
 
-<div class="page-container alert-status-page" ng-init="init();">
+<div class="page-container alert-status-page" ng-init="ctrl.init()">
   <div class="page-header">
     <h2>报警指标状态</h2>
   </div>
   
-  <div ng-if="alertRows.length === 0">
+  <div ng-if="ctrl.alertRows.length === 0">
     <em>系统一切正常</em>
   </div>
 
