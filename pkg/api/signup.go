@@ -100,6 +100,16 @@ func SignUpStep2(c *middleware.Context, form dtos.SignUpStep2Form) Response {
 		Name:  user.NameOrFallback(),
 	})
 
+	// add first system
+	systems := m.AddSystemsCommand{
+		OrgId: 				user.OrgId,
+		SystemsName:	[]string{"默认系统"},
+	}
+
+	if err := sqlstore.AddSystem(&systems); err != nil {
+		return ApiError(500, fmt.Sprintf("Failed to add system for organization %v", user.OrgId), nil)
+	}
+
 	// mark temp user as completed
 	if ok, rsp := updateTempUserStatus(form.Code, m.TmpUserCompleted); !ok {
 		return rsp

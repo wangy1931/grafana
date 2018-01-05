@@ -205,6 +205,10 @@ func DeleteOrg(cmd *m.DeleteOrgCommand) error {
 			"DELETE FROM org_user WHERE org_id = ?",
 			"DELETE FROM org WHERE id = ?",
 			"DELETE FROM temp_user WHERE org_id = ?",
+			"DELETE FROM system_user WHERE system_id IN (SELECT id FROM systems WHERE org_id = ?)",
+			"DELETE FROM system_pick WHERE system_id IN (SELECT id FROM systems WHERE org_id = ?)",
+			"DELETE FROM system_dash WHERE system_id IN (SELECT id FROM systems WHERE org_id = ?)",
+			"DELETE FROM systems WHERE org_id = ?",
 		}
 
 		for _, sql := range deletes {

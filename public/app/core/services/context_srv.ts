@@ -18,6 +18,12 @@ export class User {
   }
 }
 
+export class SignupUser {
+  orgName: any;
+  name: any;
+  constructor() {}
+}
+
 export class ContextSrv {
   pinned: any;
   version: any;
@@ -32,6 +38,7 @@ export class ContextSrv {
   systemsMap: any;
   hostNum: any;
   isViewer: any;
+  signupUser: SignupUser;
 
   constructor() {
     this.pinned = store.getBool('grafana.sidemenu.pinned', false);
@@ -56,6 +63,7 @@ export class ContextSrv {
     this.systemsMap = config.bootData.systems;
     this.hostNum = 0;
     this.isViewer = this.hasRole('Viewer');
+    this.signupUser = new SignupUser();
   }
 
   hasRole(role) {
