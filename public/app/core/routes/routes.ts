@@ -95,11 +95,13 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/alerts/edit/:id', {
     templateUrl: 'public/app/features/org/partials/alertEdit.html',
     controller : 'AlertEditCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOrgBundle,
   })
   .when('/alerts/new', {
     templateUrl: 'public/app/features/org/partials/alertEdit.html',
     controller : 'AlertEditCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOrgBundle,
   })
   .when('/alerts/status', {
