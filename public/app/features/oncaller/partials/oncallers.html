@@ -7,64 +7,97 @@
 
 <div class="page-container">
   <div class="page-header">
-      <h2>值班人员</h2>
+    <h2>值班人员</h2>
+
+    <div class="page-header-tabs">
+      <ul class="gf-tabs">
+        <li class="gf-tabs-item">
+          <a class="gf-tabs-link" ng-click="ctrl.editor.index = 0" ng-class="{active: ctrl.editor.index === 0}">
+            已添加 ({{ctrl.oncallerUsers.length}})
+          </a>
+        </li>
+        <li class="gf-tabs-item">
+          <a class="gf-tabs-link" ng-click="ctrl.editor.index = 1" ng-class="{active: ctrl.editor.index === 1}">
+            系统用户 ({{ctrl.users.length}})
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 
-  <div class="page">
+  <div ng-if="ctrl.editor.index === 0" class="tab-content">
 
-    <div ng-if="oncallerDefList.length === 0">
-      <em>您还没有添加任何值班人员,请</em>
-      <a href="oncallers/new" style="color: blue">
-        添加
-      </a>
+    <div ng-if="ctrl.oncallerUsers.length === 0">
+      <em>您还没有添加任何值班人员</em>
     </div>
 
-    <table class="grafana-options-table" ng-if="oncallerDefList.length > 0">
-      <tr>
-        <td><strong>运维人员</strong></td>
-        <td><strong>电话</strong></td>
-        <td><strong>邮箱</strong></td>
-        <td><strong>公司名称</strong></td>
-        <td><strong>系统名称</strong></td>
-        <td>
-          <a href="oncallers/new" class="btn btn-success btn-mini">
-            <i class="fa fa-plus-square-o"></i>
-            添加
-          </a>
-        </td>
-        <td></td>
-      </tr>
-      <tr ng-repeat="oncallerDef in oncallerDefList">
-        <td style="width:10%">
-          <i class="fa fa-phone"></i> &nbsp;
-          {{oncallerDef.name}}
-        </td>
-        <td style="width:30%">
-          {{oncallerDef.tel}}
-        </td>
-        <td style="width:30%">
-          {{oncallerDef.email}}
-        </td>
-        <td style="width:10%">
-          {{orgName}}
-        </td>
-        <td style="width:50%">
-          {{getSystemName(oncallerDef.service)}}
-        </td>
-        <td style="width: 1%">
-          <a href="oncallers/edit/{{oncallerDef.id}}" class="btn btn-inverse btn-mini">
-            <i class="fa fa-edit"></i>
-            编辑
-          </a>
-        </td>
-        <td style="width: 1%">
-          <a ng-click="remove(oncallerDef.org, oncallerDef.service, oncallerDef.id)" class="btn btn-danger btn-mini">
-            <i class="fa fa-remove"></i>
-          </a>
-        </td>
-      </tr>
+    <table class="grafana-options-table">
+      <thead>
+        <th>运维人员</th>
+        <th>电话</th>
+        <th>邮箱</th>
+        <th>公司名称</th>
+        <th>系统名称</th>
+        <th>操作</th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="user in ctrl.oncallerUsers">
+          <td style="width:10%">
+            <i class="fa fa-phone"></i> &nbsp;
+            {{ user.name }}
+          </td>
+          <td style="width:30%">
+            {{ user.tel }}
+          </td>
+          <td style="width:30%">
+            {{ user.email }}
+          </td>
+          <td style="width:10%">
+            {{ ctrl.orgName }}
+          </td>
+          <td style="width:50%">
+            {{ user.systemName }}
+          </td>
+          <td style="width: 1%">
+            <a href="oncallers/edit/{{ user.id }}" class="btn btn-inverse btn-mini">
+              <i class="fa fa-edit"></i>
+              编辑
+            </a>
+          </td>
+          <td style="width: 1%">
+            <a ng-click="ctrl.remove(user.org, user.service, user.id)" class="btn btn-danger btn-mini">
+              <i class="fa fa-remove"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
     </table>
 
+  </div>
+
+  <div ng-if="ctrl.editor.index === 1" >
+    <table class="grafana-options-table">
+      <thead>
+        <th>登录名</th>
+        <th>邮箱</th>
+        <th>公司名称</th>
+        <th>操作</th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="user in ctrl.users">
+          <td>{{ user.login }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ ctrl.orgName }}</td>
+          <td>
+            <button ng-click="ctrl.addOncaller(user)" class="btn btn-mini"
+              ng-class="{ 'btn-success': !user.added, 'btn-inverse': user.added  }"
+              ng-disabled="user.added">
+              添加到值班人员
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 

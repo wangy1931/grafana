@@ -7,8 +7,8 @@
 
 <div class="page-container">
   <div class="page-header">
-      <h2 ng-show="isNew">新增人员</h2>
-      <h2 ng-show="!isNew">编辑人员信息</h2>
+      <h2 ng-show="ctrl.isNew">新增人员</h2>
+      <h2 ng-show="!ctrl.isNew">编辑人员信息</h2>
   </div>
 
   <div class="page">
@@ -17,7 +17,7 @@
         <ul class="tight-form-list">
           <li class="tight-form-item" style="width: 100px">姓名</li>
           <li><input type="text" class="input-xxlarge tight-form-input last"
-                         ng-model="oncallerDef.name" placeholder="通知运维人员名称" required>
+                         ng-model="ctrl.user.name" placeholder="通知运维人员名称" required>
           </li>
         </ul>
         <div class="clearfix"></div>
@@ -25,8 +25,10 @@
       <div class="tight-form">
         <ul class="tight-form-list">
           <li class="tight-form-item" style="width: 100px">邮箱</li>
-          <li><input type="text" class="input-xxlarge tight-form-input last"
-                         ng-model="oncallerDef.email" placeholder="发送告警通知到运维人员邮箱" required>
+          <li class="tight-form-item">
+            {{ ctrl.user.email }}
+            <!-- <input type="text" class="input-xxlarge tight-form-input last" ng-disabled=""
+              ng-model="ctrl.user.email" placeholder="发送告警通知到运维人员邮箱" required> -->
           </li>
         </ul>
         <div class="clearfix"></div>
@@ -35,7 +37,7 @@
         <ul class="tight-form-list">
           <li class="tight-form-item" style="width: 100px">电话</li>
           <li><input type="text" class="input-xxlarge tight-form-input last"
-                     ng-model="oncallerDef.tel" placeholder="发送告警通知到运维人员手机" required>
+                     ng-model="ctrl.user.tel" placeholder="发送告警通知到运维人员手机" required>
           </li>
         </ul>
         <div class="clearfix"></div>
@@ -43,10 +45,12 @@
       <div class="tight-form">
         <ul class="tight-form-list">
           <li class="tight-form-item" style="width: 100px">载体</li>
-          <select type="text" class="input-xxlarge tight-form-input last"
-                     ng-options="f for f in ['att', 'tmobile', 'verizon', 'sprint', 'cricket', 'metro pcs', '中国移动', '中国联通', '中国电信']"
-                     ng-model="oncallerDef.carrier" placeholder="carrier" required>
-          </select>
+          <li>
+            <select type="text" class="input-xxlarge tight-form-input last" style="height: 37px"
+                    ng-options="f for f in ['att', 'tmobile', 'verizon', 'sprint', 'cricket', 'metro pcs', '中国移动', '中国联通', '中国电信']"
+                    ng-model="ctrl.user.carrier" placeholder="carrier" required>
+            </select>
+          </li>
         </ul>
         <div class="clearfix"></div>
       </div>
@@ -54,12 +58,12 @@
       <div class="tight-form">
         <ul class="tight-form-list">
           <li class="tight-form-item" style="width: 100px">公司名称</li>
-          <li class="tight-form-item" style="width: 150px">{{orgName}}<li>
+          <li class="tight-form-item" style="width: 150px">{{ ctrl.orgName }}<li>
         </li></li>
         </ul>
         <ul class="tight-form-list">
           <li class="tight-form-item" style="width: 100px">服务名称</li>
-          <li class="tight-form-item" style="width: 150px">{{serviceName}}<li>
+          <li class="tight-form-item" style="width: 150px">{{ ctrl.serviceName }}<li>
         </li></li>
         </ul>
         <div class="clearfix"></div>
@@ -67,8 +71,8 @@
 
       <br>
       <div class="pull-right" style="margin-top: 35px">
-        <button type="submit" class="btn btn-success" ng-show="isNew" ng-click="saveChanges()">新增</button>
-        <button type="submit" class="btn btn-success" ng-show="!isNew" ng-click="saveChanges()">保存</button>
+        <button type="submit" class="btn btn-success" ng-show="ctrl.isNew" ng-click="ctrl.save()">新增</button>
+        <button type="submit" class="btn btn-success" ng-show="!ctrl.isNew" ng-click="ctrl.save()">保存</button>
         <a class="btn btn-inverse" href="oncallers">取消</a>
       </div>
       <br>
