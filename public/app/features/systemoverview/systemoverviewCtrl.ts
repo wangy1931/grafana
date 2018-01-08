@@ -411,6 +411,15 @@ export class SystemOverviewCtrl {
         metrics: itemMap ? itemMap.metricStatusMap : null
       });
     });
+
+    // hard code: set servicekpi grey, when service state is grey
+    if (this.kpiPanel.rightItemTypes['ServiceState'].status === 'GREY') {
+      _.extend(this.kpiPanel.rightItemTypes['ServiceKPI'], {
+        data: _.statusFormatter('GREY'),
+        status: 'GREY',
+        metrics: null
+      });
+    }
   }
 
   getHostKpi(hostname) {
