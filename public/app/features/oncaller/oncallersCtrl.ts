@@ -16,7 +16,7 @@ export class OnCallersCtrl {
 
   /** @ngInject */
   constructor(
-    private $scope, private $location, private $q,
+    private $scope, private $location, private $q, private popoverSrv,
     private oncallerMgrSrv, private backendSrv, private alertSrv, private contextSrv
   ) {
     this.orgName = contextSrv.user.orgName;
@@ -61,20 +61,34 @@ export class OnCallersCtrl {
     this.$location.path("oncallers/edit/0");
   }
 
-  remove(oncallerOrg, oncallerService, oncallerId) {
+  remove(user) {
     this.$scope.appEvent('confirm-modal', {
       title: '确定要将该用户从值班人员中删除吗?',
       icon: 'fa-trash',
       noText: '取消',
       yesText: '确定',
       onConfirm: () => {
-        this.oncallerMgrSrv.remove(oncallerOrg, oncallerService, oncallerId).then(() => {
+        this.oncallerMgrSrv.remove(user.org, user.service, user.id).then(() => {
           this.alertSrv.set("删除成功", "", "success", 1000);
-          _.remove(this.oncallerUsers, { id: oncallerId });
+          _.find(this.users, { email: user.email }).added = false;
+          _.remove(this.oncallerUsers, { id: user.id });
         }, err => {
           this.alertSrv.set("error", err.status + " " + (err.data || "Request failed"), err.severity, 10000);
         });
       }
+    });
+  }
+
+  showPopover() {
+    this.popoverSrv.show({
+      element : document.getElementById('qrcode'),
+      position: 'bottom center',
+      template: `<div class="toolbar-content">
+      <div class="popover-content">
+        <img src="public/img/qrcode_cloudwiz.jpg" />
+      </div>
+    </div>`,
+      classes : 'qrcode-popover'
     });
   }
 

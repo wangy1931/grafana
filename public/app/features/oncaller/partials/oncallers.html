@@ -7,7 +7,7 @@
 
 <div class="page-container">
   <div class="page-header">
-    <h2>值班人员</h2>
+    <h2>值班人员 <i class="fa fa-qrcode pull-right" id="qrcode" ng-click="ctrl.showPopover()" bs-tooltip="'云兴维智公众号'"></i></h2>
 
     <div class="page-header-tabs">
       <ul class="gf-tabs">
@@ -31,7 +31,7 @@
       <em>您还没有添加任何值班人员</em>
     </div>
 
-    <table class="grafana-options-table">
+    <table class="grafana-options-table" ng-if="ctrl.oncallerUsers.length !== 0">
       <thead>
         <th>运维人员</th>
         <th>电话</th>
@@ -65,7 +65,7 @@
             </a>
           </td>
           <td style="width: 1%">
-            <a ng-click="ctrl.remove(user.org, user.service, user.id)" class="btn btn-danger btn-mini">
+            <a ng-click="ctrl.remove(user)" class="btn btn-danger btn-mini">
               <i class="fa fa-remove"></i>
             </a>
           </td>
