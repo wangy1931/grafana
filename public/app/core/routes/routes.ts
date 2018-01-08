@@ -115,16 +115,19 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/oncallers', {
     templateUrl: 'public/app/features/oncaller/partials/oncallers.html',
     controller : 'OnCallersCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOncallerBundle,
   })
   .when('/oncallers/edit/:id', {
     templateUrl: 'public/app/features/oncaller/partials/oncallerEdit.html',
     controller : 'OnCallerEditCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOncallerBundle,
   })
   .when('/oncallers/new', {
     templateUrl: 'public/app/features/oncaller/partials/oncallerEdit.html',
     controller : 'OnCallerEditCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOncallerBundle,
   })
   .when('/anomaly', {
