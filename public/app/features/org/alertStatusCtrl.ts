@@ -30,8 +30,6 @@ export class AlertStatusCtrl {
   };
   alertHistoryRange: Array<any>;
   alertTimeSelected: any;
-  alertTypeRange: Array<any>;
-  alertTypeSelected: any;
   alertSearch: string;
   alertWarningCount: number;
   alertCriticalCount: number;
@@ -39,6 +37,7 @@ export class AlertStatusCtrl {
   alertHistory: Array<any>;
   alertStatusShow: boolean;
   prefix: string;
+  opentsdbUrl: string;
 
   /** @ngInject */
   constructor(
@@ -55,12 +54,6 @@ export class AlertStatusCtrl {
     ];
     this.alertTimeSelected = this.alertHistoryRange[0];
 
-    this.alertTypeRange = [
-      { 'name': 'metric', 'value': '指标' },
-      { 'name': 'log', 'value': '日志' }
-    ];
-    this.alertTypeSelected = this.alertTypeRange[0];
-
     this.alertSearch = '';
     this.alertWarningCount = 0;
     this.alertCriticalCount = 0;
@@ -68,57 +61,103 @@ export class AlertStatusCtrl {
 
   getDataSource() {
     this.$controller('OpenTSDBQueryCtrl', {$scope: this.$scope});
-    this.datasourceSrv.get('opentsdb').then(datasource => {
+    return this.datasourceSrv.get('opentsdb').then(datasource => {
       this.$scope.datasource = datasource;
+      this.opentsdbUrl = datasource.url;
     });
   }
 
   init() {
     var host = this.$location.search().name;
     this.getAlertStatus(host);
-    this.getDataSource();
-
     this.getAlertHistory(this.alertTimeSelected);
   }
 
   getAlertStatus(host) {
     this.alertMgrSrv.loadTriggeredAlerts({ host: host }).then(response => {
-      for (var i = 0; i < response.data.length; i++) {
-        var alertDetail = response.data[i];
-        if (alertDetail.status.level === "CRITICAL") {
+      response.data.forEach(alert => {
+        if (alert.status.level === "CRITICAL") {
           this.alertCriticalCount++;
-          alertDetail.definition.alertDetails.threshold = alertDetail.definition.alertDetails.crit.threshold;
+          alert.definition.alertDetails.threshold = alert.definition.alertDetails.crit.threshold;
         } else {
           this.alertWarningCount++;
-          alertDetail.definition.alertDetails.threshold = alertDetail.definition.alertDetails.warn.threshold;
+          alert.definition.alertDetails.threshold = alert.definition.alertDetails.warn.threshold;
         }
         // Only show 2 digits. +0.00001 is to avoid floating point weirdness on rounding number.
-        alertDetail.status.triggeredValue = Math.round((alertDetail.status.triggeredValue + 0.00001) * 100) / 100;
-      }
+        alert.status.triggeredValue = Math.round((alert.status.triggeredValue + 0.00001) * 100) / 100;
+
+        alert.type = alert.definition.alertDetails.alertType;
+        if (alert.definition.alertDetails.alertType === 'LOG_ALERT') {
+          var output = '';
+          alert.definition.alertDetails.alertLogQuery.logQueries.forEach((query, i) => {
+            if (i === 0) {
+              output = `type: ${query.key} `;
+            } else {
+              output += `${query.condition} ${query.keyType.toLowerCase()}: ${query.key} `;
+            }
+          });
+          alert.metric = output;
+        }
+      });
       this.alertRows = response.data;
       this.getCurrentAlertValue();
     });
   }
 
   getCurrentAlertValue() {
-    _.each(this.alertRows, alertItem => {
-      var tags = {
-        host: alertItem.status.monitoredEntity
-      };
-      _.each(alertItem.definition.alertDetails.tags, tag => {
-        tags[tag.name] = tag.value;
-      });
+    this.alertRows.forEach(alertItem => {
+      if (alertItem.definition.alertDetails.alertType === 'LOG_ALERT') {
+        alertItem.curAlertValue = alertItem.status.triggeredValue;
+        return;
+      }
+      // when multi metrics, need expression
+      if (alertItem.definition.alertDetails.alertType === 'MUTI_ALERT') {
+        var metrics = angular.copy(alertItem.definition.alertDetails.alertMutiQuery.metricQueries);
+        metrics.forEach(metric => {
+          metric.metric = this.prefix + metric.metric;
+          metric.aggregator = metric.aggregator.toLowerCase();
+        });
+        let queries = {
+          timeRange: { from: '1m-ago', to: null },
+          metrics: metrics,
+          metricExpression: alertItem.definition.alertDetails.alertMutiQuery.expression.split(';')[1],
+          tags: [{
+            "type": "iliteral_or",
+            "tagk": "host",
+            "filter": alertItem.status.monitoredEntity,
+            "groupBy": true
+          }]
+        };
 
-      var queries = [{
-        "metric": alertItem.metric,
-        "aggregator": alertItem.definition.alertDetails.hostQuery.metricQueries[0].aggregator.toLowerCase(),
-        "downsample": "1m-avg",
-        "tags": tags
-      }];
-      this.datasourceSrv.getHostStatus(queries, 'now-2m').then(response => {
-        alertItem.curr = Math.floor(response.status * 1000) / 1000;
-        if (isNaN(alertItem.curr)) { alertItem.curr = "没有数据"; }
-      });
+        this.getDataSource().then(() => {
+          this.backendSrv.getOpentsdbExpressionQuery(queries, this.opentsdbUrl).then(response => {
+            // var tt = response.data.outputs[0].meta.find()
+            var dps = 0;
+            if (!response.data.outputs[0].dps[0] || isNaN(response.data.outputs[0].dps[0][1])) {
+              dps = alertItem.status.triggeredValue;
+            } else {
+              dps = response.data.outputs[0].dps[0][1];
+            }
+            alertItem.curAlertValue = Math.floor(dps * 1000) / 1000;
+          });
+        });
+      } else {
+        var tags = { host: alertItem.status.monitoredEntity };
+        alertItem.definition.alertDetails.tags.forEach(tag => {
+          tags[tag.name] = tag.value
+        });
+
+        var queries = [{
+          "metric": alertItem.metric,
+          "aggregator": alertItem.definition.alertDetails.alertSingleQuery.metricQueries[0].aggregator.toLowerCase(),
+          "downsample": "1m-avg",
+          "tags": tags
+        }];
+        this.datasourceSrv.getHostStatus(queries, 'now-2m').then(response => {
+          alertItem.curAlertValue = Math.floor(response.status * 1000) / 1000;
+          if (isNaN(alertItem.curAlertValue)) { alertItem.curAlertValue = "没有数据"; }
+        });
+      }
     });
   }
 

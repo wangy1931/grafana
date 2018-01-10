@@ -339,5 +339,54 @@ function (angular, _, coreModule, config) {
       var userAgent = navigator.userAgent;
       return userAgent.indexOf("MSIE ") > -1 || userAgent.indexOf("Trident/") > -1 || userAgent.indexOf("Edge/") > -1;
     }
+
+    this.getOpentsdbExpressionQuery = function (query, opentsdbUrl) {
+      var tags = query.tags || [
+        {
+          "type": "wildcard",
+          "tagk": "host",
+          "filter": "*",
+          "groupBy": true
+        }
+      ];
+      var tmpl = {
+        "time": {
+          "start": query.timeRange.from,
+          "end": query.timeRange.to,
+          "aggregator": "sum",
+          "downsampler": {
+            "interval": "1m",
+            "aggregator": "avg"
+          }
+        },
+        "filters": [
+          {
+            "tags": tags,
+            "id": "f1"
+          }
+        ],
+        "metrics": query.metrics,
+        "expressions": [
+          {
+            "id": "e",
+            "expr": query.metricExpression, // "a + b"
+            "join": {
+              "operator": "intersection",
+              "useQueryTags": true,
+              "includeAggTags": false
+            }
+          }
+        ],
+        "outputs": [
+          { "id": "e", "alias": "Mega expression" }
+        ]
+      };
+
+      return this.datasourceRequest({
+        method: 'POST',
+        url: opentsdbUrl + '/api/query/exp',
+        data: tmpl
+      });
+    }
   });
 });
