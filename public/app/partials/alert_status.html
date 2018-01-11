@@ -19,6 +19,11 @@
         <i class="fa fa-fw fa-search"></i>查询
       </span>
     </li>
+    <li class="pull-right">
+      <span style="margin: 6px; font-size: 1.25rem; display: block;" ng-click="ctrl.handleRCAFeedback()">
+        <i class="fa fa-pencil-square-o" bs-tooltip="'添加故障溯源关系'"></i>
+      </span>
+    </li>
   </ul>
   <div class="clearfix"></div>
 </div>
@@ -39,7 +44,7 @@
     <table class="grafana-options-table table-block">
       <thead>
         <th>报警名称</th>
-        <th>指标</th>
+        <th>报警内容</th>
         <th>主机名</th>
         <th>报警值/阈值</th>
         <th>当前值</th>
@@ -56,14 +61,14 @@
           </td>
           <td style="position: relative">
             <div ng-if="alert.type === 'MUTI_ALERT'">
-                {{ _.getMetricName(row.metric) }} 等
+                {{ _.getMetricName(alert.definition.alertDetails.alertMutiQuery.metricQueries[0].metric) }} 等
                 <info-popover mode="right-absolute">
-                  <div ng-repeat="metric in row.definition.alertDetails.hostQuery.metricQueries">{{ metric.id }} : {{ metric.metric }}</div>
-                  <div>计算方式：{{ row.definition.alertDetails.hostQuery.expression.split(';')[1] }}</div>
+                  <div ng-repeat="metric in alert.definition.alertDetails.alertMutiQuery.metricQueries">{{ metric.id }} : {{ metric.metric }}</div>
+                  <div>计算方式：{{ alert.definition.alertDetails.alertMutiQuery.expression.split(';')[1] }}</div>
                 </info-popover>
             </div>
-            <div ng-if="alert.type !== 'SIGLE_ALERT'">
-                {{ _.getMetricName(row.metric) }}
+            <div ng-if="alert.type !== 'MUTI_ALERT'">
+                {{ _.getMetricName(alert.metric) }}
             </div>
           </td>
           <td>{{ alert.status.monitoredEntity }}</td>
@@ -73,7 +78,7 @@
           <td>{{ _.transformMillionTime(alert.status.levelChangedTime) }}</td>
           <td>{{ _.timeFrom(alert.status.levelChangedTime, alert.status.snoozeMinutes, 'm') }}</td>
           <td>
-              <button class="btn btn-outline-primary btn-small" ng-click="ctrl.associateAnalysis(alert.status.monitoredEntity, alert.metric, alert.status.levelChangedTime, alert.definition)">诊断分析</button>
+              <button class="btn btn-outline-primary btn-small" ng-click="ctrl.associateAnalysis(alert.status.monitoredEntity, alert.metric, alert.status.levelChangedTime, alert.definition, alert.type)">诊断分析</button>
               <button class="btn btn-outline-primary btn-small" ng-click="ctrl.handleSnooze(alert)">延迟报警</button>
               <button class="btn btn-outline-primary btn-small" ng-click="ctrl.handleAlert(alert)">处理警告</button>
           </td>
@@ -88,7 +93,7 @@
     <table class="table">
       <thead>
         <th>报警名称</th>
-        <th>指标</th>
+        <th>报警内容</th>
         <th>主机名</th>
         <th>报警值/阈值</th>
         <th>报警级别</th>
@@ -103,7 +108,18 @@
             <i class="fa fa-bell" ng-class="{'CRITICAL':'system-legend-danger','WARNING':'system-legend-warning'}[alert.status.level]"></i> &nbsp;
             {{ alert.definition.name }}
           </td>
-          <td>{{ _.getMetricName(alert.metric) }}</td>
+          <td style="position: relative;">
+            <div ng-if="alert.type === 'MUTI_ALERT'">
+                {{ _.getMetricName(alert.definition.alertDetails.alertMutiQuery.metricQueries[0].metric) }} 等
+                <info-popover mode="right-absolute">
+                  <div ng-repeat="metric in alert.definition.alertDetails.alertMutiQuery.metricQueries">{{ metric.id }} : {{ metric.metric }}</div>
+                  <div>计算方式：{{ alert.definition.alertDetails.alertMutiQuery.expression.split(';')[1] }}</div>
+                </info-popover>
+            </div>
+            <div ng-if="alert.type !== 'MUTI_ALERT'">
+                {{ _.getMetricName(alert.metric) }}
+            </div>
+          </td>
           <td>{{ alert.history.host }}</td>
           <td><strong>{{ alert.history.triggeredValue | limitTo:5 }}</strong> / {{ alert.definition.alertDetails[ctrl.getAlertLevel(alert)].threshold }}</td>
           <td>{{ _.translateAlertLevel(alert.history.level) }}</td>
@@ -112,7 +128,7 @@
           <td>{{ alert.history.reason }}</td>
           <td>
             <button class="btn btn-outline-primary btn-small"
-              ng-click="ctrl.associateAnalysis(alert.history.host, alert.definition.alertDetails.hostQuery.metricQueries[0].metric, alert.history.createdTimeInMillis, alert.definition)">
+              ng-click="ctrl.associateAnalysis(alert.history.host, alert.metric, alert.history.createdTimeInMillis, alert.definition, alert.type)">
               <i class="fa fa-signal"></i> 诊断分析
             </button>
           </td>
@@ -121,42 +137,3 @@
     </table>
   </div>
 </div>
-
-<!-- <ul class="grid-group-component">
-    <li ng-repeat="alert in ctrl.alertRows | filter: ctrl.alertSearch" class="grid-group-item">
-      <div class="grid-group-card grid-card-component">
-        <div class="grid-card-header">
-          <div class="grid-card-header-top">
-            <span class="grid-car-name">
-              <i class="fa fa-bell" ng-class="{'CRITICAL':'system-legend-danger','WARNING':'system-legend-warning'}[alert.status.level]"></i> &nbsp;
-              {{ alert.definition.name }}
-            </span>
-            <span class="project-grid-card__notification-badge project-grid-card__notification-badge__hide-number hinted"></span>
-          </div>
-          <div class="grid-card-header-body">
-            <p>
-              <span ng-if="alert.type === 'metric'">指标：{{ _.getMetricName(alert.metric) }}</span>
-              <span ng-if="alert.type === 'log'">指标：{{ alert.metric }}</span>
-              <span>主机名：{{ alert.status.monitoredEntity }}</span>
-            </p>
-            <p>
-              <span>报警值/阈值：<strong>{{ alert.status.triggeredValue }}</strong> / {{ alert.definition.alertDetails.threshold }}</span>
-              <span>当前值：{{ alert.curr }}</span>
-            </p>
-            <p>报警级别：{{ _.translateAlertLevel(alert.status.level) }}</p>
-            <p>
-              <span>报警时间：{{ _.transformMillionTime(alert.status.levelChangedTime) }}</span>
-              <span>再次报警时间<tip>如果报警没有解决, 将重复报警</tip>：{{ _.timeFrom(alert.status.levelChangedTime, alert.status.snoozeMinutes, 'm') }}</span>
-            </p>
-          </div>
-        </div>
-        <div class="grid-card-footer">
-          <span class="grid-card-handlers">
-            <button class="btn btn-outline-primary btn-small" ng-click="ctrl.associateAnalysis(alert.status.monitoredEntity, alert.metric, alert.status.levelChangedTime, alert.definition)">诊断分析</button>
-            <button class="btn btn-outline-primary btn-small" ng-click="ctrl.handleSnooze(alert)">延迟报警</button>
-            <button class="btn btn-outline-primary btn-small" ng-click="ctrl.handleAlert(alert)">处理警告</button>
-          </span>
-        </div>
-      </div>
-    </li>
-  </ul> -->

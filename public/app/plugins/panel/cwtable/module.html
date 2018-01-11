@@ -31,8 +31,8 @@
 								<i class="fa fa-expand" ng-click="ctrl.expandLog(row)"></i>
 							</div>
 						</td>
-						<td ng-repeat="(name, value) in row">
-							<div class="truncate-by-height" ng-bind-html="value"></div>
+						<td ng-repeat="(name, value) in row track by $index">
+							<div class="truncate-by-height" ng-bind-html="value" ng-click="ctrl.onCellClick($index, value, row)"></div>
 							<div style="display: inline-block;" ng-if="value.length > ctrl.MAX_CONTENT_LEN" ng-click="ctrl.expandOrCollapse($event)">
 								<span class="expand-showmore" style="display: inline-block; padding: 0px 10px; cursor: pointer; background-color: rgb(230, 230, 230); font-size: 12px;">
 									...

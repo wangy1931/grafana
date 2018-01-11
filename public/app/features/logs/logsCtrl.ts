@@ -106,6 +106,23 @@ export class LogsCtrl {
       clusterLogSourceModal.$promise.then(clusterLogSourceModal.show);
     });
 
+    $scope.$on('cwtable-cell-click', (event, payload) => {
+      var index = payload[0], cellValue = payload[1], row = payload[2];
+      if (index !== 3) { return; }
+
+      var time = moment().valueOf(row['@timestamp']);
+      this.pushTab();
+      this.query = `type: ${row._type} AND host: ${row.host}`;
+
+      var panels = this.$scope.dashboard.rows[0].panels;
+      _.forEach(panels, (panel) => {
+        _.forEach(panel.targets, (target) => {
+          target.query = this.query + this.getExtendQuery(this.$scope.dashboard.rows[0].id);
+        });
+      });
+      this.timeSrv.setTime({ from: moment(+time).add(-30, 'minute'), to: moment(+time).add(+30, 'minute') });
+    });
+
     $controller('OpenTSDBQueryCtrl', {$scope: $scope});
     datasourceSrv.get('opentsdb').then(datasource => {
       $scope.datasource = datasource;
