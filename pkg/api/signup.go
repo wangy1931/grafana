@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+
 	"github.com/wangy1931/grafana/pkg/api/dtos"
 	"github.com/wangy1931/grafana/pkg/bus"
 	"github.com/wangy1931/grafana/pkg/events"
@@ -103,8 +104,8 @@ func SignUpStep2(c *middleware.Context, form dtos.SignUpStep2Form) Response {
 
 	// add first system
 	systems := m.AddSystemsCommand{
-		OrgId: 				user.OrgId,
-		SystemsName:	[]string{"默认系统"},
+		OrgId:       user.OrgId,
+		SystemsName: []string{"默认系统"},
 	}
 
 	if err := sqlstore.AddSystem(&systems); err != nil {
