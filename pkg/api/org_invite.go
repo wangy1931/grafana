@@ -112,7 +112,7 @@ func inviteExistingUserToOrg(c *middleware.Context, user *m.User, inviteDto *dto
 			}
 		}
 
-		return ApiSuccess(fmt.Sprintf("Existing Grafana user %s added to org %s", user.NameOrFallback(), c.OrgName))
+		return ApiSuccess(fmt.Sprintf("Existing Cloudwiz user %s added to org %s", user.NameOrFallback(), c.OrgName))
 	}
 }
 
