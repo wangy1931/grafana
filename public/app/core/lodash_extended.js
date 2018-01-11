@@ -198,7 +198,7 @@ function ($, moment, kbn) {
   _.metricMessage = {};
 
   _.excludeEmail = function(email) {
-    return /(163|126|qq|outlook|gmail|yahoo|sina|souhu|hotmail).com(.cn)?$/.test(email)
+    return /(163|126|qq|outlook|gmail|yahoo|sina|souhu|hotmail|Foxmail).com(.cn)?$/i.test(email)
   }
 
   return _;
