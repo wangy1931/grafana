@@ -254,12 +254,12 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
           res.id = (searchType === "count") ? "logCount" : "logSearch";
 
           var tt = new ElasticResponse(sentTargets, res).getTimeSeries();
-          if (tt.data[0].target.toLowerCase() === "docs") {
+          if (tt.data[0].length && tt.data[0].target.toLowerCase() === "docs") {
             _.each(tt.data[0].datapoints, function (dps) {
               dps["@timestamp"][0] = moment(dps["@timestamp"][0]).add(8, "h").valueOf();
             });
           }
-          if (tt.data[0].target.toLowerCase() === "count") {
+          if (tt.data[0].length && tt.data[0].target.toLowerCase() === "count") {
             _.each(tt.data[0].datapoints, function (dps) {
               dps[1] = moment(dps[1]).add(8, "h").valueOf();
             });
