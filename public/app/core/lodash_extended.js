@@ -197,5 +197,9 @@ function ($, moment, kbn) {
   _.metricHelpMessage = {};
   _.metricMessage = {};
 
+  _.excludeEmail = function(email) {
+    return /(163|126|qq|outlook|gmail|yahoo|sina|souhu|hotmail).com(.cn)?$/.test(email)
+  }
+
   return _;
 });
