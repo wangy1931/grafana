@@ -315,6 +315,13 @@ function (angular, _, coreModule, config) {
       });
     };
 
+    this.getServices = function() {
+      return this.alertD({
+        method: 'get',
+        url   : "/cmdb/service/metrics"
+      });
+    }
+
     this.getKpi = function(params) {
       return this.alertD({
         method: 'get',
