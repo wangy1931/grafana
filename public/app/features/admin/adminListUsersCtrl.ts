@@ -1,12 +1,11 @@
-define([
-  'angular',
-],
-function (angular) {
-  'use strict';
+///<reference path="../../headers/common.d.ts" />
 
-  var module = angular.module('grafana.controllers');
+import angular from 'angular';
+import coreModule from '../../core/core_module';
 
-  module.controller('AdminListUsersCtrl', function($scope, backendSrv) {
+export class AdminListUsersCtrl {
+  /**@ngInject */
+  constructor ($scope, backendSrv) {
 
     $scope.init = function() {
       $scope.getUsers();
@@ -32,6 +31,7 @@ function (angular) {
     };
 
     $scope.init();
+  }
+}
 
-  });
-});
+coreModule.controller('AdminListUsersCtrl', AdminListUsersCtrl);
