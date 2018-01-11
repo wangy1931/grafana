@@ -317,6 +317,15 @@ func SearchUsers(query *m.SearchUsersQuery) error {
 	return err
 }
 
+func SearchGrafanaAdmin(query *m.SearchUsersQuery) error {
+	query.Result = make([]*m.UserSearchHitDTO, 0)
+	sess := x.Table("user")
+	sess.Where("is_admin=1")
+	sess.Cols("id", "email", "name", "login", "is_admin")
+	err := sess.Find(&query.Result)
+	return err
+}
+
 func DeleteUser(cmd *m.DeleteUserCommand) error {
 	return inTransaction(func(sess *xorm.Session) error {
 		deletes := []string{

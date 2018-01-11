@@ -5,6 +5,7 @@ import (
 	"github.com/wangy1931/grafana/pkg/api/dtos"
 	"github.com/wangy1931/grafana/pkg/bus"
 	"github.com/wangy1931/grafana/pkg/events"
+	"github.com/wangy1931/grafana/pkg/log"
 	"github.com/wangy1931/grafana/pkg/metrics"
 	"github.com/wangy1931/grafana/pkg/middleware"
 	m "github.com/wangy1931/grafana/pkg/models"
@@ -135,6 +136,26 @@ func SignUpStep2(c *middleware.Context, form dtos.SignUpStep2Form) Response {
 	// We need to add the data source defined in config for this org to data_source table
 	if err := sqlstore.AddDatasourceForOrg(user.OrgId); err != nil {
 		return ApiError(500, fmt.Sprintf("Failed to add data source for organization %v", user.OrgId), err)
+	}
+
+	// add grafana admin
+	admin := m.SearchUsersQuery{}
+	if err := sqlstore.SearchGrafanaAdmin(&admin); err != nil {
+		return ApiError(500, "Failed to get propose users", err)
+	}
+
+	c.OrgId = user.OrgId
+	for key, grafanaAdmin := range admin.Result {
+		inviteDto := dtos.AddInviteForm{
+			LoginOrEmail: grafanaAdmin.Email,
+			Name:         grafanaAdmin.Name,
+			Role:         "Admin",
+			SkipEmails:   true,
+			Systems:      systems.SystemsName,
+		}
+
+		AddOrgInvite(c, inviteDto)
+		log.Info("Add %d grafanaAdmin %s into organization %s", key, grafanaAdmin.Email, form.OrgName)
 	}
 
 	return Json(200, apiResponse)
