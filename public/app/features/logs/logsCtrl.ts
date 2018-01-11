@@ -281,6 +281,7 @@ export class LogsCtrl {
     var panels = this.$scope.dashboard.rows[0].panels;
     _.forEach(panels, (panel) => {
       _.forEach(panel.targets, (target) => {
+        (typeof this.query === "undefined" || this.query === "undefined") && (this.query = "");
         target.query = this.query + this.getExtendQuery(this.$scope.dashboard.rows[0].id);
       });
     });
@@ -480,17 +481,20 @@ export class LogsCtrl {
             text: 'EXCEPTION',
             checked: false,
           }],
-          select: false
+          select: false,
+          title: 'message'
         },
         host: {
           name: '机器',
           values: [],
-          select: false
+          select: false,
+          title: 'host'
         },
         service: {
           name: '服务',
           values: [],
-          select: false
+          select: false,
+          title: 'type'
         },
         fields: {
           name: 'field筛选',
@@ -535,15 +539,15 @@ export class LogsCtrl {
         extend_query = '';
         break;
       case 1:
-        extend_query = ' AND ' + checked[0].text;
+        extend_query = ' AND (' + query.title + ': ' + checked[0].text + ')';
         break;
       default:
-        extend_query = ' AND ('
+        extend_query = ' AND (' + query.title + ': ' + '('
         _.forEach(checked, (item) => {
           extend_query += item.text +' OR ';
         });
         extend_query += ')'
-        extend_query = _.replace(extend_query, ' OR )', ')');
+        extend_query = _.replace(extend_query, ' OR )', '))');
         break;
     }
     return extend_query;
