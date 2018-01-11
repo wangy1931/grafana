@@ -56,12 +56,12 @@ func AddOrgInvite(c *middleware.Context, inviteDto dtos.AddInviteForm) Response 
 		return ApiError(500, "Failed to save invite to database", err)
 	}
 
-  system_user := m.AddSystemsUserCommand{}
-  system_user.InviteCode = cmd.Result.Code
-  system_user.SystemsId = inviteDto.Systems
-  if err := bus.Dispatch(&system_user); err != nil {
-    return ApiError(500, "Failed to save system_user to database", err)
-  }
+	system_user := m.AddSystemsUserCommand{}
+	system_user.InviteCode = cmd.Result.Code
+	system_user.SystemsId = inviteDto.Systems
+	if err := bus.Dispatch(&system_user); err != nil {
+		return ApiError(500, "Failed to save system_user to database", err)
+	}
 	// send invite email
 	if !inviteDto.SkipEmails && util.IsEmail(inviteDto.LoginOrEmail) {
 		emailCmd := m.SendEmailCommand{
@@ -112,7 +112,7 @@ func inviteExistingUserToOrg(c *middleware.Context, user *m.User, inviteDto *dto
 			}
 		}
 
-		return ApiSuccess(fmt.Sprintf("Existing Grafana user %s added to org %s", user.NameOrFallback(), c.OrgName))
+		return ApiSuccess(fmt.Sprintf("Existing Cloudwiz user %s added to org %s", user.NameOrFallback(), c.OrgName))
 	}
 }
 
@@ -173,12 +173,12 @@ func CompleteInvite(c *middleware.Context, completeInvite dtos.CompleteInviteFor
 
 	user := &cmd.Result
 
-  system_user := m.UpdateUserSystemCommond{}
-  system_user.InviteCode = completeInvite.InviteCode
-  system_user.UserId = user.Id
-  if err := bus.Dispatch(&system_user); err != nil {
-    return ApiError(500, "failed to update system user ", err)
-  }
+	system_user := m.UpdateUserSystemCommond{}
+	system_user.InviteCode = completeInvite.InviteCode
+	system_user.UserId = user.Id
+	if err := bus.Dispatch(&system_user); err != nil {
+		return ApiError(500, "failed to update system user ", err)
+	}
 
 	bus.Publish(&events.SignUpCompleted{
 		Name:  user.NameOrFallback(),
