@@ -91,7 +91,7 @@ func CreateUser(cmd *m.CreateUserCommand) error {
 			IsAdmin:       cmd.IsAdmin,
 			OrgId:         orgId,
 			EmailVerified: cmd.EmailVerified,
-      Theme:         "light",
+			Theme:         "light",
 			Created:       time.Now(),
 			Updated:       time.Now(),
 		}
@@ -312,6 +312,15 @@ func SearchUsers(query *m.SearchUsersQuery) error {
 	sess := x.Table("user")
 	sess.Where("email LIKE ?", query.Query+"%")
 	sess.Limit(query.Limit, query.Limit*query.Page)
+	sess.Cols("id", "email", "name", "login", "is_admin")
+	err := sess.Find(&query.Result)
+	return err
+}
+
+func SearchGrafanaAdmin(query *m.SearchUsersQuery) error {
+	query.Result = make([]*m.UserSearchHitDTO, 0)
+	sess := x.Table("user")
+	sess.Where("is_admin=1")
 	sess.Cols("id", "email", "name", "login", "is_admin")
 	err := sess.Find(&query.Result)
 	return err
