@@ -30,7 +30,7 @@ export class RcaFeedbackCtrl {
   ) {
     this.types = [
       { name: '指标', value: 'metric' },
-      { name: '一般文字', value: 'other' }
+      { name: '其他', value: 'other' }
     ];
     this.typeSelected = this.types[0];
 

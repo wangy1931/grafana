@@ -236,7 +236,7 @@
 
     <!-- Part3: 报警条件 -->
     <fieldset>
-      <div class="gf-form-group">
+      <div class="gf-form-group" ng-show="ctrl.alertTypeSelected.value === 'metric'">
         <h3>报警条件</h3>
         <div class="gf-form-inline">
           <div class="gf-form">
@@ -301,7 +301,7 @@
           </div>
         </div>
 
-        <div ng-show="ctrl.alertTypeSelected.value === 'metric'">
+        <div>
           <div class="gf-form-inline">
             <div class="gf-form">
                 <span class="gf-form-label width-7">标签</span>
@@ -370,6 +370,66 @@
                       ng-options="f for f in ['HOST']" readonly>
               </select>
           </div>
+        </div>
+      </div>
+
+      <div class="gf-form-group" ng-show="ctrl.alertTypeSelected.value === 'log'">
+        <h3>报警条件</h3>
+        <div class="gf-form-inline">
+            <div class="gf-form">
+                <span class="gf-form-label width-7">紧急条件</span>
+            </div>
+            <div class="gf-form">
+                <span class="gf-form-label query-keyword">当日志查询结果在</span>
+            </div>
+            <div class="gf-form">
+                <input type="number" min="1" class="gf-form-input width-5" style="width: 45px;"
+                        ng-model='ctrl.alertDef.alertDetails.crit.durarionMinutes'
+                        required />
+                <span class="gf-form-label query-keyword">分钟内</span>
+            </div>
+            <div class="gf-form">
+                <select class="gf-form-select-wrapper width-3" style="width: 40px; text-align: center;"
+                        ng-model="ctrl.expression"
+                        ng-change="ctrl.addThresholdOp()"
+                        ng-options="f for f in ['>', '<', '?']">
+                </select>
+            </div>
+            <div class="gf-form">
+                <input type="number" class="gf-form-input width-11"
+                        ng-model='ctrl.alertDef.alertDetails.crit.threshold' 
+                        ng-blur="ctrl.addThreshold(1)"
+                        placeholder="critical threshold" required ng-readonly="ctrl.expression==='?'"/>
+            </div>
+            <div class="gf-form">
+                <span class="gf-form-label query-keyword">条，则触发紧急报警</span>
+            </div>
+        </div>
+    
+        <div class="gf-form-inline">
+            <div class="gf-form">
+                <span class="gf-form-label width-7">警告条件</span>
+            </div>
+            <div class="gf-form">
+                <span class="gf-form-label query-keyword">当日志查询结果在</span>
+            </div>
+            <div class="gf-form">
+                <input type="number" min="1" class="gf-form-input width-5" style="width: 45px;"
+                        ng-model='ctrl.alertDef.alertDetails.warn.durarionMinutes' required />
+                <span class="gf-form-label query-keyword">分钟内</span>
+            </div>
+            <div class="gf-form">
+                <span class="gf-form-label width-3">{{ ctrl.expression }}</span>
+            </div>
+            <div class="gf-form">
+                <input type="number" class="gf-form-input width-11" style="width: 139px"
+                        ng-model='ctrl.alertDef.alertDetails.warn.threshold' 
+                        ng-blur="ctrl.addThreshold(0)"
+                        placeholder="warn threshold" required ng-readonly="ctrl.expression==='?'"/>
+            </div>
+            <div class="gf-form">
+                <span class="gf-form-label query-keyword">条，则触发警告报警</span>
+            </div>
         </div>
       </div>
     </fieldset>

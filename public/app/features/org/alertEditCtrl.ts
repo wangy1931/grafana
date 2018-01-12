@@ -403,7 +403,7 @@ export class AlertEditCtrl {
     }
   }
   addMetricQuery() {
-    this.metricQueries[0].id = "a";
+    this.metricQueries[0] && (this.metricQueries[0].id = "a");
     var newId = String.fromCharCode(97 + this.metricQueries.length);
     if (newId > 'z') { return; }
 

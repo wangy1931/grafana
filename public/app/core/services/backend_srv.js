@@ -375,7 +375,7 @@ function (angular, _, coreModule, config) {
         "metrics": query.metrics,
         "expressions": [
           {
-            "id": "e",
+            "id": "aa",
             "expr": query.metricExpression, // "a + b"
             "join": {
               "operator": "intersection",
@@ -385,7 +385,7 @@ function (angular, _, coreModule, config) {
           }
         ],
         "outputs": [
-          { "id": "e", "alias": "Mega expression" }
+          { "id": "aa", "alias": "Mega expression" }
         ]
       };
 

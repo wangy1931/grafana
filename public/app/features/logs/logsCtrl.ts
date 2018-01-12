@@ -107,20 +107,27 @@ export class LogsCtrl {
     });
 
     $scope.$on('cwtable-cell-click', (event, payload) => {
-      var index = payload[0], cellValue = payload[1], row = payload[2];
-      if (index !== 3) { return; }
+      var index = payload[0], cellValue = payload[1], row = payload[2], data = payload[3];
+      if (index !== 4) { return; }
 
-      var time = moment(row['@timestamp'].split(',')[0]).valueOf();
-      this.pushTab();
-      this.query = `type: ${row._type} AND host: ${row.host}`;
+      var dps = data[0].datapoints;
+      if (_.isEmpty(dps)) { return; }
 
-      var panels = this.$scope.dashboard.rows[0].panels;
-      _.forEach(panels, (panel) => {
-        _.forEach(panel.targets, (target) => {
-          target.query = this.query + this.getExtendQuery(this.$scope.dashboard.rows[0].id);
+      var logRow = _.find(dps, { _id: row._id });
+      if (logRow) {
+        var query = `type: ${logRow._type} AND host: ${logRow.host} AND source: \"${logRow.source}\"`;
+        var time = logRow['@timestamp'][0];
+        var contextLogModal = this.$modal({
+          scope: $scope,
+          templateUrl: 'public/app/features/logs/partials/log_context_modal.html',
+          show: false
         });
-      });
-      this.timeSrv.setTime({ from: moment(+time).add(-30, 'minute'), to: moment(+time).add(+30, 'minute') });
+        this.getLogContext(query, time).then(response => {
+          _.find(response[0].datapoints, { _id: logRow._id }).origin = true;
+          contextLogModal.$scope.contextLogs = response[0];
+          contextLogModal.$promise.then(contextLogModal.show);
+        });
+      }
     });
 
     $controller('OpenTSDBQueryCtrl', {$scope: $scope});
@@ -568,6 +575,28 @@ export class LogsCtrl {
         break;
     }
     return extend_query;
+  }
+
+  // 日志上下文环境
+  getLogContext(query, time) {
+    return this.datasourceSrv.get('elk').then(datasource => {
+      return datasource.query({
+        cacheTimeout: '',
+        format: 'json',
+        interval: '30s',
+        maxDataPoints: 1280,
+        panelId: 1,
+        range: { from: moment(+time).add(-30, 'minute'), to: moment(+time).add(+30, 'minute') },
+        scopedVars: '',
+        targets: [_.extend({}, this.logResultPanel.targets[0], {
+          query: query,
+          size: 500
+        })],
+        payload: ''
+      }).then(result => {
+        return result.data;
+      });
+    });
   }
 }
 

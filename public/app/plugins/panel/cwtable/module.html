@@ -7,7 +7,7 @@
 				<thead>
 					<tr>
 						<td width="1%" ng-hide="ctrl.hideOperator"></td>
-						<th ng-repeat="column in ctrl.columns">
+						<th ng-repeat="column in ctrl.columns" ng-hide="column.hide">
 							<span class="table-header-name">
 								{{ column.text }}
 								<span ng-show="column.text === 'message'"><tip>双击日志查询该日志上下文</tip></span>
@@ -32,7 +32,7 @@
 								<i class="fa fa-expand" ng-click="ctrl.expandLog(row)"></i>
 							</div>
 						</td>
-						<td ng-repeat="(name, value) in row track by $index">
+						<td ng-repeat="(name, value) in row track by $index" ng-hide="ctrl.columns[$index].hide">
 							<div class="truncate-by-height" ng-bind-html="value" ng-dblclick="ctrl.onCellClick($index, value, row)" ng-click="ctrl.expandOrCollapseText($event)"></div>
 							<div style="display: inline-block;" ng-if="value.length > ctrl.MAX_CONTENT_LEN" ng-click="ctrl.expandOrCollapse($event)">
 								<span class="expand-showmore" style="display: inline-block; padding: 0px 10px; cursor: pointer; background-color: rgb(230, 230, 230); font-size: 12px;">

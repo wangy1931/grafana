@@ -7,6 +7,11 @@ var panelMetas = [
       {
         "columns": [
           {
+            "text": "_id",
+            "value": "_id",
+            "hide": true
+          },
+          {
             "text": "@timestamp",
             "value": "@timestamp"
           },

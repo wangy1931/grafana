@@ -235,7 +235,7 @@ export class AlertStatusCtrl {
   // 关联性分析
   associateAnalysis(host, metric, startTime, alertDefinition, alertType) {
     if (alertType === 'LOG_ALERT') {
-      this.$location.url(`/logs?query=${metric} AND host: ${host}`);
+      this.$location.url(`/logs?query=${metric} AND host: ${host}&start=${startTime}`);
       return;
     }
 
