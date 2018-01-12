@@ -92,6 +92,7 @@ export class SideMenuCtrl {
     this.mainLinks.push({
       text: "指标浏览",
       icon: "fa fa-fw fa-sliders",
+      class: "scroll-y",
       click: this.loadDashboardList
     });
 
@@ -219,6 +220,7 @@ export class SideMenuCtrl {
     this.bottomLinks.push({
       text: this.contextSrv.user.orgName,
       icon: "fa fa-fw fa-random",
+      class: "scroll-y",
       click: this.getOrgsMenu,
     });
 
