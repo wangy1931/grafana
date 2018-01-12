@@ -110,7 +110,7 @@ export class LogsCtrl {
       var index = payload[0], cellValue = payload[1], row = payload[2];
       if (index !== 3) { return; }
 
-      var time = moment().valueOf(row['@timestamp']);
+      var time = moment(row['@timestamp'].split(',')[0]).valueOf();
       this.pushTab();
       this.query = `type: ${row._type} AND host: ${row.host}`;
 

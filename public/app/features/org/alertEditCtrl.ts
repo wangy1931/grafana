@@ -392,6 +392,7 @@ export class AlertEditCtrl {
   changeAlertType(alertType) {
     if (alertType.value === 'metric') {
       this.currentState = this.metricQueries.length > 1 ? this.state.MUTI_ALERT.value : this.state.SINGLE_ALERT.value;
+      this.$scope.dashboard.rows[0] = _.cloneDeep(this.panelMeta);
       this.refreshPreview();
     }
     if (alertType.value === 'log') {
