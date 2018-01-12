@@ -18,6 +18,9 @@ export class RcaFeedbackCtrl {
   causeMetric: any;
   causeHost: any;
 
+  causeDescription: any = '';
+  causeSolution: any = '';
+
   rootCauseMetrics: Array<any> = [];
 
   /** @ngInject */
@@ -27,7 +30,7 @@ export class RcaFeedbackCtrl {
   ) {
     this.types = [
       { name: '指标', value: 'metric' },
-      // { name: '一般文字', value: 'other' }
+      { name: '一般文字', value: 'other' }
     ];
     this.typeSelected = this.types[0];
 
@@ -37,7 +40,13 @@ export class RcaFeedbackCtrl {
     this.getDataSource();
   }
 
-  changeType() {}
+  changeType() {
+    this.rootCauseMetrics = [];
+    this.causeMetric = '';
+    this.causeHost = '';
+    this.causeDescription = '';
+    this.causeSolution = '';
+  }
 
   getDataSource() {
     this.$controller('OpenTSDBQueryCtrl', {$scope: this.$scope});
@@ -46,15 +55,25 @@ export class RcaFeedbackCtrl {
     });
   }
 
-  addCause(causeMetric, causeHost, confidenceLevel) {
-    if (_.every([causeMetric, causeHost, confidenceLevel])) {
+  addCause() {
+    var params = {
+      name: this.causeMetric,
+      host: this.causeHost,
+      confidenceLevel: this.confidenceLevel,
+      description: this.causeDescription
+    };
+
+    if (_.every([this.causeMetric, this.causeHost, this.confidenceLevel])) {
       this.causeMetric = '';
       this.causeHost = '';
-      this.rootCauseMetrics.push({
-        name: causeMetric,
-        host: causeHost,
-        confidenceLevel: confidenceLevel
-      });
+      this.causeDescription = '';
+      this.causeSolution = '';
+      if (this.typeSelected.value === 'other') {
+        params['type'] = 'EXCEPTION_FROM_OTHER';
+      }
+      this.rootCauseMetrics.push(params);
+    } else {
+      !this.rootCauseMetrics.length && this.$scope.appEvent('alert-warning', ['请输入完整内容']);
     }
   }
 
@@ -65,7 +84,7 @@ export class RcaFeedbackCtrl {
   submitRCAFeedback() {
     var prefix = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.';
 
-    this.addCause(this.causeMetric, this.causeHost, this.confidenceLevel);
+    this.addCause();
 
     if (this.rootCauseMetrics.length && this.alertMetric && this.alertHost) {
       var rcaFeedback: any = {
@@ -76,6 +95,7 @@ export class RcaFeedbackCtrl {
         triggerMetric: {
           name: prefix + this.alertMetric,
           host: this.alertHost,
+          // solution: this.causeSolution || '无'
         },
         rootCauseMetrics: _.cloneDeep(this.rootCauseMetrics),
         relatedMetrics: []
@@ -86,12 +106,11 @@ export class RcaFeedbackCtrl {
       });
       this.alertMgrSrv.rcaFeedback(rcaFeedback).then(response => {
         this.$scope.appEvent('alert-success', ['报警根源添加成功']);
+        this.$scope.dismiss();
       }, err => {
         this.$scope.appEvent('alert-error', ['报警根源添加失败']);
       });
     }
-
-    this.$scope.dismiss();
   }
 
 }

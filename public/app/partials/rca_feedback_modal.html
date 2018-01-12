@@ -36,15 +36,23 @@
         </div>
       </div>
 
-      <div class="gf-form-inline" ng-if="ctrl.typeSelected.value === 'metric'">
+      <div class="gf-form-inline">
         <div class="gf-form max-width-28">
-          <span class="gf-form-label width-9">根源指标</span>
-          <input type="text" class="gf-form-input" ng-model="ctrl.causeMetric" required bs-typeahead-old="suggestMetrics"/>
+          <span class="gf-form-label width-9">根源原因</span>
+          <input type="text" class="gf-form-input" ng-model="ctrl.causeMetric" bs-typeahead-old="suggestMetrics"/>
         </div>
         <div class="gf-form max-width-28">
           <span class="gf-form-label width-9">根源机器</span>
-          <input type="text" class="gf-form-input" ng-model="ctrl.causeHost" required bs-typeahead-old="suggestTagHost"/>
+          <input type="text" class="gf-form-input" ng-model="ctrl.causeHost" bs-typeahead-old="suggestTagHost"/>
         </div>
+        <div class="gf-form max-width-28">
+          <span class="gf-form-label width-9">原因描述</span>
+          <input type="text" class="gf-form-input" ng-model="ctrl.causeDescription"/>
+        </div>
+        <!-- <div class="gf-form max-width-28">
+          <span class="gf-form-label width-9">解决方案</span>
+          <input type="text" class="gf-form-input" ng-model="ctrl.causeSolution"/>
+        </div> -->
         <div class="gf-form max-width-28">
           <span class="gf-form-label width-9">确认程度</span>
           <label class="gf-form-inline">
@@ -58,12 +66,10 @@
         </div>
       </div>
 
-      <div class="gf-form-inline" ng-if="ctrl.typeSelected.value === 'other'">
-      </div>
-
       <button class="btn gf-form-btn btn-success"
         style="padding: 0.1rem 0.5rem;"
-        ng-click="ctrl.addCause(ctrl.causeMetric, ctrl.causeHost, ctrl.confidenceLevel)">
+        ng-click="ctrl.addCause()"
+        ng-if="ctrl.typeSelected.value === 'metric'">
         添加
       </button>      
 

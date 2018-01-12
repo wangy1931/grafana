@@ -224,13 +224,11 @@ export class RootCauseAnalysisCtrl {
         try {
           description.push(JSON.parse(item));
         } catch (e) {
-          description.push({ '描述': item });
+          description.push(item);
         }
       });
     } else {
-      description = [
-        { '描述': desc.join('') }
-      ];
+      description = [];
     }
 
     return description;
