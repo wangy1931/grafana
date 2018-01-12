@@ -51,9 +51,9 @@
                 <div class="kpi-detail">
                     <div ng-if="ctrl.kpiPanel.rightSelected == 'ServiceState'" class="kpi-detail-table">
                         <div ng-switch="ctrl.kpiPanel.rightItemTypes[ctrl.kpiPanel.rightSelected].status" class="service-state-text">
-                            <div ng-switch-when="GREEN">服务线程正常运行</div>
-                            <div ng-switch-when="YELLOW">服务线程中断</div>
-                            <div ng-switch-when="RED">服务线程中断</div>
+                            <div ng-switch-when="GREEN">服务进程正常运行</div>
+                            <div ng-switch-when="YELLOW">服务没有正常工作 (可能原因有: 1. 进程中断, 2. 探针没有正确收集数据)</div>
+                            <div ng-switch-when="RED">服务没有正常工作 (可能原因有: 1. 进程中断, 2. 探针没有正确收集数据)</div>
                             <div ng-switch-when="GREY">
                                 <strong>探针没有收集到数据. </strong> (可能原因有: 1. 该服务探针没有 enable, 2. 探针没有正确收集数据)
                             </div>

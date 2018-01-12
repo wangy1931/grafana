@@ -34,7 +34,6 @@ func Register(r *macaron.Macaron) {
 	r.Get("/anomaly/history", reqSignedIn, Index)
 	r.Get("/anomaly/:clusterId", reqSignedIn, Index)
 	r.Get("/decompose", reqSignedIn, Index)
-	r.Get("/signupfree", reqSignedIn, Index)
 	r.Get("/logs", reqSignedIn, Index)
 	r.Get("/logs/rules", reqSignedIn, Index)
 	r.Get("/logs/rules/new", reqSignedIn, Index)
@@ -116,6 +115,7 @@ func Register(r *macaron.Macaron) {
 	// sign up
   //TODO comment out before we will strong
 	r.Get("/signup", Index)
+	r.Get("/signupfree", Index)	
 	r.Get("/api/user/signup/options", wrap(GetSignUpOptions))
 	r.Post("/api/user/signup", quota("user"), bind(dtos.SignUpForm{}), wrap(SignUp))
 	r.Post("/api/user/signup/step2", bind(dtos.SignUpStep2Form{}), wrap(SignUpStep2))
