@@ -115,20 +115,13 @@ export class LogsCtrl {
 
       var logRow = _.find(dps, { _id: row._id });
       if (logRow) {
-        var query = `type: ${logRow._type} AND host: ${logRow.host} AND source: \"${logRow.source}\"`;
-        var time = logRow['@timestamp'][0];
-
         var contextLogModal = this.$modal({
           scope: $scope,
           templateUrl: 'public/app/features/logs/partials/log_context_modal.html',
           show: false
         });
+        contextLogModal.$scope.originRow = logRow;
         contextLogModal.$promise.then(contextLogModal.show);
-
-        this.getLogContext(query, time).then(response => {
-          _.find(response[0].datapoints, { _id: logRow._id }).origin = true;
-          contextLogModal.$scope.contextLogs = response[0];
-        });
       }
     });
 
@@ -577,28 +570,6 @@ export class LogsCtrl {
         break;
     }
     return extend_query;
-  }
-
-  // 日志上下文环境
-  getLogContext(query, time) {
-    return this.datasourceSrv.get('elk').then(datasource => {
-      return datasource.query({
-        cacheTimeout: '',
-        format: 'json',
-        interval: '30s',
-        maxDataPoints: 1280,
-        panelId: 1,
-        range: { from: moment(+time).add(-30, 'minute'), to: moment(+time).add(+30, 'minute') },
-        scopedVars: '',
-        targets: [_.extend({}, this.logResultPanel.targets[0], {
-          query: query,
-          size: 500
-        })],
-        payload: ''
-      }).then(result => {
-        return result.data;
-      });
-    });
   }
 }
 

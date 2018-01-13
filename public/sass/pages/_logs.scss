@@ -442,3 +442,20 @@ table.diff {
     line-height: 3rem;
   }
 }
+
+.log-context-modal {
+  max-height: 80%;
+  max-width: 90%;
+  overflow-y: scroll;
+  ul {
+    display: flex;
+    align-items: center;
+    li:first-child {
+      flex: 1 1 auto;
+    }
+  }
+  .origin {
+    color: #fff;
+    background-color: nth($thresholds-color, 7) !important;
+  }
+}

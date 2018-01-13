@@ -1,5 +1,5 @@
 
-<div class="modal log-context-modal" tabindex="-1" role="dialog" aria-hidden="true" style="max-height: 80%; max-width: 90%; overflow-y: scroll;">
+<div class="modal log-context-modal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="LogContextCtrl as ctrl">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header" ng-show="title">
@@ -11,7 +11,15 @@
         <div class="modal-body" style="background-color: #fff;">
             <ul>
               <li style="color: #F9934E; text-align: left;">
-                该日志前后30分钟内共有 <strong>{{ contextLogs.total || 0 }}</strong> 条日志，当前显示前 {{ contextLogs.datapoints.length || 0 }} 条
+                该日志前后 {{ ctrl.timeSelected.name }} 内共有 
+                <strong>{{ ctrl.contextLogs.total || 0 }}</strong> 条日志，当前显示前 {{ ctrl.contextLogs.datapoints.length || 0 }} 条
+              </li>
+              <li>
+                <select class="gf-form-select-wrapper gf-form-input width-7"
+                  ng-model="ctrl.timeSelected" 
+                  ng-options="item.name for item in ctrl.timeOptions"
+                  ng-change="ctrl.changeTime(ctrl.timeSelected)">
+                </select>
               </li>
             </ul>
             <table class="table table-striped table-cluster-modal">
@@ -24,7 +32,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="row in contextLogs.datapoints" ng-class="{'status-blue': row.origin}">
+                  <tr ng-repeat="row in ctrl.contextLogs.datapoints" ng-class="{'origin': row.origin}">
                     <td>{{ _.transformMillionTime(row['@timestamp'][0]) }}</td>
                     <td>{{ row.type }}</td>
                     <td>{{ row.host }}</td>
