@@ -220,6 +220,10 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
     this.$scope.$emit('expand-log', _.cloneDeep(row));
   }
 
+  onCellClick(index, cellValue, row) {
+    this.$scope.$emit('cwtable-cell-click', [index, cellValue, row, this.dataRaw]);
+  }
+
   link(scope, elem, attrs, ctrl) {
     var data;
     var panel = ctrl.panel;

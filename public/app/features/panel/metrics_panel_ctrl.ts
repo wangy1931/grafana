@@ -181,6 +181,25 @@ class MetricsPanelCtrl extends PanelCtrl {
 
   issueQueries(datasource) {
     this.updateTimeRange();
+
+    /**
+     * 如果提供了外部数据源，直接返回，不再query
+     * 注意：1）当要恢复为正常query请求时，把 externalDatasource 设置为 null
+     *      2）提供的外部数据源应该满足 graph | singlestats | table 或其他panel插件的格式要求 
+     * 例，graph 的数据格式
+     * [
+     *    {
+     *        target: `cpu.usr{host:"xxx"}`,
+     *        datapoints: [
+     *            [0.050115607375268295, 1512593700]
+     *        ]
+     *    }
+     * ]
+     */
+    if (this.panel.externalDatasource) {
+      return this.$q.when(this.panel.externalDatasource);
+    }
+
     this.datasource = datasource;
 
     if (!this.panel.targets || this.panel.targets.length === 0) {

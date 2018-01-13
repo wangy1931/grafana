@@ -106,6 +106,25 @@ export class LogsCtrl {
       clusterLogSourceModal.$promise.then(clusterLogSourceModal.show);
     });
 
+    $scope.$on('cwtable-cell-click', (event, payload) => {
+      var index = payload[0], cellValue = payload[1], row = payload[2], data = payload[3];
+      if (index !== 4) { return; }
+
+      var dps = data[0].datapoints;
+      if (_.isEmpty(dps)) { return; }
+
+      var logRow = _.find(dps, { _id: row._id });
+      if (logRow) {
+        var contextLogModal = this.$modal({
+          scope: $scope,
+          templateUrl: 'public/app/features/logs/partials/log_context_modal.html',
+          show: false
+        });
+        contextLogModal.$scope.originRow = logRow;
+        contextLogModal.$promise.then(contextLogModal.show);
+      }
+    });
+
     $controller('OpenTSDBQueryCtrl', {$scope: $scope});
     datasourceSrv.get('opentsdb').then(datasource => {
       $scope.datasource = datasource;

@@ -86,7 +86,7 @@ export class SystemOverviewCtrl {
       rightPanelHead: { id: '', name: '...' },
       rightItemTypes: {
         ServiceKPI: { id: 'ServiceKPI', name: '服务KPI', data: '...', status: 'green', metrics: {} },
-        ServiceState: { id: 'ServiceState', name: '服务线程', data: '...', status: 'green', metrics: {} },
+        ServiceState: { id: 'ServiceState', name: '服务进程', data: '...', status: 'green', metrics: {} },
         HostNW: { id: 'HostNW', name: '网络在线', data: '...', status: 'green', metrics: {} },
         HostCpu: { id: 'HostCpu', name: 'CPU使用率', data: '...', status: 'green', metrics: {} },
         HostMem: { id: 'HostMem', name: '内存使用率', data: '...', status: 'green', metrics: {} },
