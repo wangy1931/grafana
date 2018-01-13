@@ -117,15 +117,17 @@ export class LogsCtrl {
       if (logRow) {
         var query = `type: ${logRow._type} AND host: ${logRow.host} AND source: \"${logRow.source}\"`;
         var time = logRow['@timestamp'][0];
+
         var contextLogModal = this.$modal({
           scope: $scope,
           templateUrl: 'public/app/features/logs/partials/log_context_modal.html',
           show: false
         });
+        contextLogModal.$promise.then(contextLogModal.show);
+
         this.getLogContext(query, time).then(response => {
           _.find(response[0].datapoints, { _id: logRow._id }).origin = true;
           contextLogModal.$scope.contextLogs = response[0];
-          contextLogModal.$promise.then(contextLogModal.show);
         });
       }
     });

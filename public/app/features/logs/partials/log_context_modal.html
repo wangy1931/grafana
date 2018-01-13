@@ -1,5 +1,5 @@
 
-<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" style="max-height: 80%; max-width: 90%; overflow-y: scroll;">
+<div class="modal log-context-modal" tabindex="-1" role="dialog" aria-hidden="true" style="max-height: 80%; max-width: 90%; overflow-y: scroll;">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header" ng-show="title">
@@ -24,7 +24,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="row in contextLogs.datapoints">
+                  <tr ng-repeat="row in contextLogs.datapoints" ng-class="{'status-blue': row.origin}">
                     <td>{{ _.transformMillionTime(row['@timestamp'][0]) }}</td>
                     <td>{{ row.type }}</td>
                     <td>{{ row.host }}</td>
