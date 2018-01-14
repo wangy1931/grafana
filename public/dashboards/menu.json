@@ -1,0 +1,79 @@
+[
+    {
+        "id": 1,
+        "text": "系统监控",
+        "icon": "fa fa-fw fa-home",
+        "children": [
+            {
+                "id": 1,
+                "text": "指标",
+                "class": "scroll-y",
+                "click": ""
+            },
+            {
+                "id": 2,
+                "text": "日志",
+                "url": "/logs"
+            },
+            {
+                "id": 3,
+                "text": "机器",
+                "url": "/host_topology"
+            },
+            {
+                "id": 4,
+                "text": "服务",
+                "url": "/service_dep"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "text": "系统报警",
+        "icon": "fa fa-fw fa-stethoscope",
+        "children": [
+            {
+                "id": 1,
+                "text": "规则报警",
+                "url": "/alert/status"
+            },
+            {
+                "id": 2,
+                "text": "智能报警",
+                "url": "/anomoly"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "text": "系统分析",
+        "icon": "fa fa-fw fa-bar-chart"
+    },
+    {
+        "id": 4,
+        "text": "系统配置",
+        "icon": "fa fa-fw fa-cubes",
+        "children": [
+            {
+                "id": 1,
+                "text": "探针收集",
+                "click": "/cmdb/config"
+            },
+            {
+                "id": 2,
+                "text": "日志解析",
+                "click": "/logs/rules"
+            },
+            {
+                "id": 3,
+                "text": "KPI 指标",
+                "url": "/cmdb/kpi"
+            },
+            {
+                "id": 4,
+                "text": "基本配置",
+                "url": "/"
+            }
+        ]
+    }
+]
