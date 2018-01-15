@@ -1,0 +1,61 @@
+<navbar title="配置管理库" icon="fa fa-fw fa-cubes">
+  <ul class="nav">
+    <li class="active"><a href="/cmdb/basic_azure">Azure 通用配置</a></li>
+    <li><a href="/cmdb/basic_sql">SQL数据库配置</a></li>
+  </ul>
+</navbar>
+
+<div class="page-container cmdb-basic-page">
+
+  <div>
+    <form name="searchForm" class="gf-form-group">
+      <div class="gf-form">
+        <span class="gf-form-label width-7">用户 Id</span>
+        <input type="text" class="gf-form-input max-width-16" ng-model="ctrl.query.userId"
+          spellcheck='false' required>
+      </div>
+      <div class="gf-form">
+        <span class="gf-form-label width-7">Client Id</span>
+        <input type="text" class="gf-form-input max-width-16" ng-model="ctrl.query.clientId"
+          spellcheck='false' required>
+      </div>
+      <div class="gf-form">
+        <span class="gf-form-label width-7">Client Key</span>
+        <input type="text" class="gf-form-input max-width-16" ng-model="ctrl.query.clientKey"
+          spellcheck='false' required>
+      </div>
+      <div class="gf-form-button-row">
+        <button class="btn btn-primary" ng-click="ctrl.applyAzureSetting(ctrl.query)">同步</button>
+      </div>
+    </form>
+  </div>
+
+  <div ng-if="ctrl.azureList.length">
+    <table class="grafana-options-table">
+      <thead>
+        <th>名称</th>
+        <th>类型</th>
+        <th>操作</th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in ctrl.azureList track by $index">
+          <td>
+            {{ item.name }}
+          </td>
+          <td style="position: relative">
+            {{ item.type }}
+          </td>
+          <td>
+            <button class="btn btn-outline-success btn-small" ng-if="!item.added" ng-click="ctrl.add(item)">
+              <i class="fa fa-plus"></i> 加入监控
+            </button>
+            <button class="btn btn-outline-danger btn-small" ng-if="item.added" ng-click="ctrl.remove(item)">
+              <i class="fa fa-minus"></i> 移除监控
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

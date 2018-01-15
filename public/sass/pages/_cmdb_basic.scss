@@ -1,0 +1,36 @@
+.cmdb-basic-page {
+  .gf-form-label {
+    background: none;
+    font-weight: bold;
+    cursor: default;
+  }
+
+  .gf-form-input, select {
+    background: none;
+    border-radius: 5px;
+    margin-right: 5rem;
+  }
+
+  div.gf-form-input {
+    border: none;
+  }
+
+  .gf-form-input:disabled {
+    border: none;
+    cursor: default;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .label {
+    margin: 0 0.7rem;
+    background: none;
+    color: rgb(0, 111, 210);
+    cursor: default;
+  }
+
+  .btn {
+    border-radius: 5px;    
+  }
+}

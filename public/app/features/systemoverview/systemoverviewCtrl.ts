@@ -76,8 +76,9 @@ export class SystemOverviewCtrl {
     });
 
     // default data
+    // Feichi: Modify
     this.kpiPanel = {
-      leftTableHeads: ['机器名', '机器状态'],
+      leftTableHeads: ['实例名', '状态'],
       leftTableBodys: [
         { id: '', name: '', data: '正常', status: 'green' },
         { id: '', name: '', data: '正常', status: 'green' },
@@ -85,12 +86,12 @@ export class SystemOverviewCtrl {
       ],
       rightPanelHead: { id: '', name: '...' },
       rightItemTypes: {
-        ServiceKPI: { id: 'ServiceKPI', name: '服务KPI', data: '...', status: 'green', metrics: {} },
-        ServiceState: { id: 'ServiceState', name: '服务进程', data: '...', status: 'green', metrics: {} },
-        HostNW: { id: 'HostNW', name: '网络在线', data: '...', status: 'green', metrics: {} },
-        HostCpu: { id: 'HostCpu', name: 'CPU使用率', data: '...', status: 'green', metrics: {} },
-        HostMem: { id: 'HostMem', name: '内存使用率', data: '...', status: 'green', metrics: {} },
-        HostIO: { id: 'HostIO', name: '磁盘使用率', data: '...', status: 'green', metrics: {} },
+        ServiceKPI: { id: 'ServiceKPI', name: '服务KPI', data: '...', status: 'green', metrics: {}, show: true },
+        ServiceState: { id: 'ServiceState', name: '服务状态', data: '...', status: 'green', metrics: {}, show: true },
+        HostNW: { id: 'HostNW', name: '网络在线', data: '...', status: 'green', metrics: {}, show: false },
+        HostCpu: { id: 'HostCpu', name: 'CPU使用率', data: '...', status: 'green', metrics: {}, show: false },
+        HostMem: { id: 'HostMem', name: '内存使用率', data: '...', status: 'green', metrics: {}, show: false },
+        HostIO: { id: 'HostIO', name: '磁盘使用率', data: '...', status: 'green', metrics: {}, show: false }
       },
       rightMetrics: [],
       leftSelected: '',

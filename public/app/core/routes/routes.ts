@@ -417,6 +417,18 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controllerAs: 'ctrl',
     resolve: loadCMDBBundle
   })
+  .when('/cmdb/basic_azure', {
+    templateUrl: 'public/app/features/cmdb/partials/basic_azure.html',
+    controller : 'CMDBBasicAzureCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadCMDBBundle
+  })
+  .when('/cmdb/basic_sql', {
+    templateUrl: 'public/app/features/cmdb/partials/basic_sql.html',
+    controller : 'CMDBBasicSqlCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadCMDBBundle
+  })
   .when('/service_dependency', {
     templateUrl: 'public/app/features/service/partials/service_dep.html',
     controller : 'BuildDependCtrl',

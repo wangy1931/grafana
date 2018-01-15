@@ -16,11 +16,6 @@
           "url": "/logs"
         },
         {
-          "id": 3,
-          "text": "机器",
-          "url": "/host_topology"
-        },
-        {
           "id": 4,
           "text": "服务",
           "url": "/service_topology"
@@ -48,7 +43,7 @@
       "id": 3,
       "text": "系统分析",
       "icon": "fa fa-fw fa-bar-chart",
-      "url": "/rca?guide"
+      "url": "/association?guide"
     },
     {
       "id": 4,
@@ -57,8 +52,8 @@
       "children": [
         {
           "id": 1,
-          "text": "探针收集",
-          "url": "/cmdb/config?serviceName=collector"
+          "text": "基本配置",
+          "url": "/cmdb/basic_azure"
         },
         {
           "id": 2,

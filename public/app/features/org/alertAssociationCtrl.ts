@@ -39,6 +39,7 @@ export class AlertAssociationCtrl {
     private NgTableParams
   ) {
     this.targetObj = _.extend({}, {
+      guide: true,
       metric: "",
       host: "",
       start: "",
@@ -46,7 +47,7 @@ export class AlertAssociationCtrl {
       max: 1000,
     }, this.$location.search());
     if (!this.targetObj.metric) {
-      this.targetObj = _.extend({}, associationSrv.sourceAssociation);
+      this.targetObj = _.extend({}, this.targetObj, associationSrv.sourceAssociation);
       this.$location.search(this.targetObj);
     }
 

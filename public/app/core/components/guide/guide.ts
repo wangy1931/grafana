@@ -53,17 +53,18 @@ export class GuideCtrl {
       }
     });
 
-    this.steps.push({
-      title: '故障溯源',
-      cta: '故障溯源',
-      icon: 'icon-gf icon-gf-apps',
-      href: '/rca',
-      note: '根据故障问题，寻找根本原因',
-      check: () => $q.when(this.$location.path() === '/rca'),
-      jumpTo: () => {
-        this.jump('/rca');
-      }
-    });
+    // Feichi: Modify
+    // this.steps.push({
+    //   title: '故障溯源',
+    //   cta: '故障溯源',
+    //   icon: 'icon-gf icon-gf-apps',
+    //   href: '/rca',
+    //   note: '根据故障问题，寻找根本原因',
+    //   check: () => $q.when(this.$location.path() === '/rca'),
+    //   jumpTo: () => {
+    //     this.jump('/rca');
+    //   }
+    // });
 
     this.steps.push({
       title: '关联分析',
@@ -93,17 +94,18 @@ export class GuideCtrl {
       }
     });
 
-    this.steps.push({
-      title: '资源消耗',
-      cta: '资源消耗',
-      icon: 'iconfont fa-process',
-      href: '/topn',
-      note: '查看资源消耗情况',
-      check: () => $q.when(this.$location.path() === '/topn'),
-      jumpTo: () => {
-        this.jump('/topn');
-      }
-    });
+    // Feichi: Modify
+    // this.steps.push({
+    //   title: '资源消耗',
+    //   cta: '资源消耗',
+    //   icon: 'iconfont fa-process',
+    //   href: '/topn',
+    //   note: '查看资源消耗情况',
+    //   check: () => $q.when(this.$location.path() === '/topn'),
+    //   jumpTo: () => {
+    //     this.jump('/topn');
+    //   }
+    // });
 
     $scope.$on('$routeUpdate', () => {
       var metric = this.$location.search().metric;

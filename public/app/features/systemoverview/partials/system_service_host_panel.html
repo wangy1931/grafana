@@ -30,8 +30,8 @@
         <div class="panel-wrapper">
             <div class="panel-header">
                 <ul>
-                    <li><h4>机器名：{{ ctrl.kpiPanel.rightPanelHead.name }}</h4></li>
-                    <li class="pull-right"><button class="btn btn-primary btn-small" ng-click="ctrl.toHostTopology(ctrl.kpiPanel.rightPanelHead)">查看机器详情</button></li>
+                    <li><h4>实例名：{{ ctrl.kpiPanel.rightPanelHead.name }}</h4></li>
+                    <li class="pull-right"><button class="btn btn-primary btn-small" ng-click="ctrl.toHostTopology(ctrl.kpiPanel.rightPanelHead)">查看详情</button></li>
                 </ul>
             </div>
             <div class="panel-content">
@@ -39,7 +39,8 @@
                     <div class="section"
                          ng-repeat="item in ctrl.kpiPanel.rightItemTypes"
                          ng-class="{ active: item.id == ctrl.kpiPanel.rightSelected }"
-                         ng-click="ctrl.selectKpi(item.id)">
+                         ng-click="ctrl.selectKpi(item.id)"
+                         ng-show="item.show">
                         <div class="section-head">
                             <h6>{{ item.name }}</h6>
                         </div>

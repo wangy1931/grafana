@@ -7,13 +7,8 @@
     <table class="table host-panel-table" ng-show="ctrl.hostPanels.length">
       <thead>
         <tr>
-          <th>机器名</th>
-          <th>机器 IP</th>
-          <th>机器在线</th>
-          <th>CPU 使用率</th>
-          <th>内存使用率</th>
-          <th>磁盘使用率</th>
-          <th>开始运行时间</th>
+          <th>实例名</th>
+          <th>状态</th>
           <th>探针版本</th>
           <th>Commit Id</th>
         </tr>
@@ -23,12 +18,7 @@
             ng-class="{active: host.host==ctrl.currentHost.name}"
             ng-click="ctrl.nodeClickHandle(host);">
           <td>{{ host.host }}</td>
-          <td>{{ host.defaultIp || '-' }}</td>
           <td>{{ host.status || '-' }}</td>
-          <td>{{ host.cpu || '-' }}</td>
-          <td>{{ host.mem || '-' }}</td>
-          <td>{{ host.disk || '-' }}</td>
-          <td>{{ host.startTime || '-' }}</td>
           <td>{{ host.version || '-' }}</td>
           <td>{{ host.commit || '-' }}</td>
         </tr>

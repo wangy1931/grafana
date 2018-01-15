@@ -37,16 +37,6 @@ export class ToolbarCtrl {
       },
     });
 
-    if (!contextSrv.isViewer) {
-      this.toolbarItems.push({
-        class: '',
-        icon : 'fa fa-fw fa-cloud-download',
-        itemname: '安装指南',
-        href: '/setting/agent',
-        clickHandler: () => {},
-      });
-    }
-
     this.toolbarItems.push({
       class: '',
       icon : 'fa fa-fw fa-file-text-o',

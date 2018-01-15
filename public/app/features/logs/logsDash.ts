@@ -16,11 +16,11 @@ var panelMetas = [
             "value": "@timestamp"
           },
           {
-            "text": "host",
+            "text": "实例",
             "value": "host"
           },
           {
-            "text": "_type",
+            "text": "服务",
             "value": "_type"
           },
           {

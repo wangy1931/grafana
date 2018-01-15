@@ -1,0 +1,41 @@
+<navbar title="配置管理库" icon="fa fa-fw fa-cubes">
+  <ul class="nav">
+    <li><a href="/cmdb/basic_azure">Azure 通用配置</a></li>
+    <li class="active"><a href="/cmdb/basic_sql">SQL数据库配置</a></li>
+  </ul>
+</navbar>
+
+<div class="page-container cmdb-basic-page">
+
+  <div class="page-heading">
+    <button class="btn btn-outline-primary btn-small" ng-click="ctrl.add()">
+      <i class="fa fa-plus"></i> 添加
+    </button>
+  </div>
+
+  <div ng-if="ctrl.sqlList.length">
+    <table class="grafana-options-table">
+      <thead>
+        <th>名称</th>
+        <th>操作</th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in ctrl.sqlList track by $index">
+          <td>
+            {{ item.name }}
+          </td>
+          <td>
+            <button class="btn btn-outline-primary btn-small" ng-click="ctrl.edit(item)">
+              <i class="fa fa-pencil"></i> 修改
+            </button>
+            <button class="btn btn-outline-danger btn-small" ng-click="ctrl.remove(item)">
+              <i class="fa fa-minus"></i> 移除监控
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+  

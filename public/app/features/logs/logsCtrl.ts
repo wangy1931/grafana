@@ -504,7 +504,8 @@ export class LogsCtrl {
           title: 'message'
         },
         host: {
-          name: '机器',
+          // Feichi: Modify
+          name: '实例',
           values: [],
           select: false,
           title: 'host'

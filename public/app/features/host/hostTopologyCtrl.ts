@@ -48,15 +48,16 @@ export class HostTopologyCtrl {
     $scope.refresh_func = this.getProcess.bind(this);
 
     this.tabs = [
+      // Feichi: Modify
       { 'id': 0, 'title': '机器总览', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_list_table.html' },
       { 'id': 1, 'title': '系统状态', 'active': false, 'show': false,  'content': 'public/app/features/host/partials/host_system_status.html' },
       { 'id': 2, 'title': '报警检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_alert_table.html' },
       { 'id': 3, 'title': '异常检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_anomaly_table.html' },
-      { 'id': 4, 'title': '进程状态', 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_process.html' },
+      // { 'id': 4, 'title': '进程状态', 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_process.html' },
       { 'id': 5, 'title': '机器信息', 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_info.html' },
-      { 'id': 6, 'title': '资源预测', 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_prediction.html' }
+      // { 'id': 6, 'title': '资源预测', 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_prediction.html' }
     ];
-    this.needHostnameTabs = [1, 4, 5, 6];
+    this.needHostnameTabs = [1, 5];
 
     this.topologyGraphParams = {
       blockSize: 36,
