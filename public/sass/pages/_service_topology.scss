@@ -1,0 +1,35 @@
+.service-page {
+  
+  .page-header {
+    margin: 0;
+    padding: 0;
+  }
+
+  // bootstrap-table override
+  .fixed-table-container tbody td {
+    border-left: 1px solid transparent;
+  }
+
+  .tab-content{
+    border: 1px solid #eee;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
+    .service-list {
+      background-color: #fbfbfb;
+    }
+  }
+
+  .service-tab-content {
+    padding: 20px;
+  }
+
+  .service-list {
+    .active {
+      background-color: rgba(102, 194, 165, 0.12);
+    }
+  }
+
+  .service-info {
+    margin: 0 20px;
+  }
+
+}

@@ -47,6 +47,14 @@ export class ToolbarCtrl {
       });
     }
 
+    this.toolbarItems.push({
+      class: '',
+      icon : 'fa fa-fw fa-file-text-o',
+      itemname: '健康报告',
+      href: '/report',
+      clickHandler: () => {}
+    })
+
   }
 
   showPopover() {

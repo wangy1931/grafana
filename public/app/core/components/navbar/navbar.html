@@ -1,12 +1,15 @@
 <div class="navbar-inner">
-	<a class="navbar-brand-btn pointer" ng-click="ctrl.contextSrv.toggleSideMenu()">
+	<a class="navbar-brand-btn pointer" href="/">
 		<span class="navbar-brand-btn-background">
 			<img src="public/img/fav32.png"></img>
 		</span>
-		<i class="fa fa-caret-down"></i>
 	</a>
 
-	<a href="{{ctrl.titleUrl}}" class="navbar-page-btn" ng-show="ctrl.title">
+	<a class="pointer navbar-page-btn" ng-click="ctrl.contextSrv.toggleSideMenu()">
+		<i class="fa" ng-class="{ true: 'fa-outdent', false: 'fa-indent' }[ctrl.contextSrv.sidemenu]"></i>
+	</a>
+
+	<a href="{{ctrl.titleUrl}}" class="navbar-page-btn" ng-show="ctrl.showNavbarPageBtn">
 		<i class="{{ctrl.icon}}" ng-show="ctrl.icon"></i>
 		<img ng-src="{{ctrl.iconUrl}}" ng-show="ctrl.iconUrl" />
 		{{ctrl.title}}

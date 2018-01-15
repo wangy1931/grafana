@@ -7,10 +7,12 @@ import coreModule from '../../core_module';
 
 export class NavbarCtrl {
   showGuideNav: boolean = false;
+  showNavbarPageBtn: boolean = false;
 
   /** @ngInject */
   constructor(private $scope, private $rootScope, private $location, private contextSrv) {
     !!~['/rca', '/association', '/logs', '/topn'].indexOf(this.$location.path()) && (this.showGuideNav = true);
+    this.showNavbarPageBtn = (this.$location.path() === '/');
   }
 
   showGuide() {

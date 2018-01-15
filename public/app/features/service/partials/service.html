@@ -1,15 +1,15 @@
 <navbar title="系统总览" icon="fa fa-fw fa-home"></navbar>
 
-<div class="page-container host-page topology-graph" ng-init="ctrl.init();">
+<div class="page-container service-page topology-graph" ng-init="ctrl.init();">
 
     <div class="page-header">
-        <h2>机器拓扑</h2>
+        <h2>服务拓扑</h2>
     </div>
 
-    <topology-graph params="ctrl.topologyGraphParams" current-item="ctrl.currentHost"></topology-graph>
+    <topology-graph params="ctrl.topologyGraphParams" current-item="ctrl.currentService" type="service"></topology-graph>
 
     <div class="detail">
-        <tabset class="host-detail">
+        <tabset class="service-detail">
             <tab heading="{{ tab.title }}"
                  ng-repeat="tab in ctrl.tabs"
                  active="tab.active"

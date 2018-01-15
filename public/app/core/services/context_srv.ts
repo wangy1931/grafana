@@ -42,9 +42,7 @@ export class ContextSrv {
 
   constructor() {
     this.pinned = store.getBool('grafana.sidemenu.pinned', false);
-    if (this.pinned) {
-      this.sidemenu = true;
-    }
+    this.sidemenu = this.pinned ? true : false;
 
     if (!config.buildInfo) {
       config.buildInfo = {};
