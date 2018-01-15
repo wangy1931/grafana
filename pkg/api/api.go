@@ -55,6 +55,7 @@ func Register(r *macaron.Macaron) {
 	r.Get("/rca", reqSignedIn, Index)
 	r.Get("/host_topology", reqSignedIn, Index)
 	r.Get("/topn", reqSignedIn, Index)
+	r.Get("/service_topology", reqSignedIn, Index)
 
 	// cmdb
 	r.Get("/cmdb/hostlist", reqSignedIn, Index)
@@ -102,6 +103,7 @@ func Register(r *macaron.Macaron) {
 	r.Get("/plugins/:id/edit", reqSignedIn, Index)
 	r.Get("/plugins/:id/page/:page", reqSignedIn, Index)
 
+	r.Get("/dashboardlist", reqSignedIn, Index)
 	r.Get("/dashboard/*", reqSignedIn, Index)
 	r.Get("/dashboard-solo/*", reqSignedIn, Index)
 

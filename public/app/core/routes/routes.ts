@@ -437,6 +437,13 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     reloadOnSearch: false,
     resolve: loadHostBundle
   })
+  // Service Topology
+  .when('/service_topology', {
+    templateUrl: 'public/app/features/service/partials/service.html',
+    controller : 'ServiceTopologyCtrl',
+    reloadOnSearch: false,
+    resolve: loadServiceBundle
+  })
   .when('/styleguide/:page?', {
     controller: 'StyleGuideCtrl',
     controllerAs: 'ctrl',

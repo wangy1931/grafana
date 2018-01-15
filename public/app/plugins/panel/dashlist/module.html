@@ -3,6 +3,13 @@
     <h6 class="dashlist-section-header" ng-show="ctrl.panel.headings">
       {{group.header}}
     </h6>
+    <div class="dashlist-item" ng-if="!group.list.length">
+      <a class="dashlist-link dashlist-link" href="javascript:;">
+        <span class="dashlist-title">
+          暂无
+        </span>
+      </a>
+    </div>
     <div class="dashlist-item" ng-repeat="dash in group.list">
       <a class="dashlist-link dashlist-link-{{dash.type}}" href="dashboard/{{dash.uri}}">
         <span class="dashlist-title">

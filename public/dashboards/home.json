@@ -5,18 +5,18 @@
   "tags": [],
   "style": "dark",
   "timezone": "browser",
-  "editable": true,
+  "editable": false,
   "hideControls": true,
   "sharedCrosshair": false,
   "rows": [
    {
       "collapse": false,
-      "editable": true,
+      "editable": false,
       "height": "25px",
       "panels": [
         {
-          "content": "<div class=\"text-center dashboard-header\">\n  <span>Home Dashboard</span>\n</div>",
-          "editable": true,
+          "content": "<div class=\"text-center dashboard-header\">\n  <span>指标监控台</span>\n</div>",
+          "editable": false,
           "id": 1,
           "links": [],
           "mode": "html",
@@ -31,12 +31,12 @@
    },
    {
       "collapse": false,
-      "editable": true,
+      "editable": false,
       "height": "510px",
       "panels": [
         {
           "id": 3,
-          "limit": 4,
+          "limit": 6,
           "links": [],
           "query": "",
           "span": 7,
