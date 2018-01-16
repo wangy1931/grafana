@@ -32,7 +32,7 @@ export class ContextSrv {
   isGrafanaAdmin: any;
   isEditor: any;
   sidemenu: any;
-  lightTheme: any;
+  userTheme: any;
   isOrgAdmin: any;
   dashboardLink: any;
   systemsMap: any;

@@ -33,6 +33,21 @@ module.exports = function(config) {
       dest: '<%= genDir %>/css/grafana.light.min.css'
     },
 
+    cssDarkBlue: {
+      src: [
+        '<%= genDir %>/vendor/css/timepicker.css',
+        '<%= genDir %>/vendor/css/spectrum.css',
+        '<%= genDir %>/css/grafana.darkblue.css',
+        '<%= genDir %>/vendor/css/font-awesome.min.css',
+        '<%= genDir %>/vendor/css/bootstrap-responsive.min.css',
+        '<%= genDir %>/vendor/css/iconfont.css',
+        '<%= genDir %>/vendor/css/quill.snow.css',
+        '<%= genDir %>/vendor/css/quill.bubble.css',
+        '<%= genDir %>/vendor/css/ng-table.css',
+      ],
+      dest: '<%= genDir %>/css/grafana.darkblue.min.css'
+    },
+
     cssFonts: {
       src: [ '<%= genDir %>/css/fonts.css' ],
       dest: '<%= genDir %>/css/fonts.min.css'
