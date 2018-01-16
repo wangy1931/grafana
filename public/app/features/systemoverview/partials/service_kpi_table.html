@@ -10,7 +10,8 @@
             </td>
             <td data-title="'报警情况'" sortable="'alertStatus'">
                 <div style="padding-left: 10px;">
-                    <a href="/host_topology?tabId=2&id=&name=" ng-if="row.alertStatus !== 'GREY'" style="width: 15%;">
+                    <a href="/alerts/status" ng-if="row.alertStatus !== 'GREY'" style="width: 15%;">
+                    <!-- <a href="/host_topology?tabId=2&id=&name=" ng-if="row.alertStatus !== 'GREY'" style="width: 15%;"> -->
                         <i class="iconfont fa-status-{{ row.alertStatus | lowercase }} status-color status-{{ row.alertStatus | lowercase }}" style="font-weight: bolder;"></i>
                     </a>
                     <i class="iconfont fa-status-{{ row.alertStatus | lowercase }} status-color status-{{ row.alertStatus | lowercase }}" style="font-weight: bolder;" ng-if="row.alertStatus == 'GREY'"></i>
@@ -18,7 +19,7 @@
             </td>
             <td data-title="'操作'" style="padding: 0 6px; width: 15%;">
                 <div ng-show="row.anomalyHealth !== 100">
-                    <a href="/rca?guide&metric={{ row.name }}&host={{ row.host }}" class="btn btn-primary btn-small" style="padding: 0.1rem 0.5rem;"><i class="fa fa-search"></i> 诊断分析</a>
+                    <a href="/association?guide&metric={{ row.name }}&host={{ row.host }}" class="btn btn-primary btn-small" style="padding: 0.1rem 0.5rem;"><i class="fa fa-search"></i> 诊断分析</a>
                 </div>
             </td>
         </tr>

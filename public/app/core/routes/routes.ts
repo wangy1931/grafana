@@ -436,19 +436,19 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     resolve: loadServiceBundle,
   })
   // RCA
-  .when('/rca', {
-    templateUrl: 'public/app/features/rca/partials/rca.html',
-    controller : 'RootCauseAnalysisCtrl',
-    reloadOnSearch: false,
-    resolve: loadRcaBundle,
-  })
+  // .when('/rca', {
+  //   templateUrl: 'public/app/features/rca/partials/rca.html',
+  //   controller : 'RootCauseAnalysisCtrl',
+  //   reloadOnSearch: false,
+  //   resolve: loadRcaBundle,
+  // })
   // Host Topology
-  .when('/host_topology', {
-    templateUrl: 'public/app/features/host/partials/host.html',
-    controller : 'HostTopologyCtrl',
-    reloadOnSearch: false,
-    resolve: loadHostBundle
-  })
+  // .when('/host_topology', {
+  //   templateUrl: 'public/app/features/host/partials/host.html',
+  //   controller : 'HostTopologyCtrl',
+  //   reloadOnSearch: false,
+  //   resolve: loadHostBundle
+  // })
   // Service Topology
   .when('/service_topology', {
     templateUrl: 'public/app/features/service/partials/service.html',
@@ -461,11 +461,11 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controllerAs: 'ctrl',
     templateUrl: 'public/app/features/styleguide/styleguide.html',
   })
-  .when('/topn', {
-    controller: 'TopNCtrl',
-    controllerAs: 'ctrl',
-    templateUrl: 'public/app/features/topn/partials/topn.html'
-  })
+  // .when('/topn', {
+  //   controller: 'TopNCtrl',
+  //   controllerAs: 'ctrl',
+  //   templateUrl: 'public/app/features/topn/partials/topn.html'
+  // })
   .otherwise({
     templateUrl: 'public/app/partials/error.html',
     controller: 'ErrorCtrl',

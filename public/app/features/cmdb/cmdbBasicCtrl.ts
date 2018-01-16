@@ -48,7 +48,12 @@ export class CMDBBasicAzureCtrl {
     if (this.$scope.searchForm.$valid) {
       this.azureList = [];
       for (var i = 0; i < 6; i++) {
-        this.azureList.push(this.mockData[_.random(0, 17)]);
+        var randomNumber = _.random(0, 17);
+        if (!_.find(this.azureList, this.mockData[randomNumber])) {
+          this.azureList.push(this.mockData[randomNumber]);
+        } else {
+          i--;
+        }
       }
     }
   }
@@ -73,7 +78,7 @@ export class CMDBBasicSqlCtrl {
   mockData: any;
 
   /** @ngInject */
-  constructor() {
+  constructor(private $scope, private alertSrv) {
     this.mockData = [
       { name: 'Database 1', added: true },
       { name: 'Database 2', added: true },
@@ -96,7 +101,7 @@ export class CMDBBasicSqlCtrl {
   }
 
   remove(item) {
-    // 
+    this.alertSrv.set(`${item.name}已成功移除监控`, '', "success", 2000);
   }
 
 }
