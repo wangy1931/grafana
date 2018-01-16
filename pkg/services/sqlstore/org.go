@@ -29,8 +29,9 @@ func SearchOrgs(query *m.SearchOrgsQuery) error {
 	if query.Name != "" {
 		sess.Where("name=?", query.Name)
 	}
+	sess.Join("INNER", "org_permit", "org.id = org_permit.org_id")
 	sess.Limit(query.Limit, query.Limit*query.Page)
-	sess.Cols("id", "name")
+	sess.Cols("org.id", "name", "level", "deadline", "data_source")
 	err := sess.Find(&query.Result)
 	return err
 }
