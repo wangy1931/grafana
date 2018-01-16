@@ -46,9 +46,9 @@
                             </div>
                         </div>
                     </div> -->
-                    <div class="anomaly-panel panels-wrapper" style="height: 50%">
+                    <div class="anomaly-panel panels-wrapper" style="height: 50%; border-top: none;">
                         <h3 ng-click="ctrl.showModal(1)" style="cursor: pointer;" bs-tooltip="'点击查看历史报警'">
-                            报警情况
+                            <a href="javascript:;">报警情况</a>
                         </h3>
                         <div>
                             <li ng-repeat="alert in ctrl.alertPanel.status" ng-if="alert.count!=0">
@@ -58,7 +58,7 @@
                     </div>
                     <div class="anomaly-panel panels-wrapper">
                         <h3 ng-click="ctrl.showModal(2)" style="cursor: pointer;" bs-tooltip="'点击查看历史情况'">
-                            智能检测异常指标
+                            <a href="javascript:;">智能检测异常指标</a>
                         </h3>
                         <div>
                             <li ng-repeat="anomaly in ctrl.anomalyPanel.status" ng-if="anomaly.count!=-1">
@@ -108,7 +108,7 @@
                                 <div>
                                     <div class="name">
                                         <i class="${icon} service-icon bg-${status}"></i>
-                                        <span>${name}</span>
+                                        <span class="status-${status}">${name}</span>
                                     </div>
                                 </div>
                             </script>

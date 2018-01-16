@@ -5,8 +5,8 @@
 
 .cluster-item {
   margin-top: 40px;
-  border: 1px solid #e1dddd;
-  box-shadow: 0 0 4px #d3d2d2;
+  border: $panel-border;
+  box-shadow: $navbarShadow;
   a:focus {
     text-decoration: none;
   }
@@ -14,7 +14,7 @@
   h4 {
     margin: 0;
     text-align: center;
-    background: #f4f4f4;
+    background: $panel-bg;
     span {
       line-height: 48px;
       margin-right: 12px;
@@ -22,7 +22,7 @@
         border-radius: 0px;
         height: 50px;
         line-height: 30px;
-        margin-top: -7px;
+        margin-top: -4px;
       }
       em, .fa-file-text-o{
         font-style: normal;
@@ -31,8 +31,7 @@
       }
     }
     .pull-right {
-      margin: 10px;
-      margin-bottom: 0px;
+      margin: 7px 10px 0 10px;
     }
   }
 
@@ -41,7 +40,7 @@
     width: 100%;
     tbody {
       tr:hover {
-        background: white;
+        background: $panel-bg;
         box-shadow: 0 0 4px rgba(54,189,250,0.62) inset;
       }
       tr:hover > th,

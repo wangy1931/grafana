@@ -13,7 +13,7 @@ var template = `
     <form class="gf-form-group tidy-form">
       <div>
           <div class="gf-form">
-              <ul class="gf-form-list tidy-form-list" style="text-align:right; overflow: inherit; width: 100%;">
+              <ul class="grafana-list-item tidy-form-list" style="text-align:right; overflow: inherit; width: 100%;">
                   <li class="tidy-form-item">
                       搜索{{ ctrl.types[ctrl.type] }}
                   </li>

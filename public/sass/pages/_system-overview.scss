@@ -1,6 +1,5 @@
 $summary-font-color: #313F48;
-$summary-border-color: #ECEFF1;
-$service-dep-bg-color: rgba(210, 235, 250, 0.5);
+$summary-border-color: $body-bg; // #ECEFF1;
 
 .summary-page {
   border: none;
@@ -36,8 +35,8 @@ $service-dep-bg-color: rgba(210, 235, 250, 0.5);
   }
 
   .view-panel {
-    background-color: #fff;
-    box-shadow: 0px 0px 4px 1px #d8d8d8;
+    background-color: $navbarBackground;
+    box-shadow: 0px 0px 4px 1px $body-bg;
     margin-bottom: 40px;
   }
 
@@ -162,7 +161,7 @@ $service-dep-bg-color: rgba(210, 235, 250, 0.5);
         height: 0;
         border-left: 28px solid transparent;
         border-right: 28px solid transparent;
-        border-top: 23px solid rgba(210, 235, 250, 0.5);
+        border-top: 23px solid $service-dep-bg-color;
         position: absolute;
         top: 100%;
         left: 48%;
@@ -171,7 +170,7 @@ $service-dep-bg-color: rgba(210, 235, 250, 0.5);
   }
 
   .service-panel, .host-panel {
-    background-color: rgba(210, 235, 250, 0.5);
+    background-color: $service-dep-bg-color;
     position: relative;
     .mention {
       span {
@@ -189,7 +188,8 @@ $service-dep-bg-color: rgba(210, 235, 250, 0.5);
   }
 
   .kpi-panel {
-    padding-top: 34px; 
+    padding-top: 34px;
+    background-color: $body-bg;
     & > em {
       line-height: 60px;
       margin-left: 20px;
@@ -421,8 +421,8 @@ $service-dep-bg-color: rgba(210, 235, 250, 0.5);
   background-color: $service-dep-bg-color;
   .left {
     width: 400px;
-    border: 1px solid $summary-border-color;
-    background-color: $white;
+    border-right: 1px solid $summary-border-color;
+    background-color: $service-dep-bg-color;
     thead {
       background-color: #5ca1de; 
     }
@@ -473,7 +473,7 @@ $service-dep-bg-color: rgba(210, 235, 250, 0.5);
         width: 15%;
         text-align: center;
         cursor: pointer;
-        background: $white;
+        background: $body-bg;
         border-radius: 2px;
         box-shadow: 0px 0px 4px 1px #d8d8d8;
         margin-right: 2%;
@@ -513,7 +513,7 @@ $service-dep-bg-color: rgba(210, 235, 250, 0.5);
       .service-state-text {}
       // ng-table override
       .fixed-table-container {
-        background-color: $white;
+        background-color: $body-bg;
         tbody td {
           border-left: none;
         }

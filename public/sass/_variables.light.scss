@@ -112,6 +112,13 @@ $modal-background: $body-bg;
 $code-tag-bg:      $gray-6;
 $code-tag-border:  darken($code-tag-bg, 3%);
 
+// Page header
+$page-header-bg: linear-gradient(90deg, $white, $gray-7);
+$page-header-shadow: inset 0px -3px 10px $gray-6;
+$page-header-border-color: $gray-4;
+
+$divider-border-color: $gray-2;
+
 // Lists
 $grafanaListBackground:    	   $gray-6;
 $grafanaListAccent:            $gray-5;
@@ -136,45 +143,48 @@ $scrollbarBorder:       $gray-4;
 
 // Buttons
 // -------------------------
-$btn-primary-bg:        $brand-primary;
-$btn-primary-bg-hl:     lighten($brand-primary, 8%);
+$btn-primary-bg: $brand-primary;
+$btn-primary-bg-hl: lighten($brand-primary, 8%);
 
-$btn-secondary-bg:      $blue-dark;
-$btn-secondary-bg-hl:   lighten($blue-dark, 4%);
+$btn-secondary-bg: $blue-dark;
+$btn-secondary-bg-hl: lighten($blue-dark, 4%);
 
-$btn-success-bg:        lighten($green, 3%);
-$btn-success-bg-hl:     darken($green, 3%);
+$btn-success-bg: lighten($green, 3%);
+$btn-success-bg-hl: darken($green, 3%);
 
-$btn-warning-bg:        lighten($orange, 3%);
-$btn-warning-bg-hl:     darken($orange, 3%);
+$btn-warning-bg: lighten($orange, 3%);
+$btn-warning-bg-hl: darken($orange, 3%);
 
-$btn-danger-bg:         lighten($red, 3%);
-$btn-danger-bg-hl:      darken($red, 3%);
+$btn-danger-bg: lighten($red, 3%);
+$btn-danger-bg-hl: darken($red, 3%);
 
-$btn-inverse-bg:          $gray-5;
-$btn-inverse-bg-hl:       darken($gray-5, 5%);
-$btn-inverse-text-color:  $dark-4;
+$btn-inverse-bg: $gray-6;
+$btn-inverse-bg-hl: darken($gray-6, 5%);
+$btn-inverse-text-color: $gray-1;
+$btn-inverse-text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
 
 $btn-link-color: $gray-1;
 
-$btn-divider-left:   $gray-4;
-$btn-divider-right:  $gray-7;
-$btn-drag-image:     '../img/grab_light.svg';
+$btn-divider-left: $gray-4;
+$btn-divider-right: $gray-7;
+$btn-drag-image: "../img/grab_light.svg";
 
 $iconContainerBackground: $white;
 
 // Forms
 // -------------------------
-$input-bg:                       $gray-7;
-$input-bg-disabled:              $gray-5;
+$input-bg: $white;
+$input-bg-disabled: $gray-5;
 
-$input-color:                    $dark-3;
-$input-border-color:             $gray-5;
-$input-box-shadow:               none;
-$input-border-focus:             $blue !default;
-$input-box-shadow-focus:         $blue !default;
-$input-color-placeholder:        $gray-4 !default;
-$input-label-bg:	        	     $gray-6;
+$input-color: $dark-3;
+$input-border-color: $gray-5;
+$input-box-shadow: none;
+$input-border-focus: $blue !default;
+$input-box-shadow-focus: $blue !default;
+$input-color-placeholder: $gray-4 !default;
+$input-label-bg: $gray-5;
+$input-label-border-color: $gray-5;
+$input-invalid-border-color: lighten($red, 5%);
 
 // Sidemenu
 // -------------------------
@@ -229,24 +239,26 @@ $wellBackground:                  $gray-3;
 // Navbar
 // -------------------------
 
-$navbarHeight:                    52px;
-$navbarBackgroundHighlight:       #f8f8f8;
-$navbarBackground:                #f8f8f8;
-$navbarBorder:                    1px solid $tight-form-border;
+$navbarHeight: 52px;
+$navbarBackgroundHighlight: $white;
+$navbarBackground: $white;
+$navbarBorder: 1px solid $gray-4;
+$navbarShadow: 0 0 3px #c1c1c1;
 
-$navbarText:                      #666;
-$navbarLinkColor:                 #666;
-$navbarLinkColorHover:            #333;
-$navbarLinkColorActive:           #555;
-$navbarLinkBackgroundHover:       transparent;
-$navbarLinkBackgroundActive:      darken($navbarBackground, 6.5%);
-$navbarDropdownShadow:            inset 0px 4px 7px -4px darken($body-bg, 20%);
+$navbarText: #444;
+$navbarLinkColor: #444;
+$navbarLinkColorHover: #000;
+$navbarLinkColorActive: #333;
+$navbarLinkBackgroundHover: transparent;
+$navbarLinkBackgroundActive: darken($navbarBackground, 6.5%);
+$navbarDropdownShadow: inset 0px 4px 7px -4px darken($body-bg, 20%);
 
-$navbarBrandColor:                $navbarLinkColor;
+$navbarBrandColor: $navbarLinkColor;
 
-$navbarButtonBackground:          lighten($navbarBackground, 3%);
+$navbarButtonBackground: lighten($navbarBackground, 3%);
 $navbarButtonBackgroundHighlight: lighten($navbarBackground, 5%);
 
+$navbar-button-border: $gray-4;
 
 // Pagination
 // -------------------------
@@ -257,21 +269,15 @@ $paginationActiveBackground:          $blue;
 
 // Form states and alerts
 // -------------------------
-$state-warning-text:             lighten($orange, 10%);
-$state-warning-bg:       $orange;
-$warningBorder:           transparent;
+$warning-text-color: lighten($orange, 10%);
+$error-text-color: lighten($red, 10%);
+$success-text-color: lighten($green, 10%);
+$info-text-color: $blue;
 
-$errorText:               lighten($red, 10%);
-$errorBackground:         $red;
-$errorBorder:             transparent;
-
-$successText:             lighten($green, 10%);
-$successBackground:       $green;
-$successBorder:           transparent;
-
-$infoText:                $blue;
-$infoBackground:          $blue-dark;
-$infoBorder:              transparent;
+$alert-error-bg: linear-gradient(90deg, #d44939, #e04d3d);
+$alert-success-bg: linear-gradient(90deg, #3aa655, #47b274);
+$alert-warning-bg: linear-gradient(90deg, #d44939, #e04d3d);
+$alert-info-bg: $blue-dark;
 
 // popover
 $popover-bg:              $gray-5;
@@ -296,3 +302,6 @@ $checkboxImageUrl: '../img/checkbox_white.png';
 $card-background: linear-gradient(135deg, $gray-5, $gray-6);
 $card-background-hover: linear-gradient(135deg, $gray-6, $gray-7);
 $card-shadow: -1px -1px 0 0 hsla(0, 0%, 100%, .1), 1px 1px 0 0 rgba(0, 0, 0, .1);
+
+// cloudwiz
+$service-dep-bg-color: rgba(210, 235, 250, 0.5);

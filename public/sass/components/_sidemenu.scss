@@ -7,7 +7,7 @@
   top: 51px;
   left: 0;
   width: $side-menu-width;
-  background-color: #222;
+  background-color: $dark-2;
   z-index: 101;
   transform: translate3d(-100%, 0, 0);
   visibility: hidden;

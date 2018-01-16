@@ -84,7 +84,7 @@
   // search head
   .search {
     padding: 5px 0;
-    background-color: #eee;
+    background-color: $tight-form-bg;;
     border-bottom: #ddd;
   }
 
@@ -144,6 +144,7 @@
   }
   .tidy-form .tidy-form-list .tidy-form-input {
     background-color: $white;
+    outline: none;
   }
 
 }
