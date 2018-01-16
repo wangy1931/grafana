@@ -1,3 +1,3 @@
 import './buildDependCtrl';
 import './serviceTopologyCtrl';
-import '../cmdb/CMDBServiceDetailCtrl';
+import '../cmdb/cmdbServiceDetailCtrl';

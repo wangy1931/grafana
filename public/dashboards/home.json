@@ -36,10 +36,10 @@
       "panels": [
         {
           "id": 3,
-          "limit": 6,
+          "limit": 8,
           "links": [],
           "query": "",
-          "span": 7,
+          "span": 12,
           "tags": [],
           "title": "",
           "transparent": false,
@@ -48,17 +48,6 @@
           "search": false,
           "starred": true,
           "headings": true
-        },
-        {
-          "editable": true,
-          "error": false,
-          "id": 4,
-          "isNew": true,
-          "links": [],
-          "span": 5,
-          "title": "",
-          "transparent": false,
-          "type": "pluginlist"
         }
       ],
       "title": "Row"

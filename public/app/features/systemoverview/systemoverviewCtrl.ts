@@ -67,7 +67,7 @@ export class SystemOverviewCtrl {
       counts: []
     });
 
-    this.switchEnabled = store.getBool('grafana.overview.mode');
+    this.switchEnabled = true; // store.getBool('grafana.overview.mode');
     this.toolkit = window.jsPlumbToolkit.newInstance();
 
     $scope.$on("$destroy", () => {

@@ -239,7 +239,8 @@ export class AlertStatusCtrl {
       return;
     }
 
-    var url = `/rca?guide&metric=${_.getMetricName(metric)}&host=${host}&start=${startTime}`;
+    // var url = `/rca?guide&metric=${_.getMetricName(metric)}&host=${host}&start=${startTime}`;
+    var url = `/association?guide&metric=${_.getMetricName(metric)}&host=${host}&start=${startTime}`;
     this.resetAlertRule(alertDefinition);
     this.associationSrv.setSourceAssociation({
       metric: this.prefix + metric,
