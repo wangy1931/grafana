@@ -96,7 +96,7 @@
 
   &.submenu {
     width: 150px;
-    background: #999;
+    background: lighten($panel-bg, 10%);
     position: absolute;
     left: $side-menu-width;
     top: -52px;
@@ -107,6 +107,10 @@
     .sidemenu-item {
       padding: 7px 10px;
       text-align: left;
+    }
+    .sidemenu-item-top {
+      background: $body-bg;
+      height: $navbarHeight;
     }
 
     li{

@@ -161,6 +161,10 @@
     background: $panel-bg;
   }
 
+  .gf-form-switch input + label {
+    background-color: transparent;
+  }
+
   .gf-form-switch input + label:before, .gf-form-switch input + label:after {
     background-color: transparent;
     background-image: none;
@@ -294,8 +298,11 @@ table.diff {
     width: 300px;
     @include text-overflow();
   }
+  td {
+    border-top: 1px solid lighten($panel-bg, 10%);
+  }
   tr > th {
-    background: rgb(244, 246, 249);
+    background: $panel-bg;
   }
 }
 .parse-btn {
@@ -352,7 +359,7 @@ table.diff {
   }
 
   .gf-form-input {
-    background: white;
+    // background: white;
     border-radius: 5px;
     height: 2.5rem;
   }
@@ -365,7 +372,7 @@ table.diff {
     flex-direction: column;
     align-items: left;
     .parse-table {
-      border: 1px solid #ddd;
+      border: 1px solid lighten($panel-bg, 10%);
       margin-left: 1rem;
       tr > th {
         background: rgba(132, 194, 248, 0.7);
@@ -380,7 +387,7 @@ table.diff {
 }
 
 .modal-log-parse {
-  background: $white;
+  background: $panel-bg;
   height: 100%;
   padding: 2rem 2rem 0;
 }

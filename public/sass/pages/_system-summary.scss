@@ -7,7 +7,7 @@ $summary-border-color: $body-bg; // #ECEFF1;
 }
 
 .summary-panel{
-  border: 1px solid $summary-border-color;
+  border: $panel-border;
 }
 
 .summary-analysis{

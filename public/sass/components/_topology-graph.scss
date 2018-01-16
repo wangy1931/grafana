@@ -143,7 +143,12 @@
     width: 270px;
   }
   .tidy-form .tidy-form-list .tidy-form-input {
-    background-color: $white;
+    background-color: $input-bg;
+    outline: none;
+  }
+  .tidy-form .kpi-btn {
+    border: 1px solid $input-border-color;
+    background-color: $input-bg;
     outline: none;
   }
 
