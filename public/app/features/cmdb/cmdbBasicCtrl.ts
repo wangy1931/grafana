@@ -64,8 +64,17 @@ export class CMDBBasicAzureCtrl {
   }
 
   remove(item) {
-    _.find(this.azureList, item).added = false;
-    this.alertSrv.set(`${item.name}已成功移除监控`, '', "success", 2000);
+    this.$scope.appEvent('confirm-modal', {
+      title: '移除监控',
+      text: `确定将 ${item.name} 从监控列表中移除吗（移除监控不影响其在 Azure 上的正常使用）？`,
+      icon: 'fa-trash',
+      yesText: '删除',
+      noText: '取消',
+      onConfirm: () => {
+        _.find(this.azureList, item).added = false;
+        this.alertSrv.set(`${item.name}已成功移除监控`, '', "success", 2000);
+      }
+    });
   }
 
 }
@@ -78,7 +87,7 @@ export class CMDBBasicSqlCtrl {
   mockData: any;
 
   /** @ngInject */
-  constructor(private $scope, private alertSrv) {
+  constructor(private $scope, private $modal, private alertSrv) {
     this.mockData = [
       { name: 'Database 1', added: true },
       { name: 'Database 2', added: true },
@@ -97,11 +106,26 @@ export class CMDBBasicSqlCtrl {
   }
 
   edit(item) {
-    // 
+    var editSqlSettingModal = this.$modal({
+      scope: this.$scope,
+      templateUrl: 'public/app/features/cmdb/partials/basic_sql_modal.html',
+      show: false
+    });
+
+    editSqlSettingModal.$promise.then(editSqlSettingModal.show);
   }
 
   remove(item) {
-    this.alertSrv.set(`${item.name}已成功移除监控`, '', "success", 2000);
+    this.$scope.appEvent('confirm-modal', {
+      title: '移除监控',
+      text: `确定将 ${item.name} 从监控列表中移除吗（移除监控不影响其在 Azure 上的正常使用）？`,
+      icon: 'fa-trash',
+      yesText: '删除',
+      noText: '取消',
+      onConfirm: () => {
+        this.alertSrv.set(`${item.name}已成功移除监控`, '', "success", 2000);
+      }
+    });
   }
 
 }

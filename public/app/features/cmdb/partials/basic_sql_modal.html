@@ -1,0 +1,19 @@
+
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" ng-show="title">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" ng-bind="title"></h4>
+        </div>
+        <div class="modal-body">
+          数据库连接字：<input type="text" required ng-model="ctrl.sql.name" class="" >
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-inverse" ng-click="$hide()">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
