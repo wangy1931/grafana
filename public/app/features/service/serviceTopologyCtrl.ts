@@ -103,10 +103,10 @@ export class ServiceTopologyCtrl {
       }
     });
 
-    // _.isEmpty(this.serviceList) && this.serviceDepSrv.readInstalledService().then(response => {
-    //   this.serviceList = response.data;
-    //   this.$scope.services = response.data;
-    // });
+    _.isEmpty(this.serviceList) && this.serviceDepSrv.readInstalledService().then(response => {
+      this.serviceList = response.data;
+      this.$scope.services = response.data;
+    });
   }
 
   render(curItem) {
@@ -152,21 +152,20 @@ export class ServiceTopologyCtrl {
     this.$scope.$digest();
   }
 
-  getList() {
-    this.$controller('ServiceListCtrl', { $scope: this.$scope });
-    // var tableData, items;
-    // this.saveTopologyData();
+  getList(item) {
+    var tableData, items;
+    this.saveTopologyData();
 
-    // if (_.isString(item)) {
-    //   items = _.map(_.filter(this.data, { 'parent': item }), 'name');
-    //   tableData = _.filter(this.serviceList, item => {
-    //     return !!~items.indexOf(item.host);
-    //   });
-    // } else {
-    //   tableData = item.name ? _.filter(this.serviceList, { id: item._private_.id }) : this.serviceList;
-    // }
+    if (_.isString(item)) {
+      items = _.map(_.filter(this.data, { 'parent': item }), 'name');
+      tableData = _.filter(this.serviceList, item => {
+        return !!~items.indexOf(item.host);
+      });
+    } else {
+      tableData = item.name ? _.filter(this.serviceList, { id: item._private_.id }) : this.serviceList;
+    }
 
-    // this.$scope.services = tableData;
+    this.$scope.services = tableData;
   }
 
   getInfo() {
@@ -186,7 +185,7 @@ export class ServiceTopologyCtrl {
     });
 
     if (tabId === 0) {
-      this.getList();
+      this.getList(this.currentService);
     }
     if (tabId === 1) {
       this.getInfo();
