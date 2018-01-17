@@ -3,7 +3,8 @@
     {
       "id": 1,
       "text": "系统总览",
-      "icon": "fa fa-fw fa-home"
+      "icon": "fa fa-fw fa-home",
+      "url": "/"
     },
     {
       "id": 2,
