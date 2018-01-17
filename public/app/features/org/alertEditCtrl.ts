@@ -585,7 +585,7 @@ export class AlertEditCtrl {
       row.panels[0].targets[i].aggregator && (row.panels[0].targets[i].aggregator = metricDef.aggregator.toLowerCase());
       row.panels[0].targets[i].metric = metricDef.metric;
     });
-    detail.alertDetails.tags.forEach(tag => {
+    (detail.alertDetails.tags || (detail.alertDetails.tags = [])).forEach(tag => {
       row.panels[0].targets[0].tags[tag.name] = tag.value;
       this.target.tags[tag.name] = tag.value;
     });
