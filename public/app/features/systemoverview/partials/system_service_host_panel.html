@@ -13,7 +13,7 @@
                     ng-class="{ active: item.name == ctrl.kpiPanel.leftSelected }"
                     ng-click="ctrl.leftClickHandler(item, ctrl.kpiPanel.type)">
                     <td class="text-overflow">
-                        <div>{{ item.name }}</div>
+                        <div class="status-{{ item.status | lowercase }}">{{ item.name }}</div>
                     </td>
                     <td class="">
                         <button type="button" 

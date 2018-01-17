@@ -103,9 +103,9 @@ $btn-cmdb-color: rgb(25,165,228);
   }
 
   .table{
-    border-bottom: 1px solid #ddd;
+    // border-bottom: 1px solid #ddd;
     th {
-      background: #f6f8fa;
+      background: lighten($panel-bg, 10%);
     }
   }
 }

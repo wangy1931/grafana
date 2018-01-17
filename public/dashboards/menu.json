@@ -2,8 +2,13 @@
   "menusTop": [
     {
       "id": 1,
+      "text": "系统总览",
+      "icon": "fa fa-fw fa-home"
+    },
+    {
+      "id": 2,
       "text": "系统监控",
-      "icon": "fa fa-fw fa-home",
+      "icon": "fa fa-fw fa-tachometer",
       "children": [
         {
           "id": 1,
@@ -28,7 +33,7 @@
       ]
     },
     {
-      "id": 2,
+      "id": 3,
       "text": "系统报警",
       "icon": "fa fa-fw fa-stethoscope",
       "children": [
@@ -45,13 +50,13 @@
       ]
     },
     {
-      "id": 3,
+      "id": 4,
       "text": "系统分析",
       "icon": "fa fa-fw fa-bar-chart",
       "url": "/rca?guide"
     },
     {
-      "id": 4,
+      "id": 5,
       "text": "系统配置",
       "icon": "fa fa-fw fa-cubes",
       "children": [

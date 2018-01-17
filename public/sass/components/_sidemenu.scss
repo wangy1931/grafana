@@ -7,7 +7,7 @@
   top: 51px;
   left: 0;
   width: $side-menu-width;
-  background-color: #222;
+  background-color: $dark-2;
   z-index: 101;
   transform: translate3d(-100%, 0, 0);
   visibility: hidden;
@@ -96,20 +96,25 @@
 
   &.submenu {
     width: 150px;
-    background: #999;
+    background: $side-menu-bg;
     position: absolute;
     left: $side-menu-width;
     top: -52px;
     bottom: 0px;
-    &.scroll-y{
+    box-shadow: $side-menu-shadow;
+    &.scroll-y {
       overflow-y: auto;
     }
     .sidemenu-item {
       padding: 7px 10px;
       text-align: left;
     }
+    .sidemenu-item-top {
+      background: $side-menu-top-bg;
+      height: $navbarHeight;
+    }
 
-    li{
+    li {
       margin: 0;
     }
 

@@ -174,7 +174,7 @@ a.progress-link {
   width: 100%;
   z-index: 99;
   padding: 0;
-  box-shadow: 0px 0px 4px 1px #d8d8d8;
+  box-shadow: 0px 0px 4px 1px $dark-1;
   transition: top 0.1s ease-in-out;
   &.active {
     top: 0;
@@ -185,10 +185,10 @@ a.progress-link {
 
   // override
   .btn-default {
-    background-color: $white;
+    background-color: transparent;
     border-radius: 6px;
     outline: none;
-    border: 1px solid #ccc;
+    border: 1px solid $input-border-color;
   }
   .tidy-form .tidy-form-list .dropdown-menu {
     border-radius: 4px;

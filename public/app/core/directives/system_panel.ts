@@ -44,6 +44,9 @@ function systemPanel($parse, alertMgrSrv, healthSrv, datasourceSrv, contextSrv, 
               show: true,
               label: {
                   show: false,
+              },
+              stroke: {
+                width: 0
               }
             }
           },

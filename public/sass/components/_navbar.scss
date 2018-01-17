@@ -1,4 +1,3 @@
-
 .navbar {
   display: block;
   overflow: visible;
@@ -63,7 +62,7 @@
   margin: 0;
   background-color: $navbarButtonBackground;
   padding: 0.4rem 1.0rem 0.4rem 1rem;
-  border-right: 1px solid #D8D9DA;
+  border-right: 1px solid $tight-form-border;
 
   .fa-caret-down {
     font-size: 70%;
@@ -163,7 +162,7 @@
 .sidemenu-pinned {
   .navbar-brand-btn {
     border-right: none;
-    background-color: #222;
+    background-color: $dark-2;
     width: $side-menu-width;
     text-align: center;
 
@@ -176,4 +175,3 @@
     }
   }
 }
-

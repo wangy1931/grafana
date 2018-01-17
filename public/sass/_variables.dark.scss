@@ -21,6 +21,10 @@ $gray-5:           #ECECEC;
 $gray-6:           #f4f5f8;
 $gray-7:           #fbfbfb;
 
+$gray: #9d9d9d;
+$gray-blue: #212327;
+$input-black: #09090b;
+
 $white:            #fff;
 
 // Accent colors
@@ -50,7 +54,7 @@ $critical:              #ed2e18;
 // Scaffolding
 // -------------------------
 $body-bg:  			   	    rgb(20,20,20);
-$page-bg:  			   	    $dark-2;
+$page-bg:  			   	    rgb(20,20,20);
 $body-color:   		 	    $gray-4;
 $text-color:   	   		  $gray-4;
 $text-color-strong: 	  $white;
@@ -91,8 +95,14 @@ $component-active-bg:    $brand-primary !default;
 // -------------------------
 $panel-bg: 				 $dark-2;
 $panel-border: 			 solid 1px $dark-3;
+$panel-border-2px:   solid 2px $dark-3;
 
 $divider-border-color:  #555;
+
+// page header
+$page-header-bg: linear-gradient(90deg, #7e8391, black);
+$page-header-shadow: inset 0px -4px 14px $dark-2;
+$page-header-border-color: $dark-4;
 
 // Graphite Target Editor
 $tight-form-border:     #050505;
@@ -129,24 +139,26 @@ $table-border:                $dark-3; // table and cell border
 // Buttons
 // -------------------------
 
-$btn-primary-bg:              $brand-primary;
-$btn-primary-bg-hl:           lighten($brand-primary, 8%);
+$btn-primary-bg: $brand-primary; // #ff6600;
+$btn-primary-bg-hl: lighten($brand-primary, 8%);
 
-$btn-secondary-bg:            $blue-dark;
-$btn-secondary-bg-hl:     		lighten($blue-dark, 5%);
+$btn-secondary-bg: $blue-dark;
+$btn-secondary-bg-hl: lighten($blue-dark, 5%);
 
-$btn-success-bg:              lighten($green, 3%);
-$btn-success-bg-hl:     	    darken($green, 3%);
+$btn-success-bg: $green;
+$btn-success-bg-hl: darken($green, 6%);
 
-$btn-warning-bg:              $brand-warning;
-$btn-warning-bg-hl:     	    lighten($brand-warning, 8%);
+$btn-warning-bg: $brand-warning;
+$btn-warning-bg-hl: lighten($brand-warning, 8%);
 
-$btn-danger-bg:               $red;
-$btn-danger-bg-hl:            lighten($red, 5%);
+$btn-danger-bg: $red;
+$btn-danger-bg-hl: darken($red, 8%);
 
-$btn-inverse-bg:              $dark-3;
-$btn-inverse-bg-hl:     	    lighten($dark-3, 4%);
-$btn-inverse-text-color:      $link-color;
+$btn-inverse-bg: $dark-3;
+$btn-inverse-bg-hl: lighten($dark-3, 4%);
+$btn-inverse-text-color: $link-color;
+$btn-inverse-text-shadow: 0px 1px 0 rgba(0, 0, 0, 0.1);
+
 
 $btn-link-color:              $gray-3;
 
@@ -158,19 +170,23 @@ $iconContainerBackground:	    $black;
 
 // Forms
 // -------------------------
-$input-bg:                       $dark-4;
-$input-bg-disabled:              $dark-3;
 
-$input-color:                    $gray-4;
-$input-border-color:             $dark-4;
-$input-box-shadow:               inset 1px 0px 0.3rem 0px rgba(150, 150, 150, 0.10);
-$input-border-focus:             $input-border-color !default;
-$input-box-shadow-focus:         rgba(102,175,233,.6) !default;
-$input-color-placeholder:        $gray-1 !default;
-$input-label-bg:				         $dark-3;
+$input-bg: $input-black;
+$input-bg-disabled: $dark-3;
+
+$input-color: $gray-4;
+$input-border-color: $dark-3;
+$input-box-shadow: inset 1px 0px 0.3rem 0px rgba(150, 150, 150, 0.1);
+$input-border-focus: $input-border-color;
+$input-box-shadow-focus: rgba(102, 175, 233, 0.6);
+$input-color-placeholder: $gray-1 !default;
+$input-label-bg: $gray-blue;
+$input-label-border-color: $dark-3;
+$input-invalid-border-color: lighten($red, 5%);
 
 // Search
 $search-shadow: 0 0 35px 0 $body-bg;
+$search-filter-box-bg: $gray-blue;
 
 // Dropdowns
 // -------------------------
@@ -206,9 +222,10 @@ $horizontalComponentOffset:       180px;
 $wellBackground:                  #131517;
 
 $navbarHeight:                    52px;
-$navbarBackgroundHighlight:       $dark-3;
-$navbarBackground:                $dark-3;
-$navbarBorder:                    1px solid $body-bg;
+$navbarBackgroundHighlight: $dark-3;
+$navbarBackground: $panel-bg;
+$navbarBorder: 1px solid $dark-3;
+$navbarShadow: 0 0 20px black;
 
 $navbarText:                      $gray-4;
 $navbarLinkColor:                 $gray-4;
@@ -219,14 +236,37 @@ $navbarLinkBackgroundActive:      $navbarBackground;
 $navbarBrandColor:                $link-color;
 $navbarDropdownShadow:            inset 0px 4px 10px -4px $body-bg;
 
-$navbarButtonBackground:          lighten($navbarBackground, 3%);
-$navbarButtonBackgroundHighlight: lighten($navbarBackground, 5%);
+$navbarButtonBackground: $navbarBackground;
+$navbarButtonBackgroundHighlight: $body-bg;
+
+$navbar-button-border: #151515;
 
 // Sidemenu
 // -------------------------
-$side-menu-bg:            $body-bg;
+$side-menu-bg:            lighten($panel-bg, 10%);
 $side-menu-item-hover-bg: $dark-3;
 $side-menu-opacity:		  0.97;
+$side-menu-shadow: 0 0 20px black;
+$side-menu-link-color: $link-color;
+$breadcrumb-hover-hl: #111;
+$side-menu-top-bg: $body-bg;
+
+// Menu dropdowns
+// -------------------------
+$menu-dropdown-bg: $body-bg;
+$menu-dropdown-hover-bg: $dark-2;
+$menu-dropdown-border-color: $dark-3;
+$menu-dropdown-shadow: 5px 5px 20px -5px $black;
+
+// Breadcrumb
+// -------------------------
+$page-nav-bg: $black;
+$page-nav-shadow: 5px 5px 20px -5px $black;
+$page-nav-breadcrumb-color: $gray-3;
+
+// Tabs
+// -------------------------
+$tab-border-color: $dark-4;
 
 // Pagination
 // -------------------------
@@ -236,34 +276,36 @@ $paginationActiveBackground:          $blue;
 
 // Form states and alerts
 // -------------------------
-$state-warning-text:      darken(#c09853, 10%);
-$state-warning-bg:        $brand-warning;
+$warning-text-color: $warn;
+$error-text-color: #e84d4d;
+$success-text-color: #12d95a;
+$info-text-color: $blue-dark;
 
-$errorText:               #b94a48;
-$errorBackground:         $btn-danger-bg;
-
-$successText:             #468847;
-$successBackground:       $btn-success-bg;
-
-$infoText:                $blue-dark;
-$infoBackground:          $blue-dark;
+$alert-error-bg: linear-gradient(90deg, #d44939, #e0603d);
+$alert-success-bg: linear-gradient(90deg, #3aa655, #47b274);
+$alert-warning-bg: linear-gradient(90deg, #d44939, #e0603d);
+$alert-info-bg: linear-gradient(100deg, #1a4552, #00374a);
 
 // popover
-$popover-bg:         $dark-4;
-$popover-color:      $text-color;
+$popover-bg: $page-bg;
+$popover-color: $text-color;
+$popover-border-color: $dark-4;
+$popover-shadow: 0 0 20px black;
 
-$popover-help-bg:         $dark-3;
-$popover-help-color:      $gray-7;
+$popover-help-bg: $btn-secondary-bg;
+$popover-help-color: $text-color;
+
+$popover-error-bg: $btn-danger-bg;
 
 
 // Tooltips and popovers
 // -------------------------
-$tooltipColor:            $popover-help-color;
-$tooltipBackground:       $popover-help-bg;
-$tooltipArrowWidth:       5px;
-$tooltipArrowColor:       $tooltipBackground;
-$tooltipLinkColor:        $link-color;
-$graph-tooltip-bg:        $dark-4;
+$tooltipColor: $popover-help-color;
+$tooltipBackground: $popover-help-bg;
+$tooltipArrowWidth: 5px;
+$tooltipArrowColor: $tooltipBackground;
+$tooltipLinkColor: $link-color;
+$graph-tooltip-bg: $dark-1;
 
 // images
 $checkboxImageUrl: '../img/checkbox.png';
@@ -272,3 +314,10 @@ $checkboxImageUrl: '../img/checkbox.png';
 $card-background: linear-gradient(135deg, #2f2f2f, #262626);
 $card-background-hover: linear-gradient(135deg, #343434, #262626);
 $card-shadow: -1px -1px 0 0 hsla(0, 0%, 100%, .1), 1px 1px 0 0 rgba(0, 0, 0, .3);
+
+
+// cloudwiz
+$service-dep-bg-color: $navbarBackground;
+$div-box-shadow-color: #cccccc;
+$thresholds-color: (#66C2A5, #FEE08B, #FDAE61, #FE9805, #D53E4F, #DBE1EA, #6FCDFB);
+$thresholds-hover-color: (#3DB779, #FFD500, #FE9805, #ff4f45, #BB1144, #BABFC7, #18BEEA);

@@ -52,9 +52,7 @@ func setIndexViewData(c *middleware.Context) (*dtos.IndexViewData, error) {
 		data.User.Name = data.User.Login
 	}
 
-	themeUrlParam := c.Query("theme")
-	if themeUrlParam == "light" {}
-	data.User.UserTheme = themeUrlParam
+	// themeUrlParam := c.Query("theme")
 	// if themeUrlParam == "light" {
 	// 	data.User.UserTheme = true
 	// }

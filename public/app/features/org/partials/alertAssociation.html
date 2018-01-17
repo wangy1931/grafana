@@ -117,7 +117,7 @@
                         <div class="logs" id="logs">
                             <h3 ng-click="toggleRow(row)" class="pointer">日志分析</h3>
                             <form>
-                                <input type="text" class="input-xlarge tidy-form-input ng-pristine ng-untouched ng-valid ng-valid-required" ng-model="ctrl.query" required="">
+                                <input type="text" class="input-xlarge tidy-form-input ng-pristine ng-untouched ng-valid ng-valid-required" ng-model="ctrl.query" required style="display: inline;">
                                 <button type="submit" class="btn btn-primary" ng-click="ctrl.reQuery()"><i class="fa fa-search"></i>查找</button>
                                 <a href="/logs?query={{ ctrl.query }}" class="btn btn-outline-primary pull-right">查看详细日志</a>
                             </form>

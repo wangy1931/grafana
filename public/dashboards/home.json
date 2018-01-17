@@ -35,11 +35,26 @@
       "height": "510px",
       "panels": [
         {
-          "id": 3,
-          "limit": 6,
+          "id": 999,
+          "limit": "",
           "links": [],
           "query": "",
           "span": 7,
+          "tags": [],
+          "title": "所有指标面板",
+          "transparent": false,
+          "type": "dashlist",
+          "recent": false,
+          "search": true,
+          "starred": false,
+          "headings": false
+        },
+        {
+          "id": 1000,
+          "limit": 10,
+          "links": [],
+          "query": "",
+          "span": 5,
           "tags": [],
           "title": "",
           "transparent": false,
@@ -48,17 +63,6 @@
           "search": false,
           "starred": true,
           "headings": true
-        },
-        {
-          "editable": true,
-          "error": false,
-          "id": 4,
-          "isNew": true,
-          "links": [],
-          "span": 5,
-          "title": "",
-          "transparent": false,
-          "type": "pluginlist"
         }
       ],
       "title": "Row"

@@ -33,6 +33,9 @@ function (angular, coreModule) {
           pie: {
             innerRadius: innerRadius || 0.7,
             show: true,
+            stroke: {
+              width: 0
+            }
           }
         },
         colors: colors
