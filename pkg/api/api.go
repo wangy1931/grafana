@@ -331,7 +331,7 @@ func Register(r *macaron.Macaron) {
 		r.Get("/users/:id/quotas", wrap(GetUserQuotas))
 		r.Put("/users/:id/quotas/:target", bind(m.UpdateUserQuotaCmd{}), wrap(UpdateUserQuota))
 		r.Get("/customer", wrap(GetAllCustomerUsers))
-		r.Post("/permit/:id", bind(dtos.UpdateOrgPermit{}), wrap(UpdateOrgPermit))
+		r.Post("/permit/:id", bind(m.OrgPermit{}), UpdateOrgPermit)
 	}, reqGrafanaAdmin)
 
 	// rendering

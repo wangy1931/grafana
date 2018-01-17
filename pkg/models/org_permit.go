@@ -46,14 +46,3 @@ type AddOrgPermitCommand struct {
 	DataSource	string		`json:"datasource" binding:"Required"`
 	Deadline		time.Time	`json:"deadline" binding:"Required"`
 }
-
-type UpdateOrgPermitCommand struct {
-	Id					int64     `json:"-"`
-	Level				OrgLevel	`json:"level" binding:"Required"`
-	Deadline		time.Time	`json:"deadline" binding:"Required"`
-}
-
-type UpdateOrgDataSourceCommand struct {
-	Id					int64     `json:"-"`
-	DataSource	string		`json:"datasource" binding:"Required"`
-}

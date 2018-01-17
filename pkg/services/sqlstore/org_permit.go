@@ -4,7 +4,6 @@ import (
 	"github.com/go-xorm/xorm"
 	"github.com/wangy1931/grafana/pkg/bus"
 	m "github.com/wangy1931/grafana/pkg/models"
-	"github.com/wangy1931/grafana/pkg/api/dtos"
 )
 
 func init() {
@@ -49,9 +48,9 @@ func AddOrgPermit(cmd *m.AddOrgPermitCommand) error {
  	})
 }
 
-func UpdateOrgPermit(orgPermit *dtos.UpdateOrgPermit) error {
+func UpdateOrgPermit(permit *m.OrgPermit) error {
 	return inTransaction2(func(sess *session) error {
-		if _, err := sess.Id(orgPermit.Id).Update(&orgPermit); err != nil {
+		if _, err := sess.Id(permit.Id).Update(permit); err != nil {
 			return err
 		}
     return nil
