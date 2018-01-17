@@ -222,18 +222,6 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 	return nil
 }
 
-func DeleteDatasourceForOrg(orgId int64) (err error) {
-	log.Info("DeleteDatasourceForOrg: orgId=%v", orgId)
-	if err = bus.Dispatch(&m.DeleteAllDataSourceInOrgCommand{
-		OrgId: orgId,
-	}); err != nil {
-		log.Error(3, "Could not delete data source with OrgId = %v: %v", orgId, err)
-		return err
-	}
-
-	return nil
-}
-
 func NewEngine() {
 	x, err := getEngine()
 

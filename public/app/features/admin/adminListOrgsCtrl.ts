@@ -17,7 +17,7 @@ class AdminListOrgsCtrl {
         $scope.orgs = orgs;
         _.each($scope.orgs, (org) => {
           org.level = org.level === 'free' ? '免费用户' : '付费用户';
-          org.deadline = moment(org.deadline).diff(moment(), 'days') + 1;
+          org.deadline = moment(org.deadline).diff(moment(), 'days');
         });
       });
     };
