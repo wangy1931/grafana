@@ -19,7 +19,7 @@ func TestOrgPermitCommand(t *testing.T) {
 
 			addOrgPermit := m.AddOrgPermitCommand{
 				OrgId:"1",
-				DataSource:"aws",
+				DataCenter:"aws",
 				Deadline:now.Add(30 * day),
 				Level:"free",
 			}

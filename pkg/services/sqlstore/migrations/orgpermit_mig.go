@@ -8,7 +8,7 @@ func addOrgPermitMigrations(mg *Migrator) {
 		Columns: []*Column{
 			{Name: "id", Type: DB_BigInt, IsPrimaryKey: true, IsAutoIncrement: true},
 			{Name: "org_id", Type: DB_BigInt, Length: 255, Nullable: false},
-			{Name: "data_source", Type: DB_NVarchar, Length: 255, Nullable: false},
+			{Name: "data_center", Type: DB_NVarchar, Length: 255, Nullable: false},
 			{Name: "level", Type: DB_NVarchar, Length: 255, Nullable: false},
 			{Name: "deadline", Type: DB_DateTime, Nullable: false},
 		},
@@ -25,7 +25,7 @@ func addOrgPermitMigrations(mg *Migrator) {
 	mg.AddMigration("copy data account to org_permit", NewCopyTableDataMigration("org_permit", "account_org_permit", map[string]string{
 		"id":      			"id",
 		"org_id": 			"org_id",
-		"data_source":  "data_source",
+		"data_center":  "data_center",
 		"level": 				"level",
 		"deadline": 		"deadline",
 	}).IfTableExists("account_org_permit"))

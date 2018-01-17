@@ -98,6 +98,11 @@ func CreateOrg(c *middleware.Context, cmd m.CreateOrgCommand) Response {
 		return ApiError(500, "Failed to add data source for organization", err)
 	}
 
+	// We need to add the data center defined in config for this org to org_permit table
+	if err := sqlstore.AddDatacenterForOrg(cmd.Result.Id); err != nil {
+		return ApiError(500, "Failed to add data source for organization", err)
+	}
+
 	return Json(200, &util.DynMap{
 		"orgId":   cmd.Result.Id,
 		"message": "Organization created",

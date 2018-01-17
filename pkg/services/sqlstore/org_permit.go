@@ -27,6 +27,7 @@ func GetOrgPermitByOrgId(query *m.GetOrgPermitByOrgIdQuery) error {
 func AddOrgPermit(cmd *m.AddOrgPermitCommand) error {
 	return inTransaction(func(sess *xorm.Session) error {
 		// check if org_permit exists
+		var err error
 		if res, err := sess.Query("SELECT 1 from org_permit WHERE org_id=?", cmd.OrgId); err != nil {
 			return err
 		} else if len(res) == 1 {
@@ -35,24 +36,22 @@ func AddOrgPermit(cmd *m.AddOrgPermitCommand) error {
 
 		permit := m.OrgPermit{
 			OrgId: 			cmd.OrgId,
-			DataSource: cmd.DataSource,
+			DataCenter: cmd.DataCenter,
 			Deadline:		cmd.Deadline,
 			Level:			cmd.Level,
 		}
 
-		if _, err := sess.Insert(permit); err != nil {
-			return err
-		}
-
-		return nil
+		_, err = sess.Insert(permit)
+		return err
  	})
 }
 
 func UpdateOrgPermit(permit *m.OrgPermit) error {
 	return inTransaction2(func(sess *session) error {
+		var err error
 		if _, err := sess.Id(permit.Id).Update(permit); err != nil {
 			return err
 		}
-    return nil
+    return err
 	})
 }

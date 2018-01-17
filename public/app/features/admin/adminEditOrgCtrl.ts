@@ -58,7 +58,7 @@ class AdminEditOrgCtrl{
 
     $scope.formatTime = function() {
       $scope.openFromPicker = false;
-      $scope.orgPermit.Deadline = _.transformMillionTime($scope.orgPermit.Deadline)
+      $scope.deadline = _.transformMillionTime($scope.orgPermit.Deadline);
     }
 
     $scope.updateOrgPermit = function() {

@@ -25,7 +25,7 @@ func (l OrgLevel) IsValid() bool {
 type OrgPermit struct {
 	Id					int64
 	OrgId				int64
-	DataSource	string
+	DataCenter	string
 	Deadline		time.Time
 	Level				OrgLevel		
 }
@@ -43,6 +43,6 @@ type GetOrgPermitByOrgIdQuery struct {
 type AddOrgPermitCommand struct {
 	OrgId  			int64 		`json:"-"`
 	Level				OrgLevel	`json:"level" binding:"Required"`
-	DataSource	string		`json:"datasource" binding:"Required"`
+	DataCenter	string		`json:"data_center" binding:"Required"`
 	Deadline		time.Time	`json:"deadline" binding:"Required"`
 }

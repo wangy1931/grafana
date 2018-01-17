@@ -1,7 +1,6 @@
 package api
 
 import (
-  "github.com/wangy1931/grafana/pkg/log"
   "github.com/wangy1931/grafana/pkg/bus"
   "github.com/wangy1931/grafana/pkg/middleware"
   m "github.com/wangy1931/grafana/pkg/models"
@@ -18,7 +17,6 @@ func GetOrgPermitByOrgId(c *middleware.Context) Response {
 
 // POST /api/admin/permit
 func UpdateOrgPermit(c *middleware.Context, permit m.OrgPermit) Response {
-  log.Info("Request Permit time: %v", permit)
 	if err := bus.Dispatch(&permit); err != nil {
 		return ApiError(500, "Failed to update permit", err)
 	}
