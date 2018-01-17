@@ -29,7 +29,8 @@
                         <td>{{host.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                         <td>{{host.state}}</td>
                         <td>
-                            <a href="/cmdb/hostlist/hostdetail?id={{host.id}}">
+                            <!-- <a href="/cmdb/hostlist/hostdetail?id={{host.id}}"> -->
+                            <a href="/host_topology?tabId=5&id={{ host.id }}&name={{ host.hostname }}">
                                 <span class="cmdb-icon-text">详情</span>
                             </a>
                             <a ng-if="!contextSrv.isViewer" ng-click="deleteHost(host.relationshipId)">

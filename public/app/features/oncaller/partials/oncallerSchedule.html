@@ -65,7 +65,7 @@
   </div>
   <div class="clearfix"></div>
   <div ui-calendar='uiConfig.calendar' ng-model="eventSources"></div>
-  <div ng-if='showEditForm' class="scheduleEditBox">        
+  <div ng-if='showEditForm' class="scheduleEditBox">
     <form ng-if="overwrite" class="scheduleForm">
         <div class="item">
             <h4 class="center">修改值班信息</h4>
@@ -111,7 +111,7 @@
         </p>
       </div>
       <div class="item center" style="border-top: 2px solid #eee;">
-        <button ng-click="closeEdit();" class="btn">取消</button>
+        <button ng-click="closeEdit();" class="btn btn-inverse">取消</button>
         <button ng-click="addOncallers()" class="btn btn-primary">添加</button>
       </div>
     </form>

@@ -466,6 +466,14 @@ $summary-border-color: $body-bg; // #ECEFF1;
       button {
         margin-right: 20px;
       }
+      .pull-right {
+        a {
+          padding: 0 15px;
+          &:first-child {
+            border-right: 1px solid $gray-6;
+          }
+        }
+      }
     }
     .kpi-overview {
       margin: 30px 0;

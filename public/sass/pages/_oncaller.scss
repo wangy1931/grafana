@@ -37,11 +37,11 @@
 }
 
 
-.oncaller-body{
+.oncaller-body {
   height: 120px;
   text-align: center;
   padding: 15px 0;
-  overflow: scroll;
+  overflow: auto;
   color: rgb(35,172,245);
   label {
     padding: 10px 0;
@@ -67,16 +67,20 @@
       background: transparent;
       border-radius: 100%;
       border: 1px solid white;
-      margin-top: 4px;
+      margin-top: 6px;
       margin-right: 4px;
+    }
+  }
+  .span5 {
+    p {
+      height: 30px;
+      line-height: 30px;
     }
   }
 }
 
 .on-duty {
   width: 80%;
-  height: 36px;
-  line-height: 30px;
   color: white;
   text-align: center;
   border-radius: 15px;
@@ -95,18 +99,16 @@
     font-size: 20px;
     text-align: left;
     margin: 0;
+    padding: 5px 0;
     border-radius: 0;
-    background:#fff;
+    // background:#fff;
     border-bottom: 1px solid #eee;
     cursor: pointer;
-    &>span{
+    &>span {
       margin: 0 20px;
     }
-    &:hover{
-      background: #eef;
-    }
-    &.active{
-      background: #eef;
+    &:hover, &.active {
+      background-color: #eef;
     }
   }
 }
@@ -200,3 +202,51 @@
 }
 
 // oncaller end 
+
+
+.scheduleEditBox {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: $zindex-modal-backdrop;
+  // background: $black;
+  // @include opacity(70);
+}
+.scheduleForm {
+  width: 350px;
+  margin: 0 auto;
+  background: $panel-bg;
+  border: 1px solid #ccc;
+  transform: translateY(60%);
+  @include box-shadow(0 3px 7px rgba(0,0,0,0.3));
+  & > .item {
+    & > label {
+      width: 50px;
+      height: 25px;
+      line-height: 25px;
+      background: none;
+      // color: black;
+      margin-top: -6px;
+      margin-left: 20px;
+      vertical-align: middle;
+    }
+  }
+  .gf-timepicker-component {
+    position: absolute;
+    background: #fff;
+    left: 80px;
+    padding: 20px;
+    border: 1px solid;
+  }
+  h4 {
+    color: white;
+    margin: 0;
+    background: rgb(35,172,245);
+  }
+  &>.oncaller-list{
+    height: 200px;
+    overflow: auto;
+  }
+}
