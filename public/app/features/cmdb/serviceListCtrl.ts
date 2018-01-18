@@ -22,7 +22,7 @@ export class ServiceListCtrl {
   }
 
   getService() {
-    this.backendSrv.alertD({url:'/cmdb/service'}).then(result => {
+    this.backendSrv.alertD({url: '/cmdb/service'}).then(result => {
       this.services = result.data;
     });
   }

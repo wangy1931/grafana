@@ -201,6 +201,11 @@ $zindex-tooltip:           1020;
 $zindex-navbar-fixed:      1030;
 $zindex-modal-backdrop:    1040;
 $zindex-modal:             1050;
+$zindex-navbar:            222;
+$zindex-guide:             99;
+$zindex-timepicker:        111;
+$zindex-tabbed-view-timepicker: 100;
+$zindex-sidemenu-wrapper:  333;
 
 // Buttons
 //
@@ -219,7 +224,7 @@ $btn-padding-y-lg:               .75rem !default;
 $btn-border-radius:              2px;
 
 // sidemenu
-$side-menu-width:  7rem;
+$side-menu-width:  12rem;
 
 // dashboard
 $panel-margin: 0.4rem;

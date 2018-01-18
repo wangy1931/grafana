@@ -8,7 +8,7 @@
   left: 0;
   width: $side-menu-width;
   background-color: $dark-2;
-  z-index: 101;
+  z-index: $zindex-sidemenu-wrapper;
   transform: translate3d(-100%, 0, 0);
   visibility: hidden;
 
@@ -28,13 +28,13 @@
 
 .sidemenu-pinned {
   .sidemenu-wrapper {
-    min-height: calc(100% - 52px);
+    min-height: calc(100% - #{$navbarHeight});
   }
   .dashboard-container {
     padding-left: $side-menu-width + 0.5rem;
     padding-bottom: 5rem;    
   }
-  .page-container {
+  .page-container, .guide {
     margin-left: $side-menu-width;
   }
   .search-container {
@@ -82,16 +82,16 @@
       display: flex;
     }
     .icon-circle {
-      margin-left: -15px;
+      // margin-left: -15px;
     }
     .sidemenu-item-text {
-      width: 52px;
+      width: 102px;
       text-align: left;
     }
   }
   &.sidemenu-small > li > .sidemenu-item > span, 
   &.submenu > li > .sidemenu-item > span {
-    float: left;
+    // float: left;
   }
 
   &.submenu {
@@ -99,7 +99,7 @@
     background: $side-menu-bg;
     position: absolute;
     left: $side-menu-width;
-    top: -52px;
+    top: -$navbarHeight;
     bottom: 0px;
     box-shadow: $side-menu-shadow;
     &.scroll-y {
@@ -149,7 +149,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin: 0 auto;
+  margin: 3px 0 0 3px;
   text-align: center;
 }
 
@@ -157,7 +157,7 @@
   width: 40px;
   height: 40px;
   display: block;
-  margin: 0 auto -10px;
+  // margin: 0 auto -10px;
   i {
     color: $gray-7;
     opacity: .7;
@@ -176,7 +176,7 @@
   color: $gray-7;
   line-height: 40px;
   padding: 0px 10px 0px 10px;
-  display: block;
+  display: flex;
   border-left: 1px solid transparent;
 
   img {
@@ -287,17 +287,25 @@
   left: $side-menu-width + 10.5rem;
   right: 0px;
   bottom: 0px;
-  top: -52px;
+  top: -$navbarHeight;
   width: 100rem;
   z-index: -2;
 }
 
 @media (max-height: 800px) {
   $side-menu-width: 3.5rem;
+  .navbar-brand-btn {
+    width: $side-menu-width !important;
+    padding: 0.4rem;
+    .navbar-brand-btn-background {
+      span {
+        display: none !important;
+      }
+    }
+  }
   .sidemenu-pinned .navbar-brand-btn {
-    width: $side-menu-width!important;
-    padding: 0.4rem 0;
-    border-right: none;
+    // padding: 0.4rem;
+    // border-right: none;
   }
 
   .sidemenu-wrapper {
@@ -308,7 +316,7 @@
     .dashboard-container {
       padding-left: $side-menu-width + 0.5rem;
     }
-    .page-container {
+    .page-container, .guide {
       margin-left: $side-menu-width;
     }
   }

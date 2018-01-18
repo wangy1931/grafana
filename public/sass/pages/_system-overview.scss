@@ -379,7 +379,7 @@ $summary-border-color: $body-bg; // #ECEFF1;
     margin: 0;
     border: 0;
     &:nth-child(even) .accordion-heading {
-      background-color: #F4F6F9;
+      background-color: $table-bg-odd;
     }
   }
   .accordion-inner {

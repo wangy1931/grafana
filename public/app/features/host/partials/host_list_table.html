@@ -16,6 +16,7 @@
           <th>开始运行时间</th>
           <th>探针版本</th>
           <th>Commit Id</th>
+          <th>操作</th>
         </tr>
       </thead>
       <tbody>
@@ -31,6 +32,11 @@
           <td>{{ host.startTime || '-' }}</td>
           <td>{{ host.version || '-' }}</td>
           <td>{{ host.commit || '-' }}</td>
+          <td>
+            <button class="btn btn-small btn-outline-primary" ng-if="!ctrl.contextSrv.isViewer" ng-click="ctrl.deleteHost($event, host.id)">
+              <i class="fa fa-times"></i> 删除
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

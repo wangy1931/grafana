@@ -16,32 +16,25 @@ export class ServiceTopologyCtrl {
   data: any;  // don't modify this variable
   tabs: Array<any>;
   hostlist: Array<any>;
-  predictionPanel: any;
   currentService: any;  // one node information of relationshipGraph
-  tableParams: any;
-  tableData: Array<any>;
 
   currentTab: number;
   serviceList: Array<any>;
   servicePanel: Array<any>;
   dashboard: any;
   topologyGraphParams: any;
-  needHostnameTabs: Array<number>;  // don't modify this variable, except init
+  needNameTabs: Array<number>;  // don't modify this variable, except init
 
   /** @ngInject */
   constructor (
     private serviceDepSrv,
     private backendSrv,
-    private popoverSrv,
-    private templateValuesSrv,
-    private dynamicDashboardSrv,
     private contextSrv,
-    private utilSrv,
     private $scope,
     private $rootScope,
     private $controller,
     private $location,
-    private NgTableParams
+    private alertSrv
   ) {
     $scope.ctrl = this;
 
@@ -49,7 +42,7 @@ export class ServiceTopologyCtrl {
       { 'id': 0, 'title': '服务总览', 'active': false, 'show': true,  'content': 'public/app/features/service/partials/service_list_table.html' },
       { 'id': 1, 'title': '服务信息', 'active': false, 'show': false, 'content': 'public/app/features/service/partials/service_info.html' }
     ];
-    this.needHostnameTabs = [1];
+    this.needNameTabs = [1];
 
     this.topologyGraphParams = {
       blockSize: 36,
@@ -64,13 +57,6 @@ export class ServiceTopologyCtrl {
         child: this.nodeClickHandle.bind(this)
       }
     };
-
-    this.tableParams = new this.NgTableParams({
-      count: 100,
-      sorting: { 'cpuPercent': 'desc' },
-    }, {
-      counts: [],
-    });
 
     this.currentService = {};
 
@@ -105,7 +91,7 @@ export class ServiceTopologyCtrl {
 
     _.isEmpty(this.serviceList) && this.serviceDepSrv.readInstalledService().then(response => {
       this.serviceList = response.data;
-      this.$scope.services = response.data;
+      this.servicePanel = response.data;
     });
   }
 
@@ -115,14 +101,14 @@ export class ServiceTopologyCtrl {
     if (curItem.name) {
       window.d3.select(`#${curItem.__id}`).classed('selected', true);
 
-      this.needHostnameTabs.forEach(item => {
+      this.needNameTabs.forEach(item => {
         _.extend(this.tabs[item], { show: true, disabled: false });
       });
 
       this.switchTab(this.currentTab);
       this.getInfo();
     } else {
-      this.needHostnameTabs.forEach(item => {
+      this.needNameTabs.forEach(item => {
         _.extend(this.tabs[item], { show: false, disabled: true });
       });
 
@@ -165,7 +151,7 @@ export class ServiceTopologyCtrl {
       tableData = item.name ? _.filter(this.serviceList, { id: item._private_.id }) : this.serviceList;
     }
 
-    this.$scope.services = tableData;
+    this.servicePanel = tableData;
   }
 
   getInfo() {
@@ -195,6 +181,30 @@ export class ServiceTopologyCtrl {
   saveTopologyData() {
     this.data = this.serviceDepSrv.topology;
     this.hostlist = _.map(this.data, 'name');
+  }
+
+  deleteService($event, id) {
+    $event.preventDefault();
+
+    this.$scope.appEvent('confirm-modal', {
+      title: '删除',
+      text: '您确认要删除该服务吗？',
+      icon: 'fa-trash',
+      yesText: '删除',
+      noText: '取消',
+      onConfirm: () => {
+        this.backendSrv.alertD({
+          method: 'DELETE',
+          url   : '/cmdb/agent/service',
+          params: { 'id': id }
+        }).then(() => {
+          this.alertSrv.set("删除成功", '', "success", 2000);
+          _.remove(this.servicePanel, { id: id });
+        }, (err) => {
+          this.alertSrv.set("删除失败", err.data, "error", 2000);
+        });
+      }
+    });
   }
 
   showGuideResult(e, params) {

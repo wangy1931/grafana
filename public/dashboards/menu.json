@@ -1,12 +1,6 @@
 {
   "menusTop": [
     {
-      "id": 1,
-      "text": "系统总览",
-      "icon": "fa fa-fw fa-home",
-      "url": "/"
-    },
-    {
       "id": 2,
       "text": "系统监控",
       "icon": "fa fa-fw fa-tachometer",
@@ -36,7 +30,7 @@
     {
       "id": 3,
       "text": "系统报警",
-      "icon": "fa fa-fw fa-stethoscope",
+      "icon": "fa fa-fw fa-bell",
       "children": [
         {
           "id": 1,
@@ -73,8 +67,8 @@
         },
         {
           "id": 3,
-          "text": "KPI 指标",
-          "url": "/cmdb/kpi"
+          "text": "指标管理",
+          "url": "/cmdb/metrics"
         }
       ]
     }

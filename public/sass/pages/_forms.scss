@@ -103,8 +103,8 @@ input {
 }
 
 .input {
-  background-color: #fbfbfb;
-  border: 1px solid #ECECEC;
+  background-color: $input-bg;
+  border: 1px solid $input-border-color;
   border-radius: 6px;
   padding-left: 6px;
   height: 2.7rem;

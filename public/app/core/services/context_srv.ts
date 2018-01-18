@@ -73,7 +73,8 @@ export class ContextSrv {
     store.set('grafana.sidemenu.pinned', val);
   }
 
-  toggleSideMenu() {
+  toggleSideMenu($event) {
+    $event.preventDefault();
     this.sidemenu = !this.sidemenu;
     this.setPinnedState(true);
   }
