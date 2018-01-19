@@ -18,6 +18,9 @@
     <h2 ng-show="ctrl.isNew">新建报警规则</h2>
     <h2 ng-show="!ctrl.isNew">修改报警规则</h2>
   </div>
+  <div class="grafana-info-box" style="margin: 20px 0 25px 0">
+    报警规则支持"指标报警"和"日志报警"，在指标报警中，您可以对多个指标进行计算组合创建报警；在日志报警中，请输入报警所需的关键词，支持多关键词报警。详情请见帮助文档。
+  </div>
 
   <!-- Dashboard -->
   <div class="main-view-container preview-panel">
