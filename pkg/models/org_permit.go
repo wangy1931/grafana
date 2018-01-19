@@ -8,7 +8,7 @@ import(
 // Typed errors
 var (
 	ErrAddOrgPermit			= errors.New("Cannot creat new OrgPermit")
-	ErrOrgAlreadyAdded	= errors.New("Organization is already added to org_permit")
+	ErrOrgAlreadyExist	= errors.New("Organization is exist org_permit")
 )
 
 type OrgLevel string

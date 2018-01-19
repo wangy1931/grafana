@@ -17,9 +17,6 @@ func GetOrgPermitByOrgId(query *m.GetOrgPermitByOrgIdQuery) error {
 	sess := x.Table("org_permit")
 	_, err := sess.Get(&permit)
 	query.Result = &permit
-	if err != nil {
-		return err
-	}
 
   return err
 }
@@ -27,11 +24,10 @@ func GetOrgPermitByOrgId(query *m.GetOrgPermitByOrgIdQuery) error {
 func AddOrgPermit(cmd *m.AddOrgPermitCommand) error {
 	return inTransaction(func(sess *xorm.Session) error {
 		// check if org_permit exists
-		var err error
 		if res, err := sess.Query("SELECT 1 from org_permit WHERE org_id=?", cmd.OrgId); err != nil {
 			return err
 		} else if len(res) == 1 {
-			return m.ErrOrgAlreadyAdded
+			return m.ErrOrgAlreadyExist
 		}
 
 		permit := m.OrgPermit{
@@ -41,17 +37,16 @@ func AddOrgPermit(cmd *m.AddOrgPermitCommand) error {
 			Level:			cmd.Level,
 		}
 
-		_, err = sess.Insert(permit)
+		_, err := sess.Insert(permit)
 		return err
  	})
 }
 
 func UpdateOrgPermit(permit *m.OrgPermit) error {
 	return inTransaction2(func(sess *session) error {
-		var err error
 		if _, err := sess.Id(permit.Id).Update(permit); err != nil {
 			return err
 		}
-    return err
+    return nil
 	})
 }
