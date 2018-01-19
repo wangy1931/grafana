@@ -320,7 +320,7 @@ class SingleStatCtrl extends MetricsPanelCtrl {
       switch (config.bootData.user.userTheme) {
         case 'dark' : bgColor = 'rgb(230,230,230)'; break;
         case 'light': bgColor = 'rgb(38,38,38)'; break;
-        default: bgColor = '#192129'; break;
+        default: bgColor = 'rgb(38,38,38)'; break;
       }
 
       var fontScale = parseInt(panel.valueFontSize) / 100;

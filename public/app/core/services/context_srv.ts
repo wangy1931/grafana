@@ -74,7 +74,7 @@ export class ContextSrv {
   }
 
   toggleSideMenu($event) {
-    $event.preventDefault();
+    $event && $event.preventDefault();
     this.sidemenu = !this.sidemenu;
     this.setPinnedState(true);
   }
