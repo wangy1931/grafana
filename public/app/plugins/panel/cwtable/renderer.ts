@@ -68,7 +68,8 @@ export class CWTableRenderer {
     if (style && style.sanitize) {
       return this.sanitize(v);
     } else {
-      return _.escape(v);
+      return v.replace(/\n/g, '<br/>')
+              .replace(/\t/g, '&nbsp;&nbsp;');
     }
   }
 

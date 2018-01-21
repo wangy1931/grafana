@@ -7,6 +7,7 @@ function (angular, _, coreModule) {
   'use strict';
   coreModule.default.service('oncallerMgrSrv', function($http, alertSrv, backendSrv, contextSrv) {
     this.oncallerDefMap = {};
+    this.currentEditUser = {};
     var self = this;
     var oncallerUrl = "/oncaller/definition";
     var oncallerScheduleUrl = "/oncaller/schedule";
@@ -41,7 +42,7 @@ function (angular, _, coreModule) {
       return backendSrv.alertD({
         method: "delete",
         url: oncallerUrl,
-        params: {org: oncallerOrg, service: oncallerService, id:oncallerId},
+        params: {org: oncallerOrg, service: oncallerService, id: oncallerId},
         headers: {'Content-Type': 'text/plain'},
       });
     };

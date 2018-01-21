@@ -34,12 +34,11 @@ export class LogsCtrl {
   showSearchGuide: boolean;
   showAddRCA: boolean;
   logsSelected: Array<any>;
-  tabsFiled: any;
   tabsQuery: any;
 
   /** @ngInject */
   constructor(
-    private $scope, private $rootScope, private $modal, private $q, private $location, private $controller,
+    private $scope, private $rootScope, private $modal, private $q, private $location, private $controller, private logParseSrv,
     private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv, private alertSrv
   ) {
     this.tabs = [
@@ -107,6 +106,25 @@ export class LogsCtrl {
       clusterLogSourceModal.$promise.then(clusterLogSourceModal.show);
     });
 
+    $scope.$on('cwtable-cell-click', (event, payload) => {
+      var index = payload[0], cellValue = payload[1], row = payload[2], data = payload[3];
+      if (index !== 4) { return; }
+
+      var dps = data[0].datapoints;
+      if (_.isEmpty(dps)) { return; }
+
+      var logRow = _.find(dps, { _id: row._id });
+      if (logRow) {
+        var contextLogModal = this.$modal({
+          scope: $scope,
+          templateUrl: 'public/app/features/logs/partials/log_context_modal.html',
+          show: false
+        });
+        contextLogModal.$scope.originRow = logRow;
+        contextLogModal.$promise.then(contextLogModal.show);
+      }
+    });
+
     $controller('OpenTSDBQueryCtrl', {$scope: $scope});
     datasourceSrv.get('opentsdb').then(datasource => {
       $scope.datasource = datasource;
@@ -157,7 +175,7 @@ export class LogsCtrl {
       panel.scopedVars && panel.scopedVars.logFilter && (panel.scopedVars.logFilter = tabId ? this.tabsCache[tabId].logFilter : "");
       _.forEach(panel.targets, (target) => {
         target.size && (target.size = tabId ? this.tabsCache[tabId].size : 500);
-        (typeof target.query !== "undefined") && (target.query = tabId ? this.tabsCache[tabId].query + this.getExtendQuery(tabId) : "");
+        (typeof target.query !== "undefined") && (target.query = tabId ? this.tabsCache[tabId].query + this.getExtendQuery(tabId) : "*");
         (typeof target.timeShift !== "undefined") && (target.timeShift = tabId ? this.tabsCache[tabId].timeShift : "-1d");
       });
     });
@@ -282,6 +300,7 @@ export class LogsCtrl {
     var panels = this.$scope.dashboard.rows[0].panels;
     _.forEach(panels, (panel) => {
       _.forEach(panel.targets, (target) => {
+        (typeof this.query === "undefined" || this.query === "undefined") && (this.query = "");
         target.query = this.query + this.getExtendQuery(this.$scope.dashboard.rows[0].id);
       });
     });
@@ -289,7 +308,7 @@ export class LogsCtrl {
     this.$rootScope.$broadcast('refresh');
   }
 
-  getLogSize(size) {
+  getLogSize = (size) => {
     var panels = this.$scope.dashboard.rows[0].panels;
     size = parseInt(size);
     _.forEach(panels, (panel) => {
@@ -439,29 +458,28 @@ export class LogsCtrl {
 
   getFiled(filedData) {
     var panel = this.$scope.dashboard.rows[0].panels[0];
-    this.tabsFiled = this.tabsFiled || {};
-    this.tabsFiled[this.$scope.dashboard.rows[0].id] = [];
-    var filed = filedData ? filedData[0] : {};
-    _.each(filed, (value, key) => {
+    var field = filedData ? filedData[0] : {};
+    this.tabsQuery[this.$scope.dashboard.rows[0].id].fields.values = [];
+    _.each(field, (value, key) => {
       var obj = {text: key, value: key};
       if (_.find(panel.columns, obj)) {
         obj['checked'] = true;
       }
-      this.tabsFiled[this.$scope.dashboard.rows[0].id].push(obj);
+      this.tabsQuery[this.$scope.dashboard.rows[0].id].fields.values.push(obj);
     });
   }
 
-  updateColum (row, filed) {
-    if (filed.checked) {
-      if (_.findIndex(row.panels[0].columns, {text: filed.text}) === -1) {
+  updateColum (row, field) {
+    if (field.checked) {
+      if (_.findIndex(row.panels[0].columns, {text: field.text}) === -1) {
         row.panels[0].columns.push({
-          text: filed.text,
-          value: filed.value
+          text: field.text,
+          value: field.value
         });
       }
     } else {
       _.remove(row.panels[0].columns, (column) => {
-        return column.text === filed.text;
+        return column.text === field.text;
       });
     }
 
@@ -472,29 +490,83 @@ export class LogsCtrl {
     !this.tabsQuery && (this.tabsQuery = {});
     var extend_query = '';
     if (!this.tabsQuery[curTabId]) {
-      this.tabsQuery[curTabId] = [{
-        text: 'ERROR',
-        checked: false,
-      },{
-        text: 'EXCEPTION',
-        checked: false,
-      }];
+      this.tabsQuery[curTabId] = {
+        exception: {
+          name: '日志筛选',
+          values: [{
+            text: 'ERROR',
+            checked: false,
+          },{
+            text: 'EXCEPTION',
+            checked: false,
+          }],
+          select: false,
+          title: 'message'
+        },
+        host: {
+          name: '机器',
+          values: [],
+          select: false,
+          title: 'host'
+        },
+        service: {
+          name: '服务',
+          values: [],
+          select: false,
+          title: 'type'
+        },
+        fields: {
+          name: 'field筛选',
+          values: [],
+          select: false
+        }
+      }
+
+      this.logParseSrv.getServiceList().then((res) => {
+        this.tabsQuery[curTabId].service.values = _.map(res.data, (service) => {
+          return {
+            text: service.name,
+            checked: false
+          }
+        });
+      });
+
+      this.logParseSrv.getHostList().then((res) => {
+        this.tabsQuery[curTabId].host.values = _.map(res.data, (host) => {
+          return {
+            text: host.hostname,
+            checked: false
+          }
+        });
+      });
+    } else {
+      _.each(this.tabsQuery[curTabId], (query) => {
+        extend_query += this.getExtendText(query);
+      });
     }
-    var checked = _.filter(this.tabsQuery[curTabId], ['checked', true]);
+    return extend_query;
+  }
+
+  getExtendText(query) {
+    if (query.name === 'field筛选') {
+      return '';
+    }
+    var extend_query = '';
+    var checked = _.filter(query.values, ['checked', true]);
     switch (checked.length) {
       case 0:
         extend_query = '';
         break;
       case 1:
-        extend_query = ' AND ' + checked[0].text;
+        extend_query = ' AND (' + query.title + ': ' + checked[0].text + ')';
         break;
       default:
-        extend_query = ' AND ('
+        extend_query = ' AND (' + query.title + ': ' + '('
         _.forEach(checked, (item) => {
           extend_query += item.text +' OR ';
         });
         extend_query += ')'
-        extend_query = _.replace(extend_query, ' OR )', ')');
+        extend_query = _.replace(extend_query, ' OR )', '))');
         break;
     }
     return extend_query;

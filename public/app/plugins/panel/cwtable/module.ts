@@ -193,6 +193,22 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
     el.hasClass('collapse-showmore') && el.prev().css({ 'display': 'inline-block' }) && el.parent().prev().css({ 'max-height': '122px' });
   }
 
+  // 点击文本展开/收起
+  expandOrCollapseText(e) {
+    var target = e.target || e.toElement;
+    var el = $(target);
+    var span = el.next();
+    if (el.css('max-height') === '122px') {
+      el.css({ 'max-height': 'none' })
+      span.find('.collapse-showmore').css({ 'display': 'inline-block' })
+      span.find('.expand-showmore').css({ 'display': 'none' })
+    } else {
+      el.css({ 'max-height': '122px' })
+      span.find('.expand-showmore').css({ 'display': 'inline-block' })
+      span.find('.collapse-showmore').css({ 'display': 'none' })
+    }
+  }
+
   /**
    * 为特定业务加的功能
    */
@@ -202,6 +218,10 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
 
   expandLog(row) {
     this.$scope.$emit('expand-log', _.cloneDeep(row));
+  }
+
+  onCellClick(index, cellValue, row) {
+    this.$scope.$emit('cwtable-cell-click', [index, cellValue, row, this.dataRaw]);
   }
 
   link(scope, elem, attrs, ctrl) {
@@ -247,6 +267,7 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
           var highlight_txt = panel.targets[0].query;
           highlight_txt = _.replace(highlight_txt, /( OR | AND | NOT |(message|type|host)[ ]*:)|(\(|\))/gi, ' ');
           highlight_txt = _.replace(highlight_txt, /  /gi, ' ');
+          highlight_txt = _.replace(highlight_txt, /\"/gi, '');
           highlight_txt = _.trim(highlight_txt);
           var highlight_arr = _.split(highlight_txt, ' ');
           _.each(highlight_arr, (txt) => {

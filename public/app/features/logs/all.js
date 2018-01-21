@@ -1,5 +1,6 @@
 define([
   './logsCtrl',
   './logParseCtrl',
-  './logParseEditCtrl'
+  './logParseEditCtrl',
+  './logContextCtrl'
 ], function () {});

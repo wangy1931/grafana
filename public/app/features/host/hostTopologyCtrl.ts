@@ -178,7 +178,7 @@ export class HostTopologyCtrl {
   }
 
   getAlertStatus(host) {
-    this.$controller('AlertStatusCtrl', { $scope: this.$scope }).init(host.name);
+    // this.$controller('AlertStatusCtrl', { $scope: this.$scope }).init();
   }
 
   getAnomaly(host) {

@@ -140,14 +140,6 @@ function (angular, _, coreModule) {
       });
     };
 
-    this.getLevel = function(level) {
-      if(level === 'CRITICAL') {
-        return '严重';
-      } else {
-        return '警告';
-      }
-    };
-
     this.checkName = function(ruleName) {
       return backendSrv.alertD({
         method: 'get',

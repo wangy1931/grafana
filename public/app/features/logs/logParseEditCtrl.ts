@@ -106,7 +106,8 @@ export class LogParseEditCtrl {
 
   getHostNameById(hostId) {
     if (!_.isEmpty(this.hostList)) {
-      return _.find(this.hostList, {id: hostId}).hostname;
+      var tmp = _.find(this.hostList, {id: hostId});
+      return tmp ? tmp.hostname : _.remove(this.rule.hosts, (host) => { return host === hostId});
     }
   }
 

@@ -404,10 +404,11 @@ table.diff {
       color: $gray;
       display: flex;
       align-items: center;
-      cursor: pointer;
     }
-    li {
+    p, li {
+      cursor: pointer;
       padding: 0 20px;
+      margin: 0;
     }
   }
   .log-filed-contaienr-close {
@@ -436,8 +437,25 @@ table.diff {
       width: 90%;
     }
   }
-  .log-filed-header, .log-filed-header > i{
+  .log-filed-header {
     font-weight: bold;
     line-height: 3rem;
+  }
+}
+
+.log-context-modal {
+  max-height: 80%;
+  max-width: 90%;
+  overflow-y: scroll;
+  ul {
+    display: flex;
+    align-items: center;
+    li:first-child {
+      flex: 1 1 auto;
+    }
+  }
+  .origin {
+    color: #fff;
+    background-color: nth($thresholds-color, 7) !important;
   }
 }

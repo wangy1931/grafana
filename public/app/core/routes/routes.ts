@@ -90,21 +90,25 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/alerts', {
     templateUrl: 'public/app/features/org/partials/alerts.html',
     controller : 'AlertsCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOrgBundle,
   })
   .when('/alerts/edit/:id', {
     templateUrl: 'public/app/features/org/partials/alertEdit.html',
     controller : 'AlertEditCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOrgBundle,
   })
   .when('/alerts/new', {
     templateUrl: 'public/app/features/org/partials/alertEdit.html',
     controller : 'AlertEditCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOrgBundle,
   })
   .when('/alerts/status', {
     templateUrl: 'public/app/features/org/partials/alertStatus.html',
     controller : 'AlertStatusCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOrgBundle,
   })
   .when('/oncallerschedule', {
@@ -115,16 +119,19 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/oncallers', {
     templateUrl: 'public/app/features/oncaller/partials/oncallers.html',
     controller : 'OnCallersCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOncallerBundle,
   })
   .when('/oncallers/edit/:id', {
     templateUrl: 'public/app/features/oncaller/partials/oncallerEdit.html',
     controller : 'OnCallerEditCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOncallerBundle,
   })
   .when('/oncallers/new', {
     templateUrl: 'public/app/features/oncaller/partials/oncallerEdit.html',
     controller : 'OnCallerEditCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOncallerBundle,
   })
   .when('/anomaly', {
