@@ -92,15 +92,15 @@ export class TreeMenuCtrl {
 
   loadAssociatedPeriods(params) {
     return this.alertMgrSrv.loadAssociatedPeriods(params).then((res) => {
-      this.periods = res.data.periods;
+      this.periods = res.data;
       if (this.periods.length) {
-        this.timeRange.from = this.periods[0].startSec;
-        this.timeRange.to = this.periods[0].endSec;
+        this.timeRange.from = this.periods[0].o1;
+        this.timeRange.to = this.periods[0].o2;
       } else {
         this.periods = [];
         this.periods.push({
-          startSec: this.timeRange.from,
-          endSec: this.timeRange.to,
+          o1: this.timeRange.from,
+          o2: this.timeRange.to,
         });
       }
       return this.timeRange;
@@ -308,8 +308,8 @@ export class TreeMenuCtrl {
         this.timeRange.from = start;
         this.timeRange.to = end;
         this.periods.push({
-          startSec: start,
-          endSec: end
+          o1: start,
+          o2: end
         });
         this.init();
       }
@@ -317,8 +317,8 @@ export class TreeMenuCtrl {
   }
 
   updateTimeRange(period) {
-    this.timeRange.from = period.startSec;
-    this.timeRange.to = period.endSec;
+    this.timeRange.from = period.o1;
+    this.timeRange.to = period.o2;
     this.init();
   }
 }

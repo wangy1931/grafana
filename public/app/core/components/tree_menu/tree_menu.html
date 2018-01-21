@@ -17,7 +17,7 @@
         </a>
         <ul class="dropdown-menu">
           <li ng-repeat="period in ctrl.periods">
-            <a ng-click="ctrl.updateTimeRange(period)">{{period.startSec*1000 | date:'MM/dd/yyyy HH:mm'}} - {{period.endSec*1000 | date:'MM/dd/yyyy HH:mm'}}</a>
+            <a ng-click="ctrl.updateTimeRange(period)">{{period.o1*1000 | date:'MM/dd/yyyy HH:mm'}} - {{period.o2*1000 | date:'MM/dd/yyyy HH:mm'}}</a>
           </li>
         </ul>
       </div>
