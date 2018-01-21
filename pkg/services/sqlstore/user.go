@@ -276,10 +276,12 @@ func GetSignedInUser(query *m.GetSignedInUserQuery) error {
 									u.name         as name,
 	                org.name       as org_name,
 	                org_user.role  as org_role,
-	                org.id         as org_id
+									org.id         as org_id,
+									org_permit.deadline	as deadline
 	                FROM ` + dialect.Quote("user") + ` as u
 									LEFT OUTER JOIN org_user on org_user.org_id = u.org_id and org_user.user_id = u.id
-	                LEFT OUTER JOIN org on org.id = u.org_id `
+									LEFT OUTER JOIN org_permit on org_permit.org_id = u.org_id
+									LEFT OUTER JOIN org on org.id = u.org_id `
 
 	sess := x.Table("user")
 	if query.UserId > 0 {
