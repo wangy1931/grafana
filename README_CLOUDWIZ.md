@@ -9,9 +9,9 @@ set @dt = now();
 INSERT INTO org_permit (`org_id`, `data_center`, `level`, `deadline`) SELECT id, 'ucloud', 'free', date_add(@dt, interval 30 day) FROM org;
 ```
 
-### DataSource update
+### DataSource update
 - 新建用户数据源从default.ini获取，旧用户数据源从数据库获取
-- 初始化data_source表,主要修改相应的url
+- 初始化data_source表,主要修改相应的url
 ```sql
 INSERT INTO data_source ( `org_id`, `basic_auth`, `data_source`.`name`, `version`, `basic_auth_password`, `access`, `updated`, `with_credentials`, `url`, `type`, `created`, `is_default`)
 SELECT id, '0', 'download', '0', '', 'direct', NOW(), '0', 'https://aws-download.cloudwiz.cn', 'download', NOW(), '0' FROM org;
