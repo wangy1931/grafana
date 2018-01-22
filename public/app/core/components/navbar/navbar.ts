@@ -29,7 +29,7 @@ export function navbarDirective() {
     transclude: true,
     controllerAs: 'ctrl',
     scope: {
-      title: "@",
+      text: "@",
       titleUrl: "@",
       iconUrl: "@",
     },

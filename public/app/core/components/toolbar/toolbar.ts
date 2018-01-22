@@ -38,14 +38,6 @@ export class ToolbarCtrl {
       },
     });
 
-    this.toolbarItems[1].push({
-      class: '',
-      icon : 'fa fa-fw fa-file-text-o',
-      itemname: '健康报告',
-      href: '/report',
-      clickHandler: () => {}
-    });
-
     this.toolbarItems[2] = [];
     if (!contextSrv.isViewer) {
       this.toolbarItems[2].push({
