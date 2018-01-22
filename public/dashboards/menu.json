@@ -16,13 +16,8 @@
           "url": "/logs"
         },
         {
-          "id": 3,
-          "text": "机器",
-          "url": "/host_topology"
-        },
-        {
           "id": 4,
-          "text": "服务",
+          "text": "资源",
           "url": "/service_topology"
         }
       ]
@@ -70,11 +65,6 @@
           "id": 1,
           "text": "探针收集",
           "url": "/cmdb/config?serviceName=collector"
-        },
-        {
-          "id": 2,
-          "text": "日志解析",
-          "url": "/logs/rules"
         },
         {
           "id": 3,
