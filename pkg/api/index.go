@@ -1,6 +1,7 @@
 package api
 
 import (
+	"time"
 	"github.com/wangy1931/grafana/pkg/api/dtos"
 	"github.com/wangy1931/grafana/pkg/bus"
 	"github.com/wangy1931/grafana/pkg/middleware"
@@ -36,6 +37,7 @@ func setIndexViewData(c *middleware.Context) (*dtos.IndexViewData, error) {
 			SystemId: 	c.SystemId,
 			UserTheme:      prefs.Theme,
 			Timezone:       prefs.Timezone,
+			Deadline:				c.Deadline,
 		},
 		Settings:           settings,
 		AppUrl:             setting.AppUrl,
@@ -163,6 +165,10 @@ func Index(c *middleware.Context) {
 		c.Handle(500, "Failed to get settings", err)
 		return
 	} else {
+		if !data.User.IsGrafanaAdmin && data.User.Deadline.Unix() <= time.Now().Unix() {
+			c.Redirect(setting.AppSubUrl + "/login")
+			return
+		}
 		c.HTML(200, "index", data)
 	}
 }

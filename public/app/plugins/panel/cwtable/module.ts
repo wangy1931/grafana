@@ -267,6 +267,7 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
           var highlight_txt = panel.targets[0].query;
           highlight_txt = _.replace(highlight_txt, /( OR | AND | NOT |(message|type|host)[ ]*:)|(\(|\))/gi, ' ');
           highlight_txt = _.replace(highlight_txt, /  /gi, ' ');
+          highlight_txt = _.replace(highlight_txt, /\"/gi, '');
           highlight_txt = _.trim(highlight_txt);
           var highlight_arr = _.split(highlight_txt, ' ');
           _.each(highlight_arr, (txt) => {

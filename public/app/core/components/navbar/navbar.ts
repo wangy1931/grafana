@@ -8,9 +8,9 @@ import coreModule from '../../core_module';
 
 export class NavbarCtrl {
   showGuideNav: boolean = false;
-  showNavbarPageBtn: boolean = false;
   deadline: Number;
   priceUrl: string;
+  showNavbarPageBtn: boolean = false;
 
   /** @ngInject */
   constructor(private $scope, private $rootScope, private $location, private contextSrv) {

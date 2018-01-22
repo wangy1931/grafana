@@ -35,6 +35,7 @@ type CurrentUser struct {
 	GravatarUrl    string     `json:"gravatarUrl"`
   SystemId       int64      `json:"systemId"`
 	Timezone       string     `json:"timezone"`
+	Deadline			 time.Time	`json:"deadline"`
 }
 
 type DashboardMeta struct {

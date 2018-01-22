@@ -142,6 +142,7 @@ type SignedInUser struct {
 	Email          string
 	ApiKeyId       int64
 	IsGrafanaAdmin bool
+	Deadline			 time.Time
 }
 
 type UserProfileDTO struct {
