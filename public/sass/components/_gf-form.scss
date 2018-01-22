@@ -79,7 +79,7 @@ $gf-form-margin: 0.25rem;
   }
 }
 
-.gf-form-input {
+.gf-form-input, input {
   display: block;
   width: 100%;
   padding: $input-padding-y $input-padding-x;

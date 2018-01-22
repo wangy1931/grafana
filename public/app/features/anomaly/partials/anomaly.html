@@ -78,8 +78,8 @@
                 <div class="accordion-inner">
                   <table class="table table-hover table-striped">
                     <tr ng-repeat="element in cluster.elements">
-                      <td><p class="text-overflow" bs-tooltip="'{{_.getMetricName(element.metric)}}'" data-placement="bottom" data-container="body">{{_.getMetricName(element.metric)}}</p></td>
-                      <td><p class="text-overflow" style="width: 100px;">{{element.host}}</p></td>
+                      <td><div class="text-overflow" bs-tooltip="'{{_.getMetricName(element.metric)}}'" data-placement="bottom" data-container="body">{{_.getMetricName(element.metric)}}</div></td>
+                      <td><div class="text-overflow" style="width: 100px;">{{element.host}}</div></td>
                       <td>{{element.health}}%</td>
                       <td style="text-align: right;"><a ng-click="exclude(element);dismiss();"><i bs-tooltip="'暂缓报警'" data-placement="bottom" data-container="body" class="fa fa-bell-slash-o pointer"></i></a></td>
                     </tr>

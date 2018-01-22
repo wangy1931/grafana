@@ -95,7 +95,7 @@ $tag-color: #246493;
     flex: auto;
     margin: 10px 0;
     &:first-child {
-      border-right: 2px solid #f7f7f7;
+      border-right: 2px solid $tag-bg;
     }
   }
   .tag-add-form {
@@ -135,7 +135,6 @@ $tag-color: #246493;
       width: 100%;
       &:hover {
         color: $btn-cmdb-color;
-        background-color: #f7f7f7;
       }
     }
     .tag-label {

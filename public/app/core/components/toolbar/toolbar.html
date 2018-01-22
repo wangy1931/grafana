@@ -1,3 +1,5 @@
-<i class="iconfont fa-toolbar toolbar-icon toolbar"
+<i class="{{ ctrl.icon }} toolbar-icon toolbar toolbar-{{ ctrl.id }}"
    ng-click="ctrl.showPopover();"
-   style="font-weight: bolder;"></i>
+   style="font-weight: bolder;"
+   bs-tooltip="'{{ ctrl.tooltip }}'"
+   data-placement="bottom"></i>

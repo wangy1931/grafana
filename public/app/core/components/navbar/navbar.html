@@ -1,28 +1,37 @@
 <div class="navbar-inner">
-	<a class="navbar-brand-btn pointer" ng-click="ctrl.contextSrv.toggleSideMenu()">
+	<a class="navbar-brand-btn pointer" href="/">
 		<span class="navbar-brand-btn-background">
 			<img src="public/img/fav32.png"></img>
+			<span>Cloudwiz</span>
 		</span>
-		<i class="fa fa-caret-down"></i>
 	</a>
 
-	<a href="{{ctrl.titleUrl}}" class="navbar-page-btn" ng-show="ctrl.title">
+	<a class="navbar-toggle-menu-btn pull-left" href="javascript:;" ng-click="ctrl.contextSrv.toggleSideMenu($event)">
+		<i class="toggle-menu-btn"
+			ng-class="{'true': 'fa fa-arrow-left', 'false': 'fa fa-bars'}[ctrl.contextSrv.pinned]"></i>
+	</a>
+
+	<a href="{{ctrl.titleUrl}}" class="navbar-page-btn" ng-show="ctrl.showNavbarPageBtn">
 		<i class="{{ctrl.icon}}" ng-show="ctrl.icon"></i>
 		<img ng-src="{{ctrl.iconUrl}}" ng-show="ctrl.iconUrl" />
-		{{ctrl.title}}
+		{{ctrl.text}}
 	</a>
 
 	<a href="javascript:;" class="navbar-page-btn" ng-click="ctrl.showGuide();" ng-if="ctrl.showGuideNav"
 		bs-tooltip="'诊断引导'" data-placement="bottom">
-		<i class="iconfont fa-cwiz-search" style="font-weight: bolder;"></i>
+		<i class="fa fa-stethoscope" style="font-weight: bolder;"></i>
 	</a>
 
 	<a href="javascript:;" class="navbar-shortcut-btn pull-right">
-		<i class="iconfont fa-question-circle-o" bs-tooltip="'即将开放'" data-placement="bottom" style="font-weight: bold;"></i>
+		<toolbar icon="iconfont fa-question-circle-o" tooltip="使用帮助" id="2"></toolbar>
 	</a>
 
 	<a href="javascript:;" class="navbar-shortcut-btn pull-right">
-		<toolbar></toolbar>
+		<toolbar icon="iconfont fa-toolbar" tooltip="知识库" id="1"></toolbar>
+	</a>
+
+	<a href="/report" class="navbar-shortcut-btn pull-right">
+		<i class="fa fa-fw fa-file-text-o" bs-tooltip="'健康报告'" data-placement="bottom"></i>
 	</a>
 
 	<a href="/oncallerschedule" class="navbar-shortcut-btn pull-right">
