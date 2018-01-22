@@ -55,6 +55,7 @@ func Register(r *macaron.Macaron) {
 	r.Get("/rca", reqSignedIn, Index)
 	r.Get("/host_topology", reqSignedIn, Index)
 	r.Get("/topn", reqSignedIn, Index)
+	r.Get("/service_topology", reqSignedIn, Index)
 
 	// cmdb
 	r.Get("/cmdb/hostlist", reqSignedIn, Index)
@@ -102,6 +103,7 @@ func Register(r *macaron.Macaron) {
 	r.Get("/plugins/:id/edit", reqSignedIn, Index)
 	r.Get("/plugins/:id/page/:page", reqSignedIn, Index)
 
+	r.Get("/dashboardlist", reqSignedIn, Index)
 	r.Get("/dashboard/*", reqSignedIn, Index)
 	r.Get("/dashboard-solo/*", reqSignedIn, Index)
 
@@ -317,6 +319,8 @@ func Register(r *macaron.Macaron) {
 			// metric help message
 			r.Get("/metric/:name", GetMetricHelpFile)
 		})
+
+		r.Get("/permit/:id", wrap(GetOrgPermitByOrgId))
 	}, reqSignedIn)
 
 	// admin api
@@ -329,6 +333,7 @@ func Register(r *macaron.Macaron) {
 		r.Get("/users/:id/quotas", wrap(GetUserQuotas))
 		r.Put("/users/:id/quotas/:target", bind(m.UpdateUserQuotaCmd{}), wrap(UpdateUserQuota))
 		r.Get("/customer", wrap(GetAllCustomerUsers))
+		r.Post("/permit/:id", bind(m.OrgPermit{}), UpdateOrgPermit)
 	}, reqGrafanaAdmin)
 
 	// rendering

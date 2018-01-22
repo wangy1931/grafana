@@ -138,6 +138,11 @@ func SignUpStep2(c *middleware.Context, form dtos.SignUpStep2Form) Response {
 		return ApiError(500, fmt.Sprintf("Failed to add data source for organization %v", user.OrgId), err)
 	}
 
+	// We need to add the data center defined in config for this org to org_permit table
+	if err := sqlstore.AddDatacenterForOrg(user.OrgId); err != nil {
+		return ApiError(500, fmt.Sprintf("Failed to add data center for organization %v", user.OrgId), err)
+	}
+
 	// add grafana admin
 	admin := m.SearchUsersQuery{}
 	if err := sqlstore.SearchGrafanaAdmin(&admin); err != nil {

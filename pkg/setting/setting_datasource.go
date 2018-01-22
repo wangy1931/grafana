@@ -35,3 +35,12 @@ func readAlertSettings() {
 	alert := Cfg.Section("alert")
   Alert.AlertUrlRoot = alert.Key("alert_urlroot").String()
 }
+
+type DataCenterSettings struct {
+  DataCenterRoot string
+}
+
+func readDataCenterSettings() {
+  datacenter := Cfg.Section("datacenter")
+  DataCenter.DataCenterRoot = datacenter.Key("data_center").String()
+}

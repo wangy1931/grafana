@@ -1,8 +1,9 @@
 .tabbed-view {
-  background-color: $page-bg;
+  // background-color: $page-bg;
   margin: (-$panel-margin*2) (-$panel-margin);
   margin-bottom: $spacer*2;
   padding: $spacer*3;
+  position: relative;
 
   &.tabbed-view--panel-edit {
     padding: 0;
@@ -59,11 +60,11 @@
 // cloudwiz start
 .tabbed-view-timepicker {
   position: absolute;
-  top: 52px;
+  top: 0;
   left: 0;
   right: 0;
-  z-index: 11;
-  background: white;
+  z-index: $zindex-tabbed-view-timepicker;
+  background: $navbarBackground;
   padding: 50px;
 }
 // cloudwiz end

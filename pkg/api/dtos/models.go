@@ -27,7 +27,7 @@ type CurrentUser struct {
 	Login          string     `json:"login"`
 	Email          string     `json:"email"`
 	Name           string     `json:"name"`
-	LightTheme     bool       `json:"lightTheme"`
+	UserTheme      string     `json:"userTheme"`
 	OrgId          int64      `json:"orgId"`
 	OrgName        string     `json:"orgName"`
 	OrgRole        m.RoleType `json:"orgRole"`
@@ -35,6 +35,7 @@ type CurrentUser struct {
 	GravatarUrl    string     `json:"gravatarUrl"`
   SystemId       int64      `json:"systemId"`
 	Timezone       string     `json:"timezone"`
+	Deadline			 time.Time	`json:"deadline"`
 }
 
 type DashboardMeta struct {

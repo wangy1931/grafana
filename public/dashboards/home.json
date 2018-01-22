@@ -5,18 +5,18 @@
   "tags": [],
   "style": "dark",
   "timezone": "browser",
-  "editable": true,
+  "editable": false,
   "hideControls": true,
   "sharedCrosshair": false,
   "rows": [
    {
       "collapse": false,
-      "editable": true,
+      "editable": false,
       "height": "25px",
       "panels": [
         {
-          "content": "<div class=\"text-center dashboard-header\">\n  <span>Home Dashboard</span>\n</div>",
-          "editable": true,
+          "content": "<div class=\"text-center dashboard-header\">\n  <span>指标监控台</span>\n</div>",
+          "editable": false,
           "id": 1,
           "links": [],
           "mode": "html",
@@ -31,15 +31,30 @@
    },
    {
       "collapse": false,
-      "editable": true,
+      "editable": false,
       "height": "510px",
       "panels": [
         {
-          "id": 3,
-          "limit": 4,
+          "id": 999,
+          "limit": "",
           "links": [],
           "query": "",
           "span": 7,
+          "tags": [],
+          "title": "所有指标面板",
+          "transparent": false,
+          "type": "dashlist",
+          "recent": false,
+          "search": true,
+          "starred": false,
+          "headings": false
+        },
+        {
+          "id": 1000,
+          "limit": 10,
+          "links": [],
+          "query": "",
+          "span": 5,
           "tags": [],
           "title": "",
           "transparent": false,
@@ -48,17 +63,6 @@
           "search": false,
           "starred": true,
           "headings": true
-        },
-        {
-          "editable": true,
-          "error": false,
-          "id": 4,
-          "isNew": true,
-          "links": [],
-          "span": 5,
-          "title": "",
-          "transparent": false,
-          "type": "pluginlist"
         }
       ],
       "title": "Row"

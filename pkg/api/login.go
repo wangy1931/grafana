@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/url"
+	"time"
 
 	"github.com/wangy1931/grafana/pkg/api/dtos"
 	"github.com/wangy1931/grafana/pkg/bus"
@@ -74,14 +75,12 @@ func tryLoginUsingRememberCookie(c *middleware.Context) bool {
 		return false
 	}
 
-	isSucceed = true
-	loginUserWithUser(user, c)
-	return true
+	isSucceed = !loginUserWithUser(user, c)
+	return isSucceed
 }
 
 func LoginApiPing(c *middleware.Context) {
 	if !tryLoginUsingRememberCookie(c) {
-		c.JsonApiErr(401, "Unauthorized", nil)
 		return
 	}
 
@@ -104,7 +103,9 @@ func LoginPost(c *middleware.Context, cmd dtos.LoginCommand) Response {
 
 	user := authQuery.User
 
-	loginUserWithUser(user, c)
+	if loginUserWithUser(user, c) {
+		return ApiError(401, "Expired user", nil)
+	}
 
 	result := map[string]interface{}{
 		"message": "Logged in",
@@ -120,7 +121,7 @@ func LoginPost(c *middleware.Context, cmd dtos.LoginCommand) Response {
 	return Json(200, result)
 }
 
-func loginUserWithUser(user *m.User, c *middleware.Context) {
+func loginUserWithUser(user *m.User, c *middleware.Context) bool {
 	if user == nil {
 		log.Error(3, "User login with nil user")
 	}
@@ -132,6 +133,19 @@ func loginUserWithUser(user *m.User, c *middleware.Context) {
 	}
 
 	c.Session.Set(middleware.SESS_KEY_USERID, user.Id)
+
+	if user.IsAdmin {
+		return false
+	}
+	permit := m.GetOrgPermitByOrgIdQuery{OrgId: user.OrgId}
+	if err := bus.Dispatch(&permit); err != nil {
+		return false
+	}
+
+	if permit.Result.Deadline.Unix() <= time.Now().Unix() {
+		return true
+	}
+	return false
 }
 
 func Logout(c *middleware.Context) {

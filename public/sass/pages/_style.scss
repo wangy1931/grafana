@@ -32,9 +32,9 @@ body{
 .time-picker{
     position: absolute;
     right: 0;
-    z-index: 11;
-    left: $side-menu-width;
-    top: 63px;
+    z-index: $zindex-timepicker;
+    left: 0;
+    top: $navbarHeight;
 }
 
 .code-block {
