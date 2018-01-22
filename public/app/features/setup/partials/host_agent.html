@@ -23,9 +23,6 @@
     <div ng-if="selected">
       <h1>您将在【{{system}}】下{{type}}【{{selected.host}}】探针</h1>
       <p><br></p>
-      <div class="grafana-info-box" style="margin: 20px 0 25px 0">
-        请在需要监控的机器上运行以下安装部署命令, 成功安装后, 您将在 "指标浏览" 中看到相关指标信息, 若没有相关仪表盘, 请点击"导入模板"进行手动导入
-      </div>
       <h2>您也可以选择<span class="btn-update" ng-click="updateType('安装')">安装</span>或<span class="btn-update" ng-click="updateType('更新')">更新</span>探针</h2>
       <p><br></p>
       <h2>1. {{type}}部署</h2>
