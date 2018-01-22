@@ -224,7 +224,7 @@ export class TreeMenuCtrl {
           "currentTagKey": "",
           "currentTagValue": "",
           "downsampleAggregator": "avg",
-          "downsampleInterval": "",
+          "downsampleInterval": this.panel.downsample,
           "errors": {},
           "hide": false,
           "isCounter": false,

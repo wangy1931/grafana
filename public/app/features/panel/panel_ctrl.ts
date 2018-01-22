@@ -309,7 +309,9 @@ export class PanelCtrl {
 
   setDownsample(interval) {
     this.panel.downsample = interval;
-    this.panel.targets[0].downsampleInterval = interval;
+    _.each(this.panel.targets, (target) => {
+      target.downsampleInterval = interval;
+    })
     this.$timeout(() => {
       this.$scope.$broadcast('refresh', this.panel.id);
     });
