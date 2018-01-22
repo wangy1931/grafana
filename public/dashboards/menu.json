@@ -2,7 +2,7 @@
   "menusTop": [
     {
       "id": 2,
-      "text": "系统监控",
+      "text": "实时监控",
       "icon": "fa fa-fw fa-tachometer",
       "children": [
         {
@@ -29,7 +29,7 @@
     },
     {
       "id": 3,
-      "text": "系统报警",
+      "text": "实时报警",
       "icon": "fa fa-fw fa-bell",
       "children": [
         {
@@ -46,12 +46,12 @@
     },
     {
       "id": 4,
-      "text": "系统分析",
+      "text": "分析诊断",
       "icon": "fa fa-fw fa-bar-chart",
       "children": [
         {
           "id": 1,
-          "text": "诊断分析",
+          "text": "诊断助手",
           "url": "/rca?guide"
         },
         {
