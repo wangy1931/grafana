@@ -17,6 +17,7 @@ export class TreeMenuCtrl {
   correlationHosts: any;
   timeRange: any;
   periods: any;
+  limitTime: number;
 
   /** @ngInject */
   constructor(private $scope, private associationSrv,
@@ -28,19 +29,27 @@ export class TreeMenuCtrl {
     this.isOpen = false;
     this.isLoding = true;
     this.groupType = 'metrics';
+    this.limitTime = 2;
 
     var analysis = this.$rootScope.$on('analysis', (event, data) =>{
-      if (_.isEqual(data, 'thresholdSlider')) {
-        this.associationSrv.updateRang(this.$scope.$parent.thresholdSlider.get());
-        this.init();
-      } else {
-        var association = this.associationSrv.sourceAssociation;
-        this.loadAssociatedPeriods({
-          metric: association.metric,
-          host: association.host
-        }).then((res) => {
+      switch (data) {
+        case 'thresholdSlider':
+          this.associationSrv.updateRang(this.$scope.$parent.thresholdSlider.get());
           this.init();
-        });
+          this.refresh();
+          break;
+        case 'updateTime':
+          this.initByTime();
+          break;
+        default:
+          var association = this.associationSrv.sourceAssociation;
+          this.loadAssociatedPeriods({
+            metric: association.metric,
+            host: association.host
+          }).then((res) => {
+            this.init();
+          });
+          break;
       }
     });
 
@@ -56,6 +65,10 @@ export class TreeMenuCtrl {
       from: this.timeSrv.timeRange().from.unix(),
       to: this.timeSrv.timeRange().to.unix()
     };
+
+    this.backendSrv.get('/api/static/config').then((res) => {
+      this.limitTime = res.limit_association;
+    })
   }
 
   init(type?) {
@@ -94,8 +107,7 @@ export class TreeMenuCtrl {
     return this.alertMgrSrv.loadAssociatedPeriods(params).then((res) => {
       this.periods = res.data;
       if (this.periods.length) {
-        this.timeRange.from = this.periods[0].o1;
-        this.timeRange.to = this.periods[0].o2;
+        this.updateTimeRange(this.periods[0])
       } else {
         this.periods = [];
         this.periods.push({
@@ -178,7 +190,6 @@ export class TreeMenuCtrl {
           target.hide = true;
         }
       });
-      this.$rootScope.$broadcast('refresh', this.panel.id);
     }
     $('[type="checkbox"]').prop({checked: false});
     $('[disabled="disabled"]').prop({checked: true});
@@ -229,7 +240,7 @@ export class TreeMenuCtrl {
         this.panel.seriesOverrides.push(seriesOverride);
       }
       this.healthSrv.transformPanelMetricType(this.panel).then(() => {
-        this.$rootScope.$broadcast('refresh', this.panel.id);
+        this.refresh();
       });
     }
   }
@@ -290,8 +301,8 @@ export class TreeMenuCtrl {
     var from = moment(start * 1000);
     var end = this.timeSrv.timeRange().to.unix();
     var diff = moment().diff(from, 'days', true);
-    if (diff > 2) {
-      this.$scope.appEvent('alert-warning', ['您仅可以关联两天以内的数据', '请选择两天以内的时间区间']);
+    if (diff > this.limitTime) {
+      this.$scope.appEvent('alert-warning', ['您仅可以关联' + this.limitTime + '天以内的数据', '请选择' + this.limitTime + '天以内的时间区间']);
       return;
     }
     diff = moment(end * 1000).diff(from, 'minutes');
@@ -319,7 +330,11 @@ export class TreeMenuCtrl {
   updateTimeRange(period) {
     this.timeRange.from = period.o1;
     this.timeRange.to = period.o2;
-    this.init();
+    this.timeSrv.setTime({from: moment(this.timeRange.from * 1000), to: moment(this.timeRange.to * 1000)}, false);
+  }
+
+  refresh() {
+    this.$rootScope.$broadcast('refresh', this.panel.id)
   }
 }
 

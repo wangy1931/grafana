@@ -15,7 +15,6 @@ function (angular, $, _, Tether) {
             '<span class="panel-title-text drag-handle">{{ctrl.panel.title | interpolateTemplateVars:this}}</span>' +
             '<span class="panel-links-btn"><i class="fa fa-external-link"></i></span>' +
             '<span class="panel-time-info" ng-show="ctrl.timeInfo"><i class="fa fa-clock-o"></i> {{ctrl.timeInfo}}</span>' +
-            '<span class="panel-time-info" ng-show="ctrl.panel.downsample"><i class="fa fa-arrow-circle-o-down"></i> {{ctrl.panel.downsample}}</span>' +
           '</span>';
 
       function createExternalLinkMenu(ctrl) {
@@ -49,23 +48,25 @@ function (angular, $, _, Tether) {
           template += '</span>';
         });
 
-        template += '<div class="dropdown pull-right panel-right-menu-item">';
-        template += '<a class="pointer" ng-click="hideTooltip($event)" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-bars"></i></a>';
-        template += '<ul class="dropdown-menu">';
-        _.each(ctrl.getExtendedMenu(), function (item) {
-          if (item.role === 'Editor' && !ctrl.dashboard.meta.canEdit) {
-            return;
-          }
-          template += '<li><a class="pointer"';
-          if (item.click) { template += ' ng-click="'+ item.click +'"'; }
-          template += '>' + item.text + '</a></li>';
-        });
-        template += '</ul>';
-        template += '</div>';
+        if (ctrl.checkMenu('list')) {
+          template += '<div class="dropdown pull-right panel-right-menu-item">';
+          template += '<a class="pointer" ng-click="hideTooltip($event)" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-bars"></i></a>';
+          template += '<ul class="dropdown-menu">';
+          _.each(ctrl.getExtendedMenu(), function (item) {
+            if (item.role === 'Editor' && !ctrl.dashboard.meta.canEdit) {
+              return;
+            }
+            template += '<li><a class="pointer"';
+            if (item.click) { template += ' ng-click="'+ item.click +'"'; }
+            template += '>' + item.text + '</a></li>';
+          });
+          template += '</ul>';
+          template += '</div>';
+        }
 
         if (ctrl.panel.downsamples) {
           template += '<div class="dropdown pull-right panel-right-menu-item">';
-          template += '<a class="pointer" ng-click="hideTooltip($event)" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-arrow-circle-o-down"></i></a>';
+          template += '<a class="pointer" ng-click="hideTooltip($event)" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-arrow-circle-o-down"></i>{{ctrl.panel.downsample}}</a>';
           template += '<ul class="dropdown-menu">';
           _.each(ctrl.getDownsamplesMenu(), function (item) {
             template += '<li><a class="pointer"';

@@ -17,7 +17,7 @@
         </a>
         <ul class="dropdown-menu">
           <li ng-repeat="period in ctrl.periods">
-            <a ng-click="ctrl.updateTimeRange(period)">{{period.o1*1000 | date:'MM/dd/yyyy HH:mm'}} - {{period.o2*1000 | date:'MM/dd/yyyy HH:mm'}}</a>
+            <a ng-click="ctrl.updateTimeRange(period);ctrl.init();">{{period.o1*1000 | date:'MM/dd/yyyy HH:mm'}} - {{period.o2*1000 | date:'MM/dd/yyyy HH:mm'}}</a>
           </li>
         </ul>
       </div>
@@ -26,9 +26,8 @@
           <i class="fa fa-bars"></i>
         </a>
         <ul class="dropdown-menu pull-right">
-          <li><a tabindex="-1" ng-click="ctrl.initByTime()">关联选中时间的指标</a></li>
           <li><a tabindex="-1" ng-click="ctrl.showNewAssociationManual()">自定义关联指标</a></li>
-          <li><a tabindex="-1" ng-click="ctrl.clearSelected()">清除选中</a></li>
+          <li><a tabindex="-1" ng-click="ctrl.clearSelected();ctrl.refresh();">清除选中</a></li>
         </ul>
       </div>
     </div>

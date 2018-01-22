@@ -82,8 +82,8 @@
               "line": true
             }
           ],
-          "downsample": "downsample - 15m",
-          "downsamples": [1, 15]
+          "downsample": "15m",
+          "downsamples": ["1m", "15m"]
         }
       ]
     },

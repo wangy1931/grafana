@@ -127,8 +127,11 @@ export class PanelCtrl {
     menu.push({text: '删除', click: 'ctrl.removePanel(); dismiss();', role: 'Editor', icon: 'fa-trash-o', hover: 'hover-show  pull-left'});
     menu.push({text: '分享', click: 'ctrl.sharePanel(); dismiss();', role: 'Editor', icon: 'fa-external-link'});
     menu.push({text: '编辑', click: 'ctrl.editPanel(); dismiss();', role: 'Editor', icon: 'fa-pencil'});
-    if (this.checkMenu('associate')) {
+    if (this.checkMenu('association')) {
       menu.push({text: '关联性分析', click: 'ctrl.associateLink();', icon: 'fa-line-chart'});
+    }
+    if (this.checkMenu('correlation')) {
+      menu.push({text: '对当前时间窗口进行关联', click: 'ctrl.correlation();', icon: 'fa-clock-o'})
     }
     return menu;
   }
@@ -139,9 +142,14 @@ export class PanelCtrl {
     var isGraph = this.panel.type === 'graph';
     var isLine = this.panel.lines;
     switch (menu) {
-      case 'associate':
-        show = (/^\/anomaly/.test(pathname) || (/^\/integrate/.test(pathname)));
+      case 'association':
+        show = /^\/anomaly/.test(pathname);
         break;
+      case 'list':
+        show = !/^\/(association|anomaly|alert|logs)/.test(pathname);
+        break;
+      case 'correlation':
+        show = /^\/association/.test(pathname);
     }
     return show && isGraph && isLine;
   }
@@ -291,35 +299,23 @@ export class PanelCtrl {
     }
   }
 
-  toIntegrate() {
-    try{
-      this.integrateSrv.options.targets = _.cloneDeep(this.panel.targets);
-      this.integrateSrv.options.title = this.panel.title;
-      if (!this.panel.targets[0].metric) {
-        this.integrateSrv.options.targets[0].metric = "*";
-      }
-      if (!_.isNull(this.panel.targets[0].tags)) {
-        this.integrateSrv.options.targets[0].tags = {host: "*"};
-      }
-      this.$_location.url('/integrate');
-    }catch (e) {
-      this.publishAppEvent('alert-warning', ['日志分析跳转失败', '可能缺少指标名']);
-    }
-  }
-
   getDownsamplesMenu() {
     var downsamples = [];
     _.each(this.panel.downsamples, (downsample) => {
-      downsamples.push({text: 'downsample - ' + downsample + 'm', click: 'ctrl.setDownsample(' + downsample + '); dismiss();'});
+      downsamples.push({text: downsample, click: 'ctrl.setDownsample(\'' + downsample + '\');dismiss();'});
     })
     return downsamples;
   }
 
   setDownsample(interval) {
-    this.panel.downsample = 'downsample - ' + interval + 'm';
-    this.panel.targets[0].downsampleInterval = interval + 'm';
+    this.panel.downsample = interval;
+    this.panel.targets[0].downsampleInterval = interval;
     this.$timeout(() => {
       this.$scope.$broadcast('refresh', this.panel.id);
     });
+  }
+
+  correlation() {
+    this.$scope.$emit('analysis', 'updateTime');
   }
 }
