@@ -1,461 +1,482 @@
 .log-search {
-
-  // override tab style
-  & > .nav-tabs {
-    padding: 0;
-    margin: 0;
-    li.active > a, li.active > a:focus , .active > a:hover {
-      background: rgb(248, 248, 248);
-      border-bottom: 1px solid rgb(248, 248, 248);
+  
+    // override tab style
+    & > .nav-tabs {
+      padding: 0;
+      margin: 0;
+      li.active > a, li.active > a:focus , .active > a:hover {
+        background: $panel-bg;
+        border-bottom: 1px solid transparent;
+      }
     }
-  }
-
-  // override btn
-  .btn-spec {
-    padding: 0.4rem 0.6rem;
-    cursor: pointer;
-    a {
-      display: none;
+  
+    // override btn
+    .btn-spec {
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      a {
+        display: none;
+      }
     }
-  }
-
-  .pull-right {
-    border: none;
-    padding: 0;
-    a {
-      margin-right: 0;
-      color: #fff !important;
+  
+    .pull-right {
+      border: none;
+      padding: 0;
+      a {
+        margin-right: 0;
+        color: #fff !important;
+      }
     }
+  
   }
-
-}
-
-.log-search-result {
-  border: 1px solid #7B7B7B;
-  border-top: none;
-  // padding: 20px;
-  overflow: hidden;
-
-  .panel:first-child {
-    margin: 20px 0;
-  }
-
-  .panel {
-    display: block;
-    float: none;
-  }
-
-  .log-compare, .log-search {
-    display: flex;
-    flex-direction: row;
-    & > div {
-      flex: auto;
+  
+  .log-search-result {
+    border: 1px solid $divider-border-color;
+    border-top: none;
+    // padding: 20px;
+    overflow: hidden;
+  
+    .panel:first-child {
+      margin: 20px 0;
     }
-  }
-
-  .log-search {
-    margin-bottom: 10px;
-    .btn {
-      margin-left: 10px;
-      padding: 0.4rem 1rem;
+  
+    .panel {
+      display: block;
+      float: none;
     }
-  }
-
-  .dropdown-menu {
-    border-radius: 2px;
-  }
-
-  .btn-log-compare {
-    position: relative;
-    padding-left: 30px;
-    & > button {
-      line-height: 2;
+  
+    .log-compare, .log-search {
+      display: flex;
+      flex-direction: row;
+      & > div {
+        flex: auto;
+      }
     }
-    & > .dropdown-menu {
-      left: 70px;
-      top: 34px;
-      & > li {
+  
+    .log-search {
+      margin-bottom: 10px;
+      .btn {
+        margin-left: 10px;
+        padding: 0.4rem 1rem;
+      }
+    }
+  
+    .dropdown-menu {
+      border-radius: 2px;
+    }
+  
+    .btn-log-compare {
+      position: relative;
+      padding-left: 30px;
+      & > button {
+        line-height: 2;
+      }
+      & > .dropdown-menu {
+        left: 70px;
+        top: 34px;
+        & > li {
+          padding: 0 10px;
+          cursor: pointer;
+          &:hover {
+            color: white;
+            background: #24ade0;
+          }
+        }
+      }
+    }
+  
+    .btn-log-filter {
+      position: relative;
+      font-size: 14px;
+      & > button {
+        line-height: 2;
+      }
+      & > .dropdown-menu {
+        left: 70px;
+        top: 34px;
+      }
+      & > .dropdown-menu > li {
         padding: 0 10px;
         cursor: pointer;
-        &:hover {
-          color: white;
-          background: #24ade0;
-        }
+      }
+      & > .dropdown-menu > li:hover {
+        color: white;
+        background: #24ade0;
       }
     }
-  }
-
-  .btn-log-filter {
-    position: relative;
-    font-size: 14px;
-    & > button {
-      line-height: 2;
+  
+    .hide {
+      display: none;
     }
-    & > .dropdown-menu {
-      left: 70px;
-      top: 34px;
-    }
-    & > .dropdown-menu > li {
-      padding: 0 10px;
-      cursor: pointer;
-    }
-    & > .dropdown-menu > li:hover {
-      color: white;
-      background: #24ade0;
-    }
-  }
-
-  .hide {
-    display: none;
-  }
-
-  #dropdownMenu1 {
-    width: 400px;
-    & + ul {
+  
+    #dropdownMenu1 {
       width: 400px;
-      margin: 0;
-      li a {
-        min-height: 44px;
-        padding: 4px 20px 4px 10px;
-        font-size: 14px;
-        i {
-          display: block;
-          font-size: 10px;
+      background-color: darken($panel-bg, 2%);
+      outline: none;
+      & + ul {
+        width: 400px;
+        margin: 0;
+        li a {
+          min-height: 44px;
+          padding: 4px 20px 4px 10px;
+          font-size: 14px;
+          i {
+            display: block;
+            font-size: 10px;
+          }
         }
       }
     }
-  }
-
-  // override panel table style
-  .table-panel-table tbody {
-    width: 100%;
-    tr {
+  
+    .log-size {
+      background-color: darken($panel-bg, 2%);
+      border: 1px solid $input-border-color;
+    }
+  
+    // override panel table style
+    .table-panel-table tbody {
       width: 100%;
+      tr {
+        width: 100%;
+      }
+      tr:nth-child(even) {
+        background-color: #fff;
+      }
     }
-    tr:nth-child(even) {
-      background-color: #fff;
+  
+    .log-panel .table-panel-table td {
+      &:first-child {
+        width: auto;
+        max-width: 200px;
+      }
+      &:last-child {
+        word-break: break-all;
+      }
     }
-  }
-
-  .log-panel .table-panel-table td {
-    &:first-child {
-      width: auto;
-      max-width: 200px;
+  
+    .tidy-form {
+      margin: 0;
+      margin-left: 1px;
+      padding: 30px;
+      background: $panel-bg;
     }
-    &:last-child {
-      word-break: break-all;
+  
+    .gf-form-switch input + label {
+      background-color: transparent;
     }
-  }
-
-  .tidy-form {
-    margin: 0;
-    margin-left: 1px;
-    padding: 30px;
-    background: rgb(248, 248, 248);
-  }
-}
-
-.log-search-compare-modal {
-  min-height: 30%;
-  max-height: 80%;
-  max-width: 90%;
-  overflow-y: scroll;
-  .tight-form {
-    & > button {
-      outline: none;
-      padding: 0;
-    }
-  }
-  .dropdown-menu {
-    width: 210px;
-  }
-}
-
-// diff table
-table.diff {
-  width: 100%;
-	border-collapse:collapse;
-  border:1px solid darkgray;
-  white-space:pre-wrap;
-  word-break: break-all;
-  table-layout: fixed;
-  display: table;
-  col {
-    &:nth-child(1) {
-      width: 40px;
-    }
-    &:nth-child(3) {
-      width: 40px;
+  
+    .gf-form-switch input + label:before, .gf-form-switch input + label:after {
+      background-color: transparent;
+      background-image: none;
     }
   }
-}
-table.diff tbody th {
-	font-size:11px;
-	border:1px solid #CCC;
-	color:#886;
-	padding:.3em .3em .1em 1em;
-	text-align:right;
-  vertical-align:top;
-  box-sizing: border-box;
-}
-table.diff thead {
-	border-bottom:1px solid #BBC;
-	background:#EFEFEF;
-	font-family:Verdana;
-}
-table.diff thead th.texttitle {
-  text-align:left;
-  height: 40px;
-}
-table.diff tbody td {
-  vertical-align:top;
-  text-align: left;
-  border-bottom: 1px solid #ccc;
-  font-size: 14px;
-  span {
+  
+  .log-search-compare-modal {
+    min-height: 30%;
+    max-height: 80%;
+    max-width: 90%;
+    overflow-y: scroll;
+    .tight-form {
+      & > button {
+        outline: none;
+        padding: 0;
+      }
+    }
+    .dropdown-menu {
+      width: 210px;
+    }
   }
-}
-table.diff td.empty {
-	background-color:#eaecef;
-}
-table.diff td.replace {
-	background-color:#FD8;
-}
-table.diff td.delete {
-  background-color:rgb(249, 207, 210);
-  float: none;  // 被一个全局的 .delete 影响了 
-}
-table.diff td.skip {
-	background-color:#EFEFEF;
-	border:1px solid #AAA;
-	border-right:1px solid #BBC;
-}
-table.diff td.insert {
-	background-color:rgb(230, 255, 236);
-}
-
-table.diff {
-  th.insert {
-    background-color: rgb(145, 209, 160);
+  
+  // diff table
+  table.diff {
+    width: 100%;
+    border-collapse:collapse;
+    border:1px solid darkgray;
+    white-space:pre-wrap;
+    word-break: break-all;
+    table-layout: fixed;
+    display: table;
+    col {
+      &:nth-child(1) {
+        width: 40px;
+      }
+      &:nth-child(3) {
+        width: 40px;
+      }
+    }
   }
-  th.delete {
-    background-color: rgb(247, 139, 139);
-    float: none;  // 被一个全局的 .delete 影响了
+  table.diff tbody th {
+    font-size:11px;
+    border:1px solid #CCC;
+    color:#886;
+    padding:.3em .3em .1em 1em;
+    text-align:right;
+    vertical-align:top;
+    box-sizing: border-box;
   }
-  th.replace {
-    background-color: #edca73;
+  table.diff thead {
+    border-bottom:1px solid #BBC;
+    background:#EFEFEF;
+    font-family:Verdana;
   }
-  th.skip {
+  table.diff thead th.texttitle {
+    text-align:left;
+    height: 40px;
+  }
+  table.diff tbody td {
+    vertical-align:top;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+    font-size: 14px;
+    span {
+    }
+  }
+  table.diff td.empty {
+    background-color:#eaecef;
+  }
+  table.diff td.replace {
+    background-color:#FD8;
+  }
+  table.diff td.delete {
+    background-color:rgb(249, 207, 210);
+    float: none;  // 被一个全局的 .delete 影响了 
+  }
+  table.diff td.skip {
     background-color:#EFEFEF;
     border:1px solid #AAA;
     border-right:1px solid #BBC;
   }
-  th.empty {
-    background-color:#fafbfc;
+  table.diff td.insert {
+    background-color:rgb(230, 255, 236);
   }
-}
-
-.table-cluster-modal {
-  th {
-    text-align: center;
+  
+  table.diff {
+    th.insert {
+      background-color: rgb(145, 209, 160);
+    }
+    th.delete {
+      background-color: rgb(247, 139, 139);
+      float: none;  // 被一个全局的 .delete 影响了
+    }
+    th.replace {
+      background-color: #edca73;
+    }
+    th.skip {
+      background-color:#EFEFEF;
+      border:1px solid #AAA;
+      border-right:1px solid #BBC;
+    }
+    th.empty {
+      background-color:#fafbfc;
+    }
   }
-  tbody {
-    tr td:not(:last-child) {
+  
+  .table-cluster-modal {
+    th {
       text-align: center;
     }
-  }
-}
-
-// hard code
-.log-integrate-search-result {
-  border: none;
-  .nav-tabs {
-    border: none;
-  }
-}
-.parse-table {
-  font-weight: bold;
-  border-bottom: 1px solid #ddd;
-  min-width: 800px;
-  span{
-    display: inline-block;
-    width: 300px;
-    @include text-overflow();
-  }
-  tr > th {
-    background: rgb(244, 246, 249);
-  }
-}
-.parse-btn {
-  margin-right: 10px;
-  i {
-    margin-right: 5px;
-  }
-}
-
-.parse-delete, .parse-delete:hover, .parse-delete:focus{
-  color: rgb(187, 17, 68);
-}
-
-.parse-edit, .parse-edit:hover, .parse-edit:focus{
-  color: rgb(15, 171, 248);
-}
-
-.parse-add, .parse-add:hover, .parse-add:focus {
-  color: $btn-success-bg;
-  display: block;
-  height: 2.5rem;
-  line-height: 2.5rem;
-}
-
-.parse-form-group {
-  border-bottom: 1px solid #ddd;
-  padding: 2rem 0;
-
-  &.no-border {
-    border: none;
-  }
-
-  .gf-form-label {
-    font-size: 16px;
-    font-weight: bold;
-    background: none;
-  }
-
-  .multiline-label {
-    display: flex;
-    align-items: center;
-    margin-left: 1rem;
-    span {
-      margin-left: 1rem;
-    }
-  }
-
-  .multiline-box {
-    border: 1px dashed rgb(15, 171, 248);
-    border-radius: 5px;
-    padding: 0.5rem 10rem 2rem 1rem;
-    margin-left: 6rem;
-    margin-top: -2rem;
-  }
-
-  .gf-form-input {
-    background: white;
-    border-radius: 5px;
-    height: 2.5rem;
-  }
-
-  .gf-form {
-    margin-bottom: 1rem;
-  }
-
-  .parse-form {
-    flex-direction: column;
-    align-items: left;
-    .parse-table {
-      border: 1px solid #ddd;
-      margin-left: 1rem;
-      tr > th {
-        background: rgba(132, 194, 248, 0.7);
+    tbody {
+      tr td:not(:last-child) {
+        text-align: center;
       }
     }
   }
   
-  .btn {
-    padding: 0.5rem 1rem;
-    background-image: none!important;
+  // hard code
+  .log-integrate-search-result {
+    border: none;
+    .nav-tabs {
+      border: none;
+    }
   }
-}
-
-.modal-log-parse {
-  background: $white;
-  height: 100%;
-  padding: 2rem 2rem 0;
-}
-
-.error-input {
-  border-color: rgb(187, 17, 68);
-}
-
-.no-data-box {
-  font-size: 1.5rem;
-  text-align: center;
-  border: 1px dashed rgb(15, 171, 248);
-  border-radius: 5px;
-  min-height: 5rem;
-  line-height: 5rem;
-}
-
-.warn-message {
-  color: red;
-  font-weight: bold;
-  font-style: normal;
-}
-
-.log-container {
-  display: flex;
-  .log-filed-container {
-    background: rgb(236, 239, 241);
-    margin-left: 1px;
-    border-right: 1px solid;
-    position: relative;
-    width: 200px;
-    label {
-      color: $gray;
+  .parse-table {
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    min-width: 800px;
+    span{
+      display: inline-block;
+      width: 300px;
+      @include text-overflow();
+    }
+    th {
+      border-top: 1px solid #ddd;
+    }
+    td {
+      border-top: 1px solid lighten($panel-bg, 10%);
+    }
+    tr > th {
+      background: $panel-bg;
+    }
+  }
+  .parse-btn {
+    margin-right: 10px;
+    i {
+      margin-right: 5px;
+    }
+  }
+  
+  .parse-delete, .parse-delete:hover, .parse-delete:focus{
+    color: rgb(187, 17, 68);
+  }
+  
+  .parse-edit, .parse-edit:hover, .parse-edit:focus{
+    color: rgb(15, 171, 248);
+  }
+  
+  .parse-add, .parse-add:hover, .parse-add:focus {
+    color: $btn-success-bg;
+    display: block;
+    height: 2.5rem;
+    line-height: 2.5rem;
+  }
+  
+  .parse-form-group {
+    border-bottom: 1px solid #ddd;
+    padding: 2rem 0;
+  
+    &.no-border {
+      border: none;
+    }
+  
+    .gf-form-label {
+      font-size: 16px;
+      font-weight: bold;
+      background: none;
+    }
+  
+    .multiline-label {
       display: flex;
       align-items: center;
+      margin-left: 1rem;
+      span {
+        margin-left: 1rem;
+      }
     }
-    p, li {
+  
+    .multiline-box {
+      border: 1px dashed rgb(15, 171, 248);
+      border-radius: 5px;
+      padding: 0.5rem 10rem 2rem 1rem;
+      margin-left: 6rem;
+      margin-top: -2rem;
+    }
+  
+    .gf-form-input {
+      // background: white;
+      border-radius: 5px;
+      height: 2.5rem;
+    }
+  
+    .gf-form {
+      margin-bottom: 1rem;
+    }
+  
+    .parse-form {
+      flex-direction: column;
+      align-items: left;
+      .parse-table {
+        border: 1px solid lighten($panel-bg, 10%);
+        margin-left: 1rem;
+        tr > th {
+          background: rgba(132, 194, 248, 0.7);
+        }
+      }
+    }
+    
+    .btn {
+      padding: 0.5rem 1rem;
+      background-image: none!important;
+    }
+  }
+  
+  .modal-log-parse {
+    background: $panel-bg;
+    height: 100%;
+    padding: 2rem 2rem 0;
+  }
+  
+  .error-input {
+    border-color: rgb(187, 17, 68);
+  }
+  
+  .no-data-box {
+    font-size: 1.5rem;
+    text-align: center;
+    border: 1px dashed rgb(15, 171, 248);
+    border-radius: 5px;
+    min-height: 5rem;
+    line-height: 5rem;
+  }
+  
+  .warn-message {
+    color: red;
+    font-weight: bold;
+    font-style: normal;
+  }
+  
+  .log-container {
+    display: flex;
+    .log-filed-container {
+      background: darken($panel-bg, 2%);
+      border-right: 1px solid $divider-border-color;
+      position: relative;
+      width: 200px;
+      label {
+        color: $gray;
+        display: flex;
+        align-items: center;
+      }
+      p, li {
+        cursor: pointer;
+        padding: 0 20px;
+        margin: 0;
+      }
+    }
+    .log-filed-contaienr-close {
+      padding: 10px;
+      margin-left: 1px;
       cursor: pointer;
-      padding: 0 20px;
-      margin: 0;
+      &:hover {
+        background: rgb(236, 239, 241);
+      }
     }
-  }
-  .log-filed-contaienr-close {
-    padding: 10px;
-    margin-left: 1px;
-    cursor: pointer;
-    &:hover {
-      background: rgb(236, 239, 241);
+    .log-filed-title {
+      background: #38b7e6;
+      color: $white;
+      line-height: 3rem;
+      cursor: pointer;
+      .pull-right {
+        font-size: 1.5rem;
+        line-height: 3rem;
+      }
     }
-  }
-  .log-filed-title {
-    background: #38b7e6;
-    color: $white;
-    line-height: 3rem;
-    cursor: pointer;
-    .pull-right {
-      font-size: 1.5rem;
+    .row-control {
+      padding: 20px;
+      padding-right: 50px;
+      width: 100%;
+      &.active {
+        width: 90%;
+      }
+    }
+    .log-filed-header {
+      font-weight: bold;
       line-height: 3rem;
     }
   }
-  .row-control {
-    padding: 20px;
-    padding-right: 50px;
-    width: 100%;
-    &.active {
-      width: 90%;
+  
+  .log-context-modal {
+    max-height: 80%;
+    max-width: 90%;
+    overflow-y: scroll;
+    ul {
+      display: flex;
+      align-items: center;
+      li:first-child {
+        flex: 1 1 auto;
+      }
+    }
+    .origin {
+      color: #fff;
+      background-color: nth($thresholds-color, 7) !important;
     }
   }
-  .log-filed-header {
-    font-weight: bold;
-    line-height: 3rem;
-  }
-}
-
-.log-context-modal {
-  max-height: 80%;
-  max-width: 90%;
-  overflow-y: scroll;
-  ul {
-    display: flex;
-    align-items: center;
-    li:first-child {
-      flex: 1 1 auto;
-    }
-  }
-  .origin {
-    color: #fff;
-    background-color: nth($thresholds-color, 7) !important;
-  }
-}

@@ -1,11 +1,11 @@
 .table-container {
-    border: 1px solid #ddd;
-    background: white;
+    background: $panel-bg;
     width: 100%;
     position: fixed;
-    top: 52px;
+    top: $navbarHeight;
     z-index: 1;
     left: 0px;
+    margin-left: $side-menu-width;
     table {
         width: 100%;
     }
@@ -32,7 +32,7 @@
     max-height: 150px;
     overflow-y: auto;
     tr:nth-child(2n+1) {
-        background: #e4e4e4;
+        background-color: $table-bg-odd;  // #e4e4e4;
     }
 }
 

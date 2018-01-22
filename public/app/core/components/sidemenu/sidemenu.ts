@@ -23,7 +23,6 @@ export class SideMenuCtrl {
     this.user = contextSrv.user;
     this.appSubUrl = config.appSubUrl;
     this.showSignout = this.contextSrv.isSignedIn && !config['authProxyEnabled'];
-    this.mainLinks = [];
     this.bottomLinks = [];
     this.contextSrv.setPinnedState(true);
     this.contextSrv.sidemenu = true;
@@ -74,135 +73,8 @@ export class SideMenuCtrl {
   }
 
   getMenus() {
-    this.mainLinks.push({
-      text: "系统总览",
-      icon: "fa fa-fw fa-home",
-      children: [
-        {
-          text: '关键指标',
-          url: this.getUrl("/")
-        },
-        {
-          text: '机器状态',
-          url: this.getUrl("/host_topology")
-        }
-      ]
-    });
-
-    this.mainLinks.push({
-      text: "指标浏览",
-      icon: "fa fa-fw fa-sliders",
-      class: "scroll-y",
-      click: this.loadDashboardList
-    });
-
-    this.mainLinks.push({
-      text: "日志分析",
-      icon: "fa fa-fw fa-file-text-o",
-      children: [
-        {
-          text: '日志搜索',
-          url: this.getUrl("/logs")
-        },
-        {
-          text: '日志管理',
-          url: this.getUrl("/logs/rules")
-        }
-      ]
-    });
-
-    this.mainLinks.push({
-      text: "智能检测",
-      icon: "fa fa-fw fa-stethoscope",
-      children: [
-        {
-          text: '报警规则检测',
-          url: this.getUrl('/alerts/status'),
-        },
-        {
-          text: '自动异常检测',
-          url: this.getUrl("/anomaly"),
-        }
-      ]
-    });
-
-    this.mainLinks.push({
-      text: "智能分析",
-      icon: "fa fa-fw fa-bar-chart",
-      children: [
-        {
-          text: '故障溯源',
-          url: this.getUrl("/rca"),
-        },
-        {
-          text: '关联性分析',
-          url: this.getUrl("/association"),
-        },
-        {
-          text: '资源消耗',
-          url: this.getUrl("/topn?guide"),
-        },
-        {
-          text: '运维知识',
-          url: this.getUrl("/knowledgebase"),
-        },
-        {
-          text: '健康报告',
-          url: this.getUrl('/report'),
-        },
-      ]
-    });
-
-    if (!this.contextSrv.isViewer) {
-      this.mainLinks.push({
-        text: "安装指南",
-        icon: "fa fa-fw fa-cloud-download",
-        children: [
-          {
-            text: '安装探针',
-            url: this.getUrl("/setting/agent"),
-          },
-          {
-            text: '安装服务',
-            url: this.getUrl("/setting/service"),
-          },
-          {
-            text: '配置日志服务',
-            url: this.getUrl("/setting/log"),
-          },
-          {
-            text: '内网代理设置',
-            url: this.getUrl("/setting/proxy"),
-          },
-        ]
-      });
-    }
-
-    this.mainLinks.push({
-      text: "配置管理",
-      icon: "fa fa-fw fa-cubes",
-      children: [
-        {
-          text: '设备列表',
-          url: this.getUrl("/cmdb/hostlist")
-        },
-        {
-          text: '服务列表',
-          url: this.getUrl("/cmdb/servicelist")
-        },
-        {
-          text: '探针管理',
-          url: this.getUrl("/cmdb/config?serviceName=collector")
-        },
-        {
-          text: '指标概览',
-          url: this.getUrl("/cmdb/metrics")
-        },
-        {
-          text: 'KPI',
-          url: this.getUrl("/cmdb/kpi")
-        },
-      ]
+    this.backendSrv.get('/api/static/menu').then(response => {
+      this.mainLinks = response.menusTop;
     });
 
     this.bottomLinks.push({
@@ -229,8 +101,7 @@ export class SideMenuCtrl {
       icon: "fa fa-fw fa-sitemap",
       url: this.getUrl('/systems')
     });
-
-  };
+  }
 
   getUrl(url) {
     return config.appSubUrl + url;

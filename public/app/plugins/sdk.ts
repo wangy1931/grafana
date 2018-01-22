@@ -5,10 +5,10 @@ import {QueryCtrl} from 'app/features/panel/query_ctrl';
 import config from 'app/core/config';
 
 export function loadPluginCss(options) {
-  if (config.bootData.user.lightTheme) {
-    System.import(options.light + '!css');
+  if (config.bootData.user.userTheme) {
+    System.import(options[config.bootData.user.userTheme] + '!css');
   } else {
-    System.import(options.dark + '!css');
+    System.import(options.light + '!css');
   }
 }
 

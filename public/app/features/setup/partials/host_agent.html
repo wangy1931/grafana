@@ -16,8 +16,8 @@
     </li>
   </ul>
   <div class="tab-container">
-    <a ng-click="nextEvent('back')" class="pull-right">返回</a>
-    <div ng-if="!selected" style="height: 100%; overflow: hidden;">
+    <button class="btn btn-primary pull-right btn-small" ng-click="nextEvent('back')">返回</button>
+    <div ng-if="!selected" style="margin-top: 20px; height: 100%; overflow: hidden;">
       <img src="public/img/chooseHost.png" alt=""/>
     </div>
     <div ng-if="selected">

@@ -35,7 +35,7 @@ func setIndexViewData(c *middleware.Context) (*dtos.IndexViewData, error) {
 			GravatarUrl:    dtos.GetGravatarUrl(c.Email),
 			IsGrafanaAdmin: c.IsGrafanaAdmin,
 			SystemId: 	c.SystemId,
-			LightTheme:     prefs.Theme == "dark",
+			UserTheme:      prefs.Theme,
 			Timezone:       prefs.Timezone,
 			Deadline:				c.Deadline,
 		},
@@ -54,10 +54,10 @@ func setIndexViewData(c *middleware.Context) (*dtos.IndexViewData, error) {
 		data.User.Name = data.User.Login
 	}
 
-	themeUrlParam := c.Query("theme")
-	if themeUrlParam == "light" {
-		data.User.LightTheme = true
-	}
+	// themeUrlParam := c.Query("theme")
+	// if themeUrlParam == "light" {
+	// 	data.User.UserTheme = true
+	// }
 
 
 	//TODO must support Multi-tenant
