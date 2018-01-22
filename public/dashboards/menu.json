@@ -48,7 +48,18 @@
       "id": 4,
       "text": "系统分析",
       "icon": "fa fa-fw fa-bar-chart",
-      "url": "/rca?guide"
+      "children": [
+        {
+          "id": 1,
+          "text": "诊断分析",
+          "url": "/rca?guide"
+        },
+        {
+          "id": 2,
+          "text": "健康报告",
+          "url": "/report"
+        }
+      ]
     },
     {
       "id": 5,

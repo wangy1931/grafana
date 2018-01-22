@@ -80,13 +80,7 @@ export class SideMenuCtrl {
     this.bottomLinks.push({
       text: this.user.name,
       icon: "fa fa-fw fa-user",
-      url: this.getUrl('/profile')
-    });
-
-    this.bottomLinks.push({
-      text: "信息管理",
-      icon: "fa fa-fw fa-cogs",
-      children: this.getMsgManagementMenu.bind(this)(),
+      children: this.getMsgManagementMenu.bind(this)()
     });
 
     this.bottomLinks.push({
@@ -116,6 +110,12 @@ export class SideMenuCtrl {
 
   getMsgManagementMenu() {
     var item = [];
+
+    item.push({
+      text: "个人信息",
+      url : this.getUrl('/profile')
+    });
+
     if (config.allowOrgCreate) {
       item.push({
         text: "新建公司",
