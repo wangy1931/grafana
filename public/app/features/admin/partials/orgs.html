@@ -15,6 +15,9 @@
 			<tr>
 				<th>公司ID</th>
 				<th>公司名称</th>
+				<th>数据中心</th>
+				<th>用户类型</th>
+				<th>使用限期</th>
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -22,6 +25,9 @@
 			<tr ng-repeat="org in orgs">
 				<td>{{org.id}}</td>
 				<td>{{org.name}}</td>
+				<td>{{org.data_center}}</td>
+				<td>{{org.level}}</td>
+				<td>{{org.deadline}}天</td>
 				<td class="text-right">
 					<a href="admin/orgs/edit/{{org.id}}" class="btn btn-inverse btn-small">
 						<i class="fa fa-edit"></i>

@@ -32,7 +32,7 @@ export class ContextSrv {
   isGrafanaAdmin: any;
   isEditor: any;
   sidemenu: any;
-  lightTheme: any;
+  userTheme: any;
   isOrgAdmin: any;
   dashboardLink: any;
   systemsMap: any;
@@ -73,7 +73,8 @@ export class ContextSrv {
     store.set('grafana.sidemenu.pinned', val);
   }
 
-  toggleSideMenu() {
+  toggleSideMenu($event) {
+    $event && $event.preventDefault();
     this.sidemenu = !this.sidemenu;
     this.setPinnedState(true);
   }

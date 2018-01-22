@@ -70,7 +70,7 @@ $summary-border-color: $body-bg; // #ECEFF1;
     height: 50%;
     & > div:first-child {
       width: 30%;
-      border-right: 2px solid $summary-border-color;
+      border-right: $panel-border-2px;
     }
     & > div:last-child {
       flex: auto;
@@ -324,7 +324,6 @@ $summary-border-color: $body-bg; // #ECEFF1;
   height: auto;
   overflow: visible;
   position: relative;
-  background-color: #fff;
 
   // Slide
   & > div {
@@ -380,7 +379,7 @@ $summary-border-color: $body-bg; // #ECEFF1;
     margin: 0;
     border: 0;
     &:nth-child(even) .accordion-heading {
-      background-color: #F4F6F9;
+      background-color: $table-bg-odd;
     }
   }
   .accordion-inner {
@@ -466,6 +465,14 @@ $summary-border-color: $body-bg; // #ECEFF1;
       }
       button {
         margin-right: 20px;
+      }
+      .pull-right {
+        a {
+          padding: 0 15px;
+          &:first-child {
+            border-right: 1px solid $gray-6;
+          }
+        }
       }
     }
     .kpi-overview {

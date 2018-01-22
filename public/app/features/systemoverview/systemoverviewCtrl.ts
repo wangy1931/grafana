@@ -286,7 +286,8 @@ export class SystemOverviewCtrl {
     this.servicePanel.currentService = {
       id: serviceId,
       name: serviceName,
-      status: serviceStatus
+      status: serviceStatus,
+      icon: node.node.data.icon || ""
     };
 
     this.kpiPanel.type = 'service';
@@ -298,7 +299,7 @@ export class SystemOverviewCtrl {
 
       _.each(resp.hostStatusMap, (hostMap, hostKey) => {
         this.kpiPanel.leftTableBodys.push({
-          id: _.findWhere(this.hostPanels, { host: hostKey }).id,
+          id: _.find(this.hostPanels, { host: hostKey }).id,
           name: hostKey,
           data: _.statusFormatter(hostMap.healthStatusType),
           status: hostMap.healthStatusType
@@ -351,7 +352,8 @@ export class SystemOverviewCtrl {
             id: service.id,
             name: service.name,
             data: _.statusFormatter(service.healthStatusType),
-            status: service.healthStatusType
+            status: service.healthStatusType,
+            icon: (_.find(this.dependencies.nodes, { id: "" + service.id, name: service.name }) || {}).icon
           });
         });
         this.leftClickHandler(response.data.services[0], 'host');
@@ -366,6 +368,11 @@ export class SystemOverviewCtrl {
 
     if (type === 'service') {
       promise = this.getHostKpi(item.name);
+      this.hostPanel.currentHost = {
+        id: item.id || this.kpiPanel.rightPanelHead.id,
+        name: item.name,
+        status: item.status
+      };
     }
     if (type === 'host') {
       if (_.isEmpty(item)) {
@@ -375,6 +382,12 @@ export class SystemOverviewCtrl {
       } else {
         promise = this.getServiceKpi(item.id, item.name);
       }
+      this.servicePanel.currentService = {
+        id: item.id,
+        name: item.name,
+        status: item.status,
+        icon: item.icon
+      };
     }
     promise.then(() => {
       this.setServiceKpiPanel(this.kpiPanel.rightPanelHead.name);
@@ -558,10 +571,6 @@ export class SystemOverviewCtrl {
     this.servicePanel.currentService = {};
     this.hostPanel.currentHost = {};
     this.switchEnabled = !this.switchEnabled;
-  }
-
-  toHostTopology({id, name}) {
-    this.$location.url(`/host_topology?id=${id}&name=${name}&tabId=1`);
   }
 
 };

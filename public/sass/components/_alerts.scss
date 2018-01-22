@@ -10,7 +10,7 @@
   padding: 8px 35px 13px 14px;
   margin-bottom: $line-height-base;
   text-shadow: 0 1px 0 rgba(255,255,255,.5);
-  background-color: $alert-warning-bg;
+  background: $alert-warning-bg;
   position: relative;
   color: $white;
   text-shadow: 0 1px 0 rgba(0,0,0,.5);
@@ -21,18 +21,18 @@
 // -------------------------
 
 .alert-success {
-  background-color: $alert-success-bg;
+  background: $alert-success-bg;
 }
 
 .alert-danger,
 .alert-error {
-  background-color: $alert-error-bg;
+  background: $alert-error-bg;
 }
 .alert-info {
-  background-color: $alert-info-bg;
+  background: $alert-info-bg;
 }
 .alert-warning {
-  background-color: $alert-warning-bg;
+  background: $alert-warning-bg;
 }
 
 .page-alert-list {

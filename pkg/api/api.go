@@ -321,6 +321,8 @@ func Register(r *macaron.Macaron) {
 			// metric help message
 			r.Get("/metric/:name", GetMetricHelpFile)
 		})
+
+		r.Get("/permit/:id", wrap(GetOrgPermitByOrgId))
 	}, reqSignedIn)
 
 	// admin api
@@ -333,6 +335,7 @@ func Register(r *macaron.Macaron) {
 		r.Get("/users/:id/quotas", wrap(GetUserQuotas))
 		r.Put("/users/:id/quotas/:target", bind(m.UpdateUserQuotaCmd{}), wrap(UpdateUserQuota))
 		r.Get("/customer", wrap(GetAllCustomerUsers))
+		r.Post("/permit/:id", bind(m.OrgPermit{}), UpdateOrgPermit)
 	}, reqGrafanaAdmin)
 
 	// rendering

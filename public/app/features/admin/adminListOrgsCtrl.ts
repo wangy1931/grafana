@@ -1,13 +1,13 @@
-define([
-  'angular',
-],
-function (angular) {
-  'use strict';
+///<reference path="../../headers/common.d.ts" />
 
-  var module = angular.module('grafana.controllers');
+import _ from 'lodash';
+import moment from 'moment';
+import coreModule from 'app/core/core_module';
+import Moment from 'moment';
 
-  module.controller('AdminListOrgsCtrl', function($scope, backendSrv) {
-
+class AdminListOrgsCtrl {
+  /** @ngInject **/
+  constructor($scope, backendSrv) {
     $scope.init = function() {
       $scope.getOrgs();
     };
@@ -15,6 +15,10 @@ function (angular) {
     $scope.getOrgs = function() {
       backendSrv.get('/api/orgs').then(function(orgs) {
         $scope.orgs = orgs;
+        _.each($scope.orgs, (org) => {
+          org.level = org.level === 'free' ? '免费用户' : '付费用户';
+          org.deadline = moment(org.deadline).diff(moment(), 'days');
+        });
       });
     };
 
@@ -33,7 +37,7 @@ function (angular) {
     };
 
     $scope.init();
+  }
+}
 
-  });
-
-});
+coreModule.controller('AdminListOrgsCtrl', AdminListOrgsCtrl)

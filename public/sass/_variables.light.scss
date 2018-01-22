@@ -6,44 +6,52 @@
 // Global values
 // --------------------------------------------------
 
+$theme-name: light;
 
 // Grays
 // -------------------------
 $black:                 #000;
 
 // -------------------------
-$black:            #000;
-$dark-1:           #141414;
-$dark-2:           #1f1d1d;
-$dark-3:           #292929;
-$dark-4:           #373737;
-$dark-5:           #444444;
-$gray-1:           #555555;
-$gray-2:           #7B7B7B;
-$gray-3:           #b3b3b3;
-$gray-4:           #D8D9DA;
-$gray-5:           #ECECEC;
-$gray-6:           #f4f5f8;
-$gray-7:           #fbfbfb;
+$black: #000;
+$dark-1: #13161d;
+$dark-2: #1e2028;
+$dark-3: #303133;
+$dark-4: #35373f;
+$dark-5: #41444b;
+$gray-1: #52545c;
+$gray-2: #767980;
+$gray-3: #acb6bf;
+$gray-4: #c7d0d9;
+$gray-5: #dde4ed;
+$gray-6: #e9edf2;
+$gray-7: #fbfbfb;
+$gray-8: #f7f8fa;
+
+$gray: #9d9d9d;
+$gray-blue: #212327;
+$input-black: #09090b;
 
 $white:            #fff;
 
 // Accent colors
 // -------------------------
-$blue:             	   	#2AB2E4;
-$blue-dark:             #3CAAD6;
-$green:                 #28B62C;
-$red:                   #FF4136;
-$yellow:                #FF851B;
-$orange:                #Ff7941;
-$pink:                  #E671B8;
-$purple:                #9954BB;
-$variable:              #2AB2E4;
+$blue: #61c2f2;
+$blue-dark: #0083b3;
+$green: #3aa655;
+$red: #d44939;
+$yellow: #ff851b;
+$orange: #ff7941;
+$pink: #e671b8;
+$purple: #9954bb;
+$variable: $blue;
 
-$brand-primary:         $blue;
-$brand-success:         $green;
-$brand-warning:         $orange;
-$brand-danger:          $red;
+$brand-primary: $blue;
+$brand-success: $green;
+$brand-warning: $orange;
+$brand-danger: $red;
+
+$query-blue: $blue-dark;
 $brand-text-highlight:  #f7941d;
 
 // Status colors
@@ -55,21 +63,26 @@ $critical:              #EC2128;
 // Scaffolding
 // -------------------------
 
-$body-bg:  		  		    $white;
-$page-bg:  		  		    $white;
-$body-color:    		    $gray-1;
-$text-color:    		    $gray-1;
-$text-color-strong:	    $white;
-$text-color-weak: 	    $gray-1;
-$text-color-faint:      $gray-3;
-$text-color-emphasis: 	$dark-5;
+$body-bg: #fffffe;
+$page-bg: #fffffe;
+$body-color: $gray-1;
+$text-color: $dark-4;
+$text-color-strong: $white;
+$text-color-weak: $gray-2;
+$text-color-faint: $gray-4;
+$text-color-emphasis: $dark-5;
 
 $text-shadow-strong: none;
 $text-shadow-faint: none;
 
 // gradients
-$brand-gradient: linear-gradient(to right, rgba(255,213,0,1.0) 0%, rgba(255,68,0,1.0) 99%, rgba(255,68,0,1.0) 100%);
-$page-gradient: linear-gradient(60deg, transparent 70%, darken($page-bg, 4%) 98%);
+$brand-gradient: linear-gradient(
+  to right,
+  rgba(255, 213, 0, 1) 0%,
+  rgba(255, 68, 0, 1) 99%,
+  rgba(255, 68, 0, 1) 100%
+);
+$page-gradient: linear-gradient(-60deg, transparent 70%, $gray-7 98%);
 
 // Links
 // -------------------------
@@ -96,9 +109,10 @@ $component-active-bg:    $brand-primary !default;
 // Panel
 // -------------------------
 
-$panel-bg: 		  $gray-7;
-$panel-border:  solid 1px $gray-6;
-$panel-border-2px:  solid 2px $gray-6;
+$panel-bg: $gray-7;
+$panel-border-color: $gray-5;
+$panel-border: solid 1px $panel-border-color;
+$panel-border-2px:  solid 2px $panel-border-color;
 
 $divider-border-color:	$gray-2;
 
@@ -120,6 +134,12 @@ $page-header-border-color: $gray-4;
 
 $divider-border-color: $gray-2;
 
+// cards
+$card-background: linear-gradient(135deg, $gray-6, $gray-5);
+$card-background-hover: linear-gradient(135deg, $gray-5, $gray-6);
+$card-shadow: -1px -1px 0 0 hsla(0, 0%, 100%, 0.1),
+  1px 1px 0 0 rgba(0, 0, 0, 0.1);
+
 // Lists
 $grafanaListBackground:    	   $gray-6;
 $grafanaListAccent:            $gray-5;
@@ -136,6 +156,8 @@ $table-bg-accent:            $gray-5; // for striping
 $table-bg-hover:             $gray-5; // for hover
 $table-bg-active:            $table-bg-hover !default;
 $table-border:               $gray-3; // table and cell border
+
+$table-bg-odd: $gray-5;
 
 // Scrollbars
 $scrollbarBackground:   $gray-5;
@@ -189,9 +211,17 @@ $input-invalid-border-color: lighten($red, 5%);
 
 // Sidemenu
 // -------------------------
-$side-menu-bg:            $body-bg;
-$side-menu-item-hover-bg: $gray-6;
+$side-menu-bg: $gray;
+$side-menu-item-hover-bg: $gray-1;
+$side-menu-shadow: 5px 0px 10px -5px $gray-1;
+$side-menu-link-color: $gray-6;
+// $side-menu-bg:            $gray;
+// $side-menu-item-hover-bg: $gray-6;
 $side-menu-opacity:		  0.97;
+// $side-menu-shadow: 0 0 20px black;
+// $side-menu-link-color: $link-color;
+$breadcrumb-hover-hl: #111;
+$side-menu-top-bg: $dark-2;
 
 // search
 $search-shadow: 0 5px 30px 0 lighten($gray-2, 30%);
@@ -199,7 +229,7 @@ $search-shadow: 0 5px 30px 0 lighten($gray-2, 30%);
 // Dropdowns
 // -------------------------
 $dropdownBackground:            $white;
-$dropdownBorder:                $tight-form-border;
+$dropdownBorder:                $gray-4;
 $dropdownDividerTop:            $gray-6;
 $dropdownDividerBottom:         $white;
 $dropdownDivider:               $dropdownDividerTop;
@@ -242,7 +272,7 @@ $wellBackground:                  $gray-3;
 
 $navbarHeight: 52px;
 $navbarBackgroundHighlight: $white;
-$navbarBackground: $white;
+$navbarBackground: $panel-bg;
 $navbarBorder: 1px solid $gray-4;
 $navbarShadow: 0 0 3px #c1c1c1;
 
@@ -263,7 +293,7 @@ $navbar-button-border: $gray-4;
 
 // Pagination
 // -------------------------
-$paginationBackground:                $gray-2;
+$paginationBackground:                $body-bg;
 $paginationBorder:                    transparent;
 $paginationActiveBackground:          $blue;
 
@@ -299,11 +329,8 @@ $graph-tooltip-bg:        $gray-5;
 // images
 $checkboxImageUrl: '../img/checkbox_white.png';
 
-// cards
-$card-background: linear-gradient(135deg, $gray-5, $gray-6);
-$card-background-hover: linear-gradient(135deg, $gray-6, $gray-7);
-$card-shadow: -1px -1px 0 0 hsla(0, 0%, 100%, .1), 1px 1px 0 0 rgba(0, 0, 0, .1);
-
 // cloudwiz
 $service-dep-bg-color: rgba(210, 235, 250, 0.5);
 $div-box-shadow-color: #cccccc;
+$thresholds-color: (#66C2A5, #FEE08B, #FDAE61, #FE9805, #D53E4F, #DBE1EA, #6FCDFB);
+$thresholds-hover-color: (#3DB779, #FFD500, #FE9805, #ff4f45, #BB1144, #BABFC7, #18BEEA);

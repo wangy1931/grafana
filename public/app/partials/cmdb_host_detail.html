@@ -110,7 +110,8 @@
                       <td>{{service.name}}</td>
                       <td>{{service.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                       <td>
-                        <a href="/cmdb/servicelist/servicedetail?id={{service.id}}">
+                        <!-- <a href="/cmdb/servicelist/servicedetail?id={{service.id}}"> -->
+                        <a href="/service_topology?tabId=1&id={{ service.id }}&name={{ service.name }}">
                             <span class="cmdb-icon-text">详情</span>
                         </a>
                         <a ng-click="deleteService(service.relationshipId)"><span>删除</span></a>

@@ -51,6 +51,11 @@
 			<li ng-if="dashboardMeta.canSave"><a class="pointer" ng-click="deleteDashboard();">删除仪表盘</a></li>
 		</ul>
 	</li>
+	<li>
+		<a ng-click="newDashboard()" ng-show="::contextSrv.isEditor" data-container="body" bs-tooltip="'新建仪表盘'">
+			<i class="fa fa-plus"></i>
+		</a>
+	</li>
 </ul>
 
 <ul class="nav dash-playlist-actions" ng-if="playlistSrv">

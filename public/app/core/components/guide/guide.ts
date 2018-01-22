@@ -144,7 +144,7 @@ export class GuideCtrl {
   }
 
   showGuide() {
-    this.show = true;
+    this.show = !this.show; // true;
   }
 
   dismiss() {

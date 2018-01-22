@@ -1,18 +1,16 @@
-$summary-border-color: $body-bg; // #ECEFF1;
+ .summary-item{
+   width: 50%;
+   display: inline-block;
+   box-sizing: border-box;
+ }
 
-.summary-item{
-  width: 50%;
-  display: inline-block;
-  box-sizing: border-box;
-}
+ .summary-panel{
+   border: $panel-border;
+ }
 
-.summary-panel{
-  border: $panel-border;
-}
-
-.summary-analysis{
-  width: 30%;
-}
+ .summary-analysis{
+   width: 30%;
+ }
 
 
 .btn-list-status{

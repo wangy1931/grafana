@@ -30,7 +30,7 @@ var template = `
                       按标签分组
                   </li>
                   <li class="tidy-form-item" ng-hide="ctrl.type === 'service'">
-                      <button type="button" class="btn btn-default" ng-model="ctrl.group" data-placement="bottom-auto"
+                      <button type="button" class="kpi-btn btn btn-default" ng-model="ctrl.group" data-placement="bottom-auto"
                               bs-options="f.value as f.text for f in ctrl.groupOptions" bs-select ng-change="ctrl.getGraph();">
                           请选择<span class="caret"></span>
                       </button>
@@ -39,7 +39,7 @@ var template = `
                       KPI 状态
                   </li>
                   <li class="tidy-form-item">
-                      <button type="button" class="btn btn-default kpi-btn" ng-model="ctrl.filter" data-placement="bottom-auto"
+                      <button type="button" class="kpi-btn btn btn-default" ng-model="ctrl.filter" data-placement="bottom-auto"
                               bs-options="f.value as f.text for f in ctrl.filterOptions" bs-select ng-change="ctrl.filterBy();" >
                           请选择<span class="caret"></span>
                       </button>

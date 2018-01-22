@@ -41,7 +41,8 @@ export class HostTopologyCtrl {
     private $rootScope,
     private $controller,
     private $location,
-    private NgTableParams
+    private NgTableParams,
+    private alertSrv
   ) {
     $scope.ctrl = this;
     $scope.refresh_interval = '30s';
@@ -384,6 +385,30 @@ export class HostTopologyCtrl {
   saveTopologyData() {
     this.data = this.hostSrv.topology;
     this.hostlist = _.map(this.data, 'name');
+  }
+
+  deleteHost($event, hostId) {
+    $event.preventDefault();
+
+    this.$scope.appEvent('confirm-modal', {
+      title: '删除',
+      text: '您确认要删除该机器吗？',
+      icon: 'fa-trash',
+      yesText: '删除',
+      noText: '取消',
+      onConfirm: () => {
+        this.backendSrv.alertD({
+          method: 'DELETE',
+          url   : '/host',
+          params: { 'id': hostId }
+        }).then(() => {
+          this.alertSrv.set("删除成功", '', "success", 2000);
+          _.remove(this.hostPanels, { id: hostId });
+        }, (err) => {
+          this.alertSrv.set("删除失败", err.data, "error", 2000);
+        });
+      }
+    });
   }
 
   showGuideResult(e, params) {

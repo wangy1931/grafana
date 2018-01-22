@@ -1,9 +1,9 @@
 {
   "menusTop": [
     {
-      "id": 1,
-      "text": "系统监控",
-      "icon": "fa fa-fw fa-home",
+      "id": 2,
+      "text": "实时监控",
+      "icon": "fa fa-fw fa-tachometer",
       "children": [
         {
           "id": 1,
@@ -16,6 +16,11 @@
           "url": "/logs"
         },
         {
+          "id": 3,
+          "text": "机器",
+          "url": "/host_topology"
+        },
+        {
           "id": 4,
           "text": "服务",
           "url": "/service_topology"
@@ -23,9 +28,9 @@
       ]
     },
     {
-      "id": 2,
-      "text": "系统报警",
-      "icon": "fa fa-fw fa-stethoscope",
+      "id": 3,
+      "text": "实时报警",
+      "icon": "fa fa-fw fa-bell",
       "children": [
         {
           "id": 1,
@@ -40,20 +45,31 @@
       ]
     },
     {
-      "id": 3,
-      "text": "系统分析",
+      "id": 4,
+      "text": "分析诊断",
       "icon": "fa fa-fw fa-bar-chart",
-      "url": "/association?guide"
+      "children": [
+        {
+          "id": 1,
+          "text": "诊断助手",
+          "url": "/rca?guide"
+        },
+        {
+          "id": 2,
+          "text": "健康报告",
+          "url": "/report"
+        }
+      ]
     },
     {
-      "id": 4,
+      "id": 5,
       "text": "系统配置",
       "icon": "fa fa-fw fa-cubes",
       "children": [
         {
           "id": 1,
-          "text": "基本配置",
-          "url": "/cmdb/basic_azure"
+          "text": "探针收集",
+          "url": "/cmdb/config?serviceName=collector"
         },
         {
           "id": 2,
@@ -62,8 +78,8 @@
         },
         {
           "id": 3,
-          "text": "KPI 指标",
-          "url": "/cmdb/kpi"
+          "text": "指标管理",
+          "url": "/cmdb/metrics"
         }
       ]
     }
