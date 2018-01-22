@@ -4,21 +4,21 @@ $tab-list-width: 14.5rem;
   padding: 0!important;
 }
 
-.tab-list{
+.tab-list {
   position: fixed;
   list-style: none;
   width: $tab-list-width;
   height: 100%;
-  background: rgb(243,247,250);
-  border: solid 1px #ddd;
-  &>li{
+  background: $side-menu-bg;
+  & > li {
     height: 50px;
     line-height: 50px;
     padding-left: 10px;
     border-bottom: 1px solid #ddd;
-    &.active{
+    cursor: pointer;
+    &.active {
       background: skyblue;
-      &:after{
+      &:after {
         content: '';
         border: 25px solid transparent;
         border-right: 30px solid #fff;
@@ -35,7 +35,7 @@ $tab-list-width: 14.5rem;
   margin-left: $tab-list-width;
   height: 100%;
   padding: 40px;
-  box-shadow: -5px 5px 5px 0px #ccc;
+  box-shadow: -3px 0px 5px 0px #ccc;
   overflow: scroll;
   .tight-form{
     padding: 10px;
@@ -64,7 +64,7 @@ $tab-list-width: 14.5rem;
     margin: 10px;
     text-align: center;
     border: 1px solid skyblue;
-    background: white;
+    background: $panel-bg;
     position: relative;
     cursor: pointer;
     overflow: hidden;
@@ -84,19 +84,20 @@ $tab-list-width: 14.5rem;
       width: 100%;
       height: 160px;
       transform: translateY(-100%);
-      background: rgba(236,239,241,0.88);;
+      background: $panel-bg;
+      opacity: 0.88;
       transition: all linear 0.2s;
-      p{
+      p {
         height: 130px;
         padding: 10px;
         font-weight: bold;
-        text-align:justify;
+        text-align: justify;
         overflow: hidden;
       }
     }
-    &.service-err{
+    &.service-err {
       border-color: rgb(254,153,5);
-      &:before{
+      &:before {
         content: '没有收到数据';
         position: absolute;
         left: 0;
@@ -107,8 +108,8 @@ $tab-list-width: 14.5rem;
         background: rgb(254,153,5);
       }
     }
-    &:hover{
-      .service-cover{
+    &:hover {
+      .service-cover{ 
         transform: translateY(0);
       }
     }
@@ -152,9 +153,9 @@ $tab-list-width: 14.5rem;
   }
 }
 
-.service-nav{
+.service-nav {
   list-style: none;
-  &>li{
+  & > li {
     float: left;
     padding: 5px 20px;
     color: white;
@@ -164,7 +165,7 @@ $tab-list-width: 14.5rem;
     border: 2px solid skyblue;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    &.active{
+    &.active {
       color: black;
       background: white;
       border-bottom-color: white;

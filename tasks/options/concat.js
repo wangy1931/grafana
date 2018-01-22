@@ -8,6 +8,7 @@ module.exports = function(config) {
         '<%= genDir %>/vendor/css/spectrum.css',
         '<%= genDir %>/css/grafana.dark.css',
         '<%= genDir %>/vendor/css/font-awesome.min.css',
+        '<%= genDir %>/vendor/css/nouislider.min.css',
         '<%= genDir %>/vendor/css/bootstrap-responsive.min.css',
         '<%= genDir %>/vendor/css/iconfont.css',
         '<%= genDir %>/vendor/css/quill.snow.css',
@@ -31,6 +32,22 @@ module.exports = function(config) {
         '<%= genDir %>/vendor/css/ng-table.css',
       ],
       dest: '<%= genDir %>/css/grafana.light.min.css'
+    },
+
+    cssDarkBlue: {
+      src: [
+        '<%= genDir %>/vendor/css/timepicker.css',
+        '<%= genDir %>/vendor/css/spectrum.css',
+        '<%= genDir %>/css/grafana.darkblue.css',
+        '<%= genDir %>/vendor/css/font-awesome.min.css',
+        '<%= genDir %>/vendor/css/nouislider.min.css',
+        '<%= genDir %>/vendor/css/bootstrap-responsive.min.css',
+        '<%= genDir %>/vendor/css/iconfont.css',
+        '<%= genDir %>/vendor/css/quill.snow.css',
+        '<%= genDir %>/vendor/css/quill.bubble.css',
+        '<%= genDir %>/vendor/css/ng-table.css',
+      ],
+      dest: '<%= genDir %>/css/grafana.darkblue.min.css'
     },
 
     cssFonts: {

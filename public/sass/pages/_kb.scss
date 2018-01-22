@@ -6,10 +6,9 @@
 }
 
 .kb-search-form {
-  background: #fff;
+  background: lighten($panel-bg, 10%);
   padding: 20px;
-  box-shadow: 0 6px 6px -1px rgb(215, 211, 211);
-  border-bottom: 1px solid rgb(221, 221, 221); 
+  box-shadow: 0 1px 4px -1px $div-box-shadow-color; 
   .tidy-form {
     margin-top: 36px;
   }
@@ -24,10 +23,10 @@
 .kb-item {
   margin: 10px 0;
   padding: 15px 15px 0;
-  background: #fff;
+  background: lighten($panel-bg, 10%);
   border: 1px solid rgb(216, 216, 216);
   border-radius: 3px;
-  box-shadow: 1 2px 3px 0 rgb(204, 204, 204);
+  box-shadow: 1 2px 3px 0 $div-box-shadow-color;
   & > li {
     margin-bottom: 24px;
   }

@@ -1,0 +1,39 @@
+<div class="service-list service-tab-content">
+  <div ng-hide="ctrl.servicePanel.length">
+    <em>暂没有任何服务数据</em>
+    <cw-loading show="!ctrl.servicePanel.length" duration=6000></cw-loading>
+  </div>
+
+  <div style="width: 100%">
+    <h2>
+      <a ng-if="!ctrl.contextSrv.isViewer" class="btn btn-primary btn-cmdb" style="margin-left: 12px;" href="/cmdb/servicecustom">添加拓展服务</a>
+      <a ng-if="!ctrl.contextSrv.isViewer" class="btn btn-success btn-cmdb" style="margin-left: 12px;" href="/service_dependency">创建服务依赖</a>
+      <a ng-if="ctrl.contextSrv.isGrafanaAdmin" class="btn btn-success btn-cmdb" style="margin-left: 12px;" href="/cmdb/servicecustom?unit=true">添加默认服务</a>
+      <!-- <button class="btn btn-success btn-cmdb" ng-disabled="isScan" style="margin-left: 12px;" ng-click="serviceScan()"><span ng-if="!isScan">刷新</span><i ng-if="isScan" class="fa fa-spinner fa-spin"></i></button> -->
+    </h2>
+    <table class="table service-panel-table" ng-show="ctrl.servicePanel.length">
+      <thead>
+        <tr>
+          <th>服务名</th>
+          <th>服务 ID</th>
+          <th>开始运行时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in ctrl.servicePanel"
+            ng-class="{active: item.name==ctrl.currentService.name}"
+            ng-click="ctrl.nodeClickHandle(item)">
+          <td>{{ item.name }}</td>
+          <td>{{ item.id || '-' }}</td>
+          <td>{{ item.createdAt | date:'yyyy-MM-dd HH:mm:ss' || '-' }}</td>
+          <td>
+            <button class="btn btn-small btn-outline-primary" ng-if="!ctrl.contextSrv.isViewer" ng-click="ctrl.deleteService($event, item.id)">
+              <i class="fa fa-times"></i> 删除
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

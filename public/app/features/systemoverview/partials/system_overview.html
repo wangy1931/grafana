@@ -1,4 +1,4 @@
-<navbar title="系统总览" icon="fa fa-fw fa-home"></navbar>
+<navbar text="系统总览" icon="fa fa-fw fa-home"></navbar>
 
 <div class="page-container summary-page" ng-init="ctrl.init()">
 
@@ -25,8 +25,8 @@
                 <div class="health-panel">
                     <div class="alert-panel">
                         <div class="panels-wrapper">
-                            <h3 ng-click="ctrl.showModal(1)" style="cursor: pointer;" bs-tooltip="'点击查看历史报警'">
-                                报警情况
+                            <h3>
+                                <a href="javascript:;" ng-click="ctrl.showModal(1)" bs-tooltip="'点击查看历史报警'">报警情况</a>
                             </h3>
                             <div>
                                 <li ng-repeat="alert in ctrl.alertPanel.status" ng-if="alert.count!=0">
@@ -35,7 +35,9 @@
                             </div>
                         </div>
                         <div class="panels-wrapper">
-                            <h3>系统资源高消耗</h3>
+                            <h3>
+                                <a href="javascript:;">系统资源高消耗</a>
+                            </h3>
                             <div>
                                 <li ng-repeat="except in ctrl.exceptionPanel.status"
                                     data-placement="center" bs-modal="modal" data-template-url="public/app/features/systemoverview/partials/system_anomaly_modal.html">
@@ -46,8 +48,8 @@
                         </div>
                     </div>
                     <div class="anomaly-panel panels-wrapper">
-                        <h3 ng-click="ctrl.showModal(2)" style="cursor: pointer;" bs-tooltip="'点击查看历史情况'">
-                            智能检测异常指标
+                        <h3>
+                            <a href="javascript:;" ng-click="ctrl.showModal(2)" bs-tooltip="'点击查看历史情况'">智能检测异常指标</a>
                         </h3>
                         <div>
                             <li ng-repeat="anomaly in ctrl.anomalyPanel.status" ng-if="anomaly.count!=-1">
@@ -89,7 +91,7 @@
                                 <div>
                                     <div class="name">
                                         <i class="${icon} service-icon bg-${status}"></i>
-                                        <span>${name}</span>
+                                        <span class="status-${status}">${name}</span>
                                     </div>
                                 </div>
                             </script>

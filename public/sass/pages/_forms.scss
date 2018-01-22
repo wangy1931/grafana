@@ -75,54 +75,6 @@ input {
   cursor: pointer;
 }
 
-.scheduleEditBox{
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 2;
-  background: rgba(222,222,222,0.8)
-}
-.scheduleForm{
-  width: 350px;
-  margin: 0 auto;
-  background: #fff;
-  border: 1px solid #ccc;
-  transform: translateY(60%);
-  &>.item{
-    &>label{
-      width: 50px;
-      height: 25px;
-      line-height: 25px;
-      background: none;
-      color: black;
-      margin-top: -6px;
-      margin-left: 20px;
-      vertical-align: middle;
-    }
-  }
-  .gf-timepicker-component{
-    position: absolute;
-    background: #fff;
-    left: 80px;
-    padding: 20px;
-    border: 1px solid;
-  }
-  h4{
-    height: 40px;
-    line-height: 26px;
-    color: white;
-    margin: 0;
-    margin-bottom: 10px;
-    background: rgb(35,172,245);
-  }
-  &>.oncaller-list{
-    height: 200px;
-    overflow: scroll;
-  }
-}
-
 .center{
   text-align: center;
   padding: 10px 0;
@@ -151,8 +103,8 @@ input {
 }
 
 .input {
-  background-color: #fbfbfb;
-  border: 1px solid #ECECEC;
+  background-color: $input-bg;
+  border: 1px solid $input-border-color;
   border-radius: 6px;
   padding-left: 6px;
   height: 2.7rem;

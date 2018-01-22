@@ -15,7 +15,7 @@ class StyleGuideCtrl {
 
   /** @ngInject **/
   constructor(private $http, $routeParams) {
-    this.theme = config.bootData.user.lightTheme ? 'light': 'dark';
+    this.theme = config.bootData.user.userTheme;
     this.page = {};
 
     if ($routeParams.page) {
@@ -44,7 +44,7 @@ class StyleGuideCtrl {
 
   switchTheme() {
     var other = this.theme === 'dark' ? 'light' : 'dark';
-    window.location.href = window.location.href + '?theme=' + other;
+    window.location.href = window.location.href + '?theme=' + this.theme;
   }
 
 }

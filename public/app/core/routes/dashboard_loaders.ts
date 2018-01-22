@@ -1,13 +1,15 @@
-define([
-  '../core_module',
-],
-function (coreModule) {
-  "use strict";
+import coreModule from 'app/core/core_module';
 
-  coreModule.default.controller('LoadDashboardCtrl', function($scope, $routeParams, dashboardLoaderSrv, backendSrv, $location) {
+declare var window: any;
 
+export class LoadDashboardCtrl {
+  /** @ngInject */
+  constructor(
+    private $scope, private $routeParams, private $location,
+    private dashboardLoaderSrv, private backendSrv
+  ) {
     if (!$routeParams.slug) {
-      backendSrv.get('/api/dashboards/home').then(function(homeDash) {
+      backendSrv.get('/api/dashboards/home').then(homeDash => {
         if (homeDash.redirectUri) {
           $location.path('dashboard/' + homeDash.redirectUri);
         } else {
@@ -19,13 +21,19 @@ function (coreModule) {
       return;
     }
 
-    dashboardLoaderSrv.loadDashboard($routeParams.type, $routeParams.slug).then(function(result) {
+    dashboardLoaderSrv.loadDashboard($routeParams.type, $routeParams.slug).then(result => {
       $scope.initDashboard(result, $scope);
     });
+  }
+}
+coreModule.controller('LoadDashboardCtrl', LoadDashboardCtrl);
 
-  });
-
-  coreModule.default.controller('DashFromImportCtrl', function($scope, $location, alertSrv) {
+export class DashFromImportCtrl {
+  /** @ngInject */
+  constructor(
+    private $scope, private $location,
+    private alertSrv
+  ) {
     if (!window.grafanaImportDashboard) {
       alertSrv.set('抱歉', '不能在没有保存的情况下刷新页面', 'warning', 7000);
       $location.path('');
@@ -35,21 +43,28 @@ function (coreModule) {
       meta: { canShare: false, canStar: false },
       dashboard: window.grafanaImportDashboard
     }, $scope);
-  });
+  }
+}
+coreModule.controller('DashFromImportCtrl', DashFromImportCtrl);
 
-  coreModule.default.controller('NewDashboardCtrl', function($scope, $routeParams) {
+export class NewDashboardCtrl {
+  /** @ngInject */
+  constructor(
+    private $scope, private $routeParams
+  ) {
     var newTitle = $routeParams.title || "新的仪表盘";
     var newSystem = $routeParams.system;
+
     $scope.initDashboard({
       meta: { canStar: false, canShare: false },
       dashboard: {
         title: newTitle,
         system: newSystem,
-        rows: [{ height: '250px', panels:[] }],
+        rows: [{ height: '250px', panels: [] }],
         time: {from: "now-6h", to: "now"},
         refresh: "30s",
       },
     }, $scope);
-  });
-
-});
+  }
+}
+coreModule.controller('NewDashboardCtrl', NewDashboardCtrl);
