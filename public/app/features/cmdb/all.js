@@ -7,5 +7,6 @@ define([
   './serviceCustomCtrl',
   './metricsDefCtrl',
   './metricKpiCtrl',
-  './cmdbBasicCtrl'
+  './cmdbBasicCtrl',
+  './resourceCtrl'
 ], function() {});

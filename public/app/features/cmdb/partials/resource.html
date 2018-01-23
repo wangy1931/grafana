@@ -1,0 +1,31 @@
+<navbar text="配置管理库" icon="fa fa-fw fa-cubes">
+    <ul class="nav">
+        <li class="active"><a href="/cmdb/resource">资源组列表</a></li>
+        <li><a href="/cmdb/resource_list">资源列表</a></li>
+    </ul>
+</navbar>
+<div class="page-container" ng-init="ctrl.getGroup()">
+    <h2 class="page-header">资源组列表
+        <form class="form-search cmdb-search">
+            <i class="fa fa-search"></i>
+            <input type="text" class="input-medium search-query" placeholder="搜索服务列表" ng-model="ctrl.searchService">
+        </form>
+        <a ng-if="!ctrl.contextSrv.isViewer" class="btn btn-success btn-cmdb" style="margin-left: 12px;" href="/service_dependency">创建服务依赖</a>
+    </h2>
+    <div class="cmdb-container">
+        <table class="table table-hover table-striped cmdb-table">
+            <tr>
+                <th>ID</th>
+                <th ng-click="ctrl.orderBy('name')" class="pointer">名称<i class="fa fa-sort"></i></th>
+                <th>位置</th>
+            </tr>
+            <tr ng-repeat="item in ctrl.groups | filter: ctrl.searchService | orderBy: ctrl.order : ctrl.desc"
+                ng-click="ctrl.toList(item)"
+                class="pointer">
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.location }}</td>
+            </tr>
+        </table>
+    </div>
+</div>

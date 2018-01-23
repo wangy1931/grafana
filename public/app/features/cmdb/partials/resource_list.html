@@ -1,0 +1,36 @@
+<navbar text="配置管理库" icon="fa fa-fw fa-cubes">
+    <ul class="nav">
+        <li><a href="/cmdb/resource">资源组列表</a></li>
+        <li class="active"><a href="/cmdb/resource_list">资源列表</a></li>
+    </ul>
+</navbar>
+<div class="page-container" ng-init="ctrl.getList()">
+    <h2 class="page-header">资源列表
+      <form class="cmdb-search">
+        <select ng-model="ctrl.group"
+          class="gf-form-select-wrapper gf-form-input width-7"
+          ng-options="f.value as f.name for f in ctrl.groupOptions"
+          ng-change="ctrl.getListByGroup()"></select>
+      </form>
+    </h2>
+    <div class="cmdb-container">
+        <table class="table table-hover table-striped cmdb-table">
+            <tr>
+                <th>ID</th>
+                <th ng-click="ctrl.orderBy('name')" class="pointer">名称<i class="fa fa-sort"></i></th>
+                <th>类型</th>
+                <th>资源组</th>
+                <th>位置</th>
+            </tr>
+            <tr ng-repeat="item in ctrl.list | filter: ctrl.group | orderBy: ctrl.order : ctrl.desc"
+                ng-click="ctrl.toDetail(item)"
+                class="pointer">
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.group }}</td>
+                <td>{{ item.location }}</td>
+            </tr>
+        </table>
+    </div>
+</div>

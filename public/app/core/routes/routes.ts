@@ -417,15 +417,22 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controllerAs: 'ctrl',
     resolve: loadCMDBBundle
   })
-  .when('/cmdb/basic_azure', {
-    templateUrl: 'public/app/features/cmdb/partials/basic_azure.html',
-    controller : 'CMDBBasicAzureCtrl',
+  // Feichi
+  .when('/cmdb/resource', {
+    controller: 'ResourceCtrl',
+    controllerAs: 'ctrl',
+    templateUrl: 'public/app/features/cmdb/partials/resource.html',
+    resolve: loadCMDBBundle
+  })
+  .when('/cmdb/resource_list', {
+    templateUrl: 'public/app/features/cmdb/partials/resource_list.html',
+    controller : 'ResourceCtrl',
     controllerAs: 'ctrl',
     resolve: loadCMDBBundle
   })
-  .when('/cmdb/basic_sql', {
-    templateUrl: 'public/app/features/cmdb/partials/basic_sql.html',
-    controller : 'CMDBBasicSqlCtrl',
+  .when('/cmdb/resource_detail', {
+    templateUrl: 'public/app/features/cmdb/partials/resource_detail.html',
+    controller : 'ResourceCtrl',
     controllerAs: 'ctrl',
     resolve: loadCMDBBundle
   })

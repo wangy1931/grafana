@@ -38,7 +38,7 @@
 }
 
 .page-header {
-  padding: $spacer 0 0 0;
+  padding: $spacer 0 $spacer 0;
   margin-bottom: 2rem;
   @include brand-bottom-border();
   @include clearfix();

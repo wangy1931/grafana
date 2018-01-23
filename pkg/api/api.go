@@ -53,7 +53,7 @@ func Register(r *macaron.Macaron) {
 	r.Get("/setting/proxy", reqSignedIn, Index)
 	r.Get("/service_dependency", reqSignedIn, Index)
 	// r.Get("/rca", reqSignedIn, Index)
-	// r.Get("/host_topology", reqSignedIn, Index)
+	r.Get("/host_topology", reqSignedIn, Index)
 	// r.Get("/topn", reqSignedIn, Index)
 	r.Get("/service_topology", reqSignedIn, Index)
 
@@ -67,8 +67,9 @@ func Register(r *macaron.Macaron) {
 	r.Get("/cmdb/servicecustom", reqSignedIn, Index)
 	r.Get("/cmdb/metrics", reqSignedIn, Index)
 	r.Get("/cmdb/kpi", reqSignedIn, Index)
-	r.Get("/cmdb/basic_azure", reqSignedIn, Index)
-	r.Get("/cmdb/basic_sql", reqSignedIn, Index)
+	r.Get("/cmdb/resource", reqSignedIn, Index)
+	r.Get("/cmdb/resource_list", reqSignedIn, Index)
+	r.Get("/cmdb/resource_detail", reqSignedIn, Index)
 
 	// not logged in views
 	r.Get("/", reqSignedIn, Index)

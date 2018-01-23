@@ -18,7 +18,7 @@
         {
           "id": 4,
           "text": "资源",
-          "url": "/service_topology"
+          "url": "/cmdb/resource"
         }
       ]
     },
@@ -47,7 +47,7 @@
         {
           "id": 1,
           "text": "诊断助手",
-          "url": "/rca?guide"
+          "url": "/association?guide"
         },
         {
           "id": 2,

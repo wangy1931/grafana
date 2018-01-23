@@ -32,16 +32,16 @@
                 <ul>
                     <li><h4>实例名：{{ ctrl.kpiPanel.rightPanelHead.name }}</h4></li>
                     <li class="pull-right">
-                        <!--<a href="/service_topology?tabId=1&id={{ ctrl.servicePanel.currentService.id }}&name={{ ctrl.servicePanel.currentService.name }}"
-                           bs-tooltip="'查看服务详情'"
+                        <a href="/service_topology?tabId=1&id={{ ctrl.servicePanel.currentService.id }}&name={{ ctrl.servicePanel.currentService.name }}"
+                           bs-tooltip="'查看资源详情'"
                            ng-show="ctrl.servicePanel.currentService.icon">
                             <i class="{{ ctrl.servicePanel.currentService.icon }}"></i>
-                        </a>-->
-                        <a href="/host_topology?tabId=1&id={{ctrl.hostPanel.currentHost.id}}&name={{ctrl.hostPanel.currentHost.name}}"
+                        </a>
+                        <!-- <a href="/host_topology?tabId=1&id={{ctrl.hostPanel.currentHost.id}}&name={{ctrl.hostPanel.currentHost.name}}"
                            bs-tooltip="'查看机器详情'"
                            ng-if="ctrl.hostPanel.currentHost.id">
                             <i class="fa fa-desktop"></i>
-                        </a>
+                        </a> -->
                     </li>
                 </ul>
             </div>
