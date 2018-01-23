@@ -11,7 +11,7 @@
 }
 
 .jtk-node .name {
-    color: #555;
+    color: $navbarLinkColorHover;  // #555;
     cursor: move;
     font-size: 13px;
     line-height: 24px;
@@ -59,12 +59,12 @@
 }
 .service-icon {
     display: block;
-    font-size:40px;
+    font-size: 40px;
     height: 50px;
     width: 50px;
     line-height: 50px;
     margin: 0 auto;
-    border: 1px solid #555;
+    border: 1px solid $navbarLinkColorHover;;
     border-radius: 50%;
 }
 
@@ -73,7 +73,7 @@
     margin-top: 25px;
     padding: 13px 26px;
     margin-bottom: 22px;
-    background-color: #f4f5ef;
+    background-color: $panel-bg;
 }
 
 .build-service-depend .description li {
@@ -81,15 +81,15 @@
 }
 
 .jtk-demo-canvas, .jtk-canvas {    
-    height:555px;
-    max-height:700px;
-    border:1px solid #CCC;
-    background-color:white;
+    height: 555px;
+    max-height: 700px;
+    border: 1px solid #ccc;
+    background-color: $panel-bg;  // white;
     display: flex;
 }
 
 .canvas-wide {
-    margin-left:0;
+    margin-left: 0;
 }
 
 .miniview {
@@ -142,22 +142,22 @@ li {
     width:150px;
     float:left;
     text-align:center;
-    height: 550px;
-    background-color: #f3f7fa;
+    height: 555px;
+    background-color: lighten($panel-bg, 10%);  // #f3f7fa;
     overflow-y: scroll;
     overflow-x: hidden;
 }
 
 .sidebar ul li {
-    background-color: #fff;
+    background-color: $input-bg;  // #fff;
     border-radius: 11px;
-    color: #555;
+    color: $input-color;  // #555;
     cursor: move;
     margin-bottom: 10px;
     margin-left: 6px;
     padding: 8px;
     width:128px;
-    border: 1px solid #555;
+    border: 1px solid $input-border-color;  // #555;
 }
 
 .sidebar ul {
@@ -176,21 +176,21 @@ li {
 
 @media (max-width: 600px) {
     .sidebar {
-        float:none;
+        float: none;
         height: 55px;
         width: 100%;
-        padding-top:0;
+        padding-top: 0;
     }
 
     .sidebar ul li {
-        display:inline-block;
+        display: inline-block;
         margin-top: 7px;
-        width:67px;
+        width: 67px;
     }
     .jtk-demo-canvas {
         margin-left: 0;
-        margin-top:10px;
-        height:364px;
+        margin-top: 10px;
+        height: 364px;
     }
 }
 

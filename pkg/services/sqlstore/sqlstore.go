@@ -6,6 +6,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/wangy1931/grafana/pkg/bus"
 	"github.com/wangy1931/grafana/pkg/log"
@@ -87,7 +88,6 @@ func AddDatasourceFromConfig() {
 
 	// Read datasource from OrgId 1 and compare with the current setting:
 	// If same, do nothing
-	// If different, need to update the entries in the data_source table for all the OrgIds.
 
 	// Read data source from OrgId 1 (default Main.org)
 	query := m.GetDataSourceByNameQuery{
@@ -137,14 +137,31 @@ func AddDatasourceFromConfig() {
 			log.Fatal(3, "Could not add default datasource for OrgId 1 from config: %v", err)
 			return
 		}
-	} else {
-		log.Info("Update default datasource for all the Orgs")
-		if err := bus.Dispatch(&m.UpdateDataSourceForAllOrgCommand{
-			Url: setting.DataSource.DataSourceUrlRoot,
+
+		if err := bus.Dispatch(&m.AddDataSourceCommand{
+			OrgId:     MAINORG_ID,
+			Name:      "alert",
+			Type:      m.DS_ALERT,
+			Access:    m.DS_ACCESS_DIRECT,
+			Url:       setting.Alert.AlertUrlRoot,
+			IsDefault: false,
 		}); err != nil {
-			log.Fatal(3, "Could not update default datasource for all Orgs: %v", err)
+			log.Fatal(3, "Could not add default datasource for OrgId 1 from config: %v", err)
 			return
 		}
+
+		if err := bus.Dispatch(&m.AddDataSourceCommand{
+			OrgId:     MAINORG_ID,
+			Name:      "download",
+			Type:      m.DS_DOWNLOAD,
+			Access:    m.DS_ACCESS_DIRECT,
+			Url:       setting.Download.DownloadUrlRoot,
+			IsDefault: false,
+		}); err != nil {
+			log.Fatal(3, "Could not add default datasource for OrgId 1 from config: %v", err)
+			return
+		}
+
 	}
 }
 
@@ -178,18 +195,30 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 		log.Error(3, "Could not add default datasource from config: %v", err)
 		return err
 	}
-	return nil
-}
 
-func DeleteDatasourceForOrg(orgId int64) (err error) {
-	log.Info("DeleteDatasourceForOrg: orgId=%v", orgId)
-	if err = bus.Dispatch(&m.DeleteAllDataSourceInOrgCommand{
-		OrgId: orgId,
+	if err := bus.Dispatch(&m.AddDataSourceCommand{
+		OrgId:     orgId,
+		Name:      "alert",
+		Type:      m.DS_ALERT,
+		Access:    m.DS_ACCESS_DIRECT,
+		Url:       setting.Alert.AlertUrlRoot,
+		IsDefault: false,
 	}); err != nil {
-		log.Error(3, "Could not delete data source with OrgId = %v: %v", orgId, err)
+		log.Fatal(3, "Could not add default datasource from config: %v", err)
 		return err
 	}
 
+	if err := bus.Dispatch(&m.AddDataSourceCommand{
+		OrgId:     orgId,
+		Name:      "download",
+		Type:      m.DS_DOWNLOAD,
+		Access:    m.DS_ACCESS_DIRECT,
+		Url:       setting.Download.DownloadUrlRoot,
+		IsDefault: false,
+	}); err != nil {
+		log.Fatal(3, "Could not add default datasource from config: %v", err)
+		return err
+	}
 	return nil
 }
 
@@ -308,4 +337,54 @@ func LoadConfig() {
 		mysqlConfig.ClientCertPath = sec.Key("client_cert_path").String()
 		mysqlConfig.ServerCertName = sec.Key("server_cert_name").String()
 	}
+}
+
+func AddDatacenterFromConfig() {
+	// data_center in table org_permit
+	// Read datacenter from OrgId 1 and compare with the current setting:
+	// If none, insert
+	// If has, do nothing
+
+	// Read datacenter from OrgId 1 (default Main.org)
+	query := m.GetOrgPermitByOrgIdQuery{OrgId: MAINORG_ID}
+
+	if err := bus.Dispatch(&query); err != nil {
+		log.Info("Could not find data center with OrgId = 1: %v", err)
+	} else {
+		log.Info("Data center read from OrgId 1 (MAINORG_ID) is %s", query.Result.DataCenter)
+		return
+	}
+
+	// If initially OrgId 1 does not have data center defined in org_permit table, add it.
+	// This should only happen when the system runs at the first time.
+	if query.Result.DataCenter == "" {
+		log.Info("Add default data center for OrgId = 1 from config: %v", setting.DataCenter.DataCenterRoot)
+		now := time.Now()
+		day, _ := time.ParseDuration("24h")  
+		if err := bus.Dispatch(&m.AddOrgPermitCommand{
+			OrgId:     	MAINORG_ID,
+			DataCenter: setting.DataCenter.DataCenterRoot,
+			Deadline:		now.Add(30 * day),
+			Level:			m.LEVEL_FREE,
+		}); err != nil {
+			log.Fatal(3, "Could not add default datacenter for OrgId 1 from config: %v", err)
+			return
+		}
+	}
+}
+
+func AddDatacenterForOrg(orgId int64) (err error) {
+	log.Info("Add default data center for OrgId = %v from config: %v", orgId, setting.DataCenter.DataCenterRoot)
+	now := time.Now()
+	day, _ := time.ParseDuration("24h")  
+	if err := bus.Dispatch(&m.AddOrgPermitCommand{
+		OrgId:     	orgId,
+		DataCenter: setting.DataCenter.DataCenterRoot,
+		Deadline:		now.Add(30 * day),
+		Level:			m.LEVEL_FREE,
+	}); err != nil {
+		log.Fatal(3, "Could not add default datacenter for OrgId %v from config: %v", orgId, err)
+		return err
+	}
+	return nil
 }

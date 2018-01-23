@@ -171,24 +171,22 @@ a.progress-link {
   top: -300px;
   background-color: $panel-bg;
   height: 0;
-  width: 100%;
-  z-index: 99;
+  z-index: $zindex-guide;
   padding: 0;
-  box-shadow: 0px 0px 4px 1px #d8d8d8;
+  box-shadow: 0px 0px 4px 1px $dark-1;
   transition: top 0.1s ease-in-out;
   &.active {
     top: 0;
     height: auto;
     padding:  2px 10px 10px 10px;
-    margin-bottom: 20px;
   }
 
   // override
   .btn-default {
-    background-color: $white;
+    background-color: transparent;
     border-radius: 6px;
     outline: none;
-    border: 1px solid #ccc;
+    border: 1px solid $input-border-color;
   }
   .tidy-form .tidy-form-list .dropdown-menu {
     border-radius: 4px;
@@ -222,7 +220,7 @@ a.progress-link {
 .guide.fixed {
   position: absolute;
   left: 0px;
-  top: 52px;
+  top: $navbarHeight;
   padding-left: $side-menu-width;
   &.collapsed {
     padding: 2px calc(10px + 1rem * 4) 10px $side-menu-width;

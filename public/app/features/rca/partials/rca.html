@@ -1,8 +1,8 @@
-<navbar title="智能分析" icon="fa fa-fw fa-cubes"></navbar>
+<navbar text="智能分析" icon="fa fa-fw fa-cubes"></navbar>
+
+<guide guide-class="guide"></guide>
 
 <div class="page-container rca-page">
-
-  <guide guide-class="guide"></guide>
 
   <div class="page-header">
       <h2>故障溯源</h2>
@@ -41,7 +41,7 @@
           <p>名称：{{ detail.name }}</p>
           <p>类型：{{ detail.type | formatRCAType }}</p>
           <p>详情：</p>
-          <table class="table" ng-repeat="description in detail.description track by $index">
+          <table class="table" ng-repeat="description in detail.description track by $index" ng-if="detail.type === 2">
             <thead>
               <tr>
                 <th ng-repeat="(name, value) in description[0] track by $index">{{ name }}</th>
@@ -53,6 +53,9 @@
               </tr>
             </tbody>
           </table>
+          <ul style="padding: 0 30px;" ng-repeat="description in detail.description track by $index" ng-if="detail.type !== 2">
+            <li>{{ description || '无' }}</li>
+          </ul>
         </div>
       </div>
       <div class="section">
@@ -69,7 +72,7 @@
               <div class="accordion-inner">
                 <div class="block" ng-repeat="description in node.data.description track by $index">
                   <p>详情：</p>
-                  <table class="table">
+                  <table class="table" ng-if="detail.type === 2">
                     <thead>
                       <tr>
                         <th ng-repeat="(name, value) in description[0] track by $index">{{ name }}</th>
@@ -81,6 +84,9 @@
                       </tr>
                     </tbody>
                   </table>
+                  <ul class="" ng-if="detail.type !== 2">
+                    <li>{{ description || '无' }}</li>
+                  </ul>
                   <p class="">解决方案：</p>
                   <ul class="">
                     <li>{{ node.edge.solution[$index] || '无' }}</li>

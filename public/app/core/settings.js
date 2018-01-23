@@ -7,7 +7,7 @@ function (_) {
   return function Settings (options) {
     var defaults = {
       datasources                   : {},
-      window_title_prefix           : 'Cloudwiz - ',
+      window_title_prefix           : 'Cloudwiz 智能运维分析 - ',
       panels                        : {},
       new_panel_title: 'Panel Title',
       playlist_timespan: "1m",

@@ -87,6 +87,7 @@
 @import "components/tree_menu";
 @import "components/time-window";
 @import "components/elk-table";
+@import "components/grid-group";
 
 // PAGES
 @import "pages/login";
@@ -120,5 +121,6 @@
 @import "pages/association";
 @import "pages/topn";
 @import "pages/metrics";
+@import "pages/service_topology";
 
 @import "old_responsive";

@@ -1,4 +1,4 @@
-<navbar title="运维轮班" icon="fa fa-fw fa-phone">
+<navbar text="运维轮班" icon="fa fa-fw fa-phone">
   <ul class="nav" ng-if="!contextSrv.isViewer">
     <li class="active"><a href="oncallerschedule">值班表</a></li>
     <li><a href="oncallers">值班人员</a></li>
@@ -14,7 +14,7 @@
     <div class="oncaller oncaller-default span4">
       <div class="oncaller-heading">
         <h4 class="oncaller-title"><i></i>值班人员</h4>
-        <button class="btn btn-primary pull-right" style="margin-top: -26px;" ng-click="showOncallers()">添加人员</button>
+        <button class="btn btn-primary btn-small pull-right" style="margin-top: -20px;" ng-click="showOncallers()">添加人员</button>
       </div>
       <div class="row-fluid oncaller-body">
         <div ng-repeat="oncaller in oncallerList" class="span5">
@@ -43,8 +43,8 @@
           </div>
 
           <div class="span3 oncaller-border">
-            <label>值班时间</label>
-            <input ng-model="range" type="number" min="1" max="14" class="input-mini"/>天
+            <label>值班时间(天)</label>
+            <input ng-model="range" type="number" min="1" max="14" class="input-mini"/>
           </div>
 
           <div class="span3">
@@ -58,14 +58,14 @@
       </div>
     </div>
 
-    <div class="span12 btn-list">
+    <div class="btn-list">
       <button class="btn btn-primary" ng-click="reviewSchedule(changeTime, range, zonesStart, zonesEnd)">刷新预览</button>
       <button class="btn btn-success" ng-click="saveSchedule()">保存</button>
     </div>
   </div>
   <div class="clearfix"></div>
   <div ui-calendar='uiConfig.calendar' ng-model="eventSources"></div>
-  <div ng-if='showEditForm' class="scheduleEditBox">        
+  <div ng-if='showEditForm' class="scheduleEditBox">
     <form ng-if="overwrite" class="scheduleForm">
         <div class="item">
             <h4 class="center">修改值班信息</h4>
@@ -111,7 +111,7 @@
         </p>
       </div>
       <div class="item center" style="border-top: 2px solid #eee;">
-        <button ng-click="closeEdit();" class="btn">取消</button>
+        <button ng-click="closeEdit();" class="btn btn-inverse">取消</button>
         <button ng-click="addOncallers()" class="btn btn-primary">添加</button>
       </div>
     </form>

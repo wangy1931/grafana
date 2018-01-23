@@ -90,21 +90,25 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/alerts', {
     templateUrl: 'public/app/features/org/partials/alerts.html',
     controller : 'AlertsCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOrgBundle,
   })
   .when('/alerts/edit/:id', {
     templateUrl: 'public/app/features/org/partials/alertEdit.html',
     controller : 'AlertEditCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOrgBundle,
   })
   .when('/alerts/new', {
     templateUrl: 'public/app/features/org/partials/alertEdit.html',
     controller : 'AlertEditCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOrgBundle,
   })
   .when('/alerts/status', {
     templateUrl: 'public/app/features/org/partials/alertStatus.html',
     controller : 'AlertStatusCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOrgBundle,
   })
   .when('/oncallerschedule', {
@@ -115,16 +119,19 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   .when('/oncallers', {
     templateUrl: 'public/app/features/oncaller/partials/oncallers.html',
     controller : 'OnCallersCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOncallerBundle,
   })
   .when('/oncallers/edit/:id', {
     templateUrl: 'public/app/features/oncaller/partials/oncallerEdit.html',
     controller : 'OnCallerEditCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOncallerBundle,
   })
   .when('/oncallers/new', {
     templateUrl: 'public/app/features/oncaller/partials/oncallerEdit.html',
     controller : 'OnCallerEditCtrl',
+    controllerAs: 'ctrl',
     resolve: loadOncallerBundle,
   })
   .when('/anomaly', {
@@ -326,6 +333,21 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     templateUrl: 'public/app/features/report/partials/report.html',
     controller: 'ReportCtrl',
     reloadOnSearch: false,
+    controllerAs: 'ctrl',
+    resolve: loadReportBundle
+  })
+  .when('/report/template', {
+    templateUrl: 'public/app/features/report/partials/report_template.html',
+    controller: 'ReportCtrl',
+    reloadOnSearch: false,
+    controllerAs: 'ctrl',
+    resolve: loadReportBundle
+  })
+  .when('/report/edit', {
+    templateUrl: 'public/app/features/report/partials/report_edit.html',
+    controller: 'ReportCtrl',
+    reloadOnSearch: false,
+    controllerAs: 'ctrl',
     resolve: loadReportBundle
   })
   .when('/integrate', {
@@ -420,6 +442,13 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'HostTopologyCtrl',
     reloadOnSearch: false,
     resolve: loadHostBundle
+  })
+  // Service Topology
+  .when('/service_topology', {
+    templateUrl: 'public/app/features/service/partials/service.html',
+    controller : 'ServiceTopologyCtrl',
+    reloadOnSearch: false,
+    resolve: loadServiceBundle
   })
   .when('/styleguide/:page?', {
     controller: 'StyleGuideCtrl',

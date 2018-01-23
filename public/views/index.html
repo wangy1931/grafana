@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width">
     <meta name="theme-color" content="#000">
 
-    <title>CloudWiz</title>
+    <title>Cloudwiz 智能运维分析</title>
 
 		<link href='[[.AppSubUrl]]/public/css/fonts.min.css' rel='stylesheet' type='text/css'>
 
-		[[if .User.LightTheme]]
-		  <link rel="stylesheet" href="[[.AppSubUrl]]/public/css/grafana.dark.min.css">
+		[[if .User.UserTheme]]
+		  <link rel="stylesheet" href="[[.AppSubUrl]]/public/css/grafana.[[.User.UserTheme]].min.css">
 		[[else]]
 		  <link rel="stylesheet" href="[[.AppSubUrl]]/public/css/grafana.light.min.css">
 		[[end]]

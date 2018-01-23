@@ -107,6 +107,12 @@ button.close {
     color: nth($thresholds-hover-color, 6) !important;
   }
 }
+.status-blue {
+  color: nth($thresholds-color, 7) !important;
+  &:hover {
+    color: nth($thresholds-hover-color, 7) !important;
+  }
+}
 
 .bg-green {
   background-color: nth($thresholds-color, 1) !important;
@@ -130,6 +136,12 @@ button.close {
   background-color: nth($thresholds-color, 6) !important;
   &:hover {
     background-color: nth($thresholds-hover-color, 6) !important;
+  }
+}
+.bg-blue {
+  background-color: nth($thresholds-color, 7) !important;
+  &:hover {
+    background-color: nth($thresholds-hover-color, 7) !important;
   }
 }
 .trigger-red {

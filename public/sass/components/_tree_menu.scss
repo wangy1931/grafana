@@ -48,7 +48,7 @@
       height: 20px;
       border-radius: 100%;
       &::before, &::after {
-        background: none;
+        background-color: transparent;
       }
     }
     .slider-level {
@@ -60,7 +60,7 @@
 
   .nav-tabs {
     display: flex;
-    margin: 0 -2.5rem 0 -1rem;
+    margin: 0 -2rem 0 -1rem;
     padding: 0;
     border-bottom: $panel-border;
     & > li {
@@ -83,7 +83,7 @@
       
       &.disabled > button {
         color: $white;
-        background: #f4f5f8;
+        background: darken($panel-bg, 10%);
       }
     }
   }
@@ -91,7 +91,7 @@
 
 .tree-content{
   flex: 1;
-  overflow: scroll;
+  overflow: auto;
 
   &.no-data {
     text-align: center;
@@ -112,7 +112,6 @@
   i {
     margin-left: -0.5rem;
     margin-right: 0.5rem;
-    background: $white;
   }
 
   span {

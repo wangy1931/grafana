@@ -315,6 +315,13 @@ function (angular, _, coreModule, config) {
       });
     };
 
+    this.getServices = function() {
+      return this.alertD({
+        method: 'get',
+        url   : "/cmdb/service/metrics"
+      });
+    }
+
     this.getKpi = function(params) {
       return this.alertD({
         method: 'get',
@@ -338,6 +345,55 @@ function (angular, _, coreModule, config) {
     this.isIE = function() {
       var userAgent = navigator.userAgent;
       return userAgent.indexOf("MSIE ") > -1 || userAgent.indexOf("Trident/") > -1 || userAgent.indexOf("Edge/") > -1;
+    }
+
+    this.getOpentsdbExpressionQuery = function (query, opentsdbUrl) {
+      var tags = query.tags || [
+        {
+          "type": "wildcard",
+          "tagk": "host",
+          "filter": "*",
+          "groupBy": true
+        }
+      ];
+      var tmpl = {
+        "time": {
+          "start": query.timeRange.from,
+          "end": query.timeRange.to,
+          "aggregator": "sum",
+          "downsampler": {
+            "interval": "1m",
+            "aggregator": "avg"
+          }
+        },
+        "filters": [
+          {
+            "tags": tags,
+            "id": "f1"
+          }
+        ],
+        "metrics": query.metrics,
+        "expressions": [
+          {
+            "id": "aa",
+            "expr": query.metricExpression, // "a + b"
+            "join": {
+              "operator": "intersection",
+              "useQueryTags": true,
+              "includeAggTags": false
+            }
+          }
+        ],
+        "outputs": [
+          { "id": "aa", "alias": "Mega expression" }
+        ]
+      };
+
+      return this.datasourceRequest({
+        method: 'POST',
+        url: opentsdbUrl + '/api/query/exp',
+        data: tmpl
+      });
     }
   });
 });

@@ -19,4 +19,6 @@ define([
   './alertStatusCtrl',
   './alertAssociationCtrl',
   './importAlertsCtrl',
+  './rcaFeedbackCtrl',
+  './closeAlertCtrl'
 ], function () {});

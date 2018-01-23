@@ -1,53 +1,51 @@
-
 <navbar icon="fa fa-fw fa-bell" title="智能检测">
-	<ul class="nav">
-    <li><a href="alerts/status">总览</a></li>
-    <li class="active"><a href="alerts">报警规则</a></li>
-    <li><a href="alerts/new">新建报警规则</a></li>
-  </ul>
-</navbar>
-
-<div class="page-container">
-  <div class="page-header">
-    <h2>报警规则列表</h2>
-  </div>
-
-  <div class="page">
-
-    <div ng-if="alertDefList.length === 0">
-      <em>展示没有任何规则</em>
+    <ul class="nav">
+      <li><a href="alerts/status">总览</a></li>
+      <li class="active"><a href="alerts">报警规则</a></li>
+      <li><a href="alerts/new">新建报警规则</a></li>
+    </ul>
+  </navbar>
+  
+  <div class="page-container" ng-init="ctrl.init()">
+    <div class="page-header">
+      <h2>报警规则列表</h2>
     </div>
-
-    <table class="grafana-options-table" ng-if="alertDefList.length > 0">
-      <tr>
-        <td><strong>报警名称</strong></td>
-        <td><strong>描述</strong></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr ng-repeat="alertDef in alertDefList">
-        <td style="width:1%">
-          <p class="max-width" title="{{alertDef.name}}"><i class="fa fa-bell"></i> &nbsp; {{alertDef.name}}</p>
-        </td>
-        <td style="width:90%">
-          <p class="max-width" title="{{alertDef.description}}">{{alertDef.description}}</p>
-        </td>
-        <td style="width: 1%">
-          <a href="alerts/edit/{{alertDef.id}}" class="btn btn-inverse btn-mini">
-            <i class="fa fa-edit"></i> 编辑
-          </a>
-        </td>
-        <td style="width: 1%">
-          <a ng-click="remove(alertDef.id)" class="btn btn-danger btn-mini">
-            <i class="fa fa-remove"></i> 删除
-          </a>
-        </td>
-      </tr>
-    </table>
-    <div class="pull-right">
-      <a class="btn btn-success" ng-click="importAlerts()">导入</a>
-      <a class="btn btn-success" href="{{exportJson}}" download="alertd.json">导出</a>
+  
+    <div class="page">
+  
+      <div ng-if="ctrl.alertDefList.length === 0">
+        <em>展示没有任何规则</em>
+      </div>
+  
+      <table class="grafana-options-table" ng-if="ctrl.alertDefList.length > 0">
+        <tr>
+          <td><strong>报警名称</strong></td>
+          <td><strong>描述</strong></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr ng-repeat="alertDef in ctrl.alertDefList">
+          <td style="width:1%">
+            <p class="max-width" title="{{alertDef.name}}"><i class="fa fa-bell"></i> &nbsp; {{alertDef.name}}</p>
+          </td>
+          <td style="width:90%">
+            <p class="max-width" title="{{alertDef.description}}">{{alertDef.description}}</p>
+          </td>
+          <td style="width: 1%">
+            <a href="alerts/edit/{{alertDef.id}}" class="btn btn-inverse btn-mini">
+              <i class="fa fa-edit"></i> 编辑
+            </a>
+          </td>
+          <td style="width: 1%">
+            <a ng-click="ctrl.remove(alertDef.id)" class="btn btn-danger btn-mini">
+              <i class="fa fa-remove"></i> 删除
+            </a>
+          </td>
+        </tr>
+      </table>
+      <div class="pull-right">
+        <a class="btn btn-success" ng-click="ctrl.importAlerts()">导入</a>
+        <a class="btn btn-success" href="{{ ctrl.exportJson }}" download="alertd.json">导出</a>
+      </div>
     </div>
   </div>
-</div>
-

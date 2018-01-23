@@ -3,7 +3,7 @@
 .invite-box {
   text-align: center;
   border: 1px solid #e2e2e2;
-  background-color: #f9f9f9;
+  background-color: $panel-bg;
   position: fixed;
   max-width: 800px;
   left: 0;
@@ -107,17 +107,17 @@
 .btn-link-login,.btn-link-login:link,.btn-link-login:active,.btn-link-login:visited,.btn-link-login:hover{
   color: $white;
   text-align: center;
-  background: rgb(43,175,250);
+  background: $blue;
   text-decoration: none;
 }
 
-.sign-header{
+.sign-header {
   width: 100%;
   height: 82px;
-  background: $white;
+  background: $navbarBackground;
   overflow: hidden;
-  border-bottom: 1px solid rgb(151,151,151);
-  .btn-link-login{
+  border-bottom: $navbarBorder;
+  .btn-link-login {
     font-size: 22px;
     line-height: 53px;
     width: 175px;
@@ -125,37 +125,19 @@
     border-radius: 8px;
     margin-right: 84px;
   }
-  a{
+  a {
     margin-top: 16px;
   }
-  img{
+  img {
     margin: 0px 19px 14px 29px;
     width: 48px;
   }
-  span{
+  span {
     display: inline-block;
     height: 100%;
     font-size: 36px;
     font-weight: bold;
-    color: rgb(57,57,58);
-// grafana start
-
-// .login-divider {
-//   float: left;
-//   width: 50%;
-//   margin: 5px 25% 25px 25%;
-
-//   .login-divider-line {
-//     width: 100%;
-//     height: 10px;
-//     border-bottom: 1px solid $gray-1;
-
-//     .login-divider-text {
-//       background-color: $panel-bg;
-//       color: $gray-2;
-//       padding: 0 10px;
-//     }
-// grafana end
+    color: $navbarLinkColorActive;
   }
 }
 
