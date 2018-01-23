@@ -7,6 +7,8 @@ import angular from 'angular';
 import $ from 'jquery';
 import coreModule from 'app/core/core_module';
 
+var locale = 'zh-CN';
+
 export class GrafanaCtrl {
 
   /** @ngInject */
@@ -148,13 +150,15 @@ export class GrafanaCtrl {
 }
 
 /** @ngInject */
-export function grafanaAppDirective(playlistSrv, contextSrv) {
+export function grafanaAppDirective(playlistSrv, contextSrv, $translate) {
   return {
     restrict: 'E',
     controller: GrafanaCtrl,
-    link: (scope, elem) => {
+    link: (scope, elem, attr) => {
       var ignoreSideMenuHide;
       var body = $('body');
+
+      locale = attr.locale;
 
       // handle sidemenu open state
       scope.$watch('contextSrv.sidemenu', newVal => {
@@ -231,3 +235,11 @@ export function grafanaAppDirective(playlistSrv, contextSrv) {
 }
 
 coreModule.directive('grafanaApp', grafanaAppDirective);
+
+coreModule.config(['$translateProvider', ($translateProvider) => {
+  $translateProvider.useStaticFilesLoader({
+    prefix: 'public/app/core/i18n/',
+    suffix: '.json'
+  });
+  $translateProvider.preferredLanguage('zh_CN');
+}]);

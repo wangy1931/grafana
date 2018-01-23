@@ -42,10 +42,12 @@ export class SystemOverviewCtrl {
   /** @ngInject */
   constructor(
     private backendSrv, private alertSrv, private contextSrv, private alertMgrSrv, private healthSrv, private serviceDepSrv,
-    private hostSrv, private utilSrv, private $location, private $scope, private $modal, private $q,
+    private hostSrv, private utilSrv, private $location, private $scope, private $modal, private $q, private $translate,
     private NgTableParams
   ) {
     $scope.ctrl = this;
+
+    console.log($translate);
 
     this.topologyGraphParams = {
       blockSize: 36,
