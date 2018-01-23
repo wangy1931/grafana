@@ -51,6 +51,14 @@ export class GrafanaApp {
     var app = angular.module('grafana', ['mgcrea.ngStrap', 'ngAnimate', 'ngTable', 'cloudwiz.translate']);
     app.constant('grafanaVersion', "@grafanaVersion@");
 
+    app.config(['$translateProvider', ($translateProvider) => {
+      $translateProvider.useStaticFilesLoader({
+        prefix: 'public/app/core/i18n/',
+        suffix: '.json'
+      });
+      $translateProvider.preferredLanguage('zh_CN');
+    }]);
+
     // app.config(['$translateProvider', ($translateProvider) => {
     //   var translations = {
     //     HEADLINE: 'What an awesome module!',

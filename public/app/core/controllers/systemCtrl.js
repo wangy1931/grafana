@@ -6,7 +6,9 @@ define([
 function (angular, coreModule, _) {
     'use strict';
 
-    coreModule.default.controller('SystemCtrl', function ($scope, backendSrv, $location, contextSrv) {
+    coreModule.default.controller('SystemCtrl', function ($scope, backendSrv, $location, contextSrv, $translate) {
+
+      console.log($translate);
 
       $scope.dashboardSetting = {title: "新的仪表盘", system: contextSrv.user.systemId};
       $scope.init = function () {

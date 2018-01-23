@@ -1,4 +1,5 @@
 {
   "HOST": "机器",
-  "SERVICE": "服务"
+  "SERVICE": "服务",
+  "page_systems_empty": "You have not yet owned the system, please click here to add the system"
 }

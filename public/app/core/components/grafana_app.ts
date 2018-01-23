@@ -236,10 +236,10 @@ export function grafanaAppDirective(playlistSrv, contextSrv, $translate) {
 
 coreModule.directive('grafanaApp', grafanaAppDirective);
 
-coreModule.config(['$translateProvider', ($translateProvider) => {
-  $translateProvider.useStaticFilesLoader({
-    prefix: 'public/app/core/i18n/',
-    suffix: '.json'
-  });
-  $translateProvider.preferredLanguage('zh_CN');
-}]);
+// coreModule.config(['$translateProvider', ($translateProvider) => {
+//   $translateProvider.useStaticFilesLoader({
+//     prefix: 'public/app/core/i18n/',
+//     suffix: '.json'
+//   });
+//   $translateProvider.preferredLanguage('zh_CN');
+// }]);
