@@ -362,7 +362,6 @@
     }
   
     .gf-form-input {
-      // background: white;
       border-radius: 5px;
       height: 2.5rem;
     }
@@ -375,7 +374,7 @@
       flex-direction: column;
       align-items: left;
       .parse-table {
-        border: 1px solid lighten($panel-bg, 10%);
+        border: 1px solid #ddd;
         margin-left: 1rem;
         tr > th {
           background: rgba(132, 194, 248, 0.7);
@@ -479,4 +478,111 @@
       color: #fff;
       background-color: nth($thresholds-color, 7) !important;
     }
+
+
+  .log-filed-header, .log-filed-header > i{
+    font-weight: bold;
+    line-height: 3rem;
   }
+}
+$log-step-size: 50px;
+.log-step-container {
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 75%;
+    border: 1px solid $gray-4;
+    position: absolute;
+    top: 25px;
+  }
+}
+.log-step {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  cursor: not-allowed;
+  dt {
+    width: $log-step-size;
+    height: $log-step-size;
+    line-height: 40px;
+    border-radius: 100%;
+    background: $gray-4;
+    color: $white;
+    border: 5px solid $page-bg;
+  }
+}
+
+.log-step.active {
+  font-weight: bold;
+  cursor: pointer;
+  dt {
+    background: $brand-primary;
+  }
+}
+
+.log-check-container {
+  position: relative;
+  font-weight: bold;
+  &::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 100%;
+    position: absolute;
+    left: 25px;
+    border: 1px solid $gray-4;
+  }
+  & > li {
+    display: flex;
+    line-height: 40px;
+    i {
+      display: block;
+      width: $log-step-size;
+      height: $log-step-size;
+      line-height: 40px;
+      text-align: center;
+      border: 5px solid $page-bg;
+      border-radius: 100%;
+      background: $gray-4;
+      color: $white;
+      font-weight: bold;
+      z-index: 1;
+    }
+    &.log-host {
+      line-height: $log-step-size;
+      margin-bottom: 20px;
+      i {
+        background: $brand-primary;
+      }
+    }
+    &.log-dir i{
+      width: 40px;
+      height: 40px;
+      line-height: 30px;
+      margin-left: 5px;
+    }
+    &.log-stat1 i{
+      background: $brand-primary;
+    }
+    &.log-stat-1 i{
+      background: rgb(187, 17, 68);
+    }
+    &.log-stat2 i{
+      color: $black;
+      background: rgb(255, 188, 51);
+    }
+    &:last-child {
+      position: relative;
+      background: $page-bg;
+    }
+  }
+  p {
+    display: flex;
+  }
+}
