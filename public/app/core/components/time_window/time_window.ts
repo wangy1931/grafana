@@ -10,6 +10,7 @@ import 'jquery.flot';
 import 'jquery.flot.selection';
 import 'jquery.flot.time';
 import 'jquery.flot.navigate';
+import 'app/plugins/panel/graph/jquery.flot.events';
 
 export class TimeWindowCtrl {
   data: any;
@@ -73,7 +74,23 @@ export class TimeWindowCtrl {
       ],
       yaxes: [
         { position: 'left' },
-      ]
+      ],
+      events: {
+        levels: 6,
+        data: [],
+        types: {
+          "alert": {
+            color: "rgba(255, 96, 96, 1)",
+            markerSize: 5,
+            position: "BOTTOM",
+          },
+          "search1": {
+            color: "rgba(255, 96, 96, 1)",
+            markerSize: 5,
+            position: "BOTTOM",
+          }
+        },
+      }
     };
 
     this.render();
@@ -202,12 +219,43 @@ export class TimeWindowCtrl {
     }).then(response => {
       this.options.xaxis.from = this.range.from.valueOf();
       this.options.xaxis.to = this.range.to.valueOf();
+
+      this.addAnnotation();
+
       this.timeWindow = $.plot('#timeWindow', [
         { label: response[0].target, data: response[0].datapoints },
         { label: response[1].target, data: response[1].datapoints }
       ], this.options);
       this.timeWindowData = this.timeWindow.getData();
     });
+  }
+
+  addAnnotation() {
+    this.options.events.data = [];
+
+    var start = this.$location.search().start;
+    if (start && start !== "undefined") {
+      this.options.events.data.push({
+        id: 11,
+        min: +start,
+        max: +start,
+        title: "报警触发时间",
+        tags: "alert",
+        text: `[机器] ${this.$location.search().host}`,
+        eventType: "alert",
+      })
+    }
+
+    var currentPoint = this.range.from + (this.range.to - this.range.from) / 2
+    this.options.events.data.push({
+      id: 12,
+      min: currentPoint,
+      max: currentPoint,
+      title: "资源查询时间点",
+      // tags: "",
+      // text: _.transformMillionTime(currentPoint),
+      eventType: "search",
+    })
   }
 
 }
