@@ -36,6 +36,21 @@
     line-height: 30px;
     font-size: 18px;
     margin: 10px 0;
+    .btn-group {
+      position: absolute;
+      top: 2.5rem;
+      right: 0;
+    }
+    .btn-group.dropdown {
+      top: 3rem;
+      right: 2rem;
+      .dropdown-menu {
+        font-size: 10px;
+      }
+    }
+    .panel-time-info {
+      font-size: 10px;
+    }
   }
 
   .slider-container {

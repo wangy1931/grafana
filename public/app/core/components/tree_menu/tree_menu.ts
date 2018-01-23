@@ -2,6 +2,7 @@
 import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
+import moment from 'moment';
 import coreModule from 'app/core/core_module';
 
 export class TreeMenuCtrl {
@@ -14,23 +15,42 @@ export class TreeMenuCtrl {
   panel: any;
   groupType: any;
   correlationHosts: any;
+  timeRange: any;
+  periods: any;
+  limitTime: number;
 
   /** @ngInject */
   constructor(private $scope, private associationSrv,
     private $rootScope, private $timeout,
     private $controller, private backendSrv,
     private contextSrv, private healthSrv,
-    private alertMgrSrv
+    private alertMgrSrv, private timeSrv
   ) {
     this.isOpen = false;
     this.isLoding = true;
     this.groupType = 'metrics';
+    this.limitTime = 2;
 
     var analysis = this.$rootScope.$on('analysis', (event, data) =>{
-      if (_.isEqual(data, 'thresholdSlider')) {
-        this.associationSrv.updateRang(this.$scope.$parent.thresholdSlider.get());
+      switch (data) {
+        case 'thresholdSlider':
+          this.associationSrv.updateRang(this.$scope.$parent.thresholdSlider.get());
+          this.init();
+          this.refresh();
+          break;
+        case 'updateTime':
+          this.initByTime();
+          break;
+        default:
+          var association = this.associationSrv.sourceAssociation;
+          this.loadAssociatedPeriods({
+            metric: association.metric,
+            host: association.host
+          }).then((res) => {
+            this.init();
+          });
+          break;
       }
-      this.init();
     });
 
     this.$scope.$on('$destroy', () => {
@@ -40,6 +60,15 @@ export class TreeMenuCtrl {
 
     this.yaxisNumber = 3;
     this.prox = this.contextSrv.user.orgId + '.' + this.contextSrv.user.systemId + '.';
+
+    this.timeRange = {
+      from: this.timeSrv.timeRange().from.unix(),
+      to: this.timeSrv.timeRange().to.unix()
+    };
+
+    this.backendSrv.get('/api/static/config').then((res) => {
+      this.limitTime = res.limit_association;
+    })
   }
 
   init(type?) {
@@ -49,23 +78,62 @@ export class TreeMenuCtrl {
     this.isAssociation = false;
     var association = this.associationSrv.sourceAssociation;
     this.clearSelected();
-    if (!_.isEmpty(association)) {
-      this.alertMgrSrv.loadAssociatedMetrics(association.metric, association.host, association.min, association.max, this.groupType)
-      .then((response) => {
-        if (this.groupType === 'metrics') {
-          this.correlationMetrics = response.data || {};
-        } else {
-          this.correlationHosts = response.data || {};
-        }
-        if (!_.isEmpty(response.data)) {
-          this.isAssociation = true;
-        }
-        this.isLoding = false;
-      }, () => {
-        this.isLoding = false;
-      });
+    var params = {
+      metric: association.metric,
+      host: association.host,
+      minDistance: 1000 - association.max,
+      maxDistance: 1000 - association.min,
+      group: this.groupType,
+      startSec: this.timeRange.from,
+      endSec: this.timeRange.to
     }
+    if (!_.isEmpty(association)) {
+      if (this.periods) {
+        this.loadAssociatedMetrics(params);
+      } else {
+        this.loadAssociatedPeriods({
+          metric: association.metric,
+          host: association.host
+        }).then((res) => {
+          params.startSec = res.from;
+          params.endSec = res.to;
+          this.loadAssociatedMetrics(params);
+        });
+      }
+    }
+  }
 
+  loadAssociatedPeriods(params) {
+    return this.alertMgrSrv.loadAssociatedPeriods(params).then((res) => {
+      this.periods = res.data;
+      if (this.periods.length) {
+        this.updateTimeRange(this.periods[0])
+      } else {
+        this.periods = [];
+        this.periods.push({
+          o1: this.timeRange.from,
+          o2: this.timeRange.to,
+        });
+      }
+      return this.timeRange;
+    });
+  }
+
+  loadAssociatedMetrics(params) {
+    this.alertMgrSrv.loadAssociatedMetrics(params)
+    .then((res) => {
+      if (this.groupType === 'metrics') {
+        this.correlationMetrics = res.data;
+      } else {
+        this.correlationHosts = res.data;
+      }
+      if (!_.isEmpty(res.data)) {
+        this.isAssociation = true;
+      }
+      this.isLoding = false;
+    }, () => {
+      this.isLoding = false;
+    });
   }
 
   showTree() {
@@ -95,14 +163,22 @@ export class TreeMenuCtrl {
 
   addManualMetric(target) {
     target.metric = this.prox + target.metric;
-    if (!_.hasIn(this.correlationMetrics, '自定义指标')) {
-      this.correlationMetrics['自定义指标'] = {};
-    }
+    var custom = null;
     if (this.groupType === 'metrics') {
-      this.correlationMetrics['自定义指标'][target.metric] = {hosts: [target.host]};
+      (!this.correlationMetrics['自定义指标']) && (this.correlationMetrics['自定义指标'] = {});
+      custom = this.correlationMetrics['自定义指标'];
+      var key = target.metric;
+      var value = target.host;
+      var type = 'hosts';
     } else {
-      this.correlationMetrics['自定义指标'][target.metric] = {metrics: [target.host]};
+      (!this.correlationHosts['自定义指标']) && (this.correlationHosts['自定义指标'] = {});
+      custom = this.correlationHosts['自定义指标'];
+      key = target.host;
+      value = target.metric;
+      type = 'metrics';
     }
+    (!custom[key]) && (custom[key] = {});
+    custom[key][type] = _.union(custom[key][type], [value]);
     this.isAssociation = true;
   }
 
@@ -114,18 +190,16 @@ export class TreeMenuCtrl {
           target.hide = true;
         }
       });
-      this.$rootScope.$broadcast('refresh', this.panel.id);
     }
     $('[type="checkbox"]').prop({checked: false});
     $('[disabled="disabled"]').prop({checked: true});
   }
 
   addQuery(event, metric, host, otherMetric?) {
-    if (host === '自定义指标') {
-      host = metric;
-      metric = otherMetric;
+    if (host === '自定义指标' && this.groupType === 'hosts') {
+      host = otherMetric;
     }
-    if (this.checkSource(metric, host)) {
+    if (this.checkSource(this.prox + metric, host)) {
       return;
     } else {
       var $currentTarget = $(event.currentTarget);
@@ -150,7 +224,7 @@ export class TreeMenuCtrl {
           "currentTagKey": "",
           "currentTagValue": "",
           "downsampleAggregator": "avg",
-          "downsampleInterval": "",
+          "downsampleInterval": this.panel.downsample,
           "errors": {},
           "hide": false,
           "isCounter": false,
@@ -166,7 +240,7 @@ export class TreeMenuCtrl {
         this.panel.seriesOverrides.push(seriesOverride);
       }
       this.healthSrv.transformPanelMetricType(this.panel).then(() => {
-        this.$rootScope.$broadcast('refresh', this.panel.id);
+        this.refresh();
       });
     }
   }
@@ -220,6 +294,47 @@ export class TreeMenuCtrl {
   checkSource(metric, host) {
     return _.isEqual(metric, this.associationSrv.sourceAssociation.metric) &&
       _.isEqual(host, this.associationSrv.sourceAssociation.host)
+  }
+
+  initByTime() {
+    var start = this.timeSrv.timeRange().from.unix();
+    var from = moment(start * 1000);
+    var end = this.timeSrv.timeRange().to.unix();
+    var diff = moment().diff(from, 'days', true);
+    if (diff > this.limitTime) {
+      this.$scope.appEvent('alert-warning', ['您仅可以关联' + this.limitTime + '天以内的数据', '请选择' + this.limitTime + '天以内的时间区间']);
+      return;
+    }
+    diff = moment(end * 1000).diff(from, 'minutes');
+    if (diff < 20) {
+      this.$scope.appEvent('alert-warning', ['最小关联时间为20分钟', '请选择大于20分钟的时间区间']);
+      return;
+    }
+    this.$scope.appEvent('confirm-modal', {
+      title: '确定',
+      text: '您确定要重新计算关联指标吗？\n该计算过程可能较长,请耐心等待',
+      yesText: '确定',
+      noText: '取消',
+      onConfirm: () => {
+        this.timeRange.from = start;
+        this.timeRange.to = end;
+        this.periods.push({
+          o1: start,
+          o2: end
+        });
+        this.init();
+      }
+    })
+  }
+
+  updateTimeRange(period) {
+    this.timeRange.from = period.o1;
+    this.timeRange.to = period.o2;
+    this.timeSrv.setTime({from: moment(this.timeRange.from * 1000), to: moment(this.timeRange.to * 1000)}, false);
+  }
+
+  refresh() {
+    this.$rootScope.$broadcast('refresh', this.panel.id)
   }
 }
 
