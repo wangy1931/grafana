@@ -102,7 +102,7 @@
     <div class="tree-content no-data" ng-if="!ctrl.isLoding && !ctrl.isAssociation">
       <p>该指标可能正在计算关联结果</p>
       <p>请点击以下按钮进行刷新</p>
-      <p>若未指定关联时间,请点击右上角菜单进行关联计算</p>
+      <p>若需指定当前窗口时间,请点击图表右上角按钮进行关联计算</p>
       <button class="btn btn-outline-primary" ng-click="ctrl.init()">刷新</button>
     </div>
     <cw-loading class="tree-content" ng-if="ctrl.isLoding" show="ctrl.isLoding" duration=6000></cw-loading>
