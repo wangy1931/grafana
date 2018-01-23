@@ -516,6 +516,9 @@ $log-step-size: 50px;
     color: $white;
     border: 5px solid $page-bg;
   }
+  dd {
+    margin: 0.5rem 0;
+  }
 }
 
 .log-step.active {
