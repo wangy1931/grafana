@@ -1,0 +1,22 @@
+{
+  "page_overview_title": "System Overview",
+  "page_overview_panel_health_title": "Health Score Index",
+  "page_overview_panel_alert_title": "Alert Condition",
+  "page_overview_panel_topn_title": "Topn Process",
+  "page_overview_panel_anomaly_title": "Anomaly Metrics",
+  "page_overview_panel_service_title": "Service Topology",
+  "page_overview_panel_host_title": "Host Topology",
+  "page_overview_panel_kpi_title": "KPI Metrics",
+  "page_overview_tooltip_kpi": "Click a service icon above, and view the service detail information",
+  "i18n_alert": "Alert",
+  "i18n_warning": "warning",
+  "i18n_critical": "critical",
+  "i18n_normal": "normal",
+  "i18n_unnormal": "unnormal",
+  "i18n_process": "process",
+  "i18n_status_green": "",
+  "i18n_hostname": "Host Name",
+  "i18n_servicename": "Service Name",
+  "i18n_status": "Status",
+  "replace_test": "hello, {{ name }}"
+}

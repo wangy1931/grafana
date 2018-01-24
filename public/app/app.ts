@@ -52,26 +52,13 @@ export class GrafanaApp {
     app.constant('grafanaVersion', "@grafanaVersion@");
 
     app.config(['$translateProvider', ($translateProvider) => {
-      // $translateProvider.useStaticFilesLoader({
-      //   prefix: 'public/app/core/i18n/',
-      //   suffix: '.json'
-      // });
-      // $translateProvider.preferredLanguage('zh_CN');
-      $translateProvider.translations('zh_CN', {
-        "HOST": "机器",
-        "SERVICE": "服务",
-        "page_systems_empty": "You have not yet owned the system, please click here to add the system"
-      }).preferredLanguage('zh_CN');
+      $translateProvider.useStaticFilesLoader({
+        prefix: 'public/app/core/i18n/',
+        suffix: '.json'
+      });
+      $translateProvider.determinePreferredLanguage().fallbackLanguage('zh_CN');
+      $translateProvider.useLocalStorage();
     }]);
-
-    // app.config(['$translateProvider', ($translateProvider) => {
-    //   var translations = {
-    //     HEADLINE: 'What an awesome module!',
-    //     PARAGRAPH: 'Srsly!',
-    //   };
-    //   // add translation table
-    //   $translateProvider.translations('zh-CN', translations).preferredLanguage('zh-CN');
-    // }]);
 
     app.config(($locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) => {
       //$compileProvider.debugInfoEnabled(false);

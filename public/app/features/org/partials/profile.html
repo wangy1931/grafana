@@ -28,6 +28,20 @@
 
 	<prefs-control mode="user"></prefs-control>
 
+	<form name="ctrl.userForm" class="gf-form-group">
+		<h3 class="page-heading">语言</h3>
+
+		<div class="gf-form">
+			<span class="gf-form-label width-9">主题</span>
+			<div class="gf-form-select-wrapper max-width-20">
+				<select class="gf-form-input" ng-model="ctrl.curLanguage" ng-options="f.value as f.text for f in ctrl.languages"></select>
+			</div>
+		</div>
+		<div class="gf-form-button-row">
+			<button type="submit" class="btn btn-success" ng-click="ctrl.updateLanguage(ctrl.curLanguage)">更新</button>
+		</div>
+	</form>
+
 	<h3 class="page-heading">密码</h3>
 	<div class="gf-form-group">
 		<a href="profile/password" class="btn btn-inverse">修改密码</a>

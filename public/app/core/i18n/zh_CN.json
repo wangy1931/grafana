@@ -1,5 +1,22 @@
 {
-  "HOST": "机器",
-  "SERVICE": "服务",
-  "page_systems_empty": "You have not yet owned the system, please click here to add the system"
+  "page_overview_title": "系统总览",
+  "page_overview_panel_health_title": "健康指数趋势",
+  "page_overview_panel_alert_title": "报警情况",
+  "page_overview_panel_topn_title": "系统高资源消耗",
+  "page_overview_panel_anomaly_title": "智能检测异常指标",
+  "page_overview_panel_service_title": "服务拓扑",
+  "page_overview_panel_host_title": "机器拓扑",
+  "page_overview_panel_kpi_title": "KPI指标",
+  "page_overview_tooltip_kpi": "点击上图某个服务，查看服务详情",
+  "i18n_alert": "报警",
+  "i18n_warning": "警告",
+  "i18n_critical": "严重",
+  "i18n_normal": "正常",
+  "i18n_unnormal": "异常",
+  "i18n_process": "进程",
+  "i18n_status_green": "正常",
+  "i18n_hostname": "机器名",
+  "i18n_servicename": "服务名",
+  "i18n_status": "状态",
+  "replace_test": "hello, {{ name }}"
 }

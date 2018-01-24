@@ -47,8 +47,6 @@ export class SystemOverviewCtrl {
   ) {
     $scope.ctrl = this;
 
-    console.log($translate);
-
     this.topologyGraphParams = {
       blockSize: 36,
       spacing: 2,
@@ -79,7 +77,7 @@ export class SystemOverviewCtrl {
 
     // default data
     this.kpiPanel = {
-      leftTableHeads: ['机器名', '机器状态'],
+      leftTableHeads: ['i18n_hostname', 'i18n_hostname'],
       leftTableBodys: [
         { id: '', name: '', data: '正常', status: 'green' },
         { id: '', name: '', data: '正常', status: 'green' },
@@ -292,7 +290,7 @@ export class SystemOverviewCtrl {
     };
 
     this.kpiPanel.type = 'service';
-    this.kpiPanel.leftTableHeads = ['机器名', '机器状态'];
+    this.kpiPanel.leftTableHeads = ['i18n_hostname', 'i18n_status'];
     this.kpiPanel.leftTableBodys = [];
 
     this.getServiceKpi(serviceId, serviceName).then(resp => {
@@ -329,7 +327,7 @@ export class SystemOverviewCtrl {
     };
 
     this.kpiPanel.type = 'host';
-    this.kpiPanel.leftTableHeads = ['服务名', '服务状态'];
+    this.kpiPanel.leftTableHeads = ['i18n_servicename', 'i18n_status'];
     this.kpiPanel.leftTableBodys = [];
 
     this.getServicesOnHost(node._private_.id).then((response) => {
