@@ -3,7 +3,7 @@
 import angular from 'angular';
 
 angular.module('cloudwiz.translate', ['ng']).run(($translate) => {
-  // $translate.use($translate.preferredLanguage());
+  $translate.use($translate.preferredLanguage());
 });
 
 
@@ -26,6 +26,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
     $isReady = false,
     $keepContent = false,
     $fallbackLanguage,
+    $nextLang,
     loaderCache,
     uniformLanguageTagResolver = 'default',
     languageTagResolver = {
@@ -79,6 +80,29 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
     }
     return $uses;
   };
+
+  /**
+   * @name pascalprecht.translate.$translateProvider#translations
+   */
+  var translations = (langKey, translationTable) => {
+    if (!langKey && !translationTable) {
+      return $translationTable;
+    }
+
+    if (langKey && !translationTable) {
+      if (angular.isString(langKey)) {
+        return $translationTable[langKey];
+      }
+    } else {
+      if (!angular.isObject($translationTable[langKey])) {
+        $translationTable[langKey] = {};
+      }
+      // angular.extend($translationTable[langKey], flatObject(translationTable));
+      angular.extend($translationTable[langKey], translationTable);
+    }
+    return this;
+  };
+  this.translations = translations;
 
   /**
    * @name pascalprecht.translate.$translate
@@ -185,6 +209,16 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
     };
 
     /**
+     * 
+     */
+    var clearNextLangAndPromise = (key) => {
+      if ($nextLang === key) {
+        $nextLang = undefined;
+      }
+      langPromises[key] = undefined;
+    };
+
+    /**
      * @name pascalprecht.translate.$translate#use
      */
     $translate['use'] = (key?) => {
@@ -194,9 +228,6 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
       deferred.promise.then(null, angular.noop); // AJS "Possibly unhandled rejection"
 
       $rootScope.$emit('$translateChangeStart', {language : key});
-
-      deferred.resolve(key);
-      useLanguage(key);
 
       // Try to get the aliased language key
       // var aliasedKey = negotiateLocale(key);
@@ -211,45 +242,46 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
 
       // if there isn't a translation table for the language we've requested,
       // we load it asynchronously
-      // $nextLang = key;
+      $nextLang = key;
       // if (($forceAsyncReloadEnabled || !$translationTable[key]) && $loaderFactory && !langPromises[key]) {
-      //   langPromises[key] = loadAsync(key).then(function (translation) {
-      //     translations(translation.key, translation.table);
-      //     deferred.resolve(translation.key);
-      //     if ($nextLang === key) {
-      //       useLanguage(translation.key);
-      //     }
-      //     return translation;
-      //   }, function (key) {
-      //     $rootScope.$emit('$translateChangeError', {language : key});
-      //     deferred.reject(key);
-      //     $rootScope.$emit('$translateChangeEnd', {language : key});
-      //     return $q.reject(key);
-      //   });
-      //   langPromises[key]['finally'](function () {
-      //     clearNextLangAndPromise(key);
-      //   })['catch'](angular.noop); // we don't care about errors (clearing)
-      // } else if (langPromises[key]) {
-      //   // we are already loading this asynchronously
-      //   // resolve our new deferred when the old langPromise is resolved
-      //   langPromises[key].then(function (translation) {
-      //     if ($nextLang === translation.key) {
-      //       useLanguage(translation.key);
-      //     }
-      //     deferred.resolve(translation.key);
-      //     return translation;
-      //   }, function (key) {
-      //     // find first available fallback language if that request has failed
-      //     if (!$uses && $fallbackLanguage && $fallbackLanguage.length > 0 && $fallbackLanguage[0] !== key) {
-      //       return $translate.use($fallbackLanguage[0]).then(deferred.resolve, deferred.reject);
-      //     } else {
-      //       return deferred.reject(key);
-      //     }
-      //   });
-      // } else {
-      //   deferred.resolve(key);
-      //   useLanguage(key);
-      // }
+      if (!$translationTable[key] && $loaderFactory && !langPromises[key]) {
+        langPromises[key] = loadAsync(key).then(translation => {
+          translations(translation.key, translation.table);
+          deferred.resolve(translation.key);
+          if ($nextLang === key) {
+            useLanguage(translation.key);
+          }
+          return translation;
+        }, key => {
+          $rootScope.$emit('$translateChangeError', {language : key});
+          deferred.reject(key);
+          $rootScope.$emit('$translateChangeEnd', {language : key});
+          return $q.reject(key);
+        });
+        langPromises[key]['finally'](() => {
+          clearNextLangAndPromise(key);
+        })['catch'](angular.noop); // we don't care about errors (clearing)
+      } else if (langPromises[key]) {
+        // we are already loading this asynchronously
+        // resolve our new deferred when the old langPromise is resolved
+        langPromises[key].then(function (translation) {
+          if ($nextLang === translation.key) {
+            useLanguage(translation.key);
+          }
+          deferred.resolve(translation.key);
+          return translation;
+        }, function (key) {
+          // find first available fallback language if that request has failed
+          if (!$uses && $fallbackLanguage && $fallbackLanguage.length > 0 && $fallbackLanguage[0] !== key) {
+            return $translate['use']($fallbackLanguage[0]).then(deferred.resolve, deferred.reject);
+          } else {
+            return deferred.reject(key);
+          }
+        });
+      } else {
+        deferred.resolve(key);
+        useLanguage(key);
+      }
 
       return deferred.promise;
     };
@@ -265,19 +297,20 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
 
       // Also, if there are any fallback language registered, we start
       // loading them asynchronously as soon as we can.
-      // if ($fallbackLanguage && $fallbackLanguage.length) {
-      //   var processAsyncResult = function (translation) {
-      //     translations(translation.key, translation.table);
-      //     $rootScope.$emit('$translateChangeEnd', {language : translation.key});
-      //     return translation;
-      //   };
-      //   for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-      //     var fallbackLanguageId = $fallbackLanguage[i];
-      //     if ($forceAsyncReloadEnabled || !$translationTable[fallbackLanguageId]) {
-      //       langPromises[fallbackLanguageId] = loadAsync(fallbackLanguageId).then(processAsyncResult);
-      //     }
-      //   }
-      // }
+      if ($fallbackLanguage && $fallbackLanguage.length) {
+        var processAsyncResult = function (translation) {
+          translations(translation.key, translation.table);
+          $rootScope.$emit('$translateChangeEnd', {language : translation.key});
+          return translation;
+        };
+        for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
+          var fallbackLanguageId = $fallbackLanguage[i];
+          // if ($forceAsyncReloadEnabled || !$translationTable[fallbackLanguageId]) {
+          if (!$translationTable[fallbackLanguageId]) {
+            langPromises[fallbackLanguageId] = loadAsync(fallbackLanguageId).then(processAsyncResult);
+          }
+        }
+      }
     } else {
       $rootScope.$emit('$translateReady', {language : $translate['use']()});
     }
@@ -395,6 +428,9 @@ angular.module('cloudwiz.translate').factory('$translateDefaultInterpolation', (
 });
 
 
+////////
+// Directive
+////////
 angular.module('cloudwiz.translate').directive('translate', ($translate, $interpolate, $compile, $parse, $rootScope) => {
 
   var trim = function() {
