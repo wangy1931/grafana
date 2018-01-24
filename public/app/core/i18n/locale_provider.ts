@@ -51,6 +51,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
     $interpolatorFactories = [],
     $loaderFactory,
     $loaderOptions,
+    $nestedObjectDelimeter = '.',
     $isReady = false,
     $keepContent = false,
     $nextLang,
@@ -64,6 +65,35 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
         return (tag || '').split('-').join('_');
       },
     };
+
+  /**
+   * @name flatObject
+   */
+  var flatObject = (data, path = [], result = {}, prevKey?) => {
+    var key, keyWithPath, keyWithShortPath, val;
+
+    // !path && (path = {});
+    // !result && (result = {});
+    for (key in data) {
+      if (!Object.prototype.hasOwnProperty.call(data, key)) {
+        continue;
+      }
+      val = data[key];
+      if (angular.isObject(val)) {
+        flatObject(val, path.concat(key), result, key);
+      } else {
+        keyWithPath = path.length ? ('' + path.join($nestedObjectDelimeter) + $nestedObjectDelimeter + key) : key;
+        if (path.length && key === prevKey) {
+          // Create shortcut path (foo.bar == foo.bar.bar)
+          keyWithShortPath = '' + path.join($nestedObjectDelimeter);
+          // Link it to original path
+          result[keyWithShortPath] = '@:' + keyWithPath;
+        }
+        result[keyWithPath] = val;
+      }
+    }
+    return result;
+  };
 
   // tries to determine the browsers language
   var getFirstBrowserLanguage = () => {
@@ -107,7 +137,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
   };
 
   /**
-   * @name pascalprecht.translate.$translateProvider#determinePreferredLanguage
+   * @name cloudwiz.translate.$translateProvider#determinePreferredLanguage
    */
   this.determinePreferredLanguage = (fn?) => {
     var locale = (fn && angular.isFunction(fn)) ? fn() : getLocale();
@@ -118,7 +148,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
   };
 
   /**
-   * @name pascalprecht.translate.$translateProvider#registerAvailableLanguageKeys
+   * @name cloudwiz.translate.$translateProvider#registerAvailableLanguageKeys
    */
   this.registerAvailableLanguageKeys = (languageKeys, aliases?) => {
     if (languageKeys) {
@@ -163,7 +193,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
   };
 
   /**
-   * @name pascalprecht.translate.$translateProvider#fallbackLanguage
+   * @name cloudwiz.translate.$translateProvider#fallbackLanguage
    */
   var fallbackStack = (langKey) => {
     if (langKey) {
@@ -193,7 +223,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
   };
 
   /**
-   * @name pascalprecht.translate.$translateProvider#storageKey
+   * @name cloudwiz.translate.$translateProvider#storageKey
    */
   var storageKey = (key?) => {
     if (!key) {
@@ -223,7 +253,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
   };
 
   /**
-   * @name pascalprecht.translate.$translateProvider#useStorage
+   * @name cloudwiz.translate.$translateProvider#useStorage
    */
   this.useStorage = (storageFactory) => {
     $storageFactory = storageFactory;
@@ -231,7 +261,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
   };
 
   /**
-   * @name pascalprecht.translate.$translateProvider#useLocalStorage
+   * @name cloudwiz.translate.$translateProvider#useLocalStorage
    */
   this.useLocalStorage = () => {
     return this.useStorage('$translateLocalStorage');
@@ -253,8 +283,8 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
       if (!angular.isObject($translationTable[langKey])) {
         $translationTable[langKey] = {};
       }
-      // angular.extend($translationTable[langKey], flatObject(translationTable));
-      angular.extend($translationTable[langKey], translationTable);
+      angular.extend($translationTable[langKey], flatObject(translationTable));
+      // angular.extend($translationTable[langKey], translationTable);
     }
     return this;
   };
@@ -271,19 +301,6 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
       langPromises = {},
       fallbackIndex,
       startFallbackIteration;
-
-    // var resolveForFallbackLanguageInstant = (fallbackLanguageIndex, translationId, interpolateParams, Interpolator, sanitizeStrategy?) => {
-    //   var result;
-
-    //   if (fallbackLanguageIndex < $fallbackLanguage.length) {
-    //     var langKey = $fallbackLanguage[fallbackLanguageIndex];
-    //     result = getFallbackTranslationInstant(langKey, translationId, interpolateParams, Interpolator, sanitizeStrategy);
-    //     if (!result && result !== '') {
-    //       result = resolveForFallbackLanguageInstant(fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator);
-    //     }
-    //   }
-    //   return result;
-    // };
 
     var applyPostProcessing = function (translationId, translation, resolvedTranslation, interpolateParams, uses, sanitizeStrategy?) {
       var fn = postProcessFn;
@@ -306,7 +323,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
       if (Object.prototype.hasOwnProperty.call($translationTable, langKey)) {
         deferred.resolve($translationTable[langKey]);
       } else if (langPromises[langKey]) {
-        var onResolve = function (data) {
+        var onResolve = (data) => {
           translations(data.key, data.table);
           deferred.resolve(data.table);
         };
@@ -332,6 +349,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
             interpolatedValue = applyPostProcessing(translationId, translationTable[translationId], interpolatedValue, interpolateParams, langKey);
 
             deferred.resolve(interpolatedValue);
+
           }
           Interpolator.setLocale($uses);
         } else {
@@ -394,6 +412,8 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
       return resolveForFallbackLanguage((startFallbackIteration > 0 ? startFallbackIteration : fallbackIndex), translationId, interpolateParams, Interpolator, defaultTranslationText, sanitizeStrategy);
     };
 
+    var $translate: any;
+
     var determineTranslation = (translationId, interpolateParams, interpolationId, defaultTranslationText, uses, sanitizeStrategy) => {
       var deferred = $q.defer();
 
@@ -405,17 +425,16 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
         var translation = table[translationId];
 
         // If using link, rerun $translate with linked translationId and return it
-        // if (translation.substr(0, 2) === '@:') {
-        //   $translate(translation.substr(2), interpolateParams, interpolationId, defaultTranslationText, uses, sanitizeStrategy)
-        //     .then(deferred.resolve, deferred.reject);
-        // } else {
-        //   var resolvedTranslation = Interpolator.interpolate(translation, interpolateParams, 'service', sanitizeStrategy, translationId);
-        //   resolvedTranslation = applyPostProcessing(translationId, translation, resolvedTranslation, interpolateParams, uses);
-        //   deferred.resolve(resolvedTranslation);
-        // }
-        var resolvedTranslation = Interpolator.interpolate(translation, interpolateParams, 'service', sanitizeStrategy, translationId);
-        resolvedTranslation = applyPostProcessing(translationId, translation, resolvedTranslation, interpolateParams, uses);
-        deferred.resolve(resolvedTranslation);
+        if (translation.substr(0, 2) === '@:') {
+
+          $translate(translation.substr(2), interpolateParams, interpolationId, defaultTranslationText, uses, sanitizeStrategy)
+            .then(deferred.resolve, deferred.reject);
+        } else {
+          //
+          var resolvedTranslation = Interpolator.interpolate(translation, interpolateParams, 'service', sanitizeStrategy, translationId);
+          resolvedTranslation = applyPostProcessing(translationId, translation, resolvedTranslation, interpolateParams, uses);
+          deferred.resolve(resolvedTranslation);
+        }
       } else {
         var missingTranslationHandlerTranslation;
         // for logging purposes only (as in $translateMissingTranslationHandlerLog), value is not returned to promise
@@ -456,7 +475,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
     /**
      * @name the returened
      */
-    var $translate: any = (translationId, interpolateParams, interpolationId, defaultTranslationText, forceLanguage, sanitizeStrategy) => {
+    $translate = (translationId, interpolateParams, interpolationId, defaultTranslationText, forceLanguage, sanitizeStrategy) => {
       if (!$uses && $preferredLanguage) {
         $uses = $preferredLanguage;
       }
@@ -579,12 +598,12 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
 
         if (angular.isArray(data)) {
           angular.forEach(data, function (table) {
-            angular.extend(translationTable, table);
-            // angular.extend(translationTable, flatObject(table));
+            // angular.extend(translationTable, table);
+            angular.extend(translationTable, flatObject(table));
           });
         } else {
-          angular.extend(translationTable, data);
-          // angular.extend(translationTable, flatObject(data));
+          // angular.extend(translationTable, data);
+          angular.extend(translationTable, flatObject(data));
         }
         pendingLoader = false;
         deferred.resolve({
@@ -715,14 +734,14 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
     };
 
     /**
-     * @name pascalprecht.translate.$translate#storage
+     * @name cloudwiz.translate.$translate#storage
      */
     $translate.storage = () => {
       return Storage;
     };
 
     /**
-     * @name pascalprecht.translate.$translate#storageKey
+     * @name cloudwiz.translate.$translate#storageKey
      */
     $translate.storageKey = () => {
       return storageKey();
@@ -1117,7 +1136,7 @@ angular.module('cloudwiz.translate').directive('translate', ($translate, $interp
 ////////
 // Storage
 ////////
-angular.module('cloudwiz.translate').constant('$STORAGE_KEY', 'NG_TRANSLATE_LANG_KEY');
+angular.module('cloudwiz.translate').constant('$STORAGE_KEY', 'CLOUDWIZ_LANG_KEY');
 angular.module('cloudwiz.translate').factory('$translateLocalStorage', ($window) => {
   var localStorageAdapter = (function () {
     var langKey;

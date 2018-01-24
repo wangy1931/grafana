@@ -18,5 +18,10 @@
   "i18n_hostname": "Host Name",
   "i18n_servicename": "Service Name",
   "i18n_status": "Status",
-  "replace_test": "hello, {{ name }}"
+  "replace_test": "hello, {{ name }}",
+  "multi1": {
+    "multi2": {
+      "test": "test"
+    }
+  }
 }

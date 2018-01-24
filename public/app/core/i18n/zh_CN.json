@@ -18,5 +18,10 @@
   "i18n_hostname": "机器名",
   "i18n_servicename": "服务名",
   "i18n_status": "状态",
-  "replace_test": "hello, {{ name }}"
+  "replace_test": "hello, {{ name }}",
+  "multi1": {
+    "multi2": {
+      "test": "test"
+    }
+  }
 }
