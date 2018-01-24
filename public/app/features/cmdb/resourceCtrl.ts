@@ -13,26 +13,9 @@ export class ResourceCtrl {
   group: any = '';
   groupOptions: any;
 
-  mockData: any = {
-    group: [
-      { id: 1, name: 'group1', value: 'group1', location: '中国北部' },
-      { id: 2, name: 'group2', value: 'group2', location: '中国北部' },
-      { id: 3, name: 'group3', value: 'group3', location: '全球' }
-    ],
-    list: [
-      { id: 1, name: 'app1', location: '中国北部', type: '应用程序', group: 'group1' },
-      { id: 2, name: 'sql server1', location: '中国北部', type: 'SQL', group: 'group1' },
-      { id: 3, name: 'collector', location: '全球', type: '服务总线', group: 'group2' },
-      { id: 4, name: 'docker', location: '中国北部', type: 'Blob存储', group: 'group2' },
-      { id: 5, name: 'elasticsearch', location: '中国北部', type: 'Redis', group: 'group3' },
-      { id: 6, name: 'nginx', location: '中国北部', type: '流量管理器', group: 'group3' }
-    ],
-    deatil: {}
-  };
-
   /** @ngInject */
   constructor(
-    private $scope, private $location, private $timeout,
+    private $scope, private $location, private resourceSrv,
     private backendSrv, private alertSrv, private contextSrv
   ) {
     this.searchService = '';
@@ -42,36 +25,45 @@ export class ResourceCtrl {
 
   // Group
   getGroup() {
-    this.groups = this.mockData.group;
-    // this.backendSrv.alertD({url: '/cmdb/service'}).then(result => {
-    //   this.services = result.data;
-    // });
+    this.resourceSrv.getGroup().then(result => {
+      this.groups = result;
+    });
   }
   toList(item) {
-    this.$location.url('/cmdb/resource_list?name=' + item.name);
+    this.$location.url(`/cmdb/resource_list?name=${item.name}&id=${item.id}`);
   }
 
   // List
   getList() {
-    this.list = this.mockData.list;
+    var searchParams = this.$location.search();
     this.groupOptions = [
       { name: '所有资源组', value: '' }
-    ].concat(this.mockData.group);
+    ].concat(this.resourceSrv.groups);
 
-    if (this.$location.path() === '/cmdb/resource_list' && this.$location.search().name) {
-      this.group = this.$location.search().name;
+    if (this.$location.path() === '/cmdb/resource_list' && searchParams.name) {
+      this.group = searchParams.name;
     }
+
+    this.resourceSrv.getList().then(result => {
+      this.list = result;
+    });
   }
   toDetail(item) {
-    this.$location.url('/cmdb/resource_detail?id=' + item.id);
+    this.$location.url(`/cmdb/resource_detail?id=${item.id}`);
   }
   getListByGroup() {
-    console.log(this.group);
+    this.$location.search({
+      id: (_.find(this.resourceSrv.groups, { name: this.group }) || {}).id || '',
+      name: this.group
+    });
   }
 
   // Detail
   getDetail() {
-    this.detail = this.mockData.detail;
+    var searchParams = this.$location.search();
+    this.resourceSrv.getDetail(searchParams).then(result => {
+      this.detail = result;
+    });
   }
 
   orderBy(order) {

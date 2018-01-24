@@ -428,6 +428,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     templateUrl: 'public/app/features/cmdb/partials/resource_list.html',
     controller : 'ResourceCtrl',
     controllerAs: 'ctrl',
+    reloadOnSearch: false,
     resolve: loadCMDBBundle
   })
   .when('/cmdb/resource_detail', {
