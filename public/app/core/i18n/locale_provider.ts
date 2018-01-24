@@ -30,12 +30,11 @@ angular.module('cloudwiz.translate', ['ng']).run(($translate) => {
 
 
 /**
- *  @name cloudwiz.translate.$translateProvider
+ * @name cloudwiz.translate.$translateProvider
  */
-angular.module('cloudwiz.translate').constant('cloudwizTranslateOverrider', {}).provider('$translate', $translate);
+angular.module('cloudwiz.translate').provider('$translate', $translate);
 
-//($STORAGE_KEY, $windowProvider, $translateSanitizationProvider, cloudwizTranslateOverrider)
-function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
+function $translate($STORAGE_KEY, $windowProvider) {
 
   var $translationTable = {},
     $preferredLanguage,
@@ -97,11 +96,6 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
 
   // tries to determine the browsers language
   var getFirstBrowserLanguage = () => {
-    // internal purpose only
-    if (angular.isFunction(cloudwizTranslateOverrider.getLocale)) {
-      return cloudwizTranslateOverrider.getLocale();
-    }
-
     var navigator = $windowProvider.$get().navigator,
       browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
       i, language;
@@ -284,7 +278,6 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
         $translationTable[langKey] = {};
       }
       angular.extend($translationTable[langKey], flatObject(translationTable));
-      // angular.extend($translationTable[langKey], translationTable);
     }
     return this;
   };
@@ -447,9 +440,9 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
         // configured.
         if (uses && $fallbackLanguage && $fallbackLanguage.length) {
           fallbackTranslation(translationId, interpolateParams, Interpolator, defaultTranslationText, sanitizeStrategy)
-            .then(function (translation) {
+            .then(translation => {
               deferred.resolve(translation);
-            }, function (_translationId) {
+            }, _translationId => {
               // deferred.reject(applyNotFoundIndicators(_translationId));
             });
         } else if ($missingTranslationHandlerFactory && !pendingLoader && missingTranslationHandlerTranslation) {
@@ -485,11 +478,11 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
       // The result is an object.
       if (angular.isArray(translationId)) {
         // This transforms all promises regardless resolved or rejected
-        var translateAll = function (translationIds) {
+        var translateAll = (translationIds) => {
           var results = {}; // storing the actual results
           var promises = []; // promises to wait for
           // Wraps the promise a) being always resolved and b) storing the link id->value
-          var translate = function (translationId) {
+          var translate = (translationId) => {
             var deferred = $q.defer();
             var regardless = function (value) {
               results[translationId] = value;
@@ -503,8 +496,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
             promises.push(translate(translationIds[i]));
           }
           // wait for all (including storing to results)
-          return $q.all(promises).then(function () {
-            // return the results
+          return $q.all(promises).then(() => {
             return results;
           });
         };
@@ -553,7 +545,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
         // We can just translate.
         determineTranslation(translationId, interpolateParams, interpolationId, defaultTranslationText, uses, sanitizeStrategy).then(deferred.resolve, deferred.reject);
       } else {
-        var promiseResolved = function () {
+        var promiseResolved = () => {
           // $uses may have changed while waiting
           if (!forceLanguage) {
             uses = $uses;
@@ -569,10 +561,8 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
     /**
      * @name loadAsync
      */
-    var loadAsync = function (key) {
-      if (!key) {
-        throw 'No language key specified for loading.';
-      }
+    var loadAsync = (key) => {
+      if (!key) { throw 'No language key specified for loading.'; }
 
       var deferred = $q.defer();
 
@@ -592,17 +582,15 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
         }, $loaderOptions.$http)
       });
 
-      var onLoaderSuccess = function (data) {
+      var onLoaderSuccess = (data) => {
         var translationTable = {};
         $rootScope.$emit('$translateLoadingSuccess', {language : key});
 
         if (angular.isArray(data)) {
-          angular.forEach(data, function (table) {
-            // angular.extend(translationTable, table);
+          angular.forEach(data, (table) => {
             angular.extend(translationTable, flatObject(table));
           });
         } else {
-          // angular.extend(translationTable, data);
           angular.extend(translationTable, flatObject(data));
         }
         pendingLoader = false;
@@ -610,15 +598,16 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
           key : key,
           table : translationTable
         });
+
+        $translate.i18n = translationTable;
         $rootScope.$emit('$translateLoadingEnd', {language : key});
       };
 
-      var onLoaderError = function (key) {
+      var onLoaderError = (key) => {
         $rootScope.$emit('$translateLoadingError', {language : key});
         deferred.reject(key);
         $rootScope.$emit('$translateLoadingEnd', {language : key});
       };
-
       $injector.get($loaderFactory)(loaderOptions).then(onLoaderSuccess, onLoaderError);
 
       return deferred.promise;
@@ -650,7 +639,7 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
       // inform default interpolator
       defaultInterpolator.setLocale($uses);
 
-      var eachInterpolator = function (interpolator, id) {
+      var eachInterpolator = (interpolator, id) => {
         interpolatorHashMap[id].setLocale($uses);
       };
 
@@ -683,7 +672,6 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
       // if there isn't a translation table for the language we've requested,
       // we load it asynchronously
       $nextLang = key;
-      // if (($forceAsyncReloadEnabled || !$translationTable[key]) && $loaderFactory && !langPromises[key]) {
       if (!$translationTable[key] && $loaderFactory && !langPromises[key]) {
         langPromises[key] = loadAsync(key).then(translation => {
           translations(translation.key, translation.table);
@@ -723,14 +711,14 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
         useLanguage(key);
       }
 
-      /**
-       * @name cloudwiz.translate.$translate#isPostCompilingEnabled
-       */
-      $translate.isPostCompilingEnabled = () => {
-        return $postCompilingEnabled;
-      };
-
       return deferred.promise;
+    };
+
+    /**
+     * @name cloudwiz.translate.$translate#isPostCompilingEnabled
+     */
+    $translate.isPostCompilingEnabled = () => {
+      return $postCompilingEnabled;
     };
 
     /**
@@ -767,14 +755,13 @@ function $translate($STORAGE_KEY, $windowProvider, cloudwizTranslateOverrider) {
       // Also, if there are any fallback language registered, we start
       // loading them asynchronously as soon as we can.
       if ($fallbackLanguage && $fallbackLanguage.length) {
-        var processAsyncResult = function (translation) {
+        var processAsyncResult = (translation) => {
           translations(translation.key, translation.table);
           $rootScope.$emit('$translateChangeEnd', {language : translation.key});
           return translation;
         };
         for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
           var fallbackLanguageId = $fallbackLanguage[i];
-          // if ($forceAsyncReloadEnabled || !$translationTable[fallbackLanguageId]) {
           if (!$translationTable[fallbackLanguageId]) {
             langPromises[fallbackLanguageId] = loadAsync(fallbackLanguageId).then(processAsyncResult);
           }
@@ -852,9 +839,6 @@ angular.module('cloudwiz.translate').factory('$translateStaticFilesLoader', ($q,
   };
 });
 
-/**
- * ($interpolate, $translateSanitization)
- */
 angular.module('cloudwiz.translate').factory('$translateDefaultInterpolation', ($interpolate) => {
   var $translateInterpolator: any = {},
       $locale,
@@ -905,7 +889,6 @@ angular.module('cloudwiz.translate').directive('translate', ($translate, $interp
   return {
     restrict: 'AE',
     scope: true,
-    // priority: $translate.directivePriority(),
     compile: function (tElement, tAttr) {
 
       var translateValuesExist = (tAttr.translateValues) ?
@@ -923,7 +906,6 @@ angular.module('cloudwiz.translate').directive('translate', ($translate, $interp
           watcherRegExp = '^(.*)' + $interpolate.startSymbol() + '(.*)' + $interpolate.endSymbol() + '(.*)';
 
       return function linkFn(scope, iElement, iAttr) {
-
         scope.interpolateParams = {};
         scope.preText = '';
         scope.postText = '';
