@@ -17,6 +17,10 @@ module.exports = function(config) {
       src: '<%= genDir %>/css/grafana.darkblue.min.css',
       dest: '<%= genDir %>/css'
     },
+    cssBenz: {
+      src: '<%= genDir %>/css/grafana.benz.min.css',
+      dest: '<%= genDir %>/css'
+    },
     js: {
       src: ['<%= genDir %>/app/base.js', '<%= genDir %>/app/vendor.js', '<%= genDir %>/app/boot.js'],
       dest: '<%= genDir %>/app'

@@ -45,7 +45,7 @@
             <tabset>
                 <tab heading="{{panel.title}}" ng-repeat="(name, panel) in row.panels track by panel.id" ng-if="panel.tab !== graph">
                     <ul ng-if="panel.regularResult.data[0].total">
-                        <li style="color: #F9934E; list-style-type: disc; margin-left: 30px;">
+                        <li style="color: #feb101; list-style-type: disc; margin-left: 30px;">
                             该时间区域内共有 <strong>{{panel.regularResult.data[0].total}}</strong> 条日志，当前显示前 {{panel.regularResult.data[0].datapoints.length}} 条。放大时间区域，以查看更细日志数据。
                         </li>
                     </ul>

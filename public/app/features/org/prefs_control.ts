@@ -20,6 +20,7 @@ export class PrefsControlCtrl {
     {value: 'dark', text: 'Dark'},
     {value: 'light', text: 'Light'},
     {value: 'darkblue', text: 'DarkBlue'},
+    {value: 'benz', text: 'Benz'},
   ];
 
   /** @ngInject **/

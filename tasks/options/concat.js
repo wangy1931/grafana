@@ -50,6 +50,22 @@ module.exports = function(config) {
       dest: '<%= genDir %>/css/grafana.darkblue.min.css'
     },
 
+    cssBenz: {
+      src: [
+        '<%= genDir %>/vendor/css/timepicker.css',
+        '<%= genDir %>/vendor/css/spectrum.css',
+        '<%= genDir %>/css/grafana.benz.css',
+        '<%= genDir %>/vendor/css/font-awesome.min.css',
+        '<%= genDir %>/vendor/css/nouislider.min.css',
+        '<%= genDir %>/vendor/css/bootstrap-responsive.min.css',
+        '<%= genDir %>/vendor/css/iconfont.css',
+        '<%= genDir %>/vendor/css/quill.snow.css',
+        '<%= genDir %>/vendor/css/quill.bubble.css',
+        '<%= genDir %>/vendor/css/ng-table.css',
+      ],
+      dest: '<%= genDir %>/css/grafana.benz.min.css'
+    },
+
     cssFonts: {
       src: [ '<%= genDir %>/css/fonts.css' ],
       dest: '<%= genDir %>/css/fonts.min.css'

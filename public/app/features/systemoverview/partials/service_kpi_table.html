@@ -1,6 +1,6 @@
 
 <div class="fixed-table-container">
-    <table ng-table="ctrl.tableParams" class="table fix-table-row-height">
+    <table ng-table="ctrl.tableParams" class="table fix-table-row-height table-striped">
         <tr ng-repeat="row in $data">
             <td data-title="'指标'" sortable="'name'" style="width: 55%;">
                 <div data-container="body" bs-tooltip="'{{ row.metricHelp }}'">{{ row.name }}</div>

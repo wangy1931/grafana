@@ -33,12 +33,13 @@ module.exports = function(grunt) {
 
   grunt.registerTask('styleguide', function() {
     var data = {
-      dark: {}, light: {}, darkblue: {}
+      dark: {}, light: {}, darkblue: {}, benz: {}
     };
 
     readVars('public/sass/_variables.dark.scss', data.dark);
     readVars('public/sass/_variables.light.scss', data.light);
     readVars('public/sass/_variables.darkblue.scss', data.darkblue);
+    readVars('public/sass/_variables.benz.scss', data.benz);
 
     var styleGuideJson = grunt.config().genDir + '/sass/styleguide.json';
     grunt.file.write(styleGuideJson, JSON.stringify(data, null, 4));

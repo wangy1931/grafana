@@ -7,6 +7,7 @@ module.exports = function(config) {
         "<%= genDir %>/css/grafana.dark.css": "<%= srcDir %>/sass/grafana.dark.scss",
         "<%= genDir %>/css/grafana.light.css": "<%= srcDir %>/sass/grafana.light.scss",
         "<%= genDir %>/css/grafana.darkblue.css": "<%= srcDir %>/sass/grafana.darkblue.scss",
+        "<%= genDir %>/css/grafana.benz.css": "<%= srcDir %>/sass/grafana.benz.scss",
         "<%= genDir %>/css/fonts.css": "<%= srcDir %>/sass/fonts.scss",
       }
     }

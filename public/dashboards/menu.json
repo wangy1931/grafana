@@ -48,11 +48,6 @@
           "id": 1,
           "text": "诊断助手",
           "url": "/association?guide"
-        },
-        {
-          "id": 2,
-          "text": "健康报告",
-          "url": "/report"
         }
       ]
     },
@@ -61,11 +56,6 @@
       "text": "系统配置",
       "icon": "fa fa-fw fa-cubes",
       "children": [
-        {
-          "id": 1,
-          "text": "探针收集",
-          "url": "/cmdb/config?serviceName=collector"
-        },
         {
           "id": 3,
           "text": "指标管理",

@@ -292,7 +292,7 @@ export class SystemOverviewCtrl {
 
     this.kpiPanel.type = 'service';
     // Feichi: modify
-    this.kpiPanel.leftTableHeads = ['实例名', '类型', '状态'];
+    this.kpiPanel.leftTableHeads = ['实例名', '状态'];
     this.kpiPanel.leftTableBodys = [];
 
     this.getServiceKpi(serviceId, serviceName).then(resp => {
