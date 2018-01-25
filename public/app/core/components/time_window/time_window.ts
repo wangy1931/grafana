@@ -96,7 +96,7 @@ export class TimeWindowCtrl {
 
   bindEvent() {
     angular.element("#timeWindow").bind("plotselected", (...args) => {
-      this.selectRange = { from: moment(args[1].xaxis.from), to: moment(args[1].xaxis.to) };
+      this.selectRange = { from: moment(args[1].xaxis.to).add(-1, 'm'), to: moment(args[1].xaxis.to).add(1, 'm') };
       this.$scope.$emit('time-window-selected', this.selectRange);
 
       this.addAnnotation();
@@ -144,7 +144,7 @@ export class TimeWindowCtrl {
     }
     this.selectRange = this.range;
     this.datasourceSrv.get('opentsdb').then(this.issueQueries.bind(this));
-    this.$scope.$emit('time-window-resize', this.range);
+    this.$scope.$emit('time-window-resize', { from: moment(this.range.to).add(-1, 'm'), to: moment(this.range.to).add(1, 'm') });
   }
 
   showTooltip(params) {
@@ -165,7 +165,7 @@ export class TimeWindowCtrl {
         "currentTagKey": "",
         "currentTagValue": "",
         "downsampleAggregator": "avg",
-        "downsampleInterval": "1h",
+        "downsampleInterval": "5m",
         "errors": {},
         "hide": false,
         "isCounter": false,
@@ -178,7 +178,7 @@ export class TimeWindowCtrl {
         "currentTagKey": "",
         "currentTagValue": "",
         "downsampleAggregator": "avg",
-        "downsampleInterval": "1h",
+        "downsampleInterval": "5m",
         "errors": {},
         "hide": false,
         "isCounter": false,
@@ -252,7 +252,7 @@ export class TimeWindowCtrl {
       })
     }
 
-    var currentPoint = this.selectRange.from + (this.selectRange.to - this.selectRange.from) / 2
+    var currentPoint = moment(this.selectRange.to).add(-5, 'm');  // this.selectRange.from + (this.selectRange.to - this.selectRange.from) / 2
     this.options.events.data.push({
       id: 12,
       min: currentPoint,
