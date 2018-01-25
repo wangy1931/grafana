@@ -21,6 +21,8 @@ export class TimeWindowCtrl {
   range: any;
   rangeRaw: any;
   datasource: any;
+  selectRange: any;
+  queryData: any;
 
   $tooltip: any = $('<div id="tooltip">');
 
@@ -83,11 +85,6 @@ export class TimeWindowCtrl {
             color: "rgba(255, 96, 96, 1)",
             markerSize: 5,
             position: "BOTTOM",
-          },
-          "search1": {
-            color: "rgba(255, 96, 96, 1)",
-            markerSize: 5,
-            position: "BOTTOM",
           }
         },
       }
@@ -99,7 +96,11 @@ export class TimeWindowCtrl {
 
   bindEvent() {
     angular.element("#timeWindow").bind("plotselected", (...args) => {
-      this.$scope.$emit('time-window-selected', { from: moment(args[1].xaxis.from), to: moment(args[1].xaxis.to) });
+      this.selectRange = { from: moment(args[1].xaxis.from), to: moment(args[1].xaxis.to) };
+      this.$scope.$emit('time-window-selected', this.selectRange);
+
+      this.addAnnotation();
+      this.drawTimeWindow();
     });
     angular.element("#timeWindow").bind("plothover", (...args) => {
       if (!args[2]) {
@@ -141,6 +142,7 @@ export class TimeWindowCtrl {
         }
       }
     }
+    this.selectRange = this.range;
     this.datasourceSrv.get('opentsdb').then(this.issueQueries.bind(this));
     this.$scope.$emit('time-window-resize', this.range);
   }
@@ -217,17 +219,21 @@ export class TimeWindowCtrl {
       });
       return results.data;
     }).then(response => {
+      this.queryData = response;
       this.options.xaxis.from = this.range.from.valueOf();
       this.options.xaxis.to = this.range.to.valueOf();
 
       this.addAnnotation();
-
-      this.timeWindow = $.plot('#timeWindow', [
-        { label: response[0].target, data: response[0].datapoints },
-        { label: response[1].target, data: response[1].datapoints }
-      ], this.options);
-      this.timeWindowData = this.timeWindow.getData();
+      this.drawTimeWindow();
     });
+  }
+
+  drawTimeWindow() {
+    this.timeWindow = $.plot('#timeWindow', [
+      { label: this.queryData[0].target, data: this.queryData[0].datapoints },
+      { label: this.queryData[1].target, data: this.queryData[1].datapoints }
+    ], this.options);
+    this.timeWindowData = this.timeWindow.getData();
   }
 
   addAnnotation() {
@@ -246,14 +252,12 @@ export class TimeWindowCtrl {
       })
     }
 
-    var currentPoint = this.range.from + (this.range.to - this.range.from) / 2
+    var currentPoint = this.selectRange.from + (this.selectRange.to - this.selectRange.from) / 2
     this.options.events.data.push({
       id: 12,
       min: currentPoint,
       max: currentPoint,
-      title: "资源查询时间点",
-      // tags: "",
-      // text: _.transformMillionTime(currentPoint),
+      title: "资源消耗查询时间点",
       eventType: "search",
     })
   }
