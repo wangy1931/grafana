@@ -86,6 +86,8 @@
 @import "components/topology-graph";
 @import "components/tree_menu";
 @import "components/time-window";
+@import "components/elk-table";
+@import "components/grid-group";
 
 // PAGES
 @import "pages/login";
@@ -96,7 +98,6 @@
 @import "pages/plugins";
 @import "pages/signup";
 @import "pages/styleguide";
-@import "pages/bootstrap-table.min";
 @import "pages/forms";
 @import "pages/fullcalendar.min";
 @import "pages/oncaller";
@@ -119,5 +120,7 @@
 @import "pages/tag_picker";
 @import "pages/association";
 @import "pages/topn";
+@import "pages/metrics";
+@import "pages/service_topology";
 
 @import "old_responsive";

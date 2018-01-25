@@ -57,7 +57,7 @@
           },
           "targets": [
             {
-              "aggregator": "p99",
+              "aggregator": "avg",
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
@@ -71,7 +71,7 @@
             }
           ],
           "thresholds": "30,70",
-          "title": "Cpu使用率",
+          "title": "CPU使用率",
           "transparent": true,
           "type": "singlestat",
           "valueFontSize": "80%",
@@ -82,7 +82,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -125,7 +125,7 @@
           },
           "targets": [
             {
-              "aggregator": "p99",
+              "aggregator": "avg",
               "currentTagKey": "",
               "currentTagValue": "",
               "downsampleAggregator": "avg",
@@ -150,7 +150,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -219,7 +219,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -287,7 +287,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         }
       ],
       "title": "New row"
@@ -703,6 +703,74 @@
           ]
         },
         {
+          "columns": [
+            {
+              "text": "Current",
+              "value": "current"
+            }
+          ],
+          "editable": true,
+          "error": false,
+          "fontSize": "100%",
+          "id": 13,
+          "isNew": true,
+          "links": [],
+          "pageSize": null,
+          "rowHeight": false,
+          "scroll": false,
+          "showHeader": true,
+          "sort": {
+            "col": 1,
+            "desc": true
+          },
+          "span": 12,
+          "styles": [
+            {
+              "colorMode": "cell",
+              "colors": [
+                "rgba(50, 172, 45, 0.97)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(245, 54, 54, 0.9)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "pattern": "Current",
+              "rowHeight": "",
+              "thresholds": [
+                "50",
+                "80"
+              ],
+              "type": "number",
+              "unit": "percent",
+              "valueMaps": [
+                {
+                  "op": "=",
+                  "text": "",
+                  "value": ""
+                }
+              ]
+            }
+          ],
+          "targets": [
+            {
+              "aggregator": "avg",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "metric": "df.bytes.percentused",
+              "refId": "A",
+              "tags": {
+                "host": "$host",
+                "mount": "*"
+              }
+            }
+          ],
+          "title": "各磁盘使用率(现在)",
+          "transform": "timeseries_aggregations",
+          "type": "table"
+        },
+        {
           "aliasColors": {},
           "bars": false,
           "datasource": null,
@@ -835,7 +903,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "网络流入数据量统计",
+          "title": "网络流出数据量统计",
           "tooltip": {
             "msResolution": false,
             "shared": true,

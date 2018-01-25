@@ -35,9 +35,9 @@ class DashListCtrl extends PanelCtrl {
     this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
 
     this.groups = [
-      {list: [], show: false, header: "Starred dashboards",},
-      {list: [], show: false, header: "Recently viewed dashboards"},
-      {list: [], show: false, header: "Search"},
+      {list: [], show: false, header: "标记过的仪表盘",},
+      {list: [], show: false, header: "最近浏览的仪表盘"},
+      {list: [], show: false, header: "搜索"},
     ];
 
     // update capability
@@ -112,15 +112,16 @@ class DashListCtrl extends PanelCtrl {
       return Promise.resolve();
     }
 
-    var dashIds = _.first(impressions.getDashboardOpened(), this.panel.limit);
+    var dashIds = _.take(impressions.getDashboardOpened(), this.panel.limit);
     return this.backendSrv.search({dashboardIds: dashIds, limit: this.panel.limit}).then(result => {
-      this.groups[1].list = dashIds.map(orderId => {
-        return _.find(result, dashboard => {
-          return dashboard.id === orderId;
+      this.groups[1].list = dashIds
+        .map(orderId => {
+          return _.find(result, dashboard => {
+            return dashboard.id === orderId;
+          });
+        }).filter(el => {
+          return el !== undefined;
         });
-      }).filter(el => {
-        return el !== undefined;
-      });
     });
   }
 }

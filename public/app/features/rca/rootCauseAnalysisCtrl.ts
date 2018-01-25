@@ -14,11 +14,22 @@ export class RootCauseAnalysisCtrl {
   traceList: Array<string> = [];
 
   /** @ngInject */
-  constructor(private backendSrv, private $location, private $scope, private $rootScope) {
+  constructor(
+    private backendSrv, private popoverSrv, private alertSrv,
+    private $location, private $scope, private $rootScope, private $timeout
+  ) {
     this.toolkit = window.jsPlumbToolkit.newInstance();
     this.renderer = this.renderFactory();
 
     this.loadGraph().then(response => {
+      if (_.isEmpty(response.edges)) {
+        this.alertSrv.set("暂无故障溯源关系图，即将前往关联性分析", '', "warning", 2000);
+        this.$timeout(() => {
+          this.$location.url(`/association${window.location.search}`);
+        }, 2000);
+        return;
+      }
+
       this.graph = response;
       this.toolkit.load({ type: "json", data: response });
       this.resetConnection(response);
@@ -60,8 +71,11 @@ export class RootCauseAnalysisCtrl {
         data.edges.push({
           "source": item.dest.id,
           "target": item.src.id,
-          "data"  : { "type": null },
-          "score" : item.score * 4
+          "data"  : {
+            "type": null,
+            "score" : item.score * 4,
+            "solution": item.solutions
+          },
         });
       });
 
@@ -73,9 +87,6 @@ export class RootCauseAnalysisCtrl {
     var mainElement = document.querySelector("#jtk-paths"),
         canvasElement = mainElement.querySelector(`.jtk-canvas`),
         miniviewElement = mainElement.querySelector(".miniview");
-
-    // reset canvas height
-    $(".jtk-canvas").css({ "height": window.innerHeight - 52 });
 
     return this.toolkit.render({
       container: canvasElement,
@@ -90,21 +101,10 @@ export class RootCauseAnalysisCtrl {
         },
         nodes: {
           "default": {
+            template: "tmplNode",
             events: {
-              tap: (params) => {
-                this.resetGraph();
-                this.renderer.selectAllEdges({
-                  element: params.el
-                }).addClass('unselected');
-                $('.jtk-node').not(params.el).addClass('unselected');
-
-                // search
-                var searchParams = _.extend({}, this.$location.search(), {
-                  metric: params.el.getAttribute("data-jtk-node-id")
-                });
-                this.$location.search(searchParams);
-              },
-              click: this.nodeClickHandler.bind(this)
+              tap: this.nodeTapHandler.bind(this),
+              click: this.nodeClickHandler.bind(this),
             }
           }
         }
@@ -151,7 +151,7 @@ export class RootCauseAnalysisCtrl {
       window.jsPlumbToolkit.connect({
         source: $(`[data-jtk-node-id="${item.source}"]`).attr('id'),
         target: $(`[data-jtk-node-id="${item.target}"]`).attr('id'),
-        paintStyle: { strokeWidth: item.score }
+        paintStyle: { strokeWidth: item.data.score }
       });
     });
   }
@@ -186,17 +186,70 @@ export class RootCauseAnalysisCtrl {
     });
   }
 
-  showGuideResult(e, params) {
-    var selectors = $(`[data-jtk-node-id="${params.metric}"]`)
-    if (selectors.length) {
-      this.resetGraph();
-      this.renderer.selectAllEdges({
-        element: selectors[0]
-      }).addClass('unselected');
-      $('.jtk-node').not(selectors[0]).addClass('unselected');
+  nodeTapHandler(params) {
+    this.resetGraph();
+    this.renderer.selectAllEdges({
+      element: params.el
+    }).addClass('unselected');
+    $('.jtk-node').not(params.el).addClass('unselected');
 
-      selectors[0].click();
+    // search
+    var searchParams = _.extend({}, this.$location.search(), {
+      metric: params.el.getAttribute("data-jtk-node-id")
+    });
+    this.$location.search(searchParams);
+
+    // show node details
+    this.$scope.detail = {
+      name: params.node.data.name,
+      type: params.node.data.type,
+      description: this.nodeDescriptionHandler(params.node.data.desc)
+    };
+
+    // get directly relevant edges
+    this.$scope.relevantNodes = [];
+    params.node.getTargetEdges().forEach(edge => {
+      edge.source.data.description = this.nodeDescriptionHandler(edge.source.data.desc);
+      this.$scope.relevantNodes.push({ data: edge.source.data, edge: edge.data });
+    });
+
+    this.$scope.$digest();
+  }
+
+  nodeDescriptionHandler(desc) {
+    var description = [];
+
+    if (!_.isEmpty(desc)) {
+      _.each(desc, (item) => {
+        try {
+          description.push(JSON.parse(item));
+        } catch (e) {
+          description.push(item);
+        }
+      });
+    } else {
+      description = [];
     }
+
+    return description;
+  }
+
+  showGuideResult(e, params) {
+    this.$timeout(() => {
+      var selectors = $(`[data-jtk-node-id="${params.metric}"]`);
+      var node = this.toolkit.getNode(params.metric);
+
+      if (selectors.length && node) {
+        this.nodeTapHandler({
+          el: selectors[0],
+          node: node
+        });
+        selectors[0].click();
+      }
+    }, 100);
+  }
+
+  showNodeDetail(node) {
   }
 };
 

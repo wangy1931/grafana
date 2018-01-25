@@ -34,20 +34,26 @@ export class UagentCtrl {
 
   getService() {
     this.backendSrv.alertD({
-      url: '/cmdb/config/configName?serviceName=' + this.serviceName + '&hostId=' + this.host.id
+      url: '/cmdb/config/configName',
+      params: {
+        serviceName: this.serviceName,
+        hostId: this.host.id
+      }
     }).then((response) => {
       this.configs = response.data;
     });
   }
 
   getConfig() {
-    var url = '';
-    if (this.configName === 'template') {
-      url = '/cmdb/config/configTemplate?serviceName=filebeat';
-    } else {
-      url = '/cmdb/config/service?serviceName='+ this.serviceName + '&configName=' + this.configName + '&hostId=' + this.host.id;
-    }
-    this.backendSrv.alertD({url: url}).then((response) => {
+    var url = '/cmdb/config/service';
+    this.backendSrv.alertD({
+      url: url,
+      params: {
+        serviceName: this.serviceName,
+        configName: this.configName,
+        hostId: this.host.id
+      }
+    }).then((response) => {
       this.config = response.data;
       _.orderBy(this.config.sections[0].props, ['name']);
     });
@@ -83,6 +89,10 @@ export class UagentCtrl {
   }
 
   showConfirm() {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     if (_.isEmpty(this.configs)) {
       this.getService()
     }
@@ -98,6 +108,10 @@ export class UagentCtrl {
   }
 
   confirmSave() {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     var url = '/cmdb/config/service';
     var param = {
       serviceName : this.serviceName,
@@ -155,33 +169,32 @@ export class UagentCtrl {
     });
   }
 
-  addCollectionValue(path, index) {
-    var values = this.config.sections[0].props[index].value;
-    if (path) {
-      if (_.indexOf(values, path) > -1) {
-        this.$scope.appEvent('alert-warning', ['参数重复', '请检查重复内容重新填写']);
-      } else {
-        this.config.sections[0].props[index].value.push(path);
-      }
-      this.newPath = '';
-      this.newPort = null;
+  addCollectionValue(path, prop) {
+    if (_.indexOf(prop.value, path) > -1) {
+      this.$scope.appEvent('alert-warning', ['添加失败', '请将参数填写完整']);
+    } else {
+      prop.value.push(path);
     }
   }
 
-  checkCollectionValue(path, i, index) {
-    var values = this.config.sections[0].props[index].value;
-    values[i] = path;
-    if (path) {
-      values = _.uniq(values);
-    } else {
-      _.remove(values, function(p) {
-        return p === "" || _.isNull(p);
+  checkCollectionValue(path, index, prop) {
+    prop.value[index] = path;
+    if (path === '' || _.isNull(path) || _.isUndefined(path)) {
+      _.remove(prop.value, (value, i) => {
+        return index === i;
       });
     }
-    this.config.sections[0].props[index].value = values;
+    if (prop.value.length > _.uniq(prop.value).length) {
+      prop.value = _.uniq(prop.value);
+      this.$scope.appEvent('alert-warning', ['参数重复', '参数请勿重复']);
+    }
   }
 
   deleteConfig(id) {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     this.$scope.appEvent('confirm-modal', {
       title: '删除',
       text: '您确定要删除该配置吗？',
@@ -209,6 +222,10 @@ export class UagentCtrl {
   }
 
   copy(id, hosts) {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     this.$scope.appEvent('confirm-modal', {
       title: '同步',
       text: '您确定要同步该配置吗？',

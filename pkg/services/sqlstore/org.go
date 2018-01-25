@@ -29,8 +29,9 @@ func SearchOrgs(query *m.SearchOrgsQuery) error {
 	if query.Name != "" {
 		sess.Where("name=?", query.Name)
 	}
+	sess.Join("INNER", "org_permit", "org.id = org_permit.org_id")
 	sess.Limit(query.Limit, query.Limit*query.Page)
-	sess.Cols("id", "name")
+	sess.Cols("org.id", "name", "level", "deadline", "data_center")
 	err := sess.Find(&query.Result)
 	return err
 }
@@ -205,6 +206,11 @@ func DeleteOrg(cmd *m.DeleteOrgCommand) error {
 			"DELETE FROM org_user WHERE org_id = ?",
 			"DELETE FROM org WHERE id = ?",
 			"DELETE FROM temp_user WHERE org_id = ?",
+			"DELETE FROM system_user WHERE system_id IN (SELECT id FROM systems WHERE org_id = ?)",
+			"DELETE FROM system_pick WHERE system_id IN (SELECT id FROM systems WHERE org_id = ?)",
+			"DELETE FROM system_dash WHERE system_id IN (SELECT id FROM systems WHERE org_id = ?)",
+			"DELETE FROM systems WHERE org_id = ?",
+			"DELETE FROM org_permit WHERE org_id = ?",
 		}
 
 		for _, sql := range deletes {

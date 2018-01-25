@@ -3,6 +3,7 @@
   display: flex;
   height: 500px;
   width: 350px;
+  overflow: hidden;
 
   &.open { 
     width: 350px;
@@ -34,15 +35,27 @@
   .header {
     line-height: 30px;
     font-size: 18px;
-    margin: 0;
+    margin: 10px 0;
+    .btn-group {
+      position: absolute;
+      top: 2.5rem;
+      right: 0;
+    }
+    .btn-group.dropdown {
+      top: 3rem;
+      right: 2rem;
+      .dropdown-menu {
+        font-size: 10px;
+      }
+    }
+    .panel-time-info {
+      font-size: 10px;
+    }
   }
 
   .slider-container {
-    display: flex;
-    align-items: center;
     .sliders {
-      flex: 1;
-      margin: 0 5px;
+      margin: 10px 5px;
       height: 10px;
     }
     .noUi-handle {
@@ -50,7 +63,42 @@
       height: 20px;
       border-radius: 100%;
       &::before, &::after {
+        background-color: transparent;
+      }
+    }
+    .slider-level {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 5px;
+    }
+  }
+
+  .nav-tabs {
+    display: flex;
+    margin: 0 -2rem 0 -1rem;
+    padding: 0;
+    border-bottom: $panel-border;
+    & > li {
+      flex: 1;
+      text-align: center;
+      margin-bottom: 0;
+      & > button {
+        border: none;
+        width: 100%;
+        line-height: 2rem;
+        font-weight: bold;
+        &:focus {
+          outline: none;
+        }
+      }
+      &.active > button {
+        color: $blue;
         background: none;
+      }
+      
+      &.disabled > button {
+        color: $white;
+        background: darken($panel-bg, 10%);
       }
     }
   }
@@ -58,7 +106,7 @@
 
 .tree-content{
   flex: 1;
-  overflow: scroll;
+  overflow: auto;
 
   &.no-data {
     text-align: center;
@@ -79,7 +127,19 @@
   i {
     margin-left: -0.5rem;
     margin-right: 0.5rem;
-    background: $white;
+  }
+
+  span {
+    display: none;
+    margin-top: -2rem;
+    i {
+      margin: 0 5px;
+    }
+  }
+  &:hover {
+    & > span {
+      display: block;
+    }
   }
 }
 
@@ -93,18 +153,6 @@
     width: 130px;
     margin: 0;
     @include text-overflow();
-  }
-  span {
-    display: none;
-    i {
-      margin: 0 5px;
-    }
-  }
-
-  &:hover {
-    span {
-      display: block;
-    }
   }
 }
 

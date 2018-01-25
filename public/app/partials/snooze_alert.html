@@ -1,4 +1,4 @@
-<div class="modal-body" ng-controller="SnoozeCtrl" ng-init="init()">
+<div class="modal-body" ng-controller="SnoozeCtrl as ctrl">
   <a class="modal-close" ng-click="dismiss();">
     <i class="fa fa-remove"></i>
   </a>
@@ -11,8 +11,9 @@
         <div class="tight-form">
           <ul class="tight-form-list">
             <li>
-              <select ng-model="snoozeMin" class="input-large tight-form-input">
-                <option ng-selected="key===120" ng-repeat="(key, value) in moreMinutes" value="{{key}}">{{value}}
+              <select ng-model="ctrl.snoozeMin" class="input-large tight-form-input">
+                <option ng-selected="key==120" ng-repeat="(key, value) in ctrl.moreMinutes" value="{{ key }}">
+                  {{ value }}
                 </option>
               </select>
             </li>
@@ -22,7 +23,7 @@
 
       <div class="" style="margin-top: 30px; margin-bottom: 20px;">
         <button type="button" class="btn btn-inverse" ng-click="dismiss()">取消</button>
-        <button type="submit" class="btn btn-success" ng-click="snooze();">延迟报警</button>
+        <button type="submit" class="btn btn-success" ng-click="ctrl.snooze()">延迟报警</button>
       </div>
     </div>
   </form>

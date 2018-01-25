@@ -23,7 +23,6 @@ export class SideMenuCtrl {
     this.user = contextSrv.user;
     this.appSubUrl = config.appSubUrl;
     this.showSignout = this.contextSrv.isSignedIn && !config['authProxyEnabled'];
-    this.mainLinks = [];
     this.bottomLinks = [];
     this.contextSrv.setPinnedState(true);
     this.contextSrv.sidemenu = true;
@@ -74,153 +73,20 @@ export class SideMenuCtrl {
   }
 
   getMenus() {
-    this.mainLinks.push({
-      text: "系统总览",
-      icon: "fa fa-fw fa-home",
-      children: [
-        {
-          text: '关键指标',
-          url: this.getUrl("/")
-        },
-        {
-          text: '机器状态',
-          url: this.getUrl("/host_topology")
-        },
-        {
-          text: '创建服务依赖',
-          url: this.getUrl("/service_dependency")
-        },
-      ],
-    });
-
-    this.mainLinks.push({
-      text: "指标浏览",
-      icon: "fa fa-fw fa-sliders",
-      click: this.loadDashboardList
-    });
-
-    this.mainLinks.push({
-      text: "日志分析",
-      icon: "fa fa-fw fa-file-text-o",
-      children: [
-        {
-          text: '全文查询',
-          url: this.getUrl("/logs")
-        },
-        {
-          text: '聚合查询',
-          url: this.getUrl("/logs")
-        },
-        {
-          text: '日志对比',
-          url: this.getUrl("/logs")
-        },
-        {
-          text: '日志管理',
-          url: this.getUrl("/cmdb/config?serviceName=filebeat")
-        },
-      ]
-    });
-
-    this.mainLinks.push({
-      text: "智能检测",
-      icon: "fa fa-fw fa-stethoscope",
-      children: [
-        {
-          text: '报警规则检测',
-          url: this.getUrl('/alerts/status'),
-        },
-        {
-          text: '自动异常检测',
-          url: this.getUrl("/anomaly"),
-        }
-      ]
-    });
-
-    this.mainLinks.push({
-      text: "智能分析",
-      icon: "fa fa-fw fa-bar-chart",
-      children: [
-        {
-          text: '故障溯源',
-          url: this.getUrl("/rca"),
-        },
-        {
-          text: '关联性分析',
-          url: this.getUrl("/association"),
-        },
-        {
-          text: '资源消耗',
-          url: this.getUrl("/topn?guide"),
-        },
-        {
-          text: '运维知识',
-          url: this.getUrl("/knowledgebase"),
-        },
-        {
-          text: '健康报告',
-          url: this.getUrl('/report'),
-        },
-      ]
-    });
-
-    this.mainLinks.push({
-      text: "安装指南",
-      icon: "fa fa-fw fa-cloud-download",
-      children: [
-        {
-          text: '安装探针',
-          url: this.getUrl("/setting/agent"),
-        },
-        {
-          text: '安装服务',
-          url: this.getUrl("/setting/service"),
-        },
-        {
-          text: '配置日志服务',
-          url: this.getUrl("/setting/filebeat"),
-        },
-        {
-          text: '内网代理设置',
-          url: this.getUrl("/setting/proxy"),
-        },
-      ]
-    });
-
-    this.mainLinks.push({
-      text: "配置管理",
-      icon: "fa fa-fw fa-cubes",
-      children: [
-        {
-          text: '设备列表',
-          url: this.getUrl("/cmdb/hostlist")
-        },
-        {
-          text: '服务列表',
-          url: this.getUrl("/cmdb/servicelist")
-        },
-        {
-          text: 'KPI',
-          url: this.getUrl("/cmdb/kpi")
-        },
-      ]
+    this.backendSrv.get('/api/static/menu').then(response => {
+      this.mainLinks = response.menusTop;
     });
 
     this.bottomLinks.push({
       text: this.user.name,
       icon: "fa fa-fw fa-user",
-      url: this.getUrl('/profile')
-    });
-
-    this.bottomLinks.push({
-      text: "信息管理",
-      icon: "fa fa-fw fa-cogs",
-      children: this.getMsgManagementMenu.bind(this)(),
+      children: this.getMsgManagementMenu.bind(this)()
     });
 
     this.bottomLinks.push({
       text: this.contextSrv.user.orgName,
       icon: "fa fa-fw fa-random",
+      class: "scroll-y",
       click: this.getOrgsMenu,
     });
 
@@ -229,8 +95,7 @@ export class SideMenuCtrl {
       icon: "fa fa-fw fa-sitemap",
       url: this.getUrl('/systems')
     });
-
-  };
+  }
 
   getUrl(url) {
     return config.appSubUrl + url;
@@ -245,6 +110,12 @@ export class SideMenuCtrl {
 
   getMsgManagementMenu() {
     var item = [];
+
+    item.push({
+      text: "个人信息",
+      url : this.getUrl('/profile')
+    });
+
     if (config.allowOrgCreate) {
       item.push({
         text: "新建公司",
@@ -341,14 +212,16 @@ export class SideMenuCtrl {
   loadDashboardList(item, _self) {
     var submenu = [];
     _self.backendSrv.search({query: "", starred: "false"}).then(function (result) {
-      submenu.push({
-        text: "+新建",
-        click: _self.newDashboard,
-      });
-      submenu.push({
-        text: "导入",
-        url: "/import/dashboard",
-      });
+      if (!_self.contextSrv.isViewer) {
+        submenu.push({
+          text: "+新建",
+          click: _self.newDashboard,
+        });
+        submenu.push({
+          text: "导入",
+          url: "/import/dashboard",
+        });
+      }
       _.each(result, function (dash) {
         submenu.push({
           text: dash.title,

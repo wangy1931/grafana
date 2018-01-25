@@ -47,6 +47,8 @@ function ($, moment, kbn) {
    Note that a metric short name may also have '.' in it.
   */
   _.getMetricName = function (metricName) {
+    if (!metricName) { return ''; }
+
     var elem = metricName.split(".");
     if(elem.length < 3){
       return metricName;
@@ -152,6 +154,10 @@ function ($, moment, kbn) {
     return moment(value).format("YYYY-MM-DD HH:mm:ss");
   };
 
+  _.timeFrom = function (mSecond, duration, type) {
+    return moment(mSecond).add(duration, type).format("YYYY-MM-DD HH:mm");
+  };
+
   _.percentFormatter = function (value) {
     return value && (value.toFixed(2) + '%');
   };
@@ -159,8 +165,6 @@ function ($, moment, kbn) {
   _.gbFormatter = function (value) {
     return value && ((value / Math.pow(1024, 3)).toFixed(2) + 'GB');
   };
-
-  // _.valueFormats = kbn.valueFormats;
 
   // Translate
   _.translateAlertLevel = function (value) {
@@ -196,6 +200,10 @@ function ($, moment, kbn) {
 
   _.metricHelpMessage = {};
   _.metricMessage = {};
+
+  _.excludeEmail = function(email) {
+    return /(163|126|qq|outlook|gmail|yahoo|sina|souhu|hotmail|Foxmail).com(.cn)?$/i.test(email)
+  }
 
   return _;
 });

@@ -10,6 +10,7 @@ function (angular, _, coreModule, config) {
   coreModule.default.service('backendSrv', function($http, alertSrv, $timeout, contextSrv, $q) {
     var self = this;
     this.alertDUrl;
+    this.downloadUrl;
     this.tokens = null;
 
     this.get = function(url, params) {
@@ -72,6 +73,11 @@ function (angular, _, coreModule, config) {
         options.hasSubUrl = true;
       }
 
+      if (self.isIE()) {
+        var bust = Date.now();
+        options.params ? options.params.bust = bust : options.params = {'bust': bust};
+      }
+
       return $http(options).then(function(results) {
         if (options.method !== 'GET') {
           if (results && results.data.message) {
@@ -97,6 +103,11 @@ function (angular, _, coreModule, config) {
       options.retry = options.retry || 0;
       var requestIsLocal = options.url.indexOf('/') === 0;
       var firstAttempt = options.retry === 0;
+
+      if (self.isIE()) {
+        var bust = Date.now();
+        options.params ? options.params.bust = bust : options.params = {'bust': bust};
+      }
 
       return $http(options).then(null, function(err) {
         // handle unauthorized for backend requests
@@ -175,6 +186,7 @@ function (angular, _, coreModule, config) {
     this.initCustomizedSources = function () {
       return this.get('/api/customized_sources').then(function (result) {
         self.alertDUrl = result.alert;
+        self.downloadUrl = result.download;
         contextSrv.elkUrl = result.elk;
       });
     };
@@ -260,9 +272,7 @@ function (angular, _, coreModule, config) {
     this.getHostsNum = function () {
       return this.alertD({
         method: "get",
-        url: "/summary",
-        params: {metrics:"collector.summary"},
-        headers: {'Content-Type': 'text/plain'},
+        url: "/cmdb/host"
       }).then(function (response) {
         return response.data.length;
       });
@@ -305,11 +315,84 @@ function (angular, _, coreModule, config) {
       });
     };
 
-    this.metricKpi = function(query) {
+    this.getServices = function() {
       return this.alertD({
-        url: '/service/kpi',
-        method: query.method,
-        params: query.params
+        method: 'get',
+        url   : "/cmdb/service/metrics"
+      });
+    }
+
+    this.getKpi = function(params) {
+      return this.alertD({
+        method: 'get',
+        url   : '/service/kpi',
+        params: params
+      });
+    }
+
+    this.editKpi = function(params) {
+      return this.alertD({
+        method: 'post',
+        url   : '/service/kpi',
+        params: params
+      });
+    }
+
+    this.importMetricsKpi = function() {
+      return this.get('/api/static/metric/kpi');
+    }
+
+    this.isIE = function() {
+      var userAgent = navigator.userAgent;
+      return userAgent.indexOf("MSIE ") > -1 || userAgent.indexOf("Trident/") > -1 || userAgent.indexOf("Edge/") > -1;
+    }
+
+    this.getOpentsdbExpressionQuery = function (query, opentsdbUrl) {
+      var tags = query.tags || [
+        {
+          "type": "wildcard",
+          "tagk": "host",
+          "filter": "*",
+          "groupBy": true
+        }
+      ];
+      var tmpl = {
+        "time": {
+          "start": query.timeRange.from,
+          "end": query.timeRange.to,
+          "aggregator": "sum",
+          "downsampler": {
+            "interval": "1m",
+            "aggregator": "avg"
+          }
+        },
+        "filters": [
+          {
+            "tags": tags,
+            "id": "f1"
+          }
+        ],
+        "metrics": query.metrics,
+        "expressions": [
+          {
+            "id": "aa",
+            "expr": query.metricExpression, // "a + b"
+            "join": {
+              "operator": "intersection",
+              "useQueryTags": true,
+              "includeAggTags": false
+            }
+          }
+        ],
+        "outputs": [
+          { "id": "aa", "alias": "Mega expression" }
+        ]
+      };
+
+      return this.datasourceRequest({
+        method: 'POST',
+        url: opentsdbUrl + '/api/query/exp',
+        data: tmpl
       });
     }
   });

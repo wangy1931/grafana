@@ -9,7 +9,6 @@ function (angular, _, coreModule) {
       var anomalyListUrl = "/anomaly?by_groups=true";
       var excludeAnomaly = "/anomaly/exclude";
       var includeAnomaly = "/anomaly/include";
-      var mainHealthList = "/healthsummary";
       var metricsType = "/metrictype";
       var anomalyHistory = "/anomaly";
       this.anomalyMetricsData = [];
@@ -58,12 +57,6 @@ function (angular, _, coreModule) {
             metric: metricName,
             host: host
           }
-        });
-      };
-
-      this.healthSummary = function () {
-        return backendSrv.alertD({
-          method: 'GET', url: mainHealthList, timeout: 2000
         });
       };
 
@@ -125,7 +118,9 @@ function (angular, _, coreModule) {
               _.forEach(row.panels, function (panel) {
                 _.forEach(panel.targets, function (target) {
                   if (_.excludeMetricSuffix(target.metric)) {
-                    targets[target.metric] = target;
+                    if (!_.isUndefined(target.metric)) {
+                      targets[target.metric] = target;
+                    }
                   }
                 });
               });

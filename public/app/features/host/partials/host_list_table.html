@@ -8,6 +8,7 @@
       <thead>
         <tr>
           <th>机器名</th>
+          <th>机器 IP</th>
           <th>机器在线</th>
           <th>CPU 使用率</th>
           <th>内存使用率</th>
@@ -15,6 +16,7 @@
           <th>开始运行时间</th>
           <th>探针版本</th>
           <th>Commit Id</th>
+          <th>操作</th>
         </tr>
       </thead>
       <tbody>
@@ -22,6 +24,7 @@
             ng-class="{active: host.host==ctrl.currentHost.name}"
             ng-click="ctrl.nodeClickHandle(host);">
           <td>{{ host.host }}</td>
+          <td>{{ host.defaultIp || '-' }}</td>
           <td>{{ host.status || '-' }}</td>
           <td>{{ host.cpu || '-' }}</td>
           <td>{{ host.mem || '-' }}</td>
@@ -29,6 +32,11 @@
           <td>{{ host.startTime || '-' }}</td>
           <td>{{ host.version || '-' }}</td>
           <td>{{ host.commit || '-' }}</td>
+          <td>
+            <button class="btn btn-small btn-outline-primary" ng-if="!ctrl.contextSrv.isViewer" ng-click="ctrl.deleteHost($event, host.id)">
+              <i class="fa fa-times"></i> 删除
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

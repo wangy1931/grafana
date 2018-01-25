@@ -17,43 +17,48 @@ var template = `
 `;
 
 export class ToolbarCtrl {
-  toolbarItems: Array<any>;
+  toolbarItems: any;
 
   /** @ngInject */
-  constructor(private $rootScope, private $scope, private popoverSrv, private backendSrv, private $q, private $location) {
-    this.toolbarItems = [];
+  constructor(private $rootScope, private $scope, private popoverSrv, private backendSrv, private $q, private $location, private contextSrv) {
+    this.toolbarItems = {};
 
-    this.toolbarItems.push({
+    this.toolbarItems[1] = [];
+    this.toolbarItems[1].push({
       class: '',
       icon : 'fa fa-fw fa-book',
       itemname: '运维知识库',
       href: 'javascript:;',
       clickHandler: () => {
         $rootScope.appEvent('show-modal', {
-          src: 'public/app/core/components/knowledge_base/knowledge.html', // public/app/features/logs/partials/logs_knowledge.html
+          src: 'public/app/core/components/knowledge_base/knowledge.html',
           modalClass: 'modal-kb',
           scope: $scope.$new(),
         });
       },
     });
 
-    this.toolbarItems.push({
-      class: '',
-      icon : 'fa fa-fw fa-cloud-download',
-      itemname: '安装指南',
-      href: '/setting/agent',
-      clickHandler: () => {},
-    });
+    this.toolbarItems[2] = [];
+    if (!contextSrv.isViewer) {
+      this.toolbarItems[2].push({
+        class: '',
+        icon : 'fa fa-fw fa-cloud-download',
+        itemname: '安装指南',
+        href: '/setting/agent',
+        clickHandler: () => {},
+      });
+    }
+
   }
 
   showPopover() {
     this.popoverSrv.show({
-      element : $('.toolbar-icon')[0],
+      element : $(`.toolbar-${this.$scope.ctrl.id}`)[0],
       position: 'bottom center',
       template: template,
       classes : 'toolbar-popover',
       model : {
-        toolbarItems: this.toolbarItems,
+        toolbarItems: this.toolbarItems[+this.$scope.ctrl.id],
       },
     });
   }
@@ -66,7 +71,11 @@ export function toolbarDirective() {
     controller: ToolbarCtrl,
     bindToController: true,
     controllerAs: 'ctrl',
-    scope: {},
+    scope: {
+      icon: "@",
+      tooltip: "@",
+      id: "@"
+    },
   };
 }
 

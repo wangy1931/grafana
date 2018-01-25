@@ -1,4 +1,3 @@
-
 // ------------------------------
 // D3.RelationshipGraph Style
 // ------------------------------
@@ -14,7 +13,7 @@
   font-weight: bold;
   line-height: 1;
   padding: 12px;
-  background: $tooltipBackgroundOpacity;
+  background: $tooltipBackground;
   color: $tooltipColor;
   border-radius: 2px;
   z-index: 50;
@@ -26,7 +25,7 @@
   display: inline-block;
   width: 100%;
   height: 3px;
-  color: $tooltipBackgroundOpacity;
+  color: $tooltipArrowColor;
   content: "\25B6";
   position: absolute;
   font-size: 10px;
@@ -84,7 +83,7 @@
   // search head
   .search {
     padding: 5px 0;
-    background-color: #eee;
+    background-color: $tight-form-bg;;
     border-bottom: #ddd;
   }
 
@@ -110,14 +109,14 @@
   }
   .relationshipGraph-block:hover {
     cursor: pointer;
-    stroke: #4b9cdb;
+    stroke: $blue;
   }
   .relationshipGraph-block.selected {
-    stroke: $black;
+    stroke: $blue;
     stroke-width: 1px;
   }
   .relationshipGraph-Text {
-    fill: #4b9cdb !important;
+    fill: $blue !important;
     font-weight: bold;
   }
 
@@ -142,8 +141,10 @@
   .tidy-form-item-dropdown .dropdown-menu {
     width: 270px;
   }
-  .tidy-form .tidy-form-list .tidy-form-input {
-    background-color: $white;
+  .tidy-form .kpi-btn {
+    border: 1px solid $input-border-color;
+    background-color: $input-bg;
+    outline: none;
   }
 
 }

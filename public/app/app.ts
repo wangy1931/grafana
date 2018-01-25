@@ -12,12 +12,10 @@ import 'angular-animate';
 import 'angular-ui';
 import 'ui.calendar';
 
-import 'bootstrap-table';
 import 'angular-strap.tpl';
 import 'angular-strap-old';
 
 import 'jsPlumbToolkit';
-import 'jsPlumbToolkit-angular';
 
 import 'ng-quill';
 import 'ng-table';
@@ -50,7 +48,7 @@ export class GrafanaApp {
   }
 
   init() {
-    var app = angular.module('grafana', ['mgcrea.ngStrap', '$jsPlumb', 'ngAnimate', 'ngTable']);
+    var app = angular.module('grafana', ['mgcrea.ngStrap', 'ngAnimate', 'ngTable']);
     app.constant('grafanaVersion', "@grafanaVersion@");
 
     app.config(($locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) => {

@@ -1,7 +1,6 @@
 import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
-// import 'd3.graph';
 import { coreModule } from 'app/core/core';
 import kbn from 'app/core/utils/kbn';
 
@@ -27,6 +26,7 @@ export class HostTopologyCtrl {
   hostSummary: Array<any>;
   dashboard: any;
   topologyGraphParams: any;
+  needHostnameTabs: Array<number>;  // don't modify this variable, except init
 
   /** @ngInject */
   constructor (
@@ -41,7 +41,8 @@ export class HostTopologyCtrl {
     private $rootScope,
     private $controller,
     private $location,
-    private NgTableParams
+    private NgTableParams,
+    private alertSrv
   ) {
     $scope.ctrl = this;
     $scope.refresh_interval = '30s';
@@ -49,13 +50,14 @@ export class HostTopologyCtrl {
 
     this.tabs = [
       { 'id': 0, 'title': '机器总览', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_list_table.html' },
-      { 'id': 1, 'title': '系统状态', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_system_status.html' },
+      { 'id': 1, 'title': '系统状态', 'active': false, 'show': false,  'content': 'public/app/features/host/partials/host_system_status.html' },
       { 'id': 2, 'title': '报警检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_alert_table.html' },
       { 'id': 3, 'title': '异常检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_anomaly_table.html' },
       { 'id': 4, 'title': '进程状态', 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_process.html' },
       { 'id': 5, 'title': '机器信息', 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_info.html' },
       { 'id': 6, 'title': '资源预测', 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_prediction.html' }
     ];
+    this.needHostnameTabs = [1, 4, 5, 6];
 
     this.topologyGraphParams = {
       blockSize: 36,
@@ -122,7 +124,7 @@ export class HostTopologyCtrl {
     if (host.name) {
       window.d3.select(`#${host.__id}`).classed('selected', true);
 
-      [4, 5, 6].forEach(item => {
+      this.needHostnameTabs.forEach(item => {
         _.extend(this.tabs[item], { show: true, disabled: false });
       });
 
@@ -131,7 +133,7 @@ export class HostTopologyCtrl {
       this.getHostInfo(this.currentHost);
       this.getHostPrediction(this.currentHost);
     } else {
-      [4, 5, 6].forEach(item => {
+      this.needHostnameTabs.forEach(item => {
         _.extend(this.tabs[item], { show: false, disabled: true });
       });
 
@@ -171,14 +173,14 @@ export class HostTopologyCtrl {
         return !!~hosts.indexOf(item.host);
       });
     } else {
-      tableData = host.name ? _.filter(this.hostSummary, { host: host.name }) : this.hostSummary;
+      tableData = host.name ? _.filter(this.hostSummary, { id: host._private_.id }) : this.hostSummary;
     }
 
     this.hostPanels = tableData;
   }
 
   getAlertStatus(host) {
-    this.$controller('AlertStatusCtrl', { $scope: this.$scope }).init(host.name);
+    // this.$controller('AlertStatusCtrl', { $scope: this.$scope }).init();
   }
 
   getAnomaly(host) {
@@ -246,10 +248,7 @@ export class HostTopologyCtrl {
 
         _.forIn(this.predictionPanel, (item, key) => {
           // when prediction api returns {}
-          if (item.errTip) {
-            // $('.prediction-item-' + $.escapeSelector(host + key)).html(item.errTip);
-            return;
-          }
+          if (item.errTip) { return; }
 
           var score = item.tips[0] && parseFloat(item.tips[0].data);
           var colors = score > 75 ? [HEALTH_TYPE.RED.COLOR] : (score > 50 ? [HEALTH_TYPE.YELLOW.COLOR] : [HEALTH_TYPE.GREEN.COLOR]);
@@ -305,6 +304,10 @@ export class HostTopologyCtrl {
   }
 
   removeTag(tag) {
+    if (this.contextSrv.isViewer) {
+      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      return;
+    }
     _.remove(this.$scope.tags, tag);
     this.hostSrv.deleteTag({ hostId: this.$scope.id, key: tag.key, value: tag.value });
   };
@@ -384,8 +387,28 @@ export class HostTopologyCtrl {
     this.hostlist = _.map(this.data, 'name');
   }
 
-  clearSelected() {
-    this.currentHost = {};
+  deleteHost($event, hostId) {
+    $event.preventDefault();
+
+    this.$scope.appEvent('confirm-modal', {
+      title: '删除',
+      text: '您确认要删除该机器吗？',
+      icon: 'fa-trash',
+      yesText: '删除',
+      noText: '取消',
+      onConfirm: () => {
+        this.backendSrv.alertD({
+          method: 'DELETE',
+          url   : '/host',
+          params: { 'id': hostId }
+        }).then(() => {
+          this.alertSrv.set("删除成功", '', "success", 2000);
+          _.remove(this.hostPanels, { id: hostId });
+        }, (err) => {
+          this.alertSrv.set("删除失败", err.data, "error", 2000);
+        });
+      }
+    });
   }
 
   showGuideResult(e, params) {

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import $ from 'jquery';
 import {coreModule, appEvents} from  'app/core/core';
 import config from 'app/core/config';
+import store from 'app/core/store';
 
 declare var window: any;
 const HEALTH_TYPE = {
@@ -27,32 +28,21 @@ export class SystemOverviewCtrl {
   servicePanel: any = {};
   hostPanel: any = {};
   predictionPanel: any = {};
-  hostKpiPanel: any = {};
-  serviceKpiPanel: any = {};
+  hostKpi: any = {};
+  serviceKpi: any = {};
   hostPanels: any;
-  selected0: number = -1;
-  selected1: number = -1;
-  switchEnabled: boolean = true;
+  switchEnabled: boolean;
   topology: any;
 
   tableParams: any;
   dependencies: any;
 
+  kpiPanel: any;
+
   /** @ngInject */
   constructor(
-    private backendSrv,
-    private alertSrv,
-    private contextSrv,
-    private alertMgrSrv,
-    private healthSrv,
-    private serviceDepSrv,
-    private jsPlumbService,
-    private hostSrv,
-    private utilSrv,
-    private $location,
-    private $scope,
-    private $modal,
-    private $q,
+    private backendSrv, private alertSrv, private contextSrv, private alertMgrSrv, private healthSrv, private serviceDepSrv,
+    private hostSrv, private utilSrv, private $location, private $scope, private $modal, private $q,
     private NgTableParams
   ) {
     $scope.ctrl = this;
@@ -66,7 +56,6 @@ export class SystemOverviewCtrl {
       thresholds: [HEALTH_TYPE.GREEN.TEXT, HEALTH_TYPE.YELLOW.TEXT, HEALTH_TYPE.RED.TEXT, HEALTH_TYPE.GREY.TEXT],
       colors: [HEALTH_TYPE.GREEN.COLOR, HEALTH_TYPE.YELLOW.COLOR, HEALTH_TYPE.RED.COLOR, HEALTH_TYPE.GREY.COLOR],
       onClick: {
-        // parent: this.hostGroupClickHandler.bind(this),
         child: this.hostNodeClickHandler.bind(this)
       }
     };
@@ -78,10 +67,40 @@ export class SystemOverviewCtrl {
       counts: []
     });
 
+    this.switchEnabled = store.getBool('grafana.overview.mode');
     this.toolkit = window.jsPlumbToolkit.newInstance();
+
     $scope.$on("$destroy", () => {
+      this.setOverviewMode();
       this.toolkit.clear();
     });
+
+    // default data
+    this.kpiPanel = {
+      leftTableHeads: ['机器名', '机器状态'],
+      leftTableBodys: [
+        { id: '', name: '', data: '正常', status: 'green' },
+        { id: '', name: '', data: '正常', status: 'green' },
+        { id: '', name: '', data: '正常', status: 'green' }
+      ],
+      rightPanelHead: { id: '', name: '...' },
+      rightItemTypes: {
+        ServiceKPI: { id: 'ServiceKPI', name: '服务KPI', data: '...', status: 'green', metrics: {} },
+        ServiceState: { id: 'ServiceState', name: '服务进程', data: '...', status: 'green', metrics: {} },
+        HostNW: { id: 'HostNW', name: '网络在线', data: '...', status: 'green', metrics: {} },
+        HostCpu: { id: 'HostCpu', name: 'CPU使用率', data: '...', status: 'green', metrics: {} },
+        HostMem: { id: 'HostMem', name: '内存使用率', data: '...', status: 'green', metrics: {} },
+        HostIO: { id: 'HostIO', name: '磁盘使用率', data: '...', status: 'green', metrics: {} },
+      },
+      rightMetrics: [],
+      leftSelected: '',
+      rightSelected: '',
+      type: '',
+    }
+  }
+
+  setOverviewMode() {
+    store.set('grafana.overview.mode', this.switchEnabled);
   }
 
   // copy from anomalyMetic.js
@@ -129,6 +148,15 @@ export class SystemOverviewCtrl {
         meta     : { canStar: false, canShare: false, canEdit: false, canSave: false },
         dashboard: this._dashboard
       }, this.$scope);
+    });
+  }
+
+  // 机器资源信息
+  getHostSummary() {
+    this.hostSrv.getHostInfo().then(response => {
+      this.hostPanels = response;
+    }, err => {
+      this.hostPanels = [];
     });
   }
 
@@ -212,7 +240,7 @@ export class SystemOverviewCtrl {
         this.dependencies = angular.fromJson(_.last(response.data).attributes[0].value);
 
         _.each(this.dependencies.nodes, node => {
-          var q = this.serviceDepSrv.readServiceStatus(node.id, node.name)
+          var q = this.getServiceStatus(node.id, node.name)
           .then(resp => {
             node.status = resp.data.healthStatusType.toLowerCase();
 
@@ -234,7 +262,7 @@ export class SystemOverviewCtrl {
         });
 
         this.$q.all(promiseList).finally(() => {
-          this.toolkit.load({ type: "json", data: this.dependencies }).render(this.renderFactory());
+          this.toolkit.load({ type: "json", data: _.cloneDeep(this.dependencies) }).render(this.renderFactory());
         });
 
       } else {
@@ -243,10 +271,11 @@ export class SystemOverviewCtrl {
     });
   }
 
-  serviceNodeClickHandler(node) {
-    this.selected0 = -1;
-    $(node.el).addClass("active").siblings().removeClass("active");
+  getServiceStatus(serviceId, serviceName) {
+    return this.serviceDepSrv.readServiceStatus(serviceId, serviceName);
+  }
 
+  serviceNodeClickHandler(node) {
     var serviceId = node.node.data.id;
     var serviceName = node.node.data.name;
     var serviceStatus = node.node.data.status;
@@ -256,44 +285,40 @@ export class SystemOverviewCtrl {
     this.servicePanel.currentService = {
       id: serviceId,
       name: serviceName,
-      status: serviceStatus
+      status: serviceStatus,
+      icon: node.node.data.icon || ""
     };
-    this.servicePanel.hosts = [];
 
-    this.serviceDepSrv.readMetricStatus(serviceId, serviceName).then(response => {
-      hosts = Object.keys(response.data.hostStatusMap);
-      this.serviceKpiPanel = response.data;
+    this.kpiPanel.type = 'service';
+    this.kpiPanel.leftTableHeads = ['机器名', '机器状态'];
+    this.kpiPanel.leftTableBodys = [];
 
-      return response.data;
-    }).then(resp => {
-      hosts.forEach(host => {
-        !_.findWhere(this.hostPanels, { host: host }) && this.hostPanels.push({ host: host });
-        var tmp = _.findWhere(this.hostPanels, { host: host }) || { host: host };
-        tmp.healthType = _.find(this.topology, { name: host }).value;
-        this.servicePanel.hosts.push(tmp);
+    this.getServiceKpi(serviceId, serviceName).then(resp => {
+      hosts = Object.keys(resp.hostStatusMap);
+
+      _.each(resp.hostStatusMap, (hostMap, hostKey) => {
+        this.kpiPanel.leftTableBodys.push({
+          id: _.find(this.hostPanels, { host: hostKey }).id,
+          name: hostKey,
+          data: _.statusFormatter(hostMap.healthStatusType),
+          status: hostMap.healthStatusType
+        });
       });
 
+      this.leftClickHandler({ name: hosts[0] }, 'service');
+      return resp;
+    }).then(resp => {
       // refresh service-dependency-graph, service status
-      // _.find(this.dependencies.nodes, { name: serviceName }).status = "red"; // resp.healthStatusType.toLowerCase();
-      // this.toolkit.updateNode(node.node.data.id, { status: "red" });
-    });
+      _.find(this.dependencies.nodes, { name: serviceName }).status = resp.healthStatusType.toLowerCase();
+      this.toolkit.clear();
+      this.toolkit.load({ type: "json", data: _.cloneDeep(this.dependencies) });
 
-    // 拿 servicekpi metric 的 message, 储存在 _.metricHelpMessage 中
-    var service = serviceName.split(".")[0];
-    this.backendSrv.readMetricHelpMessage(service);
-  }
-
-  // 机器状态
-  getHostSummary() {
-    this.hostSrv.getHostInfo().then(response => {
-      this.hostPanels = response;
-    }, err => {
-      this.hostPanels = [];
+      $(node.el).addClass("active").siblings().removeClass("active");
     });
   }
 
   hostNodeClickHandler(node) {
-    this.selected1 = -1;
+    var promiseList = [];
 
     this.hostPanel.currentHost = {
       id: node._private_.id,
@@ -301,52 +326,152 @@ export class SystemOverviewCtrl {
       status: node.value
     };
 
-    this.hostPanel.host = _.filter(this.hostPanels, { host: node.name });
+    this.kpiPanel.type = 'host';
+    this.kpiPanel.leftTableHeads = ['服务名', '服务状态'];
+    this.kpiPanel.leftTableBodys = [];
 
-    // get host kpi
-    this.hostSrv.getHostKpi({ hostname: node.name }).then(response => {
-      this.hostKpiPanel = response.data;
+    this.getServicesOnHost(node._private_.id).then((response) => {
+      // 机器上可能没有服务
+      if (_.isEmpty(response.data.services)) {
+        this.leftClickHandler('', 'host');
+      }
+
+      _.each(response.data.services, service => {
+        var q = this.getServiceStatus(service.id, service.name)
+        .then(resp => {
+          service.healthStatusType = resp.data.healthStatusType;
+          return resp.data;
+        });
+        promiseList.push(q);
+      });
+
+      this.$q.all(promiseList).finally(resp => {
+        _.each(response.data.services, service => {
+          this.kpiPanel.leftTableBodys.push({
+            id: service.id,
+            name: service.name,
+            data: _.statusFormatter(service.healthStatusType),
+            status: service.healthStatusType,
+            icon: (_.find(this.dependencies.nodes, { id: "" + service.id, name: service.name }) || {}).icon
+          });
+        });
+        this.leftClickHandler(response.data.services[0], 'host');
+      });
+    });
+    this.getHostKpi(node.name);
+  }
+
+  leftClickHandler(item, type) {
+    var promise;
+    this.kpiPanel.leftSelected = item.name;
+
+    if (type === 'service') {
+      promise = this.getHostKpi(item.name);
+      this.hostPanel.currentHost = {
+        id: item.id || this.kpiPanel.rightPanelHead.id,
+        name: item.name,
+        status: item.status
+      };
+    }
+    if (type === 'host') {
+      if (_.isEmpty(item)) {
+        promise = this.$q.when([]).then(() => {
+          this.serviceKpi = {};
+        });
+      } else {
+        promise = this.getServiceKpi(item.id, item.name);
+      }
+      this.servicePanel.currentService = {
+        id: item.id,
+        name: item.name,
+        status: item.status,
+        icon: item.icon
+      };
+    }
+    promise.then(() => {
+      this.setServiceKpiPanel(this.kpiPanel.rightPanelHead.name);
+      this.kpiPanel.rightMetrics = [];
+      this.selectKpi('ServiceKPI');
+    });
+  }
+
+  getServicesOnHost(hostId) {
+    return this.backendSrv.alertD({
+      url: `/cmdb/host?id=${hostId}`
+    });
+  }
+
+  getServiceKpi(serviceId, serviceName) {
+    // 拿 servicekpi metric 的 message, 储存在 _.metricHelpMessage 中
+    var service = serviceName.split(".")[0];
+    this.backendSrv.readMetricHelpMessage(service);
+
+    return this.serviceDepSrv.readMetricStatus(serviceId, serviceName).then(response => {
+      this.serviceKpi = response.data;
+
+      return response.data;
+    });
+  }
+
+  setServiceKpiPanel(hostname) {
+    // serviceKpi 为空 或者 ServiceKPI 为空
+    ['ServiceKPI', 'ServiceState'].forEach(itemKey => {
+      var itemMap = this.serviceKpi.hostStatusMap && this.serviceKpi.hostStatusMap[hostname].itemStatusMap[itemKey];
+      _.extend(this.kpiPanel.rightItemTypes[itemKey], {
+        id: itemKey,
+        data: itemMap ? _.statusFormatter(itemMap.healthStatusType) : '暂无',
+        status: itemMap ? itemMap.healthStatusType : 'GREY',
+        metrics: itemMap ? itemMap.metricStatusMap : null
+      });
     });
 
+    // hard code: set servicekpi grey, when service state is grey
+    if (this.kpiPanel.rightItemTypes['ServiceState'].status === 'GREY') {
+      _.extend(this.kpiPanel.rightItemTypes['ServiceKPI'], {
+        data: _.statusFormatter('GREY'),
+        status: 'GREY',
+        metrics: null
+      });
+    }
+  }
+
+  getHostKpi(hostname) {
     // 拿 host kpi metric 的 message, 储存在 _.metricHelpMessage 中
     ['mem', 'io', 'nw', 'cpu'].forEach(item => {
       this.backendSrv.readMetricHelpMessage(item);
     });
-  }
 
-  selectHost(index, host, type) {
-    if (type === 'service') {
-      this.selected0 = (this.selected0 === index) ? -1 : index;
-      this.selectServiceKpi(host, 'ServiceKPI');
-    }
-    if (type === 'host') {
-      this.selected1 = (this.selected1 === index) ? -1 : index;
-      this.selectHostKpi(host, 'HostIO');
-    }
-  }
+    this.kpiPanel.rightPanelHead = {
+      id: _.findWhere(this.hostPanels, { host: hostname }).id,
+      name: hostname
+    };
 
-  selectServiceKpi(host, item) {
-    !this.serviceKpiPanel.hostStatusMap[host].itemStatusMap[item] &&  (item = 'ServiceState');
-    var metrics = this.serviceKpiPanel.hostStatusMap[host].itemStatusMap[item].metricStatusMap;
-    var metricsTable = this.handleKpiMetrics(metrics, host);
+    return this.hostSrv.getHostKpi({ hostname: hostname }).then(response => {
+      this.hostKpi = response.data;
 
-    this.servicePanel.currentItem = item;
-    this.servicePanel.currentItemStatus = this.serviceKpiPanel.hostStatusMap[host].itemStatusMap[item].healthStatusType;
+      _.each(response.data.itemStatusMap, (itemMap, itemKey) => {
+        var tmp = itemKey.replace('Host', '').replace('Service', '').toLowerCase();
+        tmp = (tmp === 'io') ? 'disk' : tmp;
+        _.extend(this.kpiPanel.rightItemTypes[itemKey], {
+          id: itemKey,
+          // name: itemKey,
+          data: _.findWhere(this.hostPanels, { host: hostname })[tmp] || _.statusFormatter(itemMap.healthStatusType),
+          status: itemMap.healthStatusType,
+          metrics: itemMap.metricStatusMap
+        });
+      });
 
-    this.tableParams.settings({
-      dataset: metricsTable
+      return response.data;
     });
   }
 
-  selectHostKpi(host, item) {
-    var metrics = this.hostKpiPanel.itemStatusMap[item].metricStatusMap;
-    var metricsTable = this.handleKpiMetrics(metrics, host);
+  selectKpi(kpiItem) {
+    this.kpiPanel.rightSelected = kpiItem;
 
-    this.hostPanel.currentItem = item;
-    this.hostPanel.currentItemStatus = this.hostKpiPanel.healthStatusType;
-
+    var metricsMap = this.kpiPanel.rightItemTypes[kpiItem].metrics;
+    this.kpiPanel.rightMetrics = this.handleKpiMetrics(metricsMap, this.kpiPanel.rightPanelHead.name);
     this.tableParams.settings({
-      dataset: metricsTable
+      dataset: this.kpiPanel.rightMetrics
     });
   }
 
@@ -354,6 +479,16 @@ export class SystemOverviewCtrl {
     var metricsTable = [];
     _.each(metrics, (value, key) => {
       var health = parseInt(value.health);
+      var alertStatus = 'GREEN';
+      if (value.alertRuleSet) {
+        switch (value.alertLevel) {
+          case 'NORMAL': alertStatus = 'GREEN'; break;
+          case 'WARNING': alertStatus = 'YELLOW'; break;
+          case 'CRITICAL': alertStatus = 'RED'; break;
+        }
+      } else {
+        alertStatus = 'GREY';
+      }
       metricsTable.push({
         name: key,
         host: host,
@@ -363,7 +498,8 @@ export class SystemOverviewCtrl {
         snoozeState: value.snoozeState,
         triggerRed: health === 0,
         triggerYellow: health > 0 && health < 26 && !value.snoozeState,
-        metricHelp: _.metricHelpMessage[key] ? _.metricHelpMessage[key].definition : key
+        metricHelp: _.metricHelpMessage[key] ? _.metricHelpMessage[key].definition : key,
+        alertStatus: alertStatus
       });
     });
     return metricsTable;
@@ -398,9 +534,7 @@ export class SystemOverviewCtrl {
           "default": {
             template: "tmplNode",
             events: {
-              click: this.serviceNodeClickHandler.bind(this),
-              // mouseover: this.serviceNodeOverHandler.bind(this),
-              // mouseout : this.serviceNodeOutHandler.bind(this)
+              click: this.serviceNodeClickHandler.bind(this)
             }
           }
         }
@@ -433,18 +567,9 @@ export class SystemOverviewCtrl {
   }
 
   switch() {
-  }
-
-  switchPanel(type, name) {
-    if (type === 'host') {
-      this.switchEnabled = false;
-      this.topology = this.hostSrv.topology;
-      this.hostNodeClickHandler(_.find(this.topology, { name: name }));
-    }
-  }
-
-  toHostTopology(id, host) {
-    this.$location.url(`/host_topology?id=${id}&name=${host}&tabId=0`);
+    this.servicePanel.currentService = {};
+    this.hostPanel.currentHost = {};
+    this.switchEnabled = !this.switchEnabled;
   }
 
 };

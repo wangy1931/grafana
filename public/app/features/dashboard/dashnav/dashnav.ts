@@ -204,6 +204,13 @@ export class DashNavCtrl {
       playlistSrv.stop(1);
     };
 
+    $scope.newDashboard = function() {
+      $rootScope.appEvent('show-modal', {
+        src: 'public/app/partials/select_system.html',
+        scope: $scope.$new(),
+      });
+    };
+
     $scope.init();
   }
 }

@@ -11,7 +11,7 @@
   display: block;
   margin: 5px;
   padding: 7px;
-  background-color: $tight-form-bg;
+  background-color: darken($panel-bg, 3%);
   .fa {
     float: right;
     padding-top: 3px;
@@ -21,6 +21,6 @@
   }
 
   &:hover {
-    background-color: $tight-form-func-bg;
+    background-color: lighten($panel-bg, 5%);
   }
 }

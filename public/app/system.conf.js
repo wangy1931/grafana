@@ -39,9 +39,7 @@ System.config({
     'fullcalendar':             'vendor/fullcalendar/dist/fullcalendar.min',
     'ui.calendar':              'vendor/angular-ui-calendar/src/calendar',
     'zh-cn':                    'vendor/fullcalendar/dist/zh-cn',
-    'bootstrap-table':          'vendor/angular-other/bootstrap-table',
     'jsPlumbToolkit':           'vendor/jsPlumb/jsPlumbToolkit',
-    'jsPlumbToolkit-angular':   'vendor/jsPlumb/jsPlumbToolkit-angular',
 
     "jquery.flot.gauge":        "vendor/flot/jquery.flot.gauge",
     'quill':                    'vendor/quill/quill.min',
@@ -84,9 +82,6 @@ System.config({
       exports: 'EventEmitter'
     },
     'vendor/jsPlumb/jsPlumbToolkit.js': {
-      build: false
-    },
-    'vendor/jsPlumb/jsPlumbToolkit-angular.js': {
       build: false
     },
     'vendor/quill/quill.min.js': {

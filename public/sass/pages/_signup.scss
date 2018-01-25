@@ -21,16 +21,19 @@
 
 .signup-inner-box{
     margin-bottom: 200px;
-    background: linear-gradient(to right,rgb(43,175,250),rgba(102,214,252,0.8));
-    .container{
+    background: linear-gradient(to right, #2a5481, #3c89da, #3c89da);
+    .signup-container {
+        display: flex;
+        flex-direction: row;
         position: relative;
     }
 }
 
 .signup-description{
+    width: 60%;
     color: $white;
     padding-top: 20px;
-    margin-left: -50px;
+    margin-left: 20px;
     strong{
         font-size: 36px;
         line-height: 50px;
@@ -38,15 +41,15 @@
     .signup-desc-list{
         margin-top: 25px;
         margin-left: 60px;
-        font-size: 26px;
+        font-size: 22px;
         line-height: 38px;
     }
     .signup-desc-item{
-        margin-bottom: 36px;
-        font-weight: bold;
+        margin-bottom: 26px;
+        list-style-type: disc;
     }
     p{
-        font-size: 28px;
+        font-size: 22px;
         font-weight: bold;
         line-height: 30px;
     }
@@ -54,11 +57,10 @@
 }
 
 .signup-right{
-    position: absolute;
-    width: 600px;
-    top: 20px;
-    right: -50px;
+    width: 40%;
+    max-width: 600px;
     padding: 20px;
+    margin-right: 20px;
     background: rgba(244,244,244,0.71);
 }
 
@@ -87,7 +89,7 @@
     }
     .control-label{
         width: 120px;
-        font-size: 24px;
+        font-size: 16px;
         line-height: 42px;
         text-align: left;
         font-weight: bold;
@@ -150,30 +152,43 @@
 @media (min-width: 1200px) {
     .signup-box{
         min-width: 1200px;  
-    } 
+    }
+    .signup-description {
+        padding-top: 80px;
+        padding-left: 80px;
+    }
 }
 /* 宽屏幕 */
 @media (max-height: 900px) {
     .signup-box{
         padding-bottom: 300px;
     }
+    .signup-form .controls > input, .signup-form .controls > select {
+        width: 302px;
+    }
+    .sign-footer{
+        display: none;
+    }
+    .signup-container {
+        transform: scale(0.9);
+    }
+    .btn-login {
+        font-size: 26px;
+    }
 }
 
 @media (max-width: 1199px) {
-    .signup-box{
-        background: linear-gradient(to right,rgb(43,175,250),rgba(102,214,252,0.8));
-    }
     .signup-inner-box{
         background: none;
     }
     .signup-description{
         display: none;
     }
-    .signup-right{
-        min-width: 600px;
-        right: 50%;
-        margin-right: -300px;
-    }
+    // .signup-right{
+    //     min-width: 600px;
+    //     right: 50%;
+    //     margin-right: -300px;
+    // }
     .sign-footer{
         display: none;
     }
@@ -187,16 +202,6 @@
         width: auto;
         margin: 0 auto;
         background: none;
-
-        .control-group{
-            label{
-                font-weight: normal;
-            }
-            input, select{
-                width: 85%;
-                height: 28px;
-            }
-        }
     }
     .btn-login{
         width: 90%;
@@ -204,7 +209,7 @@
 }
 
 @media (max-width:540px){
-     .signup-box{
+     .signup-box {
         overflow: scroll;
         padding-bottom: 0px;
     }

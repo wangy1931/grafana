@@ -1,0 +1,31 @@
+<navbar icon="fa fa-fw fa-list-alt" title="智能分析" title-url="/report">
+  <ul class="nav">
+    <li><a href="/report">健康报告</a></li>
+    <li><a href="/report/template">报告设置</a></li>
+    <li class="active"><a href="/report/edit">报告编辑</a></li>
+  </ul>
+</navbar>
+
+<div class="page-container" ng-init="ctrl.initEdit()">
+  <div class="page-header">
+      <h2>报告设置</h2>
+  </div>
+
+  <h4 class="report-title">多维度分析系统现状，为系统优化改进提供科学依据</h4>
+
+  <div>
+    <ng-quill-editor
+      class="report-quil"
+      ng-model="ctrl.customReport"
+      modules="{toolbar: ctrl.toolbarOptions}"
+      placeholder=""
+      scrolling-container="hidden"
+      on-editor-created="ctrl.editorCreated(editor, knows.symptom)">
+    </ng-quill-editor>
+    <div class="parse-form-group no-border">
+      <a class="btn btn-success" ng-click="ctrl.saveCustomReport()">保存</a>
+      <a class="btn btn-inverse" href="/report">取消</a>
+    </div>
+  </div>
+
+</div>

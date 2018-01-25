@@ -86,7 +86,7 @@ export class GuideCtrl {
       check: () => $q.when(this.$location.path() === '/logs'),
       jumpTo: () => {
         var type = _.metricPrefix2Type(this.selected.metric.split(".")[0]);
-        var query = `type:${type} AND host:${this.selected.host}`; // error & exception
+        var query = `type:${type} AND host:${this.selected.host}`;
         var path = '/logs';
         var url = `${path}?guide&metric=${this.selected.metric}&host=${this.selected.host}&start=${this.selected.start}&query=${query}`;
         this.$location.url(url);
@@ -142,7 +142,7 @@ export class GuideCtrl {
   }
 
   showGuide() {
-    this.show = true;
+    this.show = !this.show; // true;
   }
 
   dismiss() {
@@ -158,7 +158,7 @@ export class GuideCtrl {
   }
 
   jump(path, hash?) {
-    var url = `${path}?guide&metric=${this.selected.metric}&host=${this.selected.host}&start=${this.selected.start}`; // &hostId=${this.selected.hostId}
+    var url = `${path}?guide&metric=${this.selected.metric}&host=${this.selected.host}&start=${this.selected.start}`;
     url += hash ? hash : '';
     this.$location.url(url);
   }

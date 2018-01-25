@@ -13,31 +13,31 @@
 
 <div dash-editor-view></div>
 
-<div class="page-container">
-    <guide guide-class="guide"></guide>
+<guide guide-class="guide"></guide>
+
+<div class="page-container" ng-init="ctrl.init()">
 
     <div class="page-header">
         <h2>日志全文搜索</h2>
     </div>
 
-    <!-- (row_name, row) in dashboard.rows track by row.id -->
     <tabset class="log-search">
         <tab heading="{{ tab.title }}"
-             ng-repeat="tab in tabs"
+             ng-repeat="tab in ctrl.tabs"
              active="tab.active"
-             ng-click="switchCurLogTab(tab.id, $index)">
+             ng-click="ctrl.switchCurLogTab(tab.id, $index)">
         </tab>
         <tab heading=""
              disable="true"
              active="false"
              class="fa btn btn-primary fa-plus btn-spec"
-             ng-click="pushTab()">
+             ng-click="ctrl.pushTab()">
         </tab>
         <tab heading="横向对比"
             disable="true"
             active="false"
             class="pull-right btn btn-primary"
-            ng-click="showSearchCompareModal()">
+            ng-click="ctrl.showSearchCompareModal()">
         </tab>
     </tabset>
 

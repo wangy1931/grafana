@@ -15,6 +15,7 @@ function (angular, _, coreModule) {
     var closeAlertUrl = "/alert/status/close";
     var checkNameUrl = "/alert/definition/check";
     var rcaFeedbackUrl = "/rca/feedback/json";
+    var associationPeriodsUrl = "/alert/correlation/periods";
 
     this.currentCritialThreshold = 0;
     this.currentWarningThreshold = 0;
@@ -67,11 +68,11 @@ function (angular, _, coreModule) {
       });
     };
 
-    this.loadAssociatedMetrics = function(alertMetric, alertHost, threshold, group) {
+    this.loadAssociatedMetrics = function(params) {
       return backendSrv.alertD({
         method: "get",
         url: alertAssociationUrl,
-        params: {metric: alertMetric, host: alertHost, distance: threshold, group: group}
+        params: params
       });
     };
 
@@ -87,6 +88,14 @@ function (angular, _, coreModule) {
           reset: true
         },
         headers: {'Content-Type': 'text/plain'},
+      });
+    };
+
+    this.loadAssociatedPeriods = function(params) {
+      return backendSrv.alertD({
+        method: "get",
+        url: associationPeriodsUrl,
+        params: params
       });
     };
 
@@ -129,14 +138,6 @@ function (angular, _, coreModule) {
         data:rcaFeedback,
         headers: {'Content-Type': 'text/plain;application/json;charset=UTF-8'},
       });
-    };
-
-    this.getLevel = function(level) {
-      if(level === 'CRITICAL') {
-        return '严重';
-      } else {
-        return '警告';
-      }
     };
 
     this.checkName = function(ruleName) {

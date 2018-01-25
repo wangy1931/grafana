@@ -74,6 +74,9 @@ type SearchOrgsQuery struct {
 type OrgDTO struct {
 	Id   int64  `json:"id"`
 	Name string `json:"name"`
+	DataCenter string `json:"data_center"`
+	Level	string `json:"level"`
+	Deadline time.Time `json:"deadline"`
 }
 
 type OrgDetailsDTO struct {

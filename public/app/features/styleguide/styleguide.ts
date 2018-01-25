@@ -15,7 +15,7 @@ class StyleGuideCtrl {
 
   /** @ngInject **/
   constructor(private $http, $routeParams) {
-    this.theme = config.bootData.user.lightTheme ? 'light': 'dark';
+    this.theme = config.bootData.user.userTheme;
     this.page = {};
 
     if ($routeParams.page) {
@@ -28,8 +28,6 @@ class StyleGuideCtrl {
       this.loadColors();
     }
 
-    // $thresholds-color: (#66C2A5, #FEE08B, #FDAE61, #FE9805, #D53E4F, #DBE1EA, #6FCDFB);
-    // $thresholds-hover-color: (#3DB779, #FFD500, #FE9805, #ff4f45, #BB1144, #BABFC7, #18BEEA);
     this.cloudwiz = {
       thresholdsColor: ['#66C2A5', '#FEE08B', '#FDAE61', '#FE9805', '#D53E4F', '#DBE1EA', '#6FCDFB'],
       thresholdsHoverColor: ['#3DB779', '#FFD500', '#FE9805', '#ff4f45', '#BB1144', '#BABFC7', '#18BEEA']
@@ -46,7 +44,7 @@ class StyleGuideCtrl {
 
   switchTheme() {
     var other = this.theme === 'dark' ? 'light' : 'dark';
-    window.location.href = window.location.href + '?theme=' + other;
+    window.location.href = window.location.href + '?theme=' + this.theme;
   }
 
 }

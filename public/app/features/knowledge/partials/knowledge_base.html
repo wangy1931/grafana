@@ -1,8 +1,8 @@
-<navbar title="智能分析" icon="fa fa-fw fa-book"></navbar>
+<navbar text="智能分析" icon="fa fa-fw fa-book"></navbar>
 
 <div class="page-container kb-container">
     <div class="page-header">
-        <h2>运维知识库 <button class="btn btn-primary btn-success" ng-click="newKnows()">+ 运维经验</button></h2>
+        <h2>运维知识库 <button class="btn btn-primary btn-success" ng-click="newKnows()" ng-if="!contextSrv.isViewer">+ 运维经验</button></h2>
     </div>
 
     <knowledge-base></knowledge-base>

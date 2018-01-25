@@ -23,7 +23,6 @@ module.exports = function(config,grunt) {
       skipPragmas: true,
       paths: {
         "jsPlumbToolkit": "empty:",
-        "jsPlumbToolkit-angular": "empty:",
         "ui.calendar": "empty:",
         "zh-cn": "empty:",
         "quill": "empty:",

@@ -1,4 +1,4 @@
-<div  class="modal-body" ng-controller="ServiceDetailCtrl" style="padding:20px; background: white;">
+<div  class="modal-body" ng-controller="ServiceDetailCtrl" style="padding:20px;">
   <a class="modal-close pull-right" ng-click="dismiss();">
     <i class="fa fa-remove"></i>
   </a>
@@ -63,8 +63,8 @@
         <th style="width: 10%;">指标单位</th>
       </tr>
       <tr ng-repeat="metric in detail.metrics">
-        <td>{{metric.name}}</td>
-        <td>{{metric.define}}</td>
+        <td>{{metric.key}}</td>
+        <td>{{metric.description}}</td>
         <td>{{metric.type}}</td>
         <td>{{metric.unit}}</td>
       </tr>

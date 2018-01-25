@@ -18,6 +18,12 @@ export class User {
   }
 }
 
+export class SignupUser {
+  orgName: any;
+  name: any;
+  constructor() {}
+}
+
 export class ContextSrv {
   pinned: any;
   version: any;
@@ -26,17 +32,17 @@ export class ContextSrv {
   isGrafanaAdmin: any;
   isEditor: any;
   sidemenu: any;
-  lightTheme: any;
+  userTheme: any;
   isOrgAdmin: any;
   dashboardLink: any;
   systemsMap: any;
   hostNum: any;
+  isViewer: any;
+  signupUser: SignupUser;
 
   constructor() {
     this.pinned = store.getBool('grafana.sidemenu.pinned', false);
-    if (this.pinned) {
-      this.sidemenu = true;
-    }
+    this.sidemenu = this.pinned ? true : false;
 
     if (!config.buildInfo) {
       config.buildInfo = {};
@@ -54,6 +60,8 @@ export class ContextSrv {
     this.dashboardLink = "";
     this.systemsMap = config.bootData.systems;
     this.hostNum = 0;
+    this.isViewer = this.hasRole('Viewer');
+    this.signupUser = new SignupUser();
   }
 
   hasRole(role) {
@@ -65,7 +73,8 @@ export class ContextSrv {
     store.set('grafana.sidemenu.pinned', val);
   }
 
-  toggleSideMenu() {
+  toggleSideMenu($event) {
+    $event && $event.preventDefault();
     this.sidemenu = !this.sidemenu;
     this.setPinnedState(true);
   }

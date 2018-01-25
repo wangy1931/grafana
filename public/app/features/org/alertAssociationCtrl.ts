@@ -42,7 +42,8 @@ export class AlertAssociationCtrl {
       metric: "",
       host: "",
       start: "",
-      distance: 200,
+      min: 900,
+      max: 1000,
     }, this.$location.search());
     if (!this.targetObj.metric) {
       this.targetObj = _.extend({}, associationSrv.sourceAssociation);
@@ -130,7 +131,7 @@ export class AlertAssociationCtrl {
 
       // logs
       var type = _.metricPrefix2Type(metric.split(".")[0]);
-      this.query = `type:${type} AND host:${host} AND (error OR exception)`;  // error & exception
+      this.query = `type:${type} AND host:${host} AND (error OR exception)`;
       dashboard.rows[2].panels[0].targets[0].query = this.query;
       dashboard.rows[2].panels[1].targets[0].query = this.query;
       dashboard.rows[2].panels[2].targets[0].query = this.query;
@@ -218,8 +219,8 @@ coreModule.directive('slider', () => {
     scope: false,
     link: function (scope, element) {
       noUiSlider.create(element[0], {
-        start: scope.ctrl.associationSrv.sourceAssociation.distance || 100,
-        connect: [true, false],
+        start: [scope.ctrl.associationSrv.sourceAssociation.min || 900, scope.ctrl.associationSrv.sourceAssociation.max || 1000],
+        connect: true,
         tooltips: false,
         step: 10,
         range: {

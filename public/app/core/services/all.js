@@ -18,5 +18,8 @@ define([
   './host_srv',
   './association_srv',
   './guide_srv',
+  './logParseSrv',
+  './metricSrv',
+  './report_srv'
 ],
 function () {});

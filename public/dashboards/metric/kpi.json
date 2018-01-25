@@ -1,0 +1,230 @@
+{
+  "collector": [
+    "cloudwiz.collector.memory.rss",
+    "cloudwiz.collector.memory.dirty",
+    "cloudwiz.collector.cpu.usr",
+    "cloudwiz.collector.cpu.sys",
+    "cloudwiz.collector.io.read",
+    "cloudwiz.collector.io.write",
+    "cloudwiz.supervisord.io.read",
+    "cloudwiz.supervisord.io.write",
+    "cloudwiz.supervisord.memory.total",
+    "cloudwiz.supervisord.cpu.usr",
+    "cloudwiz.supervisord.cpu.sys"
+  ],
+  "HostCpu": [
+    "cpu.usr",
+    "cpu.nice",
+    "cpu.irq",
+    "cpu.sys",
+    "proc.loadavg.15min"
+  ],
+  "HostMem": [
+    "proc.meminfo.percentused",
+    "proc.meminfo.active",
+    "proc.meminfo.dirty",
+    "proc.meminfo.memavailable",
+    "proc.meminfo.swapfree"
+  ],
+  "HostIO": [
+    "df.bytes.total",
+    "df.bytes.used",
+    "df.bytes.percentused",
+    "df.bytes.free",
+    "iostat.avgqu-sz",
+    "iostat.await",
+    "iostat.bytes_per_s",
+    "iostat.r/s",
+    "iostat.r_await",
+    "iostat.w_await",
+    "iostat.rkB/s",
+    "iostat.svctm",
+    "iostat.w/s",
+    "iostatwkB/s",
+    "iostat.percentage_util"
+  ],
+  "HostNW": [
+    "net.sockstat.memory",
+    "net.sockstat.num_orphans",
+    "net.sockstat.num_sockets",
+    "net.stat.tcp.abort",
+    "net.stat.udp.datagrams",
+    "net.stat.udp.errors",
+    "proc.net.bytes.in",
+    "proc.net.bytes.out",
+    "proc.net.dropped.in",
+    "proc.net.dropped.out",
+    "proc.net.errs.in",
+    "proc.net.errs.out",
+    "proc.net.packets.in",
+    "proc.net.packets.out"
+  ],
+  "tomcat": [
+    "tomcat.jsp.jspCount",
+    "tomcat.jsp.jspQueueLength",
+    "tomcat.requests.errorCount",
+    "tomcat.requests.maxTime",
+    "tomcat.requests.processingTime",
+    "tomcat.requests.requestCount",
+    "tomcat.servlet.processingTime",
+    "tomcat.servlet.errorCount",
+    "tomcat.servlet.requestCount"
+  ],
+  "hadoop.namenode": [
+    "hadoop.namenode.fsnamesystem.CapacityRemaining",
+    "hadoop.namenode.fsnamesystem.CorruptBlocks",
+    "hadoop.namenode.fsnamesystem.MissingBlocks",
+    "hadoop.namenode.fsnamesystemstate.NumDeadDataNodes",
+    "hadoop.namenode.fsnamesystemstate.NumLiveDataNodes",
+    "hadoop.namenode.fsnamesystemstate.UnderReplicatedBlocks",
+    "hadoop.namenode.fsnamesystemstate.NumStaleDataNodes"
+  ],
+  "hadoop.datanode": [
+    "hadoop.datanode.fsdatasetstate-null.Remaining",
+    "hadoop.datanode.activity.VolumeFailures",
+    "hadoop.datanode.activity.WriteBlockOpAvgTime",
+    "hadoop.datanode.activity.ReadBlockOpAvgTime"
+  ],
+  "hbase.master": [
+    "hbase.master.server.numDeadRegionServers",
+    "hbase.master.server.numRegionServers",
+    "hbase.master.ritCountOverThreshold",
+    "hbase.master.ipc.QueueCallTime_99th_percentile",
+    "hbase.master.jvmmetrics.GcTimeMillis"
+  ],
+  "hbase.regionserver": [
+    "hbase.regionserver.regionCount",
+    "hbase.regionserver.jvmmetrics.GcTimeMillis",
+    "hbase.regionserver.server.slowAppendCount",
+    "hbase.regionserver.server.slowDeleteCount",
+    "hbase.regionserver.server.slowGetCount",
+    "hbase.regionserver.server.slowPutCount",
+    "hbase.regionserver.server.slowIncrementCount "
+  ],
+  "kafka": [
+    "kafka.bytesrate.BytesInPerSec.FifteenMinuteRate",
+    "kafka.bytesrate.BytesOutPerSec.FifteenMinuteRate",
+    "kafka.controller.ActiveControllerCount",
+    "kafka.controller.OfflinePartitionsCount",
+    "kafka.leaderelection.MeanRate",
+    "kafka.server.expand.MeanRate",
+    "kafka.server.shrink.MeanRate",
+    "kafka.controller.TotalTimeMs"
+  ],
+  "mysql": [
+    "mysql.slow_queries",
+    "mysql.threads_connected",
+    "mysql.queries",
+    "mysql.questions"
+  ],
+  "yarn": [
+    "yarn.metrics.rebootedNodes",
+    "yarn.metrics.unhealthyNodes",
+    "yarn.metrics.lostNodes",
+    "yarn.metrics.appsFailed",
+    "yarn.metrics.allocatedMB",
+    "yarn.metrics.containersFailed"
+  ],
+  "mapreduce": [
+    "mapreduce.job.failedMapAttempts",
+    "mapreduce.job.failedReduceAttempts",
+    "mapreduce.job.mapsTotal",
+    "mapreduce.job.reducesTotal"
+  ],
+  "spark": [
+    "spark.executor.activeTasks",
+    "spark.executor.failedTasks",
+    "spark.executor.totalDuration",
+    "spark.executor.totalTasks",
+    "spark.job.numFailedStages",
+    "spark.job.numFailedTasks",
+    "spark.rdd.diskUsed",
+    "spark.rdd.memoryUsed",
+    "spark.rdd.numPartitions",
+    "spark.stage.numActiveTasks",
+    "spark.stage.numFailedTasks"
+  ],
+  "storm": [
+    "storm.cluster.executorsTotal",
+    "storm.cluster.slotsUsed",
+    "storm.cluster.tasksTotal"
+  ],
+  "zookeeper": [
+    "zk_avg_latency",
+    "zk_num_alive_connections",
+    "zk_open_file_descriptor_count",
+    "zk_outstanding_requests",
+    "zk_packets_received",
+    "zk_packets_sent"
+  ],
+  "mongodb": [
+    "mongo.asserts.regular",
+    "mongo.extra_info.page_faults",
+    "mongo.mem.resident",
+    "mongo.metrics.cursor.timedOut",
+    "mongo.network.numRequests"
+  ],
+  "nginx": [
+    "nginx.active_connections",
+    "nginx.number_requests_reading",
+    "nginx.number_requests_writing",
+    "nginx.total_accepted_connections",
+    "nginx.number_requests_waiting"
+  ],
+  "redis": [
+    "redis.clients.blocked",
+    "redis.info.latency_ms",
+    "redis.mem.used",
+    "redis.net.clients",
+    "redis.rdb.changes_since_last",
+    "redis.slowlog.micros.avg",
+    "redis.stats.keyspace_hits"
+  ],
+  "rabbitmq": [
+    "rabbitmq.node.mem_used",
+    "rabbitmq.queue.consumer_utilisation",
+    "rabbitmq.queue.memory",
+    "rabbitmq.queue.messages.rate",
+    "rabbitmq.connections"
+  ],
+  "mongo3": [
+    "mongo.opcounters.query",
+    "mongo.opcounters.insert",
+    "mongo.opcounters.write",
+    "mongo.network.bytesOut",
+    "mongo.network.bytesIn",
+    "mongo.connections.available",
+    "mongo.globalLock.currentQueue.readers",
+    "mongo.globalLock.currentQueue.writers",
+    "mongo.asserts.msg",
+    "mongo.metrics.repl.apply.batches.totalMillis"
+  ],
+  "elasticsearch": [
+    "elasticsearch.shards.active",
+    "elasticsearch.nodes.indices.query_avg",
+    "elasticsearch.nodes.indices.index_avg",
+    "elasticsearch.nodes.indices.fetch_avg",
+    "elasticsearch.nodes.jvm.old_avg",
+    "elasticsearch.nodes.jvm.young_avg",
+    "elasticsearch.nodes.jvm.old_count",
+    "lasticsearch.nodes.jvm.young_count",
+    "elasticsearch.nodes.os.cpu_pct",
+    "elasticsearch.nodes.os.mem_swap_used"
+  ],
+  "ssdb": [
+    "ssdb.total_calls",
+    "ssdb.cmd.time_wait",
+    "ssdb.cmd.time_proc",
+    "ssdb.cmd.calls"
+  ],
+  "play": [
+    "play.classloader.LoadedClassCount",
+    "play.os.CommittedVirtualMemorySize",
+    "play.os.FreePhysicalMemorySize",
+    "play.os.ProcessCpuLoad",
+    "play.thread.ThreadCount",
+    "play.thread.TotalStartedThreadCount",
+    "play.os.SystemCpuLoad",
+    "play.os.OpenFileDescriptorCount"
+  ]
+}

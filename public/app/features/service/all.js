@@ -1,5 +1,0 @@
-define([
-  './buildDependCtrl',
-], function() {
-
-});

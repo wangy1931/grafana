@@ -15,22 +15,22 @@ var template = `
           <div class="gf-form">
               <ul class="gf-form-list tidy-form-list" style="text-align:right; overflow: inherit; width: 100%;">
                   <li class="tidy-form-item">
-                      搜索机器
+                      搜索{{ ctrl.types[ctrl.type] }}
                   </li>
                   <li class="tidy-form-item tidy-form-item-dropdown">
                       <input type="text" class="input-xlarge tidy-form-input last"
                             ng-model='ctrl.query'
                             spellcheck='false'
-                            bs-typeahead-old="ctrl.hostlist"
-                            placeholder="机器名称，按 Enter 键查看结果"
-                            ng-enter="ctrl.searchHost()"
+                            bs-typeahead-old="ctrl.searchList"
+                            placeholder="{{ ctrl.types[ctrl.type] }}名称，按 Enter 键查看结果"
+                            ng-keyup="ctrl.searchHost($event)"
                             ng-blur="ctrl.searchHost()" />
                   </li>
-                  <li class="tidy-form-item">
+                  <li class="tidy-form-item" ng-hide="ctrl.type === 'service'">
                       按标签分组
                   </li>
-                  <li class="tidy-form-item">
-                      <button type="button" class="btn btn-default" ng-model="ctrl.group" data-placement="bottom-auto"
+                  <li class="tidy-form-item" ng-hide="ctrl.type === 'service'">
+                      <button type="button" class="kpi-btn btn btn-default" ng-model="ctrl.group" data-placement="bottom-auto"
                               bs-options="f.value as f.text for f in ctrl.groupOptions" bs-select ng-change="ctrl.getGraph();">
                           请选择<span class="caret"></span>
                       </button>
@@ -39,13 +39,13 @@ var template = `
                       KPI 状态
                   </li>
                   <li class="tidy-form-item">
-                      <button type="button" class="btn btn-default" ng-model="ctrl.filter" data-placement="bottom-auto"
+                      <button type="button" class="kpi-btn btn btn-default" ng-model="ctrl.filter" data-placement="bottom-auto"
                               bs-options="f.value as f.text for f in ctrl.filterOptions" bs-select ng-change="ctrl.filterBy();" >
                           请选择<span class="caret"></span>
                       </button>
                   </li>
                   <li class="tidy-form-item pull-right" ng-hide="ctrl.hideClear">
-                      <button class="btn btn-primary" style="padding: 0.4rem 1rem;" ng-click="ctrl.clearSelected();">清除选中机器</button>
+                      <button class="btn btn-primary" style="padding: 0.4rem 1rem;" ng-click="ctrl.clearSelected();">清除选中{{ ctrl.types[ctrl.type] }}</button>
                   </li>
               </ul>
               <div class="clearfix"></div>
@@ -64,8 +64,8 @@ export class TopologyGraphCtrl {
   rendered: boolean;
   heatmap: any;
   data: any;
-  currentHost: any;
-  hostlist: any;
+  currentItem: any;
+  searchList: any;
   search: boolean = true;
   query: string;
   group: string;
@@ -73,6 +73,7 @@ export class TopologyGraphCtrl {
   groupOptions: any;
   filterOptions: any;
   hideClear: any;
+  types: any;
 
   /** @ngInject */
   constructor(
@@ -83,6 +84,7 @@ export class TopologyGraphCtrl {
     private contextSrv,
     private $rootScope,
     private hostSrv,
+    private serviceDepSrv,
     private alertSrv
   ) {
     this.groupOptions = [{ 'text': '无', 'value': '' }];
@@ -95,6 +97,12 @@ export class TopologyGraphCtrl {
     ];
     this.heatmap = window.d3.select('#heatmap');
 
+    this.types = {
+      'host': '机器',
+      'service': '服务'
+    };
+    !this.$scope.ctrl.type && (this.$scope.ctrl.type = 'host');
+
     this.hideClear = (this.$location.path() === '/');
 
     this.getGraph();
@@ -102,26 +110,37 @@ export class TopologyGraphCtrl {
   }
 
   getGraph() {
-    // 有 query 机器查询时, groupby 没有意义
-    if (this.query && this.query !== '*') { return; }
-
     var params = {};
     this.group && (params['groupby'] = this.group);
 
     // reset data empty
     this.data = [];
 
-    this.hostSrv.getHostTopologyData(params).then(response => {
-      this.hostlist = _.map(response, 'name');
-      this.data = response;
+    // default: type === 'host'
+    var type = this.$scope.ctrl.type;
+    if (type === 'service') {
+      this.serviceDepSrv.getServiceTopologyData().then(this.renderGraph.bind(this));
+    } else {
+      this.hostSrv.getHostTopologyData(params).then(this.renderGraph.bind(this));
+    }
+  }
 
-      !this.rendered && (this.heatmap = window.d3.select('#heatmap').relationshipGraph(this.$scope.ctrl.params));
+  renderGraph(response) {
+    this.searchList = _.map(response, 'name');
+    this.searchList = _.uniq(this.searchList);
+    this.data = response;
 
-      this.rendered = true;
-      this.heatmap.data(this.data);
+    !this.rendered && (this.heatmap = window.d3.select('#heatmap').relationshipGraph(this.$scope.ctrl.params));
 
-      this.$scope.$emit('topology-loaded', this.data);
-    });
+    this.rendered = true;
+    this.heatmap.data(this.data);
+
+    // 有 query 机器查询时, 先做groupby 再filter
+    if (this.query && this.query !== '*') {
+      this.searchItem();
+    }
+
+    this.$scope.$emit('topology-loaded', this.data);
   }
 
   openSearch() {
@@ -133,23 +152,33 @@ export class TopologyGraphCtrl {
   }
 
   clearSelected() {
-    this.currentHost = {};
+    this.query = '';
+    this.currentItem = {};
     this.heatmap.data(this.data);
   }
 
-  searchHost() {
+  searchItem(event?) {
     // check this.query before sending request
-    if (this.query === '' || this.query === '*') {
-      this.clearSelected();
-    } else if (!~this.hostlist.indexOf(this.query)) {
-      this.alertSrv.set("搜索条件输入不正确", '', "warning", 2000);
-    } else {
-      var searchResult = this.heatmap.search({ name: this.query });
-      searchResult = !_.isEmpty(searchResult) ? searchResult : _.filter(this.data, { name: this.query });
-
-      this.heatmap.data(searchResult);
-      this.currentHost = searchResult[0];
+    if (event) {
+      var keycode = event.keyCode || event.which;
+      if (keycode !== 13) {
+        return;
+      }
     }
+
+    this.$timeout(() => {
+      if (this.query === '' || this.query === '*') {
+        this.clearSelected();
+      } else if (!~this.searchList.indexOf(this.query)) {
+        this.alertSrv.set("搜索条件输入不正确", '', "warning", 2000);
+      } else {
+        var searchResult = this.heatmap.search({ name: this.query });
+        searchResult = !_.isEmpty(searchResult) ? searchResult : _.filter(this.data, { name: this.query });
+
+        this.heatmap.data(searchResult);
+        this.currentItem = searchResult[0];
+      }
+    });
   }
 
   getAllTagsKey() {
@@ -180,8 +209,9 @@ export function topologyGraphDirective() {
     bindToController: true,
     controllerAs: 'ctrl',
     scope: {
+      type: "@",
       params: "=",
-      currentHost: "="
+      currentItem: "="
     },
     link: function(scope, elem) {
     }

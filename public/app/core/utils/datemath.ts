@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 
-var units = ['y', 'M', 'w', 'd', 'h', 'm', 's'];
+const units = ['y', 'M', 'w', 'd', 'h', 'm', 's', 'ms'];
 
 export function parse(text, roundUp?) {
   if (!text) { return undefined; }

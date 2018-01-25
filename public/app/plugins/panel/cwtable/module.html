@@ -1,0 +1,70 @@
+
+<div class="elk-table">
+
+	<div class="elk-table-container" ng-if="ctrl.rows.length">
+		<div>
+			<table class="kbn-table table" ng-if="ctrl.indexPattern">
+				<thead>
+					<tr>
+						<td width="1%" ng-hide="ctrl.hideOperator"></td>
+						<th ng-repeat="column in ctrl.columns" ng-hide="column.hide">
+							<span class="table-header-name">
+								{{ column.text }}
+								<span ng-show="column.text === 'message'"><tip>双击日志查询该日志上下文</tip></span>
+								<button
+									id="docTableHeaderFieldSort{{column.text}}"
+									ng-if="ctrl.isSortableColumn($index)"
+									class="elkTableHeaderButton"
+									ng-class="ctrl.headerClass($index)"
+									ng-click="ctrl.toggleColumnSort($index)"
+								></button>
+							</span>
+						</th>
+					</tr>					
+				</thead>
+				<tbody>
+					<tr ng-repeat="row in ctrl.pageOfItems|limitTo:limit track by $index">
+						<td ng-hide="ctrl.hideOperator" ng-switch="ctrl.operatorType">
+							<div ng-switch-when="checkbox">
+								<gf-form-switch class="gf-form" label="" label-class="" checked="checked" on-change="ctrl.selectLog(row)"></gf-form-switch>
+							</div>
+							<div ng-switch-when="expand" style="padding: 8px; cursor: pointer;">
+								<i class="fa fa-expand" ng-click="ctrl.expandLog(row)"></i>
+							</div>
+						</td>
+						<td ng-repeat="(name, value) in row track by $index" ng-hide="ctrl.columns[$index].hide">
+							<div class="truncate-by-height" ng-bind-html="value" ng-dblclick="ctrl.onCellClick($index, value, row)" ng-click="ctrl.expandOrCollapseText($event)"></div>
+							<div style="display: inline-block;" ng-if="value.length > ctrl.MAX_CONTENT_LEN" ng-click="ctrl.expandOrCollapse($event)">
+								<span class="expand-showmore" style="display: inline-block; padding: 0px 10px; cursor: pointer; background-color: rgb(230, 230, 230); font-size: 12px;">
+									...
+								</span>
+								<span class="collapse-showmore" style="display: none; padding: 0px 20px; cursor: pointer; background-color: rgb(230, 230, 230); font-size: 12px;">
+									-
+								</span>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="elkTableBar">
+		<div class="">
+			<div class="table-panel-footer">
+				<ul>
+					<li ng-repeat="pageNumber in ctrl.pageCounts" ng-click="ctrl.changePage(pageNumber)">
+						<a class="table-panel-page-link pointer" ng-class="{ 'active': pageNumber == ctrl.pageIndex+1 }">
+							{{ pageNumber }}
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+		
+	<div ng-if="ctrl.rows != null && !ctrl.rows.length" class="table-vis-error">
+		<h4>No datapoints</h4>
+	</div>
+
+</div>
