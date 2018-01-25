@@ -1,6 +1,6 @@
 <navbar text="日志管理" icon="fa fa-fw fa-search" title-url="/logs/rules"></navbar>
 
-<div class="page-container">
+<div class="page-container" ng-init="ctrl.initList()">
   <div class="page-header">
     <h1>日志配置管理<a href="/logs/rules/new" class="parse-btn parse-edit" style="margin-left: 10px;"><i class="fa fa-plus-square-o"></i></a></h1>
   </div>
@@ -15,6 +15,7 @@
       <td style="width: 40%;"><span>{{rule.ruleName}}</span></td>
       <td style="width: 30%;"><span>{{rule.logServiceName}}</span></td>
       <td style="width: 30%;">
+        <a href="/logs/rule-detail?ruleId={{rule.id}}" class="parse-btn parse-edit">查看</a>
         <a href="/logs/rules/new?ruleId={{rule.id}}" class="parse-btn parse-edit"><i class="fa fa-pencil"></i>修改</a>
         <a class="parse-btn parse-delete" ng-click="ctrl.deleteRuleById(rule.id)"><i class="fa fa-times-circle"></i>删除</a>
       </td>

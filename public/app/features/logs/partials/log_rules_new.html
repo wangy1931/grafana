@@ -7,9 +7,19 @@
 <div class="page-container">
   <div class="page-header">
     <h1>编辑日志规则</h1>
+    <div class="log-step-container">
+      <dl class="log-step" ng-repeat="step in ctrl.steps"
+        ng-class="{true: 'active'}[ctrl.curStep > $index]"
+        ng-click="ctrl.selectStep($index + 1)">
+        <dt>{{$index + 1}}</dt>
+        <dd>{{step}}</dd>
+      </dl>
+    </div>
   </div>
+
   <form class="gf-form-group">
-    <div class="parse-form-group">
+    <div class="parse-form-group" ng-if="ctrl.curStep === 1">
+      <h2>第一步: 填写日志规则基本信息</h2>
       <div class="gf-form">
         <span class="gf-form-label width-10">规则名称<em>*</em></span>
         <input class="gf-form-input max-width-21" type="text" required ng-model="ctrl.rule.ruleName" />
@@ -38,44 +48,77 @@
           ng-model="ctrl.custom.logType" placeholder="请输入英文字母" required />
       </div>
 
-      <div class="gf-form parse-form section">
-        <span class="gf-form-label width-10">日志文件<em>*</em></span>
+      <div class="gf-form parse-form">
+        <span class="gf-form-label width-10">部署机器<em>*</em>
+          <a class="parse-btn parse-edit" ng-click="ctrl.addHost()" style="margin-left: 10px;">
+            <i class="fa fa-plus-square"></i>
+          </a>
+        </span>
+        <table class="table parse-table" ng-if="ctrl.rule.hosts.length">
+          <tr>
+            <th>机器名称</th>
+            <th>IP</th>
+            <th>操作</th>
+          </tr>
+          <tr ng-repeat="host in ctrl.rule.hosts | orderBy: id">
+            <td><span>{{host.hostname}}</span></td>
+            <td><span>{{host.defaultIp}}</span></td>
+            <td>
+              <a class="parse-btn parse-delete" ng-click="ctrl.deleteHost(host.id)"><i class="fa fa-times-circle"></i>删除</a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="parse-form-group" ng-if="ctrl.curStep === 2">
+      <h2>第二步: 填写日志路径</h2>
+      <div class="gf-form" style="display: flex; justify-content: center;">
+        <input class="gf-form-input max-width-21" type="text" placeholder="请输入日志路径" ng-model="ctrl.newPath"
+        ng-class="{false: 'error-input'}[ctrl.checkInput(ctrl.newPath, 'logPath') || !ctrl.newPath]"/>
+        <a class="parse-btn parse-add" ng-click="ctrl.addLogPath()"><i class="fa fa-pencil"></i>添加</a>
+      </div>
+
+      <div class="gf-form parse-form" ng-if="ctrl.rule.paths.length">
         <table class="table parse-table">
           <tr>
             <th>路径</th>
             <th>操作</th>
           </tr>
           <tr ng-repeat="path in ctrl.rule.paths">
-            <td style="width: 50%;">
-              <span ng-if="ctrl.editLogPath.index !== $index">{{path}}</span>
-              <input style="width: 100%;" type="text" ng-class="{false: 'error-input'}[ctrl.checkInput(ctrl.editLogPath.path, 'logPath')]"
-              placeholder="请输入日志路径"
-              ng-if="ctrl.editLogPath.index === $index"
-              ng-model="ctrl.editLogPath.path">
-            </td>
-            <td style="width: 50%;">
-              <span ng-if="ctrl.editLogPath.index !== $index">
-                <a class="parse-btn parse-edit" ng-click="ctrl.editLog($index, path);"><i class="fa fa-pencil"></i>修改</a>
+            <td><span>{{path}}</span></td>
+            <td>
+              <span>
                 <a class="parse-btn parse-delete" ng-click="ctrl.deleteLog(path)"><i class="fa fa-times-circle"></i>删除</a>
               </span>
-              <span ng-if="ctrl.editLogPath.index === $index">
-                <button class="btn btn-outline-success" ng-click="ctrl.addLogPath('save')">保存</button>
-                <button class="btn btn-outline-inverse" ng-click="ctrl.editLog(-1, '')">取消</button>
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td style="width: 50%;">
-              <input class="gf-form-input max-width-21" type="text" placeholder="请输入日志路径" ng-model="ctrl.newPath"
-              ng-class="{false: 'error-input'}[ctrl.checkInput(ctrl.newPath, 'logPath') || !ctrl.newPath]"/>
-            </td>
-            <td style="width: 50%;">
-              <a class="parse-btn parse-add" ng-click="ctrl.addLogPath('add')"><i class="fa fa-pencil"></i>添加</a>
             </td>
           </tr>
         </table>
       </div>
+    </div>
 
+    <div class="parse-form-group" ng-if="ctrl.curStep === 3">
+      <h2>第三步: 校验日志</h2>
+      <ul class="log-check-container" ng-repeat="status in ctrl.checkStatus">
+        <li class="log-host">
+          <i class="fa fa-laptop"></i>
+          <div>机器: {{ctrl.getHostKey(status.hostKey)}}</div>
+        </li>
+        <li class="log-dir {{ctrl.logStatus[directorys.status].class}}" ng-repeat="directorys in status.directorys">
+          <i class="fa fa-code"></i>
+          <div>
+            <p>路径{{$index + 1}}: {{directorys.directory}}</p>
+            <p>
+              <i class="{{ctrl.logStatus[directorys.status].icon}}"></i>
+              {{ctrl.logStatus[directorys.status].txt}}
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="parse-form-group"  ng-if="ctrl.curStep === 4">
+      <h2>第四步: 设置解析规则</h2>
       <div class="gf-form parse-form">
         <span class="gf-form-label width-10">格式<em>*</em></span>
         <label class="multiline-label">
@@ -91,10 +134,7 @@
           <input class="gf-form-input width-30" type="text" ng-model="ctrl.rule['multiline.pattern']" placeholder="请输入日志起始匹配规则" required />
         </div>
       </div>
-    </div>
 
-    <div class="parse-form-group">
-        
       <div class="gf-form parse-form section">
         <span class="gf-form-label width-10">解析器
           <a class="parse-btn parse-edit" ng-click="ctrl.editPattren()" style="margin-left: 10px;">
@@ -117,32 +157,11 @@
       </div>
     </div>
 
-    <!-- Feichi: Modify -->
-    <!-- <div class="parse-form-group">
-      <div class="gf-form parse-form section">
-        <span class="gf-form-label width-10">部署机器<em>*</em>
-          <a class="parse-btn parse-edit" ng-click="ctrl.addHost()" style="margin-left: 10px;">
-            <i class="fa fa-plus-square"></i>
-          </a>
-        </span>
-        <table class="table parse-table" ng-if="ctrl.rule.hosts.length">
-          <tr>
-            <th>机器名称</th>
-            <th>操作</th>
-          </tr>
-          <tr ng-repeat="hostId in ctrl.rule.hosts | orderBy: hostId">
-            <td style="width: 50%;"><span>{{ctrl.getHostNameById(hostId)}}</span></td>
-            <td style="width: 50%;">
-              <a class="parse-btn parse-delete" ng-click="ctrl.deleteHost(hostId)"><i class="fa fa-times-circle"></i>删除</a>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div> -->
-
     <div class="parse-form-group no-border">
-      <a class="btn btn-success" ng-click="ctrl.saveRule()">保存</a>
-      <a class="btn btn-inverse" href="/logs/rules">取消</a>
+      <a class="btn btn-primary" ng-if="ctrl.curStep > 1" ng-click="ctrl.selectStep(ctrl.curStep - 1)">上一步</a>
+      <a class="btn btn-primary" ng-if="ctrl.curStep < 3" ng-click="ctrl.selectStep()">下一步</a>
+      <a class="btn btn-primary" ng-if="ctrl.curStep === 3" ng-click="ctrl.selectStep()">保存并下一步</a>
+      <a class="btn btn-primary" ng-if="ctrl.curStep > 3" ng-click="ctrl.selectStep()">保存</a>
     </div>
 
   </form>

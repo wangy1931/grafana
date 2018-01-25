@@ -77,6 +77,21 @@ export class LogParseSrv {
     })
   }
 
+  checktask(data) {
+    return this.backendSrv.alertD({
+      url: '/cmdb/log/checktask',
+      method: 'post',
+      data: data
+    });
+  }
+
+  getChecktask(params) {
+    return this.backendSrv.alertD({
+      url: '/cmdb/log/check',
+      params: params
+    });
+  }
+
 }
 
 coreModule.service('logParseSrv', LogParseSrv);

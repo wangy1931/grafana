@@ -10,6 +10,7 @@ import 'jquery.flot';
 import 'jquery.flot.selection';
 import 'jquery.flot.time';
 import 'jquery.flot.navigate';
+import 'app/plugins/panel/graph/jquery.flot.events';
 
 export class TimeWindowCtrl {
   data: any;
@@ -20,6 +21,8 @@ export class TimeWindowCtrl {
   range: any;
   rangeRaw: any;
   datasource: any;
+  selectRange: any;
+  queryData: any;
 
   $tooltip: any = $('<div id="tooltip">');
 
@@ -73,7 +76,18 @@ export class TimeWindowCtrl {
       ],
       yaxes: [
         { position: 'left' },
-      ]
+      ],
+      events: {
+        levels: 6,
+        data: [],
+        types: {
+          "alert": {
+            color: "rgba(255, 96, 96, 1)",
+            markerSize: 5,
+            position: "BOTTOM",
+          }
+        },
+      }
     };
 
     this.render();
@@ -82,7 +96,11 @@ export class TimeWindowCtrl {
 
   bindEvent() {
     angular.element("#timeWindow").bind("plotselected", (...args) => {
-      this.$scope.$emit('time-window-selected', { from: moment(args[1].xaxis.from), to: moment(args[1].xaxis.to) });
+      this.selectRange = { from: moment(args[1].xaxis.to).add(-1, 'm'), to: moment(args[1].xaxis.to).add(1, 'm') };
+      this.$scope.$emit('time-window-selected', this.selectRange);
+
+      this.addAnnotation();
+      this.drawTimeWindow();
     });
     angular.element("#timeWindow").bind("plothover", (...args) => {
       if (!args[2]) {
@@ -124,8 +142,9 @@ export class TimeWindowCtrl {
         }
       }
     }
+    this.selectRange = this.range;
     this.datasourceSrv.get('opentsdb').then(this.issueQueries.bind(this));
-    this.$scope.$emit('time-window-resize', this.range);
+    this.$scope.$emit('time-window-resize', { from: moment(this.range.to).add(-1, 'm'), to: moment(this.range.to).add(1, 'm') });
   }
 
   showTooltip(params) {
@@ -146,7 +165,7 @@ export class TimeWindowCtrl {
         "currentTagKey": "",
         "currentTagValue": "",
         "downsampleAggregator": "avg",
-        "downsampleInterval": "1h",
+        "downsampleInterval": "5m",
         "errors": {},
         "hide": false,
         "isCounter": false,
@@ -159,7 +178,7 @@ export class TimeWindowCtrl {
         "currentTagKey": "",
         "currentTagValue": "",
         "downsampleAggregator": "avg",
-        "downsampleInterval": "1h",
+        "downsampleInterval": "5m",
         "errors": {},
         "hide": false,
         "isCounter": false,
@@ -200,14 +219,47 @@ export class TimeWindowCtrl {
       });
       return results.data;
     }).then(response => {
+      this.queryData = response;
       this.options.xaxis.from = this.range.from.valueOf();
       this.options.xaxis.to = this.range.to.valueOf();
-      this.timeWindow = $.plot('#timeWindow', [
-        { label: response[0].target, data: response[0].datapoints },
-        { label: response[1].target, data: response[1].datapoints }
-      ], this.options);
-      this.timeWindowData = this.timeWindow.getData();
+
+      this.addAnnotation();
+      this.drawTimeWindow();
     });
+  }
+
+  drawTimeWindow() {
+    this.timeWindow = $.plot('#timeWindow', [
+      { label: this.queryData[0].target, data: this.queryData[0].datapoints },
+      { label: this.queryData[1].target, data: this.queryData[1].datapoints }
+    ], this.options);
+    this.timeWindowData = this.timeWindow.getData();
+  }
+
+  addAnnotation() {
+    this.options.events.data = [];
+
+    var start = this.$location.search().start;
+    if (start && start !== "undefined") {
+      this.options.events.data.push({
+        id: 11,
+        min: +start,
+        max: +start,
+        title: "报警触发时间",
+        tags: "alert",
+        text: `[机器] ${this.$location.search().host}`,
+        eventType: "alert",
+      })
+    }
+
+    var currentPoint = moment(this.selectRange.to).add(-5, 'm');  // this.selectRange.from + (this.selectRange.to - this.selectRange.from) / 2
+    this.options.events.data.push({
+      id: 12,
+      min: currentPoint,
+      max: currentPoint,
+      title: "资源消耗查询时间点",
+      eventType: "search",
+    })
   }
 
 }
