@@ -23,7 +23,10 @@ export class LogParseEditCtrl {
   constructor(private $scope, private contextSrv,
     private $routeParams, private logParseSrv,
     private $location, private $interval) {
-    this.getServiceList().then(() => {
+    this.logParseSrv.getHostList().then((result) => {
+      this.hostList = result.data;
+      return this.getServiceList();
+    }).then(() => {
       if ($routeParams.ruleId) {
         this.getRuleById($routeParams.ruleId);
       } else {
@@ -40,9 +43,6 @@ export class LogParseEditCtrl {
           "patterns": []
         }
       }
-    });
-    this.logParseSrv.getHostList().then((result) => {
-      this.hostList = result.data;
     });
     this.custom = {
       logServiceName: '',
@@ -97,8 +97,11 @@ export class LogParseEditCtrl {
   getRuleById(id) {
     this.logParseSrv.getRuleById(id).then((response) => {
       this.rule = response.data;
-      this.rule.hosts = _.map(this.rule.hosts, (host)=>{
-        return _.find(this.hostList, {id: host});
+      var tmpHosts = _.cloneDeep(this.rule.hosts);
+      this.rule.hosts = [];
+      _.each(tmpHosts, (hostId)=>{
+        var host = _.find(this.hostList, {id: hostId});
+        host && this.rule.hosts.push(host);
       });
       this.rule.logTypes = this.rule.logTypes || [];
       this.rule.logTypes.push('其他');
@@ -118,13 +121,6 @@ export class LogParseEditCtrl {
       this.serviceList = result.data;
       this.serviceList.push({name: '其他'});
     });
-  }
-
-  getHostNameById(hostId) {
-    if (!_.isEmpty(this.hostList)) {
-      var tmp = _.find(this.hostList, {id: hostId});
-      return tmp ? tmp.hostname : _.remove(this.rule.hosts, (host) => { return host === hostId});
-    }
   }
 
   addLogPath() {
