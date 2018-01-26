@@ -51,7 +51,7 @@
     position: relative;
     &.active,
     &:hover {
-      background-color: #3269f9; // #2ab2e4;
+      background-color: #2ab2e4;
 
       .dropdown-menu {
         display: block;
@@ -67,7 +67,7 @@
 
         > li > a:hover {
           color: white;
-          background: #3269f9;  // #24ade0;
+          background: #24ade0;
         }
       }
     }

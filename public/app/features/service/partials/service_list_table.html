@@ -11,29 +11,26 @@
       <!--<a ng-if="ctrl.contextSrv.isGrafanaAdmin" class="btn btn-success btn-cmdb" style="margin-left: 12px;" href="/cmdb/servicecustom?unit=true">添加默认服务</a>-->
       <!-- <button class="btn btn-success btn-cmdb" ng-disabled="isScan" style="margin-left: 12px;" ng-click="serviceScan()"><span ng-if="!isScan">刷新</span><i ng-if="isScan" class="fa fa-spinner fa-spin"></i></button> -->
     </h2>
-    <table class="table service-panel-table" ng-show="ctrl.servicePanel.length">
-      <thead>
-        <tr>
-          <th>服务名</th>
-          <th>服务 ID</th>
-          <!--<th>开始运行时间</th>-->
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="item in ctrl.servicePanel"
-            ng-class="{active: item.name==ctrl.currentService.name}"
-            ng-click="ctrl.nodeClickHandle(item)">
-          <td>{{ item.name }}</td>
-          <td>{{ item.id || '-' }}</td>
-          <!--<td>{{ item.createdAt | date:'yyyy-MM-dd HH:mm:ss' || '-' }}</td>-->
-          <td>
-            <button class="btn btn-small btn-outline-primary" ng-if="!ctrl.contextSrv.isViewer" ng-click="ctrl.deleteService($event, item.id)">
-              <i class="fa fa-times"></i> 删除
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+
+    <div class="">
+        <table class="table table-hover table-striped service-panel-table">
+            <tr>
+                <th>ID</th>
+                <th>名称<i class="fa fa-sort"></i></th>
+                <th>类型</th>
+                <th>资源组</th>
+                <th>位置</th>
+            </tr>
+            <tr ng-repeat="item in ctrl.servicePanel"
+                ng-click="ctrl.rowClickHandle(item)"
+                class="pointer">
+                <td>{{ item.id }}</td>
+                <td><i class="iconfont fa-default"></i> {{ item.name }}</td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.group }}</td>
+                <td>{{ item.location }}</td>
+            </tr>
+        </table>
+    </div>
   </div>
 </div>

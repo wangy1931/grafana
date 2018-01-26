@@ -34,13 +34,16 @@ export class ServiceTopologyCtrl {
     private $rootScope,
     private $controller,
     private $location,
+    private $timeout,
     private alertSrv
   ) {
     $scope.ctrl = this;
 
     this.tabs = [
       { 'id': 0, 'title': '服务总览', 'active': false, 'show': true,  'content': 'public/app/features/service/partials/service_list_table.html' },
-      { 'id': 1, 'title': '服务信息', 'active': false, 'show': false, 'content': 'public/app/features/service/partials/service_info.html' }
+      { 'id': 1, 'title': '服务信息', 'active': false, 'show': false, 'content': 'public/app/features/service/partials/service_info.html' },
+      { 'id': 2, 'title': '报警检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_alert_table.html' },
+      { 'id': 3, 'title': '异常检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_anomaly_table.html' },
     ];
     this.needNameTabs = [1];
 
@@ -90,6 +93,372 @@ export class ServiceTopologyCtrl {
     });
 
     _.isEmpty(this.serviceList) && this.serviceDepSrv.readInstalledService().then(response => {
+      // mock
+      response.data = [ {
+        "id" : 10598,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "apache_linux",
+        "createdAt" : "2017-12-05T22:36:48Z",
+        "name" : "apache",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 11219,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "Microsoft.Network/applicationGateways",
+        "createdAt" : "2018-01-24T14:57:56Z",
+        "name" : "application.gateway",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 1,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "collector_linux",
+        "createdAt" : "2017-12-03T18:21:18Z",
+        "name" : "collector",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 10846,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "docker_linux",
+        "createdAt" : "2018-01-21T19:09:46Z",
+        "name" : "docker",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 10477,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "elasticsearch_linux",
+        "createdAt" : "2017-12-03T19:02:25Z",
+        "name" : "elasticsearch",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 8,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "filebeat_linux",
+        "createdAt" : "2017-12-03T18:21:37Z",
+        "name" : "filebeat",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 10427,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "hadoop.datanode_linux",
+        "createdAt" : "2017-12-03T18:53:38Z",
+        "name" : "hadoop.datanode",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 10429,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "hadoop.namenode_linux",
+        "createdAt" : "2017-12-03T18:53:49Z",
+        "name" : "hadoop.namenode",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 2,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "hbase.master_linux",
+        "createdAt" : "2017-12-03T18:21:18Z",
+        "name" : "hbase.master",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 3,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "hbase.regionserver_linux",
+        "createdAt" : "2017-12-03T18:21:18Z",
+        "name" : "hbase.regionserver",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 10430,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "kafka_linux",
+        "createdAt" : "2017-12-03T18:53:49Z",
+        "name" : "kafka",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 4,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "mysql_linux",
+        "createdAt" : "2017-12-03T18:21:32Z",
+        "name" : "mysql",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 7,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "nginx_linux",
+        "createdAt" : "2017-12-03T18:21:37Z",
+        "name" : "nginx",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 10428,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "opentsdb_linux",
+        "createdAt" : "2017-12-03T18:53:38Z",
+        "name" : "opentsdb",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 9,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "postfix_linux",
+        "createdAt" : "2017-12-03T18:21:37Z",
+        "name" : "postfix",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 10774,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "postgresql_linux",
+        "createdAt" : "2018-01-08T12:48:32Z",
+        "name" : "postgresql",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 10595,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "redis_linux",
+        "createdAt" : "2017-12-05T22:36:48Z",
+        "name" : "redis",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 11222,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "Microsoft.Cache/Redis",
+        "createdAt" : "2018-01-24T14:57:56Z",
+        "name" : "redis.cache",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 11225,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "Microsoft.ServiceBus/namespaces",
+        "createdAt" : "2018-01-24T14:57:56Z",
+        "name" : "serviceBus",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 11221,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "Microsoft.Sql/servers",
+        "createdAt" : "2018-01-24T14:57:56Z",
+        "name" : "sql.server",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 11224,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "Microsoft.Sql/servers/databases",
+        "createdAt" : "2018-01-24T14:57:56Z",
+        "name" : "sql.server.database",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 11223,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "Microsoft.Storage/storageAccounts",
+        "createdAt" : "2018-01-24T14:57:56Z",
+        "name" : "storage.account",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 10597,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "tomcat_linux",
+        "createdAt" : "2017-12-05T22:36:48Z",
+        "name" : "tomcat",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 11218,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "Microsoft.Network/trafficmanagerprofiles",
+        "createdAt" : "2018-01-24T14:57:36Z",
+        "name" : "traffic.manager",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 11220,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "Microsoft.Web/sites",
+        "createdAt" : "2018-01-24T14:57:56Z",
+        "name" : "web.application",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      }, {
+        "id" : 5,
+        "orgId" : 2,
+        "sysId" : 2,
+        "key" : "zookeeper_linux",
+        "createdAt" : "2017-12-03T18:21:32Z",
+        "name" : "zookeeper",
+        "relationshipId" : 0,
+        "isStop" : false,
+        "hosts" : null,
+        "metrics" : null,
+        "type": "type1",
+        "group": "group1",
+        "location": "china north"
+      } ];
       this.serviceList = response.data;
       this.servicePanel = response.data;
     });
@@ -133,6 +502,21 @@ export class ServiceTopologyCtrl {
     }
   }
 
+  rowClickHandle(node) {
+    this.saveTopologyData();
+
+    // event is triggered by table-row click, set node.id in node._private_
+    var elem = _.find(this.data, data => {
+      return data._private_.id === node.id;
+    });
+    this.currentService = elem;
+
+    this.$timeout(() => {
+      this.tabs[1].active = true;
+      this.switchTab(1);
+    }, 100);
+  }
+
   groupClickHandle(group) {
     this.currentService = group;
     this.$scope.$digest();
@@ -155,7 +539,17 @@ export class ServiceTopologyCtrl {
   }
 
   getInfo() {
-    this.$controller('CMDBServiceDetailCtrl', { $scope: this.$scope });
+    // this.$controller('CMDBServiceDetailCtrl', { $scope: this.$scope });
+  }
+
+  getAlertStatus(item) {
+    // this.$controller('AlertStatusCtrl', { $scope: this.$scope }).init();
+  }
+
+  getAnomaly(item) {
+    this.$controller('AnomalyHistory', { $scope: this.$scope }).loadHistory(
+      { 'num': 1, 'type': 'hours', 'value': '1小时前', 'from': 'now-1h'}, '' // item && item.name
+    );
   }
 
   switchTab(tabId) {
@@ -175,6 +569,12 @@ export class ServiceTopologyCtrl {
     }
     if (tabId === 1) {
       this.getInfo();
+    }
+    if (tabId === 2) {
+      this.getAlertStatus(this.currentService);
+    }
+    if (tabId === 3) {
+      this.getAnomaly(this.currentService);
     }
   }
 

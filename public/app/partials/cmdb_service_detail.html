@@ -1,45 +1,21 @@
 <!--<ul class="cmdb-ul">
     <li>
-        <h4>基本信息</h4>
-        <ul class="cmdb-detail">
-            <li><span>ID</span><span>{{detail.id}}</span></li>
-            <li><span>名称</span><span>{{detail.name}}</span></li>
-            <li><span>加入时间</span><span>{{detail.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</span></li>
-        </ul>
-    </li>
-    <li>
-        <h4><span ng-if="detail.hosts.length">部署机器列表</span><a ng-if="!contextSrv.isViewer" class="btn btn-primary btn-outline-primary" ng-click="showHost()">添加机器</a></h4>
-        <ul class="cmdb-detail" ng-if="detail.hosts.length">
-            <li>
-                <table class="table">
-                    <tr>
-                        <th ng-click="orderBy('hostname')" class="pointer">机器名称<i class="fa fa-sort"></i></th>
-                        <th>IP</th>
-                        <th>虚拟机</th>
-                        <th>操作系统</th>
-                        <th ng-click="orderBy('createdAt')" class="pointer">创建时间<i class="fa fa-sort"></i></th>
-                        <th>服务连接状态</th>
-                        <th>操作</th>
-                    </tr>
-                    <tr ng-repeat="host in detail.hosts | orderBy: order : desc">
-                        <td>{{host.hostname}}</td>
-                        <td>{{host.defaultIp}}</td>
-                        <td>{{host.isVirtual}}</td>
-                        <td>{{host.osName}}</td>
-                        <td>{{host.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-                        <td>{{host.state}}</td>
-                        <td>
-                            <a href="/host_topology?tabId=5&id={{ host.id }}&name={{ host.hostname }}">
-                                <span class="cmdb-icon-text">详情</span>
-                            </a>
-                            <a ng-if="!contextSrv.isViewer" ng-click="deleteHost(host.relationshipId)">
-                                <span class="cmdb-icon-text">删除</span>
-                            </a>
-                        </td>
-                    </tr>
-                </table>
-            </li>
-        </ul>
+        <h4>{{ ctrl.detail.name }}</h4>
+        <table class="table table-hover table-no-bordered cmdb-table">
+            <tr><td class="main-color">Resource group</td><td>{{ ctrl.detail.resourceGroup }}</td></tr>
+            <tr ng-show="ctrl.detail.status"><td class="main-color">Status</td><td>{{ ctrl.detail.status }}</td></tr>
+            <tr><td class="main-color">Location</td><td>{{ ctrl.detail.location }}</td></tr>
+            <tr><td class="main-color">Subscription ID</td><td>{{ ctrl.detail.subscription }}</td></tr>
+            <tr ng-show="ctrl.detail.sku"><td class="main-color">Access tier</td><td>{{ ctrl.detail.sku.tier }}</td></tr>
+            <tr ng-show="ctrl.detail.sku"><td class="main-color">Replication</td><td>{{ ctrl.detail.sku.name }}</td></tr>
+            <tr ng-show="ctrl.detail.kind"><td class="main-color">Account kind</td><td>{{ ctrl.detail.kind }}</td></tr>
+            <tr ng-show="ctrl.detail.primary_endpoints"><td class="main-color">Primary blob service endpoint</td><td>{{ ctrl.detail.primary_endpoints.blob }}</td></tr>
+            <tr ng-show="ctrl.detail.status_of_primary"><td class="main-color">Primary blob service status</td><td>{{ ctrl.detail.status_of_primary }}</td></tr>
+            <tr ng-show="ctrl.detail.primary_location"><td class="main-color">Primary blob service location</td><td>{{ ctrl.detail.primary_location }}</td></tr>
+            <tr ng-show="ctrl.detail.secondary_endpoints"><td class="main-color">Secondary blob service endpoint</td><td>{{ ctrl.detail.secondary_endpoints.blob }}</td></tr>
+            <tr ng-show="ctrl.detail.status_of_secondary"><td class="main-color">Secondary blob service status</td><td>{{ ctrl.detail.status_of_secondary }}</td></tr>
+            <tr ng-show="ctrl.detail.secondary_location"><td class="main-color">Secondary blob service location</td><td>{{ ctrl.detail.secondary_location }}</td></tr>
+        </table>
     </li>
 </ul>-->
 
