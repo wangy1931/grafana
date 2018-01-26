@@ -13,6 +13,7 @@
   "i18n_critical": "严重",
   "i18n_normal": "正常",
   "i18n_unnormal": "异常",
+  "i18n_not_running": "没有运行",
   "i18n_process": "进程",
   "i18n_status_green": "正常",
   "i18n_hostname": "机器名",

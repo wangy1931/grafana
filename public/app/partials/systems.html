@@ -14,15 +14,15 @@
                 <div class="system-item-pie" sys_alert="{{sys.Id}}"></div>
                 <div class="system-item-legend">
                     <dl class="small-dl">
-                        <dt><span class="system-label system-label-success">正常</span></dt>
+                        <dt><span class="system-label system-label-success" translate="i18n_normal"></span></dt>
                         <dd class="system-legend system-legend-success">{{alertNum - warn - critical}}</dd>
                     </dl>
                     <dl class="small-dl">
-                        <dt><span class="system-label system-label-warning">警告</span></dt>
+                        <dt><span class="system-label system-label-warning" translate="i18n_warning"></span></dt>
                         <dd class="system-legend system-legend-warning">{{warn}}</dd>
                     </dl>
                     <dl class="small-dl">
-                        <dt><span class="system-label system-label-danger">严重</span></dt>
+                        <dt><span class="system-label system-label-danger" translate="i18n_critical"></span></dt>
                         <dd class="system-legend system-legend-danger">{{critical}}</dd>
                     </dl>
                 </div>
@@ -51,7 +51,7 @@
                 <p>{{servies.length}}</p>
                 <div style="width:70%; margin:0 auto;">
                     <div class="system-status-box pull-left">
-                        <span class="system-label system-label-success">正常</span>
+                        <span class="system-label system-label-success" translate="i18n_normal"></span>
                         <span class="system-legend system-legend-success">{{serviesStatus.normal}}</span>
                     </div>
                     <div class="system-status-box pull-right">
@@ -83,7 +83,7 @@
                 <p>{{hostList.length}}</p>
                 <div style="width: 70%; margin:0 auto;">
                     <div class="system-status-box pull-left">
-                        <span class="system-label system-label-success">正常</span>
+                        <span class="system-label system-label-success" translate="i18n_normal"></span>
                         <span class="system-legend system-legend-success">{{hostStatus.normal}}</span>
                     </div>
                     <div class="system-status-box pull-right">
