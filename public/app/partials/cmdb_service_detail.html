@@ -19,7 +19,7 @@
     </li>
 </ul>-->
 
-<ul class="cmdb-ul">
+<!-- <ul class="cmdb-ul">
     <li>
         <h4>基本信息</h4>
         <ul class="cmdb-detail">
@@ -33,5 +33,28 @@
             <li><span>Primary blob service endpoint</span><span>https://cloudwizstoragetest-secondary.blob.core.chinacloudapi.cn/</span></li>
             <li><span>Account kind</span><span>Blob storage</span></li>
         </ul>
+    </li>
+</ul> -->
+
+<ul class="cmdb-ul">
+    <li>
+        <h4>{{ ctrl.detail.name }}</h4>
+        <table class="table table-hover table-no-bordered cmdb-table">
+            <!-- Common -->
+            <tr><td class="main-color">Resource group</td><td>{{ ctrl.detail.resourceGroup }}</td></tr>
+            <tr ng-show="ctrl.detail.status"><td class="main-color">Status</td><td>{{ ctrl.detail.status }}</td></tr>
+            <tr><td class="main-color">Location</td><td>{{ ctrl.detail.location }}</td></tr>
+            <tr><td class="main-color">Subscription ID</td><td>{{ ctrl.detail.subscription }}</td></tr>
+            <!-- Special -->
+            <tr ng-show="ctrl.detail.sku"><td class="main-color">Access tier</td><td>{{ ctrl.detail.sku.tier }}</td></tr>
+            <tr ng-show="ctrl.detail.sku"><td class="main-color">Replication</td><td>{{ ctrl.detail.sku.name }}</td></tr>
+            <tr ng-show="ctrl.detail.kind"><td class="main-color">Account kind</td><td>{{ ctrl.detail.kind }}</td></tr>
+            <tr ng-show="ctrl.detail.primary_endpoints"><td class="main-color">Primary blob service endpoint</td><td>{{ ctrl.detail.primary_endpoints.blob }}</td></tr>
+            <tr ng-show="ctrl.detail.status_of_primary"><td class="main-color">Primary blob service status</td><td>{{ ctrl.detail.status_of_primary }}</td></tr>
+            <tr ng-show="ctrl.detail.primary_location"><td class="main-color">Primary blob service location</td><td>{{ ctrl.detail.primary_location }}</td></tr>
+            <tr ng-show="ctrl.detail.secondary_endpoints"><td class="main-color">Secondary blob service endpoint</td><td>{{ ctrl.detail.secondary_endpoints.blob }}</td></tr>
+            <tr ng-show="ctrl.detail.status_of_secondary"><td class="main-color">Secondary blob service status</td><td>{{ ctrl.detail.status_of_secondary }}</td></tr>
+            <tr ng-show="ctrl.detail.secondary_location"><td class="main-color">Secondary blob service location</td><td>{{ ctrl.detail.secondary_location }}</td></tr>
+        </table>
     </li>
 </ul>

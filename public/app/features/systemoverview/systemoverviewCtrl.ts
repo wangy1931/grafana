@@ -300,7 +300,7 @@ export class SystemOverviewCtrl {
 
       _.each(resp.hostStatusMap, (hostMap, hostKey) => {
         this.kpiPanel.leftTableBodys.push({
-          id: _.find(this.hostPanels, { host: hostKey }).id,
+          id: (_.find(this.hostPanels, { host: hostKey }) || {}).id,
           name: hostKey,
           data: _.statusFormatter(hostMap.healthStatusType),
           status: hostMap.healthStatusType
@@ -444,7 +444,7 @@ export class SystemOverviewCtrl {
     });
 
     this.kpiPanel.rightPanelHead = {
-      id: _.findWhere(this.hostPanels, { host: hostname }).id,
+      id: (_.findWhere(this.hostPanels, { host: hostname }) || {}).id,
       name: hostname
     };
 
@@ -457,7 +457,7 @@ export class SystemOverviewCtrl {
         _.extend(this.kpiPanel.rightItemTypes[itemKey], {
           id: itemKey,
           // name: itemKey,
-          data: _.findWhere(this.hostPanels, { host: hostname })[tmp] || _.statusFormatter(itemMap.healthStatusType),
+          data: (_.findWhere(this.hostPanels, { host: hostname }) || {})[tmp] || _.statusFormatter(itemMap.healthStatusType),
           status: itemMap.healthStatusType,
           metrics: itemMap.metricStatusMap
         });

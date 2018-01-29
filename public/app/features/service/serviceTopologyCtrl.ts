@@ -25,6 +25,9 @@ export class ServiceTopologyCtrl {
   topologyGraphParams: any;
   needNameTabs: Array<number>;  // don't modify this variable, except init
 
+  // Feichi
+  detail: any;
+
   /** @ngInject */
   constructor (
     private resourceSrv,
@@ -173,7 +176,10 @@ export class ServiceTopologyCtrl {
   }
 
   getInfo() {
-    // this.$controller('CMDBServiceDetailCtrl', { $scope: this.$scope });
+    var searchParams = this.$location.search();
+    this.resourceSrv.getDetail(searchParams).then(result => {
+      this.detail = result;
+    });
   }
 
   getAlertStatus(item) {
