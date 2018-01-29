@@ -1,5 +1,5 @@
 <div class="navbar-inner">
-	<a class="navbar-brand-btn pointer" href="/">
+	<a class="navbar-brand-btn pointer" href="javascript:;" ng-click="ctrl.updateIndex()">
 		<span class="navbar-brand-btn-background">
 			<img src="public/img/fav32.png"></img>
 			<span>Com&Lan</span>
@@ -7,8 +7,7 @@
 	</a>
 
 	<a class="navbar-toggle-menu-btn pull-left" href="javascript:;" ng-click="ctrl.contextSrv.toggleSideMenu($event)">
-		<i class="toggle-menu-btn"
-			ng-class="{'true': 'fa fa-arrow-left', 'false': 'fa fa-bars'}[ctrl.contextSrv.pinned]"></i>
+		<i class="toggle-menu-btn fa fa-bars"></i>
 	</a>
 
 	<a href="{{ctrl.titleUrl}}" class="navbar-page-btn" ng-show="ctrl.showNavbarPageBtn">
@@ -35,7 +34,7 @@
 	</a>
 
 	<a href="{{ctrl.priceUrl}}" target="_blank" class="navbar-shortcut-btn pull-right" ng-if="ctrl.deadline <= 15">
-		<i style="color: #D53E4F; font-style: normal;">您的使用期限还剩{{ctrl.deadline}}天</i>
+		<i style="color: #D53E4F; font-style: normal;">您的使用期限还剩{{ ctrl.deadline }}天</i>
 	</a>
 
 	<div ng-transclude></div>

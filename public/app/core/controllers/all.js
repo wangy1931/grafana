@@ -8,5 +8,6 @@ define([
   './error_ctrl',
   './installCtrl',
   './signupFreeCtrl',
-  './systemCtrl'
+  './systemCtrl',
+  './guide_use_ctrl'
 ], function () {});
