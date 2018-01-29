@@ -18,7 +18,7 @@ export class SideMenuCtrl {
   configMenu: any;
 
   /** @ngInject */
-  constructor($rootScope, private $scope, private $location, private contextSrv, private backendSrv, private $element) {
+  constructor($rootScope, private $scope, private $location, private contextSrv, private backendSrv, private $element, private $translate) {
     this.isSignedIn = contextSrv.isSignedIn;
     this.user = contextSrv.user;
     this.appSubUrl = config.appSubUrl;
@@ -112,13 +112,13 @@ export class SideMenuCtrl {
     var item = [];
 
     item.push({
-      text: "个人信息",
+      text: "i18n_menu_profile",
       url : this.getUrl('/profile')
     });
 
     if (config.allowOrgCreate) {
       item.push({
-        text: "新建公司",
+        text: "i18n_menu_org_new",
         icon: "fa fa-fw fa-plus",
         url: this.getUrl('/org/new')
       });
@@ -126,16 +126,16 @@ export class SideMenuCtrl {
 
     if (this.contextSrv.hasRole('Admin')) {
       item.push({
-        text: "公司信息设置",
+        text: "i18n_menu_org",
         url: this.getUrl("/org"),
       });
       item.push({
-        text: "用户管理",
+        text: "i18n_menu_org_users",
         url: this.getUrl("/org/users"),
       });
       if (this.contextSrv.isGrafanaAdmin) {
         item.push({
-          text: "密钥管理",
+          text: "i18n_menu_org_apikeys",
           url: this.getUrl("/org/apikeys"),
         });
       }
@@ -143,45 +143,45 @@ export class SideMenuCtrl {
 
     if (this.contextSrv.isGrafanaAdmin) {
       item.push({
-        text: "后台管理",
+        text: "i18n_menu_admin",
         dropdown: 'dropdown',
         children: [
           {
-            text: "系统信息",
+            text: "i18n_menu_admin_setting",
             icon: "fa fa-fw fa-info",
             url: this.getUrl("/admin/settings"),
           },
           {
-            text: "系统状态",
+            text: "i18n_menu_admin_stats",
             icon: "fa fa-fw fa-info",
             url: this.getUrl("/admin/stats"),
           },
           {
-            text: "全体成员",
+            text: "i18n_menu_admin_users",
             icon: "fa fa-fw fa-user",
             url: this.getUrl("/admin/users"),
           },
           {
-            text: "所有公司",
+            text: "i18n_menu_admin_orgs",
             icon: "fa fa-fw fa-users",
             url: this.getUrl("/admin/orgs"),
           }
         ]
       });
       item.push({
-        text: "申请用户",
+        text: "i18n_menu_document",
         icon: "fa fa-fw fa-users",
         url: this.getUrl("/customer"),
       });
       item.push({
-        text: "数据源",
+        text: "i18n_menu_datasource",
         icon: "icon-gf icon-gf-dashboard",
         url: this.getUrl("/datasources")
       });
     }
 
     item.push({
-      text: "帮助文档",
+      text: "i18n_menu_document",
       url: "http://cloudwiz.cn/document/",
       target: '_blank'
     });
@@ -205,30 +205,6 @@ export class SideMenuCtrl {
           }
         });
       });
-      _self.$scope.submenu = item;
-    });
-  };
-
-  loadDashboardList(item, _self) {
-    var submenu = [];
-    _self.backendSrv.search({query: "", starred: "false"}).then(function (result) {
-      if (!_self.contextSrv.isViewer) {
-        submenu.push({
-          text: "+新建",
-          click: _self.newDashboard,
-        });
-        submenu.push({
-          text: "导入",
-          url: "/import/dashboard",
-        });
-      }
-      _.each(result, function (dash) {
-        submenu.push({
-          text: dash.title,
-          url: _self.getUrl("dashboard/"+dash.uri),
-        });
-      });
-      item.children = submenu;
       _self.$scope.submenu = item;
     });
   };
