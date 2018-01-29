@@ -23,7 +23,7 @@
       <tbody>
         <tr ng-repeat="item in ctrl.servicePanel"
             ng-class="{active: item.name==ctrl.currentService.name}"
-            ng-click="ctrl.nodeClickHandle(item)">
+            ng-click="ctrl.rowClickHandle($event, item)">
           <td>{{ item.name }}</td>
           <td>{{ item.id || '-' }}</td>
           <td>{{ item.createdAt | date:'yyyy-MM-dd HH:mm:ss' || '-' }}</td>

@@ -23,6 +23,14 @@ export class NavbarCtrl {
   showGuide() {
     this.$rootScope.appEvent('show-guide-book');
   }
+
+  updateIndex() {
+    if (this.$location.path() === '/') {
+      window.location.href = config.appSubUrl + '/';
+    } else {
+      this.$location.url('/');
+    }
+  }
 }
 
 export function navbarDirective() {
