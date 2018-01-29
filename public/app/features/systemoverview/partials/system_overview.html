@@ -8,7 +8,7 @@
             <div class="summary-panel view-panel">
                 <div class="health-panel panels-wrapper">
                     <h3 class="spec-tip">
-                        <a href="javascript:;" ng-click="ctrl.showModal(0)" bs-tooltip="'点击查看历史指数'">健康指数趋势</a>
+                        <a href="javascript:;" ng-click="ctrl.showModal(0)" bs-tooltip="'点击查看历史指数'" translate="page_overview_panel_health_title"></a>
                         <tip placement="bottom">
                             优：系统运行状况良好<br />
                             良：存在报警或异常指标，不影响运行<br />
@@ -30,7 +30,7 @@
                             </h3>
                             <div>
                                 <li ng-repeat="alert in ctrl.alertPanel.status" ng-if="alert.count!=0">
-                                    <a href="/host_topology?tabId=2">{{ alert.text }} <span class="status-color status-{{ alert.health }}">{{ alert.count }}</span></a>
+                                    <a href="/host_topology?tabId=2"> <em translate="{{ alert.text }}"></em>: <span class="status-color status-{{ alert.health }}">{{ alert.count }}</span></a>
                                 </li>
                             </div>
                         </div>
@@ -42,7 +42,7 @@
                                 <li ng-repeat="except in ctrl.exceptionPanel.status"
                                     data-placement="center" bs-modal="modal" data-template-url="public/app/features/systemoverview/partials/system_anomaly_modal.html">
                                     <a href="javascript:;">{{ except.text }} <strong class=""> &gt;{{ except.threadhold }}</strong></a>
-                                    <a href="javascript:;">进程: <span class="status-color status-{{ except.health }}">{{ except.count }}</span></a>
+                                    <a href="javascript:;"><em style="font-style: normal;" translate="i18n_process"></em>: <span class="status-color status-{{ except.health }}">{{ except.count }}</span></a>
                                 </li>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                         </h3>
                         <div>
                             <li ng-repeat="anomaly in ctrl.anomalyPanel.status" ng-if="anomaly.count!=-1">
-                                <a href="/anomaly">{{ anomaly.text }} <span class="status-color status-{{ anomaly.health }}">{{ anomaly.count }}</span></a>
+                                <a href="/anomaly"><em translate="{{ anomaly.text }}"></em>: <span class="status-color status-{{ anomaly.health }}">{{ anomaly.count }}</span></a>
                             </li>
                         </div>
                     </div>
@@ -65,13 +65,15 @@
                 <span class="overview-switch">
                     <span class="switch-text" ng-click="ctrl.switch()">
                         <span class="item" ng-class="{ 'on': ctrl.switchEnabled }">
-                            <i class="fa fa-check" translate="page_overview_panel_service_title"></i>
+                            <i class="fa fa-check"></i>
+                            <span translate="page_overview_panel_service_title"></span>
                         </span>
                         <span>
                             <i class="fa fa-exchange"></i>
                         </span>
                         <span class="item" ng-class="{ 'on': !ctrl.switchEnabled }">
-                            <i class="fa fa-check"></i>机器拓扑
+                            <i class="fa fa-check"></i>
+                            <span translate="page_overview_panel_host_title"></span>
                         </span>
                     </span>
                 </span>
@@ -104,9 +106,9 @@
         
                         <div class="kpi-panel panels-wrapper">
                             <h3>
-                                <a href="javascript:;">服务KPI</a>
+                                <a href="javascript:;" translate="page_overview_kpi_service"></a>
                             </h3>
-                            <em ng-if="!ctrl.servicePanel.currentService.name">点击上图某个服务，查看服务详情</em>
+                            <em ng-if="!ctrl.servicePanel.currentService.name" translate="page_overview_tooltip_service"></em>
                             <div class="mention"></div>
                         </div>
                         <div class="" ng-if="ctrl.servicePanel.currentService.name">
@@ -131,9 +133,9 @@
         
                         <div class="kpi-panel panels-wrapper">
                             <h3>
-                                <a href="javascript:;">机器KPI</a>
+                                <a href="javascript:;" translate="page_overview_kpi_host"></a>
                             </h3>
-                            <em ng-if="!ctrl.hostPanel.currentHost.name">点击上图某个机器，查看机器详情</em>
+                            <em ng-if="!ctrl.hostPanel.currentHost.name" translate="page_overview_tooltip_host"></em>
                             <div class="mention"></div>
                         </div>
                         <div class="" ng-if="ctrl.hostPanel.currentHost.name">

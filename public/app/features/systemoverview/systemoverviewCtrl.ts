@@ -164,8 +164,8 @@ export class SystemOverviewCtrl {
   getAlertStatus() {
     this.alertPanel.status = [
       { health: HEALTH_TYPE.GREEN.TEXT, text: '系统正常', count: 0 },
-      { health: HEALTH_TYPE.YELLOW.TEXT, text: '警告: ', count: 0 },
-      { health: HEALTH_TYPE.RED.TEXT, text: '严重: ', count: 0 }
+      { health: HEALTH_TYPE.YELLOW.TEXT, text: 'i18n_warning', count: 0 },
+      { health: HEALTH_TYPE.RED.TEXT, text: 'i18n_critical', count: 0 }
     ];
 
     this.alertMgrSrv.loadTriggeredAlerts().then(response => {
@@ -204,9 +204,9 @@ export class SystemOverviewCtrl {
   // 智能检测异常指标 & 健康指数
   getAnomaly() {
     this.anomalyPanel.status = [
-      { health: HEALTH_TYPE.RED.TEXT, text: '严重: ', count: -1 },
-      { health: HEALTH_TYPE.YELLOW.TEXT, text: '异常指标: ', count: 0 },
-      { health: HEALTH_TYPE.GREEN.TEXT, text: '指标数量: ', count: 0 }
+      { health: HEALTH_TYPE.RED.TEXT, text: 'i18n_critical', count: -1 },
+      { health: HEALTH_TYPE.YELLOW.TEXT, text: 'page_overview_panel_anomaly_metric', count: 0 },
+      { health: HEALTH_TYPE.GREEN.TEXT, text: 'page_overview_panel_metric_number', count: 0 }
     ];
 
     this.healthSrv.load().then(data => {
