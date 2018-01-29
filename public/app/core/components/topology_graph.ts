@@ -107,6 +107,8 @@ export class TopologyGraphCtrl {
 
     this.getGraph();
     this.getAllTagsKey();
+
+    this.$scope.$on('topology-update', this.updateTopology.bind(this));
   }
 
   getGraph() {
@@ -197,6 +199,11 @@ export class TopologyGraphCtrl {
 
     var filteredData = this.filter.toLowerCase() ? _.filter(this.data, { value: this.filter.toLowerCase() }) : this.data;
     this.heatmap.data(filteredData);
+  }
+
+  updateTopology(evt, payload) {
+    this.data = payload || this.data;
+    this.clearSelected();
   }
 
 }

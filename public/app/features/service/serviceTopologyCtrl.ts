@@ -121,15 +121,19 @@ export class ServiceTopologyCtrl {
   nodeClickHandle(node) {
     this.saveTopologyData();
 
-    // if event is triggered by table-row click, set node.id in node._private_
-    if (node.id) {
-      var elem = _.find(this.data, data => {
-        return data._private_.id === node.id;
-      });
+    this.currentService = node;
+    this.$scope.$digest();
+  }
+
+  rowClickHandle($event, node) {
+    this.saveTopologyData();
+
+    var elem = _.find(this.data, data => {
+      return data._private_.id === node.id;
+    });
+    // ignore .delete button
+    if (!$($event.target).hasClass('btn')) {
       this.currentService = elem;
-    } else {
-      this.currentService = node;
-      this.$scope.$digest();
     }
   }
 
@@ -179,7 +183,7 @@ export class ServiceTopologyCtrl {
   }
 
   saveTopologyData() {
-    this.data = this.serviceDepSrv.topology;
+    _.isEmpty(this.data) && (this.data = this.serviceDepSrv.topology);
     this.hostlist = _.map(this.data, 'name');
   }
 
@@ -199,7 +203,11 @@ export class ServiceTopologyCtrl {
           params: { 'id': id }
         }).then(() => {
           this.alertSrv.set("删除成功", '', "success", 2000);
-          _.remove(this.servicePanel, { id: id });
+          _.remove(this.serviceList, { id: id });
+          this.data = _.filter(this.data, (item) => {
+            return item._private_.id !== id;
+          });
+          this.$scope.$broadcast('topology-update', this.data);
         }, (err) => {
           this.alertSrv.set("删除失败", err.data, "error", 2000);
         });

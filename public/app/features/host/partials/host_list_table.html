@@ -22,7 +22,7 @@
       <tbody>
         <tr ng-repeat="host in ctrl.hostPanels"
             ng-class="{active: host.host==ctrl.currentHost.name}"
-            ng-click="ctrl.nodeClickHandle(host);">
+            ng-click="ctrl.rowClickHandle($event, host);">
           <td>{{ host.host }}</td>
           <td>{{ host.defaultIp || '-' }}</td>
           <td>{{ host.status || '-' }}</td>
