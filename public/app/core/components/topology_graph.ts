@@ -85,7 +85,8 @@ export class TopologyGraphCtrl {
     private $rootScope,
     private hostSrv,
     private serviceDepSrv,
-    private alertSrv
+    private alertSrv,
+    private resourceSrv
   ) {
     this.groupOptions = [{ 'text': '无', 'value': '' }];
     this.filterOptions = [
@@ -119,7 +120,8 @@ export class TopologyGraphCtrl {
     // default: type === 'host'
     var type = this.$scope.ctrl.type;
     if (type === 'service') {
-      this.serviceDepSrv.getServiceTopologyData().then(this.renderGraph.bind(this));
+      this.resourceSrv.getTopology().then(this.renderGraph.bind(this));
+      // this.serviceDepSrv.getServiceTopologyData().then(this.renderGraph.bind(this));
     } else {
       this.hostSrv.getHostTopologyData(params).then(this.renderGraph.bind(this));
     }

@@ -7,9 +7,10 @@ export class ResourceSrv {
 
   groups: Array<any> = [];
   list: Array<any> = [];
+  topology: Array<any> = [];
 
   /** @ngInject */
-  constructor(private $http, private $timeout, private $q, private alertSrv, private backendSrv) {
+  constructor(private $http, private $timeout, private $q, private alertSrv, private backendSrv, private serviceDepSrv) {
   }
 
   getGroup() {
@@ -36,6 +37,38 @@ export class ResourceSrv {
   getDetail({id}) {
     return this.backendSrv.alertD({url: `/integration/azure/resources?id=${id}`}).then(result => {
       return result.data;
+    });
+  }
+
+  getTopology() {
+    return this.backendSrv.alertD({url: '/integration/azure/resources'}).then(result => {
+      var promiseList = [];
+      this.topology = [];
+
+      result.data.forEach(item => {
+        var q = this.serviceDepSrv.readServiceStatus(item.id, item.name).then(response => {
+          this.topology.push({
+            parent: 'All',
+            name  : item.name,
+            value : response.data.healthStatusType.toLowerCase(),
+            _private_: item
+          });
+        }, err => {
+          this.topology.push({
+            parent: 'All',
+            name  : item.name,
+            value : 'grey',
+            _private_: item
+          });
+        });
+        promiseList.push(q);
+      });
+
+      return this.$q.all(promiseList).then(() => {
+        this.topology = _.orderBy(this.topology, ['name'], ['asc']);
+
+        return this.topology;
+      });
     });
   }
 
