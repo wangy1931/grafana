@@ -12,7 +12,7 @@ export class GuideUseCtrl {
     var path = $location.path();
     path = _.replace(path, /\//g, '_');
     path = _.guideMap()[path] || 'ui_summary';
-    this.guidePath = $sce.trustAsResourceUrl(`http://cloudwiz.cn/document/part4/${path}.html`);
+    this.guidePath = $sce.trustAsResourceUrl(`https://cloudwiz.cn/document/part4/${path}.html`);
   }
 }
 
