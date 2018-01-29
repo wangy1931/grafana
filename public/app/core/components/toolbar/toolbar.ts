@@ -43,6 +43,20 @@ export class ToolbarCtrl {
       });
     }
 
+    this.toolbarItems[2].push({
+      class: '',
+      icon: 'fa fa-fw fa-info-circle',
+      itemname: '使用指南',
+      href: 'javascript:;',
+      clickHandler: () => {
+        $rootScope.appEvent('show-modal', {
+          src: 'public/app/core/components/toolbar/guide_use.html',
+          modalClass: 'guide_use',
+          scope: $scope.$new(),
+        });
+      }
+    });
+
   }
 
   showPopover() {
