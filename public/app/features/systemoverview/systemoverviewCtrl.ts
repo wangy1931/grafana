@@ -164,7 +164,7 @@ export class SystemOverviewCtrl {
   // 报警情况
   getAlertStatus() {
     this.alertPanel.status = [
-      { health: HEALTH_TYPE.GREEN.TEXT, text: '系统正常', count: 0 },
+      { health: HEALTH_TYPE.GREEN.TEXT, text: '系统正常', count: 0, hide: true },
       { health: HEALTH_TYPE.YELLOW.TEXT, text: '警告: ', count: 0 },
       { health: HEALTH_TYPE.RED.TEXT, text: '严重: ', count: 0 }
     ];

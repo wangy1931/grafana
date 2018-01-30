@@ -360,6 +360,18 @@ $thresholds-hover-color: (#3DB779, #FFD500, #FE9805, #ff4f45, #BB1144, #BABFC7, 
   .service-panel .mention span {
     color: $body-color !important;
   }
+  .health-panel.panels-wrapper:first-child {
+    border-right: solid 10px $page-bg;
+  }
+  .summary-panel.view-panel {
+    border: none;
+  }
+  .anomaly-panel.panels-wrapper:first-child {
+    border-bottom: solid 5px $page-bg;
+  }
+  .anomaly-panel.panels-wrapper:last-child {
+    border-top: solid 5px $page-bg;
+  }
 }
 .association-page {
   .tree-menu {
@@ -419,5 +431,17 @@ input, select, .input, .select {
         }
       }
     }
+  }
+}
+.service-page {
+  .tidy-form .kpi-btn {
+    background-color: $input-bg !important;
+    border: 1px solid transparent !important;
+  }
+  .tight-form-item {
+    border: none;
+  }
+  .host-anomaly.host-tab-content {
+    padding: 20px;
   }
 }

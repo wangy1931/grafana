@@ -4,7 +4,7 @@
     <cw-loading show="!ctrl.servicePanel.length" duration=6000></cw-loading>
   </div>
 
-  <div style="width: 100%">
+  <div style="width: 100%" ng-show="ctrl.servicePanel.length" >
     <h2>
       <!--<a ng-if="!ctrl.contextSrv.isViewer" class="btn btn-primary btn-cmdb" style="margin-left: 12px;" href="/cmdb/servicecustom">添加拓展服务</a>-->
       <a ng-if="!ctrl.contextSrv.isViewer" class="btn btn-success btn-cmdb" style="margin-left: 12px;" href="/service_dependency">创建服务依赖</a>
