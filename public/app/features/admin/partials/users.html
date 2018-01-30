@@ -1,28 +1,28 @@
-<navbar icon="fa fa-fw fa-cogs" title="Admin" title-url="admin">
+<navbar icon="fa fa-fw fa-cogs" title-url="admin">
 	<a href="admin/users" class="navbar-page-btn">
 		<i class="icon-gf icon-gf-users"></i>
-		用户
+		<span translate="page_admin_users"></span>
 	</a>
 </navbar>
 
 <div class="page-container">
 	<div class="page-header">
-		<h1>用户</h1>
+		<h1 translate="page_admin_users"></h1>
 
 		<a class="btn btn-success" href="admin/users/create">
 			<i class="fa fa-plus"></i>
-			新增用户
+			<span translate="page_admin_users_new"></span>
 		</a>
 	</div>
 
 	<table class="filter-table form-inline">
 		<thead>
 			<tr>
-				<th>Id</th>
-				<th>姓名</th>
-				<th>账号</th>
-				<th>邮箱</th>
-				<th style="white-space: nowrap">是否管理员</th>
+				<th translate="page_admin_users_id"></th>
+				<th translate="page_admin_users_name"></th>
+				<th translate="page_admin_users_login"></th>
+				<th translate="page_admin_users_email"></th>
+				<th translate="page_admin_users_isAdmin" style="white-space: nowrap"></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -36,7 +36,7 @@
 				<td class="text-right">
 					<a href="admin/users/edit/{{user.id}}" class="btn btn-inverse btn-small">
 						<i class="fa fa-edit"></i>
-						编辑
+						<span translate="i18n_edit"></span>
 					</a>
 					&nbsp;&nbsp;
 					<a ng-click="deleteUser(user)" class="btn btn-danger btn-small">
