@@ -74,7 +74,7 @@
   "page_anomaly_warning_metric": "临时异常指标:",
   "page_anomaly_critical_metrics": "持续异常",
   "page_anomaly_critical_metric": "持续异常指标:",
-  "page_anomaly_none": "系统一切正常",
+  "page_anomaly_none": "暂没有任何异常数据",
   "page_anomaly_health_value": "平均健康值: ",
   "page_anomaly_detail": "查看详情",
   "page_anomaly_health": "健康值",

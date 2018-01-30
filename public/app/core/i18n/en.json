@@ -74,7 +74,7 @@
   "page_anomaly_warning_metric": "Warning Metrics:",
   "page_anomaly_critical_metrics": "Critical Metrics",
   "page_anomaly_critical_metric": "Critical Metrics:",
-  "page_anomaly_none": "The system is healthy",
+  "page_anomaly_none": "No abnormal data temporarily",
   "page_anomaly_health_value": "Average health value: ",
   "page_anomaly_detail": "More",
   "page_anomaly_health": "Health Value",
