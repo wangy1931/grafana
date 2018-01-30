@@ -1,59 +1,59 @@
-<navbar icon="icon-gf icon-gf-users" title="个人信息" title-url="profile">
+<navbar icon="icon-gf icon-gf-users" title-url="profile">
 </navbar>
 
 <div class="page-container">
 	<div class="page-header">
-		<h1>个人信息</h1>
+		<h1 translate="i18n_menu_profile"></h1>
 	</div>
 
 	<form name="ctrl.userForm" class="gf-form-group">
-		<h3 class="page-heading">信息</h3>
+		<h3 class="page-heading" translate="page_profile_msg"></h3>
 
 		<div class="gf-form">
-			<span class="gf-form-label width-9">姓名</span>
+			<span class="gf-form-label width-9" translate="page_profile_name"></span>
 			<input class="gf-form-input max-width-21" type="text" required ng-model="ctrl.user.name" >
 		</div>
 		<div class="gf-form">
-			<span class="gf-form-label width-9">邮箱</span>
+			<span class="gf-form-label width-9" translate="page_profile_email"></span>
 			<input class="gf-form-input max-width-21" type="email" required ng-model="ctrl.user.email">
 		</div>
 		<div class="gf-form">
-			<span class="gf-form-label width-9">账号</span>
+			<span class="gf-form-label width-9" translate="page_profile_username"></span>
 			<input class="gf-form-input max-width-21" type="text" required ng-model="ctrl.user.login">
 		</div>
 		<div class="gf-form-button-row">
-			<button type="submit" class="btn btn-success" ng-click="ctrl.update()">更新</button>
+			<button type="submit" class="btn btn-success" ng-click="ctrl.update()" translate="i18n_update"></button>
 		</div>
 	</form>
 
 	<prefs-control mode="user"></prefs-control>
 
 	<form name="ctrl.userForm" class="gf-form-group">
-		<h3 class="page-heading">语言</h3>
+		<h3 class="page-heading" translate="page_profile_language"></h3>
 
 		<div class="gf-form">
-			<span class="gf-form-label width-9">主题</span>
+			<span class="gf-form-label width-9" translate="page_profile_theme"></span>
 			<div class="gf-form-select-wrapper max-width-20">
 				<select class="gf-form-input" ng-model="ctrl.curLanguage" ng-options="f.value as f.text for f in ctrl.languages"></select>
 			</div>
 		</div>
 		<div class="gf-form-button-row">
-			<button type="submit" class="btn btn-success" ng-click="ctrl.updateLanguage(ctrl.curLanguage)">更新</button>
+			<button type="submit" class="btn btn-success" ng-click="ctrl.updateLanguage(ctrl.curLanguage)" translate="i18n_update"></button>
 		</div>
 	</form>
 
-	<h3 class="page-heading">密码</h3>
+	<h3 class="page-heading" translate="page_profile_pwd"></h3>
 	<div class="gf-form-group">
-		<a href="profile/password" class="btn btn-inverse">修改密码</a>
+		<a href="profile/password" class="btn btn-inverse" translate="page_profile_pwd_change"></a>
 	</div>
 
-	<h3 class="page-heading">公司</h3>
+	<h3 class="page-heading" translate="page_org"></h3>
 	<div class="gf-form-group">
 		<table class="filter-table form-inline">
 			<thead>
 				<tr>
-					<th>公司名</th>
-					<th>角色</th>
+					<th translate="page_org_name"></th>
+					<th translate="page_org_role"></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -62,11 +62,9 @@
 					<td>{{org.name}}</td>
 					<td>{{org.role}}</td>
 					<td class="text-right">
-						<span class="btn btn-primary btn-mini" ng-show="org.orgId === contextSrv.user.orgId">
-							当前用户
+						<span class="btn btn-primary btn-mini" ng-show="org.orgId === contextSrv.user.orgId" translate="page_org_cur">
 						</span>
-						<a ng-click="ctrl.setUsingOrg(org)" class="btn btn-inverse btn-mini" ng-show="org.orgId !== contextSrv.user.orgId">
-							选择用户
+						<a ng-click="ctrl.setUsingOrg(org)" class="btn btn-inverse btn-mini" ng-show="org.orgId !== contextSrv.user.orgId" translate="page_org_switch">
 						</a>
 					</td>
 				</tr>
