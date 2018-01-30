@@ -1,7 +1,7 @@
-<navbar icon="fa fa-fw fa-stethoscope" title="智能检测">
+<navbar icon="fa fa-fw fa-stethoscope">
     <ul class="nav">
-      <li><a href="anomaly">列表</a></li>
-      <li class="active"><a>指标</a></li>
+      <li><a href="anomaly" translate="i18n_list"></a></li>
+      <li class="active"><a translate="i18n_metric"></a></li>
     </ul>
     <ul class="nav pull-right">
         <li ng-show="dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
@@ -23,9 +23,9 @@
         <tr>
           <th style="width: 100px"></th>
           <th style="width: 80px;"><input type="checkbox" ng-checked="anomalyList.length === selections.length" ng-click="changeSelect(null)"></th>
-          <th style="width: 600px"><p class="text-overflow">指标<p></th>
-          <th style="width: 150px;">健康值</th>
-          <th>操作</th>
+          <th style="width: 600px"><p class="text-overflow" translate="i18n_metric"><p></th>
+          <th style="width: 150px;" translate="page_anomaly_health"></th>
+          <th translate="i18n_operating"></th>
         </tr>
       </table>
     </div>
@@ -36,7 +36,7 @@
           <td style="width: 80px;"><input type="checkbox" ng-model="anomalyItem.checked" ng-click="changeSelect(anomalyItem)"></td>
           <td style="width: 600px; text-align: left;"><p class="text-overflow">{{_.getMetricName(anomalyItem.metric)+ "{host=" + anomalyItem.host + "}"}}<p></td>
           <td  style="width: 150px;">{{anomalyItem.health}}</td>
-          <td><button class="btn btn-outline-primary btn-small" ng-click="exclude(anomalyItem)">暂缓报警</button></td>
+          <td><button class="btn btn-outline-primary btn-small" ng-click="exclude(anomalyItem)" translate="page_alert_delay"></button></td>
         </tr>
       </table>
     </div>
@@ -73,7 +73,7 @@
         <div panel-drop-zone class="panel panel-drop-zone" ui-on-drop="onDrop($data, row)" data-drop="true">
           <div class="panel-container" style="background: transparent">
             <div style="text-align: center">
-              <em>点击这里(drop here)</em>
+              <em translate="i18n_drop_here"></em>
             </div>
           </div>
         </div>
