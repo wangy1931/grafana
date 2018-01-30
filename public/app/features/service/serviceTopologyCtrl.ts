@@ -47,8 +47,9 @@ export class ServiceTopologyCtrl {
       { 'id': 1, 'title': '服务信息', 'active': false, 'show': false, 'content': 'public/app/features/service/partials/service_info.html' },
       { 'id': 2, 'title': '报警检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_alert_table.html' },
       { 'id': 3, 'title': '异常检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_anomaly_table.html' },
+      { 'id': 4, 'title': '系统状态', 'active': false, 'show': false,  'content': 'public/app/features/host/partials/host_system_status.html' },
     ];
-    this.needNameTabs = [1];
+    this.needNameTabs = [1, 4];
 
     this.topologyGraphParams = {
       blockSize: 36,
@@ -93,6 +94,11 @@ export class ServiceTopologyCtrl {
       } else {
         this.switchTab(this.currentTab);
       }
+
+      (this.serviceList = []) && this.data.forEach(item => {
+        this.serviceList.push(item._private_);
+        this.servicePanel = this.serviceList;
+      });
     });
 
     _.isEmpty(this.serviceList) && this.resourceSrv.getList().then(response => {
@@ -192,6 +198,8 @@ export class ServiceTopologyCtrl {
     );
   }
 
+  getDashboard(item) {}
+
   switchTab(tabId) {
     this.currentTab = tabId;
     this.$location.search({
@@ -215,6 +223,9 @@ export class ServiceTopologyCtrl {
     }
     if (tabId === 3) {
       this.getAnomaly(this.currentService);
+    }
+    if (tabId === 4) {
+      this.getDashboard(this.currentService);
     }
   }
 

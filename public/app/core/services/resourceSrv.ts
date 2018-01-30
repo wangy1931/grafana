@@ -8,9 +8,10 @@ export class ResourceSrv {
   groups: Array<any> = [];
   list: Array<any> = [];
   topology: Array<any> = [];
+  topologyBackup: Array<any> = [];
 
   /** @ngInject */
-  constructor(private $http, private $timeout, private $q, private alertSrv, private backendSrv, private serviceDepSrv) {
+  constructor(private $http, private $timeout, private $q, private alertSrv, private backendSrv, private hostSrv) {
   }
 
   getGroup() {
@@ -46,7 +47,10 @@ export class ResourceSrv {
       this.topology = [];
 
       result.data.forEach(item => {
-        var q = this.serviceDepSrv.readServiceStatus(item.id, item.name).then(response => {
+        item.type = item.azureType;
+        item.group = item.resourceGroup.split('/').pop();
+
+        var q = this.hostSrv.getHostKpiById({ id: item.id }).then(response => {
           this.topology.push({
             parent: 'All',
             name  : item.name,
@@ -65,11 +69,46 @@ export class ResourceSrv {
       });
 
       return this.$q.all(promiseList).then(() => {
+        this.topologyBackup = _.orderBy(this.topology, ['name'], ['asc']);
         this.topology = _.orderBy(this.topology, ['name'], ['asc']);
 
         return this.topology;
       });
     });
+  }
+
+  getGroupTopologyData(params) {
+    return this.backendSrv.alertD({
+      method: 'GET',
+      url   : '/integration/azure/resourceGroups',
+      params: params
+    }).then(response => {
+      this.topology = [];
+
+      response.data.resources && response.data.resources.forEach(item => {
+        item.type = item.azureType;
+        item.group = item.resourceGroup.split('/').pop();
+
+        this.topology.push({
+          parent: response.data.name,
+          name  : item.name,
+          value : _.find(this.topologyBackup, { name: item.name }).value || 'grey',
+          _private_: item
+        });
+      });
+
+      this.topology = _.orderBy(this.topology, ['name'], ['asc']);
+
+      return this.topology;
+    });
+  }
+
+  getGroupData(id) {
+    if (!id) {
+      return this.getTopology();
+    } else {
+      return this.getGroupTopologyData({ id: id });
+    }
   }
 
 }

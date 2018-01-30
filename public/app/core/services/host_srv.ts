@@ -222,6 +222,14 @@ export class HostSrv {
     });
   }
 
+  getHostKpiById({ id }) {
+    return this.backendSrv.alertD({
+      method: "GET",
+      url   : "/service/hostStatus",
+      params: { host: id }
+    });
+  }
+
 }
 
 coreModule.service('hostSrv', HostSrv);

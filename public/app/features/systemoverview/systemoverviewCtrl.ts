@@ -448,23 +448,24 @@ export class SystemOverviewCtrl {
       name: hostname
     };
 
-    return this.hostSrv.getHostKpi({ hostname: hostname }).then(response => {
-      this.hostKpi = response.data;
+    return this.$q.when([]);
+    // this.hostSrv.getHostKpi({ hostname: hostname }).then(response => {
+    //   this.hostKpi = response.data;
 
-      _.each(response.data.itemStatusMap, (itemMap, itemKey) => {
-        var tmp = itemKey.replace('Host', '').replace('Service', '').toLowerCase();
-        tmp = (tmp === 'io') ? 'disk' : tmp;
-        _.extend(this.kpiPanel.rightItemTypes[itemKey], {
-          id: itemKey,
-          // name: itemKey,
-          data: (_.findWhere(this.hostPanels, { host: hostname }) || {})[tmp] || _.statusFormatter(itemMap.healthStatusType),
-          status: itemMap.healthStatusType,
-          metrics: itemMap.metricStatusMap
-        });
-      });
+    //   _.each(response.data.itemStatusMap, (itemMap, itemKey) => {
+    //     var tmp = itemKey.replace('Host', '').replace('Service', '').toLowerCase();
+    //     tmp = (tmp === 'io') ? 'disk' : tmp;
+    //     _.extend(this.kpiPanel.rightItemTypes[itemKey], {
+    //       id: itemKey,
+    //       // name: itemKey,
+    //       data: (_.findWhere(this.hostPanels, { host: hostname }) || {})[tmp] || _.statusFormatter(itemMap.healthStatusType),
+    //       status: itemMap.healthStatusType,
+    //       metrics: itemMap.metricStatusMap
+    //     });
+    //   });
 
-      return response.data;
-    });
+    //   return response.data;
+    // });
   }
 
   selectKpi(kpiItem) {

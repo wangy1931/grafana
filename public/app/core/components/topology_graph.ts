@@ -26,10 +26,10 @@ var template = `
                             ng-keyup="ctrl.searchHost($event)"
                             ng-blur="ctrl.searchHost()" />
                   </li>
-                  <li class="tidy-form-item" ng-hide="ctrl.type === 'service'">
+                  <li class="tidy-form-item">
                       按标签分组
                   </li>
-                  <li class="tidy-form-item" ng-hide="ctrl.type === 'service'">
+                  <li class="tidy-form-item">
                       <button type="button" class="kpi-btn btn btn-default" ng-model="ctrl.group" data-placement="bottom-auto"
                               bs-options="f.value as f.text for f in ctrl.groupOptions" bs-select ng-change="ctrl.getGraph();">
                           请选择<span class="caret"></span>
@@ -45,6 +45,7 @@ var template = `
                       </button>
                   </li>
                   <li class="tidy-form-item pull-right" ng-hide="ctrl.hideClear">
+                      <a ng-if="!ctrl.contextSrv.isViewer" class="btn btn-success btn-cmdb" style="margin-left: 12px;" href="/service_dependency">创建依赖图</a>
                       <button class="btn btn-primary" style="padding: 0.4rem 1rem;" ng-click="ctrl.clearSelected();">清除选中{{ ctrl.types[ctrl.type] }}</button>
                   </li>
               </ul>
@@ -120,8 +121,7 @@ export class TopologyGraphCtrl {
     // default: type === 'host'
     var type = this.$scope.ctrl.type;
     if (type === 'service') {
-      this.resourceSrv.getTopology().then(this.renderGraph.bind(this));
-      // this.serviceDepSrv.getServiceTopologyData().then(this.renderGraph.bind(this));
+      this.resourceSrv.getGroupData(this.group).then(this.renderGraph.bind(this));
     } else {
       this.hostSrv.getHostTopologyData(params).then(this.renderGraph.bind(this));
     }
@@ -184,13 +184,24 @@ export class TopologyGraphCtrl {
   }
 
   getAllTagsKey() {
-    // init, get all tags key for group-options
-    this.hostSrv.getAllTagsKey().then(response => {
-      response.data && response.data.forEach((item, index) => {
-        response.data[index] = { 'text': item, 'value': item }
+    // default: type === 'host'
+    var type = this.$scope.ctrl.type;
+    if (type === 'service') {
+      this.resourceSrv.getGroup().then(result => {
+        result.forEach((item, index) => {
+          result[index] = { 'text': item.name, 'value': item.id }
+        });
+        this.groupOptions = [this.groupOptions[0]].concat(result);
       });
-      this.groupOptions = [this.groupOptions[0]].concat(response.data);
-    });
+    } else {
+      // init, get all tags key for group-options
+      this.hostSrv.getAllTagsKey().then(response => {
+        response.data && response.data.forEach((item, index) => {
+          response.data[index] = { 'text': item, 'value': item }
+        });
+        this.groupOptions = [this.groupOptions[0]].concat(response.data);
+      });
+    }
   }
 
   filterBy() {
