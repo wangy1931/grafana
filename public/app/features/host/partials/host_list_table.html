@@ -1,22 +1,22 @@
 <div class="host-list host-tab-content">
   <div ng-hide="ctrl.hostPanels.length">
-    <em>暂没有任何机器数据</em>
+    <em translate="page_host_none"></em>
     <cw-loading show="!ctrl.hostPanels.length" duration=6000></cw-loading>
   </div>
   <div>
     <table class="table host-panel-table" ng-show="ctrl.hostPanels.length">
       <thead>
         <tr>
-          <th>机器名</th>
-          <th>机器 IP</th>
-          <th>机器在线</th>
-          <th>CPU 使用率</th>
-          <th>内存使用率</th>
-          <th>磁盘使用率</th>
-          <th>开始运行时间</th>
-          <th>探针版本</th>
+          <th translate="i18n_hostname"></th>
+          <th>IP</th>
+          <th translate="page_host_stat"></th>
+          <th translate="page_topn_cpu_usr"></th>
+          <th translate="page_topn_mem_usage"></th>
+          <th translate="page_topn_disk_usage"></th>
+          <th translate="page_host_start"></th>
+          <th translate="page_host_agent_version"></th>
           <th>Commit Id</th>
-          <th>操作</th>
+          <th translate="i18n_operating"></th>
         </tr>
       </thead>
       <tbody>
@@ -34,7 +34,8 @@
           <td>{{ host.commit || '-' }}</td>
           <td>
             <button class="btn btn-small btn-outline-primary" ng-if="!ctrl.contextSrv.isViewer" ng-click="ctrl.deleteHost($event, host.id)">
-              <i class="fa fa-times"></i> 删除
+              <i class="fa fa-times"></i>
+              <span translate="i18n_delete"></span>
             </button>
           </td>
         </tr>

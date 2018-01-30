@@ -42,8 +42,8 @@ export class GuideCtrl {
     $timeout(() => { this.located(); }, 100);
 
     this.steps.push({
-      title: '发现问题',
-      cta: '发现问题',
+      title: 'i18n_guide_step1',
+      cta: 'i18n_guide_step1',
       icon: 'icon-gf icon-gf-check',
       href: '/',
       note: '1) 系统报警<br/>2) 服务KPI<br/>3) 机器KPI',
@@ -54,8 +54,8 @@ export class GuideCtrl {
     });
 
     this.steps.push({
-      title: '故障溯源',
-      cta: '故障溯源',
+      title: 'i18n_guide_step2',
+      cta: 'i18n_guide_step2',
       icon: 'icon-gf icon-gf-apps',
       href: '/rca',
       note: '根据故障问题，寻找根本原因',
@@ -66,8 +66,8 @@ export class GuideCtrl {
     });
 
     this.steps.push({
-      title: '关联分析',
-      cta: '关联分析',
+      title: 'i18n_guide_step3',
+      cta: 'i18n_guide_step3',
       icon: 'iconfont fa-association',
       href: '/association',
       note: '比较高相关性指标',
@@ -78,8 +78,8 @@ export class GuideCtrl {
     });
 
     this.steps.push({
-      title: '日志分析',
-      cta: '日志分析',
+      title: 'i18n_guide_step4',
+      cta: 'i18n_guide_step4',
       icon: 'fa fa-fw fa-file-text-o',
       href: '/logs',
       note: '全文搜索系统日志',
@@ -94,8 +94,8 @@ export class GuideCtrl {
     });
 
     this.steps.push({
-      title: '资源消耗',
-      cta: '资源消耗',
+      title: 'i18n_guide_step5',
+      cta: 'i18n_guide_step5',
       icon: 'iconfont fa-process',
       href: '/topn',
       note: '查看资源消耗情况',

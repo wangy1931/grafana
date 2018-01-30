@@ -30,7 +30,7 @@
         <div class="panel-wrapper">
             <div class="panel-header">
                 <ul>
-                    <li><h4>机器名：{{ ctrl.kpiPanel.rightPanelHead.name }}</h4></li>
+                    <li><h4> <span translate="i18n_hostname"></span>：{{ ctrl.kpiPanel.rightPanelHead.name }}</h4></li>
                     <li class="pull-right">
                         <a href="/service_topology?tabId=1&id={{ ctrl.servicePanel.currentService.id }}&name={{ ctrl.servicePanel.currentService.name }}"
                            bs-tooltip="'查看服务详情'"
@@ -52,7 +52,7 @@
                          ng-class="{ active: item.id == ctrl.kpiPanel.rightSelected }"
                          ng-click="ctrl.selectKpi(item.id)">
                         <div class="section-head">
-                            <h6>{{ item.name }}</h6>
+                            <h6 translate>{{ item.name }}</h6>
                         </div>
                         <div class="section-body">
                             <h4 class="status-color status-{{ item.status | lowercase }}">{{ item.data }}</h4>
