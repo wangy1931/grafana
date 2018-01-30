@@ -1,27 +1,31 @@
-<navbar text="日志管理" icon="fa fa-fw fa-search" title-url="/logs/rules"></navbar>
+<navbar icon="fa fa-fw fa-search" title-url="/logs/rules"></navbar>
 
 <div class="page-container" ng-init="ctrl.initList()">
   <div class="page-header">
-    <h1>日志配置管理<a href="/logs/rules/new" class="parse-btn parse-edit" style="margin-left: 10px;"><i class="fa fa-plus-square-o"></i></a></h1>
+    <h1>
+      <span translate="page_log_conf_mange"></span>
+      <a href="/logs/rules/new" class="parse-btn parse-edit" style="margin-left: 10px;"><i class="fa fa-plus-square-o"></i></a>
+    </h1>
   </div>
   <br>
   <table class="table parse-table" ng-if="ctrl.ruleList.length">
     <tr>
-      <th>规则名称</th>
-      <th>服务</th>
-      <th>操作</th>
+      <th translate="page_log_rule_name"></th>
+      <th translate="i18n_menu_service"></th>
+      <th translate="i18n_operating"></th>
     </tr>
     <tr ng-repeat="rule in ctrl.ruleList">
       <td style="width: 40%;"><span>{{rule.ruleName}}</span></td>
       <td style="width: 30%;"><span>{{rule.logServiceName}}</span></td>
       <td style="width: 30%;">
-        <a href="/logs/rule-detail?ruleId={{rule.id}}" class="parse-btn parse-edit">查看</a>
-        <a href="/logs/rules/new?ruleId={{rule.id}}" class="parse-btn parse-edit"><i class="fa fa-pencil"></i>修改</a>
-        <a class="parse-btn parse-delete" ng-click="ctrl.deleteRuleById(rule.id)"><i class="fa fa-times-circle"></i>删除</a>
+        <a href="/logs/rule-detail?ruleId={{rule.id}}" class="parse-btn parse-edit" translate="i18n_detail"></a>
+        <a href="/logs/rules/new?ruleId={{rule.id}}" class="parse-btn parse-edit"><i class="fa fa-pencil"></i> <span translate="i18n_edit"></span></a>
+        <a class="parse-btn parse-delete" ng-click="ctrl.deleteRuleById(rule.id)"><i class="fa fa-times-circle"></i> <span translate="i18n_delete"></span></a>
       </td>
     </tr>
   </table>
   <div ng-if="!ctrl.ruleList.length" class="no-data-box">
-    暂无日志规则,请<a href="/logs/rules/new" class="parse-btn parse-edit" style="margin-left: 10px;">添加日志规则</a>
+    <span translate="page_log_rule_none"></span>
+    <a href="/logs/rules/new" class="parse-btn parse-edit" style="margin-left: 10px;" translate="page_log_rule_add"></a>
   </div>
 </div>
