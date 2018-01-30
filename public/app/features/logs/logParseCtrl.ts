@@ -6,9 +6,18 @@ import coreModule from '../../core/core_module';
 
 export class LogParseCtrl {
   ruleList: Array<any>;
+  rule: any;
+  hostList: Array<any>;
+  checkStatus: Array<any>;
 
   /** @ngInject */
-  constructor(private $scope, private contextSrv, private logParseSrv) {
+  constructor(private $scope,
+    private contextSrv,
+    private logParseSrv,
+    private $location,
+    private $routeParams
+  ) {}
+  initList() {
     this.logParseSrv.getListRule(this.contextSrv.user.orgId, this.contextSrv.user.systemId).then((response) => {
       this.ruleList = response.data;
     });
@@ -35,6 +44,40 @@ export class LogParseCtrl {
           this.$scope.appEvent('alert-danger', ['删除失败', '请稍后重试']);
         });
       }
+    });
+  }
+
+  initDetail() {
+    this.logParseSrv.getHostList().then((result) => {
+      this.hostList = result.data;
+      this.getRuleById(this.$routeParams.ruleId);
+    });
+  }
+
+  getRuleById(id) {
+    this.logParseSrv.getRuleById(id).then((response) => {
+      this.rule = response.data;
+      this.rule.hosts = _.map(this.rule.hosts, (host)=>{
+        return _.find(this.hostList, {id: host});
+      });
+      this.initCheckStatus('1');
+    });
+  }
+
+  initCheckStatus(stat) {
+    this.checkStatus = [];
+    _.each(this.rule.hosts, (host) => {
+      var obj = {
+        hostKey: host.key,
+        directorys: []
+      };
+      _.each(this.rule.paths, (path) => {
+        obj.directorys.push({
+          directory: path,
+          status: stat
+        });
+      });
+      this.checkStatus.push(obj);
     });
   }
 }

@@ -159,7 +159,7 @@ export class AlertStatusCtrl {
         });
       } else {
         var tags = { host: alertItem.status.monitoredEntity };
-        alertItem.definition.alertDetails.tags.forEach(tag => {
+        alertItem.definition.alertDetails.tags && alertItem.definition.alertDetails.tags.forEach(tag => {
           tags[tag.name] = tag.value
         });
 

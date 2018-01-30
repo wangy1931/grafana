@@ -6,14 +6,32 @@
   </div>
   <div class="tree-container" ng-show="ctrl.isOpen">
     <ul class="nav nav-tabs">
-      <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'metrics']"><button ng-click="ctrl.init('metrics')" ng-disabled="ctrl.groupType === 'metrics'">按服务分类</button></li>
-      <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'hosts']"><button ng-click="ctrl.init('hosts')" ng-disabled="ctrl.groupType === 'hosts'">按机器分类</button></li>
+      <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'metrics']"><button ng-click="ctrl.init('metrics')" ng-disabled="ctrl.groupType === 'metrics'" translate="page_association_service"></button></li>
+      <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'hosts']"><button ng-click="ctrl.init('hosts')" ng-disabled="ctrl.groupType === 'hosts'" translate="page_association_host"></button></li>
     </ul>
-    <p class="header">
+    <div class="header">
       <span translate="page_association_metrics"></span>
-      <i class="fa fa-plus-square-o btn-add-metric" ng-click="ctrl.showNewAssociationManual()"></i>
-      <button class="btn btn-outline-primary pull-right" ng-click="ctrl.clearSelected()" translate="page_association_clear"></button>
-    </p>
+      <div class="btn-group dropdown">
+        <a class="dropdown-toggle panel-time-info" data-toggle="dropdown">
+          ({{ctrl.timeRange.from*1000 | date:'MM/dd/yyyy HH:mm'}} - {{ctrl.timeRange.to*1000 | date:'MM/dd/yyyy HH:mm'}})
+          <i class="fa fa-caret-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li ng-repeat="period in ctrl.periods">
+            <a ng-click="ctrl.updateTimeRange(period);ctrl.init();">{{period.o1*1000 | date:'MM/dd/yyyy HH:mm'}} - {{period.o2*1000 | date:'MM/dd/yyyy HH:mm'}}</a>
+          </li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown">
+          <i class="fa fa-bars"></i>
+        </a>
+        <ul class="dropdown-menu pull-right">
+          <li><a tabindex="-1" ng-click="ctrl.showNewAssociationManual()" translate="page_association_metrics_custom"></a></li>
+          <li><a tabindex="-1" ng-click="ctrl.clearSelected();ctrl.refresh();" translate="page_association_clear"></a></li>
+        </ul>
+      </div>
+    </div>
     <div class="tree-content" id="tree-content" ng-if="ctrl.groupType === 'metrics' && !ctrl.isLoding && ctrl.isAssociation">
       <ul class="tree_ul accordion" id="accordion2">
         <li class="tree_li" ng-repeat="(service, metrics) in ctrl.correlationMetrics">
@@ -85,6 +103,7 @@
     <div class="tree-content no-data" ng-if="!ctrl.isLoding && !ctrl.isAssociation">
       <p translate="page_association_Info1"></p>
       <p translate="page_association_Info2"></p>
+      <p translate="page_association_Info3"></p>
       <button class="btn btn-outline-primary" ng-click="ctrl.init()" translate="page_association_refresh"></button>
     </div>
     <cw-loading class="tree-content" ng-if="ctrl.isLoding" show="ctrl.isLoding" duration=6000></cw-loading>

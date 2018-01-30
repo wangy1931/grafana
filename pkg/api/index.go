@@ -165,7 +165,7 @@ func Index(c *middleware.Context) {
 		c.Handle(500, "Failed to get settings", err)
 		return
 	} else {
-		if !data.User.IsGrafanaAdmin && data.User.Deadline.Unix() <= time.Now().Unix() {
+		if data.User.Name != "" && !data.User.IsGrafanaAdmin && data.User.Deadline.Unix() <= time.Now().Unix() {
 			c.Redirect(setting.AppSubUrl + "/login")
 			return
 		}

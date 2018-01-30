@@ -28,14 +28,8 @@ export class ToolbarCtrl {
       class: '',
       icon : 'fa fa-fw fa-book',
       itemname: '运维知识库',
-      href: 'javascript:;',
-      clickHandler: () => {
-        $rootScope.appEvent('show-modal', {
-          src: 'public/app/core/components/knowledge_base/knowledge.html',
-          modalClass: 'modal-kb',
-          scope: $scope.$new(),
-        });
-      },
+      href: '/knowledgebase',
+      clickHandler: () => {},
     });
 
     this.toolbarItems[2] = [];
@@ -48,6 +42,20 @@ export class ToolbarCtrl {
         clickHandler: () => {},
       });
     }
+
+    this.toolbarItems[2].push({
+      class: '',
+      icon: 'fa fa-fw fa-info-circle',
+      itemname: '使用指南',
+      href: 'javascript:;',
+      clickHandler: () => {
+        $rootScope.appEvent('show-modal', {
+          src: 'public/app/core/components/toolbar/guide_use.html',
+          modalClass: 'guide_use',
+          scope: $scope.$new(),
+        });
+      }
+    });
 
   }
 

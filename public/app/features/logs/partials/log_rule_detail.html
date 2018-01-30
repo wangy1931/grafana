@@ -1,0 +1,77 @@
+<navbar title="日志管理" icon="fa fa-fw fa-search" title-url="/logs/rules">
+  <ul class="nav">
+      <li class="active"><a>日志规则</a></li>
+  </ul>
+</navbar>
+
+<div class="page-container" ng-init="ctrl.initDetail()">
+  <div class="page-header">
+    <h1>日志规则</h1>
+  </div>
+
+  <form class="gf-form-group">
+    <div class="parse-form-group">
+      <div class="gf-form">
+        <span class="gf-form-label width-10">规则名称:</span>
+        <span>{{ctrl.rule.ruleName}}</span>
+      </div>
+
+      <div class="gf-form">
+        <span class="gf-form-label width-10">服务:</span>
+        <span>{{ctrl.rule.logServiceName}}</span>
+      </div>
+
+      <div class="gf-form">
+        <span class="gf-form-label width-10">日志类型:</span>
+        <span>{{ctrl.rule.logType}}</span>
+      </div>
+    </div>
+
+    <div class="parse-form-group">
+      <ul class="log-check-container" ng-repeat="status in ctrl.checkStatus">
+        <li class="log-host">
+          <i class="fa fa-laptop"></i>
+          <div>机器: {{status.hostKey}}</div>
+        </li>
+        <li class="log-dir log-stat1" ng-repeat="directorys in status.directorys">
+          <i class="fa fa-code"></i>
+          <div>
+            <p>路径{{$index + 1}}: {{directorys.directory}}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="parse-form-group">
+      <div class="gf-form">
+        <span class="gf-form-label width-10">格式: </span>
+        <span ng-if="!ctrl.rule.multiline">单行</span>
+        <span ng-if="ctrl.rule.multiline">多行</span>
+      </div>
+
+      <div class="gf-form">
+        <span class="gf-form-label width-10">日志起始标识:</span>
+        <span ng-if="!ctrl.rule.multiline">无</span>
+        <span ng-if="ctrl.rule.multiline">{{ctrl.rule['multiline.pattern']}}</span>
+      </div>
+    </div>
+
+    <div class="parse-form-group">
+      <span class="gf-form-label width-10">解析器</span>
+      <table class="table parse-table" ng-if="ctrl.rule.patterns.length">
+        <tr>
+          <th>解析器名称</th>
+        </tr>
+        <tr ng-repeat="pattern in ctrl.rule.patterns">
+          <td><span>{{pattern.name}}</span></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="parse-form-group no-border">
+      <a class="btn btn-primary" href="/logs/rules/new?ruleId={{ctrl.rule.id}}">修改</a>
+      <a class="btn btn-primary" href="/logs/rules">返回</a>
+    </div>
+
+  </form>
+</div>

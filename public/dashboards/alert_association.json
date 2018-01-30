@@ -20,7 +20,7 @@
               "aggregator": "avg",
               "metric": "",
               "downsampleAggregator": "avg",
-              "downsampleInterval": "",
+              "downsampleInterval": "15m",
               "tags": { "host": "" }
             }
           ],
@@ -81,7 +81,9 @@
               "fill": false,
               "line": true
             }
-          ]
+          ],
+          "downsample": "15m",
+          "downsamples": ["1m", "15m"]
         }
       ]
     },

@@ -69,6 +69,9 @@ export class LogsCtrl {
       { key: 'NOT', helpInfo: '联合查询' }
     ];
 
+    this.textTitle = [];
+    this.selectedCompare = [];
+
     // cache repsonse data when datasource.query successed
     $scope.$on('data-saved', (event, payload) => {
       var curTabId = $scope.dashboard.rows[0].id;
