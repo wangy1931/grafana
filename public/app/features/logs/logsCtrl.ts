@@ -492,7 +492,7 @@ export class LogsCtrl {
     if (!this.tabsQuery[curTabId]) {
       this.tabsQuery[curTabId] = {
         exception: {
-          name: '日志筛选',
+          name: 'page_logs_filter_message',
           values: [{
             text: 'ERROR',
             checked: false,
@@ -504,19 +504,19 @@ export class LogsCtrl {
           title: 'message'
         },
         host: {
-          name: '机器',
+          name: 'page_logs_filter_host',
           values: [],
           select: false,
           title: 'host'
         },
         service: {
-          name: '服务',
+          name: 'page_logs_filter_service',
           values: [],
           select: false,
           title: 'type'
         },
         fields: {
-          name: 'field筛选',
+          name: 'page_logs_filter_field',
           values: [],
           select: false
         }
@@ -548,7 +548,7 @@ export class LogsCtrl {
   }
 
   getExtendText(query) {
-    if (query.name === 'field筛选') {
+    if (query.title === 'message') {
       return '';
     }
     var extend_query = '';
