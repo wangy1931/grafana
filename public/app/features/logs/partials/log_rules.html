@@ -19,8 +19,8 @@
       <td style="width: 30%;"><span>{{rule.logServiceName}}</span></td>
       <td style="width: 30%;">
         <a href="/logs/rule-detail?ruleId={{rule.id}}" class="parse-btn parse-edit" translate="i18n_detail"></a>
-        <a href="/logs/rules/new?ruleId={{rule.id}}" class="parse-btn parse-edit"><i class="fa fa-pencil"></i> <span translate="i18n_edit"></span></a>
-        <a class="parse-btn parse-delete" ng-click="ctrl.deleteRuleById(rule.id)"><i class="fa fa-times-circle"></i> <span translate="i18n_delete"></span></a>
+        <a href="/logs/rules/new?ruleId={{rule.id}}" class="parse-btn parse-edit"><i class="fa fa-pencil"></i> <em translate="i18n_edit"></em></a>
+        <a class="parse-btn parse-delete" ng-click="ctrl.deleteRuleById(rule.id)"><i class="fa fa-times-circle"></i> <em translate="i18n_delete"></em></a>
       </td>
     </tr>
   </table>

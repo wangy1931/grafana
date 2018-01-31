@@ -35,10 +35,13 @@
 
 <div ng-show="ctrl.alertRows.length && ctrl.alertStatusShow">
   <p>
-    <span style="font-size: 12px">（实时）</span>
-    <span>触发的报警规则总数：{{ ctrl.alertRows.length }}</span>
-    <span>严重报警数：{{ ctrl.alertCriticalCount }}</span>
-    <span>警告报警数：{{ ctrl.alertWarningCount }}</span>
+    (<span style="font-size: 12px" translate="page_alert_real_time"></span>)
+    <span translate="page_alert_total"></span>
+    <span>: {{ ctrl.alertRows.length }} &nbsp;&nbsp;</span>
+    <span translate="page_alert_critical"></span>
+    <span>: {{ ctrl.alertCriticalCount }} &nbsp;&nbsp;</span>
+    <span translate="page_alert_warning"></span>
+    <span>: {{ ctrl.alertWarningCount }}</span>
   </p>
   <div class="">
     <table class="grafana-options-table table-block">
@@ -78,7 +81,7 @@
           <td>{{ _.transformMillionTime(alert.status.levelChangedTime) }}</td>
           <td>{{ _.timeFrom(alert.status.levelChangedTime, alert.status.snoozeMinutes, 'm') }}</td>
           <td>
-              <button class="btn btn-outline-primary btn-small" ng-click="ctrl.associateAnalysis(alert.status.monitoredEntity, alert.metric, alert.status.levelChangedTime, alert.definition, alert.type)" translate="page_alert_diagnostic_analysis">诊断分析</button>
+              <button class="btn btn-outline-primary btn-small" ng-click="ctrl.associateAnalysis(alert.status.monitoredEntity, alert.metric, alert.status.levelChangedTime, alert.definition, alert.type)" translate="page_alert_diagnostic_analysis"></button>
               <button class="btn btn-outline-primary btn-small" ng-click="ctrl.handleSnooze(alert)" translate="page_alert_delay"></button>
               <button class="btn btn-outline-primary btn-small" ng-click="ctrl.handleAlert(alert)" translate="page_alert_handle"></button>
           </td>
