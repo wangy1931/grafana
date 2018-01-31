@@ -61,7 +61,7 @@
     </div>
 
     <tabset class="anomaly-container" ng-if="summary.numAnomalyMetrics">
-      <tab heading="聚合分析">
+      <tab heading="{{tab0}}">
         <div>
           <div class="accordion cluster-list" id="accordion2">
             <div class="accordion-group cluster-item" ng-repeat="cluster in metricHostClusters | orderBy: 'health'" ng-if="cluster.elements.length" ng-class="{true: 'anomaly-danger'}[cluster.counter.unhealth >= 1/4*cluster.elements.length]">
@@ -101,7 +101,7 @@
 
         <div class="clearfix"></div>
       </tab>
-      <tab heading="暂缓报警">
+      <tab heading="{{tab1}}">
         <div>
           <h3 translate="page_anomaly_suspended"></h3>
           <p>共有{{excludeMetricsData.length}}个指标不参与健康值计算
