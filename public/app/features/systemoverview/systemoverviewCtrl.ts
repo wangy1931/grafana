@@ -165,14 +165,14 @@ export class SystemOverviewCtrl {
   getAlertStatus() {
     this.alertPanel.status = [
       { health: HEALTH_TYPE.GREEN.TEXT, text: '系统正常', count: 0, hide: true },
+      { health: HEALTH_TYPE.RED.TEXT, text: '严重: ', count: 0 },
       { health: HEALTH_TYPE.YELLOW.TEXT, text: '警告: ', count: 0 },
-      { health: HEALTH_TYPE.RED.TEXT, text: '严重: ', count: 0 }
     ];
 
     this.alertMgrSrv.loadTriggeredAlerts().then(response => {
       if (response.data.length) {
         for (var i = 0; i < response.data.length; i++) {
-          response.data[i].status.level === "CRITICAL" ? this.alertPanel.status[2].count++ : this.alertPanel.status[1].count++;
+          response.data[i].status.level === "CRITICAL" ? this.alertPanel.status[1].count++ : this.alertPanel.status[2].count++;
         }
       } else {
         this.alertPanel.status[0].text = '';

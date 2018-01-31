@@ -445,3 +445,11 @@ input, select, .input, .select {
     padding: 20px;
   }
 }
+.tight-form-item {
+  border: none !important;
+}
+.navbar-inner {
+  .navbar-brand-btn img {
+    width: $side-menu-width - 2rem;
+  }
+}

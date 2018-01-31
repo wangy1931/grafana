@@ -45,7 +45,7 @@ var template = `
                       </button>
                   </li>
                   <li class="tidy-form-item pull-right" ng-hide="ctrl.hideClear">
-                      <a ng-if="!ctrl.contextSrv.isViewer" class="btn btn-success btn-cmdb" style="margin-left: 12px;" href="/service_dependency">创建依赖图</a>
+                      <a ng-if="!ctrl.contextSrv.isViewer" class="btn btn-success" style="margin-left: 12px; padding: 0.4rem 1rem;" href="/service_dependency">创建依赖图</a>
                       <button class="btn btn-primary" style="padding: 0.4rem 1rem;" ng-click="ctrl.clearSelected();">清除选中{{ ctrl.types[ctrl.type] }}</button>
                   </li>
               </ul>

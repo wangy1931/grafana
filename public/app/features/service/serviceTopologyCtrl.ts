@@ -12,6 +12,15 @@ const HEALTH_TYPE = {
   GREY: { TEXT: 'grey', COLOR: '#DBE1EA' }
 };
 
+const Map = {
+  'Microsoft.Web/sites': 'webfu-wu',
+  'Microsoft.Web/serverFarms': 'webfu-wu',
+  'Microsoft.Sql/servers': 'shu-ju-ku',
+  'Microsoft.Sql/servers/databases': 'shu-ju-ku',
+  'Microsoft.Cache/Redis': 'redis',
+  'Microsoft.Storage/storageAccounts': 'cun-chu'
+};
+
 export class ServiceTopologyCtrl {
   data: any;  // don't modify this variable
   tabs: Array<any>;
@@ -113,9 +122,15 @@ export class ServiceTopologyCtrl {
     if (curItem.name) {
       window.d3.select(`#${curItem.__id}`).classed('selected', true);
 
-      this.needNameTabs.forEach(item => {
-        _.extend(this.tabs[item], { show: true, disabled: false });
-      });
+      var type = curItem.type || curItem._private_.azureType;
+      if (Map[type]) {
+        this.needNameTabs.forEach(item => {
+          _.extend(this.tabs[item], { show: true, disabled: false });
+        });
+      } else {
+        _.extend(this.tabs[1], { show: true, disabled: false });
+        _.extend(this.tabs[4], { show: false, disabled: true });
+      }
 
       this.switchTab(this.currentTab);
       this.getInfo();
@@ -198,7 +213,22 @@ export class ServiceTopologyCtrl {
     );
   }
 
-  getDashboard(item) {}
+  getDashboard(item) {
+    var type = item.type || item._private_.azureType;
+    if (type) {
+      // 检测的到 dashboard name
+      var dashboardName = Map[type];
+      this.backendSrv.get(`/api/dashboards/db/${dashboardName}`).then(dashboard => {
+        // store & init dashboard
+        if (!this.dashboard) {
+          this.dashboard = dashboard;
+          this.$scope.initDashboard(dashboard, this.$scope);
+        } else {
+          this.$scope.setupDashboard(dashboard);
+        }
+      });
+    }
+  }
 
   switchTab(tabId) {
     this.currentTab = tabId;

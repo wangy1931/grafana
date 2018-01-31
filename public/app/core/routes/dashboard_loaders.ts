@@ -1,4 +1,6 @@
 import coreModule from 'app/core/core_module';
+import {impressions} from 'app/features/dashboard/impression_store';
+import _ from 'lodash';
 
 declare var window: any;
 
@@ -12,11 +14,32 @@ export class LoadDashboardCtrl {
       backendSrv.get('/api/dashboards/home').then(homeDash => {
         if (homeDash.redirectUri) {
           $location.path('dashboard/' + homeDash.redirectUri);
-        } else {
+        }
+
+        // auto link to recent dashboard, otherwise to the first dash.
+        var dashIds = _.take(impressions.getDashboardOpened(), 1);
+        var promise = this.backendSrv.search({dashboardIds: dashIds, limit: 1}).then(result => {
+          return result[0].uri;
+        });
+        promise.then((uri) => {
+          if (uri) {
+            $location.path('dashboard/' + uri);
+          } else {
+            this.backendSrv.search({limit: 1, query: ''}).then(result => {
+              if (result[0].uri) {
+                $location.path('dashboard/' + result[0].uri)
+              } else {
+                var meta = homeDash.meta;
+                meta.canSave = meta.canShare = meta.canStar = false;
+                $scope.initDashboard(homeDash, $scope);
+              }
+            });
+          }
+        }, err => {
           var meta = homeDash.meta;
           meta.canSave = meta.canShare = meta.canStar = false;
           $scope.initDashboard(homeDash, $scope);
-        }
+        });
       });
       return;
     }
