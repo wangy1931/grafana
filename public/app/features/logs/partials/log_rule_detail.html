@@ -1,28 +1,28 @@
-<navbar title="日志管理" icon="fa fa-fw fa-search" title-url="/logs/rules">
+<navbar icon="fa fa-fw fa-search" title-url="/logs/rules">
   <ul class="nav">
-      <li class="active"><a>日志规则</a></li>
+      <li class="active"><a translate="page_logs_rules"></a></li>
   </ul>
 </navbar>
 
 <div class="page-container" ng-init="ctrl.initDetail()">
   <div class="page-header">
-    <h1>日志规则</h1>
+    <h1 translate="page_logs_rules"></h1>
   </div>
 
   <form class="gf-form-group">
     <div class="parse-form-group">
       <div class="gf-form">
-        <span class="gf-form-label width-10">规则名称:</span>
+        <span class="gf-form-label width-10" translate="page_log_rule_name"></span>
         <span>{{ctrl.rule.ruleName}}</span>
       </div>
 
       <div class="gf-form">
-        <span class="gf-form-label width-10">服务:</span>
+        <span class="gf-form-label width-10" translate="i18n_menu_service"></span>
         <span>{{ctrl.rule.logServiceName}}</span>
       </div>
 
       <div class="gf-form">
-        <span class="gf-form-label width-10">日志类型:</span>
+        <span class="gf-form-label width-10" translate="page_alert_log_type"></span>
         <span>{{ctrl.rule.logType}}</span>
       </div>
     </div>
@@ -31,12 +31,12 @@
       <ul class="log-check-container" ng-repeat="status in ctrl.checkStatus">
         <li class="log-host">
           <i class="fa fa-laptop"></i>
-          <div>机器: {{status.hostKey}}</div>
+          <div> <span translate="i18n_host"></span>: {{status.hostKey}}</div>
         </li>
         <li class="log-dir log-stat1" ng-repeat="directorys in status.directorys">
           <i class="fa fa-code"></i>
           <div>
-            <p>路径{{$index + 1}}: {{directorys.directory}}</p>
+            <p> <span translate="page_logs_path"></span>{{$index + 1}}: {{directorys.directory}}</p>
           </div>
         </li>
       </ul>
@@ -44,23 +44,23 @@
 
     <div class="parse-form-group">
       <div class="gf-form">
-        <span class="gf-form-label width-10">格式: </span>
-        <span ng-if="!ctrl.rule.multiline">单行</span>
-        <span ng-if="ctrl.rule.multiline">多行</span>
+        <span class="gf-form-label width-10" translate="page_logs_pattern"></span>
+        <span ng-if="!ctrl.rule.multiline" translate="page_logs_singleline"></span>
+        <span ng-if="ctrl.rule.multiline" translate="page_logs_multiline"></span>
       </div>
 
       <div class="gf-form">
-        <span class="gf-form-label width-10">日志起始标识:</span>
-        <span ng-if="!ctrl.rule.multiline">无</span>
+        <span class="gf-form-label width-10" translate="page_logs_start"></span>
+        <span ng-if="!ctrl.rule.multiline" translate="page_logs_start_none"></span>
         <span ng-if="ctrl.rule.multiline">{{ctrl.rule['multiline.pattern']}}</span>
       </div>
     </div>
 
     <div class="parse-form-group">
-      <span class="gf-form-label width-10">解析器</span>
+      <span class="gf-form-label width-10" translate="page_logs_parser"></span>
       <table class="table parse-table" ng-if="ctrl.rule.patterns.length">
         <tr>
-          <th>解析器名称</th>
+          <th translate="page_logs_parser_name"></th>
         </tr>
         <tr ng-repeat="pattern in ctrl.rule.patterns">
           <td><span>{{pattern.name}}</span></td>
@@ -69,8 +69,8 @@
     </div>
 
     <div class="parse-form-group no-border">
-      <a class="btn btn-primary" href="/logs/rules/new?ruleId={{ctrl.rule.id}}">修改</a>
-      <a class="btn btn-primary" href="/logs/rules">返回</a>
+      <a class="btn btn-primary" href="/logs/rules/new?ruleId={{ctrl.rule.id}}" translate="i18n_edit"></a>
+      <a class="btn btn-primary" href="/logs/rules" translate="i18n_back"></a>
     </div>
 
   </form>
