@@ -39,7 +39,7 @@ export class LogsCtrl {
   /** @ngInject */
   constructor(
     private $scope, private $rootScope, private $modal, private $q, private $location, private $controller, private logParseSrv,
-    private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv, private alertSrv
+    private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv, private alertSrv, private $translate
   ) {
     this.tabs = [
       {
@@ -335,7 +335,10 @@ export class LogsCtrl {
       "\\$SIZE": this.size,
       "\\$QUERY": this.query + this.getExtendQuery(row.id),
       "\\$TIMESHIFT": this.timeShift,
-      "\\$LOGFILTER": this.logFilter
+      "\\$LOGFILTER": this.logFilter,
+      "\\$TABLOG": this.$translate.i18n.page_logs_tab_log,
+      "\\$TABCLUSTER": this.$translate.i18n.page_logs_tab_cluster,
+      "\\$TABCOMPARE": this.$translate.i18n.page_logs_tab_contrast,
     });
 
     // 是否显示添加 rca 反馈: 目前任何条件都显示
