@@ -1,0 +1,45 @@
+<navbar icon="fa fa-fw fa-cloud-download" title="安装指南" title-url="/setting/agent">
+  <ul class="nav">
+      <li><a href="/setting/agent">安装探针</a></li>
+      <li><a href="/setting/service">安装服务</a></li>
+      <li><a href="/setting/log">日志收集配置</a></li>
+      <li><a href="/setting/proxy">内网代理设置</a></li>
+      <li class="active"><a href="/setting/problems">常见问题</a></li>
+  </ul>
+</navbar>
+<div class="page-container">
+	<div>
+		<h1>常见问题</h1>
+
+		<ul class="kb-item" ng-repeat="problem in ctrl.problems">
+			<li class="kb-symptom">
+				<div class="kb-header">
+					<div><i style="color:#32b2e1;" class="fa fa-question-circle kb-icon"></i><span>问题描述:</span></div>
+				</div>
+				<ng-quill-editor 
+					class="kb-editor"
+					ng-model="problem.symptom"
+					modules="{toolbar: false}"
+					read-only="true"
+					placeholder=""
+					scrolling-container="hidden"
+					on-editor-created="ctrl.editorCreated(editor, problem.symptom)">
+				</ng-quill-editor>
+			</li>
+			<li class="kb-solution">
+				<div class="kb-header">
+					<div><i style="color:#29ba2d;" class="fa fa-lightbulb-o kb-icon"></i><span>解决方案:</span></div>
+				</div>
+				<ng-quill-editor 
+					class="kb-editor"
+					ng-model="problem.solution"
+					modules="{toolbar: false}"
+					read-only="true"
+					placeholder=""
+					scrolling-container="hidden"
+					on-editor-created="ctrl.editorCreated(editor, problem.solution)">
+				</ng-quill-editor>
+			</li>
+		</ul>
+	</div>
+</div>
