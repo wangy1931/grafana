@@ -453,3 +453,10 @@ input, select, .input, .select {
     width: $side-menu-width - 2rem;
   }
 }
+@media (max-height: 800px) {
+  .navbar-inner {
+    .navbar-brand-btn img {
+      width: 30px;
+    }
+  }
+}

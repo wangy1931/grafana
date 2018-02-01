@@ -13,12 +13,12 @@ const HEALTH_TYPE = {
 };
 
 const Map = {
-  'Microsoft.Web/sites': 'webfu-wu',
-  'Microsoft.Web/serverFarms': 'webfu-wu',
-  'Microsoft.Sql/servers': 'shu-ju-ku',
-  'Microsoft.Sql/servers/databases': 'shu-ju-ku',
+  'Microsoft.Web/sites': 'web',
+  'Microsoft.Web/serverFarms': 'web',
+  'Microsoft.Sql/servers': 'sqlserver',
+  'Microsoft.Sql/servers/databases': 'sqlserver_database',
   'Microsoft.Cache/Redis': 'redis',
-  'Microsoft.Storage/storageAccounts': 'cun-chu'
+  'Microsoft.Storage/storageAccounts': 'storage'
 };
 
 export class ServiceTopologyCtrl {
@@ -130,6 +130,9 @@ export class ServiceTopologyCtrl {
       } else {
         _.extend(this.tabs[1], { show: true, disabled: false });
         _.extend(this.tabs[4], { show: false, disabled: true });
+
+        if (+this.currentTab === 4) { this.currentTab = 0; }
+        this.tabs[0].active = true;
       }
 
       this.switchTab(this.currentTab);
@@ -215,16 +218,22 @@ export class ServiceTopologyCtrl {
 
   getDashboard(item) {
     var type = item.type || item._private_.azureType;
-    if (type) {
+    var dashboardName = Map[type];
+    if (type && dashboardName) {
       // 检测的到 dashboard name
-      var dashboardName = Map[type];
-      this.backendSrv.get(`/api/dashboards/db/${dashboardName}`).then(dashboard => {
+      this.backendSrv.get(`/api/static/${dashboardName}`).then(dashboard => {
         // store & init dashboard
         if (!this.dashboard) {
           this.dashboard = dashboard;
-          this.$scope.initDashboard(dashboard, this.$scope);
+          this.$scope.initDashboard({
+            dashboard: dashboard,
+            meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
+          }, this.$scope);
         } else {
-          this.$scope.setupDashboard(dashboard);
+          this.$scope.setupDashboard({
+            dashboard: dashboard,
+            meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
+          });
         }
       });
     }
