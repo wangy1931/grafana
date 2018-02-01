@@ -232,7 +232,7 @@
     {
       "id": "opentsdb",
       "name": "OpenTSDB",
-      "icon": "iconfont fa-zanwutu",
+      "icon": "iconfont fa-opentsdb",
       "img": "img/service_opentsdb.png",
       "info": "开源监控系统OpenTSDB，用hbase存储所有的时序（无须 采样）来构建一个分布式、可伸缩的时间序列数据库。",
       "deploy": "",
@@ -521,6 +521,27 @@
       "status": -1,
       "template": "docker",
       "collectorName": "dockerd"
+    },{
+      "id": "zabbix",
+      "name": "zabbix",
+      "icon": "iconfont fa-zabbix",
+      "img": "",
+      "info": "zabbix（音同 zæbix）是一个基于WEB界面的提供分布式系统监视以及网络监视功能的企业级的开源解决方案。",
+      "deploy": [
+        "路径: /opt/cloudwiz-agent/agent/collectors/conf/zabbix_bridge.conf",
+        "<p class='code-block'> [base] </p>",
+        "<p class='code-block'> enabled = false </p>",
+        "<p class='code-block'> info = {\"host\": \"&lt;IP&gt;\", \"port\": &lt;PORT&gt;, \"user\": \"&lt;USERNAME&gt;\", \"passwd\": \"&lt;PASSWORD&gt;\", \"db\": \"&lt;ZABBIX_DATABASE&gt;\" } </p>",
+        "<p class='code-block'> database = &lt;mysql/oracle&gt; </p>",
+        "<p class='code-block'> config_path = /opt/cloudwiz-agent/agent/local_config/collectors/zabbix_bridge/zabbix_map.yaml </p>",
+        "说明:",
+        "database: 支持 mysql, oracle 两种模式",
+        "info: 修改info信息, 将zabbix所在的数据库信息填写清楚",
+        "offset: 获取前面多长时间 单位ms"
+      ],
+      "status": -1,
+      "template": "",
+      "collectorName": "zabbix_bridge"
     }
   ]
 }

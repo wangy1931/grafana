@@ -1,10 +1,9 @@
 
 @font-face {font-family: "iconfont";
-  src: url('../fonts/iconfont.eot?t=1511519795011'); /* IE9*/
-  src: url('../fonts/iconfont.eot?t=1511519795011#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('../fonts/iconfont.woff?t=1511519795011') format('woff'),
-  url('iconfont.ttf?t=1511519795011') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1511519795011#iconfont') format('svg'); /* iOS 4.1- */
+  src: url('../fonts/iconfont.eot?t=1517454284805'); /* IE9*/
+  src: url('../fonts/iconfont.eot?t=1517454284805#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../fonts/iconfont.ttf?t=1517454284805') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('../fonts/iconfont.svg?t=1517454284805#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -16,6 +15,8 @@
 }
 
 .fa-macos:before { content: "\e600"; }
+
+.fa-processor:before { content: "\e6a5"; }
 
 .fa-linux:before { content: "\e726"; }
 
@@ -112,3 +113,17 @@
 .fa-status-red:before { content: "\e684"; }
 
 .fa-status-green:before { content: "\e685"; }
+
+.fa-hadoop:before { content: "\e60c"; }
+
+.fa-webfront:before { content: "\e60e"; }
+
+.fa-cmservice:before { content: "\e60f"; }
+
+.fa-alertD:before { content: "\e610"; }
+
+.fa-clustering:before { content: "\e607"; }
+
+.fa-opentsdb:before { content: "\e612"; }
+
+.fa-zabbix:before { content: "\e614"; }
