@@ -6,7 +6,7 @@ import $ from 'jquery';
 import moment from 'moment';
 import 'highlight';
 import {MetricsPanelCtrl} from 'app/plugins/sdk';
-import {transformDataToTable} from './transformers';
+import {transformers, transformDataToTable} from './transformers';
 import {CWTableRenderer} from './renderer';
 import * as columnActions from './columns';
 
@@ -131,6 +131,8 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
           }
         }
       }
+      var columns = transformers[this.panel.transform].getColumns(this.dataRaw);
+      this.panel.fields = columns;
     }
 
     this.render();

@@ -81,7 +81,7 @@ export class LogsCtrl {
       this.saveCurQueryInfo(curTabId);
 
       if (payload.id === 'logSearch') {
-        this.getFiled(payload.data);
+        this.getField();
       }
     });
 
@@ -459,17 +459,15 @@ export class LogsCtrl {
     rcaFeedbackModal.$promise.then(rcaFeedbackModal.show);
   }
 
-  getFiled(filedData) {
+  getField() {
     var panel = this.$scope.dashboard.rows[0].panels[0];
-    var field = filedData ? filedData[0] : {};
-    this.tabsQuery[this.$scope.dashboard.rows[0].id].fields.values = [];
-    _.each(field, (value, key) => {
-      var obj = {text: key, value: key};
-      if (_.find(panel.columns, obj)) {
-        obj['checked'] = true;
+    var fields = panel.fields;
+    _.each(fields, (field) => {
+      if (_.find(panel.columns, field)) {
+        field['checked'] = true;
       }
-      this.tabsQuery[this.$scope.dashboard.rows[0].id].fields.values.push(obj);
     });
+    this.tabsQuery[this.$scope.dashboard.rows[0].id].fields.values = fields;
   }
 
   updateColum (row, field) {
