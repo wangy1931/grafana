@@ -9,9 +9,11 @@ define([
 
     var module = angular.module('grafana.controllers');
 
-    module.controller('AnomalyCtrl', function ($scope, healthSrv, backendSrv, contextSrv, $controller, $rootScope) {
+    module.controller('AnomalyCtrl', function ($scope, healthSrv, backendSrv, contextSrv, $controller, $rootScope, $translate) {
       $scope.init = function () {
         $scope.system = backendSrv.getSystemById(contextSrv.user.systemId);
+        $scope.tab0 = $translate.i18n.page_anomaly_metrics_clustering;
+        $scope.tab1 = $translate.i18n.page_anomaly_snoozed;
         healthSrv.load().then(function (data) {
           $scope.applicationHealth = Math.floor(data.health);
           $scope.summary = data;

@@ -1,20 +1,20 @@
-<navbar icon="fa fa-fw fa-list-alt" title="智能分析" title-url="/report">
+<navbar icon="fa fa-fw fa-list-alt" title-url="/report">
   <ul class="nav">
-    <li><a href="/report">健康报告</a></li>
-    <li class="active"><a href="/report/template">报告设置</a></li>
+    <li><a href="/report" translate="page_report_title"></a></li>
+    <li class="active"><a href="/report/template" translate="page_report_setting"></a></li>
     <!-- <li><a href="/report/edit">报告编辑</a></li> -->
   </ul>
 </navbar>
 
 <div class="page-container" ng-init="ctrl.initTemplate()">
   <div class="page-header">
-    <h2>报告设置</h2>
+    <h2 translate="page_report_setting"></h2>
   </div>
   <div ng-if="!ctrl.reportTemplate.enabled" class="no-data-box">
-      您暂未设置报告，请点击以下按钮进行设置报告内容
-      <p>
-        <button class="btn btn-primary" ng-click="ctrl.reportTemplate.enabled = true">设置报告</button>
-      </p>
+    <p translate="page_report_setting_none"></p>
+    <p>
+      <button class="btn btn-primary" ng-click="ctrl.reportTemplate.enabled = true" translate="page_report_setting"></button>
+    </p>
   </div>
   <div ng-if="ctrl.reportTemplate.enabled">
     <form class="gf-form-group">
@@ -48,9 +48,8 @@
 
       <div class="parse-form-group">
         <div class="gf-form">
-          <span class="gf-form-label width-10">报告模板
-            <tip>请选择您需要定期查看的模板</tip>
-          </span>
+          <span class="gf-form-label width-20" translate="page_report_template"></span>
+          <tip>请选择您需要定期查看的模板</tip>
         </div>
 
         <div class="gf-form template-container">
@@ -59,17 +58,17 @@
             <div class="template-img" ng-class="{true: 'active'}[template.selected]">
               <i class="fa fa-check" ng-if="template.selected"></i>
               <img style="width: 80%; height: 80%;" src="public/img/{{template.img}}" alt="">
-              <p ng-if="template.selected">已选定</p>
-              <p ng-if="!template.selected">选择此模板</p>
+              <p ng-if="template.selected" translate="page_report_selected"></p>
+              <p ng-if="!template.selected" translate="page_report_select"></p>
             </div>
           </div>
         </div>
       </div>
 
       <div class="parse-form-group no-border">
-        <a class="btn btn-success" ng-click="ctrl.saveTemplate()">保存</a>
-        <a class="btn btn-primary" ng-click="ctrl.disableReport()" ng-if="ctrl.enabled">取消订阅</a>
-        <a class="btn btn-inverse" href="/report">取消</a>
+        <a class="btn btn-success" ng-click="ctrl.saveTemplate()" translate="i18n_save"></a>
+        <a class="btn btn-primary" ng-click="ctrl.disableReport()" ng-if="ctrl.enabled" translate="page_report_unsubscribe"></a>
+        <a class="btn btn-inverse" href="/report" translate="i18n_cancel"></a>
       </div>
     </form>
   </div>

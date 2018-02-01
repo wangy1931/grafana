@@ -1,25 +1,27 @@
 
-<navbar icon="fa fa-fw fa-stethoscope" title="智能检测">
+<navbar icon="fa fa-fw fa-stethoscope">
 	<ul class="nav">
-    <li><a href="/anomaly">总览</a></li>
-    <li class="active"><a>历史</a></li>
+    <li><a href="/anomaly" translate="i18n_list"></a></li>
+    <li class="active"><a translate="i18n_history"></a></li>
   </ul>
 </navbar>
 
 <div class="page-container alert-status-page" style="padding-bottom:300px;" ng-init="init();">
     <div class="page-header">
-      <h2>自动异常检测 <span style="font-size: 12px">历史</span></h2>
+      <h2> 
+        <span translate="page_anomaly_title"></span>
+        <span style="font-size: 12px" translate="i18n_history"></span>
+      </h2>
     </div>
 
     <div ng-if="anomalyRows.length === 0">
-      <em>还没有任何历史数据</em>
+      <em translate="page_anomaly_history_none"></em>
     </div>
 
     <div style="overflow: hidden;">
       <div class="grafana-list-item">
         <ul class="tight-form-list">
-          <li class="tight-form-item" style="width: 100px">
-            查询历史
+          <li class="tight-form-item" style="width: 100px" translate="i18n_search_history">
           </li>
           <li>
             <select style="width: 110px" 
@@ -33,16 +35,16 @@
             <input type="text" class="tight-form-input input-large" required placeholder="请输入需要查询内容" ng-model="anomalyKey"/>
           </li>
           <li>
-            <span class="tight-form-btn btn btn-success btn-small"><i class="fa fa-fw fa-search"></i>查询</span>
+            <span class="tight-form-btn btn btn-success btn-small"><i class="fa fa-fw fa-search"></i> <span translate="i18n_search"></span></span>
           </li>
         </ul>
         <div class="clearfix"></div>
       </div>
 
        <div class="grafana-list-item">
-        <span style="width: 200px;"><strong>异常出现时间</strong></span>
-        <span style="width: 100px;"><strong>机器名称</strong></span>
-        <span style="width: 300px;"><strong>指标名称</strong></span>
+        <span style="width: 200px;"><strong translate="page_anomaly_time"></strong></span>
+        <span style="width: 100px;"><strong translate="i18n_hostname"></strong></span>
+        <span style="width: 300px;"><strong translate="i18n_metric_name"></strong></span>
       </div>
       <div class="grafana-list-item" ng-repeat="anomaly in anomalyHistory | filter: anomalyKey" ng-click="getDetail(anomaly);" ng-class="{true: 'active'}[$index === selectedAnomaly]">
         <span style="width: 200px;">{{anomaly.time | date: 'yyyy-MM-dd HH:mm:ss'}}</span>

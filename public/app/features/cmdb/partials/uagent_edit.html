@@ -2,7 +2,7 @@
 
 <div class="page-container">
   <div class="page-header">
-		<h1>{{ctrl.configName}} 配置管理 -- 
+		<h1>{{ctrl.configName}} <span translate="page_agent_conf_mange"></span> -- 
       <span class="dropdown">
         <span class="dropdown-toggle pointer" data-toggle="dropdown">{{ctrl.host.hostname}} <i class="fa fa-caret-down" ng-if="ctrl.hostList.length > 1"></i></span>
         <ul class="dropdown-menu" ng-if="ctrl.hostList.length > 1">
@@ -66,9 +66,9 @@
     <br/>
       
     <div class="gf-form-button-row">
-      <a class="btn btn-primary" ng-click="ctrl.showConfirm()">应用</a>
-      <a class="btn btn-danger" ng-click="ctrl.deleteConfig(ctrl.config.id)">删除</a>
-      <a class="btn btn-outline-primary" href="/cmdb/config?serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}">取消</a>
+      <a class="btn btn-primary" ng-click="ctrl.showConfirm()" translate="i18n_apply"></a>
+      <a class="btn btn-danger" ng-click="ctrl.deleteConfig(ctrl.config.id)" translate="i18n_delete"></a>
+      <a class="btn btn-outline-primary" href="/cmdb/config?serviceName={{ctrl.serviceName}}&hostId={{ctrl.host.id}}" translate="i18n_cancel"></a>
     </div>
   </form>
 

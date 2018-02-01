@@ -54,13 +54,13 @@
                         <i class="{{step.icon}}"></i>
                     </span>
                     <span class="progress-text" ng-href="{{step.href}}" target="{{step.target}}">
-                        {{step.title}}
+                        <span translate>{{step.title}}</span>
                         <info-popover>
                             <div ng-bind-html="step.note"></div>
                         </info-popover>
                     </span>
                 </a>
-                <a class="btn progress-step-cta" ng-href="{{step.href}}" target="{{step.target}}" ng-click="step.jumpTo()">{{step.cta}}</a>
+                <a class="btn progress-step-cta" ng-href="{{step.href}}" target="{{step.target}}" ng-click="step.jumpTo()" translate>{{step.cta}}</a>
             </li>
         </ul>
     </div>

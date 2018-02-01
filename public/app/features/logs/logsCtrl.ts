@@ -39,7 +39,7 @@ export class LogsCtrl {
   /** @ngInject */
   constructor(
     private $scope, private $rootScope, private $modal, private $q, private $location, private $controller, private logParseSrv,
-    private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv, private alertSrv
+    private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv, private alertSrv, private $translate
   ) {
     this.tabs = [
       {
@@ -335,7 +335,10 @@ export class LogsCtrl {
       "\\$SIZE": this.size,
       "\\$QUERY": this.query + this.getExtendQuery(row.id),
       "\\$TIMESHIFT": this.timeShift,
-      "\\$LOGFILTER": this.logFilter
+      "\\$LOGFILTER": this.logFilter,
+      "\\$TABLOG": this.$translate.i18n.page_logs_tab_log,
+      "\\$TABCLUSTER": this.$translate.i18n.page_logs_tab_cluster,
+      "\\$TABCOMPARE": this.$translate.i18n.page_logs_tab_contrast,
     });
 
     // 是否显示添加 rca 反馈: 目前任何条件都显示
@@ -495,7 +498,7 @@ export class LogsCtrl {
     if (!this.tabsQuery[curTabId]) {
       this.tabsQuery[curTabId] = {
         exception: {
-          name: '日志筛选',
+          name: 'page_logs_filter_message',
           values: [{
             text: 'ERROR',
             checked: false,
@@ -507,19 +510,19 @@ export class LogsCtrl {
           title: 'message'
         },
         host: {
-          name: '机器',
+          name: 'page_logs_filter_host',
           values: [],
           select: false,
           title: 'host'
         },
         service: {
-          name: '服务',
+          name: 'page_logs_filter_service',
           values: [],
           select: false,
           title: 'type'
         },
         fields: {
-          name: 'field筛选',
+          name: 'page_logs_filter_field',
           values: [],
           select: false
         }
@@ -551,7 +554,7 @@ export class LogsCtrl {
   }
 
   getExtendText(query) {
-    if (query.name === 'field筛选') {
+    if (query.title === 'message') {
       return '';
     }
     var extend_query = '';

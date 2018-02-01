@@ -1,46 +1,52 @@
 
-<navbar icon="fa fa-fw fa-stethoscope" title="智能检测">
+<navbar icon="fa fa-fw fa-stethoscope">
 	<ul class="nav">
-    <li class="active" ><a>列表</a></li>
-    <li><a href="/anomaly/history">历史</a></li>
+    <li class="active"><a translate="i18n_list"></a></li>
+    <li><a href="/anomaly/history" translate="i18n_history"></a></li>
   </ul>
 </navbar>
 
 <div class="page-container">
   <div class="page-header">
-    <h2>自动异常探测 <span style="font-size: 17px">{{system}}</span></h2>
+    <h2> <span translate="page_anomaly_title"></span> <span style="font-size: 17px">{{system}}</span></h2>
   </div>
   <div class="page" style="max-width: 100%">
     <div class="anomaly-header">
       <div class="system-item">
-        <h3 class="center">数据点检测统计</h3>
+        <h3 class="center" translate="page_anomaly_data_point"></h3>
         <div id="anomaly-point-pie" style="width: 150px; height: 150px; margin:0 auto 20px;"></div>
         <div class="system-item-legend anomaly-item-legend">
             <dl class="small-dl" style="width: 50%;">
-                <dt><span class="system-label system-label-success">正常点数<tip>计算机扫描数据点</tip></span></dt>
+                <dt><span class="system-label system-label-success" translate="page_anomaly_normal_points"></span><tip>计算机扫描数据点</tip></dt>
                 <dd class="system-legend system-legend-success">{{pieData.normalPointNum}}({{pieData.normalPointPer}}%)</dd>
             </dl>
             <dl class="small-dl" style="width: 50%;">
-                <dt><span class="system-label system-label-warning">异常点数<tip>计算机扫描数据点</tip></span></dt>
+                <dt><span class="system-label system-label-warning" translate="page_anomaly_abnormal_points"></span><tip>计算机扫描数据点</tip></dt>
                 <dd class="system-legend system-legend-warning">{{pieData.anomalyPointNum}}({{pieData.anomalyPointPer}}%)</dd>
             </dl>
         </div>
         <div class="clearfix"></div>
       </div>
       <div class="system-item">
-        <h3 class="center">指标检测统计</h3>
+        <h3 class="center" translate="page_anomaly_metrics_stat"></h3>
         <div id="anomaly-pie" style="width: 150px; height: 150px; margin:0 auto 20px;"></div>
         <div class="system-item-legend anomaly-item-legend">
             <dl class="small-dl">
-                <dt><span class="system-label system-label-success">正常指标</span></dt>
+                <dt><span class="system-label system-label-success" translate="page_anomaly_normal_metrics"></span></dt>
                 <dd class="system-legend system-legend-success">{{pieData.normalMetricNum}}({{pieData.normalMetricPer}}%)</dd>
             </dl>
             <dl class="small-dl">
-                <dt><span class="system-label system-label-warning">临时异常<tip>指标临时异常,一般不影响系统性能</tip></span></dt>
+                <dt>
+                  <span class="system-label system-label-warning" translate="page_anomaly_warning_metrics"></span>
+                  <tip>指标临时异常,一般不影响系统性能</tip>
+                </dt>
                 <dd class="system-legend system-legend-warning">{{pieData.criticalMetricNum}}({{pieData.criticalMetricPer}}%)</dd>
             </dl>
             <dl class="small-dl">
-                <dt><span class="system-label system-label-danger">持续异常<tip>指标持续异常,请关注</tip></span></dt>
+                <dt>
+                  <span class="system-label system-label-danger" translate="page_anomaly_critical_metrics"></span>
+                  <tip>指标持续异常,请关注</tip>
+                </dt>
                 <dd class="system-legend system-legend-danger">{{pieData.dangerMetricNum}}({{pieData.dangerMetricPer}}%)</dd>
             </dl>
         </div>
@@ -51,11 +57,11 @@
 
     
     <div ng-if="!summary.numAnomalyMetrics">
-      <em>系统一切正常</em>
+      <em translate="page_anomaly_none"></em>
     </div>
 
     <tabset class="anomaly-container" ng-if="summary.numAnomalyMetrics">
-      <tab heading="聚合分析">
+      <tab heading="{{tab0}}">
         <div>
           <div class="accordion cluster-list" id="accordion2">
             <div class="accordion-group cluster-item" ng-repeat="cluster in metricHostClusters | orderBy: 'health'" ng-if="cluster.elements.length" ng-class="{true: 'anomaly-danger'}[cluster.counter.unhealth >= 1/4*cluster.elements.length]">
@@ -65,11 +71,14 @@
                     <span class="pull-left">
                       <i class="fa btn btn-primary" ng-class="{true: 'fa-minus', false: 'fa-plus'}[$index === selected]"></i>
                       <i class="fa fa-file-text-o"></i>
-                      平均健康值: 
+                      <span translate="page_anomaly_health_value"></span>
                       <em>{{cluster.health}}%</em>
                     </span>
-                    <span ng-if="cluster.counter.unhealth" class="pull-left">持续异常指标:<em class="danger-color">{{cluster.counter.unhealth}}个</em></span>
-                    <a href="/anomaly/{{cluster.index}}" class="btn btn-primary pull-right">查看详情</a>
+                    <span ng-if="cluster.counter.unhealth" class="pull-left">
+                      <span translate="page_anomaly_critical_metric"></span>
+                      <em class="danger-color">{{cluster.counter.unhealth}}</em>
+                    </span>
+                    <a href="/anomaly/{{cluster.index}}" class="btn btn-primary pull-right" translate="page_anomaly_detail"></a>
                     <div class="clearfix"></div>
                   </h4>
                 </a>
@@ -92,24 +101,24 @@
 
         <div class="clearfix"></div>
       </tab>
-      <tab heading="暂缓报警">
+      <tab heading="{{tab1}}">
         <div>
-          <h3>暂缓异常报警指标</h3>
+          <h3 translate="page_anomaly_suspended"></h3>
           <p>共有{{excludeMetricsData.length}}个指标不参与健康值计算
             <tip>剔除噪声值,减少对健康值的影响</tip>
           </p>
           <table class="table" ng-if="excludeMetricsData.length">
             <tr>
-              <th>指标名称</th>
-              <th>主机名</th>
-              <th>健康值</th>
-              <th>修改</th>
+              <th translate="i18n_metric_name"></th>
+              <th translate="page_alert_host"></th>
+              <th translate="page_anomaly_health"></th>
+              <th translate="i18n_edit"></th>
             </tr>
             <tr ng-repeat="anomalyDef in excludeMetricsData | orderBy:'metric'">
               <td>{{_.getMetricName(anomalyDef.metric)}}</td>
               <td>{{anomalyDef.host}}</td>
               <td>{{anomalyDef.health}}</td>
-              <td><a ng-click="include(anomalyDef);" class="btn btn-primary">参与计算</a></td>
+              <td><a ng-click="include(anomalyDef);" class="btn btn-primary" translate="page_anomaly_calculate"></a></td>
             </tr>
           </table>
         </div>

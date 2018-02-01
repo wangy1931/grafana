@@ -1,32 +1,32 @@
-<navbar text="公司" icon="icon-gf icon-gf-users">
+<navbar icon="icon-gf icon-gf-users">
 </navbar>
 
 <div class="page-container" ng-form="playlistEditForm">
 	<div class="page-header">
-		<h1>新增公司</h1>
+		<h1 translate="page_org_new"></h1>
 	</div>
 
-	<p class="playlist-description">每个公司包含其自己的仪表盘,数据源以及配置信息,不同的公司之间不会共享这些信息。 然而用户可能属于或者管理不止一个公司,因此切换公司来查看不同的部署信息经常会被使用。</p>
+	<p class="playlist-description" translate="page_org_info"></p>
 
 	<form>
 		<div class="gf-form-group">
 			<div class="gf-form">
-				<span class="gf-form-label width-10">公司名称</span>
+				<span class="gf-form-label width-10" translate="page_org_name"></span>
 				<input type="text" ng-model="newOrg.name" required class="gf-form-input max-width-21" placeholder="请输入公司名称">
 			</div>
 			<br>
 
-			<h3 style="margin-top: 30px;">子系统</h3>
+			<h3 style="margin-top: 30px;" translate="page_org_system"></h3>
 			<div class="gf-form" ng-repeat="system in newSystems">
-				<span class="gf-form-label width-10">系统名称</span>
+				<span class="gf-form-label width-10" translate="page_org_system_name"></span>
 				<input type="text" ng-model="system.name" required class="gf-form-input max-width-21" placeholder="如:办公自动化系统">
 			</div>
 			<div style="text-align: left; margin-top: 6px;">
-				<a ng-click="addSystem()">+ 增加子系统</a>
+				+ <a ng-click="addSystem()" translate="page_org_system_add"></a>
 			</div>
 			<br>
 			<div class="gf-form-buttons-row">
-				<button type="submit" class="btn btn-success pull-right" ng-click="createOrg()">新增</button>
+				<button type="submit" class="btn btn-success pull-right" ng-click="createOrg()" translate="i18n_create"></button>
 			</div>
 		</div>
 	</form>
