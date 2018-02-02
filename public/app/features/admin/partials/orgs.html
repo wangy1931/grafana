@@ -1,4 +1,4 @@
-<navbar icon="fa fa-fw fa-cogs" title="Admin" title-url="admin">
+<navbar icon="fa fa-fw fa-cogs" title-url="admin">
 	<a href="admin/orgs" class="navbar-page-btn">
 		<i class="icon-gf icon-gf-users"></i>
 		Orgs
@@ -7,18 +7,18 @@
 
 <div class="page-container">
 	<div class="page-header">
-		<h1>公司管理</h1>
+		<h1 translate="page_admin_org"></h1>
 	</div>
 
 	<table class="filter-table form-inline">
 		<thead>
 			<tr>
-				<th>公司ID</th>
-				<th>公司名称</th>
-				<th>数据中心</th>
-				<th>用户类型</th>
-				<th>使用限期</th>
-				<th>操作</th>
+				<th translate="page_admin_org_id"></th>
+				<th translate="page_admin_org_name"></th>
+				<th translate="page_admin_org_datacenter"></th>
+				<th translate="page_admin_org_type"></th>
+				<th translate="page_admin_org_deadline"></th>
+				<th translate="i18n_operating"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -27,7 +27,7 @@
 				<td>{{org.name}}</td>
 				<td>{{org.data_center}}</td>
 				<td>{{org.level}}</td>
-				<td>{{org.deadline}}天</td>
+				<td>{{org.deadline}}Day</td>
 				<td class="text-right">
 					<a href="admin/orgs/edit/{{org.id}}" class="btn btn-inverse btn-small">
 						<i class="fa fa-edit"></i>

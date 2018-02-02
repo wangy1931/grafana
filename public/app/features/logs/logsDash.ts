@@ -97,7 +97,7 @@ var panelMetas = [
           }
         ],
         "tab": 1,
-        "title": "日志查询",
+        "title": "$TABLOG",
         "transform": "json",
         "transparent": false,
         "type": "cwtable"
@@ -180,7 +180,7 @@ var panelMetas = [
             "size": "$SIZE"
           }
         ],
-        "title": "聚合数据",
+        "title": "$TABCLUSTER",
         "transform": "json",
         "transparent": false,
         "type": "cwtable",
@@ -278,7 +278,7 @@ var panelMetas = [
         ],
         "tab": 3,
         "operate": "logCompare",
-        "title": "日志对比",
+        "title": "$TABCOMPARE",
         "transform": "json",
         "type": "cwtable",
         "scopedVars": {

@@ -1,29 +1,29 @@
 <ul class="cmdb-ul">
   <li>
-      <h4>基本信息</h4>
+      <h4 translate="i18n_basic_info"></h4>
       <ul class="cmdb-detail">
           <li><span>ID</span><span>{{detail.id}}</span></li>
-          <li><span>名称</span><span>{{detail.hostname}}</span></li>
-          <li><span>加入时间</span><span>{{detail.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</span></li>
-          <li><span>域</span><span>{{detail.domain}}</span></li>
+          <li><span translate="i18n_hostname"></span><span>{{detail.hostname}}</span></li>
+          <li><span translate="page_topn_create_time"></span><span>{{detail.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</span></li>
+          <li><span translate="page_host_domain"></span><span>{{detail.domain}}</span></li>
           <li><span>FQDN</span><span>{{detail.fqdn}}</span></li>
       </ul>
   </li>
   <li>
-      <h4>硬件配置</h4>
+      <h4 translate="page_host_hardware"></h4>
       <ul class="cmdb-detail">
-          <li><span>生产厂商</span><span>{{detail.systemVendor}}</span></li>
-          <li><span>产品名称</span><span>{{detail.productName}}</span></li>
-          <li><span>产品型号</span><span>{{detail.productVersion}}</span></li>
-          <li><span>序列号</span><span>{{detail.productSerial}}</span></li>
+          <li><span translate="page_host_systemVendor"></span><span>{{detail.systemVendor}}</span></li>
+          <li><span translate="page_host_productName"></span><span>{{detail.productName}}</span></li>
+          <li><span translate="page_host_productVersion"></span><span>{{detail.productVersion}}</span></li>
+          <li><span translate="page_host_productSerial"></span><span>{{detail.productSerial}}</span></li>
           <li><span>UUID</span><span>{{detail.productUuid}}</span></li>
           <li>
-              <span>内存</span><span>{{detail.totalMemory}} <span ng-if="detail.totalMemory!== '暂无信息'">MB</span></span>
+              <span translate="page_host_totalMemory"></span><span>{{detail.totalMemory}} <span ng-if="detail.totalMemory!== '暂无信息'">MB</span></span>
               <table class="table" ng-if="detail.memory">
                   <tr>
-                      <th>生产厂商</th>
-                      <th>产品型号</th>
-                      <th>容量</th>
+                      <th translate="page_host_systemVendor"></th>
+                      <th translate="page_host_productVersion"></th>
+                      <th translate="page_host_size"></th>
                   </tr>
                   <tr ng-repeat="memory in detail.memory">
                       <td>{{memory.vendor}}</td>
@@ -32,13 +32,13 @@
                   </tr>
               </table>
           </li>
-          <li><span>虚拟机</span><span>{{detail.isVirtual}}</span></li>
-          <li><span>架构</span><span>{{detail.architecture}}</span></li>
+          <li><span translate="page_host_virtual_machine"></span><span>{{detail.isVirtual}}</span></li>
+          <li><span translate="page_host_architecture"></span><span>{{detail.architecture}}</span></li>
           <li><span>CPU</span><span ng-if="_.isEmpty(cpuCount)">暂无信息</span>
               <table class="table" ng-if="!_.isEmpty(cpuCount)">
                   <tr>
-                      <th>cpu型号</th>
-                      <th>个数</th>
+                      <th translate="page_host_CPU"></th>
+                      <th translate="page_host_count"></th>
                   </tr>
                   <tr ng-repeat="(cpu, num) in cpuCount">
                       <td>{{cpu}}</td>
@@ -49,14 +49,14 @@
       </ul>
   </li>
   <li ng-if="detail.devices">
-      <h4>存储</h4>
+      <h4 translate="page_host_devices"></h4>
       <ul class="cmdb-detail">
           <li>
               <table class="table">
                   <tr>
-                      <th>生产厂商</th>
-                      <th>产品型号</th>
-                      <th>容量</th>
+                      <th translate="page_host_systemVendor"></th>
+                      <th translate="page_host_productVersion"></th>
+                      <th translate="page_host_size"></th>
                   </tr>
                   <tr ng-repeat="device in detail.devices">
                       <td>{{device.vendor}}</td>
@@ -68,23 +68,23 @@
       </ul>
   </li>
   <li>
-      <h4>操作系统</h4>
+      <h4 translate="i18n_os"></h4>
       <ul class="cmdb-detail">
-          <li><span>名称</span><span>{{detail.osName}}</span></li>
-          <li><span>类型</span><span>{{detail.osFamily}}</span></li>
-          <li><span>版本</span><span>{{detail.osVersion}}</span></li>
+          <li><span translate="i18n_name"></span><span>{{detail.osName}}</span></li>
+          <li><span translate="page_host_osFamily"></span><span>{{detail.osFamily}}</span></li>
+          <li><span translate="page_host_osVersion"></span><span>{{detail.osVersion}}</span></li>
       </ul>
   </li>
   <li ng-if="detail.interfaces">
-      <h4>网络配置</h4>
+      <h4 translate="page_host_interfaces"></h4>
       <ul class="cmdb-detail">
           <li>
               <table class="table">
                   <tr>
-                      <th>名称</th>
-                      <th>IP地址</th>
-                      <th>MAC地址</th>
-                      <th>带宽</th>
+                      <th translate="i18n_name"></th>
+                      <th>IP</th>
+                      <th translate="page_host_mac"></th>
+                      <th translate="page_host_speed"></th>
                   </tr>
                   <tr ng-repeat="interface in detail.interfaces">
                       <td>{{interface.name}}</td>
@@ -97,13 +97,13 @@
       </ul>
   </li>
   <li class="last" ng-if="detail.services">
-      <h4>部署服务<a ng-if="!contextSrv.isViewer" class="btn btn-outline-primary" ng-click="showServices()">添加服务</a></h4>
+      <h4> <span translate="page_host_service"></span> <a ng-if="!contextSrv.isViewer" class="btn btn-outline-primary" ng-click="showServices()" translate="i18n_add"></a></h4>
       <ul class="cmdb-detail">
           <li>
               <table class="table">
                   <tr>
-                      <th>名称</th>
-                      <th>创建时间</th>
+                      <th translate="i18n_name"></th>
+                      <th translate="page_topn_create_time"></th>
                       <th></th>
                   </tr>
                   <tr ng-repeat="service in detail.services">
@@ -112,9 +112,9 @@
                       <td>
                         <!-- <a href="/cmdb/servicelist/servicedetail?id={{service.id}}"> -->
                         <a href="/service_topology?tabId=1&id={{ service.id }}&name={{ service.name }}">
-                            <span class="cmdb-icon-text">详情</span>
+                            <span class="cmdb-icon-text" translate="i18n_detail"></span>
                         </a>
-                        <a ng-click="deleteService(service.relationshipId)"><span>删除</span></a>
+                        <a ng-click="deleteService(service.relationshipId)"><span translate="i18n_delete"></span></a>
                       </td>
                   </tr>
               </table>

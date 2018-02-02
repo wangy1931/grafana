@@ -39,7 +39,7 @@ export class LogsCtrl {
   /** @ngInject */
   constructor(
     private $scope, private $rootScope, private $modal, private $q, private $location, private $controller, private logParseSrv,
-    private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv, private alertSrv
+    private contextSrv, private timeSrv, private datasourceSrv, private backendSrv, private alertMgrSrv, private alertSrv, private $translate
   ) {
     this.tabs = [
       {
@@ -69,6 +69,9 @@ export class LogsCtrl {
       { key: 'NOT', helpInfo: '联合查询' }
     ];
 
+    this.textTitle = [];
+    this.selectedCompare = [];
+
     // cache repsonse data when datasource.query successed
     $scope.$on('data-saved', (event, payload) => {
       var curTabId = $scope.dashboard.rows[0].id;
@@ -78,7 +81,7 @@ export class LogsCtrl {
       this.saveCurQueryInfo(curTabId);
 
       if (payload.id === 'logSearch') {
-        this.getFiled(payload.data);
+        this.getField();
       }
     });
 
@@ -332,7 +335,10 @@ export class LogsCtrl {
       "\\$SIZE": this.size,
       "\\$QUERY": this.query + this.getExtendQuery(row.id),
       "\\$TIMESHIFT": this.timeShift,
-      "\\$LOGFILTER": this.logFilter
+      "\\$LOGFILTER": this.logFilter,
+      "\\$TABLOG": this.$translate.i18n.page_logs_tab_log,
+      "\\$TABCLUSTER": this.$translate.i18n.page_logs_tab_cluster,
+      "\\$TABCOMPARE": this.$translate.i18n.page_logs_tab_contrast,
     });
 
     // 是否显示添加 rca 反馈: 目前任何条件都显示
@@ -456,17 +462,15 @@ export class LogsCtrl {
     rcaFeedbackModal.$promise.then(rcaFeedbackModal.show);
   }
 
-  getFiled(filedData) {
+  getField() {
     var panel = this.$scope.dashboard.rows[0].panels[0];
-    var field = filedData ? filedData[0] : {};
-    this.tabsQuery[this.$scope.dashboard.rows[0].id].fields.values = [];
-    _.each(field, (value, key) => {
-      var obj = {text: key, value: key};
-      if (_.find(panel.columns, obj)) {
-        obj['checked'] = true;
+    var fields = panel.fields;
+    _.each(fields, (field) => {
+      if (_.find(panel.columns, field)) {
+        field['checked'] = true;
       }
-      this.tabsQuery[this.$scope.dashboard.rows[0].id].fields.values.push(obj);
     });
+    this.tabsQuery[this.$scope.dashboard.rows[0].id].fields.values = fields;
   }
 
   updateColum (row, field) {
@@ -492,7 +496,7 @@ export class LogsCtrl {
     if (!this.tabsQuery[curTabId]) {
       this.tabsQuery[curTabId] = {
         exception: {
-          name: '日志筛选',
+          name: 'page_logs_filter_message',
           values: [{
             text: 'ERROR',
             checked: false,
@@ -505,19 +509,19 @@ export class LogsCtrl {
         },
         host: {
           // Feichi: Modify
-          name: '实例',
+          name: 'page_logs_filter_host',
           values: [],
           select: false,
           title: 'host'
         },
         service: {
-          name: '服务',
+          name: 'page_logs_filter_service',
           values: [],
           select: false,
           title: 'type'
         },
         fields: {
-          name: 'field筛选',
+          name: 'page_logs_filter_field',
           values: [],
           select: false
         }
@@ -549,7 +553,7 @@ export class LogsCtrl {
   }
 
   getExtendText(query) {
-    if (query.name === 'field筛选') {
+    if (query.title === 'message') {
       return '';
     }
     var extend_query = '';

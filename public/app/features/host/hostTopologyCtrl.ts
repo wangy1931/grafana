@@ -42,20 +42,21 @@ export class HostTopologyCtrl {
     private $controller,
     private $location,
     private NgTableParams,
-    private alertSrv
+    private alertSrv,
+    private $translate
   ) {
     $scope.ctrl = this;
     $scope.refresh_interval = '30s';
     $scope.refresh_func = this.getProcess.bind(this);
 
     this.tabs = [
-      { 'id': 0, 'title': '机器总览', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_list_table.html' },
-      { 'id': 1, 'title': '系统状态', 'active': false, 'show': false,  'content': 'public/app/features/host/partials/host_system_status.html' },
-      { 'id': 2, 'title': '报警检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_alert_table.html' },
-      { 'id': 3, 'title': '异常检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_anomaly_table.html' },
-      { 'id': 4, 'title': '进程状态', 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_process.html' },
-      { 'id': 5, 'title': '机器信息', 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_info.html' },
-      { 'id': 6, 'title': '资源预测', 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_prediction.html' }
+      { 'id': 0, 'title': $translate.i18n.page_host_tab0, 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_list_table.html' },
+      { 'id': 1, 'title': $translate.i18n.page_host_tab1, 'active': false, 'show': false,  'content': 'public/app/features/host/partials/host_system_status.html' },
+      { 'id': 2, 'title': $translate.i18n.page_host_tab2, 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_alert_table.html' },
+      { 'id': 3, 'title': $translate.i18n.page_host_tab3, 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_anomaly_table.html' },
+      { 'id': 4, 'title': $translate.i18n.page_host_tab4, 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_process.html' },
+      { 'id': 5, 'title': $translate.i18n.page_host_tab5, 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_info.html' },
+      { 'id': 6, 'title': $translate.i18n.page_host_tab6, 'active': false, 'show': false, 'content': 'public/app/features/host/partials/host_prediction.html' }
     ];
     this.needHostnameTabs = [1, 4, 5, 6];
 
@@ -145,15 +146,19 @@ export class HostTopologyCtrl {
   nodeClickHandle(node) {
     this.saveTopologyData();
 
-    // if event is triggered by table-row click, set node.id in node._private_
-    if (node.id) {
-      var elem = _.find(this.data, data => {
-        return data._private_.id === node.id;
-      });
+    this.currentHost = node;
+    this.$scope.$digest();
+  }
+
+  rowClickHandle($event, node) {
+    this.saveTopologyData();
+
+    var elem = _.find(this.data, data => {
+      return data._private_.id === node.id;
+    });
+    // ignore .delete button
+    if (!$($event.target).hasClass('btn')) {
       this.currentHost = elem;
-    } else {
-      this.currentHost = node;
-      this.$scope.$digest();
     }
   }
 
@@ -207,9 +212,9 @@ export class HostTopologyCtrl {
 
     var host = hostObj && hostObj.name;
     var titleMap = {
-      disk: '磁盘占用空间(%)',
-      cpu : 'CPU使用情况(%)',
-      mem : '内存使用情况(%)'
+      disk: this.$translate.i18n.page_host_pre_disk,
+      cpu : this.$translate.i18n.page_host_pre_cpu,
+      mem : this.$translate.i18n.page_host_pre_mem
     };
 
     var prePanels = ["df.bytes.free", "cpu.usr", "proc.meminfo.active"];
@@ -382,7 +387,7 @@ export class HostTopologyCtrl {
   }
 
   saveTopologyData() {
-    this.data = this.hostSrv.topology;
+    _.isEmpty(this.data) && (this.data = this.hostSrv.topology);
     this.hostlist = _.map(this.data, 'name');
   }
 
@@ -402,7 +407,10 @@ export class HostTopologyCtrl {
           params: { 'id': hostId }
         }).then(() => {
           this.alertSrv.set("删除成功", '', "success", 2000);
-          _.remove(this.hostPanels, { id: hostId });
+          _.remove(this.hostSummary, { id: hostId });
+          this.$scope.$broadcast('topology-update', _.filter(this.data, (item) => {
+            return item._private_.id !== hostId;
+          }));
         }, (err) => {
           this.alertSrv.set("删除失败", err.data, "error", 2000);
         });

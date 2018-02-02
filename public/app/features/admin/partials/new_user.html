@@ -1,26 +1,26 @@
 <navbar icon="fa fa-fw fa-cogs" title="Admin" title-url="admin">
 	<a href="admin/users" class="navbar-page-btn">
 		<i class="icon-gf icon-gf-users"></i>
-		用户管理
+		<span translate="i18n_menu_org_users"></span>
 	</a>
 </navbar>
 
 <div class="page-container">
 	<div class="page-header">
-		<h1>创建新用户</h1>
+		<h1 translate="page_admin_users_new"></h1>
 	</div>
 
 	<form name="userForm" class="gf-form-group">
 		<div class="gf-form">
-			<span class="gf-form-label width-10">姓名</span>
+			<span class="gf-form-label width-10" translate="page_admin_users_name"></span>
 			<input type="text" required ng-model="user.name" class="gf-form-input max-width-20" >
 		</div>
 		<div class="gf-form">
-			<span class="gf-form-label width-10">邮箱</span>
+			<span class="gf-form-label width-10" translate="page_admin_users_email"></span>
 			<input type="email" ng-model="user.email" class="gf-form-input max-width-20" >
 		</div>
 		<div class="gf-form">
-			<span class="gf-form-label width-10">账号名称</span>
+			<span class="gf-form-label width-10" translate="page_profile_username"></span>
 			<input type="text" ng-model="user.login" class="gf-form-input max-width-20" >
 		</div>
 		<div class="gf-form">
@@ -29,7 +29,7 @@
 		</div>
 
 		<div class="gf-form-button-row">
-			<button type="submit" class="btn btn-success" ng-click="create()">新建</button>
+			<button type="submit" class="btn btn-success" ng-click="create()" translate="i18n_create"></button>
 		</div>
 	</form>
 </div>

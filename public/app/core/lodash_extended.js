@@ -114,10 +114,10 @@ function ($, moment, kbn) {
       "mysql": "iconfont fa-mysql",
       "spark": "iconfont fa-spark1",
       "storm": "iconfont fa-ApacheStorm",
-      "yarn": "iconfont fa-zanwutu",
+      "yarn": "iconfont fa-yarn",
       "zookeeper": "iconfont fa-zookeeper",
       "tomcat": "iconfont fa-tomcat",
-      "opentsdb": "iconfont fa-zanwutu",
+      "opentsdb": "iconfont fa-opentsdb",
       "mongo3": "iconfont fa-mongo-db1",
       "nginx": "iconfont fa-image-icon_nginx",
       "postgresql": "iconfont fa-postgresql",
@@ -203,6 +203,42 @@ function ($, moment, kbn) {
 
   _.excludeEmail = function(email) {
     return /(163|126|qq|outlook|gmail|yahoo|sina|souhu|hotmail|Foxmail).com(.cn)?$/i.test(email)
+  }
+
+  _.guideMap = function() {
+    return {
+      '_': 'ui_summary',
+      '_alerts': 'alert_and_association/alert_and_association',
+      '_alerts_new': 'alert_and_association/alert_and_association',
+      '_alerts_status': 'alert_and_association/alert_and_association',
+      '_anomaly': 'alert_and_association/annomaly',
+      '_anomaly_0': 'alert_and_association/annomaly',
+      '_anomaly_history': 'alert_and_association/annomaly',
+      '_association': 'zhi-neng-fen-xi/gu-zhang-su-yuan',
+      '_cmdb_config': 'collector',
+      '_cmdb_config_edit': 'collector',
+      '_cmdb_config_metrics': 'ui_summary',
+      '_cmdb_metrics': 'collector',
+      '_cmdb_servicecustom': 'ui_summary',
+      '_dashboardlist': 'ui_dashboard',
+      '_dashboard_db_cloudwiz-backend': 'ui_dashboard/graph',
+      '_host_topology': 'ui_summary',
+      '_logs': 'zhi-neng-fen-xi/ri-zhi-cha-kan',
+      '_logs_rules': 'ui_summary',
+      '_logs_rules_new': 'ui_summary',
+      '_oncallerschedule': 'oncaller',
+      '_oncallers': 'oncaller',
+      '_org': 'guan-li-gong-neng',
+      '_org_new': 'ui_summary',
+      '_org_users': 'ui_summary',
+      '_profile': 'ui_summary',
+      '_rca': 'zhi-neng-fen-xi/gu-zhang-su-yuan',
+      '_report': 'zhi-neng-fen-xi/jian-kang-bao-gao',
+      '_report_template': 'zhi-neng-fen-xi/jian-kang-bao-gao',
+      '_service_topology': 'ui_summary',
+      '_service_dependency': 'ui_summary',
+      '_topn': 'ui_summary'
+    }
   }
 
   return _;

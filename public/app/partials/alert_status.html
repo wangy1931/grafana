@@ -1,7 +1,6 @@
 <div class="grafana-list-item" style="margin-bottom: 40px; min-width: auto; padding: 10px;">
   <ul class="tight-form-list">
-    <li class="tight-form-item">
-      查询历史
+    <li class="tight-form-item" translate="i18n_search_history">
     </li>
     <li>
       <select style="width: 110px" 
@@ -16,7 +15,8 @@
     </li>
     <li>
       <span class="tight-form-btn btn btn-success btn-small" style="margin: 3px 20px;">
-        <i class="fa fa-fw fa-search"></i>查询
+        <i class="fa fa-fw fa-search"></i>
+        <span translate="i18n_search"></span>
       </span>
     </li>
     <!-- Feichi: Modify -->
@@ -30,29 +30,32 @@
 </div>
 
 <div ng-hide="ctrl.alertRows.length || ctrl.alertHistory.length">
-  <em>暂没有任何报警数据</em>
+  <em translate="page_alert_none"></em>
   <cw-loading show="!ctrl.alertRows.length" duration=6000></cw-loading>
 </div>
 
 <div ng-show="ctrl.alertRows.length && ctrl.alertStatusShow">
   <p>
-    <span style="font-size: 12px">（实时）</span>
-    <span>触发的报警规则总数：{{ ctrl.alertRows.length }}</span>
-    <span>严重报警数：{{ ctrl.alertCriticalCount }}</span>
-    <span>警告报警数：{{ ctrl.alertWarningCount }}</span>
+    (<span style="font-size: 12px" translate="page_alert_real_time"></span>)
+    <span translate="page_alert_total"></span>
+    <span>: {{ ctrl.alertRows.length }} &nbsp;&nbsp;</span>
+    <span translate="page_alert_critical"></span>
+    <span>: {{ ctrl.alertCriticalCount }} &nbsp;&nbsp;</span>
+    <span translate="page_alert_warning"></span>
+    <span>: {{ ctrl.alertWarningCount }}</span>
   </p>
   <div class="">
     <table class="grafana-options-table table-block">
       <thead>
-        <th>报警名称</th>
-        <th>报警内容</th>
-        <th>实例名称</th>
-        <th>报警值/阈值</th>
-        <th>当前值</th>
-        <th>报警级别</th>
-        <th>报警时间</th>
-        <th>再次报警时间<tip>如果报警没有解决, 将重复报警</tip></th>
-        <th>操作</th>
+        <th translate="page_alert_name"></th>
+        <th translate="page_alert_content"></th>
+        <th translate="page_alert_host"></th>
+        <th translate="page_alert_value_threshold"></th>
+        <th translate="page_alert_current"></th>
+        <th translate="page_alert_level"></th>
+        <th translate="page_alert_time"></th>
+        <th><span translate="page_alert_again"></span><tip>如果报警没有解决, 将重复报警</tip></th>
+        <th translate="i18n_operating"></th>
       </thead>
       <tbody>
         <tr ng-repeat="alert in ctrl.alertRows | filter: ctrl.alertSearch">
@@ -79,9 +82,9 @@
           <td>{{ _.transformMillionTime(alert.status.levelChangedTime) }}</td>
           <td>{{ _.timeFrom(alert.status.levelChangedTime, alert.status.snoozeMinutes, 'm') }}</td>
           <td>
-              <button class="btn btn-outline-primary btn-small" ng-click="ctrl.associateAnalysis(alert.status.monitoredEntity, alert.metric, alert.status.levelChangedTime, alert.definition, alert.type)">诊断分析</button>
-              <button class="btn btn-outline-primary btn-small" ng-click="ctrl.handleSnooze(alert)">延迟报警</button>
-              <button class="btn btn-outline-primary btn-small" ng-click="ctrl.handleAlert(alert)">处理警告</button>
+              <button class="btn btn-outline-primary btn-small" ng-click="ctrl.associateAnalysis(alert.status.monitoredEntity, alert.metric, alert.status.levelChangedTime, alert.definition, alert.type)" translate="page_alert_diagnostic_analysis"></button>
+              <button class="btn btn-outline-primary btn-small" ng-click="ctrl.handleSnooze(alert)" translate="page_alert_delay"></button>
+              <button class="btn btn-outline-primary btn-small" ng-click="ctrl.handleAlert(alert)" translate="page_alert_handle"></button>
           </td>
         </tr>
       </tbody>
@@ -93,15 +96,15 @@
   <div class="">
     <table class="table">
       <thead>
-        <th>报警名称</th>
-        <th>报警内容</th>
-        <th>实例名称</th>
-        <th>报警值/阈值</th>
-        <th>报警级别</th>
-        <th>报警时间</th>
-        <th>处理人员</th>
-        <th>处理方法</th>
-        <th>操作</th>
+        <th translate="page_alert_name"></th>
+        <th translate="page_alert_content"></th>
+        <th translate="page_alert_host"></th>
+        <th translate="page_alert_value_threshold"></th>
+        <th translate="page_alert_level"></th>
+        <th translate="page_alert_time"></th>
+        <th translate="page_alert_handler"></th>
+        <th translate="page_alert_approach"></th>
+        <th translate="i18n_operating"></th>
       </thead>
       <tbody>
         <tr ng-repeat="alert in ctrl.alertHistory | orderBy:closedTimeInMillis:true | filter: ctrl.alertSearch">
@@ -130,7 +133,8 @@
           <td>
             <button class="btn btn-outline-primary btn-small"
               ng-click="ctrl.associateAnalysis(alert.history.host, alert.metric, alert.history.createdTimeInMillis, alert.definition, alert.type)">
-              <i class="fa fa-signal"></i> 诊断分析
+              <i class="fa fa-signal"></i>
+              <span translate="page_alert_diagnostic_analysis"></span>
             </button>
           </td>
         </tr>

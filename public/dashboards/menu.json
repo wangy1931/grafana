@@ -2,17 +2,17 @@
   "menusTop": [
     {
       "id": 2,
-      "text": "实时监控",
+      "text": "i18n_menu_monitor",
       "icon": "fa fa-fw fa-tachometer",
       "children": [
         {
           "id": 1,
-          "text": "指标",
+          "text": "i18n_menu_dashboardlist",
           "url": "/dashboardlist"
         },
         {
           "id": 2,
-          "text": "日志",
+          "text": "i18n_menu_logs",
           "url": "/logs"
         },
         {
@@ -24,24 +24,24 @@
     },
     {
       "id": 3,
-      "text": "实时报警",
+      "text": "i18n_menu_alert",
       "icon": "fa fa-fw fa-bell",
       "children": [
         {
           "id": 1,
-          "text": "规则报警",
+          "text": "i18n_menu_alert_rule",
           "url": "/alerts/status"
         },
         {
           "id": 2,
-          "text": "智能报警",
+          "text": "i18n_menu_alert_auto",
           "url": "/anomaly"
         }
       ]
     },
     {
       "id": 4,
-      "text": "分析诊断",
+      "text": "i18n_menu_diagnosis",
       "icon": "fa fa-fw fa-bar-chart",
       "children": [
         {
@@ -53,12 +53,12 @@
     },
     {
       "id": 5,
-      "text": "系统配置",
+      "text": "i18n_menu_cmdb",
       "icon": "fa fa-fw fa-cubes",
       "children": [
         {
           "id": 3,
-          "text": "指标管理",
+          "text": "i18n_menu_cmdb_metrics",
           "url": "/cmdb/metrics"
         }
       ]

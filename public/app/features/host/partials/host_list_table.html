@@ -1,30 +1,31 @@
 <div class="host-list host-tab-content">
   <div ng-hide="ctrl.hostPanels.length">
-    <em>暂没有任何机器数据</em>
+    <em translate="page_host_none"></em>
     <cw-loading show="!ctrl.hostPanels.length" duration=6000></cw-loading>
   </div>
   <div>
     <table class="table host-panel-table" ng-show="ctrl.hostPanels.length">
       <thead>
         <tr>
-          <th>实例名</th>
-          <th>状态</th>
-          <th>探针版本</th>
+          <th translate="i18n_hostname"></th>
+          <th translate="page_host_stat">状态</th>
+          <th translate="page_host_agent_version">探针版本</th>
           <th>Commit Id</th>
-          <th>操作</th>
+          <th translate="i18n_operating"></th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="host in ctrl.hostPanels"
             ng-class="{active: host.host==ctrl.currentHost.name}"
-            ng-click="ctrl.nodeClickHandle(host);">
+            ng-click="ctrl.rowClickHandle($event, host);">
           <td>{{ host.host }}</td>
           <td>{{ host.status || '-' }}</td>
           <td>{{ host.version || '-' }}</td>
           <td>{{ host.commit || '-' }}</td>
           <td>
             <button class="btn btn-small btn-outline-primary" ng-if="!ctrl.contextSrv.isViewer" ng-click="ctrl.deleteHost($event, host.id)">
-              <i class="fa fa-times"></i> 删除
+              <i class="fa fa-times"></i>
+              <span translate="i18n_delete"></span>
             </button>
           </td>
         </tr>

@@ -1,6 +1,6 @@
 <div class="service-list service-tab-content">
   <div ng-hide="ctrl.servicePanel.length">
-    <em>暂没有任何服务数据</em>
+    <em translate="page_service_none"></em>
     <cw-loading show="!ctrl.servicePanel.length" duration=6000></cw-loading>
   </div>
 
@@ -16,7 +16,7 @@
         <table class="table table-hover table-striped service-panel-table">
             <tr>
                 <th>ID</th>
-                <th>名称<i class="fa fa-sort"></i></th>
+                <th translate="i18n_servicename"></th>
                 <th>类型</th>
                 <th>资源组</th>
                 <th>位置</th>

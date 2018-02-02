@@ -1,26 +1,26 @@
-<navbar icon="fa fa-fw fa-bell" title="智能检测">
+<navbar icon="fa fa-fw fa-bell">
     <ul class="nav">
-      <li><a href="alerts/status">总览</a></li>
-      <li class="active"><a href="alerts">报警规则</a></li>
-      <li><a href="alerts/new">新建报警规则</a></li>
+      <li><a href="alerts/status" translate="page_alert_status_title"></a></li>
+      <li class="active"><a href="alerts" translate="page_alert_list_title"></a></li>
+      <li><a href="alerts/new" translate="page_alert_new_title"></a></li>
     </ul>
   </navbar>
   
   <div class="page-container" ng-init="ctrl.init()">
     <div class="page-header">
-      <h2>报警规则列表</h2>
+      <h2 translate="page_alert_list_title"></h2>
     </div>
   
     <div class="page">
   
       <div ng-if="ctrl.alertDefList.length === 0">
-        <em>展示没有任何规则</em>
+        <em translate="page_alert_list_none"></em>
       </div>
   
       <table class="grafana-options-table" ng-if="ctrl.alertDefList.length > 0">
         <tr>
-          <td><strong>报警名称</strong></td>
-          <td><strong>描述</strong></td>
+          <td><strong translate="i18n_name"></strong></td>
+          <td><strong translate="i18n_desc"></strong></td>
           <td></td>
           <td></td>
         </tr>
@@ -33,19 +33,19 @@
           </td>
           <td style="width: 1%">
             <a href="alerts/edit/{{alertDef.id}}" class="btn btn-inverse btn-mini">
-              <i class="fa fa-edit"></i> 编辑
+              <i class="fa fa-edit"></i> <span translate="i18n_edit"></span>
             </a>
           </td>
           <td style="width: 1%">
             <a ng-click="ctrl.remove(alertDef.id)" class="btn btn-danger btn-mini">
-              <i class="fa fa-remove"></i> 删除
+              <i class="fa fa-remove"></i> <span translate="i18n_delete"></span>
             </a>
           </td>
         </tr>
       </table>
       <div class="pull-right">
-        <a class="btn btn-success" ng-click="ctrl.importAlerts()">导入</a>
-        <a class="btn btn-success" href="{{ ctrl.exportJson }}" download="alertd.json">导出</a>
+        <a class="btn btn-success" ng-click="ctrl.importAlerts()" translate="i18n_import"></a>
+        <a class="btn btn-success" href="{{ ctrl.exportJson }}" download="alertd.json" translate="i18n_export"></a>
       </div>
     </div>
   </div>

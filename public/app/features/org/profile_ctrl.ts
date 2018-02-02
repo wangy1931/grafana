@@ -9,9 +9,15 @@ export class ProfileCtrl {
   old_theme: any;
   orgs: any;
   userForm: any;
+  languages: any;
+  curLanguage: any;
 
   /** @ngInject **/
-  constructor(private backendSrv, private contextSrv, private $location) {
+  constructor(private backendSrv, private contextSrv, private $location, private $translate) {
+    this.languages = [
+      { text: '中文简体', value: 'zh_CN' },
+      { text: 'English', value: 'en' }
+    ];
     this.getUser();
     this.getUserOrgs();
   }
@@ -43,6 +49,12 @@ export class ProfileCtrl {
       if (this.old_theme !== this.user.theme) {
         window.location.href = config.appSubUrl + this.$location.path();
       }
+    });
+  }
+
+  updateLanguage(lang) {
+    this.$translate.use(lang).then(() => {
+      window.location.href = config.appSubUrl + this.$location.path();
     });
   }
 

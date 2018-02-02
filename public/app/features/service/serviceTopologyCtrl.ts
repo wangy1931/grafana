@@ -47,13 +47,14 @@ export class ServiceTopologyCtrl {
     private $controller,
     private $location,
     private $timeout,
-    private alertSrv
+    private alertSrv,
+    private $translate
   ) {
     $scope.ctrl = this;
 
     this.tabs = [
-      { 'id': 0, 'title': '服务总览', 'active': false, 'show': true,  'content': 'public/app/features/service/partials/service_list_table.html' },
-      { 'id': 1, 'title': '服务信息', 'active': false, 'show': false, 'content': 'public/app/features/service/partials/service_info.html' },
+      { 'id': 0, 'title': $translate.i18n.page_service_tab0, 'active': false, 'show': true,  'content': 'public/app/features/service/partials/service_list_table.html' },
+      { 'id': 1, 'title': $translate.i18n.page_service_tab1, 'active': false, 'show': false, 'content': 'public/app/features/service/partials/service_info.html' },
       { 'id': 2, 'title': '报警检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_alert_table.html' },
       { 'id': 3, 'title': '异常检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_anomaly_table.html' },
       { 'id': 4, 'title': '系统状态', 'active': false, 'show': false,  'content': 'public/app/features/host/partials/host_system_status.html' },
@@ -151,26 +152,20 @@ export class ServiceTopologyCtrl {
   nodeClickHandle(node) {
     this.saveTopologyData();
 
-    // if event is triggered by table-row click, set node.id in node._private_
-    if (node.id) {
-      var elem = _.find(this.data, data => {
-        return data._private_.id === node.id;
-      });
-      this.currentService = elem;
-    } else {
-      this.currentService = node;
-      this.$scope.$digest();
-    }
+    this.currentService = node;
+    this.$scope.$digest();
   }
 
-  rowClickHandle(node) {
+  rowClickHandle($event, node) {
     this.saveTopologyData();
 
-    // event is triggered by table-row click, set node.id in node._private_
     var elem = _.find(this.data, data => {
       return data._private_.id === node.id;
     });
-    this.currentService = elem;
+    // ignore .delete button
+    if (!$($event.target).hasClass('btn')) {
+      this.currentService = elem;
+    }
 
     this.$timeout(() => {
       this.tabs[1].active = true;
@@ -289,7 +284,11 @@ export class ServiceTopologyCtrl {
           params: { 'id': id }
         }).then(() => {
           this.alertSrv.set("删除成功", '', "success", 2000);
-          _.remove(this.servicePanel, { id: id });
+          _.remove(this.serviceList, { id: id });
+          this.data = _.filter(this.data, (item) => {
+            return item._private_.id !== id;
+          });
+          this.$scope.$broadcast('topology-update', this.data);
         }, (err) => {
           this.alertSrv.set("删除失败", err.data, "error", 2000);
         });

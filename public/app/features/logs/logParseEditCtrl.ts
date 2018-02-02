@@ -49,7 +49,7 @@ export class LogParseEditCtrl {
       logType: ''
     }
     this.curStep = 1;
-    this.steps = ['填写基本信息', '填写日志路径', '校验日志', '设置日志解析'];
+    this.steps = ['page_logs_step1', 'page_logs_step2', 'page_logs_step3', 'page_logs_step4'];
 
     this.logStatus = {
       '0': {txt: '校验日志中...', icon: 'fa fa-spinner fa-spin', class: 'log-stat0'},

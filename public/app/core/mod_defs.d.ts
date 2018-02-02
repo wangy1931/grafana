@@ -13,6 +13,9 @@ declare module "app/core/services/all" {
   export default json;
 }
 
-
-
-
+// declare module "app/core/i18n/locale_provider" {
+//   interface $translateProvider {}
+//   interface $translate {
+//     use: Function;
+//   }
+// }
