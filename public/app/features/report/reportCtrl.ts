@@ -5,12 +5,6 @@ import coreModule from 'app/core/core_module';
 import _ from 'lodash';
 import 'ng-quill';
 
-const SECTIONS = [
-  {id: 1, name: '系统总览', img: 'report-summary.png'},
-  {id: 2, name: '告警情况', img: 'report-alert.png'},
-  {id: 3, name: '机器状态', img: 'report-host.png'},
-  {id: 4, name: '服务状态', img: 'report-service.png'}
-]
 const TEMPLATE = {
   "orgId": 0,
   "sysId": 0,
@@ -29,9 +23,17 @@ export class ReportCtrl {
   toolbarOptions: any;
   reportDownloadUrl: any;
   enabled: boolean;
+  sections: Array<any>;
 
   /** @ngInject */
-  constructor (private $scope, private $location, private reportSrv, private contextSrv) {}
+  constructor (private $scope, private $location, private reportSrv, private contextSrv, private $translate) {
+    this.sections = [
+      {id: 1, name: $translate.i18n.page_overview_title, img: 'report-summary.png'},
+      {id: 2, name: $translate.i18n.page_overview_panel_alert_title, img: 'report-alert.png'},
+      {id: 3, name: $translate.i18n.i18n_host, img: 'report-host.png'},
+      {id: 4, name: $translate.i18n.i18n_service, img: 'report-service.png'}
+    ]
+  }
 
   /**
    * get report list
@@ -61,7 +63,7 @@ export class ReportCtrl {
   initTemplate() {
     this.reportSrv.getReportConfig().then((res) => {
       this.reportTemplate = res.data || _.cloneDeep(TEMPLATE);
-      var curSections = _.cloneDeep(SECTIONS);
+      var curSections = _.cloneDeep(this.sections);
       _.find(curSections, {id: 1}).selected = true;
       _.each(this.reportTemplate.sections, (section) => {
         var tmp = _.find(curSections, {id: section.id});

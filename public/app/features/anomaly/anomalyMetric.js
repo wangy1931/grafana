@@ -6,7 +6,7 @@ define([
     'use strict';
 
     var module = angular.module('grafana.controllers');
-    module.controller('AnomalyMetric', function ($scope, healthSrv, $routeParams, $timeout) {
+    module.controller('AnomalyMetric', function ($scope, healthSrv, contextSrv, $routeParams, $timeout, $translate) {
         var clusterId = $routeParams.clusterId;
         var panelMeta = {
           title: '指标健康异常状况',
@@ -196,7 +196,7 @@ define([
           metric = _.getMetricName(metric);
           var alias = metric + ".anomaly{host=" + hostname + "}";
           var panel = panelDef;
-          panel.title = setMetricName(metric,hostname) + "指标异常情况";
+          panel.title = setMetricName(metric,hostname) + $translate.i18n.page_anomaly_status;
           panel.targets[0].metric = metric;
           panel.targets[0].tags.host = hostname;
           panel.targets[1].metric = metric + ".anomaly";
