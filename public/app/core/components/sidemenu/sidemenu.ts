@@ -169,7 +169,7 @@ export class SideMenuCtrl {
         ]
       });
       item.push({
-        text: "i18n_menu_document",
+        text: "i18n_menu_customer",
         icon: "fa fa-fw fa-users",
         url: this.getUrl("/customer"),
       });

@@ -1,24 +1,24 @@
-<navbar icon="icon-gf icon-gf-users" title="公司" title-url="org">
+<navbar icon="icon-gf icon-gf-users" title-url="org">
 </navbar>
 
 <div class="page-container">
 	<div class="page-header">
-		<h1>API Keys(当前org 下的token)</h1>
+		<h1>API Keys</h1>
 	</div>
 
-	<h3 class="page-heading">新增</h3>
+	<h3 class="page-heading" translate="i18n_create"></h3>
 	<form name="addTokenForm" class="gf-form-group">
 		<div class="gf-form-inline">
 			<div class="gf-form max-width-21">
-				<span class="gf-form-label">新增 key</span>
+				<span class="gf-form-label"><span translate="i18n_create"></span> key</span>
 				<input type="text" class="gf-form-input" ng-model='token.name' placeholder="Name"></input>
 			</div>
 			<div class="gf-form">
-				<span class="gf-form-label">角色</span>
+				<span class="gf-form-label" translate="page_org_role"></span>
 				<select class="gf-form-input gf-size-auto" ng-model="token.role" ng-options="r for r in roleTypes"></select>
 			</div>
 			<div class="gf-form">
-				<button class="btn gf-form-btn btn-success" ng-click="addToken()">新增</button>
+				<button class="btn gf-form-btn btn-success" ng-click="addToken()" translate="i18n_create"></button>
 			</div>
 		</div>
 	</form>
@@ -27,7 +27,7 @@
 	<table class="filter-table">
 		<thead>
 			<tr>
-				<th>系统id</th>
+				<th>System id</th>
 				<th>Token</th>
 				<th style="width: 34px;"></th>
 			</tr>
