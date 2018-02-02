@@ -1537,7 +1537,7 @@
       allNoneButtons: false,
       sort: true,
       caretHtml: '<span class="caret"></span>',
-      placeholder: 'Choose among the following...',
+      placeholder: 'Choose',
       allText: 'All',
       noneText: 'None',
       maxLength: 3,
