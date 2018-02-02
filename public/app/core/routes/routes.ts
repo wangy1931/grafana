@@ -373,6 +373,13 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     templateUrl: 'public/app/features/setup/partials/proxy.html',
     reloadOnSearch: false,
   })
+  .when('/setting/problems', {
+    templateUrl: 'public/app/features/setup/partials/problems.html',
+    reloadOnSearch: false,
+    controllerAs: 'ctrl',
+    controller: 'ProblemsCtrl',
+    resolve: loadSetupBundle,
+  })
   .when('/cmdb/hostlist', {
     templateUrl: 'public/app/features/cmdb/partials/host_list.html',
     controller : 'HostListCtrl',

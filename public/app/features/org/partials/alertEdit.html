@@ -1,8 +1,8 @@
-<navbar icon="fa fa-fw fa-bell" title="智能检测">
+<navbar icon="fa fa-fw fa-bell">
   <ul class="nav">
-    <li><a href="alerts/status">总览</a></li>
-    <li><a href="alerts">报警规则</a></li>
-    <li class="active"><a href="alerts/new">新建报警规则</a></li>
+    <li><a href="alerts/status" translate="page_alert_status_title"></a></li>
+    <li><a href="alerts" translate="page_alert_list_title"></a></li>
+    <li class="active"><a href="alerts/new" translate="page_alert_new_title"></a></li>
   </ul>
   <ul class="nav pull-right">
     <li ng-if="dashboard">
@@ -15,8 +15,8 @@
 
 <div class="page-container" ng-init="ctrl.init()">
   <div class="page-header">
-    <h2 ng-show="ctrl.isNew">新建报警规则</h2>
-    <h2 ng-show="!ctrl.isNew">修改报警规则</h2>
+    <h2 ng-show="ctrl.isNew" translate="page_alert_new_title"></h2>
+    <h2 ng-show="!ctrl.isNew" translate="page_alert_edit_title"></h2>
   </div>
 
   <!-- Dashboard -->
@@ -60,21 +60,21 @@
     <fieldset>
       <div class="gf-form-group">
         <div class="gf-form" ng-if="false">
-            <span class="gf-form-label width-7">id</span>
+            <span class="gf-form-label width-11">id</span>
             <div class="gf-form-select-wrapper max-width-23">
                 <input type="text" class="input-xlarge tidy-form-input last"
                 ng-model="ctrl.alertDef.id" placeholder="randomly generated" readonly>
             </div>
         </div>
-        <h3>报警基本信息</h3>
+        <h3 translate="page_alert_basic"></h3>
         <div class="gf-form-inline">
           <div class="gf-form">
-            <span class="gf-form-label width-7">报警名称</span>
+            <span class="gf-form-label width-11" translate="page_alert_name"></span>
             <input type="text" class="input-xlarge tidy-form-input last"
                 ng-model="ctrl.alertDef.name" ng-blur="ctrl.checkName()" placeholder="报警规则名称" required>
           </div>
           <div class="gf-form">
-              <span class="gf-form-label width-7">报警描述</span>
+              <span class="gf-form-label width-11" translate="page_alert_desc"></span>
               <input type="text" class="input-xlarge tidy-form-input last"
                   ng-model="ctrl.alertDef.description" placeholder="报警规则描述信息" required>
           </div>
@@ -85,9 +85,9 @@
     <!-- Part2: 报警内容 -->
     <fieldset>
       <div class="gf-form-group">
-        <h3>报警内容</h3>
+        <h3 translate="page_alert_content"></h3>
         <div class="gf-form">
-          <span class="gf-form-label width-7">报警类型</span>
+          <span class="gf-form-label width-11" translate="page_alert_type"></span>
           <select class="gf-form-select-wrapper gf-form-input width-7"
             ng-model="ctrl.alertTypeSelected" 
             ng-options="item.name for item in ctrl.alertTypeRange"
@@ -99,7 +99,7 @@
         <div ng-show="ctrl.alertTypeSelected.value === 'log'">
           <div class="gf-form-inline">
               <div class="gf-form">
-                  <span class="gf-form-label width-7">日志类型</span>
+                  <span class="gf-form-label width-11" translate="page_alert_log_type"></span>
                   <input type="text" class="gf-form-input width-7"
                       ng-blur="ctrl.refreshPreview()"
                       ng-model='ctrl.logType'
@@ -118,7 +118,7 @@
           </div>
           <div class="gf-form-inline" ng-repeat="logDef in ctrl.logQueries">
               <div class="gf-form">
-                  <span class="gf-form-label width-7">关系查询</span>
+                  <span class="gf-form-label width-11" translate="page_alert_relationship"></span>
                   <select class="gf-form-select-wrapper gf-form-input"
                       ng-model="logDef.condition"
                       ng-change="ctrl.refreshPreview()"
@@ -126,7 +126,7 @@
                   </select>
               </div>
               <div class="gf-form">
-                  <span class="gf-form-label width-7 spec-tip">关键词类型</span>
+                  <span class="gf-form-label width-11 spec-tip" translate="page_alert_keyword_type"></span>
                   <select class="gf-form-select-wrapper gf-form-input"
                       ng-change="ctrl.refreshPreview()"
                       ng-model="logDef.keyType"
@@ -134,7 +134,8 @@
                   </select>
               </div>
               <div class="gf-form">
-                  <span class="gf-form-label width-7 spec-tip">关键词
+                  <span class="gf-form-label width-11 spec-tip">
+                    <span translate="page_logs_key_words"></span>
                     <tip>
                       1. 具体值：MESSAGE: ERROR<br />
                       2. 正则匹配查询：MESSAGE: /^[\w.]+$/<br />
@@ -156,18 +157,20 @@
               </div>
           </div>
           <div class="gf-form">
-              <span class="gf-form-label width-11">预览日志查询条件</span>
+              <span class="gf-form-label width-11" translate="page_alert_preview_conditions"></span>
               <span>{{ ctrl.logQueriesOutput }}</span>
           </div>
           <div class="gf-form-inline">
               <div class="gf-form">
                   <button class="btn btn-inverse gf-form-btn" ng-click="ctrl.addLogQuery()">
-                      <i class="fa fa-plus"></i>&nbsp;关键词
+                      <i class="fa fa-plus"></i>&nbsp;
+                      <span translate="page_logs_key_words"></span>
                   </button>
               </div>
               <div class="gf-form">
                   <button class="btn btn-inverse gf-form-btn" ng-click="ctrl.refreshLogPreview()">
-                      <i class="fa fa-fw fa-search"></i>&nbsp;预览
+                      <i class="fa fa-fw fa-search"></i>&nbsp;
+                      <span translate="i18n_preview"></span>
                   </button>
               </div>
           </div>
@@ -182,7 +185,7 @@
                     </label>
                 </div>
                 <div class="gf-form">
-                    <span class="gf-form-label width-7">指标名称</span>
+                    <span class="gf-form-label width-11" translate="i18n_metric_name"></span>
                     <input type="text" class="gf-form-input width-20"
                           ng-blur="ctrl.refreshPreview()"
                           ng-model='metricDef.metric'
@@ -191,7 +194,10 @@
                           placeholder="例: cpu.usr" />
                 </div>
                 <div class="gf-form">
-                    <span class="gf-form-label width-7">聚合算法 <tip>选择一分钟里面数据展示形式</tip></span>
+                    <span class="gf-form-label width-11">
+                        <span translate="i18n_aggregation"></span>
+                        <tip>选择一分钟里面数据展示形式</tip>
+                    </span>
                     <select class="gf-form-select-wrapper gf-form-input max-width-23"
                         ng-change="ctrl.refreshPreview()"
                         ng-model="metricDef.aggregator"
@@ -217,7 +223,7 @@
                           placeholder="例: a+b" />
                 </div>
                 <div class="gf-form">
-                    <span class="gf-form-label query-keyword">聚合</span>
+                    <span class="gf-form-label query-keyword" translate="i18n_aggregation"></span>
                     <select class="gf-form-select-wrapper gf-form-input max-width-23"
                         ng-change="ctrl.refreshPreview()"
                         ng-model="ctrl.alertDef.alertDetails.clusterwideAggregator"
@@ -227,7 +233,8 @@
             </div>
             <div class="gf-form">
                 <button class="btn btn-inverse gf-form-btn" ng-click="ctrl.addMetricQuery()">
-                    <i class="fa fa-plus"></i>&nbsp;指标
+                    <i class="fa fa-plus"></i>&nbsp;
+                    <span translate="i18n_metric"></span>
                 </button>
             </div>
         </div>
@@ -237,13 +244,13 @@
     <!-- Part3: 报警条件 -->
     <fieldset>
       <div class="gf-form-group" ng-show="ctrl.alertTypeSelected.value === 'metric'">
-        <h3>报警条件</h3>
+        <h3 translate="page_alert_conditions"></h3>
         <div class="gf-form-inline">
           <div class="gf-form">
-              <span class="gf-form-label width-7">紧急条件</span>
+              <span class="gf-form-label width-11" translate="page_alert_conditions_critical"></span>
           </div>
           <div class="gf-form">
-              <span class="gf-form-label query-keyword">当指标值</span>
+              <span class="gf-form-label query-keyword" translate="page_alert_if_value"></span>
           </div>
           <div class="gf-form">
               <select class="gf-form-select-wrapper width-3" style="width: 40px; text-align: center;"
@@ -253,7 +260,7 @@
               </select>
           </div>
           <div class="gf-form">
-              <span class="gf-form-label query-keyword">阈值</span>
+              <span class="gf-form-label query-keyword" translate="i18n_threshold"></span>
           </div>
           <div class="gf-form">
               <input type="number" class="gf-form-input width-11"
@@ -262,28 +269,28 @@
                     placeholder="critical threshold" required ng-readonly="ctrl.expression==='?'"/>
           </div>
           <div class="gf-form">
-              <span class="gf-form-label query-keyword">并且持续时间达</span>
+              <span class="gf-form-label query-keyword" translate="page_alert_and_duration"></span>
           </div>
           <div class="gf-form">
               <input type="number" min="1" class="gf-form-input width-5" style="width: 45px;"
                     ng-model='ctrl.alertDef.alertDetails.crit.durarionMinutes'
                     required />
-              <span class="gf-form-label query-keyword">分钟，则触发紧急报警</span>
+              <span class="gf-form-label query-keyword" translate="page_alert_trigge_critical"></span>
           </div>
         </div>
 
         <div class="gf-form-inline">
           <div class="gf-form">
-              <span class="gf-form-label width-7">警告条件</span>
+              <span class="gf-form-label width-11" translate="page_alert_conditions_warning"></span>
           </div>
           <div class="gf-form">
-              <span class="gf-form-label query-keyword">当指标值</span>
+              <span class="gf-form-label query-keyword" translate="page_alert_if_value"></span>
           </div>
           <div class="gf-form">
               <span class="gf-form-label width-3">{{ ctrl.expression }}</span>
           </div>
           <div class="gf-form">
-              <span class="gf-form-label query-keyword">阈值</span>
+              <span class="gf-form-label query-keyword" translate="i18n_threshold"></span>
           </div>
           <div class="gf-form">
               <input type="number" class="gf-form-input width-11" style="width: 139px"
@@ -292,19 +299,19 @@
                     placeholder="warn threshold" required ng-readonly="ctrl.expression==='?'"/>
           </div>
           <div class="gf-form">
-              <span class="gf-form-label query-keyword">并且持续时间达</span>
+              <span class="gf-form-label query-keyword" translate="page_alert_and_duration"></span>
           </div>
           <div class="gf-form">
               <input type="number" min="1" class="gf-form-input width-5" style="width: 45px;"
                     ng-model='ctrl.alertDef.alertDetails.warn.durarionMinutes' required />
-              <span class="gf-form-label query-keyword">分钟，则触发警告报警</span>
+              <span class="gf-form-label query-keyword" translate="page_alert_trigger_warning"></span>
           </div>
         </div>
 
         <div>
           <div class="gf-form-inline">
             <div class="gf-form">
-                <span class="gf-form-label width-7">标签</span>
+                <span class="gf-form-label width-11" translate="i18n_tag"></span>
             </div>
             <div class="gf-form" ng-repeat="(key, value) in ctrl.target.tags track by $index">
                 <label class="gf-form-label">
@@ -335,7 +342,7 @@
                     </a>
                 </label>
                 <label class="gf-form-label">
-                    <a ng-click="ctrl.addTags()" ng-hide="ctrl.errors.tags" class="">添加标签</a>
+                    <a ng-click="ctrl.addTags()" ng-hide="ctrl.errors.tags" class="" translate="i18n_add_tag"></a>
                     <a ng-click="ctrl.closeAddTagMode()"><i class="fa fa-remove"></i></a>
                 </label>
             </div>
@@ -343,7 +350,7 @@
 
           <div class="gf-form-inline">
             <div class="gf-form">
-                <span class="gf-form-label width-7">Host List</span>
+                <span class="gf-form-label width-11">Host List</span>
                 <input type="text" class="gf-form-input width-20"
                       ng-model="ctrl.alertDef.alertDetails.hosts" placeholder="请输入以','分隔的hosts列表">
             </div>
@@ -357,7 +364,7 @@
 
         <div class="gf-form-inline" ng-if="false">
           <div class="gf-form">
-              <span class="gf-form-label width-7">集群</span>
+              <span class="gf-form-label width-11" translate="i18n_cluster"></span>
               <input type="text" class="input-xlarge tidy-form-input last"
                     ng-model="ctrl.alertDef.alertDetails.cluster" readonly>
           </div>
@@ -374,69 +381,69 @@
       </div>
 
       <div class="gf-form-group" ng-show="ctrl.alertTypeSelected.value === 'log'">
-        <h3>报警条件</h3>
+        <h3 translate="page_alert_conditions"></h3>
         <div class="gf-form-inline">
             <div class="gf-form">
-                <span class="gf-form-label width-7">紧急条件</span>
+                <span class="gf-form-label width-11" translate="page_alert_conditions_critical"></span>
             </div>
             <div class="gf-form">
-                <span class="gf-form-label query-keyword">当日志查询结果在</span>
+                <span class="gf-form-label query-keyword" translate="page_alert_if_count">当日志查询结果</span>
+            </div>
+            <div class="gf-form">
+                <select class="gf-form-select-wrapper width-3" style="width: 40px; text-align: center;"
+                    ng-model="ctrl.expression"
+                    ng-change="ctrl.addThresholdOp()"
+                    ng-options="f for f in ['>', '<', '?']">
+                </select>
+            </div>
+            <div class="gf-form">
+                <input type="number" class="gf-form-input width-11"
+                    ng-model='ctrl.alertDef.alertDetails.crit.threshold' 
+                    ng-blur="ctrl.addThreshold(1)"
+                    placeholder="critical threshold" required ng-readonly="ctrl.expression==='?'"/>
+            </div>
+            <div class="gf-form">
+                <span class="gf-form-label query-keyword" translate="page_alert_within"></span>
             </div>
             <div class="gf-form">
                 <input type="number" min="1" class="gf-form-input width-5" style="width: 45px;"
                         ng-model='ctrl.alertDef.alertDetails.crit.durarionMinutes'
                         required />
-                <span class="gf-form-label query-keyword">分钟内</span>
-            </div>
-            <div class="gf-form">
-                <select class="gf-form-select-wrapper width-3" style="width: 40px; text-align: center;"
-                        ng-model="ctrl.expression"
-                        ng-change="ctrl.addThresholdOp()"
-                        ng-options="f for f in ['>', '<', '?']">
-                </select>
-            </div>
-            <div class="gf-form">
-                <input type="number" class="gf-form-input width-11"
-                        ng-model='ctrl.alertDef.alertDetails.crit.threshold' 
-                        ng-blur="ctrl.addThreshold(1)"
-                        placeholder="critical threshold" required ng-readonly="ctrl.expression==='?'"/>
-            </div>
-            <div class="gf-form">
-                <span class="gf-form-label query-keyword">条，则触发紧急报警</span>
+                <span class="gf-form-label query-keyword" translate="page_alert_trigge_critical_log"></span>
             </div>
         </div>
     
         <div class="gf-form-inline">
             <div class="gf-form">
-                <span class="gf-form-label width-7">警告条件</span>
+                <span class="gf-form-label width-11" translate="page_alert_conditions_warning"></span>
             </div>
             <div class="gf-form">
-                <span class="gf-form-label query-keyword">当日志查询结果在</span>
-            </div>
-            <div class="gf-form">
-                <input type="number" min="1" class="gf-form-input width-5" style="width: 45px;"
-                        ng-model='ctrl.alertDef.alertDetails.warn.durarionMinutes' required />
-                <span class="gf-form-label query-keyword">分钟内</span>
+                <span class="gf-form-label query-keyword" translate="page_alert_if_count"></span>
             </div>
             <div class="gf-form">
                 <span class="gf-form-label width-3">{{ ctrl.expression }}</span>
             </div>
             <div class="gf-form">
                 <input type="number" class="gf-form-input width-11" style="width: 139px"
-                        ng-model='ctrl.alertDef.alertDetails.warn.threshold' 
-                        ng-blur="ctrl.addThreshold(0)"
-                        placeholder="warn threshold" required ng-readonly="ctrl.expression==='?'"/>
+                    ng-model='ctrl.alertDef.alertDetails.warn.threshold' 
+                    ng-blur="ctrl.addThreshold(0)"
+                    placeholder="warn threshold" required ng-readonly="ctrl.expression==='?'"/>
             </div>
             <div class="gf-form">
-                <span class="gf-form-label query-keyword">条，则触发警告报警</span>
+                <span class="gf-form-label query-keyword" translate="page_alert_within"></span>
+            </div>
+            <div class="gf-form">
+                <input type="number" min="1" class="gf-form-input width-5" style="width: 45px;"
+                        ng-model='ctrl.alertDef.alertDetails.warn.durarionMinutes' required />
+                <span class="gf-form-label query-keyword" translate="page_alert_trigger_warning_log"></span>
             </div>
         </div>
       </div>
     </fieldset>
 
     <div class="pull-right" style="margin-top: 35px">
-      <button type="submit" class="btn btn-success" ng-click="ctrl.saveChanges()">保存</button><!-- ng-disabled="!ctrl.checkStatus.checkForm" -->
-      <a class="btn btn-inverse" href="alerts">取消</a>
+      <button type="submit" class="btn btn-success" ng-click="ctrl.saveChanges()" translate="i18n_save"></button><!-- ng-disabled="!ctrl.checkStatus.checkForm" -->
+      <a class="btn btn-inverse" href="alerts" translate="i18n_cancel"></a>
     </div>
 
   </form>

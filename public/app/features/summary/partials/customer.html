@@ -1,18 +1,18 @@
-<navbar text="申请用户" icon="fa fa-fw fa-users">
+<navbar icon="fa fa-fw fa-users">
 
 </navbar>
 <div class="page-container">
-    <h2>申请注册的用户</h2>
+    <h2 translate="i18n_menu_customer"></h2>
     <table class="grafana-options-table form-inline">
         <tbody>
         <tr>
-            <th>姓名</th>
-            <th>公司名称</th>
-            <th>用户邮箱</th>
-            <th>手机号</th>
-            <th>公司规模</th>
-            <th>申请时间</th>
-            <th>状态</th>
+            <th translate="page_profile_name"></th>
+            <th translate="page_admin_org_name"></th>
+            <th translate="page_admin_users_email"></th>
+            <th translate="page_customers_tel"></th>
+            <th translate="page_customers_scale"></th>
+            <th translate="page_customers_create_time"></th>
+            <th translate="i18n_status"></th>
         </tr>
         <tr ng-repeat="customer in customers">
             <td>{{customer.Name}}</td>

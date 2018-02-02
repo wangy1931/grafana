@@ -17,7 +17,7 @@ export class UagentCtrl {
   title: any;
 
   /** @ngInject */
-  constructor(private $scope, private backendSrv, private $location, private contextSrv) {
+  constructor(private $scope, private backendSrv, private $location, private contextSrv, private $translate) {
     this.user = this.contextSrv.user;
     var search = this.$location.search();
     this.serviceName = search.serviceName;
@@ -28,7 +28,7 @@ export class UagentCtrl {
     this.getHosts(hostId);
     this.title = {
       'filebeat': '日志管理',
-      'collector': '探针管理'
+      'collector': $translate.i18n.i18n_menu_cmdb_config
     }
   }
 

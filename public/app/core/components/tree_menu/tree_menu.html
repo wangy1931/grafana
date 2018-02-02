@@ -6,10 +6,11 @@
   </div>
   <div class="tree-container" ng-show="ctrl.isOpen">
     <ul class="nav nav-tabs">
-      <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'metrics']"><button ng-click="ctrl.init('metrics')" ng-disabled="ctrl.groupType === 'metrics'">按服务分类</button></li>
-      <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'hosts']"><button ng-click="ctrl.init('hosts')" ng-disabled="ctrl.groupType === 'hosts'">按机器分类</button></li>
+      <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'metrics']"><button ng-click="ctrl.init('metrics')" ng-disabled="ctrl.groupType === 'metrics'" translate="page_association_service"></button></li>
+      <li ng-class="{true: 'active', false: 'disabled'}[ctrl.groupType === 'hosts']"><button ng-click="ctrl.init('hosts')" ng-disabled="ctrl.groupType === 'hosts'" translate="page_association_host"></button></li>
     </ul>
-    <div class="header">关联指标
+    <div class="header">
+      <span translate="page_association_metrics"></span>
       <div class="btn-group dropdown">
         <a class="dropdown-toggle panel-time-info" data-toggle="dropdown">
           ({{ctrl.timeRange.from*1000 | date:'MM/dd/yyyy HH:mm'}} - {{ctrl.timeRange.to*1000 | date:'MM/dd/yyyy HH:mm'}})
@@ -26,8 +27,8 @@
           <i class="fa fa-bars"></i>
         </a>
         <ul class="dropdown-menu pull-right">
-          <li><a tabindex="-1" ng-click="ctrl.showNewAssociationManual()">自定义关联指标</a></li>
-          <li><a tabindex="-1" ng-click="ctrl.clearSelected();ctrl.refresh();">清除选中</a></li>
+          <li><a tabindex="-1" ng-click="ctrl.showNewAssociationManual()" translate="page_association_metrics_custom"></a></li>
+          <li><a tabindex="-1" ng-click="ctrl.clearSelected();ctrl.refresh();" translate="page_association_clear"></a></li>
         </ul>
       </div>
     </div>
@@ -100,15 +101,15 @@
       </ul>
     </div>
     <div class="tree-content no-data" ng-if="!ctrl.isLoding && !ctrl.isAssociation">
-      <p>该指标可能正在计算关联结果</p>
-      <p>请点击以下按钮进行刷新</p>
-      <p>若需指定当前窗口时间,请点击图表右上角按钮进行关联计算</p>
-      <button class="btn btn-outline-primary" ng-click="ctrl.init()">刷新</button>
+      <p translate="page_association_Info1"></p>
+      <p translate="page_association_Info2"></p>
+      <p translate="page_association_Info3"></p>
+      <button class="btn btn-outline-primary" ng-click="ctrl.init()" translate="page_association_refresh"></button>
     </div>
     <cw-loading class="tree-content" ng-if="ctrl.isLoding" show="ctrl.isLoding" duration=6000></cw-loading>
     <div class="slider-container">
       <div class="sliders" slider></div>
-      <div class="slider-level"><span>低</span><span>相似度</span><span>高 </span></div>
+      <div class="slider-level"><span translate="page_association_low"></span><span translate="page_association_similarity"></span><span translate="page_association_high"></span></div>
     </div>
   </div>
 </div>

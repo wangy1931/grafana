@@ -1,72 +1,72 @@
-<navbar icon="icon-gf icon-gf-users" title="公司" title-url="org">
+<navbar icon="icon-gf icon-gf-users" title-url="org">
 </navbar>
 
 <div class="page-container">
 	<div class="page-header">
-		<h1>公司</h1>
+		<h1 translate="page_org"></h1>
 	</div>
 
-	<h3 class="page-heading">信息</h3>
+	<h3 class="page-heading" translate="page_org_profile"></h3>
 	<form name="orgForm" class="gf-form-group">
 		<div class="gf-form-inline">
 			<div class="gf-form max-width-28">
-				<span class="gf-form-label width-6">公司名称</span>
+				<span class="gf-form-label width-6" translate="page_org_name"></span>
 				<input class="gf-form-input" type="text" required ng-model="org.name">
 			</div>
 			<div class="gf-form">
-				<button type="submit" class="btn gf-form-btn btn-success" ng-click="update()">更新</button>
+				<button type="submit" class="btn gf-form-btn btn-success" ng-click="update()" translate="i18n_update"></button>
 			</div>
 		</div>
 	</form>
 
 	<prefs-control mode="org"></prefs-control>
 
-	<h3 class="page-heading">公司地址</h3>
+	<h3 class="page-heading" translate="page_org_addr"></h3>
 
 	<form name="addressForm" class="gf-form-group">
 		<div class="gf-form-inline">
 			<div class="gf-form max-width-28">
-				<span class="gf-form-label width-7">地址 1</span>
+				<span class="gf-form-label width-7" translate="page_org_addr1"></span>
 				<input class="gf-form-input" type="text" ng-model="address.address1">
 			</div>
 			<div class="gf-form max-width-28">
-				<span class="gf-form-label width-7">地址 2</span>
+				<span class="gf-form-label width-7" translate="page_org_addr2"></span>
 				<input class="gf-form-input" type="text" ng-model="address.address2">
 			</div>
 		</div>
 
 		<div class="gf-form-inline">
 			<div class="gf-form max-width-28">
-				<span class="gf-form-label width-7">城市</span>
+				<span class="gf-form-label width-7" translate="page_org_addr_city"></span>
 				<input class="gf-form-input" type="text" ng-model="address.city">
 			</div>
 			<div class="gf-form max-width-28">
-				<span class="gf-form-label width-7">邮政编码</span>
+				<span class="gf-form-label width-7" translate="page_org_addr_zipcode"></span>
 				<input class="gf-form-input" type="text" ng-model="address.zipCode">
 			</div>
 		</div>
 
 		<div class="gf-form-inline">
 			<div class="gf-form max-width-28">
-				<span class="gf-form-label width-7">省</span>
+				<span class="gf-form-label width-7" translate="page_org_addr_state"></span>
 				<input class="gf-form-input" type="text" ng-model="address.state">
 			</div>
 			<div class="gf-form max-width-28">
-				<span class="gf-form-label width-7">国家</span>
+				<span class="gf-form-label width-7" translate="page_org_addr_country"></span>
 				<input class="gf-form-input" type="text" ng-model="address.country">
 			</div>
 		</div>
 
 		<div class="gf-form-button-row">
-			<button type="submit" class="btn btn-success" ng-click="updateAddress()">更新</button>
+			<button type="submit" class="btn btn-success" ng-click="updateAddress()" translate="i18n_update"></button>
 		</div>
 	</form>
 
-	<h3 class="page-heading">子系统</h3>
+	<h3 class="page-heading" translate="page_org_system"></h3>
 	<form name="addOrgForm" class="gf-form-group">
 		<div class="gf-form-inline">
 			<div class="gf-form max-width-28">
-				<span class="gf-form-label width-7">新增子系统</span>
+				<span class="gf-form-label width-7" translate="page_org_system_add"></span>
 				<input type="text" ng-model="newSystemName" required class="itight-form-input last" placeholder="如:办公自动化系统">
 			</div>
 			<div class="gf-form">
@@ -76,30 +76,30 @@
 	</form>
 
 	<div class="gf-form-inline" ng-if="!systems.length">
-		<h4>没有子系统,请手动加入</h4>
+		<h4 translate="page_org_system_none"></h4>
 	</div>
 	<form name="addOrgForm" class="gf-form-group" ng-if="systems.length > 0">
 		<div class="gf-form-inline" ng-repeat="system in systems">
 			<div class="gf-form max-width-28">
-				<span class="gf-form-label width-7">子系统名称</span>
+				<span class="gf-form-label width-7" translate="page_org_system_name"></span>
 				<input type="text" required ng-model="system.SystemsName" class="tight-form-input last" style="width: 475px">
-				<button class="btn gf-form-btn btn-danger" ng-click="deleteSystem(system)" ng-disabled="system.Id === contextSrv.user.systemId">删除</button>
+				<button class="btn gf-form-btn btn-danger" ng-click="deleteSystem(system)" ng-disabled="system.Id === contextSrv.user.systemId" translate="i18n_delete"></button>
 			</div>
 		</div>
 		<div class="gf-form-button-row">
-			<button type="submit" class="btn gf-form-btn btn-success" ng-click="updateSystems()">更新</button>
+			<button type="submit" class="btn gf-form-btn btn-success" ng-click="updateSystems()" translate="i18n_update"></button>
 		</div>
 	</form>
 
 
-	<h3 class="page-heading">管理员页面</h3>
+	<h3 class="page-heading" translate="page_admin_page"></h3>
 	<div class="gf-form-group">
 		<div class="gf-form-inline">
 			<div class="gf-form">
-				<a href="org/users" class="btn gf-form-btn btn-inverse">用户管理</a>
+				<a href="org/users" class="btn gf-form-btn btn-inverse" translate="i18n_menu_org_users"></a>
 			</div>
 			<div class="gf-form">
-			<a href="org/apikeys" class="btn gf-form-btn btn-inverse">密钥管理</a>
+			<a href="org/apikeys" class="btn gf-form-btn btn-inverse" translate="i18n_menu_org_apikeys"></a>
 		</div>
 	</div>
 </div>

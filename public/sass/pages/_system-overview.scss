@@ -135,6 +135,9 @@ $summary-border-color: $body-bg; // #ECEFF1;
       .mention {
         flex: auto;
         line-height: 40px;
+        &.center {
+          text-align: right;
+        }
       }
     }
     .jtk-canvas {

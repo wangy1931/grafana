@@ -36,7 +36,6 @@ $criticalBackground: rgb(224,76,65);
   width: 20%;
   height: 300px;
   box-sizing: border-box;
-  padding: 0 20px; 
   p{
     font-size: 26px;
     font-weight: bold;
@@ -128,9 +127,6 @@ $criticalBackground: rgb(224,76,65);
 
 .system-status-box{
   margin: -10px 0px 10px;
-  &>span{
-    margin: 5px;
-  }
 }
 .system-status-percent{
   width: 100%;

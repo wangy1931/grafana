@@ -8,7 +8,7 @@ define([
 
     var module = angular.module('grafana.controllers');
 
-    module.controller('AnomalyHistory', function ($scope, healthSrv) {
+    module.controller('AnomalyHistory', function ($scope, healthSrv, $translate) {
       var panelMeta = [{
         "collapse": false,
         "editable": false,
@@ -100,10 +100,10 @@ define([
 
       $scope.init = function() {
         $scope.anomalyHistoryRange = [
-          {'num': 1,'type':'days','value': '过去一天','from': 'now-1d'},
-          {'num': 1,'type':'weeks','value': '过去一周','from': 'now-7d'},
-          {'num': 1,'type':'months','value': '过去一个月','from': 'now-1M'},
-          {'num': 3,'type':'months','value': '过去三个月','from':'now-3M'},
+          {'num': 1,'type':'days','value': $translate.i18n.i18n_day_ago_1,'from': 'now-1d'},
+          {'num': 1,'type':'weeks','value': $translate.i18n.i18n_week_ago_1,'from': 'now-7d'},
+          {'num': 1,'type':'months','value': $translate.i18n.i18n_month_ago_1,'from': 'now-1M'},
+          {'num': 3,'type':'months','value': $translate.i18n.i18n_month_ago_3,'from':'now-3M'},
         ];
         $scope.anomalyTimeSelected = $scope.anomalyHistoryRange[0];
         $scope.loadHistory($scope.anomalyTimeSelected).then(function(anomaly) {
@@ -113,7 +113,7 @@ define([
           targets[1].metric = anomaly.metric+".anomaly";
           targets[1].tags.host = anomaly.host;
           panelMeta[0].panels[0].seriesOverrides[0].alias = anomaly.metric+".anomaly{host="+ anomaly.host + "}";
-          panelMeta[0].panels[0].title = anomaly.metric + "异常点";
+          panelMeta[0].panels[0].title = anomaly.metric + $translate.i18n.page_anomaly_status;
           $scope.initDashboard({
             meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
             dashboard: {

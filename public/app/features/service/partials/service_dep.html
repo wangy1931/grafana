@@ -1,10 +1,9 @@
-<navbar text="系统总览" icon="fa fa-fw fa-home"></navbar>
+<navbar icon="fa fa-fw fa-home"></navbar>
 
 <div class="page-container" style="padding-left:20px;">
 
     <div class="page-header">
-        <h2>
-            创建服务依赖
+        <h2 translate="page_service_create_depend">
         </h2>
     </div>
 
@@ -54,16 +53,16 @@
         </div>
 
         <div style="padding-top: 10px;">
-            <button class="btn btn-primary" ng-click="ctrl.save()">保存</button>
+            <button class="btn btn-primary" ng-click="ctrl.save()" translate="i18n_save"></button>
         </div>
 
         <div class="description">
-            <p>创建服务依赖方法:</p>
+            <p translate="page_service_dep_usage"></p>
             <ul>
-                <li>从左侧的服务列表中拖动新节点到工作区.</li>
-                <li>点击工作区中某个节点右下角的红色小方块，并拖动到另外一个节点上，即可建立两个节点之间的依赖关系.</li>
-                <li>点击工作区中某个节点左下角的“x”，即可删除该节点.</li>
-                <li>已经拖动到工作区中的节点不可再次添加.</li>
+                <li translate="page_service_dep_info1"></li>
+                <li translate="page_service_dep_info2"></li>
+                <li translate="page_service_dep_info3"></li>
+                <li translate="page_service_dep_info4"></li>
             </ul>
         </div>
 

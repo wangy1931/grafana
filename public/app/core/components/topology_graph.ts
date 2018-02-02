@@ -35,9 +35,7 @@ var template = `
                           请选择<span class="caret"></span>
                       </button>
                   </li>
-                  <li class="tidy-form-item">
-                      KPI 状态
-                  </li>
+                  <li class="tidy-form-item" translate="page_host_kpi_stat"></li>
                   <li class="tidy-form-item">
                       <button type="button" class="kpi-btn btn btn-default" ng-model="ctrl.filter" data-placement="bottom-auto"
                               bs-options="f.value as f.text for f in ctrl.filterOptions" bs-select ng-change="ctrl.filterBy();" >

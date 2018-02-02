@@ -22,24 +22,24 @@
 	</head>
 
 	<body ng-cloak>
-		<grafana-app class="grafana-app">
+			<grafana-app class="grafana-app">
 
-			<aside class="sidemenu-wrapper">
-				<sidemenu ng-if="contextSrv.sidemenu"></sidemenu>
-			</aside>
+				<aside class="sidemenu-wrapper">
+					<sidemenu ng-if="contextSrv.sidemenu"></sidemenu>
+				</aside>
 
-			<div class="page-alert-list">
-				<div ng-repeat='alert in dashAlerts.list' class="alert-{{alert.severity}} alert">
-					<button type="button" class="alert-close" ng-click="dashAlerts.clear(alert)">
-						<i class="fa fa-times-circle"></i>
-					</button>
-					<div class="alert-title">{{alert.title}}</div>
-					<div ng-bind='alert.text'></div>
+				<div class="page-alert-list">
+					<div ng-repeat='alert in dashAlerts.list' class="alert-{{alert.severity}} alert">
+						<button type="button" class="alert-close" ng-click="dashAlerts.clear(alert)">
+							<i class="fa fa-times-circle"></i>
+						</button>
+						<div class="alert-title">{{alert.title}}</div>
+						<div ng-bind='alert.text'></div>
+					</div>
 				</div>
-			</div>
 
-			<div ng-view class="main-view"></div>
-		</grafana-app>
+				<div ng-view class="main-view"></div>
+			</grafana-app>
   </body>
 
 	<script>

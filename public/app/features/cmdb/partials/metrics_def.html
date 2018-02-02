@@ -1,52 +1,56 @@
-<navbar icon="fa fa-fw fa-cubes" title="配置管理库" title-url="/cmdb/metrics">
+<navbar icon="fa fa-fw fa-cubes" title-url="/cmdb/metrics">
   <ul class="nav">
-    <li class="active"><a href="/cmdb/metrics">指标概览</a></li>
+    <li class="active"><a href="/cmdb/metrics" translate="page_metrics_title"></a></li>
   </ul>
 </navbar>
 <div class="page-container metrics-def-container">
   <div>
     <form name="searchForm" class="gf-form-group">
       <div class="gf-form">
-        <span class="gf-form-label width-7">指标名称</span>
+        <span class="gf-form-label width-10" translate="i18n_metric_name"></span>
         <input type="text" class="gf-form-input max-width-16" ng-model="ctrl.query.metric"
           ng-change="ctrl.getSuggest();"
           spellcheck='false' bs-typeahead-old="ctrl.suggestMetrics">
       </div>
       <div class="gf-form">
         <div class="gf-form">
-          <span class="gf-form-label width-7">类型</span>
+          <span class="gf-form-label width-10" translate="i18n_type"></span>
           <select class="max-width-16" ng-options="type.name for type in ctrl.typeList" ng-change="ctrl.changeType();" ng-model="ctrl.query.type"></select>
         </div>
         <div class="gf-form" ng-if="ctrl.query.type">
-          <span class="gf-form-label width-7">子类型</span>
+          <span class="gf-form-label width-10" translate="i18n_sub_type"></span>
           <select class="max-width-16" ng-options="subType.alias for subType in ctrl.query.type.software" ng-model="ctrl.query.subType"></select>
         </div>
       </div>
       <div class="gf-form">
-        <span class="gf-form-label width-7">KPI</span>
+        <span class="gf-form-label width-10">KPI</span>
         <div class="width-16 query-label">
           <label>
-            <input type="radio" name="kpi" ng-value=1 ng-model="ctrl.params.kpi" checked>是
+            <input type="radio" name="kpi" ng-value=1 ng-model="ctrl.params.kpi" checked>
+            <span translate="i18n_yes"></span>
           </label>
           <label>
-            <input type="radio" name="kpi" ng-value=0 ng-model="ctrl.params.kpi" checked>否
+            <input type="radio" name="kpi" ng-value=0 ng-model="ctrl.params.kpi" checked>
+            <span translate="i18n_no"></span>
           </label>
         </div>
       </div>
       <div class="gf-form">
-        <span class="gf-form-label width-7">自定义指标</span>
+        <span class="gf-form-label width-10" translate="page_metrics_custom"></span>
         <div class="width-16 query-label">
           <label>
-            <input type="radio" name="custom" ng-value=true ng-model="ctrl.params.custom" checked>是
+            <input type="radio" name="custom" ng-value=true ng-model="ctrl.params.custom" checked>
+            <span translate="i18n_yes"></span>
           </label>
           <label>
-            <input type="radio" name="custom" ng-value=false ng-model="ctrl.params.custom" checked>否
+            <input type="radio" name="custom" ng-value=false ng-model="ctrl.params.custom" checked>
+            <span translate="i18n_no"></span>
           </label>
         </div>
       </div>
       <div class="gf-form-button-row">
-        <button class="btn btn-primary" ng-click="ctrl.getMetricsList(1, ctrl.query)">搜索</button>
-        <button class="btn btn-inverse" ng-click="ctrl.clearQuery()">清空搜索</button>
+        <button class="btn btn-primary" ng-click="ctrl.getMetricsList(1, ctrl.query)" translate="i18n_search"></button>
+        <button class="btn btn-inverse" ng-click="ctrl.clearQuery()" translate="page_metrics_clear"></button>
       </div>
     </form>
   </div>
@@ -58,31 +62,31 @@
             <i class="fa" ng-class="{true: 'fa-angle-up', false: 'fa-angle-down'}[metric.id === ctrl.metricCur.id]"></i>
             <p class="text-overflow metric-name">{{metric.key}}</p>
             <span>{{ctrl.getSubtypeAlias(metric)}}</span>
-            <span ng-if="metric.kpi">KPI指标</span>
+            <span ng-if="metric.kpi">KPI</span>
           </a>
         </div>
         <div class="accordion-body" ng-if="metric.id === ctrl.metricCur.id">
           <div class="accordion-inner">
             <form name="userForm" class="gf-form-group">
               <div class="gf-form">
-                <span class="gf-form-label width-7">类型</span>
+                <span class="gf-form-label width-10" translate="i18n_type"></span>
                 <select ng-disabled="ctrl.metricCur.disabled" class="gf-form-input max-width-25"  ng-change="ctrl.changeType(ctrl.metricCur.type);" ng-options="type.name as type.name for type in ctrl.typeList" ng-model="ctrl.metricCur.type"></select>
-                <span class="gf-form-label width-7">子类型</span>
+                <span class="gf-form-label width-10" translate="i18n_sub_type"></span>
                 <select ng-disabled="ctrl.metricCur.disabled" class="gf-form-input max-width-25" ng-options="subType.alias for subType in ctrl.metricCur.subTypes" ng-model="ctrl.metricCur.subType"></select>
               </div>
               <div class="gf-form">
-                <span class="gf-form-label width-7">描述</span>
+                <span class="gf-form-label width-10" translate="i18n_desc"></span>
                 <div ng-if="ctrl.metricCur.disabled" class="gf-form-input">{{metric.description}}</div>
                 <textarea ng-if="!ctrl.metricCur.disabled" style="overflow-x: hidden;" type="text" class="gf-form-input" ng-model="ctrl.metricCur.description"></textarea>
               </div>
               <div class="gf-form">
-                <span class="gf-form-label width-7">单位</span>
+                <span class="gf-form-label width-10" translate="page_metrics_unit"></span>
                 <input type="text" class="gf-form-input max-width-25" ng-model="ctrl.metricCur.unit" ng-disabled="ctrl.metricCur.disabled">
-                <span class="gf-form-label width-7">metrictype</span>
+                <span class="gf-form-label width-10">metrictype</span>
                 <select class="gf-form-input max-width-25" ng-options="metrictype for metrictype in ['regular', 'counter', 'increment']" ng-model="ctrl.metricCur.metrictype" ng-disabled="ctrl.metricCur.disabled"></select>
               </div>
               <div class="gf-form">
-                <span class="gf-form-label width-7">标签</span>
+                <span class="gf-form-label width-10" translate="i18n_tag"></span>
                 <div ng-if="metric.tags">
                   <span class="tag label" ng-repeat="tag in metric.tags"> <i class="fa fa-tag"></i>{{ tag }}</span>
                 </div>
@@ -91,25 +95,27 @@
                 </div>
               </div>
               <div class="gf-form query-label">
-                <span class="gf-form-label width-7">自定义指标</span>
-                <label ng-if="metric.customMetric">是</label>
-                <label ng-if="!metric.customMetric">否</label>
+                <span class="gf-form-label width-10" translate="page_metrics_custom"></span>
+                <label ng-if="metric.customMetric" translate="i18n_yes"></label>
+                <label ng-if="!metric.customMetric" translate="i18n_no"></label>
               </div>
               <div class="gf-form query-label">
-                <span class="gf-form-label width-7">KPI</span>
-                <label ng-if="ctrl.metricCur.kpi && ctrl.metricCur.disabled">是</label>
-                <label ng-if="!ctrl.metricCur.kpi && ctrl.metricCur.disabled">否</label>
+                <span class="gf-form-label width-10">KPI</span>
+                <label ng-if="ctrl.metricCur.kpi && ctrl.metricCur.disabled" translate="i18n_yes"></label>
+                <label ng-if="!ctrl.metricCur.kpi && ctrl.metricCur.disabled" translate="i18n_no"></label>
                 <label ng-if="!ctrl.metricCur.disabled">
-                  <input type="radio" name="iskpi" ng-value=true ng-model="ctrl.metricCur.kpi" checked>是
+                  <input type="radio" name="iskpi" ng-value=true ng-model="ctrl.metricCur.kpi" checked>
+                  <span translate="i18n_yes"></span>
                 </label>
                 <label ng-if="!ctrl.metricCur.disabled">
-                  <input type="radio" name="iskpi" ng-value=false ng-model="ctrl.metricCur.kpi" checked>否
+                  <input type="radio" name="iskpi" ng-value=false ng-model="ctrl.metricCur.kpi" checked>
+                  <span translate="i18n_no"></span>
                 </label>
               </div>
               <div class="gf-form-button-row" ng-if="ctrl.contextSrv.isEditor && (metric.customMetric || ctrl.contextSrv.user.orgId === 2)">
-                <button class="btn" ng-click="ctrl.edit()" ng-show="ctrl.metricCur.disabled">编辑</button>
-                <button class="btn" ng-click="ctrl.update(metric, $index)" ng-show="!ctrl.metricCur.disabled">更新</button>
-                <button class="btn btn-outline-inverse" ng-click="ctrl.getDetailById(metric, true)" ng-show="!ctrl.metricCur.disabled">取消</button>
+                <button class="btn" ng-click="ctrl.edit()" ng-show="ctrl.metricCur.disabled" translate="i18n_edit"></button>
+                <button class="btn" ng-click="ctrl.update(metric, $index)" ng-show="!ctrl.metricCur.disabled" translate="i18n_update"></button>
+                <button class="btn btn-outline-inverse" ng-click="ctrl.getDetailById(metric, true)" ng-show="!ctrl.metricCur.disabled" translate="i18n_cancel"></button>
               </div>
             </form>
           </div>
@@ -119,15 +125,14 @@
     <div class="pagination">
       <ul class="pager">
         <li class="previous">
-          <a ng-click="ctrl.getMetricsList(ctrl.params.page-1)">&larr; 上一页</a>
+          <a ng-click="ctrl.getMetricsList(ctrl.params.page-1)">&larr; <span translate="i18n_pre_page"></span></a>
         </li>
         <li class="next">
-          <a ng-click="ctrl.getMetricsList(ctrl.params.page+1)">下一页 &rarr;</a>
+          <a ng-click="ctrl.getMetricsList(ctrl.params.page+1)"><span translate="i18n_next_page"></span> &rarr;</a>
         </li>
       </ul>
     </div>
   </div>
-  <div class="no-data" ng-if="!ctrl.metricList.length">
-    没有相关指标
+  <div class="no-data" ng-if="!ctrl.metricList.length" translate="page_metrics_none">
   </div>
 </div>

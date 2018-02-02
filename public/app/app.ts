@@ -48,8 +48,17 @@ export class GrafanaApp {
   }
 
   init() {
-    var app = angular.module('grafana', ['mgcrea.ngStrap', 'ngAnimate', 'ngTable']);
+    var app = angular.module('grafana', ['mgcrea.ngStrap', 'ngAnimate', 'ngTable', 'cloudwiz.translate']);
     app.constant('grafanaVersion', "@grafanaVersion@");
+
+    app.config(['$translateProvider', ($translateProvider) => {
+      $translateProvider.useStaticFilesLoader({
+        prefix: 'public/app/core/i18n/',
+        suffix: '.json'
+      });
+      $translateProvider.determinePreferredLanguage().fallbackLanguage('zh_CN');
+      $translateProvider.useLocalStorage();
+    }]);
 
     app.config(($locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) => {
       //$compileProvider.debugInfoEnabled(false);

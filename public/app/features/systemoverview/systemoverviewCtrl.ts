@@ -42,7 +42,7 @@ export class SystemOverviewCtrl {
   /** @ngInject */
   constructor(
     private backendSrv, private alertSrv, private contextSrv, private alertMgrSrv, private healthSrv, private serviceDepSrv,
-    private hostSrv, private utilSrv, private $location, private $scope, private $modal, private $q,
+    private hostSrv, private utilSrv, private $location, private $scope, private $modal, private $q, private $translate,
     private NgTableParams
   ) {
     $scope.ctrl = this;
@@ -77,7 +77,7 @@ export class SystemOverviewCtrl {
 
     // default data
     this.kpiPanel = {
-      leftTableHeads: ['机器名', '机器状态'],
+      leftTableHeads: ['i18n_hostname', 'i18n_hostname'],
       leftTableBodys: [
         { id: '', name: '', data: '正常', status: 'green' },
         { id: '', name: '', data: '正常', status: 'green' },
@@ -85,12 +85,12 @@ export class SystemOverviewCtrl {
       ],
       rightPanelHead: { id: '', name: '...' },
       rightItemTypes: {
-        ServiceKPI: { id: 'ServiceKPI', name: '服务KPI', data: '...', status: 'green', metrics: {} },
-        ServiceState: { id: 'ServiceState', name: '服务进程', data: '...', status: 'green', metrics: {} },
-        HostNW: { id: 'HostNW', name: '网络在线', data: '...', status: 'green', metrics: {} },
-        HostCpu: { id: 'HostCpu', name: 'CPU使用率', data: '...', status: 'green', metrics: {} },
-        HostMem: { id: 'HostMem', name: '内存使用率', data: '...', status: 'green', metrics: {} },
-        HostIO: { id: 'HostIO', name: '磁盘使用率', data: '...', status: 'green', metrics: {} },
+        ServiceKPI: { id: 'ServiceKPI', name: 'page_overview_kpi_service', data: '...', status: 'green', metrics: {} },
+        ServiceState: { id: 'ServiceState', name: 'page_service_process', data: '...', status: 'green', metrics: {} },
+        HostNW: { id: 'HostNW', name: 'page_host_network', data: '...', status: 'green', metrics: {} },
+        HostCpu: { id: 'HostCpu', name: 'page_overview_cpu_usage', data: '...', status: 'green', metrics: {} },
+        HostMem: { id: 'HostMem', name: 'page_overview_mem_usage', data: '...', status: 'green', metrics: {} },
+        HostIO: { id: 'HostIO', name: 'page_overview_disk_usage', data: '...', status: 'green', metrics: {} },
       },
       rightMetrics: [],
       leftSelected: '',
@@ -164,8 +164,8 @@ export class SystemOverviewCtrl {
   getAlertStatus() {
     this.alertPanel.status = [
       { health: HEALTH_TYPE.GREEN.TEXT, text: '系统正常', count: 0 },
-      { health: HEALTH_TYPE.YELLOW.TEXT, text: '警告: ', count: 0 },
-      { health: HEALTH_TYPE.RED.TEXT, text: '严重: ', count: 0 }
+      { health: HEALTH_TYPE.YELLOW.TEXT, text: 'i18n_warning', count: 0 },
+      { health: HEALTH_TYPE.RED.TEXT, text: 'i18n_critical', count: 0 }
     ];
 
     this.alertMgrSrv.loadTriggeredAlerts().then(response => {
@@ -204,9 +204,9 @@ export class SystemOverviewCtrl {
   // 智能检测异常指标 & 健康指数
   getAnomaly() {
     this.anomalyPanel.status = [
-      { health: HEALTH_TYPE.RED.TEXT, text: '严重: ', count: -1 },
-      { health: HEALTH_TYPE.YELLOW.TEXT, text: '异常指标: ', count: 0 },
-      { health: HEALTH_TYPE.GREEN.TEXT, text: '指标数量: ', count: 0 }
+      { health: HEALTH_TYPE.RED.TEXT, text: 'i18n_critical', count: -1 },
+      { health: HEALTH_TYPE.YELLOW.TEXT, text: 'page_overview_panel_anomaly_metric', count: 0 },
+      { health: HEALTH_TYPE.GREEN.TEXT, text: 'page_overview_panel_metric_number', count: 0 }
     ];
 
     this.healthSrv.load().then(data => {
@@ -290,7 +290,7 @@ export class SystemOverviewCtrl {
     };
 
     this.kpiPanel.type = 'service';
-    this.kpiPanel.leftTableHeads = ['机器名', '机器状态'];
+    this.kpiPanel.leftTableHeads = ['i18n_hostname', 'i18n_status'];
     this.kpiPanel.leftTableBodys = [];
 
     this.getServiceKpi(serviceId, serviceName).then(resp => {
@@ -327,7 +327,7 @@ export class SystemOverviewCtrl {
     };
 
     this.kpiPanel.type = 'host';
-    this.kpiPanel.leftTableHeads = ['服务名', '服务状态'];
+    this.kpiPanel.leftTableHeads = ['i18n_servicename', 'i18n_status'];
     this.kpiPanel.leftTableBodys = [];
 
     this.getServicesOnHost(node._private_.id).then((response) => {

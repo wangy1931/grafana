@@ -1,6 +1,6 @@
 <div class="host-anomaly host-tab-content">
   <div ng-hide="anomalyHistory.length">
-    <em>暂没有任何异常数据</em>
+    <em translate="page_anomaly_none"></em>
     <cw-loading show="!anomalyHistory.length" duration=6000></cw-loading>
   </div>
 
@@ -11,9 +11,9 @@
     <table class="table">
       <thead>
         <tr>
-          <th>异常出现时间</th>
-          <th>机器名称</th>
-          <th>指标名称</th>
+          <th translate="page_anomaly_time"></th>
+          <th translate="i18n_hostname"></th>
+          <th translate="i18n_metric_name"></th>
         </tr>
       </thead>
       <tbody>
