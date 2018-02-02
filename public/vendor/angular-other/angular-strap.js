@@ -1537,11 +1537,11 @@
       allNoneButtons: false,
       sort: true,
       caretHtml: '<span class="caret"></span>',
-      placeholder: '请选择...',
+      placeholder: 'Choose',
       allText: 'All',
       noneText: 'None',
       maxLength: 3,
-      maxLengthHtml: '已选择',
+      maxLengthHtml: 'selected',
       iconCheckmark: 'fa fa-check',
       toggle: false
     };
