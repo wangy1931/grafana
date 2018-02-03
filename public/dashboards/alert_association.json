@@ -99,7 +99,7 @@
     {
       "title": "logs",
       "height": "300px",
-      "collapse": true,
+      "collapse": false,
       "showTitle": true,
       "panels": [
         {

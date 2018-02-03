@@ -54,7 +54,7 @@
                         </h3>
                         <div>
                             <li ng-repeat="alert in ctrl.alertPanel.status" ng-if="alert.hide!=true">
-                                <a href="/alerts/status">{{ alert.text }} <span class="status-color status-{{ alert.health }}">{{ alert.count }}</span></a>
+                                <a href="/alerts/status"><em translate="{{ alert.text }}"></em>: <span class="status-color status-{{ alert.health }}">{{ alert.count }}</span></a>
                             </li>
                         </div>
                     </div>

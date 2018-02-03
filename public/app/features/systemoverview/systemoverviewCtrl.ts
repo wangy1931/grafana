@@ -165,8 +165,8 @@ export class SystemOverviewCtrl {
   getAlertStatus() {
     this.alertPanel.status = [
       { health: HEALTH_TYPE.GREEN.TEXT, text: '系统正常', count: 0, hide: true },
-      { health: HEALTH_TYPE.RED.TEXT, text: 'i18n_critical: ', count: 0 },
-      { health: HEALTH_TYPE.YELLOW.TEXT, text: 'i18n_warning: ', count: 0 },
+      { health: HEALTH_TYPE.RED.TEXT, text: 'i18n_critical', count: 0 },
+      { health: HEALTH_TYPE.YELLOW.TEXT, text: 'i18n_warning', count: 0 },
     ];
 
     this.alertMgrSrv.loadTriggeredAlerts().then(response => {
