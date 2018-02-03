@@ -523,7 +523,8 @@ export class LogsCtrl {
         fields: {
           name: 'page_logs_filter_field',
           values: [],
-          select: false
+          select: false,
+          title: 'fields'
         }
       }
 
@@ -553,7 +554,7 @@ export class LogsCtrl {
   }
 
   getExtendText(query) {
-    if (query.title === 'message') {
+    if (query.title === 'fields') {
       return '';
     }
     var extend_query = '';

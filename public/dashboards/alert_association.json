@@ -189,7 +189,7 @@
             }
           ],
           "tab": 1,
-          "title": "日志查询",
+          "title": "$TABLOG",
           "transform": "json",
           "transparent": false,
           "type": "cwtable"
@@ -272,7 +272,7 @@
               "timeField": "@timestamp"
             }
           ],
-          "title": "聚合数据",
+          "title": "$TABCLUSTER",
           "transform": "json",
           "transparent": false,
           "type": "cwtable",
@@ -366,7 +366,7 @@
             }
           ],
           "tab": 3,
-          "title": "日志对比",
+          "title": "$TABCOMPARE",
           "transform": "json",
           "type": "cwtable",
           "scopedVars": {

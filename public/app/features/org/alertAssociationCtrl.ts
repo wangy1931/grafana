@@ -36,7 +36,8 @@ export class AlertAssociationCtrl {
     private associationSrv,
     private timeSrv,
     private integrateSrv,
-    private NgTableParams
+    private NgTableParams,
+    private $translate
   ) {
     this.targetObj = _.extend({}, {
       guide: true,
@@ -121,6 +122,11 @@ export class AlertAssociationCtrl {
       // store & init dashboard
       var dashboard = response;
 
+      dashboard = this.fillRowData(dashboard, {
+        "\\$TABLOG": this.$translate.i18n.page_logs_tab_log,
+        "\\$TABCLUSTER": this.$translate.i18n.page_logs_tab_cluster,
+        "\\$TABCOMPARE": this.$translate.i18n.page_logs_tab_contrast,
+      });
       // association graph
       dashboard.rows[0].panels[0].title = metric;
       dashboard.rows[0].panels[0].targets[0].metric = metric;
@@ -210,6 +216,14 @@ export class AlertAssociationCtrl {
     panels[2].targets[1].query = this.query;
 
     this.$rootScope.$broadcast('refresh', [panels[0].id, panels[1].id, panels[2].id]);
+  }
+
+  fillRowData(row, patternMap) {
+    row = JSON.stringify(row);
+    for (var pattern in patternMap) {
+      row = row.replace(new RegExp(pattern, "g"), patternMap[pattern]);
+    }
+    return JSON.parse(row);
   }
 }
 coreModule.controller('AlertAssociationCtrl', AlertAssociationCtrl);

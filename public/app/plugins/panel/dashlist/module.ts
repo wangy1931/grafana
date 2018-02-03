@@ -22,7 +22,7 @@ class DashListCtrl extends PanelCtrl {
   };
 
   /** @ngInject */
-  constructor($scope, $injector, private backendSrv) {
+  constructor($scope, $injector, private backendSrv, private $translate) {
     super($scope, $injector);
     _.defaults(this.panel, this.panelDefaults);
 
@@ -35,9 +35,9 @@ class DashListCtrl extends PanelCtrl {
     this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
 
     this.groups = [
-      {list: [], show: false, header: "标记过的仪表盘",},
-      {list: [], show: false, header: "最近浏览的仪表盘"},
-      {list: [], show: false, header: "搜索"},
+      {list: [], show: false, header: $translate.i18n.page_monitor_marked},
+      {list: [], show: false, header: $translate.i18n.page_monitor_recent},
+      {list: [], show: false, header: $translate.i18n.i18n_search},
     ];
 
     // update capability
