@@ -77,7 +77,7 @@
           <td>{{ alert.status.monitoredEntity }}</td>
           <td><strong>{{ alert.status.triggeredValue }}</strong> / {{ alert.definition.alertDetails.threshold }}</td>
           <td>{{ alert.curAlertValue }}</td>
-          <td>{{ _.translateAlertLevel(alert.status.level) }}</td>
+          <td>{{ _.translateAlertLevel(alert.status.level) | translate }}</td>
           <td>{{ _.transformMillionTime(alert.status.levelChangedTime) }}</td>
           <td>{{ _.timeFrom(alert.status.levelChangedTime, alert.status.snoozeMinutes, 'm') }}</td>
           <td>

@@ -3,10 +3,10 @@
       <div class="gf-form">
           <ul class="gf-form-list tidy-form-list" style="overflow: inherit">
               <li ng-click="ctrl.showSearchGuide = !ctrl.showSearchGuide" class="gf-form-item" style="width: 100px">
-                  <span translate="page_logs_key_words"></span> <tip>点击显示搜索指南</tip>
+                  <span translate="page_logs_key_words"></span> <tip>{{ ctrl.$translate.i18n.page_logs_seach_tip }}</tip>
               </li>
               <li class="dropdown" style="width: 400px">
-                  <input placeholder="支持AND, OR, 空格表示OR" type="text"
+                  <input placeholder="type: nginx" type="text"
                          class="input-xlarge tidy-form-input last dropdown-toggle" id="dropdownMenu1"
                          data-toggle="dropdown" autocomplete="off" ng-model="ctrl.query" required=""
                          ng-keypress="ctrl.showQueryOption($event)">
@@ -20,9 +20,9 @@
               </li>
               <li class="tidy-form-item">
                   <button type="button" class="log-size input-small tidy-form-input last input" ng-model="ctrl.size" 
-                          bs-options="f for f in [500, 1000, 2000, 3000, 5000]" data-placeholder="请选择"
+                          bs-options="f for f in [500, 1000, 2000, 3000, 5000]" data-placeholder="{{ ctrl.$translate.i18n.i18n_select_choose }}"
                           bs-on-select="ctrl.getLogSize" data-placement="bottom-auto" bs-select>
-                    请选择 <span class="caret"></span>
+                    <span class="caret"></span>
                   </button>
               </li>
               <li>
@@ -30,12 +30,12 @@
               </li>
               <li class="search-guide" ng-if="ctrl.showSearchGuide">
                   <i class="fa fa-times pull-right pointer" ng-click="ctrl.hideGuide()"></i>
-                  <p>1、展示所有日志: *</p>
-                  <p>2、展示特定host日志: host: host_name ("host_name"改为需要查询的host名称)</p>
-                  <p>3、联合查询-AND: host:host_name AND Exception (查询"host_name"的"Exception"日志)</p>
-                  <p>4、联合查询-NOT: NOT host:host_name (排除"host_name"相关的日志)</p>
-                  <p>5、联合查询-OR: host:host1 OR host:host2 (查询"host1"和"host2"相关的日志)</p>
-                  <p>6、正则匹配: message:"[正则表达式]"</p>
+                  <p>1、*</p>
+                  <p>2、{{ ctrl.$translate.i18n.page_logs_help_host }}</p>
+                  <p>3、{{ ctrl.$translate.i18n.page_logs_help_type }}</p>
+                  <p>4、{{ ctrl.$translate.i18n.page_logs_help_and }}-NOT: NOT host:host_name</p>
+                  <p>5、{{ ctrl.$translate.i18n.page_logs_help_and }}-OR: host:host1 OR host:host2</p>
+                  <p>6、{{ ctrl.$translate.i18n.page_logs_help_message }}</p>
               </li>
           </ul>
           <div class="clearfix"></div>
@@ -86,40 +86,40 @@
                       <div class="btn-group">
                             <ul>
                                 <li style="color: #F9934E; text-align: right;">
-                                    该时间区域内共有 <strong>{{panel.regularResult.data[0].total || 0}}</strong> 条日志，当前显示前 {{panel.regularResult.data[0].datapoints.length || 0}} 条。放大时间区域，以查看更细日志数据。
+                                    <em translate="page_logs_total_number"></em> <strong>{{panel.regularResult.data[0].total || 0}}</strong>, <em translate="page_logs_shown_number"></em> {{panel.regularResult.data[0].datapoints.length || 0}}. <em translate="page_logs_datazoom"></em>
                                 </li>
                             </ul>
                       </div>
                   </div>
                   <div ng-if="name == 2" class="log-compare">
-                    <div class="btn-group btn-log-compare">对比日志：
+                    <div class="btn-group btn-log-compare">
                         <button class="dropdown-toggle input" data-toggle="dropdown">
                             {{ ctrl.currentRelativeTime }}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li ng-click="ctrl.logCompare('-1d')">1天以前</li>
-                            <li ng-click="ctrl.logCompare('-7d')">7天以前</li>
-                            <li ng-click="ctrl.logCompare('-30d')">1月以前</li>
-                            <li ng-click="ctrl.logCompare('-365d')">1年以前</li>
-                            <li ng-click="ctrl.showInputModal()">自定义</li>
+                            <li ng-click="ctrl.logCompare('-1d')">1 <em tranlate="i18n_day"></em><em tranlate="i18n_ago"></em></li>
+                            <li ng-click="ctrl.logCompare('-7d')">7 <em tranlate="i18n_day"></em><em tranlate="i18n_ago"></em></li>
+                            <li ng-click="ctrl.logCompare('-30d')">1 <em tranlate="i18n_month"></em><em tranlate="i18n_ago"></em></li>
+                            <li ng-click="ctrl.logCompare('-365d')">1 <em tranlate="i18n_year"></em><em tranlate="i18n_ago"></em></li>
+                            <li ng-click="ctrl.showInputModal()"><em translate="i18n_custom"></em></li>
                         </ul>
                     </div>
-                    <div class="btn-group btn-log-filter">过滤条件：
+                    <div class="btn-group btn-log-filter"><em translate="page_logs_filter_rule"></em>: 
                         <button class="dropdown-toggle input" data-toggle="dropdown">
                             {{ ctrl.currentFilter }}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li ng-click="ctrl.logFilterOperator('')">无</li>
-                            <li ng-click="ctrl.logFilterOperator('增加')">增加日志</li>
-                            <li ng-click="ctrl.logFilterOperator('减少')">减少日志</li>
-                            <li ng-click="ctrl.logFilterOperator('新增')">新增日志</li>
-                            <li ng-click="ctrl.logFilterOperator('消失')">消失日志</li>
+                            <li ng-click="ctrl.logFilterOperator('')"><em translate="i18n_empty"></em></li>
+                            <li ng-click="ctrl.logFilterOperator(ctrl.$translate.i18n.i18n_increase)"><em translate="i18n_increase"></em></li>
+                            <li ng-click="ctrl.logFilterOperator(ctrl.$translate.i18n.i18n_decrease)"><em translate="i18n_decrease"></em></li>
+                            <li ng-click="ctrl.logFilterOperator(ctrl.$translate.i18n.i18n_newly_added)"><em translate="i18n_newly_added"></em></li>
+                            <li ng-click="ctrl.logFilterOperator(ctrl.$translate.i18n.i18n_disappearing)"><em translate="i18n_disappearing"></em></li>
                         </ul>
                     </div>
                     <div>
                         <ul ng-if="name == 2">
-                            <li style="color: #F9934E;">当前日志时间段： <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:'now':0 }} 至 {{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:'now':1 }}</strong></li>
-                            <li style="color: #F9934E;">对比日志时间段： <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:0}} 至 {{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:1 }}</strong></li>
+                            <li style="color: #F9934E;"><em translate="page_logs_cur_range"></em>: <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:'now':0 }} <em translate="i18n_to"></em> {{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:'now':1 }}</strong></li>
+                            <li style="color: #F9934E;"><em translate="page_logs_compare_range"></em>: <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:0}} <em translate="i18n_to"></em> {{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:1 }}</strong></li>
                         </ul>
                     </div>
                   </div>

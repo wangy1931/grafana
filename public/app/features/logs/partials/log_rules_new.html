@@ -30,9 +30,9 @@
         <select class="gf-form-input max-width-21" ng-options="s.name as s.name for s in ctrl.serviceList"
           ng-change="ctrl.getTemplate(ctrl.rule.logServiceName)"
           ng-model="ctrl.rule.logServiceName"></select>
-        <input class="gf-form-input max-width-21" type="text" ng-if="ctrl.rule.logServiceName === '其他'"
+        <input class="gf-form-input max-width-21" type="text" ng-if="ctrl.rule.logServiceName === ctrl.$translate.i18n.i18n_other"
           ng-class="{false: 'error-input'}[!ctrl.custom.logServiceName || ctrl.checkInput(ctrl.custom.logServiceName, 'parseName')]"
-          ng-model="ctrl.custom.logServiceName" placeholder="仅支持英文字母/数字/下划线/小数点" required />
+          ng-model="ctrl.custom.logServiceName" placeholder="ctrl.$translate.i18n.page_log_parse_input" required />
       </div>
 
       <div class="gf-form">
@@ -42,7 +42,7 @@
           ng-model="ctrl.rule.logType"></select>
         <input class="gf-form-input max-width-21"
           ng-class="{false: 'error-input'}[!ctrl.custom.logType || ctrl.checkInput(ctrl.custom.logType, 'logType')]"
-          type="text" ng-if="ctrl.rule.logType === '其他'"
+          type="text" ng-if="ctrl.rule.logType === 'ctrl.$translate.i18n.i18n_other'"
           ng-model="ctrl.custom.logType" placeholder="请输入英文字母" required />
       </div>
 

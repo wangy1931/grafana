@@ -5,8 +5,7 @@
             <i class="fa fa-remove"></i>
         </a>
     
-        <h3>
-            选择日志查询结果进行对比：
+        <h3 translate="i18n_select_choose">
         </h3>
     
         <form>
@@ -14,22 +13,22 @@
                 <div class="tight-form-container">
                     <div class="tight-form">
                         <button type="button" class="input-large tight-form-item input" ng-model="ctrl.selectedCompare1" 
-                            bs-options="tab.title for tab in ctrl.tabs" data-placeholder="请选择"
+                            bs-options="tab.title for tab in ctrl.tabs" data-placeholder="{{ ctrl.$translate.i18n.i18n_select_choose }}"
                             bs-on-select="ctrl.getSearchQuery(0);" data-placement="bottom-auto" bs-select>
-                            请选择 <span class="caret"></span>
+                            <span class="caret"></span>
                         </button>
-                        对比
+                         vs 
                         <button type="button" class="input-large tight-form-item input" ng-model="ctrl.selectedCompare2" 
-                            bs-options="tab.title for tab in ctrl.tabs" data-placeholder="请选择"
+                            bs-options="tab.title for tab in ctrl.tabs" data-placeholder="{{ ctrl.$translate.i18n.i18n_select_choose }}"
                             bs-on-select="ctrl.getSearchQuery(1);" data-placement="bottom-auto" bs-select>
-                            请选择 <span class="caret"></span>
+                            <span class="caret"></span>
                         </button>
                         <div class="clearfix"></div>
                     </div>
                 </div>
             </div>
             <div style="display: inline-block">
-                <button type="submit" class="btn btn-success" ng-click="ctrl.logSearchCompare()">确定</button>
+                <button type="submit" class="btn btn-success" ng-click="ctrl.logSearchCompare()" translate="i18n_comfirm"></button>
             </div>
         </form>
 

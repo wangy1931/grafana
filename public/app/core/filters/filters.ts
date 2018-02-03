@@ -80,23 +80,23 @@ coreModule.filter('formatItemType', () => {
   };
 });
 
-coreModule.filter('translateItemType', () => {
+coreModule.filter('translateItemType', ($translate) => {
   return (text) => {
     var map = {
-      "mem": "内存",
-      "io" : "磁盘",
-      "nw" : "网络",
-      "cpu": "CPU",
-      "kpi": "服务 KPI",
-      "state": "服务状态"
+      "mem": $translate.i18n.i18n_mem,
+      "io" : $translate.i18n.i18n_io,
+      "nw" : $translate.i18n.i18n_net,
+      "cpu": $translate.i18n.i18n_cpu,
+      "kpi": $translate.i18n.page_overview_kpi_service,
+      "state": $translate.i18n.page_overview_kpi_state
     };
     return text && map[text.toLowerCase()];
   };
 });
 
-coreModule.filter('formatAnomalyHealth', () => {
+coreModule.filter('formatAnomalyHealth', ($translate) => {
   return (value) => {
-    return value === 100 ? value : (value < 26 ? value + " (持续异常)" : value + " (临时异常)")
+    return value === 100 ? value : (value < 26 ? value + ` (${$translate.i18n.page_anomaly_critical_metrics})` : value + ` (${$translate.i18n.page_anomaly_warning_metrics})`)
   };
 });
 
@@ -122,9 +122,9 @@ coreModule.filter('formatTimeRange', () => {
   };
 });
 
-coreModule.filter('formatRCAType', () => {
+coreModule.filter('formatRCAType', ($translate) => {
   return (value) => {
-    return (value === 1) ? '指标' : ((value === 2) ? '日志' : '其他');
+    return (value === 1) ? $translate.i18n.i18n_metric : ((value === 2) ? $translate.i18n.i18n_menu_logs : $translate.i18n.i18n_other);
   };
 });
 

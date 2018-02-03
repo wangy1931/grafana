@@ -259,7 +259,7 @@ export class AlertEditCtrl {
         ],
         "timeFrom": null,
         "timeShift": null,
-        "title": "日志总数",
+        "title": "Count",
         "tooltip": {
           "shared": true,
           "value_type": "cumulative"
