@@ -14,38 +14,36 @@
                     <div class="gf-form">
                         <ul class="gf-form-list tidy-form-list" style="text-align:right; overflow: inherit; width: 100%;">
                             <li class="tidy-form-item" ng-if="!ctrl.notMetric">
-                                定位到重要异常指标：
+                                <em translate="page_overview_panel_anomaly_metric"></em>:  
                             </li>
                             <li class="tidy-form-item" ng-if="!ctrl.notMetric">
                                 <button type="button" class="btn btn-default" ng-model="ctrl.selected.metric" data-placement="bottom-auto"
                                         bs-options="f.name as f.name for f in ctrl.exceptionMetrics" bs-select ng-change="ctrl.onSelectChange();">
-                                    请选择<span class="caret"></span>
+                                    <em translate="i18n_select_choose"></em><span class="caret"></span>
                                 </button>
                             </li>
                             <li class="tidy-form-item" ng-if="ctrl.needHost">
-                                机器：
+                                <em translate="i18n_host"></em>:  
                             </li>
                             <li class="tidy-form-item" ng-if="ctrl.needHost">
                                 <button type="button" class="btn btn-default" ng-model="ctrl.selected.host"
                                         bs-options="f.host as f.host for f in ctrl.exceptionHosts" bs-select ng-change="ctrl.onSelectChange();">
-                                    请选择<span class="caret"></span>
+                                    <em translate="i18n_select_choose"></em><span class="caret"></span>
                                 </button>
                             </li>
                             <li class="tidy-form-item">
-                                <span class="tight-form-btn btn btn-success btn-small" style="margin: 3px 20px;" ng-click="ctrl.located();">
-                                    分析
+                                <span class="tight-form-btn btn btn-success btn-small" style="margin: 3px 20px;" ng-click="ctrl.located();" translate="i18n_analysis">
                                 </span>
                             </li>
                             <li class="tidy-form-item" ng-hide="ctrl.stepIndex+1 == ctrl.steps.length">
-                                <span class="tight-form-btn btn btn-primary btn-small" style="margin: 3px 20px 3px 0;" ng-click="ctrl.steps[ctrl.stepIndex+1].jumpTo();">
-                                    下一步
+                                <span class="tight-form-btn btn btn-primary btn-small" style="margin: 3px 20px 3px 0;" ng-click="ctrl.steps[ctrl.stepIndex+1].jumpTo();" translate="i18n_next">
                                 </span>
                             </li>
                         </ul>
                     </div>
                 </div>
             </form>
-            <p style="margin: 5px;">异常诊断引导：</p>
+            <p style="margin: 5px;"><em translate="i18n_menu_diagnosis"></em>: </p>
         </div>
         <ul class="progress-tracker">
             <li class="progress-step" ng-repeat="step in ctrl.steps" ng-class="step.cssClass">

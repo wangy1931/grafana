@@ -4,8 +4,7 @@
     <i class="fa fa-remove"></i>
   </a>
 
-  <h3>
-    创建新的仪表盘
+  <h3 translate="i18n_dash_new">
   </h3>
 
   <form name="systemForm">
@@ -13,8 +12,7 @@
     <div class="tight-form-container">
       <div class="tight-form">
         <ul class="tight-form-list">
-          <li class="tight-form-item" style="width: 100px">
-            仪表盘名称
+          <li class="tight-form-item" style="width: 120px" translate="i18n_dash_name">
           </li>
           <li>
             <input ng-model="dashboardSetting.title" type="text" required class="input-large tight-form-input">
@@ -24,8 +22,7 @@
       </div>
       <div class="tight-form">
         <ul class="tight-form-list">
-          <li class="tight-form-item" style="width: 100px">
-            子系统
+          <li class="tight-form-item" style="width: 120px" translate="i18n_child_system">
           </li>
           <li>
             <input ng-model="system.SystemsName" type="text" required disabled class="input-large tight-form-input">
@@ -36,9 +33,8 @@
     </div>
 
     <div class="" style="margin-top: 30px; margin-bottom: 20px;">
-      <button type="button" class="btn btn-inverse" ng-click="dismiss()">取消</button>
-      <button type="submit" class="btn btn-success" ng-click="addSystem();">创建</button>
-
+      <button type="button" class="btn btn-inverse" ng-click="dismiss()" translate="i18n_cancel"></button>
+      <button type="submit" class="btn btn-success" ng-click="addSystem();" translate="i18n_new_create"></button>
     </div>
   </div>
 </form>

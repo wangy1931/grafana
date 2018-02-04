@@ -15,7 +15,7 @@ var template = `
           <div class="gf-form">
               <ul class="gf-form-list tidy-form-list" style="text-align:right; overflow: inherit; width: 100%;">
                   <li class="tidy-form-item">
-                      <em translate="i18n_search"></em>{{ ctrl.types[ctrl.type] }}
+                      <em translate="i18n_search"></em> {{ ctrl.types[ctrl.type] }}
                   </li>
                   <li class="tidy-form-item tidy-form-item-dropdown">
                       <input type="text" class="input-xlarge tidy-form-input last"
@@ -43,7 +43,7 @@ var template = `
                       </button>
                   </li>
                   <li class="tidy-form-item pull-right" ng-hide="ctrl.hideClear">
-                      <button class="btn btn-primary" style="padding: 0.4rem 1rem;" ng-click="ctrl.clearSelected();"><em translate="page_topology_clear_select"></em>{{ ctrl.types[ctrl.type] }}</button>
+                      <button class="btn btn-primary" style="padding: 0.4rem 1rem;" ng-click="ctrl.clearSelected();"><em translate="page_topology_clear_select"></em> {{ ctrl.types[ctrl.type] }}</button>
                   </li>
               </ul>
               <div class="clearfix"></div>

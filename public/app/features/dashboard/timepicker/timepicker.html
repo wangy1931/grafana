@@ -3,8 +3,7 @@
 		<a ng-click='ctrl.move(-1)'><i class="fa fa-chevron-left"></i></a>
 	</li>
 	<li class="dashnav-zoom-out gf-timepicker-time-control" bs-tooltip="'Time range zoom in <br> CTRL+Z'" data-placement="bottom">
-		<a ng-click='ctrl.zoom(2)'>
-			 放大时间区域
+		<a ng-click='ctrl.zoom(2)' translate="i18n_zoom_in">
 		</a>
 	</li>
 	<li class="dashnav-move-timeframe gf-timepicker-time-control" bs-tooltip="'Shift time forward <br> (right arrow key)'" data-placement="bottom">
@@ -21,7 +20,7 @@
 
 			<span ng-show="ctrl.dashboard.refresh" class="text-warning">
 				&nbsp;
-				自动刷新 {{ctrl.dashboard.refresh}}
+				<em translate="i18n_auto_refresh"></em> {{ctrl.dashboard.refresh}}
 			</span>
 		</a>
 	</li>

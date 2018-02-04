@@ -3,18 +3,18 @@
         <div class="">
             <div class="tidy-form">
                 <ul class="tidy-form-list">
-                    <li class="tidy-form-item"><h4>关键词</h4></li>
+                    <li class="tidy-form-item"><h4 translate="page_logs_key_words"></h4></li>
                     <li>
-                        <input placeholder="支持AND, OR, 空格表示OR" type="text" class="input-large tidy-form-input last" ng-model="ctrl.q" required=""/>
+                        <input placeholder="Support AND, OR" type="text" class="input-large tidy-form-input last" ng-model="ctrl.q" required=""/>
                     </li>
-                    <li class="tidy-form-item" style="margin-left:30px;"><h4>类型</h4></li>
+                    <li class="tidy-form-item" style="margin-left:30px;"><h4 translate="i18n_type"></h4></li>
                     <li>
                         <select class="input-small tidy-form-input" ng-model="ctrl.service" required>
                             <option ng-repeat="s in ctrl.services" value="{{s}}" ng-selected="ctrl.service == s">{{s}}</option>
                         </select>
                     </li>
                     <li>
-                        <button style="margin:0 20px;" type="submit" class="btn btn-primary" ng-click="ctrl.query()"><i class="fa fa-search"></i>查找</button>
+                        <button style="margin:0 20px;" type="submit" class="btn btn-primary" ng-click="ctrl.query()"><i class="fa fa-search"></i><em translate="i18n_search_info"></em></button>
                     </li>
                 </ul>
                 <div class="clearfix"></div>
@@ -29,8 +29,8 @@
             <ul class="kb-item kb-hover">
                 <li class="kb-symptom">
                     <div class="kb-header">
-                        <div><i style="color:#32b2e1;" class="fa fa-question-circle kb-icon"></i><span>问题描述:</span></div>
-                        <div><span>类型:</span><button class="btn kb-type">{{knows.service}}</button></div>
+                        <div><i style="color:#32b2e1;" class="fa fa-question-circle kb-icon"></i><span><em translate="i18n_desc"></em>: </span></div>
+                        <div><span><em translate="i18n_type"></em>: </span><button class="btn kb-type">{{knows.service}}</button></div>
                     </div>
                     <ng-quill-editor 
                         class="kb-editor kb-editor-list"
@@ -44,7 +44,7 @@
                 </li>
                 <li class="kb-solution">
                     <div class="kb-header">
-                        <div><i style="color:#29ba2d;" class="fa fa-lightbulb-o kb-icon"></i><span>解决方案:</span></div>
+                        <div><i style="color:#29ba2d;" class="fa fa-lightbulb-o kb-icon"></i><span><em translate="i18n_solution"></em>: </span></div>
                     </div>
                     <ng-quill-editor 
                         class="kb-editor kb-editor-list"
@@ -64,7 +64,7 @@
         <ul class="kb-item">
             <li class="kb-symptom">
                 <div class="kb-header">
-                    <div><i style="color:#32b2e1;" class="fa fa-question-circle kb-icon"></i><span>问题描述:</span></div>
+                    <div><i style="color:#32b2e1;" class="fa fa-question-circle kb-icon"></i><span><em translate="i18n_desc"></em>: </span></div>
                     <div><span>类型:</span><button class="btn kb-type">{{ctrl.detailKnowledge.service}}</button></div>
                 </div>
                 <ng-quill-editor 
@@ -79,7 +79,7 @@
             </li>
             <li class="kb-solution">
                 <div class="kb-header">
-                    <div><i style="color:#29ba2d;" class="fa fa-lightbulb-o kb-icon"></i><span>解决方案:</span></div>
+                    <div><i style="color:#29ba2d;" class="fa fa-lightbulb-o kb-icon"></i><span><em translate="i18n_solution"></em>: </span></div>
                 </div>
                 <ng-quill-editor 
                     class="kb-editor"
@@ -97,7 +97,7 @@
                 <a class="like-or-dislike"><i class="fa fa-thumbs-o-up" style="color: rgb(0, 111, 210);"></i>{{ctrl.detailKnowledge.score}}</a>
                 <a class="like-or-dislike"><i class="fa fa-thumbs-o-down" style="color: rgb(144, 19, 254);"></i>0</a>
             </div>
-            <a ng-click="ctrl.getList()">返回列表</a>
+            <a ng-click="ctrl.getList()" translate="i18n_back"></a>
         </div>
     </div>
 </div>

@@ -15,7 +15,7 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
   kbn = kbn.default;
 
   /** @ngInject */
-  function ElasticDatasource(instanceSettings, $q, backendSrv, templateSrv, timeSrv, contextSrv) {
+  function ElasticDatasource(instanceSettings, $q, backendSrv, templateSrv, timeSrv, contextSrv, $translate) {
     this.basicAuth = instanceSettings.basicAuth;
     this.withCredentials = instanceSettings.withCredentials;
     this.url = instanceSettings.url;
@@ -371,25 +371,25 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
   // 没有变化 count0 == count1
   function compare(target) {
     if (target.count0 === 0 && target.count1 > 0) {
-      target.count = "消失日志:" + target.count1;
-      target.change = "消失";
+      target.count = $translate.i18n.i18n_disappearing + ": " + target.count1;
+      target.change = $translate.i18n.i18n_disappearing;
     } else if (target.count0 > 0 && target.count1 === 0) {
-      target.count = "新增日志:" + target.count0;
-      target.change = "新增";
+      target.count = $translate.i18n.i18n_newly_added + ": " + target.count0;
+      target.change = $translate.i18n.i18n_newly_added;
     } else if (target.count0 > 0 && target.count1 > 0 && target.count0 > target.count1) {
       var num = ((Math.abs(target.count0 - target.count1) / target.count1)*100).toFixed();
-      target.count = "出现次数:" + target.count0 + "\n同比增长" + num + "%";
-      target.change = "增加";
+      target.count = $translate.i18n.i18n_appear_count + ": " + target.count0 + "\n" + $translate.i18n.i18n_increase + num + "%";
+      target.change = $translate.i18n.i18n_increase;
     } else if (target.count0 > 0 && target.count1 > 0 && target.count0 < target.count1) {
       var num = ((Math.abs(target.count0 - target.count1) / target.count0)*100).toFixed();
-      target.count = "出现次数:" + target.count0 + "\n同比减少" + num + "%";
-      target.change = "减少";
+      target.count = $translate.i18n.i18n_appear_count + ": " + target.count0 + "\n" + $translate.i18n.i18n_decrease + num + "%";
+      target.change = $translate.i18n.i18n_decrease;
     } else if (target.count0 > 0 && target.count1 > 0 && target.count0 == target.count1) {
-      target.count = "出现次数:" + target.count0;
-      target.change = "没有变化";
+      target.count = $translate.i18n.i18n_appear_count + ": " + target.count0;
+      target.change = $translate.i18n.i18n_no_change;
     } else {
       target.count = "0";
-      target.change = "没有变化";
+      target.change = $translate.i18n.i18n_no_change;
     }
   };
 

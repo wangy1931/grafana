@@ -23,15 +23,18 @@ export class ServiceCustomCtrl {
   searchCommand: any;
 
   /** @ngInject */
-  constructor(private $scope, private backendSrv, private contextSrv, private $location, private NgTableParams) {
+  constructor(
+    private $scope, private backendSrv, private contextSrv,
+    private $location, private NgTableParams, private $translate
+  ) {
     this.hostId = parseInt(this.$location.search().hostId) || -1;
     this.isUnit = this.contextSrv.isGrafanaAdmin && this.$location.search().unit;
     if (this.isUnit) {
-      this.title = '默认';
+      this.title = $translate.i18n.i18n_default;
       this.orgId = 0;
       this.sysId = 0;
     } else {
-      this.title = '拓展';
+      this.title = $translate.i18n.i18n_extension;
       this.orgId = this.contextSrv.user.orgId;
       this.sysId = this.contextSrv.user.systemId;
     }
@@ -93,7 +96,8 @@ export class ServiceCustomCtrl {
 
   checkName(name) {
     if (!this.pattern.test(name)) {
-      this.$scope.appEvent('alert-warning', ['服务名称非法','请输入英文字母/数字/下划线/小数点组成的字符串']);
+      this.$scope.appEvent('alert-warning',
+        [this.$translate.i18n.i18n_input_invalid, this.$translate.i18n.page_log_parse_input]);
     }
   }
 
@@ -104,16 +108,16 @@ export class ServiceCustomCtrl {
 
   deleteSoftware(software) {
     this.$scope.appEvent('confirm-modal', {
-      title: '删除',
-      text: '您确定要删除此服务吗？',
+      title: this.$translate.i18n.i18n_delete,
+      text: this.$translate.i18n.i18n_sure_operator,
       icon: 'fa-bell',
-      yesText: '确定',
-      noText: '取消',
+      yesText: this.$translate.i18n.i18n_confirm,
+      noText: this.$translate.i18n.i18n_cancel,
       onConfirm: ()=> {
         _.remove(this.softwareList, (service) => {
           return _.isEqual(service, software);
         });
-        this.saveSoftware('删除');
+        this.saveSoftware(this.$translate.i18n.i18n_delete);
       },
     });
   }
@@ -123,27 +127,29 @@ export class ServiceCustomCtrl {
       case 'add':
         if (_.every(this.newSoftware)) {
           if (!this.pattern.test(this.newSoftware.name)) {
-            this.$scope.appEvent('alert-warning', ['服务名称非法','请输入英文字母/数字/下划线/小数点组成的字符串']);
+            this.$scope.appEvent('alert-warning',
+            [this.$translate.i18n.i18n_input_invalid, this.$translate.i18n.page_log_parse_input]);
             return;
           }
           this.softwareList.push(this.newSoftware);
           this.initEditSoftware(type);
-          this.saveSoftware('添加');
+          this.saveSoftware(this.$translate.i18n.i18n_add);
         } else {
-          this.$scope.appEvent('alert-warning', ['参数不完整', '请完整填写服务信息']);
+          this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_param_miss, this.$translate.i18n.i18n_input_full]);
         }
         break;
       case 'save':
         if (_.every(this.editSoftware)) {
           if (!this.pattern.test(this.editSoftware.name)) {
-            this.$scope.appEvent('alert-warning', ['服务名称非法','请输入英文字母/数字/下划线/小数点组成的字符串']);
+            this.$scope.appEvent('alert-warning',
+            [this.$translate.i18n.i18n_input_invalid, this.$translate.i18n.page_log_parse_input]);
             return;
           }
           this.softwareList[this.editIndex] = _.cloneDeep(this.editSoftware);
           this.initEditSoftware(type);
-          this.saveSoftware('保存');
+          this.saveSoftware(this.$translate.i18n.i18n_save);
         } else {
-          this.$scope.appEvent('alert-warning', ['参数不完整', '请完整填写服务信息']);
+          this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_param_miss, this.$translate.i18n.i18n_input_full]);
         }
         break;
     }
@@ -152,7 +158,7 @@ export class ServiceCustomCtrl {
   saveSoftware(type) {
     this.backendSrv.saveCustomSoftware(this.softwareList, '/cmdb/setting/software?default_config=' + this.isUnit).then((response) => {
       if (response.status === 200) {
-        this.$scope.appEvent('alert-success', [type + '成功']);
+        this.$scope.appEvent('alert-success', [type + this.$translate.i18n.i18n_success]);
       }
     });
   }

@@ -192,25 +192,25 @@ export class ServiceTopologyCtrl {
     $event.preventDefault();
 
     this.$scope.appEvent('confirm-modal', {
-      title: '删除',
-      text: '您确认要删除该服务吗？',
+      title: this.$translate.i18n.i18n_delete,
+      text: this.$translate.i18n.i18n_sure_operator,
       icon: 'fa-trash',
-      yesText: '删除',
-      noText: '取消',
+      yesText: this.$translate.i18n.i18n_delete,
+      noText: this.$translate.i18n.i18n_cancel,
       onConfirm: () => {
         this.backendSrv.alertD({
           method: 'DELETE',
           url   : '/cmdb/agent/service',
           params: { 'id': id }
         }).then(() => {
-          this.alertSrv.set("删除成功", '', "success", 2000);
+          this.alertSrv.set(this.$translate.i18n.i18n_success, '', "success", 2000);
           _.remove(this.serviceList, { id: id });
           this.data = _.filter(this.data, (item) => {
             return item._private_.id !== id;
           });
           this.$scope.$broadcast('topology-update', this.data);
         }, (err) => {
-          this.alertSrv.set("删除失败", err.data, "error", 2000);
+          this.alertSrv.set(this.$translate.i18n.i18n_fail, err.data, "error", 2000);
         });
       }
     });

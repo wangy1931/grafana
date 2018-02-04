@@ -86,21 +86,21 @@
                       <div class="btn-group">
                             <ul>
                                 <li style="color: #F9934E; text-align: right;">
-                                    <em translate="page_logs_total_number"></em> <strong>{{panel.regularResult.data[0].total || 0}}</strong>, <em translate="page_logs_shown_number"></em> {{panel.regularResult.data[0].datapoints.length || 0}}. <em translate="page_logs_datazoom"></em>
+                                    <em translate="page_logs_total_number"></em>: <strong>{{panel.regularResult.data[0].total || 0}}</strong>, <em translate="page_logs_shown_number"></em> {{panel.regularResult.data[0].datapoints.length || 0}}. <em translate="page_logs_datazoom"></em>
                                 </li>
                             </ul>
                       </div>
                   </div>
                   <div ng-if="name == 2" class="log-compare">
-                    <div class="btn-group btn-log-compare">
+                    <div class="btn-group btn-log-compare"><em translate="page_logs_log_compare"></em>: 
                         <button class="dropdown-toggle input" data-toggle="dropdown">
-                            {{ ctrl.currentRelativeTime }}<span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
+                            {{ ctrl.currentRelativeTime }} <span class="caret" style="vertical-align: middle; margin-left: 10px;"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li ng-click="ctrl.logCompare('-1d')">1 <em tranlate="i18n_day"></em><em tranlate="i18n_ago"></em></li>
-                            <li ng-click="ctrl.logCompare('-7d')">7 <em tranlate="i18n_day"></em><em tranlate="i18n_ago"></em></li>
-                            <li ng-click="ctrl.logCompare('-30d')">1 <em tranlate="i18n_month"></em><em tranlate="i18n_ago"></em></li>
-                            <li ng-click="ctrl.logCompare('-365d')">1 <em tranlate="i18n_year"></em><em tranlate="i18n_ago"></em></li>
+                            <li ng-click="ctrl.logCompare('-1d')">1 <em translate="i18n_day"></em><em translate="i18n_ago"></em></li>
+                            <li ng-click="ctrl.logCompare('-7d')">7 <em translate="i18n_day"></em><em translate="i18n_ago"></em></li>
+                            <li ng-click="ctrl.logCompare('-30d')">1 <em translate="i18n_month"></em><em translate="i18n_ago"></em></li>
+                            <li ng-click="ctrl.logCompare('-365d')">1 <em translate="i18n_year"></em><em translate="i18n_ago"></em></li>
                             <li ng-click="ctrl.showInputModal()"><em translate="i18n_custom"></em></li>
                         </ul>
                     </div>

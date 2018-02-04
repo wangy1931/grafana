@@ -22,7 +22,7 @@ class DashListCtrl extends PanelCtrl {
   };
 
   /** @ngInject */
-  constructor($scope, $injector, private backendSrv, private $translate) {
+  constructor($scope, $injector, private backendSrv, $translate) {
     super($scope, $injector);
     _.defaults(this.panel, this.panelDefaults);
 

@@ -117,7 +117,7 @@ define([
           $scope.initDashboard({
             meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
             dashboard: {
-              title: "总览",
+              title: "Overview",
               id: "name",
               rows: panelMeta,
               time: { from: $scope.anomalyTimeSelected.from, to: "now" }
@@ -167,7 +167,7 @@ define([
           target.shouldComputeRate = false;
         });
         $scope.dashboard.rows[0].panels[0].seriesOverrides[0].alias = anomaly.metric+".anomaly{host="+ anomaly.host + "}";
-        $scope.dashboard.rows[0].panels[0].title = anomaly.metric + "异常点";
+        $scope.dashboard.rows[0].panels[0].title = anomaly.metric + $translate.i18n.page_anomaly_status;
         healthSrv.transformMetricType($scope.dashboard).then(function () {
           $scope.$broadcast('refresh');
         });

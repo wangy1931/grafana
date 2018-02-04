@@ -64,10 +64,10 @@ define([
           noText: '取消',
           onConfirm: function () {
             backendSrv.alertD({url:url, method:'delete'}).then(function () {
-              $scope.appEvent('alert-success', ['删除成功']);
+              $scope.appEvent('alert-success', [this.$translate.i18n.i18n_success]);
               $scope.getOrgInfo();
             }, function () {
-              $scope.appEvent('alert-danger', ['删除失败']);
+              $scope.appEvent('alert-danger', [this.$translate.i18n.i18n_fail]);
             });
           }
         });

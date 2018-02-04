@@ -12,7 +12,7 @@ var template = `
              ng-model='ctrl.curTagKey'
              spellcheck='false'
              bs-typeahead-old="ctrl.allkeyOptions"
-             placeholder="添加标签" required autofocus
+             placeholder="{{ ctrl.$translate.i18n.i18n_add_tag }}" required autofocus
              ng-blur="ctrl.getTagValue();" />
     </div>
   </div>
@@ -23,7 +23,7 @@ var template = `
              ng-model='ctrl.curTagValue'
              spellcheck='false'
              bs-typeahead-old="ctrl.allvalueOptions"
-             placeholder="添加标签值" required
+             placeholder="{{ ctrl.$translate.i18n.i18n_add_tag_value }}" required
              ng-enter="ctrl.postTag();" />
     </div>
   </div>
@@ -39,7 +39,7 @@ export class TagPickerCtrl {
   curTagValue: string;
 
   /** @ngInject */
-  constructor(private $scope, private $timeout, private hostSrv, private alertSrv) {
+  constructor(private $scope, private $timeout, private hostSrv, private alertSrv, private $translate) {
     this.getAllTags();
   }
 
@@ -67,7 +67,7 @@ export class TagPickerCtrl {
     };
 
     if (this.isInvalid(this.curTagKey) || this.isInvalid(this.curTagValue)) {
-      this.alertSrv.set("创建 Tag 失败", "输入内容中存在非法字符", "error", 2000);
+      this.alertSrv.set(this.$translate.i18n.page_add_tag_err, this.$translate.i18n.page_add_tag_invalid, "error", 2000);
       return;
     }
 
@@ -77,7 +77,7 @@ export class TagPickerCtrl {
       this.curTagKey = '';
       this.curTagValue = '';
     }, err => {
-      this.alertSrv.set("创建 Tag 失败", err.data, "error", 2000);
+      this.alertSrv.set(this.$translate.i18n.page_add_tag_err, err.data, "error", 2000);
     });
   };
 

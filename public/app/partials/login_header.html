@@ -1,7 +1,7 @@
 <header class="sign-header" ng-controller="LoginCtrl">
     <a class="pull-left">
-        <img src="public/img/fav32.png" alt="云兴维智" />
-        <span>云兴维智</span>
+        <img src="public/img/fav32.png" alt="{{ 'i18n_index' | translate }}" />
+        <span translate="i18n_index"></span>
     </a>
-    <a ng-click="contactUs()" class="pull-right btn-link-login">联系我们</a>
+    <a ng-click="contactUs()" class="pull-right btn-link-login" translate="i18n_contact_us"></a>
 </header>

@@ -21,7 +21,7 @@
                 <th>ID</th>
                 <th ng-click="orderBy('name')" class="pointer">名称<i class="fa fa-sort"></i></th>
                 <th ng-click="orderBy('createdAt')" class="pointer">创建时间<i class="fa fa-sort"></i></th>
-                <th>操作</th>
+                <th translate="i18n_operating"></th>
             </tr>
             <tr ng-repeat="service in services| filter: searchService | orderBy: order : desc">
                 <td class="main-color">{{$index+1}}</td>

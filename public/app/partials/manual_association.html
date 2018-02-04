@@ -4,42 +4,40 @@
         <i class="fa fa-remove"></i>
     </a>
 
-    <h3>
-        加入新的关联指标
+    <h3 translate="page_association_new_metric">
     </h3>
-    <form >
+    <form>
         <div class="tidy-form">
             <ul class="tidy-form-list">
-                <li class="tidy-form-item" style="width: 100px">
-                    指标
+                <li class="tidy-form-item" style="width: 100px" translate="i18n_metric">
                 </li>
                 <li>
                     <input type="text" class="tidy-form-input input-xlarge"
-                           ng-model='target.metric'
-                           spellcheck='false'
-                           bs-typeahead-old="suggestMetrics"
-                           placeholder="需要分析的指标" required/>
+                        ng-model='target.metric'
+                        spellcheck='false'
+                        bs-typeahead-old="suggestMetrics"
+                        placeholder="{{ 'i18n_metric_name' | translate }}" required/>
                 </li>
             </ul>
             <div class="clearfix"></div>
         </div>
         <div class="tidy-form">
             <ul class="tidy-form-list">
-                <li class="tidy-form-item" style="width: 100px">
-                    机器标签
+                <li class="tidy-form-item" style="width: 100px" translate="page_host_info_tag">
                 </li>
                 <li>
                     <input type="text" class="input-medium tidy-form-input ng-pristine ng-untouched ng-valid"
-                           spellcheck="false"
-                           bs-typeahead-old="suggestTagHost"
-                           data-min-length="0" data-items="100" ng-model="target.host" placeholder="请键入主机名"
-                           data-provide="typeahead">
+                        spellcheck="false"
+                        bs-typeahead-old="suggestTagHost"
+                        data-min-length="0" data-items="100" ng-model="target.host" placeholder="{{ 'i18n_hostname' | translate }}"
+                        data-provide="typeahead">
                 </li>
             </ul>
             <div class="clearfix"></div>
         </div>
-        <button type="submit" class="btn btn-primary" ng-click="addManualMetric(target);dismiss()"><i
-                class="fa fa-search"/>加入分析
+        <button type="submit" class="btn btn-primary" ng-click="addManualMetric(target);dismiss()">
+            <i class="fa fa-search" />
+            <em translate="page_association_analysis"></em>
         </button>
     </form>
 </div>

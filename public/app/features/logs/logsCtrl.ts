@@ -54,7 +54,7 @@ export class LogsCtrl {
     this.timeShift = "-1d";
     this.logFilter = "";
     this.currentRelativeTime = `1${$translate.i18n.i18n_day}${$translate.i18n.i18n_ago}`;
-    this.currentFilter = $translate.i18n_empty;
+    this.currentFilter = $translate.i18n.i18n_empty;
     this.resultCache = {};
     this.tabsCache = {};
     this.logsSelected = [];

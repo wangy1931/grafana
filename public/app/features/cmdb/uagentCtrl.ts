@@ -27,7 +27,7 @@ export class UagentCtrl {
     var hostId = search.hostId || -1;
     this.getHosts(hostId);
     this.title = {
-      'filebeat': '日志管理',
+      'filebeat': $translate.i18n.i18n_log_manage,
       'collector': $translate.i18n.i18n_menu_cmdb_config
     }
   }
@@ -84,24 +84,24 @@ export class UagentCtrl {
 
   checkNum(prop) {
     if (!prop.value) {
-      this.$scope.appEvent('alert-warning', ['参数错误', '请输入大于' + prop.minValue + '的整数']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_param_err, this.$translate.i18n.i18n_integer_above + " " + prop.minValue]);
     }
   }
 
   showConfirm() {
     if (this.contextSrv.isViewer) {
-      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_sorry, this.$translate.i18n.i18n_no_authority]);
       return;
     }
     if (_.isEmpty(this.configs)) {
       this.getService()
     }
     this.$scope.appEvent('confirm-modal', {
-      title: '确认应用',
-      text: '您确认要应用该配置吗',
+      title: this.$translate.i18n.i18n_confirm,
+      text: this.$translate.i18n.i18n_sure_operator,
       icon: 'fa-bell',
-      yesText: '确定',
-      noText: '取消',
+      yesText: this.$translate.i18n.i18n_confirm,
+      noText: this.$translate.i18n.i18n_cancel,
       modalClass : 'contact-us',
       onConfirm: this.confirmSave.bind(this)
     });
@@ -109,7 +109,7 @@ export class UagentCtrl {
 
   confirmSave() {
     if (this.contextSrv.isViewer) {
-      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_sorry, this.$translate.i18n.i18n_no_authority]);
       return;
     }
     var url = '/cmdb/config/service';
@@ -142,7 +142,8 @@ export class UagentCtrl {
           param.configName = prop.value;
           if (this.configName !== prop.value && _.some(this.configs, {name: prop.value})) {
             checkDocument = false;
-            this.$scope.appEvent('alert-warning', ['document_type为' + prop.value + '的配置已经存在', '请修改日志类型(document_type)']);
+            this.$scope.appEvent('alert-warning',
+              [prop.value + this.$translate.i18n.i18n_existed, `${this.$translate.i18n.i18n_modify}${this.$translate.i18n.page_alert_log_type}(document_type)`]);
           }
         }
       });
@@ -162,16 +163,16 @@ export class UagentCtrl {
       data: data,
       headers: {'Content-Type': 'text/plain;application/json;charset=UTF-8'},
     }).then((response)=>{
-      this.$scope.appEvent('alert-success', ['应用成功']);
+      this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success]);
       this.$location.url('/cmdb/config?serviceName=' + this.serviceName + '&hostId=' + this.host.id);
     }, (err)=>{
-      this.$scope.appEvent('alert-warning', ['应用失败', '请稍后重试']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_fail, this.$translate.i18n.i18n_try_later]);
     });
   }
 
   addCollectionValue(path, prop) {
     if (_.indexOf(prop.value, path) > -1) {
-      this.$scope.appEvent('alert-warning', ['添加失败', '请将参数填写完整']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_fail, this.$translate.i18n.i18n_input_full]);
     } else {
       prop.value.push(path);
     }
@@ -186,21 +187,21 @@ export class UagentCtrl {
     }
     if (prop.value.length > _.uniq(prop.value).length) {
       prop.value = _.uniq(prop.value);
-      this.$scope.appEvent('alert-warning', ['参数重复', '参数请勿重复']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_param_repeat, this.$translate.i18n.i18n_dont_repeat]);
     }
   }
 
   deleteConfig(id) {
     if (this.contextSrv.isViewer) {
-      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_sorry, this.$translate.i18n.i18n_no_authority]);
       return;
     }
     this.$scope.appEvent('confirm-modal', {
-      title: '删除',
-      text: '您确定要删除该配置吗？',
-      icon: 'fa-bell',
-      yesText: '确定',
-      noText: '取消',
+      title: this.$translate.i18n.i18n_delete,
+      text: this.$translate.i18n.i18n_sure_operator,
+      icon: 'fa-trash',
+      yesText: this.$translate.i18n.i18n_delete,
+      noText: this.$translate.i18n.i18n_cancel,
       modalClass : 'contact-us',
       onConfirm: ()=>{
         this.backendSrv.alertD({
@@ -213,7 +214,7 @@ export class UagentCtrl {
             userId: this.user.id
           },
         }).then((response)=>{
-          this.$scope.appEvent('alert-success', ['删除成功']);
+          this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success]);
           this.$location.url('/cmdb/config?serviceName=' + this.serviceName + '&hostId=' + this.host.id);
           this.getData();
         });
@@ -223,15 +224,15 @@ export class UagentCtrl {
 
   copy(id, hosts) {
     if (this.contextSrv.isViewer) {
-      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_sorry, this.$translate.i18n.i18n_no_authority]);
       return;
     }
     this.$scope.appEvent('confirm-modal', {
-      title: '同步',
-      text: '您确定要同步该配置吗？',
+      title: this.$translate.i18n.page_agent_synchronize,
+      text: this.$translate.i18n.i18n_sure_operator,
       icon: 'fa-bell',
-      yesText: '确定',
-      noText: '取消',
+      yesText: this.$translate.i18n.i18n_confirm,
+      noText: this.$translate.i18n.i18n_cancel,
       modalClass : 'contact-us',
       onConfirm: ()=>{
         this.backendSrv.alertD({
@@ -245,7 +246,7 @@ export class UagentCtrl {
           },
           data: {hosts: hosts}
         }).then((response)=>{
-          this.$scope.appEvent('alert-success', ['同步成功']);
+          this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success]);
         });
       }
     });

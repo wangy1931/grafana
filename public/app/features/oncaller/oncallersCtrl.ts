@@ -16,7 +16,7 @@ export class OnCallersCtrl {
 
   /** @ngInject */
   constructor(
-    private $scope, private $location, private $q, private popoverSrv,
+    private $scope, private $location, private $q, private popoverSrv, private $translate,
     private oncallerMgrSrv, private backendSrv, private alertSrv, private contextSrv
   ) {
     this.orgName = contextSrv.user.orgName;
@@ -63,13 +63,13 @@ export class OnCallersCtrl {
 
   remove(user) {
     this.$scope.appEvent('confirm-modal', {
-      title: '确定要将该用户从值班人员中删除吗?',
+      title: this.$translate.i18n.page_oncaller_delete_duty,
       icon: 'fa-trash',
-      noText: '取消',
-      yesText: '确定',
+      noText: this.$translate.i18n.i18n_cancel,
+      yesText: this.$translate.i18n.i18n_confirm,
       onConfirm: () => {
         this.oncallerMgrSrv.remove(user.org, user.service, user.id).then(() => {
-          this.alertSrv.set("删除成功", "", "success", 1000);
+          this.alertSrv.set(this.$translate.i18n.i18n_success, "", "success", 1000);
           _.find(this.users, { email: user.email }).added = false;
           _.remove(this.oncallerUsers, { id: user.id });
         }, err => {
