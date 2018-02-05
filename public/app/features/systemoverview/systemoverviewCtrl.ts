@@ -80,9 +80,9 @@ export class SystemOverviewCtrl {
     this.kpiPanel = {
       leftTableHeads: ['i18n_hostname', 'i18n_hostname'],
       leftTableBodys: [
-        { id: '', name: '', data: $translate.i18n.i18n_normal, status: 'green' },
-        { id: '', name: '', data: $translate.i18n.i18n_normal, status: 'green' },
-        { id: '', name: '', data: $translate.i18n.i18n_normal, status: 'green' }
+        { id: '', name: '', data: '...', status: 'green' },
+        { id: '', name: '', data: '...', status: 'green' },
+        { id: '', name: '', data: '...', status: 'green' }
       ],
       rightPanelHead: { id: '', name: '...' },
       rightItemTypes: {
