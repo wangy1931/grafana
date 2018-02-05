@@ -20,7 +20,7 @@
         <div ng-repeat="oncaller in oncallerList" class="span5">
           <p class="{{oncaller.user}} on-duty">
             <span class="user-span">{{oncaller.name | limitTo:1 | uppercase}}</span>
-            <span>{{oncaller.name}}</span>
+            <em>{{oncaller.name}}</em>
             <button ng-click="deleteOncaller(oncaller)" class="delete pull-right"><i class="fa fa-times"></i></i></button></p>
         </div>
       </div>

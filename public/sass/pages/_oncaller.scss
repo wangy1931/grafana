@@ -95,8 +95,8 @@
     border-radius: 100%;
     font-weight: bold;
   }
-  &>span{
-    width: 60%;
+  &>em{
+    flex: 1;
     overflow: hidden;
   }
   &.on-duty-form{
