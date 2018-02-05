@@ -17,7 +17,7 @@
         },
         {
           "id": 4,
-          "text": "资源",
+          "text": "i18n_menu_service",
           "url": "/service_topology"
         }
       ]
@@ -46,7 +46,7 @@
       "children": [
         {
           "id": 1,
-          "text": "诊断助手",
+          "text": "i18n_menu_diagnostic_assistant",
           "url": "/association?guide"
         }
       ]

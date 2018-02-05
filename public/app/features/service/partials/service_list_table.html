@@ -22,7 +22,7 @@
                 <th>位置</th>
             </tr>
             <tr ng-repeat="item in ctrl.servicePanel"
-                ng-click="ctrl.rowClickHandle(item)"
+                ng-click="ctrl.rowClickHandle($event, item)"
                 class="pointer">
                 <td>{{ item.id }}</td>
                 <td><i class="iconfont fa-default"></i> {{ item.name }}</td>

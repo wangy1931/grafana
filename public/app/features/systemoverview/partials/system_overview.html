@@ -50,7 +50,7 @@
                     </div> -->
                     <div class="anomaly-panel panels-wrapper" style="height: 50%; border-top: none;">
                         <h3 ng-click="ctrl.showModal(1)" style="cursor: pointer;" bs-tooltip="'点击查看历史报警'">
-                            <a href="javascript:;">报警情况</a>
+                            <a href="javascript:;" translate="page_overview_panel_alert_title"></a>
                         </h3>
                         <div>
                             <li ng-repeat="alert in ctrl.alertPanel.status" ng-if="alert.hide!=true">
@@ -92,7 +92,8 @@
                 <span class="overview-switch">
                     <span class="switch-text">
                         <span class="item on">
-                            <i class="fa fa-check"></i>服务拓扑
+                            <i class="fa fa-check"></i>
+                            <em translate="page_overview_panel_service_title"></em>
                         </span>
                     </span>
                 </span>

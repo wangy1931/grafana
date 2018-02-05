@@ -55,9 +55,9 @@ export class ServiceTopologyCtrl {
     this.tabs = [
       { 'id': 0, 'title': $translate.i18n.page_service_tab0, 'active': false, 'show': true,  'content': 'public/app/features/service/partials/service_list_table.html' },
       { 'id': 1, 'title': $translate.i18n.page_service_tab1, 'active': false, 'show': false, 'content': 'public/app/features/service/partials/service_info.html' },
-      { 'id': 2, 'title': '报警检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_alert_table.html' },
-      { 'id': 3, 'title': '异常检测', 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_anomaly_table.html' },
-      { 'id': 4, 'title': '系统状态', 'active': false, 'show': false,  'content': 'public/app/features/host/partials/host_system_status.html' },
+      { 'id': 2, 'title': $translate.i18n.page_host_tab2, 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_alert_table.html' },
+      { 'id': 3, 'title': $translate.i18n.page_host_tab3, 'active': false, 'show': true,  'content': 'public/app/features/host/partials/host_anomaly_table.html' },
+      { 'id': 4, 'title': $translate.i18n.page_host_tab1, 'active': false, 'show': false,  'content': 'public/app/features/host/partials/host_system_status.html' },
     ];
     this.needNameTabs = [1, 4];
 
