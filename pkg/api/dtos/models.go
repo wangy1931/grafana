@@ -72,6 +72,7 @@ type DataSource struct {
 	TypeLogoUrl       string           `json:"typeLogoUrl"`
 	Access            m.DsAccess       `json:"access"`
 	Url               string           `json:"url"`
+	Intranet          string           `json:"intranet"`
 	Password          string           `json:"password"`
 	User              string           `json:"user"`
 	Database          string           `json:"database"`

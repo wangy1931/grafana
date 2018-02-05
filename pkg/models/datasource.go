@@ -107,6 +107,7 @@ type UpdateDataSourceCommand struct {
 	Type              string           `json:"type" binding:"Required"`
 	Access            DsAccess         `json:"access" binding:"Required"`
 	Url               string           `json:"url"`
+	Intranet          string           `json:"intranet"`
 	Password          string           `json:"password"`
 	User              string           `json:"user"`
 	Database          string           `json:"database"`

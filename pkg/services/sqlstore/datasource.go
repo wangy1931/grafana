@@ -109,6 +109,7 @@ func UpdateDataSource(cmd *m.UpdateDataSourceCommand) error {
 			Type:              cmd.Type,
 			Access:            cmd.Access,
 			Url:               cmd.Url,
+			Intranet:          cmd.Intranet,
 			User:              cmd.User,
 			Password:          cmd.Password,
 			Database:          cmd.Database,

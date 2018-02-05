@@ -1,0 +1,18 @@
+{
+  "type": "datasource",
+  "name": "CustomDB",
+  "id": "customdb",
+
+  "metrics": false,
+  "annotations": false,
+
+  "info": {
+    "author": {
+      "name": "Cloudwiz Project"
+    },
+    "logos": {
+      "small": "img/icn-datasource.svg",
+      "large": "img/icn-datasource.svg"
+    }
+  }
+}

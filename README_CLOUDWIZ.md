@@ -1,12 +1,16 @@
 ## Update tables Features
 
 ## Datasource add column 'intranet'
+date: 2018-02-05
+
 - 添加内网设置, 默认与url一致
 ```sql
 UPDATE data_source SET intranet=url
 ```
-
+---
 ### 免费用户限制
+date: 2018-01-21
+
 - 免费用户拥有30天试用期，过时不能登录
 - 创建org_permit表
 - 初始化org_permit表
@@ -14,8 +18,10 @@ UPDATE data_source SET intranet=url
 set @dt = now();
 INSERT INTO org_permit (`org_id`, `data_center`, `level`, `deadline`) SELECT id, 'ucloud', 'free', date_add(@dt, interval 30 day) FROM org;
 ```
-
+---
 ### DataSource update
+date: 2018-01-21
+
 - 新建用户数据源从default.ini获取，旧用户数据源从数据库获取
 - 初始化data_source表,主要修改相应的url
 ```sql
