@@ -2,83 +2,78 @@
   "menusTop": [
     {
       "id": 2,
-      "text": "i18n_menu_monitor",
+      "text": "实时监控",
       "icon": "fa fa-fw fa-tachometer",
       "children": [
         {
           "id": 1,
-          "text": "i18n_menu_dashboardlist",
+          "text": "指标",
           "url": "/dashboardlist"
         },
         {
           "id": 2,
-          "text": "i18n_menu_logs",
+          "text": "日志",
           "url": "/logs"
         },
         {
           "id": 3,
-          "text": "i18n_menu_host",
+          "text": "机器",
           "url": "/host_topology"
         },
         {
           "id": 4,
-          "text": "i18n_menu_service",
+          "text": "服务",
           "url": "/service_topology"
         }
       ]
     },
     {
       "id": 3,
-      "text": "i18n_menu_alert",
+      "text": "实时报警",
       "icon": "fa fa-fw fa-bell",
       "children": [
         {
           "id": 1,
-          "text": "i18n_menu_alert_rule",
+          "text": "规则报警",
           "url": "/alerts/status"
         },
         {
           "id": 2,
-          "text": "i18n_menu_alert_auto",
+          "text": "智能报警",
           "url": "/anomaly"
         }
       ]
     },
     {
       "id": 4,
-      "text": "i18n_menu_diagnosis",
+      "text": "分析诊断",
       "icon": "fa fa-fw fa-bar-chart",
       "children": [
         {
           "id": 1,
-          "text": "i18n_menu_diagnostic_assistant",
+          "text": "诊断助手",
           "url": "/rca?guide"
         },
         {
           "id": 2,
-          "text": "i18n_menu_report",
+          "text": "健康报告",
           "url": "/report"
         }
       ]
     },
     {
       "id": 5,
-      "text": "i18n_menu_cmdb",
+      "text": "系统配置",
       "icon": "fa fa-fw fa-cubes",
       "children": [
         {
           "id": 1,
-          "text": "i18n_menu_cmdb_config",
+          "text": "探针收集",
           "url": "/cmdb/config?serviceName=collector"
         },
         {
-          "id": 2,
-          "text": "i18n_menu_logs_parse",
-          "url": "/logs/rules"
-        },
-        {
           "id": 3,
-          "text": "i18n_menu_cmdb_metrics",
+          "text": "指标管理",
           "url": "/cmdb/metrics"
         }
       ]
