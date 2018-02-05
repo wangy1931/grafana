@@ -38,20 +38,20 @@ function (moment, $, angular, _) {
 
       // 从后台获取的shchedule
       $scope.primary = {
-        type: `(${$translate.i18n.i18n_primary})`,
+        type: "(" + $translate.i18n.i18n_primary + ")",
         events: []
       };
       $scope.secondary = {
-        type: `(${$translate.i18n.i18n_secondary})`,
+        type: "(" + $translate.i18n.i18n_secondary + ")",
         events: []
       };
       // 从纯前端排班的shchedule
       $scope.primaryReview = {
-        type: `(${$translate.i18n.i18n_primary})`,
+        type: "(" + $translate.i18n.i18n_primary + ")",
         events: []
       };
       $scope.secondaryReview = {
-        type: `(${$translate.i18n.i18n_secondary})`,
+        type: "(" + $translate.i18n.i18n_secondary + ")",
         events: []
       };
       $scope.roles = [

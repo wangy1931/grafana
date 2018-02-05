@@ -68,6 +68,8 @@
       $keepContent = false,
       $nextLang,
       $missingTranslationHandlerFactory,
+      $notFoundIndicatorLeft,
+      $notFoundIndicatorRight,
       $postCompilingEnabled = false,
       loaderCache,
       postProcessFn,
@@ -848,7 +850,7 @@
             break;
           }
         }
-  
+
         if (!result && result !== '') {
           if ($notFoundIndicatorLeft || $notFoundIndicatorRight) {
             throw Error('Not found indicator left or right');
@@ -856,7 +858,7 @@
           } else {
             // Return translation of default interpolator if not found anything.
             result = defaultInterpolator.interpolate(translationId, interpolateParams, 'filter', sanitizeStrategy);
-  
+
             // looks like the requested translation id doesn't exists.
             // Now, if there is a registered handler for missing translations and no
             // asyncLoader is pending, we execute the handler
@@ -864,13 +866,13 @@
             if ($missingTranslationHandlerFactory && !pendingLoader) {
               // missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams, sanitizeStrategy);
             }
-  
+
             if ($missingTranslationHandlerFactory && !pendingLoader && missingTranslationHandlerTranslation) {
               result = missingTranslationHandlerTranslation;
             }
           }
         }
-  
+
         return result;
       };
 
@@ -1264,14 +1266,14 @@
         var ctx = this;
         interpolateParams = $parse(interpolateParams)(ctx);
       }
-  
+
       return $translate.instant(translationId, interpolateParams, interpolation, forceLanguage);
     };
-  
+
     if ($translate.statefulFilter()) {
       translateFilter.$stateful = true;
     }
-  
+
     return translateFilter;
   });
 
