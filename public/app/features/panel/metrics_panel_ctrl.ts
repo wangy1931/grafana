@@ -4,12 +4,10 @@ import config from 'app/core/config';
 import $ from 'jquery';
 import _ from 'lodash';
 import kbn from 'app/core/utils/kbn';
-import {PanelCtrl} from './panel_ctrl';
+import { PanelCtrl } from './panel_ctrl';
 
 import * as rangeUtil from 'app/core/utils/rangeutil';
 import * as dateMath from 'app/core/utils/datemath';
-
-import {Subject} from 'vendor/npm/rxjs/Subject';
 
 class MetricsPanelCtrl extends PanelCtrl {
   error: boolean;
@@ -56,7 +54,9 @@ class MetricsPanelCtrl extends PanelCtrl {
 
   private onMetricsPanelRefresh() {
     // ignore fetching data if another panel is in fullscreen
-    if (this.otherPanelInFullscreenMode()) { return; }
+    if (this.otherPanelInFullscreenMode()) {
+      return;
+    }
 
     // if we have snapshot data use that
     if (this.panel.snapshotData) {
@@ -82,17 +82,18 @@ class MetricsPanelCtrl extends PanelCtrl {
 
     // load datasource service
     this.setTimeQueryStart();
-    this.datasourceSrv.get(this.panel.datasource)
-    .then(this.issueQueries.bind(this))
-    .then(this.handleQueryResult.bind(this))
-    .then(this.saveQueryResult.bind(this))
-    .catch(err => {
-      this.loading = false;
-      this.error = err.message || "Timeseries data request error";
-      this.inspector = {error: err};
-      this.events.emit('data-error', err);
-      console.log('Panel data error:', err);
-    });
+    this.datasourceSrv
+      .get(this.panel.datasource)
+      .then(this.issueQueries.bind(this))
+      .then(this.handleQueryResult.bind(this))
+      .then(this.saveQueryResult.bind(this))
+      .catch(err => {
+        this.loading = false;
+        this.error = err.message || 'Timeseries data request error';
+        this.inspector = { error: err };
+        this.events.emit('data-error', err);
+        console.log('Panel data error:', err);
+      });
   }
 
   setTimeQueryStart() {
@@ -119,7 +120,7 @@ class MetricsPanelCtrl extends PanelCtrl {
     var panelInterval = this.panel.interval;
     var datasourceInterval = (this.datasource || {}).interval;
     this.interval = kbn.calculateInterval(this.range, this.resolution, panelInterval || datasourceInterval);
-  };
+  }
 
   applyPanelTimeOverrides() {
     this.timeInfo = '';
@@ -177,7 +178,7 @@ class MetricsPanelCtrl extends PanelCtrl {
     if (this.panel.hideTimeOverride) {
       this.timeInfo = '';
     }
-  };
+  }
 
   issueQueries(datasource) {
     this.updateTimeRange();
@@ -185,7 +186,7 @@ class MetricsPanelCtrl extends PanelCtrl {
     /**
      * 如果提供了外部数据源，直接返回，不再query
      * 注意：1）当要恢复为正常query请求时，把 externalDatasource 设置为 null
-     *      2）提供的外部数据源应该满足 graph | singlestats | table 或其他panel插件的格式要求 
+     *      2）提供的外部数据源应该满足 graph | singlestats | table 或其他panel插件的格式要求
      * 例，graph 的数据格式
      * [
      *    {
@@ -215,22 +216,22 @@ class MetricsPanelCtrl extends PanelCtrl {
       format: this.panel.renderer === 'png' ? 'png' : 'json',
       maxDataPoints: this.resolution,
       scopedVars: this.panel.scopedVars,
-      cacheTimeout: this.panel.cacheTimeout
+      cacheTimeout: this.panel.cacheTimeout,
     };
 
     this.setTimeQueryStart();
-    return datasource.query(metricsQuery).then((results) => {
+    return datasource.query(metricsQuery).then(results => {
       this.setTimeQueryEnd();
 
-        if (this.dashboard.snapshot) {
-          this.panel.snapshotData = results;
-        }
+      if (this.dashboard.snapshot) {
+        this.panel.snapshotData = results;
+      }
 
-        if (results.id === 'logSearch') {
-          this.panel.regularResult = results;
-        }
+      if (results.id === 'logSearch') {
+        this.panel.regularResult = results;
+      }
 
-        return results;
+      return results;
     });
   }
 
@@ -262,20 +263,20 @@ class MetricsPanelCtrl extends PanelCtrl {
 
     this.dataStream = stream;
     this.dataSubscription = stream.subscribe({
-      next: (data) => {
+      next: data => {
         console.log('dataSubject next!');
         if (data.range) {
           this.range = data.range;
         }
         this.events.emit('data-received', data.data);
       },
-      error: (error) => {
+      error: error => {
         this.events.emit('data-error', error);
         console.log('panel: observer got error');
       },
       complete: () => {
         console.log('panel: observer got complete');
-      }
+      },
     });
   }
 
@@ -301,9 +302,11 @@ class MetricsPanelCtrl extends PanelCtrl {
   }
 
   saveQueryResult(result) {
-    result.data && result.data[0] && this.$scope.$emit('data-saved', { id: result.id, data: result.data[0].datapoints });
-    (result.id === 'logSearch') && this.$scope.$emit('data-saved', { id: 'queryHeader', data: result.config.data });
+    result.data &&
+      result.data[0] &&
+      this.$scope.$emit('data-saved', { id: result.id, data: result.data[0].datapoints });
+    result.id === 'logSearch' && this.$scope.$emit('data-saved', { id: 'queryHeader', data: result.config.data });
   }
 }
 
-export {MetricsPanelCtrl};
+export { MetricsPanelCtrl };

@@ -2,6 +2,7 @@ package api
 
 import (
 	"time"
+	"strings"
 	"github.com/wangy1931/grafana/pkg/api/dtos"
 	"github.com/wangy1931/grafana/pkg/bus"
 	"github.com/wangy1931/grafana/pkg/middleware"
@@ -22,6 +23,15 @@ func setIndexViewData(c *middleware.Context) (*dtos.IndexViewData, error) {
 	}
 	prefs := prefsQuery.Result
 
+	// Read locale from acccept-language
+	acceptLang := c.Req.Header.Get("Accept-Language")
+	locale := "zh-CN"
+
+	if len(acceptLang) > 0 {
+		parts := strings.Split(acceptLang, ",")
+		locale = parts[0]
+	}
+
 	var data = dtos.IndexViewData{
 		User: &dtos.CurrentUser{
 			Id:             c.UserId,
@@ -34,10 +44,11 @@ func setIndexViewData(c *middleware.Context) (*dtos.IndexViewData, error) {
 			OrgRole:        c.OrgRole,
 			GravatarUrl:    dtos.GetGravatarUrl(c.Email),
 			IsGrafanaAdmin: c.IsGrafanaAdmin,
-			SystemId: 	c.SystemId,
+			SystemId: 	    c.SystemId,
 			UserTheme:      prefs.Theme,
 			Timezone:       prefs.Timezone,
 			Deadline:				c.Deadline,
+			Locale:         locale,
 		},
 		Settings:           settings,
 		AppUrl:             setting.AppUrl,

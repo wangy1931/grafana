@@ -24,7 +24,7 @@ module.exports = function(grunt) {
       'jquery',
       'bootstrap-tagsinput',
       'lodash',
-      'moment',
+      // 'moment',
       'spectrum',
       'eventemitter3',
       'ng-table'

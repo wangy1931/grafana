@@ -13,8 +13,8 @@ export class GuideCtrl {
   exceptionMetrics: any = [];
   exceptionHosts: any = [];
   selected: any = {};
-  collapsed: boolean = true;
-  fixed: boolean = false;
+  collapsed: true;
+  fixed: false;
 
   /** @ngInject */
   constructor(
@@ -39,7 +39,9 @@ export class GuideCtrl {
     searchParams.host = searchParams.host || '*';
     _.extend(this.selected, searchParams);
     // TO FIX: does not work sometimes
-    $timeout(() => { this.located(); }, 100);
+    $timeout(() => {
+      this.located();
+    }, 100);
 
     this.steps.push({
       title: 'i18n_guide_step1',
@@ -50,7 +52,7 @@ export class GuideCtrl {
       check: () => $q.when(this.$location.path() === '/'),
       jumpTo: () => {
         this.$location.url('/');
-      }
+      },
     });
 
     this.steps.push({
@@ -62,7 +64,7 @@ export class GuideCtrl {
       check: () => $q.when(this.$location.path() === '/rca'),
       jumpTo: () => {
         this.jump('/rca');
-      }
+      },
     });
 
     this.steps.push({
@@ -74,7 +76,7 @@ export class GuideCtrl {
       check: () => $q.when(this.$location.path() === '/association'),
       jumpTo: () => {
         this.jump('/association');
-      }
+      },
     });
 
     this.steps.push({
@@ -85,12 +87,14 @@ export class GuideCtrl {
       note: '全文搜索系统日志',
       check: () => $q.when(this.$location.path() === '/logs'),
       jumpTo: () => {
-        var type = _.metricPrefix2Type(this.selected.metric.split(".")[0]);
+        var type = _.metricPrefix2Type(this.selected.metric.split('.')[0]);
         var query = `type:${type} AND host:${this.selected.host}`;
         var path = '/logs';
-        var url = `${path}?guide&metric=${this.selected.metric}&host=${this.selected.host}&start=${this.selected.start}&query=${query}`;
+        var url = `${path}?guide&metric=${this.selected.metric}&host=${this.selected.host}&start=${
+          this.selected.start
+        }&query=${query}`;
         this.$location.url(url);
-      }
+      },
     });
 
     this.steps.push({
@@ -102,7 +106,7 @@ export class GuideCtrl {
       check: () => $q.when(this.$location.path() === '/topn'),
       jumpTo: () => {
         this.jump('/topn');
-      }
+      },
     });
 
     $scope.$on('$routeUpdate', () => {
@@ -119,8 +123,7 @@ export class GuideCtrl {
     this.getExceptionMetrics();
     this.getExceptionHost();
 
-    return this.nextStep().then(res => {
-    });
+    return this.nextStep().then(res => {});
   }
 
   nextStep() {
@@ -173,13 +176,14 @@ export class GuideCtrl {
     this.exceptionMetrics = [];
 
     this.alertMgrSrv.loadTriggeredAlerts().then(response => {
-      response.data && response.data.forEach(item => {
-        this.exceptionMetrics.push({
-          name: _.getMetricName(item.metric),
-          time: item.status.levelChangedTime,
-          host: item.status.monitoredEntity
+      response.data &&
+        response.data.forEach(item => {
+          this.exceptionMetrics.push({
+            name: _.getMetricName(item.metric),
+            time: item.status.levelChangedTime,
+            host: item.status.monitoredEntity,
+          });
         });
-      });
     });
   }
 
@@ -204,20 +208,20 @@ export function guideDirective() {
     scope: {
       needHost: '@',
       guideClass: '@',
-      notMetric: '@'
+      notMetric: '@',
     },
-    link: function (scope, elem, attrs, ctrl) {
+    link: function(scope, elem, attrs, ctrl) {
       var $scrollElement = elem.parent('.page-container');
 
-      var scroll = function () {
+      var scroll = function() {
         var scroll = $scrollElement.scrollTop();
         var shrinkHeader = ctrl.collapsed ? 90 : 230;
-        ctrl.fixed = (scroll >= shrinkHeader) ? true : false;
+        ctrl.fixed = scroll >= shrinkHeader ? true : false;
         scope.$digest();
-      }
+      };
 
       ctrl.show && $scrollElement.on('scroll', _.throttle(scroll.bind(this), 100));
-    }
+    },
   };
 }
 

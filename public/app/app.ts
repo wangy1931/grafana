@@ -1,30 +1,34 @@
 ///<reference path="headers/common.d.ts" />
 
-import 'bootstrap';
-import 'vendor/filesaver';
-import 'lodash-src';
-import 'angular-strap';
+import 'babel-polyfill';
+import 'file-saver';
+import 'lodash';
+import 'jquery';
+import 'angular';
 import 'angular-route';
 import 'angular-sanitize';
-import 'angular-dragdrop';
+import 'angular-native-dragdrop';
 import 'angular-bindonce';
-import 'angular-animate';
-import 'angular-ui';
-import 'ui.calendar';
 
-import 'angular-strap.tpl';
-import 'angular-strap-old';
+import 'vendor/bootstrap/bootstrap';
+import 'vendor/angular-other/angular-strap';
+import 'vendor/angular-ui/ui-bootstrap-tpls';
+import 'vendor/angular-ui-calendar/src/calendar';
 
-import 'jsPlumbToolkit';
+import 'vendor/angular-other/angular-strap.tpl';
+import 'vendor/angular-other/angular-strap-old';
 
-import 'ng-quill';
-import 'ng-table';
+import 'vendor/jsPlumb/jsPlumbToolkit';
+
+import 'vendor/quill/ng-quill';
+import 'vendor/angular-other/ng-table.min';
 
 import $ from 'jquery';
 import angular from 'angular';
 import config from 'app/core/config';
 import _ from 'lodash';
-import {coreModule} from './core/core';
+import moment from 'moment';
+import { coreModule } from './core/core';
 
 export class GrafanaApp {
   registerFunctions: any;
@@ -49,40 +53,50 @@ export class GrafanaApp {
 
   init() {
     var app = angular.module('grafana', ['mgcrea.ngStrap', 'ngAnimate', 'ngTable', 'cloudwiz.translate']);
-    app.constant('grafanaVersion', "@grafanaVersion@");
+    app.constant('grafanaVersion', '@grafanaVersion@');
 
-    app.config(['$translateProvider', ($translateProvider) => {
-      $translateProvider.useStaticFilesLoader({
-        prefix: 'public/app/core/i18n/',
-        suffix: '.json'
-      });
-      $translateProvider.determinePreferredLanguage().fallbackLanguage('zh_CN');
-      $translateProvider.useLocalStorage();
-    }]);
+    console.log(config.bootData.user.locale);
+    moment.locale(config.bootData.user.locale);
+
+    app.config([
+      '$translateProvider',
+      $translateProvider => {
+        $translateProvider.useStaticFilesLoader({
+          prefix: 'public/app/core/i18n/',
+          suffix: '.json',
+        });
+        $translateProvider.determinePreferredLanguage().fallbackLanguage('zh_CN');
+        $translateProvider.useLocalStorage();
+      },
+    ]);
 
     app.config(($locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) => {
       //$compileProvider.debugInfoEnabled(false);
       $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|data|chrome-extension|javascript):/);
 
       this.registerFunctions.controller = $controllerProvider.register;
-      this.registerFunctions.directive  = $compileProvider.directive;
-      this.registerFunctions.factory    = $provide.factory;
-      this.registerFunctions.service    = $provide.service;
-      this.registerFunctions.filter     = $filterProvider.register;
+      this.registerFunctions.directive = $compileProvider.directive;
+      this.registerFunctions.factory = $provide.factory;
+      this.registerFunctions.service = $provide.service;
+      this.registerFunctions.filter = $filterProvider.register;
 
-      $provide.decorator("$http", ["$delegate", "$templateCache", function($delegate, $templateCache) {
-        var get = $delegate.get;
-        $delegate.get = function(url, config) {
-          if (url.match(/\.html$/)) {
-            // some template's already exist in the cache
-            if (!$templateCache.get(url)) {
-              url += "?v=" + new Date().getTime();
+      $provide.decorator('$http', [
+        '$delegate',
+        '$templateCache',
+        function($delegate, $templateCache) {
+          var get = $delegate.get;
+          $delegate.get = function(url, config) {
+            if (url.match(/\.html$/)) {
+              // some template's already exist in the cache
+              if (!$templateCache.get(url)) {
+                url += '?v=' + new Date().getTime();
+              }
             }
-          }
-          return get(url, config);
-        };
-        return $delegate;
-      }]);
+            return get(url, config);
+          };
+          return $delegate;
+        },
+      ]);
     });
 
     this.ngModuleDependencies = [
@@ -96,7 +110,7 @@ export class GrafanaApp {
       'ui.bootstrap',
       'ui.bootstrap.tpls',
       'ui.calendar',
-      'ngQuill'
+      'ngQuill',
     ];
 
     var module_types = ['controllers', 'directives', 'factories', 'services', 'filters', 'routes'];
@@ -111,20 +125,22 @@ export class GrafanaApp {
 
     var preBootRequires = [System.import('app/features/all')];
 
-    Promise.all(preBootRequires).then(() => {
-      // disable tool tip animation
-      $.fn.tooltip.defaults.animation = false;
-      // bootstrap the app
-      angular.bootstrap(document, this.ngModuleDependencies).invoke(() => {
-        _.each(this.preBootModules, module => {
-          _.extend(module, this.registerFunctions);
-        });
+    Promise.all(preBootRequires)
+      .then(() => {
+        // disable tool tip animation
+        $.fn.tooltip.defaults.animation = false;
+        // bootstrap the app
+        angular.bootstrap(document, this.ngModuleDependencies).invoke(() => {
+          _.each(this.preBootModules, module => {
+            _.extend(module, this.registerFunctions);
+          });
 
-        this.preBootModules = null;
+          this.preBootModules = null;
+        });
+      })
+      .catch(function(err) {
+        console.log('Application boot failed:', err);
       });
-    }).catch(function(err) {
-      console.log('Application boot failed:', err);
-    });
   }
 }
 

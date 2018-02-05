@@ -64,7 +64,7 @@ export class TopologyGraphCtrl {
   data: any;
   currentItem: any;
   searchList: any;
-  search: boolean = true;
+  search: true;
   query: string;
   group: string;
   filter: string;
@@ -86,23 +86,23 @@ export class TopologyGraphCtrl {
     private alertSrv,
     private $translate
   ) {
-    this.groupOptions = [{ 'text': $translate.i18n.i18n_empty, 'value': '' }];
+    this.groupOptions = [{ text: $translate.i18n.i18n_empty, value: '' }];
     this.filterOptions = [
-      { 'text': $translate.i18n.i18n_all, 'value': '' },
-      { 'text': $translate.i18n.i18n_normal, 'value': 'GREEN' },
-      { 'text': $translate.i18n.i18n_warning, 'value': 'YELLOW' },
-      { 'text': $translate.i18n.i18n_critical, 'value': 'RED' },
-      { 'text': $translate.i18n.i18n_breakdown, 'value': 'GREY' }
+      { text: $translate.i18n.i18n_all, value: '' },
+      { text: $translate.i18n.i18n_normal, value: 'GREEN' },
+      { text: $translate.i18n.i18n_warning, value: 'YELLOW' },
+      { text: $translate.i18n.i18n_critical, value: 'RED' },
+      { text: $translate.i18n.i18n_breakdown, value: 'GREY' },
     ];
     this.heatmap = window.d3.select('#heatmap');
 
     this.types = {
-      'host': $translate.i18n.i18n_host,
-      'service': $translate.i18n.i18n_service
+      host: $translate.i18n.i18n_host,
+      service: $translate.i18n.i18n_service,
     };
     !this.$scope.ctrl.type && (this.$scope.ctrl.type = 'host');
 
-    this.hideClear = (this.$location.path() === '/');
+    this.hideClear = this.$location.path() === '/';
 
     this.getGraph();
     this.getAllTagsKey();
@@ -162,7 +162,7 @@ export class TopologyGraphCtrl {
     if (this.query === '' || this.query === '*') {
       this.clearSelected();
     } else if (!~this.searchList.indexOf(this.query)) {
-      this.alertSrv.set(this.$translate.i18n.page_topology_search_invalid, '', "warning", 2000);
+      this.alertSrv.set(this.$translate.i18n.page_topology_search_invalid, '', 'warning', 2000);
     } else {
       var searchResult = this.heatmap.search({ name: this.query });
       searchResult = !_.isEmpty(searchResult) ? searchResult : _.filter(this.data, { name: this.query });
@@ -175,18 +175,23 @@ export class TopologyGraphCtrl {
   getAllTagsKey() {
     // init, get all tags key for group-options
     this.hostSrv.getAllTagsKey().then(response => {
-      response.data && response.data.forEach((item, index) => {
-        response.data[index] = { 'text': item, 'value': item }
-      });
+      response.data &&
+        response.data.forEach((item, index) => {
+          response.data[index] = { text: item, value: item };
+        });
       this.groupOptions = [this.groupOptions[0]].concat(response.data);
     });
   }
 
   filterBy() {
     // 有 query 机器查询时, filterby 没有意义
-    if (this.query && this.query !== '*') { return; }
+    if (this.query && this.query !== '*') {
+      return;
+    }
 
-    var filteredData = this.filter.toLowerCase() ? _.filter(this.data, { value: this.filter.toLowerCase() }) : this.data;
+    var filteredData = this.filter.toLowerCase()
+      ? _.filter(this.data, { value: this.filter.toLowerCase() })
+      : this.data;
     this.heatmap.data(filteredData);
   }
 
@@ -194,7 +199,6 @@ export class TopologyGraphCtrl {
     this.data = payload || this.data;
     this.clearSelected();
   }
-
 }
 
 export function topologyGraphDirective() {
@@ -205,12 +209,11 @@ export function topologyGraphDirective() {
     bindToController: true,
     controllerAs: 'ctrl',
     scope: {
-      type: "@",
-      params: "=",
-      currentItem: "="
+      type: '@',
+      params: '=',
+      currentItem: '=',
     },
-    link: function(scope, elem) {
-    }
+    link: function(scope, elem) {},
   };
 }
 

@@ -5,14 +5,15 @@ define([
   'lodash',
   'ui.calendar',
   'fullcalendar',
-  'zh-cn',
 ],
 function (moment, $, angular, _, uiCalendarConfig) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('OnCallerScheduleCtrl', function ($scope, oncallerMgrSrv, $timeout, $q, contextSrv) {
+  module.controller('OnCallerScheduleCtrl', function (
+    $scope, oncallerMgrSrv, $timeout, $q, contextSrv, $translate
+  ) {
     /* oncaller/events
       {
         title: name,            << 显示名称
@@ -39,20 +40,20 @@ function (moment, $, angular, _, uiCalendarConfig) {
 
       // 从后台获取的shchedule
       $scope.primary = {
-        type: '(主)',
+        type: `(${$translate.i18n.i18n_primary})`,
         events: []
       };
       $scope.secondary = {
-        type: '(次)',
+        type: `(${$translate.i18n.i18n_secondary})`,
         events: []
       };
       // 从纯前端排班的shchedule
       $scope.primaryReview = {
-        type: '(主)',
+        type: `(${$translate.i18n.i18n_primary})`,
         events: []
       };
       $scope.secondaryReview = {
-        type: '(次)',
+        type: `(${$translate.i18n.i18n_secondary})`,
         events: []
       };
       $scope.roles = [
@@ -139,11 +140,11 @@ function (moment, $, angular, _, uiCalendarConfig) {
 
     function eventClick(date, jsEvent, view) {
       if (contextSrv.isViewer) {
-        $scope.appEvent('alert-warning', ['抱歉','您没有权限修改值班表']);
+        $scope.appEvent('alert-warning', [$translate.i18n.i18n_sorry, $translate.i18n.i18n_no_authority]);
       } else {
         var today = new Date();
         if(date.end.valueOf() < today.valueOf()) {
-          $scope.appEvent('alert-warning', ['抱歉','不可以修改历史数据']);
+          $scope.appEvent('alert-warning', [$translate.i18n.i18n_sorry, $translate.i18n.i18n_forbid_operator]);
           return;
         }
         $scope.showEditForm = true;
@@ -335,7 +336,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
       $scope.showScheduling = false;
       oncallerMgrSrv.updateSchedule(_.concat(updatePrimaryList, updateSecondaryList)).then(function(response) {
         loadSchedule($scope.zonesStart, $scope.zonesEnd);
-        $scope.appEvent('alert-success', ['保存成功']);
+        $scope.appEvent('alert-success', [$translate.i18n.i18n_success]);
       });
     };
 
@@ -354,7 +355,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
       }
       if (type === 'update') {
         oncallerMgrSrv.updateSchedule([event]).then(function(response) {
-          $scope.appEvent('alert-success', ['保存成功']);
+          $scope.appEvent('alert-success', [$translate.i18n.i18n_success]);
         });
       } else {
         return event;
