@@ -108,36 +108,12 @@
       return result;
     };
 
-    // tries to determine the browsers language
-    var getFirstBrowserLanguage = function () {
-      var navigator = $windowProvider.$get().navigator,
-        browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
-        i, language;
-
-      // support for HTML 5.1 "navigator.languages"
-      if (angular.isArray(navigator.languages)) {
-        for (i = 0; i < navigator.languages.length; i++) {
-          language = navigator.languages[i];
-          if (language && language.length) {
-            return language;
-          }
-        }
-      }
-
-      // support for other well known properties in browsers
-      for (i = 0; i < browserLanguagePropertyKeys.length; i++) {
-        language = navigator[browserLanguagePropertyKeys[i]];
-        if (language && language.length) {
-          return language;
-        }
-      }
-
-      return null;
-    };
-
     // tries to determine the browsers locale
     var getLocale = function () {
-      var locale = getFirstBrowserLanguage() || '';
+      var locale = window.grafanaBootData.user.locale;
+      /en/.test(locale) && (locale = 'en');
+      /zh/.test(locale) && (locale = 'zh_CN');
+
       if (languageTagResolver[uniformLanguageTagResolver]) {
         locale = languageTagResolver[uniformLanguageTagResolver](locale);
       }
@@ -310,6 +286,14 @@
       return this;
     };
     this.translations = translations;
+
+    /**
+     * @name pascalprecht.translate.$translateProvider#keepContent
+     */
+    this.keepContent = function (value) {
+      $keepContent = !(!value);
+      return this;
+    };
 
     /**
      * @name cloudwiz.translate.$translate
@@ -888,6 +872,13 @@
         }
   
         return result;
+      };
+
+      /**
+       * @name pascalprecht.translate.$translate#isKeepContent
+       */
+      $translate.isKeepContent = function () {
+        return $keepContent;
       };
 
       if ($storageFactory) {

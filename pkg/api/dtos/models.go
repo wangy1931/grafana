@@ -36,6 +36,7 @@ type CurrentUser struct {
   SystemId       int64      `json:"systemId"`
 	Timezone       string     `json:"timezone"`
 	Deadline			 time.Time	`json:"deadline"`
+	Locale         string     `json:"locale"`
 }
 
 type DashboardMeta struct {
