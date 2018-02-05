@@ -8,7 +8,7 @@ type DataSourceSettings struct {
 func readDataSourceSettings() {
 	ds := Cfg.Section("datasource")
   DataSource.DataSourceUrlRoot = ds.Key("datasource_urlroot").String()
-  DataSource.DataSourceUrlIntranet = ds.Key("datasource_urlintranet").String()
+  DataSource.DataSourceUrlIntranet = ds.Key("datasource_urlintranet").MustString(DataSource.DataSourceUrlRoot)
 }
 
 type ElkSourceSettings struct {
@@ -19,7 +19,7 @@ type ElkSourceSettings struct {
 func readElkSourceSettings() {
   elk := Cfg.Section("elk")
   ElkSource.ElkSourceUrlRoot = elk.Key("elk_source_url").String()
-  ElkSource.ElkSourceUrlIntranet = elk.Key("elk_source_urlintranet").String()
+  ElkSource.ElkSourceUrlIntranet = elk.Key("elk_source_urlintranet").MustString(ElkSource.ElkSourceUrlRoot)
 }
 
 type DownloadSettings struct {
@@ -30,7 +30,7 @@ type DownloadSettings struct {
 func readDownloadSettings() {
   download := Cfg.Section("download")
   Download.DownloadUrlRoot = download.Key("download_urlroot").String()
-  Download.DownloadUrlIntranet = download.Key("download_urlintranet").String()
+  Download.DownloadUrlIntranet = download.Key("download_urlintranet").MustString(Download.DownloadUrlRoot)
 }
 
 type AlertSettings struct {
@@ -41,7 +41,7 @@ type AlertSettings struct {
 func readAlertSettings() {
 	alert := Cfg.Section("alert")
   Alert.AlertUrlRoot = alert.Key("alert_urlroot").String()
-  Alert.AlertUrlIntranet = alert.Key("alert_urlintranet").String()
+  Alert.AlertUrlIntranet = alert.Key("alert_urlintranet").MustString(Alert.AlertUrlRoot)
 }
 
 type DataCenterSettings struct {
