@@ -49,8 +49,8 @@
                         </div>
                     </div> -->
                     <div class="anomaly-panel panels-wrapper" style="height: 50%; border-top: none;">
-                        <h3 ng-click="ctrl.showModal(1)" style="cursor: pointer;" bs-tooltip="'点击查看历史报警'">
-                            <a href="javascript:;" translate="page_overview_panel_alert_title"></a>
+                        <h3 ng-click="ctrl.showModal(1)" style="cursor: pointer;">
+                            <a href="javascript:;" translate="page_overview_panel_alert_title" bs-tooltip="ctrl.$translate.i18n.page_overview_history_index"></a>
                         </h3>
                         <div>
                             <li ng-repeat="alert in ctrl.alertPanel.status" ng-if="alert.hide!=true">

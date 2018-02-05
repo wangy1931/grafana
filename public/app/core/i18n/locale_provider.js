@@ -68,6 +68,8 @@
       $keepContent = false,
       $nextLang,
       $missingTranslationHandlerFactory,
+      $notFoundIndicatorLeft,
+      $notFoundIndicatorRight,
       $postCompilingEnabled = false,
       loaderCache,
       postProcessFn,

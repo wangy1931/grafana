@@ -22,7 +22,7 @@
 	</a>
 
 	<a href="javascript:;" class="navbar-shortcut-btn pull-right">
-		<toolbar icon="iconfont fa-question-circle-o" tooltip="{{ 'i18n_use_help' | translate }}" id="2"></toolbar>
+		<toolbar icon="iconfont fa-question-circle-o" tooltip="{{ i18n_use_help | translate }}" id="2"></toolbar>
 	</a>
 
 	<a href="javascript:;" class="navbar-shortcut-btn pull-right">
@@ -30,7 +30,7 @@
 	</a>
 
 	<a href="/oncallerschedule" class="navbar-shortcut-btn pull-right">
-		<i class="fa fa-fw fa-calendar" bs-tooltip="'{{ 'i18n_oncaller' | translate }}'" data-placement="bottom"></i>
+		<i class="fa fa-fw fa-calendar" bs-tooltip="ctrl.$translate.i18n.i18n_oncaller" data-placement="bottom"></i>
 	</a>
 
 	<a href="{{ctrl.priceUrl}}" target="_blank" class="navbar-shortcut-btn pull-right" ng-if="ctrl.deadline <= 15">
