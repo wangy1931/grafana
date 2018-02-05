@@ -21,8 +21,8 @@
         <div class="row-fluid oncaller-body">
           <div ng-repeat="oncaller in oncallerList" class="span5">
             <p class="{{oncaller.user}} on-duty">
-              <span class="user-span pull-left">{{oncaller.name | limitTo:1 | uppercase}}</span>
-                {{oncaller.name}}
+              <span class="user-span">{{oncaller.name | limitTo:1 | uppercase}}</span>
+              <em>{{oncaller.name}}</em>
               <button ng-click="deleteOncaller(oncaller)" class="delete pull-right">
                 <i class="fa fa-times"></i>
               </button>
@@ -78,28 +78,28 @@
           <div class="item">
               <h4 class="center" translate="i18n_edit_info"></h4>
           </div>
-          <div class="item">
-              <label class="label" translate="i18n_role"></label>
-              <select class="text ui-widget-content ui-corner-all"
+          <div class="gf-form item">
+              <label class="gf-form-label width-4" translate="i18n_role"></label>
+              <select class="gf-form-input max-width-16"
                       ng-model="role"
                       ng-options="r.val for r in roles"
                       ng-disabled="true">
               </select>
           </div>
-          <div class="item">
-              <label class="label" translate="i18n_name"></label>
-              <select class="text ui-widget-content ui-corner-all"
+          <div class="gf-form item">
+              <label class="gf-form-label width-4" translate="i18n_name"></label>
+              <select class="gf-form-input max-width-16"
                   ng-model="oncallerSelcted"
                   ng-options="oncaller.name for oncaller in oncallerDefList">
               </select>
           </div>
-          <div class="item">
-              <label class="label" translate="i18n_start"></label>
-              <input type="text" class="input-large" ng-model="startTime" style="display: inline-block">
+          <div class="gf-form item">
+              <label class="gf-form-label width-4" translate="i18n_start"></label>
+              <input type="text" class="gf-form-input max-width-16" ng-model="startTime" style="display: inline-block">
           </div>
-          <div class="item">
-              <label class="label" translate="i18n_end"></label>
-              <input type="text" class="input-large" ng-model="endTime" style="display: inline-block">
+          <div class="gf-form item">
+              <label class="gf-form-label width-4" translate="i18n_end"></label>
+              <input type="text" class="gf-form-input max-width-16" ng-model="endTime" style="display: inline-block">
           </div>
           <div class="item center">
               <button ng-click="closeEdit();" class="btn" translate="i18n_cancel"></button>
