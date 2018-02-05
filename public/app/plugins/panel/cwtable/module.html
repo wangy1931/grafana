@@ -10,7 +10,7 @@
 						<th ng-repeat="column in ctrl.columns" ng-hide="column.hide">
 							<span class="table-header-name">
 								{{ column.text }}
-								<span ng-show="column.text === 'message'"><tip>双击日志查询该日志上下文</tip></span>
+								<span ng-show="!ctrl.panel.operate && column.text === 'message'"><tip>双击日志查询该日志上下文</tip></span>
 								<button
 									id="docTableHeaderFieldSort{{column.text}}"
 									ng-if="ctrl.isSortableColumn($index)"
