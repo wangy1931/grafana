@@ -7,6 +7,10 @@ date: 2018-02-05
 ```sql
 UPDATE data_source SET intranet=url
 ```
+- update datasource type
+```sql
+UPDATE data_source SET type='customdb' WHERE name='alert' OR name='download'
+```
 ---
 ### 免费用户限制
 date: 2018-01-21

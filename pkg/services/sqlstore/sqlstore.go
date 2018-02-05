@@ -143,7 +143,7 @@ func AddDatasourceFromConfig() {
 		if err := bus.Dispatch(&m.AddDataSourceCommand{
 			OrgId:     MAINORG_ID,
 			Name:      "alert",
-			Type:      m.DS_ALERT,
+			Type:      m.DS_CUSTOMDB,
 			Access:    m.DS_ACCESS_DIRECT,
 			Url:       setting.Alert.AlertUrlRoot,
 			Intranet:  setting.Alert.AlertUrlIntranet,
@@ -156,7 +156,7 @@ func AddDatasourceFromConfig() {
 		if err := bus.Dispatch(&m.AddDataSourceCommand{
 			OrgId:     MAINORG_ID,
 			Name:      "download",
-			Type:      m.DS_DOWNLOAD,
+			Type:      m.DS_CUSTOMDB,
 			Access:    m.DS_ACCESS_DIRECT,
 			Url:       setting.Download.DownloadUrlRoot,
 			Intranet:  setting.Download.DownloadUrlIntranet,
@@ -205,7 +205,7 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 	if err := bus.Dispatch(&m.AddDataSourceCommand{
 		OrgId:     orgId,
 		Name:      "alert",
-		Type:      m.DS_ALERT,
+		Type:      m.DS_CUSTOMDB,
 		Access:    m.DS_ACCESS_DIRECT,
 		Url:       setting.Alert.AlertUrlRoot,
 		Intranet:  setting.Alert.AlertUrlIntranet,
@@ -218,7 +218,7 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 	if err := bus.Dispatch(&m.AddDataSourceCommand{
 		OrgId:     orgId,
 		Name:      "download",
-		Type:      m.DS_DOWNLOAD,
+		Type:      m.DS_CUSTOMDB,
 		Access:    m.DS_ACCESS_DIRECT,
 		Url:       setting.Download.DownloadUrlRoot,
 		Intranet:  setting.Download.DownloadUrlIntranet,
