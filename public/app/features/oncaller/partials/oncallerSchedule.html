@@ -70,28 +70,28 @@
         <div class="item">
             <h4 class="center">修改值班信息</h4>
         </div>
-        <div class="item">
-            <label class="label">角色</label>
-            <select class="text ui-widget-content ui-corner-all"
+        <div class="gf-form item">
+            <label class="gf-form-label width-4">角色</label>
+            <select class="gf-form-input max-width-16"
                     ng-model="role"
                     ng-options="r.val for r in roles"
                     ng-disabled="true">
             </select>
         </div>
-        <div class="item">
-            <label class="label">姓名</label>
-            <select class="text ui-widget-content ui-corner-all"
+        <div class="gf-form item">
+            <label class="gf-form-label width-4">姓名</label>
+            <select class="gf-form-input max-width-16"
                 ng-model="oncallerSelcted"
                 ng-options="oncaller.name for oncaller in oncallerDefList">
             </select>
         </div>
-        <div class="item">
-            <label class="label">开始</label>
-            <input type="text" class="input-large" ng-model="startTime">
+        <div class="gf-form item">
+            <label class="gf-form-label width-4">开始</label>
+            <input type="text" class="gf-form-input max-width-16" ng-model="startTime">
         </div>
-        <div class="item">
-            <label class="label">结束</label>
-            <input type="text" class="input-large" ng-model="endTime">
+        <div class="gf-form item">
+            <label class="gf-form-label width-4">结束</label>
+            <input type="text" class="gf-form-input max-width-16" ng-model="endTime">
         </div>
         <div class="item center">
             <button ng-click="closeEdit();" class="btn">取消</button>
