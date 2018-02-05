@@ -10,7 +10,10 @@ function (angular, _, coreModule, config) {
   coreModule.default.service('backendSrv', function($http, alertSrv, $timeout, contextSrv, $q) {
     var self = this;
     this.alertDUrl;
+    this.alertDUrlIntranet;
     this.downloadUrl;
+    this.downloadUrlIntranet;
+    this.opentsdbUrlIntranet;
     this.tokens = null;
 
     this.get = function(url, params) {
@@ -188,6 +191,9 @@ function (angular, _, coreModule, config) {
         self.alertDUrl = result.alert;
         self.downloadUrl = result.download;
         contextSrv.elkUrl = result.elk;
+        self.alertDUrlIntranet = result.alert_intranet;
+        self.downloadUrlIntranet = result.download_intranet;
+        self.opentsdbUrlIntranet = result.opentsdb_intranet;
       });
     };
 

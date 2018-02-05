@@ -1,5 +1,11 @@
 ## Update tables Features
 
+## Datasource add column 'intranet'
+- 添加内网设置, 默认与url一致
+```sql
+UPDATE data_source SET intranet=url
+```
+
 ### 免费用户限制
 - 免费用户拥有30天试用期，过时不能登录
 - 创建org_permit表

@@ -115,6 +115,7 @@ func AddDatasourceFromConfig() {
 			Type:      m.DS_OPENTSDB,
 			Access:    m.DS_ACCESS_DIRECT,
 			Url:       setting.DataSource.DataSourceUrlRoot,
+			Intranet:  setting.DataSource.DataSourceUrlIntranet,
 			IsDefault: true,
 		}); err != nil {
 			log.Fatal(3, "Could not add default datasource for OrgId 1 from config: %v", err)
@@ -127,6 +128,7 @@ func AddDatasourceFromConfig() {
 			Type:      m.DS_ES,
 			Access:    m.DS_ACCESS_PROXY,
 			Url:       setting.ElkSource.ElkSourceUrlRoot,
+			Intranet:  setting.ElkSource.ElkSourceUrlIntranet,
 			IsDefault: false,
 			Database:  "[$_token-logstash-]YYYY.MM.DD",
 			JsonData:  simplejson.NewFromAny(map[string]interface{}{
@@ -144,6 +146,7 @@ func AddDatasourceFromConfig() {
 			Type:      m.DS_ALERT,
 			Access:    m.DS_ACCESS_DIRECT,
 			Url:       setting.Alert.AlertUrlRoot,
+			Intranet:  setting.Alert.AlertUrlIntranet,
 			IsDefault: false,
 		}); err != nil {
 			log.Fatal(3, "Could not add default datasource for OrgId 1 from config: %v", err)
@@ -156,6 +159,7 @@ func AddDatasourceFromConfig() {
 			Type:      m.DS_DOWNLOAD,
 			Access:    m.DS_ACCESS_DIRECT,
 			Url:       setting.Download.DownloadUrlRoot,
+			Intranet:  setting.Download.DownloadUrlIntranet,
 			IsDefault: false,
 		}); err != nil {
 			log.Fatal(3, "Could not add default datasource for OrgId 1 from config: %v", err)
@@ -173,6 +177,7 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 		Type:      m.DS_OPENTSDB,
 		Access:    m.DS_ACCESS_DIRECT,
 		Url:       setting.DataSource.DataSourceUrlRoot,
+		Intranet:  setting.DataSource.DataSourceUrlIntranet,
 		IsDefault: true,
 	}); err != nil {
 		log.Error(3, "Could not add default datasource from config: %v", err)
@@ -185,6 +190,7 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 		Type:      m.DS_ES,
 		Access:    m.DS_ACCESS_PROXY,
 		Url:       setting.ElkSource.ElkSourceUrlRoot,
+		Intranet:  setting.ElkSource.ElkSourceUrlIntranet,
 		IsDefault: false,
 		Database:  "[$_token-logstash-]YYYY.MM.DD",
 		JsonData:  simplejson.NewFromAny(map[string]interface{}{
@@ -202,6 +208,7 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 		Type:      m.DS_ALERT,
 		Access:    m.DS_ACCESS_DIRECT,
 		Url:       setting.Alert.AlertUrlRoot,
+		Intranet:  setting.Alert.AlertUrlIntranet,
 		IsDefault: false,
 	}); err != nil {
 		log.Fatal(3, "Could not add default datasource from config: %v", err)
@@ -214,6 +221,7 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 		Type:      m.DS_DOWNLOAD,
 		Access:    m.DS_ACCESS_DIRECT,
 		Url:       setting.Download.DownloadUrlRoot,
+		Intranet:  setting.Download.DownloadUrlIntranet,
 		IsDefault: false,
 	}); err != nil {
 		log.Fatal(3, "Could not add default datasource from config: %v", err)
