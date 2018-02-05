@@ -43,15 +43,15 @@ export class AlertStatusCtrl {
   /** @ngInject */
   constructor(
     private $scope, private $controller, private $location, private associationSrv, private integrateSrv,
-    private alertMgrSrv, private datasourceSrv, private contextSrv, private backendSrv
+    private alertMgrSrv, private datasourceSrv, private contextSrv, private backendSrv, private $translate
   ) {
     this.prefix = contextSrv.user.orgId + '.' + contextSrv.user.systemId + '.';
     this.alertHistoryRange = [
-      { 'num': 0, 'type': 'now',  'value': '现在', },
-      { 'num': 1, 'type': 'days',   'value': '过去一天' },
-      { 'num': 1, 'type': 'weeks',  'value': '过去一周' },
-      { 'num': 1, 'type': 'months', 'value': '过去一个月' },
-      { 'num': 3, 'type': 'months', 'value': '过去三个月' },
+      { 'num': 0, 'type': 'now',  'value': $translate.i18n.i18n_now },
+      { 'num': 1, 'type': 'days',   'value': $translate.i18n.i18n_day_ago_1 },
+      { 'num': 1, 'type': 'weeks',  'value': $translate.i18n.i18n_week_ago_1 },
+      { 'num': 1, 'type': 'months', 'value': $translate.i18n.i18n_month_ago_1 },
+      { 'num': 3, 'type': 'months', 'value': $translate.i18n.i18n_month_ago_3 },
     ];
     this.alertTimeSelected = this.alertHistoryRange[0];
 
@@ -178,7 +178,7 @@ export class AlertStatusCtrl {
         }];
         this.datasourceSrv.getHostStatus(queries, 'now-2m').then(response => {
           alertItem.curAlertValue = Math.floor(response.status * 1000) / 1000;
-          if (isNaN(alertItem.curAlertValue)) { alertItem.curAlertValue = "没有数据"; }
+          if (isNaN(alertItem.curAlertValue)) { alertItem.curAlertValue = this.$translate.i18n.i18n_empty; }
         });
       }
     });
@@ -203,7 +203,7 @@ export class AlertStatusCtrl {
   // 处理报警
   handleAlert(alertDetail) {
     if (this.contextSrv.isViewer) {
-      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_sorry, this.$translate.i18n.i18n_no_authority]);
     } else {
       var newScope = this.$scope.$new();
       newScope.alertData = alertDetail;
@@ -227,7 +227,7 @@ export class AlertStatusCtrl {
   // 延迟报警
   handleSnooze(alertDetails) {
     if (this.contextSrv.isViewer) {
-      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_sorry, this.$translate.i18n.i18n_no_authority]);
     } else {
       var newScope = this.$scope.$new();
       newScope.alertDetails = alertDetails;
@@ -272,7 +272,7 @@ export class AlertStatusCtrl {
   }
 
   getCloseOp(alert) {
-    return alert.history.closeOp === 'AUTO' ? '自动关闭' : alert.history.closeBy;
+    return alert.history.closeOp === 'AUTO' ? this.$translate.i18n.i18n_auto_close : alert.history.closeBy;
   }
 
 }

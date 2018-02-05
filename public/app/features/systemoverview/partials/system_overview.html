@@ -8,13 +8,13 @@
             <div class="summary-panel view-panel">
                 <div class="health-panel panels-wrapper">
                     <h3 class="spec-tip">
-                        <a href="javascript:;" ng-click="ctrl.showModal(0)" bs-tooltip="'点击查看历史指数'" translate="page_overview_panel_health_title"></a>
-                        <tip placement="bottom">
+                        <a href="javascript:;" ng-click="ctrl.showModal(0)" bs-tooltip="ctrl.$translate.i18n.page_overview_history_index" translate="page_overview_panel_health_title"></a>
+                        <!-- <tip placement="bottom">
                             优：系统运行状况良好<br />
                             良：存在报警或异常指标，不影响运行<br />
                             中：存在严重报警或异常，会影响运行<br />
                             差：不能正常运行，请及时处理
-                        </tip>
+                        </tip> -->
                     </h3>
                     <div style="position: absolute; bottom: 50%; left: 50%; transform: translate(-50%, 80%); font-weight: bold;">
                         <span style="font-size: 38px;">{{ ctrl.healthPanel.score }}</span>
@@ -27,7 +27,7 @@
                     <!-- <div class="alert-panel">
                         <div class="panels-wrapper">
                             <h3>
-                                <a href="javascript:;" ng-click="ctrl.showModal(1)" bs-tooltip="'点击查看历史报警'" translate="page_overview_panel_alert_title"></a>
+                                <a href="javascript:;" ng-click="ctrl.showModal(1)" bs-tooltip="ctrl.$translate.i18n.page_overview_history_index" translate="page_overview_panel_alert_title"></a>
                             </h3>
                             <div>
                                 <li ng-repeat="alert in ctrl.alertPanel.status" ng-if="alert.count!=0">
@@ -60,7 +60,7 @@
                     </div>
                     <div class="anomaly-panel panels-wrapper">
                         <h3>
-                            <a href="javascript:;" ng-click="ctrl.showModal(2)" bs-tooltip="'点击查看历史情况'" translate="page_overview_panel_anomaly_title"></a>
+                            <a href="javascript:;" ng-click="ctrl.showModal(2)" bs-tooltip="ctrl.$translate.i18n.page_overview_history_index" translate="page_overview_panel_anomaly_title"></a>
                         </h3>
                         <div>
                             <li ng-repeat="anomaly in ctrl.anomalyPanel.status" ng-if="anomaly.count!=-1">
@@ -148,7 +148,7 @@
                             </div>
                         </div>
                         <div class="host-topology topology-graph">
-                            <topology-graph params="ctrl.topologyGraphParams"></topology-graph>
+                            <topology-graph params="ctrl.topologyGraphParams" current-item=""></topology-graph>
                         </div>
         
                         <div class="kpi-panel panels-wrapper">

@@ -4,7 +4,7 @@
     <div class="host-tags">
         <div class="tags-aside">
             <span class="fa fa-tag"></span>
-            <span class="tag-title">机器标签</span>
+            <span class="tag-title" translate="page_host_info_tag"></span>
         </div>
         <ul class="tags-list">
             <li class="tag-wrap" ng-repeat="tag in tags" ng-show="tags.length">
@@ -15,7 +15,7 @@
             </li>
             <li class="tag-add" ng-click="ctrl.showPopover();" ng-if="!ctrl.contextSrv.isViewer">
                 <span class="tag-add-icon fa fa-plus-square-o" ng-show="tags.length"></span>
-                <span class="tag-add-tips" ng-hide="tags.length">待添加</span>
+                <span class="tag-add-tips" ng-hide="tags.length" translate="page_host_tag_to_add"></span>
             </li>
         </ul>
     </div>

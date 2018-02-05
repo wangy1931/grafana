@@ -34,6 +34,7 @@ export class PanelCtrl {
   contextSrv: any;
   integrateSrv: any;
   associationSrv: any;
+  $translate: any;
 
   constructor($scope, $injector) {
     this.$injector = $injector;
@@ -43,6 +44,7 @@ export class PanelCtrl {
     this.contextSrv = $injector.get('contextSrv');
     this.integrateSrv = $injector.get('integrateSrv');
     this.associationSrv = $injector.get('associationSrv');
+    this.$translate = $injector.get('$translate');
     this.editorTabIndex = 0;
     this.events = new Emitter();
 
@@ -100,7 +102,7 @@ export class PanelCtrl {
 
   initEditMode() {
     this.editorTabs = [];
-    this.addEditorTab('概要', 'public/app/partials/panelgeneral.html');
+    this.addEditorTab(this.$translate.i18n.i18n_general, 'public/app/partials/panelgeneral.html');
     this.editModeInitiated = true;
     this.events.emit('init-edit-mode', null);
   }
@@ -122,16 +124,16 @@ export class PanelCtrl {
 
   getMenu() {
     let menu = [];
-    menu.push({text: '放大', click: 'ctrl.updateColumnSpan(1); dismiss();', role: 'Editor', icon: 'fa-plus', hover: 'hover-show pull-left'});
-    menu.push({text: '缩小', click: 'ctrl.updateColumnSpan(-1); dismiss();', role: 'Editor',  icon: 'fa-minus', hover: 'hover-show pull-left'});
-    menu.push({text: '删除', click: 'ctrl.removePanel(); dismiss();', role: 'Editor', icon: 'fa-trash-o', hover: 'hover-show  pull-left'});
-    menu.push({text: '分享', click: 'ctrl.sharePanel(); dismiss();', role: 'Editor', icon: 'fa-external-link'});
-    menu.push({text: '编辑', click: 'ctrl.editPanel(); dismiss();', role: 'Editor', icon: 'fa-pencil'});
+    menu.push({text: this.$translate.i18n.i18n_enlarge, click: 'ctrl.updateColumnSpan(1); dismiss();', role: 'Editor', icon: 'fa-plus', hover: 'hover-show pull-left'});
+    menu.push({text: this.$translate.i18n.i18n_narrow, click: 'ctrl.updateColumnSpan(-1); dismiss();', role: 'Editor',  icon: 'fa-minus', hover: 'hover-show pull-left'});
+    menu.push({text: this.$translate.i18n.i18n_delete, click: 'ctrl.removePanel(); dismiss();', role: 'Editor', icon: 'fa-trash-o', hover: 'hover-show  pull-left'});
+    menu.push({text: this.$translate.i18n.i18n_share, click: 'ctrl.sharePanel(); dismiss();', role: 'Editor', icon: 'fa-external-link'});
+    menu.push({text: this.$translate.i18n.i18n_edit, click: 'ctrl.editPanel(); dismiss();', role: 'Editor', icon: 'fa-pencil'});
     if (this.checkMenu('association')) {
-      menu.push({text: '关联性分析', click: 'ctrl.associateLink();', icon: 'fa-line-chart'});
+      menu.push({text: this.$translate.i18n.page_association_title, click: 'ctrl.associateLink();', icon: 'fa-line-chart'});
     }
     if (this.checkMenu('correlation')) {
-      menu.push({text: '对当前时间窗口进行关联', click: 'ctrl.correlation();', icon: 'fa-clock-o'})
+      menu.push({text: this.$translate.i18n.page_association_info5, click: 'ctrl.correlation();', icon: 'fa-clock-o'})
     }
     return menu;
   }
@@ -157,10 +159,10 @@ export class PanelCtrl {
   getExtendedMenu() {
     var actions = [];
     if (!this.fullscreen) { //  duplication is not supported in fullscreen mode
-      actions.push({ text: '复制', click: 'ctrl.duplicate(); dismiss();', role: 'Editor'});
+      actions.push({ text: this.$translate.i18n.i18n_copy, click: 'ctrl.duplicate(); dismiss();', role: 'Editor'});
     }
-    actions.push({text: '查看', click: 'ctrl.viewPanel(); dismiss();', icon: 'icon-eye-open'});
-    actions.push({text: '查看 JSON', click: 'ctrl.editPanelJson(); dismiss();', role: 'Editor'});
+    actions.push({text: this.$translate.i18n.i18n_query, click: 'ctrl.viewPanel(); dismiss();', icon: 'icon-eye-open'});
+    actions.push({text: this.$translate.i18n.i18n_view_json, click: 'ctrl.editPanelJson(); dismiss();', role: 'Editor'});
     this.events.emit('init-panel-actions', actions);
     return actions;
   }
@@ -226,11 +228,11 @@ export class PanelCtrl {
 
   removePanel() {
     this.publishAppEvent('confirm-modal', {
-      title: '移除面板',
-      text: '您是否想移除这个面板？',
+      title: this.$translate.i18n.i18n_sure_operator,
+      text: this.$translate.i18n.i18n_sure_operator,
       icon: 'fa-trash',
-      yesText: '删除',
-      noText: '取消',
+      yesText: this.$translate.i18n.i18n_delete,
+      noText: this.$translate.i18n.i18n_cancel,
       onConfirm: () => {
         this.row.panels = _.without(this.row.panels, this.panel);
       }
@@ -294,8 +296,8 @@ export class PanelCtrl {
       }
     } catch (err) {
       var reg = /\'(.*?)\'/g;
-      var msg = "图表中缺少" + err.toString().match(reg)[0] + "配置";
-      this.publishAppEvent('alert-warning', ['参数缺失', msg]);
+      var msg = this.$translate.i18n.i18n_param_miss + ": " + err.toString().match(reg)[0];
+      this.publishAppEvent('alert-warning', [this.$translate.i18n.i18n_param_miss, msg]);
     }
   }
 

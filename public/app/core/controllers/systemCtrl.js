@@ -8,7 +8,7 @@ function (angular, coreModule, _) {
 
     coreModule.default.controller('SystemCtrl', function ($scope, backendSrv, $location, contextSrv) {
 
-      $scope.dashboardSetting = {title: "新的仪表盘", system: contextSrv.user.systemId};
+      $scope.dashboardSetting = {title: "new dashboard", system: contextSrv.user.systemId};
       $scope.init = function () {
         $scope.getCurrentUserSystem();
       };

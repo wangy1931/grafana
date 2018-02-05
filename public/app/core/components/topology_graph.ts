@@ -15,36 +15,36 @@ var template = `
           <div class="gf-form">
               <ul class="grafana-list-item tidy-form-list" style="text-align:right; overflow: inherit; width: 100%;">
                   <li class="tidy-form-item">
-                      搜索{{ ctrl.types[ctrl.type] }}
+                      <em translate="i18n_search"></em> {{ ctrl.types[ctrl.type] }}
                   </li>
                   <li class="tidy-form-item tidy-form-item-dropdown">
                       <input type="text" class="input-xlarge tidy-form-input last"
                             ng-model='ctrl.query'
                             spellcheck='false'
                             bs-typeahead-old="ctrl.searchList"
-                            placeholder="{{ ctrl.types[ctrl.type] }}名称，按 Enter 键查看结果"
-                            ng-keyup="ctrl.searchHost($event)"
-                            ng-blur="ctrl.searchHost()" />
+                            placeholder="{{ ctrl.$translate.i18n.page_topology_search_input }}"
+                            ng-enter="ctrl.searchItem()"
+                            ng-blur="ctrl.searchItem()" />
                   </li>
                   <li class="tidy-form-item">
-                      按标签分组
+                    <em translate="page_topology_group_tag"></em>
                   </li>
                   <li class="tidy-form-item">
                       <button type="button" class="kpi-btn btn btn-default" ng-model="ctrl.group" data-placement="bottom-auto"
-                              bs-options="f.value as f.text for f in ctrl.groupOptions" bs-select ng-change="ctrl.getGraph();">
-                          请选择<span class="caret"></span>
+                              bs-options="f.value as f.text for f in ctrl.groupOptions" bs-select ng-change="ctrl.getGraph();" placeholder="{{ ctrl.$translate.i18n.i18n_select_choose }}">
+                          <span class="caret"></span>
                       </button>
                   </li>
                   <li class="tidy-form-item" translate="page_host_kpi_stat"></li>
                   <li class="tidy-form-item">
                       <button type="button" class="kpi-btn btn btn-default" ng-model="ctrl.filter" data-placement="bottom-auto"
-                              bs-options="f.value as f.text for f in ctrl.filterOptions" bs-select ng-change="ctrl.filterBy();" >
-                          请选择<span class="caret"></span>
+                              bs-options="f.value as f.text for f in ctrl.filterOptions" bs-select ng-change="ctrl.filterBy();" placeholder="{{ ctrl.$translate.i18n.i18n_select_choose }}">
+                          <span class="caret"></span>
                       </button>
                   </li>
                   <li class="tidy-form-item pull-right" ng-hide="ctrl.hideClear">
-                      <a ng-if="!ctrl.contextSrv.isViewer" class="btn btn-success" style="margin-left: 12px; padding: 0.4rem 1rem;" href="/service_dependency">创建依赖图</a>
-                      <button class="btn btn-primary" style="padding: 0.4rem 1rem;" ng-click="ctrl.clearSelected();">清除选中{{ ctrl.types[ctrl.type] }}</button>
+                      <a ng-if="!ctrl.contextSrv.isViewer" class="btn btn-success" style="margin-left: 12px; padding: 0.4rem 1rem;" href="/service_dependency" translate="page_service_create_depend"></a>
+                      <button class="btn btn-primary" style="padding: 0.4rem 1rem;" ng-click="ctrl.clearSelected();"><em translate="page_topology_clear_select"></em> {{ ctrl.types[ctrl.type] }}</button>
                   </li>
               </ul>
               <div class="clearfix"></div>
@@ -85,21 +85,22 @@ export class TopologyGraphCtrl {
     private hostSrv,
     private serviceDepSrv,
     private alertSrv,
-    private resourceSrv
+    private resourceSrv,
+    private $translate
   ) {
-    this.groupOptions = [{ 'text': '无', 'value': '' }];
+    this.groupOptions = [{ 'text': $translate.i18n.i18n_empty, 'value': '' }];
     this.filterOptions = [
-      { 'text': '所有', 'value': '' },
-      { 'text': '正常', 'value': 'GREEN' },
-      { 'text': '警告', 'value': 'YELLOW' },
-      { 'text': '严重', 'value': 'RED' },
-      { 'text': '宕机', 'value': 'GREY' }
+      { 'text': $translate.i18n.i18n_all, 'value': '' },
+      { 'text': $translate.i18n.i18n_normal, 'value': 'GREEN' },
+      { 'text': $translate.i18n.i18n_warning, 'value': 'YELLOW' },
+      { 'text': $translate.i18n.i18n_critical, 'value': 'RED' },
+      { 'text': $translate.i18n.i18n_breakdown, 'value': 'GREY' }
     ];
     this.heatmap = window.d3.select('#heatmap');
 
     this.types = {
-      'host': '机器',
-      'service': '服务'
+      'host': $translate.i18n.i18n_host,
+      'service': $translate.i18n.i18n_service
     };
     !this.$scope.ctrl.type && (this.$scope.ctrl.type = 'host');
 
@@ -160,27 +161,17 @@ export class TopologyGraphCtrl {
   }
 
   searchItem(event?) {
-    // check this.query before sending request
-    if (event) {
-      var keycode = event.keyCode || event.which;
-      if (keycode !== 13) {
-        return;
-      }
+    if (this.query === '' || this.query === '*') {
+      this.clearSelected();
+    } else if (!~this.searchList.indexOf(this.query)) {
+      this.alertSrv.set(this.$translate.i18n.page_topology_search_invalid, '', "warning", 2000);
+    } else {
+      var searchResult = this.heatmap.search({ name: this.query });
+      searchResult = !_.isEmpty(searchResult) ? searchResult : _.filter(this.data, { name: this.query });
+
+      this.heatmap.data(searchResult);
+      this.currentItem = searchResult[0];
     }
-
-    this.$timeout(() => {
-      if (this.query === '' || this.query === '*') {
-        this.clearSelected();
-      } else if (!~this.searchList.indexOf(this.query)) {
-        this.alertSrv.set("搜索条件输入不正确", '', "warning", 2000);
-      } else {
-        var searchResult = this.heatmap.search({ name: this.query });
-        searchResult = !_.isEmpty(searchResult) ? searchResult : _.filter(this.data, { name: this.query });
-
-        this.heatmap.data(searchResult);
-        this.currentItem = searchResult[0];
-      }
-    });
   }
 
   getAllTagsKey() {

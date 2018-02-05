@@ -11,8 +11,9 @@
         <div class="modal-body">
             <ul>
               <li style="color: #F9934E; text-align: left;">
-                该日志前后 {{ ctrl.timeSelected.name }} 内共有 
-                <strong>{{ ctrl.contextLogs.total || 0 }}</strong> 条日志，当前显示前 {{ ctrl.contextLogs.datapoints.length || 0 }} 条
+                {{ ctrl.timeSelected.name }} <em translate="page_logs_context_time"></em>, 
+                <em translate="page_logs_count"></em>
+                <strong>{{ ctrl.contextLogs.total || 0 }}</strong>, <em translate="page_logs_shown_number"></em> {{ ctrl.contextLogs.datapoints.length || 0 }}
               </li>
               <li>
                 <select class="gf-form-select-wrapper gf-form-input width-7"
@@ -42,7 +43,7 @@
             </table>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" ng-click="$hide()">关闭</button>
+          <button type="button" class="btn btn-default" ng-click="$hide()" translate="i18n_close"></button>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ import angular from 'angular';
 export class DashNavCtrl {
 
   /** @ngInject */
-  constructor($scope, $rootScope, alertSrv, $location, playlistSrv, backendSrv, $timeout) {
+  constructor($scope, $rootScope, alertSrv, $location, playlistSrv, backendSrv, $timeout, $translate) {
 
     $scope.init = function() {
       $scope.onAppEvent('save-dashboard', $scope.saveDashboard);
@@ -88,12 +88,12 @@ export class DashNavCtrl {
       }
 
       if (!$scope.dashboard.system) {
-        $scope.appEvent('alert-warning', ['保存失败', '请选择子系统']);
+        $scope.appEvent('alert-warning', [$translate.i18n.i18n_fail, $translate.i18n.i18n_input_full]);
         return;
       }
 
       if (_.isEmpty($scope.dashboard.title)) {
-        $scope.appEvent('alert-warning', ['保存失败', '请填写仪表盘标题']);
+        $scope.appEvent('alert-warning', [$translate.i18n.i18n_fail, $translate.i18n.i18n_input_full]);
         return;
       }
       var clone = $scope.dashboard.getSaveModelClone();
@@ -109,7 +109,7 @@ export class DashNavCtrl {
         }
         backendSrv.updateSystemId(clone.system);
         backendSrv.post("/api/dashboards/system", {DashId: data.id.toString(), SystemId: clone.system});
-        $scope.appEvent('alert-success', ['仪表盘保存成功', '保存为' + clone.title]);
+        $scope.appEvent('alert-success', [$translate.i18n.i18n_success, $translate.i18n.i18n_saveAs + clone.title]);
       }, $scope.handleSaveDashError);
     };
 
@@ -133,10 +133,10 @@ export class DashNavCtrl {
         err.isHandled = true;
 
         $scope.appEvent('confirm-modal', {
-          title: '冲突',
-          text: '已经存在相同名字的仪表盘',
-          text2: '请修改您的仪表盘名称',
-          yesText: "立即修改",
+          title: $translate.i18n.i18n_confilct,
+          text: $translate.i18n.page_dash_save_name,
+          text2: $translate.i18n.page_dash_edit_name,
+          yesText: $translate.i18n.i18n_modify,
           icon: "fa-warning"
         });
       }
@@ -144,11 +144,11 @@ export class DashNavCtrl {
 
     $scope.deleteDashboard = function() {
       $scope.appEvent('confirm-modal', {
-        title: '删除',
-        text: '您是否想删除',
+        title: $translate.i18n.i18n_delete,
+        text: $translate.i18n.i18n_sure_operator,
         text2: $scope.dashboard.title,
         icon: 'fa-trash',
-        yesText: 'Delete',
+        yesText: $translate.i18n.i18n_delete,
         onConfirm: function() {
           $scope.deleteDashboardConfirmed();
         }
@@ -157,7 +157,7 @@ export class DashNavCtrl {
 
     $scope.deleteDashboardConfirmed = function() {
       backendSrv.delete('/api/dashboards/db/' + $scope.dashboardMeta.slug).then(function() {
-        $scope.appEvent('alert-success', ['仪表盘', $scope.dashboard.title + ' 已经被移除']);
+        $scope.appEvent('alert-success', ['Dashboard ', $scope.dashboard.title + ' Removed']);
         $location.url('/');
       });
     };

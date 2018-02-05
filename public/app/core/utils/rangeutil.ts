@@ -4,6 +4,8 @@ import _ from 'lodash';
 import moment from 'moment';
 import * as dateMath from './datemath';
 
+var language = (window.localStorage.getItem('CLOUDWIZ_LANG_KEY')) || 'zh_CN'
+
 var spans = {
   's': {display: '秒'},
   'm': {display: '分钟'},
@@ -47,11 +49,61 @@ var rangeOptions = [
   { from: 'now-5y',   to: 'now',      display: '5  年之前',          section: 0 },
 ];
 
+var toText = ' 至 ';
+var agoText = '之前';
+
+if (language === 'en') {
+  spans = {
+    's': {display: 'second'},
+    'm': {display: 'minute'},
+    'h': {display: 'hour'},
+    'd': {display: 'day'},
+    'w': {display: 'week'},
+    'M': {display: 'month'},
+    'y': {display: 'year'},
+  };
+  rangeOptions = rangeOptions = [
+    { from: 'now/d',    to: 'now/d',    display: 'Today',                 section: 2 },
+    { from: 'now/d',    to: 'now',      display: 'Today so far',          section: 2 },
+    { from: 'now/w',    to: 'now/w',    display: 'This week',             section: 2 },
+    { from: 'now/w',    to: 'now',      display: 'This week so far',           section: 2 },
+    { from: 'now/M',    to: 'now/M',    display: 'This month',            section: 2 },
+    { from: 'now/y',    to: 'now/y',    display: 'This year',             section: 2 },
+
+    { from: 'now-1d/d', to: 'now-1d/d', display: 'Yesterday',             section: 1 },
+    { from: 'now-2d/d', to: 'now-2d/d', display: 'Day before yesterday',  section: 1 },
+    { from: 'now-7d/d', to: 'now-7d/d', display: 'This day last week',    section: 1 },
+    { from: 'now-1w/w', to: 'now-1w/w', display: 'Previous week',         section: 1 },
+    { from: 'now-1M/M', to: 'now-1M/M', display: 'Previous month',        section: 1 },
+    { from: 'now-1y/y', to: 'now-1y/y', display: 'Previous year',         section: 1 },
+
+    { from: 'now-5m',   to: 'now',      display: 'Last 5 minutes',        section: 3 },
+    { from: 'now-15m',  to: 'now',      display: 'Last 15 minutes',       section: 3 },
+    { from: 'now-30m',  to: 'now',      display: 'Last 30 minutes',       section: 3 },
+    { from: 'now-1h',   to: 'now',      display: 'Last 1 hour',           section: 3 },
+    { from: 'now-3h',   to: 'now',      display: 'Last 3 hours',          section: 3 },
+    { from: 'now-6h',   to: 'now',      display: 'Last 6 hours',          section: 3 },
+    { from: 'now-12h',  to: 'now',      display: 'Last 12 hours',         section: 3 },
+    { from: 'now-24h',  to: 'now',      display: 'Last 24 hours',         section: 3 },
+
+    { from: 'now-7d',   to: 'now',      display: 'Last 7 days',           section: 0 },
+    { from: 'now-30d',  to: 'now',      display: 'Last 30 days',          section: 0 },
+    { from: 'now-60d',  to: 'now',      display: 'Last 60 days',          section: 0 },
+    { from: 'now-90d',  to: 'now',      display: 'Last 90 days',          section: 0 },
+    { from: 'now-6M',   to: 'now',      display: 'Last 6 months',         section: 0 },
+    { from: 'now-1y',   to: 'now',      display: 'Last 1 year',           section: 0 },
+    { from: 'now-2y',   to: 'now',      display: 'Last 2 years',          section: 0 },
+    { from: 'now-5y',   to: 'now',      display: 'Last 5 years',          section: 0 },
+  ];
+  toText = ' to ';
+  agoText = 'ago';
+}
+
 var absoluteFormat = 'MMM D, YYYY HH:mm:ss';
 
 var rangeIndex = {};
 _.each(rangeOptions, function (frame) {
-  rangeIndex[frame.from + ' to ' + frame.to] = frame;
+  rangeIndex[frame.from + toText + frame.to] = frame;
 });
 
 export  function getRelativeTimesList(timepickerSettings, currentDisplay) {
@@ -59,13 +111,6 @@ export  function getRelativeTimesList(timepickerSettings, currentDisplay) {
     option.active = option.display === currentDisplay;
     return option.section;
   });
-
-  // _.each(timepickerSettings.time_options, (duration: string) => {
-  //   let info = describeTextRange(duration);
-  //   if (info.section) {
-  //     groups[info.section].push(info);
-  //   }
-  // });
 
   return groups;
 }
@@ -98,14 +143,14 @@ export function describeTextRange(expr: any) {
     let amount = parseInt(parts[1]);
     let span = spans[unit];
     if (span) {
-      opt.display = amount + ' ' + span.display + '之前';
+      opt.display = amount + ' ' + span.display + agoText;
       opt.section = span.section;
       // if (amount > 1) {
       //   opt.display += 's';
       // }
     }
   } else {
-    opt.display = opt.from + ' 至 ' + opt.to;
+    opt.display = opt.from + toText + opt.to;
     opt.invalid = true;
   }
 
@@ -113,23 +158,23 @@ export function describeTextRange(expr: any) {
 }
 
 export function describeTimeRange(range) {
-  var option = rangeIndex[range.from.toString() + ' to ' + range.to.toString()];
+  var option = rangeIndex[range.from.toString() + toText + range.to.toString()];
   if (option) {
     return option.display;
   }
 
   if (moment.isMoment(range.from) && moment.isMoment(range.to)) {
-    return formatDate(range.from) + ' 至 ' + formatDate(range.to);
+    return formatDate(range.from) + toText + formatDate(range.to);
   }
 
   if (moment.isMoment(range.from)) {
     var toMoment = dateMath.parse(range.to, true);
-    return formatDate(range.from) + ' 至 ' + toMoment.fromNow();
+    return formatDate(range.from) + toText + toMoment.fromNow();
   }
 
   if (moment.isMoment(range.to)) {
     var from = dateMath.parse(range.from, false);
-    return from.fromNow() + ' 至 ' + formatDate(range.to);
+    return from.fromNow() + toText + formatDate(range.to);
   }
 
   if (range.to.toString() === 'now') {
@@ -137,6 +182,6 @@ export function describeTimeRange(range) {
     return res.display;
   }
 
-  return range.from.toString() + ' 至 ' + range.to.toString();
+  return range.from.toString() + toText + range.to.toString();
 }
 

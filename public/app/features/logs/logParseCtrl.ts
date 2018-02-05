@@ -15,7 +15,8 @@ export class LogParseCtrl {
     private contextSrv,
     private logParseSrv,
     private $location,
-    private $routeParams
+    private $routeParams,
+    private $translate
   ) {}
   initList() {
     this.logParseSrv.getListRule(this.contextSrv.user.orgId, this.contextSrv.user.systemId).then((response) => {
@@ -25,23 +26,23 @@ export class LogParseCtrl {
 
   deleteRuleById(ruleId) {
     if (this.contextSrv.isViewer) {
-      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n_sorry, this.$translate.i18n.i18n_no_authority]);
       return;
     }
     this.$scope.appEvent('confirm-modal', {
-      title: '删除',
-      text: '该操作将删除所有相关日志配置,您确定要删除该规则吗？',
+      title: this.$translate.i18n.i18n_delete,
+      text: this.$translate.i18n.page_log_config_del_tip,
       icon: 'fa-trash',
-      yesText: '删除',
-      noText: '取消',
+      yesText: this.$translate.i18n.i18n_delete,
+      noText: this.$translate.i18n.i18n_cancel,
       onConfirm: () => {
         this.logParseSrv.deletePattern(ruleId, this.contextSrv.user.id).then((res) => {
-          this.$scope.appEvent('alert-success', ['删除成功']);
+          this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success]);
           _.remove(this.ruleList, (rule) => {
             return rule.id === ruleId;
           });
         }, () => {
-          this.$scope.appEvent('alert-danger', ['删除失败', '请稍后重试']);
+          this.$scope.appEvent('alert-danger', [this.$translate.i18n.i18n_fail, this.$translate.i18n.i18n_try_later]);
         });
       }
     });

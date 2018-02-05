@@ -1,10 +1,9 @@
 <div class="tabbed-view-header">
-	<h2 class="tabbed-view-title">
-		设置
+	<h2 class="tabbed-view-title" translate="i18n_setting">
 	</h2>
 
 	<ul class="gf-tabs">
-		<li class="gf-tabs-item" ng-repeat="tab in ::['概要', '行设置', '链接', '时间选择', '元数据']">
+		<li class="gf-tabs-item" ng-repeat="tab in ::[$translate.i18n.i18n_general, $translate.i18n.i18n_row_option, $translate.i18n.i18n_links, $translate.i18n.i18n_time_select, $translate.i18n.i18n_metadata]">
 			<a class="gf-tabs-link" ng-click="editor.index = $index" ng-class="{active: editor.index === $index}">
 				{{::tab}}
 			</a>
@@ -20,14 +19,14 @@
 	<div ng-if="editor.index === 0">
 
 		<div class="gf-form-group section">
-      <h5 class="section-heading">仪表盘 信息</h5>
+      <h5 class="section-heading" translate="i18n_dash_info"></h5>
 			<div class="gf-form">
-				<label class="gf-form-label width-7">标题</label>
+				<label class="gf-form-label width-7" translate="i18n_title"></label>
 				<input type="text" class="gf-form-input width-25" ng-model='dashboard.title'></input>
 			</div>
 			<div class="gf-form">
 				<label class="gf-form-label width-7">
-          标签
+          <em translate="i18n_label"></em>
           <info-popover mode="right-normal">Press enter to a add tag</info-popover>
         </label>
 				<bootstrap-tagsinput ng-model="dashboard.tags" tagclass="label label-tag" placeholder="add tags">
@@ -35,13 +34,13 @@
 			</div>
 
 			<div class="gf-form">
-				<label class="gf-form-label width-7">时区</label>
+				<label class="gf-form-label width-7" translate="i18n_timezone"></label>
 				<div class="gf-form-select-wrapper">
 					<select ng-model="dashboard.timezone" class='gf-form-input' ng-options="f.value as f.text for f in [{value: '', text: 'Default'}, {value: 'browser', text: 'Local browser time'},{value: 'utc', text: 'UTC'}]" ng-change="timezoneChanged()"></select>
 				</div>
 			</div>
 			<div class="gf-form">
-				<label class="gf-form-label width-7">子系统</label>
+				<label class="gf-form-label width-7" translate="i18n_child_system"></label>
 				<div class="gf-form-select-wrapper" ng-controller="SystemCtrl" ng-init="init()">
 					<select ng-model="dashboard.system" class="input tight-form-input">
 						<option ng-repeat="system in systems" value="{{system.Id}}" ng-selected="dashboard.system === system.Id">{{system.SystemsName}}</option>
@@ -51,16 +50,16 @@
 		</div>
 
     <div class="section">
-      <h5 class="section-heading">开启/关闭</h5>
+      <h5 class="section-heading" translate="i18n_switch"></h5>
       <div class="gf-form-group">
         <gf-form-switch class="gf-form"
-                        label="编辑"
+                        label="{{ 'i18n_edit' | translate }}"
                         tooltip="Uncheck, then save and reload to disable all dashboard editing"
                         checked="dashboard.editable"
                         label-class="width-11">
         </gf-form-switch>
         <gf-form-switch class="gf-form"
-                        label="隐藏操作栏"
+                        label="Hide operation bar"
                         tooltip="Hide row controls. Shortcut: CTRL+H"
                         checked="dashboard.hideControls"
                         label-class="width-11">
@@ -77,12 +76,12 @@
 	</div>
 
 	<div ng-if="editor.index == 1">
-		<h5 class="section-heading">行设置</h5>
+		<h5 class="section-heading" translate="i18n_row_option"></h5>
 
 		<div class="gf-form-group">
 			<div class="gf-form-inline" ng-repeat="row in dashboard.rows">
 				<div class="gf-form">
-					<span class="gf-form-label">标题</span>
+					<span class="gf-form-label" translate="i18n_title"></span>
 					<input type="text" class="gf-form-input max-width-14" ng-model='row.title'></input>
 				</div>
 				<gf-form-switch class="gf-form" label="Show title" checked="row.showTitle" switch-class="max-width-6"></gf-form-switch>
@@ -111,7 +110,7 @@
 	</div>
 
 	<div ng-if="editor.index == 4">
-		<h5 class="section-heading">Dashboard info</h5>
+		<h5 class="section-heading" translate="i18n_dash_info"></h5>
 		<div class="gf-form-group">
 			<div class="gf-form">
 				<span class="gf-form-label width-10">Last updated at:</span>

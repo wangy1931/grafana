@@ -1,18 +1,18 @@
 <div class="host-process host-tab-content" auto-refresh>
   <div ng-hide="ctrl.tableData.length">
-    <em>暂没有任何进程数据</em>
+    <em translate="i18n_empty_tmp"></em>
     <cw-loading show="!ctrl.tableData.length" duration=6000></cw-loading>
   </div>
   <div ng-show="ctrl.tableData.length">
     <p class="pull-right">
-        <a href="/topn?guide&host={{ ctrl.currentHost.name }}" style="text-decoration: underline;">查看历史资源使用 &gt;&gt;</a>
+        <a href="/topn?guide&host={{ ctrl.currentHost.name }}" style="text-decoration: underline;"><em translate="page_host_topn_history"></em> &gt;&gt;</a>
     </p>
     <p class="pull-right" ng-show="refresh_interval" style="margin-right: 50px;">
       <i class="fa fa-clock-o"></i>
-      <span>现在</span>
+      <span translate="i18n_now"></span>
       <span class="text-warning">
         &nbsp;
-        自动刷新 {{ refresh_interval }}
+        <em translate="i18n_auto_refresh"></em> {{ refresh_interval }}
       </span>
     </p>
     <div ng-include="'public/app/partials/host_process_table.html'"></div>

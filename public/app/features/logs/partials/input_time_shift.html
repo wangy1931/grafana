@@ -4,27 +4,25 @@
         <i class="fa fa-remove"></i>
     </a>
 
-    <h3>
-        请填写相对时间
+    <h3 translate="page_logs_relative_time">
     </h3>
 
     <form name="timeShiftFrom">
         <div style="display: inline-block">
             <div class="tight-form-title">
                 <ul>
-                    <li>设置相对时间：如 -1d，-7d，-30d；</li>
-                    <li>表示 “当前时间段日志” 对比 “1天前时间段日志”</li>
+                    <li translate="page_logs_relative_tip1"></li>
+                    <li translate="page_logs_relative_tip2"></li>
                 </ul>
             </div>
             <div class="tight-form-container">
                 <div class="tight-form">
                     <ul class="tight-form-list">
-                        <li class="tight-form-item" style="width: 100px">
-                            相对时间
+                        <li class="tight-form-item" style="width: 100px" translate="page_logs_relative_time">
                         </li>
                         <li>
                             <input ng-model="shift" type="text" required class="input-large tight-form-input"
-                                   placeholder="如 -1d, -1M, -1y">
+                                   placeholder="-1d / -1M / -1y">
                         </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -32,8 +30,8 @@
             </div>
 
             <div class="" style="margin-top: 30px; margin-bottom: 20px;">
-                <button type="button" class="btn btn-inverse" ng-click="dismiss()">取消</button>
-                <button type="submit" class="btn btn-success" ng-click="logCompare(shift);dismiss()">确定</button>
+                <button type="button" class="btn btn-inverse" ng-click="dismiss()" translate="i18n_cancel"></button>
+                <button type="submit" class="btn btn-success" ng-click="logCompare(shift);dismiss()" translate="i18n_confirm"></button>
             </div>
         </div>
     </form>

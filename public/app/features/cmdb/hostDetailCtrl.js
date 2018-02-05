@@ -6,7 +6,7 @@ define([
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('HostDetailCtrl', function ($scope, backendSrv, $location, hostSrv, contextSrv, $q) {
+  module.controller('HostDetailCtrl', function ($scope, backendSrv, $location, hostSrv, contextSrv, $q, $translate) {
     $scope.init = function() {
       var id = $location.search().id;
       $scope.id = id;
@@ -17,7 +17,7 @@ define([
         $scope.detail = response.data;
         $scope.tags = angular.copy(response.data.tags);
         $scope.cpuCount = _.countBy(response.data.cpu);
-        $scope.detail.isVirtual = $scope.detail.isVirtual ? '是' : '否';
+        $scope.detail.isVirtual = $scope.detail.isVirtual ? $translate.i18n.i18n_yes : $translate.i18n.i18n_no;
         $scope.detail = _.cmdbInitObj($scope.detail);
       });
     };
@@ -32,7 +32,7 @@ define([
         });
 
         if(!$scope.allService.length) {
-          $scope.appEvent('alert-success', ['您已添加所有机器']);
+          $scope.appEvent('alert-success', [$translate.i18n.page_log_parse_service_fulled]);
           return;
         }
 
@@ -77,11 +77,11 @@ define([
 
     $scope.deleteService = function(relationshipId) {
       $scope.appEvent('confirm-modal', {
-        title: '删除',
-        text: '您确认要删除该服务吗？',
+        title: $translate.i18n.i18n_delete,
+        text: $translate.i18n.i18n_sure_operator,
         icon: 'fa-trash',
-        yesText: '删除',
-        noText: '取消',
+        yesText: $translate.i18n.i18n_delete,
+        noText: $translate.i18n.i18n_cancel,
         onConfirm: function() {
           backendSrv.editServiceHost({op: 'Delete', rId: relationshipId}).then(function(response) {
             if (response.status === 200) {

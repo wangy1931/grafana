@@ -6,7 +6,7 @@ define([
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('CMDBServiceDetailCtrl', function ($scope, backendSrv, $location, $q, contextSrv, datasourceSrv) {
+  module.controller('CMDBServiceDetailCtrl', function ($scope, backendSrv, $location, $q, contextSrv, datasourceSrv, $translate) {
     $scope.init = function() {
       $scope.order = "'hostname'";
       $scope.desc = false;
@@ -19,11 +19,11 @@ define([
 
     $scope.deleteHost = function(relationshipId) {
       $scope.appEvent('confirm-modal', {
-        title: '删除',
-        text: '您确认要删除该机器吗？',
+        title: $translate.i18n.i18n_delete,
+        text: $translate.i18n.i18n_sure_operator,
         icon: 'fa-trash',
-        yesText: '删除',
-        noText: '取消',
+        yesText: $translate.i18n.i18n_delete,
+        noText: $translate.i18n.i18n_cancel,
         onConfirm: function() {
           backendSrv.editServiceHost({op: 'Delete', rId: relationshipId}).then(function(response) {
             if (response.status === 200) {
@@ -44,7 +44,7 @@ define([
         });
 
         if(!$scope.allHosts.length) {
-          $scope.appEvent('alert-success', ['您已添加所有机器']);
+          $scope.appEvent('alert-success', [$translate.i18n.page_log_parse_host_fulled]);
           return;
         }
 
@@ -105,22 +105,22 @@ define([
                   throw Error;
                 }
                 if (status > 0) {
-                  host.state = "异常";
+                  host.state = $translate.i18n.i18n_unnormal;
                 } else {
-                  host.state = "正常";
+                  host.state = $translate.i18n.i18n_normal;
                 }
               }
             });
           }, function() {
-            host.state = "异常";
+            host.state = $translate.i18n.i18n_unnormal;
           });
 
           if(host.isVirtual) {
-            return host.isVirtual = '是';
+            return host.isVirtual = $translate.i18n.i18n_yes;
           } else if(host.isVirtual == false) {
-            return host.isVirtual = '否';
+            return host.isVirtual = $translate.i18n.i18n_no;
           } else {
-            return host.isVirtual = '未知';
+            return host.isVirtual = $translate.i18n.i18n_unknown;
           };
         });
       });

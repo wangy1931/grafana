@@ -80,9 +80,9 @@ export class SystemOverviewCtrl {
     this.kpiPanel = {
       leftTableHeads: ['i18n_hostname', 'i18n_hostname'],
       leftTableBodys: [
-        { id: '', name: '', data: '正常', status: 'green' },
-        { id: '', name: '', data: '正常', status: 'green' },
-        { id: '', name: '', data: '正常', status: 'green' }
+        { id: '', name: '', data: $translate.i18n.i18n_normal, status: 'green' },
+        { id: '', name: '', data: $translate.i18n.i18n_normal, status: 'green' },
+        { id: '', name: '', data: $translate.i18n.i18n_normal, status: 'green' }
       ],
       rightPanelHead: { id: '', name: '...' },
       rightItemTypes: {
@@ -109,7 +109,7 @@ export class SystemOverviewCtrl {
   setPanelMetaHost(panelDef, metric, hostname) {
     var alias = metric + ".anomaly{host=" + hostname + "}";
     var panel = panelDef;
-    panel.title = metric + "{host=" + hostname + "}" + "指标异常情况";
+    panel.title = metric + "{host=" + hostname + "}" + this.$translate.i18n.i18n_anomaly_metric;
     panel.targets[0].metric = metric;
     panel.targets[0].tags.host = hostname;
     panel.targets[1].metric = metric + ".anomaly";
@@ -164,8 +164,7 @@ export class SystemOverviewCtrl {
   // 报警情况
   getAlertStatus() {
     this.alertPanel.status = [
-      { health: HEALTH_TYPE.GREEN.TEXT, text: '系统正常', count: 0, hide: true },
-      { health: HEALTH_TYPE.RED.TEXT, text: 'i18n_critical', count: 0 },
+      { health: HEALTH_TYPE.GREEN.TEXT, text: 'i18n_normal', count: 0 },
       { health: HEALTH_TYPE.YELLOW.TEXT, text: 'i18n_warning', count: 0 },
     ];
 
@@ -176,7 +175,7 @@ export class SystemOverviewCtrl {
         }
       } else {
         this.alertPanel.status[0].text = '';
-        this.alertPanel.status[0].count = '系统正常';
+        this.alertPanel.status[0].count = this.$translate.i18n.i18n_normal;
       }
     });
   }
@@ -213,7 +212,7 @@ export class SystemOverviewCtrl {
     this.healthSrv.load().then(data => {
       var healthScore = Math.floor(data.health);
       this.healthPanel.score = healthScore;
-      this.healthPanel.level = _.getLeveal(healthScore);
+      this.healthPanel.level = this.$translate.i18n[_.getLeveal(healthScore)];
 
       var colors = healthScore > 75 ? [HEALTH_TYPE.GREEN.COLOR] : (healthScore > 50 ? [HEALTH_TYPE.YELLOW.COLOR] : [HEALTH_TYPE.RED.COLOR]);
       this.utilSrv.setPie('.health-pie', [
@@ -254,7 +253,7 @@ export class SystemOverviewCtrl {
               !this.hostsResource[node.name][key] && (this.hostsResource[node.name][key] = {
                 "host"  : item.hostName,
                 "status": item.healthStatusType,
-                "statusText": _.statusFormatter(item.healthStatusType)
+                "statusText": this.$translate.i18n[_.statusFormatter(item.healthStatusType)]
               });
             });
           });
@@ -267,7 +266,7 @@ export class SystemOverviewCtrl {
         });
 
       } else {
-        this.alertSrv.set("抱歉", "您还没有创建服务依赖关系, 建议您先创建", "error", 2000);
+        this.alertSrv.set(this.$translate.i18n.i18n_sorry, this.$translate.i18n.page_overview_err_dependency, "error", 2000);
       }
     });
   }
@@ -301,7 +300,7 @@ export class SystemOverviewCtrl {
         this.kpiPanel.leftTableBodys.push({
           id: (_.find(this.hostPanels, { host: hostKey }) || {}).id,
           name: hostKey,
-          data: _.statusFormatter(hostMap.healthStatusType),
+          data: this.$translate.i18n[_.statusFormatter(hostMap.healthStatusType)],
           status: hostMap.healthStatusType
         });
       });
@@ -351,7 +350,7 @@ export class SystemOverviewCtrl {
           this.kpiPanel.leftTableBodys.push({
             id: service.id,
             name: service.name,
-            data: _.statusFormatter(service.healthStatusType),
+            data: this.$translate.i18n[_.statusFormatter(service.healthStatusType)],
             status: service.healthStatusType,
             icon: (_.find(this.dependencies.nodes, { id: "" + service.id, name: service.name }) || {}).icon
           });
@@ -420,7 +419,7 @@ export class SystemOverviewCtrl {
       var itemMap = this.serviceKpi.hostStatusMap && this.serviceKpi.hostStatusMap[hostname].itemStatusMap[itemKey];
       _.extend(this.kpiPanel.rightItemTypes[itemKey], {
         id: itemKey,
-        data: itemMap ? _.statusFormatter(itemMap.healthStatusType) : '暂无',
+        data: itemMap ? this.$translate.i18n[_.statusFormatter(itemMap.healthStatusType)] : this.$translate.i18n.i18n_empty_tmp,
         status: itemMap ? itemMap.healthStatusType : 'GREY',
         metrics: itemMap ? itemMap.metricStatusMap : null
       });
@@ -429,7 +428,7 @@ export class SystemOverviewCtrl {
     // hard code: set servicekpi grey, when service state is grey
     if (this.kpiPanel.rightItemTypes['ServiceState'].status === 'GREY') {
       _.extend(this.kpiPanel.rightItemTypes['ServiceKPI'], {
-        data: _.statusFormatter('GREY'),
+        data: this.$translate.i18n[_.statusFormatter('GREY')],
         status: 'GREY',
         metrics: null
       });
@@ -494,8 +493,8 @@ export class SystemOverviewCtrl {
       metricsTable.push({
         name: key,
         host: host,
-        alertRuleSet: value.alertRuleSet ? '有' : '无',
-        alertLevel: _.translateAlertLevel(value.alertLevel),
+        alertRuleSet: value.alertRuleSet ? this.$translate.i18n.i18n_exist : this.$translate.i18n.i18n_empty,
+        alertLevel: this.$translate.i18n[_.translateAlertLevel(value.alertLevel)],
         anomalyHealth: health,
         snoozeState: value.snoozeState,
         triggerRed: health === 0,
