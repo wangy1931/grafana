@@ -37,7 +37,7 @@ type DataSource struct {
 	Type              string
 	Access            DsAccess
 	Url               string
-	Intranet          string
+	IntranetUrl          string
 	Password          string
 	User              string
 	Database          string
@@ -83,7 +83,7 @@ type AddDataSourceCommand struct {
 	Type              string           `json:"type" binding:"Required"`
 	Access            DsAccess         `json:"access" binding:"Required"`
 	Url               string           `json:"url"`
-	Intranet          string           `json:"intranet"`
+	IntranetUrl       string           `json:"intranetUrl"`
 	Password          string           `json:"password"`
 	Database          string           `json:"database"`
 	User              string           `json:"user"`
@@ -105,7 +105,7 @@ type UpdateDataSourceCommand struct {
 	Type              string           `json:"type" binding:"Required"`
 	Access            DsAccess         `json:"access" binding:"Required"`
 	Url               string           `json:"url"`
-	Intranet          string           `json:"intranet"`
+	IntranetUrl       string           `json:"intranetUrl"`
 	Password          string           `json:"password"`
 	User              string           `json:"user"`
 	Database          string           `json:"database"`

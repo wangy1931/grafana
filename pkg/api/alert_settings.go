@@ -22,10 +22,10 @@ func GetCustomizedSource(c *middleware.Context) {
   sqlstore.GetDataSources(&query)
   for _, dataSource := range query.Result {
     alert[dataSource.Name] = dataSource.Url
-    if dataSource.Intranet == "" {
+    if dataSource.IntranetUrl == "" {
       alert[dataSource.Name + "_intranet"] = dataSource.Url
     } else {
-      alert[dataSource.Name + "_intranet"] = dataSource.Intranet
+      alert[dataSource.Name + "_intranet"] = dataSource.IntranetUrl
     }
   }
   log.Info("Alert Url: %v", alert["alert"])

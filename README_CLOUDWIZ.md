@@ -1,11 +1,11 @@
 ## Update tables Features
 
-## Datasource add column 'intranet'
+## Datasource add column 'intranet_url'
 date: 2018-02-05
 
 - 添加内网设置, 默认与url一致
 ```sql
-UPDATE data_source SET intranet=url
+UPDATE data_source SET intranet_url=url
 ```
 - update datasource type
 ```sql
