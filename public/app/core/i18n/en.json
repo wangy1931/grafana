@@ -96,7 +96,7 @@
   "page_logs_tab_log": "Logs",
   "page_logs_tab_cluster": "Aggregation",
   "page_logs_tab_contrast": "Comparison",
-  "page_logs_log_compare": "Comparison log",
+  "page_logs_log_compare": "Compare",
   "page_logs_add_source": "Add to RCA",
   "page_logs_rules": "Log Collection Setting",
   "page_logs_rules_edit": "Edit Log Rule",

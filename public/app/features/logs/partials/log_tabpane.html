@@ -120,7 +120,7 @@
                     <div>
                         <ul ng-if="name == 2">
                             <li style="color: #F9934E;"><em translate="page_logs_cur_range"></em>: <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:'now':0 }} <em translate="i18n_to"></em> {{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:'now':1 }}</strong></li>
-                            <li style="color: #F9934E;"><em translate="page_logs_compare_range"></em>: <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:0}} <em translate="i18n_to"></em> {{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:currentRelativeTime:1 }}</strong></li>
+                            <li style="color: #F9934E;"><em translate="page_logs_compare_range"></em>: <strong>{{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:ctrl.currentRelativeTime:0}} <em translate="i18n_to"></em> {{ ctrl.tabsCache[row.id].timeRange | formatTimeRange:ctrl.currentRelativeTime:1 }}</strong></li>
                         </ul>
                     </div>
                   </div>
