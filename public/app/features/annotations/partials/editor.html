@@ -1,13 +1,11 @@
 <div ng-controller="AnnotationsEditorCtrl">
 	<div class="tabbed-view-header">
-		<h2 class="tabbed-view-title">
-			标注
+		<h2 class="tabbed-view-title" translate="i18n_annotation">
 		</h2>
 
 		<ul class="gf-tabs">
 			<li class="gf-tabs-item" >
-				<a class="gf-tabs-link" ng-click="ctrl.mode = 'list';" ng-class="{active: ctrl.mode === 'list'}">
-					列表
+				<a class="gf-tabs-link" ng-click="ctrl.mode = 'list';" ng-class="{active: ctrl.mode === 'list'}" translate="i18n_list">
 				</a>
 			</li>
 			<li class="gf-tabs-item" ng-show="ctrl.mode === 'edit'">
@@ -16,7 +14,7 @@
 				</a>
 			</li>
 			<li class="gf-tabs-item" ng-show="ctrl.mode === 'new'">
-				<span class="active gf-tabs-link">新建</span>
+				<span class="active gf-tabs-link" translate="i18n_new_create"></span>
 			</li>
 		</ul>
 
@@ -28,7 +26,7 @@
 	<div class="tabbed-view-body">
 		<div class="editor-row row" ng-if="ctrl.mode === 'list'">
 			<div ng-if="ctrl.annotations.length === 0">
-				<em>您尚未创建任何标注</em>
+				<em translate="page_dash_no_anno"></em>
 			</div>
 			<table class="grafana-options-table">
 				<tr ng-repeat="annotation in ctrl.annotations">
@@ -42,7 +40,7 @@
 					<td style="width: 1%">
 						<a ng-click="ctrl.edit(annotation)" class="btn btn-inverse btn-mini">
 							<i class="fa fa-edit"></i>
-							Edit
+							<em translate="i18n_edit"></em>
 						</a>
 					</td>
 					<td style="width: 1%">
@@ -56,7 +54,7 @@
 
 		<div class="gf-form" ng-show="ctrl.mode === 'list'">
 			<div class="gf-form-button-row">
-				<a type="button" class="btn gf-form-button btn-success" ng-click="ctrl.mode = 'new';"><i class="fa fa-plus" ></i>&nbsp;&nbsp;New</a>
+				<a type="button" class="btn gf-form-button btn-success" ng-click="ctrl.mode = 'new';"><i class="fa fa-plus" ></i>&nbsp;&nbsp;<em translate="i18n_new_create"></em></a>
 			</div>
 		</div>
 
@@ -64,18 +62,18 @@
 			<div class="gf-form-group">
 				<div class="gf-form-inline">
 					<div class="gf-form gf-size-max-xxl">
-						<span class="gf-form-label">标注名</span>
+						<span class="gf-form-label" translate="i18n_annotation_name"></span>
 						<input type="text" class="gf-form-input" ng-model='ctrl.currentAnnotation.name' placeholder="name"></input>
 					</div>
 					<div class="gf-form">
-						<span class="gf-form-label max-width-10">数据源</span>
+						<span class="gf-form-label max-width-10" translate="i18n_menu_datasource"></span>
 						<div class="gf-form-select-wrapper">
 							<select class="gf-form-input gf-size-auto" ng-model="ctrl.currentAnnotation.datasource" ng-options="f.name as f.name for f in ctrl.datasources" ng-change="ctrl.datasourceChanged()"></select>
 						</div>
 					</div>
 					<div class="gf-form">
 						<label class="gf-form-label">
-							<span>颜色</span>
+							<span translate="i18n_color"></span>
 						</label>
 						<spectrum-picker class="gf-form-input" ng-model="ctrl.currentAnnotation.iconColor"></spectrum-picker>
 					</div>
@@ -89,8 +87,8 @@
 
 			<div class="gf-form">
 				<div class="gf-form-button-row p-y-0">
-					<button ng-show="ctrl.mode === 'new'" type="button" class="btn gf-form-button btn-success" ng-click="ctrl.add()">新建</button>
-					<button ng-show="ctrl.mode === 'edit'" type="button" class="btn btn-success pull-left" ng-click="ctrl.update()">更新</button>
+					<button ng-show="ctrl.mode === 'new'" type="button" class="btn gf-form-button btn-success" ng-click="ctrl.add()" translate="i18n_new_create"></button>
+					<button ng-show="ctrl.mode === 'edit'" type="button" class="btn btn-success pull-left" ng-click="ctrl.update()" translate="i18n_update"></button>
 				</div>
 			</div>
 		</div>

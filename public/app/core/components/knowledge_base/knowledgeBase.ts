@@ -19,7 +19,10 @@ export class KnowledgeBaseCtrl {
   knowledgeCopy: any;
 
   /** @ngInject */
-  constructor(private $scope, private $rootScope, private backendSrv, private contextSrv) {
+  constructor(
+    private $scope, private $rootScope, private backendSrv,
+    private contextSrv, private $translate
+  ) {
     this.q = "*";
     this.service = "*";
     this.services = ["*", "system", "hadoop", "hbase", "kafka", "mysql", "spark", "storm", "yarn", "zookeeper", "tomcat", "opentsdb", "mongo3", "nginx", "windows", "exchange"];
@@ -70,7 +73,7 @@ export class KnowledgeBaseCtrl {
       url: "",
       data: this.newKnowledge
     }).then((res) => {
-      res.data.isSuccessful && this.$scope.appEvent('alert-success', ['添加成功']);
+      res.data.isSuccessful && this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success]);
     });
     this.showCreatForm = false;
   }

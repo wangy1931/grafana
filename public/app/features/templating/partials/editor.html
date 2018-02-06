@@ -11,12 +11,11 @@
 				</a>
 			</li>
 			<li class="gf-tabs-item" ng-show="mode === 'edit'">
-				<a class="gf-tabs-link" ng-class="{active: mode === 'edit'}">
-					编辑
+				<a class="gf-tabs-link" ng-class="{active: mode === 'edit'}" translate="i18n_edit">
 				</a>
 			</li>
 			<li class="gf-tabs-item" ng-show="mode === 'new'">
-				<span class="active gf-tabs-link">新增</span>
+				<span class="active gf-tabs-link" translate="i18n_create"></span>
 			</li>
 		</ul>
 
@@ -45,14 +44,13 @@
 					<td style="width: 1%"><i ng-click="_.move(variables,$index,$index-1)" ng-hide="$first" class="pointer fa fa-arrow-up"></i></td>
 					<td style="width: 1%"><i ng-click="_.move(variables,$index,$index+1)" ng-hide="$last" class="pointer fa fa-arrow-down"></i></td>
 					<td style="width: 1%">
-            <a ng-click="duplicate(variable)" class="btn btn-inverse btn-mini">
-				复制
+            <a ng-click="duplicate(variable)" class="btn btn-inverse btn-mini" translate="i18n_copy">
             </a>
           </td>
 					<td style="width: 1%">
 						<a ng-click="edit(variable)" class="btn btn-inverse btn-mini">
 							<i class="fa fa-edit"></i>
-							编辑
+							<em translate="i18n_edit"></em>
 						</a>
 					</td>
 					<td style="width: 1%">
@@ -66,7 +64,7 @@
 
 		<div class="gf-form" ng-show="mode === 'list'">
 			<div class="gf-form-button-row">
-				<a type="button" class="btn gf-form-button btn-success" ng-click="mode = 'new';"><i class="fa fa-plus" ></i>&nbsp;&nbsp;新增</a>
+				<a type="button" class="btn gf-form-button btn-success" ng-click="mode = 'new';"><i class="fa fa-plus" ></i>&nbsp;&nbsp;<em translate="i18n_newly_added"></em></a>
 			</div>
 		</div>
 
@@ -102,7 +100,7 @@
         </div>
 				<div class="gf-form-inline">
 					<div class="gf-form max-width-19">
-						<span class="gf-form-label width-6">Label</span>
+						<span class="gf-form-label width-6" translate="i18n_label"></span>
 						<input type="text" class="gf-form-input" ng-model='current.label' placeholder="optional display name"></input>
 					</div>
 					<div class="gf-form max-width-19">

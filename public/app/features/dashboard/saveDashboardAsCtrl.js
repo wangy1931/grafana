@@ -6,7 +6,7 @@ function (angular) {
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('SaveDashboardAsCtrl', function($scope, backendSrv, $location) {
+  module.controller('SaveDashboardAsCtrl', function($scope, backendSrv, $location, $translate) {
 
     $scope.init = function() {
       $scope.clone.id = null;
@@ -16,7 +16,7 @@ function (angular) {
 
     function saveDashboard(options) {
       return backendSrv.saveDashboard($scope.clone, options).then(function(result) {
-        $scope.appEvent('alert-success', ['仪表盘已经保存', '保存为 ' + $scope.clone.title]);
+        $scope.appEvent('alert-success', [$translate.i18n.i18n_success, $translate.i18n.i18n_saveAs + ' ' + $scope.clone.title]);
 
         $location.url('/dashboard/db/' + result.slug);
 
@@ -39,9 +39,9 @@ function (angular) {
           err.isHandled = true;
 
           $scope.appEvent('confirm-modal', {
-            title: '已经有相同名字的仪表盘存在',
-            text: "您是否需要覆盖?",
-            yesText: "保存 & 覆盖",
+            title: $translate.i18n.page_dash_save_name,
+            text: $translate.i18n.page_dash_override_tip,
+            yesText: $translate.i18n.i18n_save_override,
             icon: "fa-warning",
             onConfirm: function() {
               saveDashboard({overwrite: true});

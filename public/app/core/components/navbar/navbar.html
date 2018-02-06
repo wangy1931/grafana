@@ -17,24 +17,28 @@
 	</a>
 
 	<a href="javascript:;" class="navbar-page-btn" ng-click="ctrl.showGuide();" ng-if="ctrl.showGuideNav"
-		bs-tooltip="'诊断引导'" data-placement="bottom">
+		bs-tooltip="'{{ 'i18n_menu_diagnostic_assistant' | translate }}'" data-placement="bottom">
 		<i class="fa fa-stethoscope" style="font-weight: bolder;"></i>
 	</a>
 
 	<a href="javascript:;" class="navbar-shortcut-btn pull-right">
-		<toolbar icon="iconfont fa-question-circle-o" tooltip="使用帮助" id="2"></toolbar>
+		<i bs-tooltip="ctrl.$translate.i18n.i18n_use_help" data-placement="bottom">
+			<toolbar icon="iconfont fa-question-circle-o" tooltip="" id="2"></toolbar>
+		</i>
 	</a>
 
 	<a href="javascript:;" class="navbar-shortcut-btn pull-right">
-		<toolbar icon="iconfont fa-toolbar" tooltip="知识库" id="1"></toolbar>
+		<i bs-tooltip="ctrl.$translate.i18n.i18n_kb" data-placement="bottom">
+			<toolbar icon="iconfont fa-toolbar" tooltip="" id="1"></toolbar>
+		</i>
 	</a>
 
 	<a href="/oncallerschedule" class="navbar-shortcut-btn pull-right">
-		<i class="fa fa-fw fa-calendar" bs-tooltip="'运维轮班'" data-placement="bottom"></i>
+		<i class="fa fa-fw fa-calendar" bs-tooltip="'{{ 'i18n_oncaller' | translate }}'" data-placement="bottom"></i>
 	</a>
 
 	<a href="{{ctrl.priceUrl}}" target="_blank" class="navbar-shortcut-btn pull-right" ng-if="ctrl.deadline <= 15">
-		<i style="color: #D53E4F; font-style: normal;">您的使用期限还剩{{ ctrl.deadline }}天</i>
+		<i style="color: #D53E4F; font-style: normal;"><em translate="i18n_use_deadline"></em> {{ ctrl.deadline }} <em translate="i18n_day"></em></i>
 	</a>
 
 	<div ng-transclude></div>

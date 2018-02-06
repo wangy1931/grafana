@@ -7,7 +7,7 @@
       </div>
       <div class="gf-form">
         <span class="gf-form-label width-10"> <em translate="page_logs_parser_name"></em><em>*</em></span>
-        <input class="gf-form-input max-width-30" type="text" required ng-model="pattern.name" placeholder="仅支持英文字母/数字/下划线/小数点"/>
+        <input class="gf-form-input max-width-30" type="text" required ng-model="pattern.name" placeholder="ctrl.$translate.i18n.page_log_parse_input" />
       </div>
       
       <div class="gf-form">
@@ -29,8 +29,8 @@
             <em class="warn-message"><i class="fa fa-info-circle"></i><em translate="page_logs_parser_info1"></em></em>
           </label>
           <br>
-          <p ng-if="pattern.result === '规则解析失败'">{{pattern.result}}</p>
-          <label class="multiline-label" ng-click="ctrl.selectMetric($event, pattern, key)" ng-if="pattern.result !== '规则解析失败'" ng-repeat="(key, value) in pattern.result">
+          <p ng-if="pattern.result === ctrl.$translate.i18n.i18n_fail">{{pattern.result}}</p>
+          <label class="multiline-label" ng-click="ctrl.selectMetric($event, pattern, key)" ng-if="pattern.result !== ctrl.$translate.i18n.i18n_fail" ng-repeat="(key, value) in pattern.result">
             <input ng-if="pattern.isMetric" type="checkbox" name="pattern" ng-checked="_.has(pattern.fields, key);">{{key}}: {{value}}
           </label>
         </div>

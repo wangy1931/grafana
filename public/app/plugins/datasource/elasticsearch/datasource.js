@@ -370,26 +370,32 @@ function (angular, _, moment, kbn, dateMath, ElasticQueryBuilder, IndexPattern, 
   // 减少 count0 > 0 && count1 > 0 && count0 < count1
   // 没有变化 count0 == count1
   function compare(target) {
+    var i18n_increse = '增加', i18n_decrese = '减少', i18n_disappear = '消失', i18n_newly = '新增', i18n_no_change = '没有变化', i18n_count = '出现次数';
+    if (window.localStorage.getItem('CLOUDWIZ_LANG_KEY') === 'en') {
+      i18n_increse = 'Increasing', i18n_decrese = 'Decreasing', i18n_disappear = 'Disappeared', i18n_newly = 'Newly Added',
+      i18n_no_change = 'No change', i18n_count = 'Occurrence number';
+    }
+
     if (target.count0 === 0 && target.count1 > 0) {
-      target.count = "消失日志:" + target.count1;
-      target.change = "消失";
+      target.count = i18n_disappear + ": " + target.count1;
+      target.change = i18n_disappear;
     } else if (target.count0 > 0 && target.count1 === 0) {
-      target.count = "新增日志:" + target.count0;
-      target.change = "新增";
+      target.count = i18n_newly + ": " + target.count0;
+      target.change = i18n_newly;
     } else if (target.count0 > 0 && target.count1 > 0 && target.count0 > target.count1) {
       var num = ((Math.abs(target.count0 - target.count1) / target.count1)*100).toFixed();
-      target.count = "出现次数:" + target.count0 + "\n同比增长" + num + "%";
-      target.change = "增加";
+      target.count = i18n_count + ": " + target.count0 + "\n" + i18n_increse + num + "%";
+      target.change = i18n_increse;
     } else if (target.count0 > 0 && target.count1 > 0 && target.count0 < target.count1) {
       var num = ((Math.abs(target.count0 - target.count1) / target.count0)*100).toFixed();
-      target.count = "出现次数:" + target.count0 + "\n同比减少" + num + "%";
-      target.change = "减少";
+      target.count = i18n_count + ": " + target.count0 + "\n" + i18n_decrese + num + "%";
+      target.change = i18n_decrese;
     } else if (target.count0 > 0 && target.count1 > 0 && target.count0 == target.count1) {
-      target.count = "出现次数:" + target.count0;
-      target.change = "没有变化";
+      target.count = i18n_count + ": " + target.count0;
+      target.change = i18n_no_change;
     } else {
       target.count = "0";
-      target.change = "没有变化";
+      target.change = i18n_no_change;
     }
   };
 

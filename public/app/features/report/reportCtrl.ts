@@ -86,7 +86,7 @@ export class ReportCtrl {
 
   chooseTemplate(template) {
     if (template.id === 1) {
-      this.$scope.appEvent('alert-warning', ['总览信息不可删除']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_forbid_operator]);
       return;
     }
     template.selected = !template.selected;
@@ -101,7 +101,7 @@ export class ReportCtrl {
       return !section.selected;
     });
     this.reportSrv.saveReportConfig(data).then((res) => {
-      this.$scope.appEvent('alert-success', ['保存成功']);
+      this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success]);
       this.$location.url('/report');
     });
   }
@@ -124,10 +124,10 @@ export class ReportCtrl {
 
   disableReport() {
     this.$scope.appEvent('confirm-modal', {
-      title: '取消订阅',
-      text: '取消订阅将不再收到巡检报告<br>您确定要取消订阅吗',
-      yesText: '确定',
-      noText: '取消',
+      title: this.$translate.i18n.page_report_unsubscribe,
+      text: `${this.$translate.i18n.page_report_unsubscribe_tip}<br>${this.$translate.i18n.i18n_sure_operator}`,
+      yesText: this.$translate.i18n.i18n_confirm,
+      noText: this.$translate.i18n.i18n_cancel,
       onConfirm: () => {
         this.reportTemplate.enabled = false;
         this.saveTemplate();

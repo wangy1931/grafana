@@ -7,7 +7,7 @@ define([
 
   var module = angular.module('grafana.controllers');
 
-  module.controller('HostListCtrl', function ($scope, backendSrv, $location, $controller, alertSrv, contextSrv) {
+  module.controller('HostListCtrl', function ($scope, backendSrv, $location, $controller, alertSrv, contextSrv, $translate) {
     $scope.init = function() {
       $scope.searchHost = '';
       $scope.order = "'hostname'";
@@ -16,11 +16,11 @@ define([
         $scope.hosts = result.data;
         _.map($scope.hosts, function(host) {
           if(host.isVirtual) {
-            return host.isVirtual = '是';
+            return host.isVirtual = $translate.i18n.i18n_yes;
           } else if(host.isVirtual === false) {
-            return host.isVirtual = '否';
+            return host.isVirtual = $translate.i18n.i18n_no;
           } else {
-            return host.isVirtual = '未知';
+            return host.isVirtual = $translate.i18n.i18n_unknown;
           }
         });
       });
@@ -61,21 +61,21 @@ define([
 
     $scope.deleteHost = function(hostId) {
       $scope.appEvent('confirm-modal', {
-        title: '删除',
-        text: '您确认要删除该机器吗？',
+        title: $translate.i18n.i18n_delete,
+        text: $translate.i18n.i18n_sure_operator,
         icon: 'fa-trash',
-        yesText: '删除',
-        noText: '取消',
+        yesText: $translate.i18n.i18n_delete,
+        noText: $translate.i18n.i18n_cancel,
         onConfirm: function() {
           backendSrv.alertD({
             method: 'DELETE',
             url   : '/host',
             params: { 'id': hostId }
           }).then(function () {
-            alertSrv.set("删除成功", '', "success", 2000);
+            alertSrv.set($translate.i18n.i18n_success, '', "success", 2000);
             _.remove($scope.hosts, { id: hostId });
           }, function (err) {
-            alertSrv.set("删除失败", err.data, "error", 2000);
+            alertSrv.set($translate.i18n.i18n_fail, err.data, "error", 2000);
           });
         }
       });

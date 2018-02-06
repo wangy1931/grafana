@@ -4,14 +4,13 @@
       <i class="fa fa-remove"></i>
   </a>
 
-  <h3>
-      添加部署服务
+  <h3 translate="page_host_add_service">
   </h3>
   <div class="modal-cmdb-list">
     <table class="table">
         <tr>
             <th><input type="checkbox" ng-model="select_all" ng-change="selectAll(select_all)" /></th>
-            <th>服务名称</th>
+            <th translate="i18n_servicename"></th>
         </tr>
         <tr ng-repeat="service in allService">
             <td><input type="checkbox" ng-model="service.checked" ng-change="selectOne()" /></td>
@@ -19,5 +18,5 @@
         </tr>
     </table>
   </div>
-    <button class="btn btn-primary" ng-click="addServices();dismiss();">添加</button>
+    <button class="btn btn-primary" ng-click="addServices();dismiss();" translate="i18n_add"></button>
 </div>

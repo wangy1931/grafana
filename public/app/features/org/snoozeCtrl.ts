@@ -9,17 +9,16 @@ export class SnoozeCtrl {
 
   /** @ngInject */
   constructor (
-    private $scope,
+    private $scope, private $translate,
     private backendSrv, private alertSrv
   ) {
     this.snoozeMin = "120";
     this.moreMinutes = {
-      "10": "10分钟",
-      "30": "半小时",
-      "60": "一小时",
-      "120": "两小时",
-      "360": "六小时",
-      "720": "半天"
+      "10": `10${$translate.i18n.i18n_minute}`,
+      "30": `30${$translate.i18n.i18n_minute}`,
+      "60": `1${$translate.i18n.i18n_hour}`,
+      "120": `2${$translate.i18n.i18n_hour}`,
+      "360": `6${$translate.i18n.i18n_hour}`,
     };
   }
 
@@ -36,7 +35,7 @@ export class SnoozeCtrl {
         "moreMinutes": this.snoozeMin
       }
     }).then(() => {
-      this.alertSrv.set("删除成功", "", "success", 1000);
+      this.alertSrv.set(this.$translate.i18n.i18n_success, "", "success", 1000);
     }, err => {
       this.alertSrv.set("error", err.status + " " + (err.data || "Request failed"), err.severity, 10000);
     });

@@ -27,7 +27,11 @@ export class TimeWindowCtrl {
   $tooltip: any = $('<div id="tooltip">');
 
   /** @ngInject */
-  constructor(private $rootScope, private $scope, private popoverSrv, private backendSrv, private $q, private $location, private timeSrv, private datasourceSrv) {
+  constructor(
+    private $rootScope, private $scope, private popoverSrv,
+    private backendSrv, private $q, private $location,
+    private timeSrv, private datasourceSrv, private $translate
+  ) {
     var start = $location.search().start;
     this.range = (start === "undefined" || !start)
       ? { from: moment().add(-1, 'day'), to: moment() }
@@ -151,7 +155,7 @@ export class TimeWindowCtrl {
     var body = `
       <div class="graph-tooltip small topn-tooltip">
         <div class="graph-tooltip-time">${moment(params.x).format("YYYY-MM-DD HH:mm:ss")}</div>
-        <div class="graph-tooltip-value">使用率: ${_.percentFormatter(params.y)}</div>
+        <div class="graph-tooltip-value">${this.$translate.i18n.i18n_percent_usage}: ${_.percentFormatter(params.y)}</div>
       </div>
     `;
     this.$tooltip.html(body).place_tt(params.pageX + 20, params.pageY);
@@ -245,9 +249,9 @@ export class TimeWindowCtrl {
         id: 11,
         min: +start,
         max: +start,
-        title: "报警触发时间",
+        title: this.$translate.i18n.page_alert_time,
         tags: "alert",
-        text: `[机器] ${this.$location.search().host}`,
+        text: `[${this.$translate.i18n.i18n_host}] ${this.$location.search().host}`,
         eventType: "alert",
       })
     }
@@ -257,7 +261,7 @@ export class TimeWindowCtrl {
       id: 12,
       min: currentPoint,
       max: currentPoint,
-      title: "资源消耗查询时间点",
+      title: this.$translate.i18n.page_topn_query_point,
       eventType: "search",
     })
   }

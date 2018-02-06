@@ -11,7 +11,7 @@
       </select>
     </li>
     <li style="padding-left: 20px">
-      <input type="text" class="input-large" required placeholder="请输入需要查询内容" ng-model="ctrl.alertSearch"/>
+      <input type="text" class="input-large" required placeholder="{{ ctrl.$translate.i18n.i18n_input_search }}" ng-model="ctrl.alertSearch" />
     </li>
     <li>
       <span class="tight-form-btn btn btn-success btn-small" style="margin: 3px 20px;">
@@ -21,7 +21,7 @@
     </li>
     <li class="pull-right">
       <span style="margin: 6px; font-size: 1.25rem; display: block;" ng-click="ctrl.handleRCAFeedback()">
-        <i class="fa fa-pencil-square-o" bs-tooltip="'添加故障溯源关系'"></i>
+        <i class="fa fa-pencil-square-o" bs-tooltip="ctrl.$translate.i18n.page_logs_add_source"></i>
       </span>
     </li>
   </ul>
@@ -53,7 +53,10 @@
         <th translate="page_alert_current"></th>
         <th translate="page_alert_level"></th>
         <th translate="page_alert_time"></th>
-        <th><span translate="page_alert_again"></span><tip>如果报警没有解决, 将重复报警</tip></th>
+        <th>
+          <span translate="page_alert_again"></span>
+          <i class="grafana-tip fa fa-question-circle" bs-tooltip="ctrl.$translate.i18n.page_alert_tip1" data-placement="top" html=true></i>
+        </th>
         <th translate="i18n_operating"></th>
       </thead>
       <tbody>
@@ -63,11 +66,11 @@
             {{ alert.definition.name }}
           </td>
           <td style="position: relative">
-            <div ng-if="alert.type === 'MUTI_ALERT'">
-                {{ _.getMetricName(alert.definition.alertDetails.alertMutiQuery.metricQueries[0].metric) }} 等
+            <div ng-if="alert.type === 'MUTI_ALERT'" style="padding-right: 20px">
+                {{ _.getMetricName(alert.definition.alertDetails.alertMutiQuery.metricQueries[0].metric) }} <em translate="i18n_etc"></em>
                 <info-popover mode="right-absolute">
                   <div ng-repeat="metric in alert.definition.alertDetails.alertMutiQuery.metricQueries">{{ metric.id }} : {{ metric.metric }}</div>
-                  <div>计算方式：{{ alert.definition.alertDetails.alertMutiQuery.expression.split(';')[1] }}</div>
+                  <div><em translate="page_alert_cal_method"></em>: {{ alert.definition.alertDetails.alertMutiQuery.expression.split(';')[1] }}</div>
                 </info-popover>
             </div>
             <div ng-if="alert.type !== 'MUTI_ALERT'">
@@ -77,7 +80,7 @@
           <td>{{ alert.status.monitoredEntity }}</td>
           <td><strong>{{ alert.status.triggeredValue }}</strong> / {{ alert.definition.alertDetails.threshold }}</td>
           <td>{{ alert.curAlertValue }}</td>
-          <td>{{ _.translateAlertLevel(alert.status.level) }}</td>
+          <td>{{ _.translateAlertLevel(alert.status.level) | translate }}</td>
           <td>{{ _.transformMillionTime(alert.status.levelChangedTime) }}</td>
           <td>{{ _.timeFrom(alert.status.levelChangedTime, alert.status.snoozeMinutes, 'm') }}</td>
           <td>
@@ -112,11 +115,11 @@
             {{ alert.definition.name }}
           </td>
           <td style="position: relative;">
-            <div ng-if="alert.type === 'MUTI_ALERT'">
-                {{ _.getMetricName(alert.definition.alertDetails.alertMutiQuery.metricQueries[0].metric) }} 等
+            <div ng-if="alert.type === 'MUTI_ALERT'" style="padding-right: 20px">
+                {{ _.getMetricName(alert.definition.alertDetails.alertMutiQuery.metricQueries[0].metric) }} <em translate="i18n_etc"></em>
                 <info-popover mode="right-absolute">
                   <div ng-repeat="metric in alert.definition.alertDetails.alertMutiQuery.metricQueries">{{ metric.id }} : {{ metric.metric }}</div>
-                  <div>计算方式：{{ alert.definition.alertDetails.alertMutiQuery.expression.split(';')[1] }}</div>
+                  <div><em translate="page_alert_cal_method"></em>: {{ alert.definition.alertDetails.alertMutiQuery.expression.split(';')[1] }}</div>
                 </info-popover>
             </div>
             <div ng-if="alert.type !== 'MUTI_ALERT'">
@@ -125,7 +128,7 @@
           </td>
           <td>{{ alert.history.host }}</td>
           <td><strong>{{ alert.history.triggeredValue | limitTo:5 }}</strong> / {{ alert.definition.alertDetails[ctrl.getAlertLevel(alert)].threshold }}</td>
-          <td>{{ _.translateAlertLevel(alert.history.level) }}</td>
+          <td>{{ _.translateAlertLevel(alert.history.level) | translate }}</td>
           <td>{{ alert.history.createdTimeInMillis | date:'yyyy-MM-dd HH:mm:ss' }}</td>
           <td>{{ ctrl.getCloseOp(alert) }}</td>
           <td>{{ alert.history.reason }}</td>

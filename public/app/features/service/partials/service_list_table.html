@@ -28,9 +28,9 @@
           <td>{{ item.id || '-' }}</td>
           <td>{{ item.createdAt | date:'yyyy-MM-dd HH:mm:ss' || '-' }}</td>
           <td>
-            <button class="btn btn-small btn-outline-primary" ng-if="!ctrl.contextSrv.isViewer" ng-click="ctrl.deleteService($event, item.id)">
+            <button class="btn btn-small btn-outline-primary del-btn" ng-if="!ctrl.contextSrv.isViewer" ng-click="ctrl.deleteService($event, item.id)">
               <i class="fa fa-times"></i>
-              <span translate="i18n_delete"></span>
+              <span translate="i18n_delete" class="del-btn"></span>
             </button>
           </td>
         </tr>

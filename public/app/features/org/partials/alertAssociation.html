@@ -2,7 +2,7 @@
     <ul class="nav pull-right">
         <li ng-show="dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
             <a ng-click="exitFullscreen()">
-                返回到仪表盘
+                <em translate="i18n_back_dashboard"></em>
             </a>
         </li>
         <li ng-if="dashboard">
@@ -31,7 +31,7 @@
                         ng-model='ctrl.targetObj.metric'
                         spellcheck='false'
                         bs-typeahead-old="suggestMetrics"
-                        placeholder="需要分析的指标" required/>
+                        placeholder="{{ ctrl.$translate.i18n_metric_name }}" required/>
                 </li>
             </ul>
         </div>
@@ -43,7 +43,7 @@
                     <input type="text" class="input-medium tidy-form-input ng-pristine ng-untouched ng-valid"
                         style="margin-right: 40px;"
                         spellcheck="false"
-                        placeholder="请键入主机名"
+                        placeholder="{{ ctrl.$translate.i18n_hostname }}"
                         bs-typeahead-old="ctrl.suggestTagHost"
                         ng-model="ctrl.targetObj.host">
                 </li>
@@ -91,16 +91,16 @@
                                             <input type="checkbox" name="event" ng-click="ctrl.addAnnotation(row)" ng-model="row.checked" />
                                         </div>
                                     </td>
-                                    <td title="'名称'" sortable="'service'">
+                                    <td title="ctrl.$translate.i18n.i18n_name" sortable="'service'">
                                         <div>{{ row.service }}</div>
                                     </td>
-                                    <td title="'事件类型'" sortable="'type'">
+                                    <td title="ctrl.$translate.i18n.i18n_type" sortable="'type'">
                                         <div>{{ row.type }}</div>
                                     </td>
-                                    <td title="'发生时间'" sortable="'timestamp'">
+                                    <td title="ctrl.$translate.i18n_occurr_time" sortable="'timestamp'">
                                         <div>{{ row.time }}</div>
                                     </td>
-                                    <td title="'其他信息'" sortable="'hostname'">
+                                    <td title="ctrl.$translate.i18n.i18n_other" sortable="'hostname'">
                                         <div>{{ row.hostname }}</div>
                                     </td>
                                 </tr>
@@ -126,7 +126,7 @@
                                     <tab heading="{{ panel.title }}" ng-repeat="(name, panel) in row.panels track by panel.id" ng-if="panel.tab !== graph">
                                         <ul ng-if="panel.regularResult.data[0].total">
                                             <li style="color: #F9934E; list-style-type: disc; margin-left: 30px;">
-                                                该时间区域内共有 <strong>{{ panel.regularResult.data[0].total }}</strong> 条日志，当前显示前 {{ panel.regularResult.data[0].datapoints.length }} 条。放大时间区域，以查看更细日志数据。
+                                                <em translate="page_logs_total_number"></em>:  <strong>{{ panel.regularResult.data[0].total }}</strong>, <em translate="page_logs_shown_number"></em> {{ panel.regularResult.data[0].datapoints.length }}. <em translate="page_logs_datazoom"></em>
                                             </li>
                                         </ul>
                                         <div>

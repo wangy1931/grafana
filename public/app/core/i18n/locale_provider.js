@@ -1,5 +1,6 @@
 
-(function (window, angular, undefined) {'use strict';
+(function (window, angular, undefined) {
+  'use strict';
 
   var util = {
     trim: function (text) {
@@ -67,10 +68,13 @@
       $keepContent = false,
       $nextLang,
       $missingTranslationHandlerFactory,
+      $notFoundIndicatorLeft,
+      $notFoundIndicatorRight,
       $postCompilingEnabled = false,
       loaderCache,
       postProcessFn,
       uniformLanguageTagResolver = 'default',
+      statefulFilter = true,
       languageTagResolver = {
         'default' : function (tag) {
           return (tag || '').split('-').join('_');
@@ -106,36 +110,12 @@
       return result;
     };
 
-    // tries to determine the browsers language
-    var getFirstBrowserLanguage = function () {
-      var navigator = $windowProvider.$get().navigator,
-        browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
-        i, language;
-
-      // support for HTML 5.1 "navigator.languages"
-      if (angular.isArray(navigator.languages)) {
-        for (i = 0; i < navigator.languages.length; i++) {
-          language = navigator.languages[i];
-          if (language && language.length) {
-            return language;
-          }
-        }
-      }
-
-      // support for other well known properties in browsers
-      for (i = 0; i < browserLanguagePropertyKeys.length; i++) {
-        language = navigator[browserLanguagePropertyKeys[i]];
-        if (language && language.length) {
-          return language;
-        }
-      }
-
-      return null;
-    };
-
     // tries to determine the browsers locale
     var getLocale = function () {
-      var locale = getFirstBrowserLanguage() || '';
+      var locale = window.grafanaBootData.user.locale;
+      /en/.test(locale) && (locale = 'en');
+      /zh/.test(locale) && (locale = 'zh_CN');
+
       if (languageTagResolver[uniformLanguageTagResolver]) {
         locale = languageTagResolver[uniformLanguageTagResolver](locale);
       }
@@ -244,6 +224,20 @@
     this.storageKey = storageKey;
 
     /**
+     * @name pascalprecht.translate.$translateProvider#statefulFilter
+     */
+    this.statefulFilter = function (state) {
+      if (state === undefined) {
+        // getter
+        return statefulFilter;
+      } else {
+        // setter with chaining
+        statefulFilter = state;
+        return this;
+      }
+    };
+
+    /**
      * @name cloudwiz.translate.$translateProvider#use
      */
     this.use = function (langKey) {
@@ -294,6 +288,14 @@
       return this;
     };
     this.translations = translations;
+
+    /**
+     * @name pascalprecht.translate.$translateProvider#keepContent
+     */
+    this.keepContent = function (value) {
+      $keepContent = !(!value);
+      return this;
+    };
 
     /**
      * @name cloudwiz.translate.$translate
@@ -473,6 +475,52 @@
           }
         }
         return deferred.promise;
+      };
+
+      var determineTranslationInstant = function (translationId, interpolateParams, interpolationId, uses, sanitizeStrategy) {
+        var result, table = uses ? $translationTable[uses] : $translationTable,
+          Interpolator = defaultInterpolator;
+
+        // if the interpolation id exists use custom interpolator
+        if (interpolatorHashMap && Object.prototype.hasOwnProperty.call(interpolatorHashMap, interpolationId)) {
+          Interpolator = interpolatorHashMap[interpolationId];
+        }
+
+        // if the translation id exists, we can just interpolate it
+        if (table && Object.prototype.hasOwnProperty.call(table, translationId) && table[translationId] !== null) {
+          var translation = table[translationId];
+
+          // If using link, rerun $translate with linked translationId and return it
+          if (translation.substr(0, 2) === '@:') {
+            result = determineTranslationInstant(translation.substr(2), interpolateParams, interpolationId, uses, sanitizeStrategy);
+          } else {
+            result = Interpolator.interpolate(translation, interpolateParams, 'filter', sanitizeStrategy, translationId);
+            result = applyPostProcessing(translationId, translation, result, interpolateParams, uses, sanitizeStrategy);
+          }
+        } else {
+          var missingTranslationHandlerTranslation;
+          // for logging purposes only (as in $translateMissingTranslationHandlerLog), value is not returned to promise
+          if ($missingTranslationHandlerFactory && !pendingLoader) {
+            // missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams, sanitizeStrategy);
+          }
+
+          // since we couldn't translate the inital requested translation id,
+          // we try it now with one or more fallback languages, if fallback language(s) is
+          // configured.
+          if (uses && $fallbackLanguage && $fallbackLanguage.length) {
+            fallbackIndex = 0;
+            result = fallbackTranslationInstant(translationId, interpolateParams, Interpolator, sanitizeStrategy);
+          } else if ($missingTranslationHandlerFactory && !pendingLoader && missingTranslationHandlerTranslation) {
+            // looks like the requested translation id doesn't exists.
+            // Now, if there is a registered handler for missing translations and no
+            // asyncLoader is pending, we execute the handler
+            result = missingTranslationHandlerTranslation;
+          } else {
+            result = applyNotFoundIndicators(translationId);
+          }
+        }
+
+        return result;
       };
 
       /**
@@ -665,6 +713,11 @@
         langPromises[key] = undefined;
       };
 
+      // internal purpose only
+      $translate.statefulFilter = function () {
+        return statefulFilter;
+      };
+
       /**
        * @name cloudwiz.translate.$translate#use
        */
@@ -740,6 +793,94 @@
        */
       $translate.storageKey = function () {
         return storageKey();
+      };
+
+      /**
+       * @name pascalprecht.translate.$translate#instant
+       */
+      $translate.instant = function (translationId, interpolateParams, interpolationId, forceLanguage, sanitizeStrategy) {
+        // we don't want to re-negotiate $uses
+        // var uses = (forceLanguage && forceLanguage !== $uses) ? // we don't want to re-negotiate $uses
+        //   (negotiateLocale(forceLanguage) || forceLanguage) : $uses;
+        var uses = $uses;
+
+        // Detect undefined and null values to shorten the execution and prevent exceptions
+        if (translationId === null || angular.isUndefined(translationId)) {
+          return translationId;
+        }
+
+        // Duck detection: If the first argument is an array, a bunch of translations was requested.
+        // The result is an object.
+        if (angular.isArray(translationId)) {
+          var results = {};
+          for (var i = 0, c = translationId.length; i < c; i++) {
+            results[translationId[i]] = $translate.instant(translationId[i], interpolateParams, interpolationId, forceLanguage, sanitizeStrategy);
+          }
+          return results;
+        }
+
+        // We discarded unacceptable values. So we just need to verify if translationId is empty String
+        if (angular.isString(translationId) && translationId.length < 1) {
+          return translationId;
+        }
+
+        // trim off any whitespace
+        if (translationId) {
+          translationId = util.trim(translationId);
+        }
+
+        var result, possibleLangKeys = [];
+        if ($preferredLanguage) {
+          possibleLangKeys.push($preferredLanguage);
+        }
+        if (uses) {
+          possibleLangKeys.push(uses);
+        }
+        if ($fallbackLanguage && $fallbackLanguage.length) {
+          possibleLangKeys = possibleLangKeys.concat($fallbackLanguage);
+        }
+        for (var j = 0, d = possibleLangKeys.length; j < d; j++) {
+          var possibleLangKey = possibleLangKeys[j];
+          if ($translationTable[possibleLangKey]) {
+            if (typeof $translationTable[possibleLangKey][translationId] !== 'undefined') {
+              result = determineTranslationInstant(translationId, interpolateParams, interpolationId, uses, sanitizeStrategy);
+            }
+          }
+          if (typeof result !== 'undefined') {
+            break;
+          }
+        }
+
+        if (!result && result !== '') {
+          if ($notFoundIndicatorLeft || $notFoundIndicatorRight) {
+            throw Error('Not found indicator left or right');
+            // result = applyNotFoundIndicators(translationId);
+          } else {
+            // Return translation of default interpolator if not found anything.
+            result = defaultInterpolator.interpolate(translationId, interpolateParams, 'filter', sanitizeStrategy);
+
+            // looks like the requested translation id doesn't exists.
+            // Now, if there is a registered handler for missing translations and no
+            // asyncLoader is pending, we execute the handler
+            var missingTranslationHandlerTranslation;
+            if ($missingTranslationHandlerFactory && !pendingLoader) {
+              // missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams, sanitizeStrategy);
+            }
+
+            if ($missingTranslationHandlerFactory && !pendingLoader && missingTranslationHandlerTranslation) {
+              result = missingTranslationHandlerTranslation;
+            }
+          }
+        }
+
+        return result;
+      };
+
+      /**
+       * @name pascalprecht.translate.$translate#isKeepContent
+       */
+      $translate.isKeepContent = function () {
+        return $keepContent;
       };
 
       if ($storageFactory) {
@@ -1114,6 +1255,26 @@
         };
       }
     };
+  });
+
+  ////////
+  // filter
+  ////////
+  angular.module('cloudwiz.translate').filter('translate', function ($parse, $translate) {
+    var translateFilter = function (translationId, interpolateParams, interpolation, forceLanguage) {
+      if (!angular.isObject(interpolateParams)) {
+        var ctx = this;
+        interpolateParams = $parse(interpolateParams)(ctx);
+      }
+
+      return $translate.instant(translationId, interpolateParams, interpolation, forceLanguage);
+    };
+
+    if ($translate.statefulFilter()) {
+      translateFilter.$stateful = true;
+    }
+
+    return translateFilter;
   });
 
   ////////

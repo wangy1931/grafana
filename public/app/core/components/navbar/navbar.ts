@@ -13,7 +13,7 @@ export class NavbarCtrl {
   showNavbarPageBtn: boolean = false;
 
   /** @ngInject */
-  constructor(private $scope, private $rootScope, private $location, private contextSrv) {
+  constructor(private $scope, private $rootScope, private $location, private contextSrv, private $translate) {
     !!~['/rca', '/association', '/logs', '/topn'].indexOf(this.$location.path()) && (this.showGuideNav = true);
     this.showNavbarPageBtn = (this.$location.path() === '/');
     this.deadline = moment(contextSrv.user.deadline).diff(moment(), 'days');

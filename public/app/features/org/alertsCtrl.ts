@@ -14,7 +14,8 @@ export class AlertsCtrl {
     private $location,
     private alertMgrSrv,
     private alertSrv,
-    private contextSrv
+    private contextSrv,
+    private $translate
   ) {
   }
 
@@ -29,15 +30,15 @@ export class AlertsCtrl {
 
   remove(alertId) {
     if (this.contextSrv.isViewer) {
-      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_sorry, this.$translate.i18n.i18n_no_authority]);
       return;
     }
     this.$scope.appEvent('confirm-modal', {
-      title: '删除',
-      text: '您是否需要删除这个报警规则',
+      title: this.$translate.i18n.i18n_delete,
+      text: this.$translate.i18n.i18n_sure_operator,
       icon: 'fa-trash',
-      yesText: '确定',
-      noText: '关闭',
+      yesText: this.$translate.i18n.i18n_delete,
+      noText: this.$translate.i18n.i18n_cancel,
       onConfirm: () => {
         this.alertMgrSrv.remove(alertId).then(() => {
           _.remove(this.alertDefList, { id: alertId });
@@ -50,7 +51,7 @@ export class AlertsCtrl {
 
   importAlerts() {
     if (this.contextSrv.isViewer) {
-      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_sorry, this.$translate.i18n.i18n_no_authority]);
       return;
     }
     var modalScope = this.$scope.$new();
