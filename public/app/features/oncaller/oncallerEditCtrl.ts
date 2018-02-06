@@ -35,7 +35,7 @@ export class OnCallerEditCtrl {
     if (parseInt($routeParams.id) === 0) {
       var editingUser = this.oncallerMgrSrv.currentEditUser;
       if (_.isEmpty(editingUser)) {
-        this.alertSrv.set('操作不合法', '', 'warning', 1500);
+        this.alertSrv.set($translate.i18n.i18n_input_full, '', 'warning', 1500);
         this.$timeout(() => {
           this.$location.path('oncallers');
         }, 1500);

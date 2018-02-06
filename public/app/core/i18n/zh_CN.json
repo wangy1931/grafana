@@ -631,5 +631,6 @@
   "i18n_china_unicom": "中国联通",
   "i18n_china_mobile": "中国移动",
   "i18n_china_telecom": "中国电信",
-  "i18n_maxed": "已达上限"
+  "i18n_maxed": "已达上限",
+  "page_excluded_title": "修改不参与健康值计算指标"
 }

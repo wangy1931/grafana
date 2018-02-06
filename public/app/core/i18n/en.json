@@ -632,5 +632,6 @@
   "i18n_china_unicom": "China Unicom",
   "i18n_china_mobile": "China Mobile",
   "i18n_china_telecom": "China Telecom",
-  "i18n_maxed": "reach limit"
+  "i18n_maxed": "reach limit",
+  "page_excluded_title": "It will not participate in the health value calculation"
 }
