@@ -126,6 +126,7 @@
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "mousetrap": "^1.6.0",
+    "ng-quill": "^3.5.1",
     "remarkable": "^1.7.1",
     "rst2html": "github:thoward/rst2html#990cb89",
     "rxjs": "^5.4.3",

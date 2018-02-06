@@ -1,9 +1,7 @@
-///<reference path="../../headers/common.d.ts" />
 
 import _ from 'lodash';
 import moment from 'moment';
 import coreModule from 'app/core/core_module';
-import Moment from 'moment';
 
 class AdminListOrgsCtrl {
   /** @ngInject **/

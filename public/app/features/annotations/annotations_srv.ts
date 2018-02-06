@@ -1,10 +1,8 @@
-///<reference path="../../headers/common.d.ts" />
 
 import './editor_ctrl';
 
-import angular from 'angular';
 import _ from 'lodash';
-import $ from 'jquery';
+import angular from 'angular';
 import coreModule from 'app/core/core_module';
 
 export class AnnotationsSrv {

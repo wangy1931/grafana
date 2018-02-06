@@ -1,4 +1,3 @@
-///<reference path="../../../headers/common.d.ts" />
 
 import './graph';
 import './legend';
@@ -6,11 +5,8 @@ import './series_overrides_ctrl';
 import './thresholds_form';
 
 import template from './template';
-import angular from 'angular';
 import moment from 'moment';
 import _ from 'lodash';
-import TimeSeries from 'app/core/time_series2';
-import config from 'app/core/config';
 import * as fileExport from 'app/core/utils/file_export';
 import {MetricsPanelCtrl} from 'app/plugins/sdk';
 import {DataProcessor} from './data_processor';

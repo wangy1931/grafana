@@ -1,8 +1,5 @@
-///<reference path="../../headers/common.d.ts" />
 
-import angular from 'angular';
 import _ from 'lodash';
-import $ from 'jquery';
 import 'app/plugins/datasource/opentsdb/queryCtrl';
 import coreModule from 'app/core/core_module';
 

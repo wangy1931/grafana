@@ -1,4 +1,3 @@
-///<reference path="../../../headers/common.d.ts" />
 
 import {PanelCtrl} from 'app/plugins/sdk';
 

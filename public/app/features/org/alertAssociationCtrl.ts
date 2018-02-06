@@ -1,11 +1,8 @@
-///<reference path="../../headers/common.d.ts" />
 
-import angular from 'angular';
 import _ from 'lodash';
-import $ from 'jquery';
 import moment from 'moment';
 import coreModule from '../../core/core_module';
-import noUiSlider from 'slider';
+import noUiSlider from 'vendor/angular-other/nouislider.min';
 
 export class AlertAssociationCtrl {
   targetObj: any;

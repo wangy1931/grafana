@@ -1,10 +1,8 @@
-///<reference path="../../headers/common.d.ts" />
 
 import config from 'app/core/config';
 import _ from 'lodash';
-import $ from 'jquery';
 import coreModule from 'app/core/core_module';
-import 'd3.graph';
+import 'vendor/d3/d3.relationshipgraph.js';
 
 declare var window: any;
 
@@ -64,7 +62,7 @@ export class TopologyGraphCtrl {
   data: any;
   currentItem: any;
   searchList: any;
-  search: true;
+  search = true;
   query: string;
   group: string;
   filter: string;

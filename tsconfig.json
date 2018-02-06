@@ -18,11 +18,12 @@
       "noImplicitThis": false,
       "noImplicitUseStrict":false,
       "noImplicitAny": false,
-      "noUnusedLocals": true,
+      "noUnusedLocals": false,
       "baseUrl": "public",
       "paths": {
         "app": ["app"]
-      }
+      },
+      "allowJs": true,
     },
     "include": [
       "public/app/**/*.ts",

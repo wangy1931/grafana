@@ -1,8 +1,6 @@
-///<reference path="../../../../headers/common.d.ts" />
 
 import {describe, beforeEach, it, sinon, expect, angularMocks} from '../../../../../test/lib/common';
 
-import angular from 'angular';
 import helpers from '../../../../../test/specs/helpers';
 import {SingleStatCtrl} from '../module';
 

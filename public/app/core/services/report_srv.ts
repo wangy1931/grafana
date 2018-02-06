@@ -1,6 +1,4 @@
-///<reference path="../../headers/common.d.ts" />
 
-import angular from 'angular';
 import coreModule from 'app/core/core_module';
 
 export class ReportSrv {

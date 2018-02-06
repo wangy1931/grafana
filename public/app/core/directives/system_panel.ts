@@ -2,8 +2,8 @@ import $ from 'jquery';
 import _ from 'lodash';
 
 import coreModule from 'app/core/core_module';
-import 'jquery.flot';
-import 'jquery.flot.pie';
+import 'vendor/flot/jquery.flot';
+import 'vendor/flot/jquery.flot.pie';
 
 function systemPanel($parse, alertMgrSrv, healthSrv, datasourceSrv, contextSrv, backendSrv, $location, $q) {
   return {

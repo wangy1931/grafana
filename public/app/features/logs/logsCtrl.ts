@@ -1,10 +1,9 @@
-///<reference path="../../headers/common.d.ts" />
 
 import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
 import moment from 'moment';
-import Diff from 'jsdiff';
+import Diff from 'vendor/jsdiff/index';
 import logsDash from './logsDash';
 import coreModule from '../../core/core_module';
 import 'app/plugins/datasource/opentsdb/queryCtrl';
@@ -349,7 +348,7 @@ export class LogsCtrl {
     var start = this.$location.search().start;
     var initTime = { from: "now-6h", to: "now" };
     if (start && start !== 'undefined') {
-      initTime = { from: moment(+start).add(-6, 'hour'), to: moment(+start) }
+      initTime = { from:<any> moment(+start).add(-6, 'hour'), to:<any> moment(+start) }
     }
 
     this.$scope.initDashboard({

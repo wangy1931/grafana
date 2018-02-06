@@ -1,5 +1,3 @@
-///<reference path="headers/common.d.ts" />
-
 import 'babel-polyfill';
 import 'file-saver';
 import 'lodash';
@@ -14,6 +12,8 @@ import 'angular-bindonce';
 // import 'ui.calendar';
 // import 'fullcalendar';
 
+// import 'spectrum';
+
 import 'vendor/bootstrap/bootstrap';
 import 'vendor/angular-other/angular-strap';
 import 'vendor/angular-ui/ui-bootstrap-tpls';
@@ -24,7 +24,7 @@ import 'vendor/angular-other/angular-strap-old';
 
 import 'vendor/jsPlumb/jsPlumbToolkit';
 
-import 'vendor/quill/ng-quill';
+// import 'vendor/quill/ng-quill';
 import 'vendor/angular-other/ng-table.min';
 
 import $ from 'jquery';
@@ -33,6 +33,8 @@ import config from 'app/core/config';
 import _ from 'lodash';
 import moment from 'moment';
 import {coreModule} from './core/core';
+
+declare var System: any;
 
 export class GrafanaApp {
   registerFunctions: any;
@@ -68,7 +70,7 @@ export class GrafanaApp {
 
     // fullcalendar: 没有检测到英文, 均显示中文
     if (!/en/.test(locale)) {
-      System.import('zh-cn')
+      System.import('vendor/fullcalendar/dist/zh-cn')
     }
 
     app.config(['$translateProvider', ($translateProvider) => {

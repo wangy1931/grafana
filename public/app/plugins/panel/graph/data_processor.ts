@@ -1,8 +1,5 @@
-///<reference path="../../../headers/common.d.ts" />
 
-import kbn from 'app/core/utils/kbn';
 import _ from 'lodash';
-import moment from 'moment';
 import TimeSeries from 'app/core/time_series2';
 import {colors} from 'app/core/core';
 
@@ -130,38 +127,35 @@ export class DataProcessor {
 
     let fields = [];
     var firstItem = dataList[0];
-    if (firstItem.type === 'docs'){
+    let fieldParts = [];
+
+    function getPropertiesRecursive(obj) {
+      _.forEach(obj, (value, key) => {
+        if (_.isObject(value)) {
+          fieldParts.push(key);
+          getPropertiesRecursive(value);
+        } else {
+          if (!onlyNumbers || _.isNumber(value)) {
+            let field = fieldParts.concat(key).join('.');
+            fields.push(field);
+          }
+        }
+      });
+      fieldParts.pop();
+    }
+
+    if (firstItem.type === 'docs') {
       if (firstItem.datapoints.length === 0) {
         return [];
       }
-
-      let fieldParts = [];
-
-      function getPropertiesRecursive(obj) {
-        _.forEach(obj, (value, key) => {
-          if (_.isObject(value)) {
-            fieldParts.push(key);
-            getPropertiesRecursive(value);
-          } else {
-            if (!onlyNumbers || _.isNumber(value)) {
-              let field = fieldParts.concat(key).join('.');
-              fields.push(field);
-            }
-          }
-        });
-        fieldParts.pop();
-      }
-
       getPropertiesRecursive(firstItem.datapoints[0]);
-      return fields;
     }
+
+    return fields;
   }
 
   getXAxisValueOptions(options) {
     switch (this.panel.xaxis.mode) {
-      case 'time': {
-        return [];
-      }
       case 'series': {
         return [
           {text: 'Avg', value: 'avg'},
@@ -172,6 +166,7 @@ export class DataProcessor {
         ];
       }
     }
+    return [];
   }
 
   pluckDeep(obj: any, property: string) {

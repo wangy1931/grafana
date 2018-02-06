@@ -484,7 +484,7 @@ small,
 mark,
 .mark {
   padding: 0.2em;
-  background: linear-gradient(90deg, #d44939, #e04d3d); }
+  background: linear-gradient(90deg, #ff851b, #F79520); }
 
 ul, ol {
   padding: 0; }
@@ -5291,7 +5291,7 @@ table th[class*="span"],
   padding: 8px 35px 13px 14px;
   margin-bottom: 1.5;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-  background: linear-gradient(90deg, #d44939, #e04d3d);
+  background: linear-gradient(90deg, #ff851b, #F79520);
   position: relative;
   color: #fff;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
@@ -5308,7 +5308,7 @@ table th[class*="span"],
   background: #0083b3; }
 
 .alert-warning {
-  background: linear-gradient(90deg, #d44939, #e04d3d); }
+  background: linear-gradient(90deg, #ff851b, #F79520); }
 
 .page-alert-list {
   z-index: 8000;
@@ -11294,28 +11294,39 @@ a.fc-more:hover {
       color: white;
       width: 15px;
       height: 15px;
+      line-height: 12px;
       background: transparent;
       border-radius: 100%;
       border: 1px solid white;
-      margin-top: 6px;
       margin-right: 4px; }
   .oncaller-body .span5 p {
     height: 30px;
-    line-height: 30px; }
+    line-height: 30px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
 
 .on-duty {
   width: 80%;
   color: white;
   text-align: center;
   border-radius: 15px;
-  margin-left: 25px; }
-  .on-duty > span {
+  margin-left: 25px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+  .on-duty > .user-span {
     color: #fff;
     text-align: center;
     width: 30px !important;
     height: 30px;
     border-radius: 100%;
     font-weight: bold; }
+  .on-duty > em {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    overflow: hidden; }
   .on-duty.on-duty-form {
     width: 100%;
     color: #000;

@@ -1,16 +1,13 @@
-///<reference path="../../../headers/common.d.ts" />
 
 import config from 'app/core/config';
-import _ from 'lodash';
-import $ from 'jquery';
 import moment from 'moment';
 import coreModule from '../../core_module';
 
 export class NavbarCtrl {
-  showGuideNav: false;
+  showGuideNav = false;
   deadline: Number;
   priceUrl: string;
-  showNavbarPageBtn: false;
+  showNavbarPageBtn = false;
 
   /** @ngInject */
   constructor(private $scope, private $rootScope, private $location, private contextSrv, private $translate) {

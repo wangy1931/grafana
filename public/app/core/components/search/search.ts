@@ -1,9 +1,5 @@
-///<reference path="../../../headers/common.d.ts" />
-
-import angular from 'angular';
 import config from 'app/core/config';
 import _ from 'lodash';
-import $ from 'jquery';
 import coreModule from '../../core_module';
 
 export class SearchCtrl {

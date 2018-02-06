@@ -1,6 +1,4 @@
-///<reference path="../../headers/common.d.ts" />
 
-import config from 'app/core/config';
 import coreModule from 'app/core/core_module';
 import _ from 'lodash';
 import 'ng-quill';

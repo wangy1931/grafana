@@ -197,7 +197,7 @@ export class TimeBuckets {
    *
    */
   getBounds() {
-    if (!this.hasBounds()) { return; }
+    if (!this.hasBounds()) { return null; }
     return {
       min: this._lb,
       max: this._ub
@@ -212,7 +212,7 @@ export class TimeBuckets {
    * @return {moment.duration|undefined}
    */
   getDuration() {
-    if (!this.hasBounds()) { return; }
+    if (!this.hasBounds()) { return null; }
     return moment.duration(this._ub - this._lb, 'ms');
   };
 
@@ -310,7 +310,7 @@ export class TimeBuckets {
       if (!self.hasBounds()) { return interval; }
 
       const maxLength = config['histogram:maxBars'].value;
-      const approxLen = duration / interval;
+      const approxLen = +duration / interval;
       let scaled;
 
       if (approxLen > maxLength) {
@@ -335,9 +335,9 @@ export class TimeBuckets {
       interval.esValue = esInterval.value;
       interval.esUnit = esInterval.unit;
       interval.expression = esInterval.expression;
-      interval.overflow = duration > interval ? moment.duration(interval - duration) : false;
+      interval.overflow = duration > interval ? moment.duration(interval - Number(duration)) : false;
 
-      const prettyUnits = moment.normalizeUnits(esInterval.unit);
+      const prettyUnits = moment.normalizeUnits(<any>esInterval.unit);
       if (esInterval.value === 1) {
         interval.description = prettyUnits;
       } else {

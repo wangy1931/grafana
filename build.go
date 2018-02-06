@@ -414,6 +414,7 @@ func rmr(paths ...string) {
 }
 
 func clean() {
+	rmr("bin", "Godeps/_workspace/pkg", "Godeps/_workspace/bin")	
 	rmr("dist")
 	rmr("tmp")
 	rmr(filepath.Join(os.Getenv("GOPATH"), fmt.Sprintf("pkg/%s_%s/github.com/grafana", goos, goarch)))
@@ -439,13 +440,13 @@ func setBuildEnv() {
 	if gocxx != "" {
 		os.Setenv("CXX", gocxx)
 	}
-	// wd, err := os.Getwd()
-	// if err != nil {
-	// 	log.Println("Warning: can't determine current dir:", err)
-	// 	log.Println("Build might not work as expected")
-	// }
-	// os.Setenv("GOPATH", fmt.Sprintf("%s%c%s", filepath.Join(wd, "Godeps", "_workspace"), os.PathListSeparator, os.Getenv("GOPATH")))
-	// log.Println("GOPATH=" + os.Getenv("GOPATH"))
+	wd, err := os.Getwd()
+	if err != nil {
+		log.Println("Warning: can't determine current dir:", err)
+		log.Println("Build might not work as expected")
+	}
+	os.Setenv("GOPATH", fmt.Sprintf("%s%c%s", filepath.Join(wd, "Godeps", "_workspace"), os.PathListSeparator, os.Getenv("GOPATH")))
+	log.Println("GOPATH=" + os.Getenv("GOPATH"))
 }
 
 func getGitSha() string {

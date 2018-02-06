@@ -17,16 +17,6 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.es6', '.js', '.json'],
     alias: {
-      'bootstrap': './public/vendor/bootstrap/bootstrap.js',
-      'angular-strap': './public/vendor/angular-other/angular-strap.js',
-      'angular-ui': './public/vendor/angular-ui/ui-bootstrap-tpls.js',
-      'ui.calendar': './public/vendor/angular-ui-calendar/src/calendar',
-      'angular-strap.tpl': './public/vendor/angular-other/angular-strap.tpl',
-      'angular-strap-old': './public/vendor/angular-other/angular-strap-old',
-      'jsPlumbToolkit': './public/vendor/jsPlumb/jsPlumbToolkit',
-      'quill': './public/vendor/quill/quill.min',
-      'ng-quill': './public/vendor/quill/ng-quill',
-      'ng-table': './public/vendor/angular-other/ng-table.min'
     },
     modules: [
       path.resolve('public'),

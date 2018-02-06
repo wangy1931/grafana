@@ -1,9 +1,6 @@
-///<reference path="../../../headers/common.d.ts" />
 
-import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
-import moment from 'moment';
 import 'highlight';
 import {MetricsPanelCtrl} from 'app/plugins/sdk';
 import {transformers, transformDataToTable} from './transformers';
@@ -141,14 +138,14 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
   // Columns
   isSortableColumn(columnIndex) {
     if (!this.indexPattern || !_.isFunction(this.toggleColumnSort)) {
-      return;
+      return null;
     }
     var sortable = this.columns[columnIndex].sortable !== false;
     return sortable;
   }
 
   headerClass(columnIndex) {
-    if (!this.isSortableColumn(columnIndex)) { return; }
+    if (!this.isSortableColumn(columnIndex)) { return null; }
 
     const sortOrder = this.panel.sort;
     const defaultClass = ['fa', 'fa-sort-down', 'table-header-sortchange'];

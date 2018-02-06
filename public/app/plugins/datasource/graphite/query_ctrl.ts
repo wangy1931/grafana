@@ -1,11 +1,8 @@
-///<reference path="../../../headers/common.d.ts" />
 
 import './add_graphite_func';
 import './func_editor';
 
-import angular from 'angular';
 import _ from 'lodash';
-import moment from 'moment';
 import gfunc from './gfunc';
 import {Parser} from './parser';
 import {QueryCtrl} from 'app/plugins/sdk';

@@ -1,4 +1,4 @@
-///<reference path="../../headers/common.d.ts" />
+import System from 'systemjs/dist/system.js';
 
 export class BundleLoader {
   lazy: any;

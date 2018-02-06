@@ -1,4 +1,3 @@
-///<reference path="../../../headers/common.d.ts" />
 
 import './query_part_editor';
 import './query_part_editor';
@@ -320,6 +319,7 @@ export class InfluxQueryCtrl extends QueryCtrl {
     } else if ((tagOperator === '=~' || tagOperator === '!~') && /^(?!\/.*\/$)/.test(tagValue)) {
       return '=';
     }
+    return null;
   }
 
   getCollapsedText() {

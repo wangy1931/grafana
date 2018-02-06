@@ -1,4 +1,3 @@
-///<reference path="../../headers/common.d.ts" />
 
 import _ from 'lodash';
 import moment from 'moment';
@@ -6,7 +5,7 @@ import moment from 'moment';
 const d = moment.duration;
 
 const units = ['y', 'M', 'w', 'd', 'h', 'm', 's', 'ms'];
-const unitsAsc = units.sort((prev: any, val) => prev - moment.duration(1, val).valueOf());
+const unitsAsc = units.sort((prev: any, val: any) => prev - Number(moment.duration(1, val).valueOf()));
 const unitsDesc = unitsAsc.reverse();
 
 export function TimeBucketsCalcAutoIntervalProvider() {
@@ -59,6 +58,7 @@ export function TimeBucketsCalcAutoIntervalProvider() {
     return function (buckets, duration) {
       const interval = pick(buckets, duration);
       if (interval) { return moment.duration(interval._data); }
+      return null;
     };
   }
 
@@ -132,7 +132,7 @@ export function parseInterval(interval) {
 
   try {
     const value = parseFloat(matches[1]) || 1;
-    const unit = matches[2];
+    const unit: any = matches[2];
 
     const duration = moment.duration(value, unit);
 

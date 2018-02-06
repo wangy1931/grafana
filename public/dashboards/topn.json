@@ -70,7 +70,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "<a></a>进程: $pid 的 CPU使用率",
+          "title": "进程: $pid 的 CPU使用率",
           "tooltip": {
             "msResolution": false,
             "shared": true,

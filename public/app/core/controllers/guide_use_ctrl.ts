@@ -1,7 +1,5 @@
-///<reference path="../../headers/common.d.ts" />
 
 import _ from 'lodash';
-import config from 'app/core/config';
 import coreModule from '../core_module';
 
 export class GuideUseCtrl {

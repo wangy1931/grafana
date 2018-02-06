@@ -1,5 +1,4 @@
-///<reference path="../../headers/common.d.ts" />
-
+import System from 'systemjs/dist/system.js';
 import angular from 'angular';
 import _ from 'lodash';
 

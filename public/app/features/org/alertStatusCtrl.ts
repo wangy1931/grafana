@@ -1,4 +1,3 @@
-///<reference path="../../headers/common.d.ts" />
 
 import angular from 'angular';
 import moment from 'moment';
@@ -189,7 +188,7 @@ export class AlertStatusCtrl {
     if (time.type === 'now') {
       this.alertStatusShow = true;
     } else {
-      var timestemp = Date.parse(moment().subtract(time.num, time.type));
+      var timestemp = Date.parse(<any>moment().subtract(time.num, time.type));
       this.alertMgrSrv.loadAlertHistory(timestemp, host).then(response => {
         response.data.forEach(alert => {
           alert = this.handleAlertData(alert);
