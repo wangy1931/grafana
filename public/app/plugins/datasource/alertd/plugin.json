@@ -1,0 +1,18 @@
+{
+  "type": "datasource",
+  "name": "AlertD",
+  "id": "alertd",
+
+  "metrics": true,
+  "annotations": true,
+
+  "info": {
+    "author": {
+      "name": "Cloudwiz Project"
+    },
+    "logos": {
+      "small": "img/icn-datasource.svg",
+      "large": "img/icn-datasource.svg"
+    }
+  }
+}
