@@ -27,12 +27,14 @@ function ($, coreModule) {
     };
   });
 
-  coreModule.default.directive('dashEditorView', function($compile, $location) {
+  coreModule.default.directive('dashEditorView', function($compile, $location, $translate) {
     return {
       restrict: 'A',
       link: function(scope, elem) {
         var editorScope;
         var lastEditor;
+
+        scope.$translate = $translate;
 
         function hideEditorPane() {
           if (editorScope) {
