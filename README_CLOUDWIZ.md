@@ -22,7 +22,13 @@ date: 2018-01-21
 set @dt = now();
 INSERT INTO org_permit (`org_id`, `data_center`, `level`, `deadline`) SELECT id, 'ucloud', 'free', date_add(@dt, interval 30 day) FROM org;
 ```
----
+- 若测试创表失败,请检查migration_log,删除相应log,再重启grafana
+```sql
+DELETE FROM migration_log WHERE migration_log.migration_id = 'copy data account to org_permit';
+DELETE FROM migration_log WHERE migration_log.migration_id = 'create index UQE_org_permit_org_id - v1';
+DELETE FROM migration_log WHERE migration_log.migration_id = 'create org_permit table';
+```
+
 ### DataSource update
 date: 2018-01-21
 
