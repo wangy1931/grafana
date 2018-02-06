@@ -99,7 +99,7 @@ export class AlertAssociationCtrl {
       this.suggestTagHost = _.map(response.data, 'hostname');
     });
 
-    if (this.targetObj.metric) {
+    if (this.targetObj.metric && this.targetObj.metric !== "undefined") {
       if (!this.$scope.dashboard) {
         this.createAlertMetricsGraph(this.targetObj.metric, this.targetObj.host);
       } else {
