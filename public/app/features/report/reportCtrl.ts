@@ -47,6 +47,9 @@ export class ReportCtrl {
       this.reportDownloadUrl = res.url;
       this.expertReports = res.reports;
     })
+    .catch((err) => {
+      err.isHandled = true;
+    });
   }
 
   getReport(report) {
