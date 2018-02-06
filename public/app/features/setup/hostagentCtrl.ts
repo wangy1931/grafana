@@ -1,38 +1,32 @@
-define([
-  'angular',
-  'lodash',
-  'app/features/org/importAlertsCtrl'
-],
-function (angular, _) {
-  'use strict';
+import coreModule from 'app/core/core_module';
+import config from 'app/core/config';
+import _ from 'lodash';
 
-  var module = angular.module('grafana.controllers');
+class HostAgentCtrl {
 
-  module.controller('HostAgentCtrl', function ($scope, backendSrv, datasourceSrv, contextSrv, $interval, $location, $controller, $q) {
-
+  /** @ngInject **/
+  constructor($scope, backendSrv, datasourceSrv, contextSrv, $interval, $location, $controller, $q) {
     $scope.init = function() {
       $scope.type = '安装';
       $scope.installManual = false;
       $scope.orgId = contextSrv.user.orgId;
       $scope.systemId = contextSrv.user.systemId;
-      $scope.alertServer = backendSrv.alertDUrl;
-      $scope.agentUrl = backendSrv.downloadUrl + '/agent';
+      $scope.alertServer = backendSrv.alertDUrlIntranet;
+      $scope.agentUrl = backendSrv.downloadUrlIntranet + '/agent';
       $scope.token = backendSrv.getToken();
-      $scope.system = _.find(contextSrv.systemsMap,{Id:contextSrv.user.systemId}).SystemsName;
+      $scope.system = _.find(contextSrv.systemsMap,{Id: contextSrv.user.systemId}).SystemsName;
       backendSrv.get('/api/static/hosts').then(function(result) {
         $scope.platform = result.hosts;
       });
 
-      datasourceSrv.get("opentsdb").then(function (ds) {
-        var url = document.createElement('a');
-        url.href = ds.url;
-        $scope.metricsServer = url.hostname;
-      });
+      var url = document.createElement('a');
+      url.href = backendSrv.opentsdbUrlIntranet;
+      $scope.metricsServer = url.hostname;
 
       backendSrv.getHostsNum().then(function (response) {
         contextSrv.hostNum = response;
         $scope.hostNum = response;
-        if(contextSrv.hostNum) {
+        if (contextSrv.hostNum) {
           $scope.installed = true;
           $scope.hostDashboard = false;
           $scope.appEvent('alert-success', ['您已安装机器探针', "请继续安装机器探针,或安装服务探针"]);
@@ -43,12 +37,13 @@ function (angular, _) {
       $scope.inter = $interval($scope.getHosts,5000);
 
       $controller('ImportAlertsCtrl',{$scope: $scope});
+
     };
 
     $scope.getHosts = function() {
-      if($scope.hostNum > contextSrv.hostNum){
+      if ($scope.hostNum > contextSrv.hostNum) {
         // 首台机器安装完成，自动加载模板
-        if(contextSrv.hostNum === 0){
+        if (contextSrv.hostNum === 0) {
           contextSrv.hostNum = $scope.hostNum;
           $interval.cancel($scope.inter);
           $scope.createTemp();
@@ -66,7 +61,7 @@ function (angular, _) {
     $scope.changeSelect = function(select) {
       $scope.selected = select;
       $scope.type = '安装';
-      if($scope.selected.addr === 'windows') {
+      if ($scope.selected.addr === 'windows') {
         $scope.updateAuto = 0;
         $scope.otherQuestion = false;
       } else {
@@ -87,7 +82,7 @@ function (angular, _) {
         case "skip":
           $location.url('/');
           break;
-        case "import":{
+        case "import": {
           backendSrv.get('/api/static/alertd/machine').then(function(result) {
             $scope.alertDefs = result.alertd;
             $scope.importAlerts($scope.alertDefs);
@@ -128,20 +123,20 @@ function (angular, _) {
         var success = _.filter(valuse,function(data) {
           return data > 0;
         });
-        if(success.length) {
+        if (success.length) {
           $scope.appEvent('alert-success', ['机器探针部署成功', '共导入' + success.length + '个模板']);
         }
       });
     };
 
     $scope.$on("$destroy", function() {
-      if($scope.inter){
+      if ($scope.inter){
         $interval.cancel($scope.inter);
       }
     });
 
     $scope.importAlerts = function(alertDefs) {
-      if(alertDefs.length) {
+      if (alertDefs.length) {
         $scope.importAlert(alertDefs);
       } else {
         $scope.appEvent('alert-warning', ['暂无报警规则', '请联系管理员']);
@@ -150,15 +145,15 @@ function (angular, _) {
 
     $scope.updateType = function(type) {
       $scope.type = type;
-      if(type === '更新') {
-        if($scope.selected.addr === 'windows') {
+      if (type === '更新') {
+        if ($scope.selected.addr === 'windows') {
           $scope.updateAuto = 1;
         } else {
           $scope.updateAuto = ' /dev/stdin -update';
           $scope.updateSelf = ' -update';
         }
       } else {
-        if($scope.selected.addr === 'windows') {
+        if ($scope.selected.addr === 'windows') {
           $scope.updateAuto = 0;
         } else {
           $scope.updateAuto = '';
@@ -168,6 +163,7 @@ function (angular, _) {
     };
 
     $scope.init();
-  });
+  }
+}
 
-});
+coreModule.controller('HostAgentCtrl', HostAgentCtrl);

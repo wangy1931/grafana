@@ -1,6 +1,20 @@
 ## Update tables Features
 
+## Datasource add column 'intranet_url'
+date: 2018-02-05
+
+- 添加内网设置, 默认与url一致
+```sql
+UPDATE data_source SET intranet_url=url
+```
+- update datasource type
+```sql
+UPDATE data_source SET type='customdb' WHERE name='alert' OR name='download'
+```
+---
 ### 免费用户限制
+date: 2018-01-21
+
 - 免费用户拥有30天试用期，过时不能登录
 - 创建org_permit表
 - 初始化org_permit表
@@ -16,6 +30,8 @@ DELETE FROM migration_log WHERE migration_log.migration_id = 'create org_permit 
 ```
 
 ### DataSource update
+date: 2018-01-21
+
 - 新建用户数据源从default.ini获取，旧用户数据源从数据库获取
 - 初始化data_source表,主要修改相应的url
 ```sql
