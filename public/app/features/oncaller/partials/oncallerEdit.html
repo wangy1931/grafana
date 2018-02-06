@@ -33,7 +33,10 @@
       </div>
       <div class="tight-form">
         <ul class="tight-form-list">
-          <li class="tight-form-item" style="width: 100px"><em translate="i18n_tel"></em> <tip>{{ ctrl.$translate.i18n.page_oncaller_send_sms }}</em></tip></li>
+          <li class="tight-form-item" style="width: 100px">
+            <em translate="i18n_tel"></em>
+            <i class="grafana-tip fa fa-question-circle" bs-tooltip="ctrl.$translate.i18n.page_oncaller_send_sms" data-placement="top" html=true></i>
+          </li>
           <li><input type="text" class="input-xxlarge tight-form-input last"
                       ng-model="ctrl.user.tel" placeholder="{{ ctrl.$translate.i18n.page_oncaller_send_sms }}" required>
           </li>

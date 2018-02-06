@@ -64,6 +64,13 @@ export class AlertStatusCtrl {
       SINGLE_ALERT: "alertSingleQuery",
       MUTI_ALERT: "alertMutiQuery"
     }
+
+    $scope.$watch('ctrl.$location.search().name', (newValue, oldValue) => {
+      if ((newValue === oldValue)) { return; }
+
+      this.getAlertStatus(newValue);
+      this.getAlertHistory(this.alertTimeSelected);
+    });
   }
 
   getDataSource() {

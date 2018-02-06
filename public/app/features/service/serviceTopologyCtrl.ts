@@ -35,7 +35,8 @@ export class ServiceTopologyCtrl {
     private $controller,
     private $location,
     private alertSrv,
-    private $translate
+    private $translate,
+    private $timeout
   ) {
     $scope.ctrl = this;
 
@@ -132,9 +133,14 @@ export class ServiceTopologyCtrl {
     var elem = _.find(this.data, data => {
       return data._private_.id === node.id;
     });
+
     // ignore .delete button
-    if (!$($event.target).hasClass('btn')) {
+    if (!$($event.target).hasClass('del-btn')) {
       this.currentService = elem;
+      this.$timeout(() => {
+        this.tabs[1].active = true;
+        this.switchTab(1);
+      }, 100);
     }
   }
 

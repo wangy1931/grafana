@@ -3,7 +3,8 @@
       <div class="gf-form">
           <ul class="gf-form-list tidy-form-list" style="overflow: inherit">
               <li ng-click="ctrl.showSearchGuide = !ctrl.showSearchGuide" class="gf-form-item" style="width: 100px">
-                  <span translate="page_logs_key_words"></span> <tip>{{ ctrl.$translate.i18n.page_logs_seach_tip }}</tip>
+                  <span translate="page_logs_key_words"></span>
+                  <i class="grafana-tip fa fa-question-circle" bs-tooltip="ctrl.$translate.i18n.page_logs_seach_tip" data-placement="top" html=true></i>
               </li>
               <li class="dropdown" style="width: 400px">
                   <input placeholder="type: nginx" type="text"
