@@ -27,9 +27,10 @@ export class CloseAlertCtrl {
         }).catch(err => {
           this.$scope.appEvent('alert-error', ['报警处理失败','请检查网络连接状态']);
         });
+      this.$scope.dismiss();
+    } else {
+      this.$scope.appEvent('alert-warning', ['报警处理失败','请填写报警处理信息']);
     }
-
-    this.$scope.dismiss();
   }
 
 }
