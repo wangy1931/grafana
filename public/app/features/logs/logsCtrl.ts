@@ -53,7 +53,7 @@ export class LogsCtrl {
     this.size = 500;
     this.timeShift = "-1d";
     this.logFilter = "";
-    this.currentRelativeTime = `1${$translate.i18n.i18n_day}${$translate.i18n.i18n_ago}`;
+    this.currentRelativeTime = `1 ${$translate.i18n.i18n_day}${$translate.i18n.i18n_ago}`;
     this.currentFilter = $translate.i18n.i18n_empty;
     this.resultCache = {};
     this.tabsCache = {};
@@ -167,7 +167,7 @@ export class LogsCtrl {
       "query": "",
       "size": "500",
       "timeShift": "-1d",
-      "currentRelativeTime": `1${this.$translate.i18n.i18n_day}${this.$translate.i18n.i18n_ago}`,
+      "currentRelativeTime": `1 ${this.$translate.i18n.i18n_day}${this.$translate.i18n.i18n_ago}`,
       "logFilter": "",
       "currentFilter": this.$translate.i18n.i18n_empty
     });
@@ -242,7 +242,7 @@ export class LogsCtrl {
   // tab: 日志对比 - 自定义对比时间
   showInputModal() {
     var newScope = this.$scope.$new();
-    newScope.logCompare = this.logCompare;
+    newScope.logCompare = this.logCompare.bind(this);
     newScope.shift = "-1d";
     this.$scope.appEvent('show-modal', {
       src: 'public/app/features/logs/partials/input_time_shift.html',

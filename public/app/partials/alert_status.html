@@ -53,7 +53,10 @@
         <th translate="page_alert_current"></th>
         <th translate="page_alert_level"></th>
         <th translate="page_alert_time"></th>
-        <th><span translate="page_alert_again"></span><tip>{{ ctrl.$translate.i18n.page_alert_tip1 }}</tip></th>
+        <th>
+          <span translate="page_alert_again"></span>
+          <i class="grafana-tip fa fa-question-circle" bs-tooltip="ctrl.$translate.i18n.page_alert_tip1" data-placement="top" html=true></i>
+        </th>
         <th translate="i18n_operating"></th>
       </thead>
       <tbody>
@@ -63,7 +66,7 @@
             {{ alert.definition.name }}
           </td>
           <td style="position: relative">
-            <div ng-if="alert.type === 'MUTI_ALERT'">
+            <div ng-if="alert.type === 'MUTI_ALERT'" style="padding-right: 20px">
                 {{ _.getMetricName(alert.definition.alertDetails.alertMutiQuery.metricQueries[0].metric) }} <em translate="i18n_etc"></em>
                 <info-popover mode="right-absolute">
                   <div ng-repeat="metric in alert.definition.alertDetails.alertMutiQuery.metricQueries">{{ metric.id }} : {{ metric.metric }}</div>
@@ -112,7 +115,7 @@
             {{ alert.definition.name }}
           </td>
           <td style="position: relative;">
-            <div ng-if="alert.type === 'MUTI_ALERT'">
+            <div ng-if="alert.type === 'MUTI_ALERT'" style="padding-right: 20px">
                 {{ _.getMetricName(alert.definition.alertDetails.alertMutiQuery.metricQueries[0].metric) }} <em translate="i18n_etc"></em>
                 <info-popover mode="right-absolute">
                   <div ng-repeat="metric in alert.definition.alertDetails.alertMutiQuery.metricQueries">{{ metric.id }} : {{ metric.metric }}</div>

@@ -2,11 +2,9 @@ define([
   'moment',
   'jquery',
   'angular',
-  'lodash',
-  'ui.calendar',
-  'fullcalendar',
+  'lodash'
 ],
-function (moment, $, angular, _, uiCalendarConfig) {
+function (moment, $, angular, _) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
@@ -40,27 +38,27 @@ function (moment, $, angular, _, uiCalendarConfig) {
 
       // 从后台获取的shchedule
       $scope.primary = {
-        type: `(${$translate.i18n.i18n_primary})`,
+        type: "(" + $translate.i18n.i18n_primary + ")",
         events: []
       };
       $scope.secondary = {
-        type: `(${$translate.i18n.i18n_secondary})`,
+        type: "(" + $translate.i18n.i18n_secondary + ")",
         events: []
       };
       // 从纯前端排班的shchedule
       $scope.primaryReview = {
-        type: `(${$translate.i18n.i18n_primary})`,
+        type: "(" + $translate.i18n.i18n_primary + ")",
         events: []
       };
       $scope.secondaryReview = {
-        type: `(${$translate.i18n.i18n_secondary})`,
+        type: "(" + $translate.i18n.i18n_secondary + ")",
         events: []
       };
       $scope.roles = [
-        {key:'primary',val:'值班',},
-        {key:'secondary',val:'候选',},
-        {key:'primaryReview',val:'值班',},
-        {key:'secondaryReview',val:'候选',},
+        { key: 'primary', val: $translate.i18n.i18n_primary },
+        { key: 'secondary', val: $translate.i18n.i18n_secondary },
+        { key: 'primaryReview', val: $translate.i18n.i18n_primary },
+        { key: 'secondaryReview', val: $translate.i18n.i18n_secondary },
       ];
 
       // 所有值班人员
@@ -88,7 +86,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
         calendar: {
           height: 450,
           editable: true,
-          locale: 'zh-cn',
+          // locale: 'zh-cn',
           monthNames: moment.months(),
           monthNamesShort: moment.monthsShort(),
           dayNames: moment.weekdays(),
@@ -105,7 +103,12 @@ function (moment, $, angular, _, uiCalendarConfig) {
         }
       };
 
-      $scope.eventSources = [$scope.primary,$scope.secondary,$scope.primaryReview,$scope.secondaryReview];
+      $scope.eventSources = [
+        $scope.primary,
+        $scope.secondary,
+        $scope.primaryReview,
+        $scope.secondaryReview
+      ];
 
       oncallerMgrSrv.load().then(function onSuccess(response) {
         $scope.oncallerDefList = response.data;
@@ -240,7 +243,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
 
     $scope.showOncallers = function() {
       if($scope.oncallerList.length === $scope.oncallerDefList.length) {
-        $scope.appEvent('alert-warning', ['您已添加所有值班人员']);
+        $scope.appEvent('alert-warning', [$translate.i18n.i18n_maxed]);
       } else {
         $scope.showEditForm = true;
         $scope.addoncaller = true;
@@ -254,7 +257,7 @@ function (moment, $, angular, _, uiCalendarConfig) {
         $scope.closeEdit();
         $scope.reviewSchedule();
       } else {
-        $scope.appEvent('alert-warning', ['您已添加该值班人员','请重新选择']);
+        $scope.appEvent('alert-warning', [$translate.i18n.i18n_maxed]);
       }
     };
 
@@ -342,9 +345,11 @@ function (moment, $, angular, _, uiCalendarConfig) {
 
     function updateSchedule(role,oncallerSelcted,type) {
       if (_.isString(oncallerSelcted.start)) {
+        console.log(oncallerSelcted.start)
         oncallerSelcted.start = oncallerSelcted.start.replace(/[A,P,凌,早,晚,中,下,上]/, 'T');
       }
       if (_.isString(oncallerSelcted.end)) {
+        console.log(oncallerSelcted.end)
         oncallerSelcted.end = oncallerSelcted.end.replace(/[A,P,凌,早,晚,中,下,上]/, 'T');
       }
       var event = {

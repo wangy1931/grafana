@@ -68,6 +68,8 @@
       $keepContent = false,
       $nextLang,
       $missingTranslationHandlerFactory,
+      $notFoundIndicatorLeft,
+      $notFoundIndicatorRight,
       $postCompilingEnabled = false,
       loaderCache,
       postProcessFn,
@@ -108,36 +110,12 @@
       return result;
     };
 
-    // tries to determine the browsers language
-    var getFirstBrowserLanguage = function () {
-      var navigator = $windowProvider.$get().navigator,
-        browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
-        i, language;
-
-      // support for HTML 5.1 "navigator.languages"
-      if (angular.isArray(navigator.languages)) {
-        for (i = 0; i < navigator.languages.length; i++) {
-          language = navigator.languages[i];
-          if (language && language.length) {
-            return language;
-          }
-        }
-      }
-
-      // support for other well known properties in browsers
-      for (i = 0; i < browserLanguagePropertyKeys.length; i++) {
-        language = navigator[browserLanguagePropertyKeys[i]];
-        if (language && language.length) {
-          return language;
-        }
-      }
-
-      return null;
-    };
-
     // tries to determine the browsers locale
     var getLocale = function () {
-      var locale = getFirstBrowserLanguage() || '';
+      var locale = window.grafanaBootData.user.locale;
+      /en/.test(locale) && (locale = 'en');
+      /zh/.test(locale) && (locale = 'zh_CN');
+
       if (languageTagResolver[uniformLanguageTagResolver]) {
         locale = languageTagResolver[uniformLanguageTagResolver](locale);
       }
@@ -310,6 +288,14 @@
       return this;
     };
     this.translations = translations;
+
+    /**
+     * @name pascalprecht.translate.$translateProvider#keepContent
+     */
+    this.keepContent = function (value) {
+      $keepContent = !(!value);
+      return this;
+    };
 
     /**
      * @name cloudwiz.translate.$translate
@@ -864,7 +850,7 @@
             break;
           }
         }
-  
+
         if (!result && result !== '') {
           if ($notFoundIndicatorLeft || $notFoundIndicatorRight) {
             throw Error('Not found indicator left or right');
@@ -872,7 +858,7 @@
           } else {
             // Return translation of default interpolator if not found anything.
             result = defaultInterpolator.interpolate(translationId, interpolateParams, 'filter', sanitizeStrategy);
-  
+
             // looks like the requested translation id doesn't exists.
             // Now, if there is a registered handler for missing translations and no
             // asyncLoader is pending, we execute the handler
@@ -880,14 +866,21 @@
             if ($missingTranslationHandlerFactory && !pendingLoader) {
               // missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams, sanitizeStrategy);
             }
-  
+
             if ($missingTranslationHandlerFactory && !pendingLoader && missingTranslationHandlerTranslation) {
               result = missingTranslationHandlerTranslation;
             }
           }
         }
-  
+
         return result;
+      };
+
+      /**
+       * @name pascalprecht.translate.$translate#isKeepContent
+       */
+      $translate.isKeepContent = function () {
+        return $keepContent;
       };
 
       if ($storageFactory) {
@@ -1273,14 +1266,14 @@
         var ctx = this;
         interpolateParams = $parse(interpolateParams)(ctx);
       }
-  
+
       return $translate.instant(translationId, interpolateParams, interpolation, forceLanguage);
     };
-  
+
     if ($translate.statefulFilter()) {
       translateFilter.$stateful = true;
     }
-  
+
     return translateFilter;
   });
 

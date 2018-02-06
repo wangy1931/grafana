@@ -43,7 +43,8 @@ export class HostTopologyCtrl {
     private $location,
     private NgTableParams,
     private alertSrv,
-    private $translate
+    private $translate,
+    private $timeout
   ) {
     $scope.ctrl = this;
     $scope.refresh_interval = '30s';
@@ -156,9 +157,14 @@ export class HostTopologyCtrl {
     var elem = _.find(this.data, data => {
       return data._private_.id === node.id;
     });
+
     // ignore .delete button
-    if (!$($event.target).hasClass('btn')) {
+    if (!$($event.target).hasClass('del-btn')) {
       this.currentHost = elem;
+      this.$timeout(() => {
+        this.tabs[1].active = true;
+        this.switchTab(1);
+      }, 100);
     }
   }
 

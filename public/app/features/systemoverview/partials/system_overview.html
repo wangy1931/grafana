@@ -30,7 +30,7 @@
                             </h3>
                             <div>
                                 <li ng-repeat="alert in ctrl.alertPanel.status" ng-if="alert.count!=0">
-                                    <a href="/host_topology?tabId=2"> <em translate="{{ alert.text }}"></em>: <span class="status-color status-{{ alert.health }}">{{ alert.count }}</span></a>
+                                    <a href="/host_topology?tabId=2"> <em translate="{{ alert.text }}"></em> <em ng-if="alert.text !== ''">:</em> <span class="status-color status-{{ alert.health }}">{{ alert.count }}</span></a>
                                 </li>
                             </div>
                         </div>
