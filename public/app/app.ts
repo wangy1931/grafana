@@ -13,6 +13,7 @@ import 'angular-bindonce';
 // import 'fullcalendar';
 
 // import 'spectrum';
+import 'app/core/lodash_extended';
 
 import 'vendor/bootstrap/bootstrap';
 import 'vendor/angular-other/angular-strap';
@@ -58,7 +59,7 @@ export class GrafanaApp {
   }
 
   init() {
-    var app = angular.module('grafana', ['mgcrea.ngStrap', 'ngAnimate', 'ngTable', 'cloudwiz.translate']);
+    var app = angular.module('grafana', ['mgcrea.ngStrap', 'ngTable', 'cloudwiz.translate']);
     app.constant('grafanaVersion', '@grafanaVersion@');
 
     var locale = config.bootData.user.locale;
@@ -67,11 +68,6 @@ export class GrafanaApp {
 
     locale = window.localStorage.getItem('CLOUDWIZ_LANG_KEY') || locale;
     moment.locale(locale);
-
-    // fullcalendar: 没有检测到英文, 均显示中文
-    if (!/en/.test(locale)) {
-      System.import('vendor/fullcalendar/dist/zh-cn')
-    }
 
     app.config(['$translateProvider', ($translateProvider) => {
       $translateProvider.useStaticFilesLoader({

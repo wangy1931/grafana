@@ -2,7 +2,8 @@ define([
   'moment',
   'jquery',
   'angular',
-  'lodash'
+  'lodash',
+  'fullcalendar'
 ],
 function (moment, $, angular, _) {
   'use strict';
@@ -24,7 +25,7 @@ function (moment, $, angular, _) {
         color/textColor: color, <<  控制展示颜色,可由前端设置,每个人员一个颜色
       }
     */
-    window.moment = moment;
+    var locale = /en/.test(window.localStorage.getItem('CLOUDWIZ_LANG_KEY')) ? 'en' : 'zh-cn';
     var colors = {
       user0:['#89c4f4','#43a1ed'],
       user1:['#ffd990','#ffbf43'],
@@ -86,7 +87,7 @@ function (moment, $, angular, _) {
         calendar: {
           height: 450,
           editable: true,
-          // locale: 'zh-cn',
+          locale: locale,
           monthNames: moment.months(),
           monthNamesShort: moment.monthsShort(),
           dayNames: moment.weekdays(),

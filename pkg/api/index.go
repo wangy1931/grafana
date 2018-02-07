@@ -51,10 +51,13 @@ func setIndexViewData(c *middleware.Context) (*dtos.IndexViewData, error) {
 			Locale:         locale,
 		},
 		Settings:           settings,
+		Theme:              prefs.Theme,
 		AppUrl:             setting.AppUrl,
 		AppSubUrl:          setting.AppSubUrl,
 		GoogleAnalyticsId:  setting.GoogleAnalyticsId,
 		GoogleTagManagerId: setting.GoogleTagManagerId,
+		BuildVersion:       setting.BuildVersion,
+		BuildCommit:        setting.BuildCommit,
 	}
 
 	if setting.DisableGravatar {

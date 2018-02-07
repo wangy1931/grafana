@@ -2,13 +2,16 @@ package dtos
 
 type IndexViewData struct {
 	User               *CurrentUser
-	Systems		   interface{}
+	Systems		         interface{}
 	Settings           map[string]interface{}
 	AppUrl             string
 	AppSubUrl          string
 	GoogleAnalyticsId  string
 	GoogleTagManagerId string
 	MainNavLinks       []*NavLink
+	BuildVersion       string
+	BuildCommit        string
+	Theme              string
 }
 
 type PluginCss struct {

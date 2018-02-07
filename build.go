@@ -48,22 +48,14 @@ func main() {
 	log.SetFlags(0)
 
 	ensureGoPath()
-
-	flag.StringVar(&goarch, "goarch", runtime.GOARCH, "GOARCH")
-	flag.StringVar(&goos, "goos", runtime.GOOS, "GOOS")
-	flag.StringVar(&gocc, "cc", "", "CC")
-	flag.StringVar(&gocxx, "cxx", "", "CXX")
-	flag.StringVar(&cgo, "cgo-enabled", "", "CGO_ENABLED")
-	flag.StringVar(&pkgArch, "pkg-arch", "", "PKG ARCH")
-	flag.StringVar(&phjsToRelease, "phjs", "", "PhantomJS binary")
-	flag.BoolVar(&race, "race", race, "Use race detector")
-	flag.BoolVar(&includeBuildNumber, "includeBuildNumber", includeBuildNumber, "IncludeBuildNumber in package name")
-	flag.IntVar(&buildNumber, "buildNumber", 0, "Build number from CI system")
-	flag.Parse()
-
 	readVersionFromPackageJson()
 
 	log.Printf("Version: %s, Linux Version: %s, Package Iteration: %s\n", version, linuxPackageVersion, linuxPackageIteration)
+
+	flag.StringVar(&goarch, "goarch", runtime.GOARCH, "GOARCH")
+	flag.StringVar(&goos, "goos", runtime.GOOS, "GOOS")
+	flag.BoolVar(&race, "race", race, "Use race detector")
+	flag.Parse()
 
 	if flag.NArg() == 0 {
 		log.Println("Usage: go run build.go build")
@@ -89,9 +81,6 @@ func main() {
 
 		case "package":
 			grunt(gruntBuildArg("release")...)
-			if runtime.GOOS != "windows" {
-				createLinuxPackages()
-			}
 
 		case "pkg-rpm":
 			grunt(gruntBuildArg("release")...)

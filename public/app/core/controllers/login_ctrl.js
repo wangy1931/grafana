@@ -6,6 +6,8 @@ define([
 function (angular, coreModule, config) {
   'use strict';
 
+  config = config.default;
+
   coreModule.default.controller('LoginCtrl', function($scope, backendSrv, contextSrv, $location) {
     $scope.formModel = {
       user: '',
