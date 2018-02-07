@@ -1,4 +1,4 @@
-{
+export default {
   "i18n_index_company": "云兴维智（北京）科技有限公司",
   "i18n_index": "云兴维智",
   "page_overview_title": "系统总览",

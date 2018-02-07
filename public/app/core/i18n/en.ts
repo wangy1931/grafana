@@ -1,4 +1,4 @@
-{
+export default {
   "i18n_index_company": "Cloudwiz（Beijing）Technology Co., Ltd.",
   "i18n_index": "Cloudwiz",
   "page_overview_title": "System Overview",

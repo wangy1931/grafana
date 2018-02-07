@@ -3,7 +3,7 @@
 	</h2>
 
 	<ul class="gf-tabs">
-		<li class="gf-tabs-item" ng-repeat="tab in ::[$translate.i18n.i18n_general, $translate.i18n.i18n_row_option, $translate.i18n.i18n_links, $translate.i18n.i18n_time_select, $translate.i18n.i18n_metadata]">
+		<li class="gf-tabs-item" ng-repeat="tab in ::[$translate.i18n.i18n_general, $translate.i18n.i18n_row_option, $translate.i18n.i18n_links, $translate.i18n.i18n_time_select, $translate.i18n.i18n_metadata] track by $index">
 			<a class="gf-tabs-link" ng-click="editor.index = $index" ng-class="{active: editor.index === $index}">
 				{{::tab}}
 			</a>

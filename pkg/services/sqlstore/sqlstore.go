@@ -115,6 +115,7 @@ func AddDatasourceFromConfig() {
 			Type:      m.DS_OPENTSDB,
 			Access:    m.DS_ACCESS_DIRECT,
 			Url:       setting.DataSource.DataSourceUrlRoot,
+			IntranetUrl:  setting.DataSource.DataSourceUrlIntranet,
 			IsDefault: true,
 		}); err != nil {
 			log.Fatal(3, "Could not add default datasource for OrgId 1 from config: %v", err)
@@ -127,6 +128,7 @@ func AddDatasourceFromConfig() {
 			Type:      m.DS_ES,
 			Access:    m.DS_ACCESS_PROXY,
 			Url:       setting.ElkSource.ElkSourceUrlRoot,
+			IntranetUrl:  setting.ElkSource.ElkSourceUrlIntranet,
 			IsDefault: false,
 			Database:  "[$_token-logstash-]YYYY.MM.DD",
 			JsonData:  simplejson.NewFromAny(map[string]interface{}{
@@ -141,9 +143,10 @@ func AddDatasourceFromConfig() {
 		if err := bus.Dispatch(&m.AddDataSourceCommand{
 			OrgId:     MAINORG_ID,
 			Name:      "alert",
-			Type:      m.DS_ALERT,
+			Type:      m.DS_CUSTOMDB,
 			Access:    m.DS_ACCESS_DIRECT,
 			Url:       setting.Alert.AlertUrlRoot,
+			IntranetUrl:  setting.Alert.AlertUrlIntranet,
 			IsDefault: false,
 		}); err != nil {
 			log.Fatal(3, "Could not add default datasource for OrgId 1 from config: %v", err)
@@ -153,9 +156,10 @@ func AddDatasourceFromConfig() {
 		if err := bus.Dispatch(&m.AddDataSourceCommand{
 			OrgId:     MAINORG_ID,
 			Name:      "download",
-			Type:      m.DS_DOWNLOAD,
+			Type:      m.DS_CUSTOMDB,
 			Access:    m.DS_ACCESS_DIRECT,
 			Url:       setting.Download.DownloadUrlRoot,
+			IntranetUrl:  setting.Download.DownloadUrlIntranet,
 			IsDefault: false,
 		}); err != nil {
 			log.Fatal(3, "Could not add default datasource for OrgId 1 from config: %v", err)
@@ -173,6 +177,7 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 		Type:      m.DS_OPENTSDB,
 		Access:    m.DS_ACCESS_DIRECT,
 		Url:       setting.DataSource.DataSourceUrlRoot,
+		IntranetUrl:  setting.DataSource.DataSourceUrlIntranet,
 		IsDefault: true,
 	}); err != nil {
 		log.Error(3, "Could not add default datasource from config: %v", err)
@@ -185,6 +190,7 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 		Type:      m.DS_ES,
 		Access:    m.DS_ACCESS_PROXY,
 		Url:       setting.ElkSource.ElkSourceUrlRoot,
+		IntranetUrl:  setting.ElkSource.ElkSourceUrlIntranet,
 		IsDefault: false,
 		Database:  "[$_token-logstash-]YYYY.MM.DD",
 		JsonData:  simplejson.NewFromAny(map[string]interface{}{
@@ -199,9 +205,10 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 	if err := bus.Dispatch(&m.AddDataSourceCommand{
 		OrgId:     orgId,
 		Name:      "alert",
-		Type:      m.DS_ALERT,
+		Type:      m.DS_CUSTOMDB,
 		Access:    m.DS_ACCESS_DIRECT,
 		Url:       setting.Alert.AlertUrlRoot,
+		IntranetUrl:  setting.Alert.AlertUrlIntranet,
 		IsDefault: false,
 	}); err != nil {
 		log.Fatal(3, "Could not add default datasource from config: %v", err)
@@ -211,9 +218,10 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 	if err := bus.Dispatch(&m.AddDataSourceCommand{
 		OrgId:     orgId,
 		Name:      "download",
-		Type:      m.DS_DOWNLOAD,
+		Type:      m.DS_CUSTOMDB,
 		Access:    m.DS_ACCESS_DIRECT,
 		Url:       setting.Download.DownloadUrlRoot,
+		IntranetUrl:  setting.Download.DownloadUrlIntranet,
 		IsDefault: false,
 	}); err != nil {
 		log.Fatal(3, "Could not add default datasource from config: %v", err)

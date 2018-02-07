@@ -83,19 +83,19 @@ export class TopologyGraphCtrl {
     private alertSrv,
     private $translate
   ) {
-    this.groupOptions = [{ text: $translate.i18n.i18n_empty, value: '' }];
+    this.groupOptions = [{ 'text': $translate.i18n.i18n_empty, 'value': '' }];
     this.filterOptions = [
-      { text: $translate.i18n.i18n_all, value: '' },
-      { text: $translate.i18n.i18n_normal, value: 'GREEN' },
-      { text: $translate.i18n.i18n_warning, value: 'YELLOW' },
-      { text: $translate.i18n.i18n_critical, value: 'RED' },
-      { text: $translate.i18n.i18n_breakdown, value: 'GREY' },
+      { 'text': $translate.i18n.i18n_all, 'value': '' },
+      { 'text': $translate.i18n.i18n_normal, 'value': 'GREEN' },
+      { 'text': $translate.i18n.i18n_warning, 'value': 'YELLOW' },
+      { 'text': $translate.i18n.i18n_critical, 'value': 'RED' },
+      { 'text': $translate.i18n.i18n_breakdown, 'value': 'GREY' }
     ];
     this.heatmap = d3.select('#heatmap');
 
     this.types = {
-      host: $translate.i18n.i18n_host,
-      service: $translate.i18n.i18n_service,
+      'host': $translate.i18n.i18n_host,
+      'service': $translate.i18n.i18n_service
     };
     !this.$scope.ctrl.type && (this.$scope.ctrl.type = 'host');
 

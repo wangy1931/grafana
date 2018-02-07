@@ -1,9 +1,9 @@
 
 @font-face {font-family: "iconfont";
-  src: url('../fonts/iconfont.eot?t=1517454284805'); /* IE9*/
-  src: url('../fonts/iconfont.eot?t=1517454284805#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('../fonts/iconfont.ttf?t=1517454284805') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('../fonts/iconfont.svg?t=1517454284805#iconfont') format('svg'); /* iOS 4.1- */
+  src: url('../fonts/iconfont.eot?t=1517975489910'); /* IE9*/
+  src: url('../fonts/iconfont.eot?t=1517975489910#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../fonts/iconfont.ttf?t=1517975489910') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('../fonts/iconfont.svg?t=1517975489910#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -127,3 +127,6 @@
 .fa-opentsdb:before { content: "\e612"; }
 
 .fa-zabbix:before { content: "\e614"; }
+
+.fa-sqlserver:before { content: "\e615"; }
+

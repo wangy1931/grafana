@@ -7,6 +7,7 @@ import 'angular-route';
 import 'angular-sanitize';
 import 'angular-native-dragdrop';
 import 'angular-bindonce';
+
 // import 'angular-animate';
 // import 'angular-ui';
 // import 'ui.calendar';
@@ -27,6 +28,9 @@ import 'vendor/jsPlumb/jsPlumbToolkit';
 
 // import 'vendor/quill/ng-quill';
 import 'vendor/angular-other/ng-table.min';
+
+import * as locale_en from 'app/core/i18n/en';
+import * as locale_zh_cn from 'app/core/i18n/zh_CN';
 
 import $ from 'jquery';
 import angular from 'angular';
@@ -69,11 +73,21 @@ export class GrafanaApp {
     locale = window.localStorage.getItem('CLOUDWIZ_LANG_KEY') || locale;
     moment.locale(locale);
 
+    var locale = config.bootData.user.locale;
+    /en/.test(locale) && (locale = 'en');
+    /zh/.test(locale) && (locale = 'zh_CN');
+
+    locale = window.localStorage.getItem('CLOUDWIZ_LANG_KEY') || locale;
+    moment.locale(locale);
+
+    // fullcalendar: 没有检测到英文, 均显示中文
+    if (!/en/.test(locale)) {
+      System.import('zh-cn')
+    }
+
     app.config(['$translateProvider', ($translateProvider) => {
-      $translateProvider.useStaticFilesLoader({
-        prefix: 'public/app/core/i18n/',
-        suffix: '.json'
-      });
+      $translateProvider.translations(locale, locale_en.default);
+      $translateProvider.translations(locale, locale_zh_cn.default);
       $translateProvider.determinePreferredLanguage().fallbackLanguage('zh_CN');
       $translateProvider.useLocalStorage();
     }]);

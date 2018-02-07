@@ -31,7 +31,7 @@
           <br>
           <p ng-if="pattern.result === ctrl.$translate.i18n.i18n_fail">{{pattern.result}}</p>
           <label class="multiline-label" ng-click="ctrl.selectMetric($event, pattern, key)" ng-if="pattern.result !== ctrl.$translate.i18n.i18n_fail" ng-repeat="(key, value) in pattern.result">
-            <input ng-if="pattern.isMetric" type="checkbox" name="pattern" ng-checked="_.has(pattern.fields, key);">{{key}}: {{value}}
+            <input ng-if="pattern.isMetric" type="checkbox" name="pattern" ng-checked="ctrl.checkeMetrics(pattern.fields, key);">{{key}}: {{value}}
           </label>
         </div>
       </div>

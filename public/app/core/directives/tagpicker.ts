@@ -39,7 +39,7 @@ export class TagPickerCtrl {
   curTagValue: string;
 
   /** @ngInject */
-  constructor(private $scope, private hostSrv, private alertSrv, private $translate) {
+  constructor(private $scope, private $timeout, private hostSrv, private alertSrv, private $translate) {
     this.getAllTags();
   }
 

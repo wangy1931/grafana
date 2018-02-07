@@ -13,8 +13,7 @@ const (
 	DS_INFLUXDB_08   = "influxdb_08"
 	DS_ES            = "elasticsearch"
 	DS_OPENTSDB      = "opentsdb"
-	DS_ALERT				 = "alert"
-	DS_DOWNLOAD			 = "download"
+	DS_CUSTOMDB			 = "customdb"
 	DS_CLOUDWATCH    = "cloudwatch"
 	DS_KAIROSDB      = "kairosdb"
 	DS_PROMETHEUS    = "prometheus"
@@ -38,6 +37,7 @@ type DataSource struct {
 	Type              string
 	Access            DsAccess
 	Url               string
+	IntranetUrl          string
 	Password          string
 	User              string
 	Database          string
@@ -61,8 +61,7 @@ var knownDatasourcePlugins map[string]bool = map[string]bool{
 	DS_CLOUDWATCH:  true,
 	DS_PROMETHEUS:  true,
 	DS_OPENTSDB:    true,
-	DS_ALERT:    		true,
-	DS_DOWNLOAD:		true,
+	DS_CUSTOMDB:		true,
 	"opennms":      true,
 	"druid":        true,
 	"dalmatinerdb": true,
@@ -84,6 +83,7 @@ type AddDataSourceCommand struct {
 	Type              string           `json:"type" binding:"Required"`
 	Access            DsAccess         `json:"access" binding:"Required"`
 	Url               string           `json:"url"`
+	IntranetUrl       string           `json:"intranetUrl"`
 	Password          string           `json:"password"`
 	Database          string           `json:"database"`
 	User              string           `json:"user"`
@@ -105,6 +105,7 @@ type UpdateDataSourceCommand struct {
 	Type              string           `json:"type" binding:"Required"`
 	Access            DsAccess         `json:"access" binding:"Required"`
 	Url               string           `json:"url"`
+	IntranetUrl       string           `json:"intranetUrl"`
 	Password          string           `json:"password"`
 	User              string           `json:"user"`
 	Database          string           `json:"database"`
