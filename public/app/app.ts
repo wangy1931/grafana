@@ -21,6 +21,9 @@ import 'jsPlumbToolkit';
 import 'ng-quill';
 import 'ng-table';
 
+import * as locale_en from 'app/core/i18n/en';
+import * as locale_zh_cn from 'app/core/i18n/zh_CN';
+
 import $ from 'jquery';
 import angular from 'angular';
 import config from 'app/core/config';
@@ -66,10 +69,8 @@ export class GrafanaApp {
     }
 
     app.config(['$translateProvider', ($translateProvider) => {
-      $translateProvider.useStaticFilesLoader({
-        prefix: 'public/app/core/i18n/',
-        suffix: '.json'
-      });
+      $translateProvider.translations(locale, locale_en.default);
+      $translateProvider.translations(locale, locale_zh_cn.default);
       $translateProvider.determinePreferredLanguage().fallbackLanguage('zh_CN');
       $translateProvider.useLocalStorage();
     }]);
