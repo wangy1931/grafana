@@ -488,12 +488,46 @@ define([
                     return longestWidth + (obj.__index - 1) * _this.configuration.blockSize + 5 + (_this._spacing * obj.__index - 1);
                 }).attr('y', function (obj) {
                     return (obj.__row - 1) * _this.configuration.blockSize + (_this._spacing * obj.__row - 1);
-                }).attr('rx', 4).attr('ry', 4).attr('class', 'relationshipGraph-block').attr('width', _this.configuration.blockSize).attr('height', _this.configuration.blockSize).style('fill', function (obj) {
+                }).attr('rx', 4).attr('ry', 4)
+                .attr('class', 'relationshipGraph-block')
+                .attr('width', _this.configuration.blockSize)
+                .attr('height', _this.configuration.blockSize).style('fill', function (obj) {
                     return obj.__colorValue;
-                }).style('cursor', _this.childPointer ? 'pointer' : 'default').on('mouseover', _this.tooltip ? _this.tooltip.show : RelationshipGraph.noop).on('mouseout', _this.tooltip ? _this.tooltip.hide : RelationshipGraph.noop)
+                })
+                .style('cursor', _this.childPointer ? 'pointer' : 'default')
+                .on('mouseover', _this.tooltip ? _this.tooltip.show : RelationshipGraph.noop)
+                .on('mouseout', _this.tooltip ? _this.tooltip.hide : RelationshipGraph.noop)
                 .on('click', function (obj) {
                     _this.tooltip.hide();
                     _this.configuration.onClick.child(obj);
+                });
+
+                // hard code.
+                childrenNodes.enter().append('image').attr('id', function (obj) {
+                    return 'image' + obj.__id;
+                }).attr('x', function (obj) {
+                    return obj._private_.icon && longestWidth + (obj.__index - 1) * _this.configuration.blockSize + 5 + (_this._spacing * obj.__index - 1) + (_this.configuration.blockSize * 1 / 10);
+                }).attr('y', function (obj) {
+                    return obj._private_.icon && (obj.__row - 1) * _this.configuration.blockSize + (_this._spacing * obj.__row - 1) + (_this.configuration.blockSize * 1 / 10);
+                })
+                .attr('rx', 4)
+                .attr('ry', 4)
+                .attr('class', 'relationshipGraph-block')
+                .attr('width', function (obj) {
+                    return obj._private_.icon && (_this.configuration.blockSize * 8 / 10);
+                })
+                .attr('height', function (obj) {
+                    return obj._private_.icon && (_this.configuration.blockSize * 8 / 10);
+                })
+                .style('cursor', _this.childPointer ? 'pointer' : 'default')
+                .on('mouseover', _this.tooltip ? _this.tooltip.show : RelationshipGraph.noop)
+                .on('mouseout', _this.tooltip ? _this.tooltip.hide : RelationshipGraph.noop)
+                .on('click', function (obj) {
+                    _this.tooltip.hide();
+                    _this.configuration.onClick.child(obj);
+                })
+                .attr('href', function (obj) {
+                    return obj._private_.icon;
                 });
             }
         }, {
@@ -509,6 +543,8 @@ define([
             value: function updateChildren(childrenNodes, longestWidth) {
                 var blockSize = this.configuration.blockSize;
                 var _this = this;
+
+                // childrenNodes.transition(this.configuration.transitionTime);
     
                 // noinspection JSUnresolvedFunction
                 childrenNodes.transition(this.configuration.transitionTime).attr('id', function (obj) {

@@ -29,15 +29,17 @@ export class BuildDependCtrl {
   loadInstalledServices() {
     return this.serviceDepSrv.readInstalledService().then(response => {
       var services = response.data;
-      var serviceIconMap = _.serviceIconMap();
+      // var serviceIconMap = _.serviceIconMap();
+      var resourceImgMap = _.resourceImgMap();
 
       _.each(services, (service) => {
+        var icon = resourceImgMap[service.name] || "Azure.svg"
         this.draggableTypes.push({
           id   : service.id,
           key  : service.name,
           label: service.name,
           type : "node",
-          icon : serviceIconMap[service.name] || "iconfont fa-default"
+          icon : `public/img/${icon}`
         });
       });
     });
@@ -150,12 +152,14 @@ export class BuildDependCtrl {
 
   dataGenerator(type, dragElement) {
     var $dragElement = angular.element(dragElement);
-    var serviceIconMap = _.serviceIconMap();
+    // var serviceIconMap = _.serviceIconMap();
+    var resourceImgMap = _.resourceImgMap();
     var serviceName = $dragElement.attr('data-node-key');
+    var icon = resourceImgMap[serviceName] || "Azure.svg"
     return {
       name: serviceName,
       id  : $dragElement.attr('data-node-id'),
-      icon: serviceIconMap[serviceName] || "iconfont fa-default"
+      icon: `public/img/${icon}`
     };
   }
 

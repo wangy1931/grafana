@@ -128,6 +128,29 @@ function ($, moment, kbn) {
     };
   }
 
+  _.resourceImgMap = function () {
+    return {
+      "Microsoft.Network/trafficmanagerprofiles": "AzureTrafficManager.svg",
+      "Microsoft.Web/serverFarms": "AzureWebApp.svg",
+      "Microsoft.Cache/Redis": "AzureCacheRedis.svg",
+      "Microsoft.ServiceBus/namespaces": "AzureServiceBus.svg",
+      "Microsoft.Storage/storageAccounts": "AzureStorageBlob.svg",
+      "Microsoft.Sql/servers": "AzureSQLDatabase.svg",
+      "Microsoft.Sql/servers/databases": "AzureSQLDatabase.svg",
+      "Microsoft.Web/sites": "AzureWebApp.svg",
+      "Microsoft.Network/applicationGateways": "AzureApplicationGateway.svg",
+      "web.application": "AzureWebApp.svg",
+      "server.farm": "AzureWebApp.svg",
+      "storage": "AzureStorageBlob.svg",
+      "storage.account": "AzureStorageBlob.svg",
+      "traffic.manager": "AzureTrafficManager.svg",
+      "application.gateway": "AzureApplicationGateway.svg",
+      "service.bus": "AzureServiceBus.svg",
+      "sqlserver": "AzureSQLDatabase.svg",
+      "sqlserver.database": "AzureSQLDatabase.svg"
+    }
+  }
+
   _.cmdbInitObj = function(obj) {
     if(_.isObject(obj)) {
       for(var i in obj) {

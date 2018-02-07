@@ -242,6 +242,8 @@ export class SystemOverviewCtrl {
         _.each(this.dependencies.nodes, node => {
           var q = this.getServiceStatus(node.id, node.name)
           .then(resp => {
+            var icon = _.resourceImgMap()[node.name] || 'Azure.svg';
+            node.icon = `public/img/${icon}`;// change icon for feichi azure
             node.status = resp.data.healthStatusType.toLowerCase();
 
             return resp;

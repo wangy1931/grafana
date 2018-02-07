@@ -62,8 +62,8 @@ export class ServiceTopologyCtrl {
     this.needNameTabs = [1, 4];
 
     this.topologyGraphParams = {
-      blockSize: 36,
-      spacing: 2,
+      blockSize: 66,
+      spacing: 10,
       maxChildCount: 10,
       showTooltip: true,
       showKeys: true,

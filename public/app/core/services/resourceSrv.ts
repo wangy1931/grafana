@@ -28,6 +28,8 @@ export class ResourceSrv {
     return this.backendSrv.alertD({url: '/integration/azure/resources'}).then(result => {
       this.list = result.data;
       this.list.forEach(item => {
+        var icon = _.resourceImgMap()[item.azureType] || 'Azure.svg';
+        item.icon = `public/img/${icon}`;
         item.type = item.azureType,
         item.group = item.resourceGroup.split('/').pop()
       });
@@ -47,6 +49,9 @@ export class ResourceSrv {
       this.topology = [];
 
       result.data.forEach(item => {
+        var icon = _.resourceImgMap()[item.azureType] || 'Azure.svg';
+        item.icon = `public/img/${icon}`;
+
         item.type = item.azureType;
         item.group = item.resourceGroup.split('/').pop();
 
@@ -86,6 +91,9 @@ export class ResourceSrv {
       this.topology = [];
 
       response.data.resources && response.data.resources.forEach(item => {
+        var icon = _.resourceImgMap()[item.azureType] || 'Azure.svg';
+        item.icon = `public/img/${icon}`;
+
         item.type = item.azureType;
         item.group = item.resourceGroup.split('/').pop();
 

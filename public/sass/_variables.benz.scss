@@ -444,6 +444,12 @@ input, select, .input, .select {
   .host-anomaly.host-tab-content {
     padding: 20px;
   }
+  .service-list {
+    table td img {
+      width: 30px;
+      height: 30px;
+    }
+  }
 }
 .tight-form-item {
   border: none !important;
