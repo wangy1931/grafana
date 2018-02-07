@@ -1,25 +1,22 @@
 <navbar text="配置管理库" icon="fa fa-fw fa-cubes">
-  <ul class="nav">
-      <li class="active"><a>{{ctrl.title}}服务</a></li>
-  </ul>
 </navbar>
 
 <div class="page-container">
-  <h2>添加{{ctrl.title}}服务</h2>
+  <h2><em translate="i18n_add"></em>{{ctrl.title}}<em translate="i18n_service"></em></h2>
 
   <table class="table">
     <tr>
-      <th>服务名称</th>
-      <th>操作系统</th>
-      <th>匹配规则</th>
-      <th>别名</th>
-      <th>操作</th>
+      <th translate="i18n_servicename"></th>
+      <th translate="i18n_os"></th>
+      <th translate="i18n_matching_rules"></th>
+      <th translate="i18n_alias"></th>
+      <th translate="i18n_operating"></th>
     </tr>
     <tr ng-repeat="software in ctrl.softwareList">
       <td>
         <span ng-if="ctrl.editIndex !== $index">{{software.name}}</span>
         <input style="width: 100%;" type="text"
-          placeholder="仅支持英文字母/数字/下划线/小数点"
+          placeholder="{{ ctrl.$translate.i18n.page_log_parse_input }}"
           ng-blur="ctrl.checkName(ctrl.editSoftware.name);"
           ng-if="ctrl.editIndex === $index"
           ng-model="ctrl.editSoftware.name">
@@ -36,31 +33,31 @@
       <td>
         <span class="software-command" bs-tooltip="'{{software.command}}'" data-placement="top" data-container="body" ng-if="ctrl.editIndex !== $index">{{software.command}}</span>
         <input style="width: 100%;" type="text"
-          placeholder="请根据下列进程信息输入匹配规则"
+          placeholder="{{ ctrl.$translate.i18n.page_custom_service_tip1 }}"
           ng-if="ctrl.editIndex === $index"
           ng-model="ctrl.editSoftware.command">
       </td>
       <td>
         <span class="software-command" bs-tooltip="'{{software.alias}}'" data-placement="top" data-container="body" ng-if="ctrl.editIndex !== $index">{{software.alias}}</span>
         <input style="width: 100%;" type="text"
-          placeholder="请输入服务别名"
+          placeholder="{{ ctrl.$translate.i18n.page_custom_service_tip2 }}"
           ng-if="ctrl.editIndex === $index"
           ng-model="ctrl.editSoftware.alias">
       </td>
       <td>
         <span ng-if="ctrl.editIndex !== $index">
-          <button class="btn btn-outline-secondary" ng-click="ctrl.getEditSoftware(software, $index)">编辑</button>
-          <button class="btn btn-outline-danger" ng-click="ctrl.deleteSoftware(software)">删除</button>
+          <button class="btn btn-outline-secondary" ng-click="ctrl.getEditSoftware(software, $index)" translate="i18n_edit"></button>
+          <button class="btn btn-outline-danger" ng-click="ctrl.deleteSoftware(software)" translate="i18n_delete"></button>
         </span>
         <span ng-if="ctrl.editIndex === $index">
-          <button class="btn btn-outline-success" ng-click="ctrl.addSoftware('save')">保存</button>
-          <button class="btn btn-outline-inverse" ng-click="ctrl.initEditSoftware('save')">取消</button>
+          <button class="btn btn-outline-success" ng-click="ctrl.addSoftware('save')" translate="i18n_save"></button>
+          <button class="btn btn-outline-inverse" ng-click="ctrl.initEditSoftware('save')" translate="i18n_cancel"></button>
         </span>
       </td>
     </tr>
     <tr>
       <td>
-        <input style="width: 100%;" type="text" placeholder="仅支持英文字母/数字/下划线/小数点"
+        <input style="width: 100%;" type="text" placeholder="{{ ctrl.$translate.i18n.page_log_parse_input }}"
         ng-model="ctrl.newSoftware.name" ng-blur="ctrl.checkName(ctrl.newSoftware.name);">
       </td>
       <td>
@@ -71,23 +68,24 @@
         </select>
       </td>
       <td>
-        <input style="width: 100%;" type="text" placeholder="请根据下列进程信息输入匹配规则" 
+        <input style="width: 100%;" type="text" placeholder="{{ ctrl.$translate.i18n.page_custom_service_tip1 }}" 
           ng-model="ctrl.newSoftware.command">
       </td>
       <td>
-        <input style="width: 100%;" type="text" placeholder="请根据服务别名" 
+        <input style="width: 100%;" type="text" placeholder="{{ ctrl.$translate.i18n.page_custom_service_tip2 }}" 
           ng-model="ctrl.newSoftware.alias">
       </td>
       <td>
-        <button class="btn btn-outline-success" ng-click="ctrl.addSoftware('add')">添加</button>
+        <button class="btn btn-outline-success" ng-click="ctrl.addSoftware('add')" translate="i18n_add"></button>
       </td>
     </tr> 
   </table>
 
   <div class="cmdb-reference" ng-show="!ctrl.isUnit">
-    <h2>参考信息
+    <h2>
+      <em translate="i18n_reference_information"></em>
       <span class="dropdown" style="color: #2962ff;">
-        <span ng-if="!ctrl.host.hostname">请选择机器</span>
+        <span ng-if="!ctrl.host.hostname" translate="i18n_choose"></span>
         <span class="dropdown-toggle pointer" data-toggle="dropdown">{{ctrl.host.hostname}} <i class="fa fa-caret-down" ng-if="ctrl.hostList.length > 1"></i></span>
         <ul class="dropdown-menu" ng-if="ctrl.hostList.length > 1">
             <li ng-repeat="host in ctrl.hostList"><a ng-click="ctrl.setHost(host)">{{host.hostname}}</a></li>
@@ -95,16 +93,16 @@
       </span>
       <form class="form-search cmdb-search" ng-submit="ctrl.applySearch()">
         <i class="fa fa-search"></i>
-        <input type="text" class="input-medium search-query" placeholder="搜索进程信息" ng-model="ctrl.searchCommand">
+        <input type="text" class="input-medium search-query" placeholder="{{ ctrl.$translate.i18n.i18n_search_info }}" ng-model="ctrl.searchCommand">
       </form>
     </h2>
     <div ng-if="ctrl.hostProcess.length">
       <table ng-table="ctrl.tableParams" class="table fixed-table-container table-no-bordered">
           <tr ng-repeat="row in $data">
-              <td data-title="'参考名称'" sortable="'name'">
+              <td data-title="ctrl.$translate.i18n.i18n_reference_name" sortable="'name'">
                   <div>{{ row.name }}</div>
               </td>
-              <td data-title="'进程信息'" sortable="'command'">
+              <td data-title="ctrl.$translate.i18n.page_service_process" sortable="'command'">
                   <div>{{ row.command }}</div>
               </td>
           </tr>

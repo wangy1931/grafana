@@ -10,7 +10,7 @@ var template = `
     <div class="popover-content">
       <a href="{{ item.href }}" ng-repeat="item in toolbarItems" class="toolbar-item {{ item.class }}" ng-click="item.clickHandler()">
         <i class="{{ item.icon }}"></i>
-        <p class="item-name">{{ item.itemname }}</p>
+        <p class="item-name">{{ item.itemname | translate }}</p>
       </a>
     </div>
   </div>
@@ -20,14 +20,17 @@ export class ToolbarCtrl {
   toolbarItems: any;
 
   /** @ngInject */
-  constructor(private $rootScope, private $scope, private popoverSrv, private backendSrv, private $q, private $location, private contextSrv) {
+  constructor(
+    private $rootScope, private $scope, private popoverSrv, private backendSrv, private $q,
+    private $location, private contextSrv, private $translate
+  ) {
     this.toolbarItems = {};
 
     this.toolbarItems[1] = [];
     this.toolbarItems[1].push({
       class: '',
       icon : 'fa fa-fw fa-book',
-      itemname: '运维知识库',
+      itemname: 'i18n_kb',
       href: '/knowledgebase',
       clickHandler: () => {},
     });
@@ -37,25 +40,11 @@ export class ToolbarCtrl {
       this.toolbarItems[2].push({
         class: '',
         icon : 'fa fa-fw fa-cloud-download',
-        itemname: '安装指南',
+        itemname: 'i18n_install_guide',
         href: '/setting/agent',
         clickHandler: () => {},
       });
     }
-
-    this.toolbarItems[2].push({
-      class: '',
-      icon: 'fa fa-fw fa-info-circle',
-      itemname: '使用指南',
-      href: 'javascript:;',
-      clickHandler: () => {
-        $rootScope.appEvent('show-modal', {
-          src: 'public/app/core/components/toolbar/guide_use.html',
-          modalClass: 'guide_use',
-          scope: $scope.$new(),
-        });
-      }
-    });
 
   }
 

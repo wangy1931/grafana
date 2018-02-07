@@ -44,7 +44,7 @@ export class LogsCtrl {
     this.tabs = [
       {
         "active": true,
-        "title": "日志搜索 1",
+        "title": $translate.i18n.page_logs_log_search + " 1",
         "id": 1,  // should be the same with panelMeta[0].id
       }
     ];
@@ -53,20 +53,20 @@ export class LogsCtrl {
     this.size = 500;
     this.timeShift = "-1d";
     this.logFilter = "";
-    this.currentRelativeTime = "1天以前";
-    this.currentFilter = "无";
+    this.currentRelativeTime = `1 ${$translate.i18n.i18n_day}${$translate.i18n.i18n_ago}`;
+    this.currentFilter = $translate.i18n.i18n_empty;
     this.resultCache = {};
     this.tabsCache = {};
     this.logsSelected = [];
 
     // 搜索框帮助
     this.queryInputOptions = [
-      { key: 'host:', helpInfo: '查询特定host日志 (例如: host:centos1)' },
-      { key: 'type:', helpInfo: '查询特定type日志 (例如: type:mysql)' },
-      { key: 'message:', helpInfo: '查询正则匹配的日志 (例如: message:/INFO/)' },
-      { key: 'AND', helpInfo: '联合查询' },
-      { key: 'OR', helpInfo: '联合查询' },
-      { key: 'NOT', helpInfo: '联合查询' }
+      { key: 'host:', helpInfo: $translate.i18n.page_logs_help_host },
+      { key: 'type:', helpInfo: $translate.i18n.page_logs_help_type },
+      { key: 'message:', helpInfo: $translate.i18n.page_logs_help_message },
+      { key: 'AND', helpInfo: $translate.i18n.page_logs_help_and },
+      { key: 'OR', helpInfo: $translate.i18n.page_logs_help_and },
+      { key: 'NOT', helpInfo: $translate.i18n.page_logs_help_and }
     ];
 
     this.textTitle = [];
@@ -167,9 +167,9 @@ export class LogsCtrl {
       "query": "",
       "size": "500",
       "timeShift": "-1d",
-      "currentRelativeTime": "1天以前",
+      "currentRelativeTime": `1 ${this.$translate.i18n.i18n_day}${this.$translate.i18n.i18n_ago}`,
       "logFilter": "",
-      "currentFilter": "无"
+      "currentFilter": this.$translate.i18n.i18n_empty
     });
 
     // reset for requesting dashboard
@@ -228,7 +228,7 @@ export class LogsCtrl {
     this.timeShift = timeShift;
     this.$scope.dashboard.rows[0].panels[2].targets[1].timeShift = timeShift;
     this.$rootScope.$broadcast('refresh', this.$scope.dashboard.rows[0].panels[2].id);
-    this.currentRelativeTime = timeShift.replace("-", "").replace("d", "天") + "以前";
+    this.currentRelativeTime = timeShift.replace("-", "").replace("d", this.$translate.i18n.i18n_day) + this.$translate.i18n.i18n_ago;
   }
 
   // tab: 日志对比 - 过滤条件
@@ -236,13 +236,13 @@ export class LogsCtrl {
     this.logFilter = rule;
     this.$scope.dashboard.rows[0].panels[2].scopedVars.logFilter = rule;
     this.$rootScope.$broadcast('refresh', this.$scope.dashboard.rows[0].panels[2].id);
-    this.currentFilter = rule === "" ? "无" : rule + "日志";
+    this.currentFilter = rule === "" ? this.$translate.i18n.i18n_empty : rule + this.$translate.i18n.i18n_menu_logs;
   }
 
   // tab: 日志对比 - 自定义对比时间
   showInputModal() {
     var newScope = this.$scope.$new();
-    newScope.logCompare = this.logCompare;
+    newScope.logCompare = this.logCompare.bind(this);
     newScope.shift = "-1d";
     this.$scope.appEvent('show-modal', {
       src: 'public/app/features/logs/partials/input_time_shift.html',
@@ -355,7 +355,7 @@ export class LogsCtrl {
     this.$scope.initDashboard({
       meta: {canStar: false, canShare: false, canEdit: false, canSave: false},
       dashboard: {
-        title: "日志全文搜索",
+        title: this.$translate.i18n.page_logs_title,
         id: "123",
         rows: [row],
         time: initTime,
@@ -370,7 +370,7 @@ export class LogsCtrl {
 
     this.tabs.push({
       "active": true,
-      "title": "日志搜索 " + this.$scope.dashboard.rows[0].id,
+      "title": this.$translate.page_logs_log_search + " " + this.$scope.dashboard.rows[0].id,
       "id": this.$scope.dashboard.rows[0].id
     });
   }
@@ -423,7 +423,7 @@ export class LogsCtrl {
     });
     newScope.addCause = (causeMetric, causeHost, confidenceLevel, reason, solution) => {
       if (!causeMetric || !causeHost || !reason) {
-        this.alertSrv.set("请输入完整内容", '', "warning", 2000);
+        this.alertSrv.set(this.$translate.i18n.i18n_input_full, '', "warning", 2000);
         return;
       }
 
@@ -433,7 +433,7 @@ export class LogsCtrl {
         triggerMetric: {
           name: prefix + causeMetric,
           host: causeHost,
-          solution: solution || '无'
+          solution: solution || this.$translate.i18n.i18n_empty
         },
         rootCauseMetrics: [{
           name: prefix + reason,
@@ -448,9 +448,9 @@ export class LogsCtrl {
       };
 
       this.alertMgrSrv.rcaFeedback(rcaFeedback).then(() => {
-        this.alertSrv.set("添加成功", '', "success", 2000);
+        this.alertSrv.set(this.$translate.i18n.i18n_success, '', "success", 2000);
       }, (err) => {
-        this.alertSrv.set("添加失败", err.data, "error", 2000);
+        this.alertSrv.set(this.$translate.i18n.i18n_fail, err.data, "error", 2000);
       });
     };
 

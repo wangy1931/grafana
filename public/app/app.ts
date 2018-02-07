@@ -11,6 +11,7 @@ import 'angular-bindonce';
 import 'angular-animate';
 import 'angular-ui';
 import 'ui.calendar';
+import 'fullcalendar';
 
 import 'angular-strap.tpl';
 import 'angular-strap-old';
@@ -24,6 +25,7 @@ import $ from 'jquery';
 import angular from 'angular';
 import config from 'app/core/config';
 import _ from 'lodash';
+import moment from 'moment';
 import {coreModule} from './core/core';
 
 export class GrafanaApp {
@@ -50,6 +52,18 @@ export class GrafanaApp {
   init() {
     var app = angular.module('grafana', ['mgcrea.ngStrap', 'ngAnimate', 'ngTable', 'cloudwiz.translate']);
     app.constant('grafanaVersion', "@grafanaVersion@");
+
+    var locale = config.bootData.user.locale;
+    /en/.test(locale) && (locale = 'en');
+    /zh/.test(locale) && (locale = 'zh_CN');
+
+    locale = window.localStorage.getItem('CLOUDWIZ_LANG_KEY') || locale;
+    moment.locale(locale);
+
+    // fullcalendar: 没有检测到英文, 均显示中文
+    if (!/en/.test(locale)) {
+      System.import('zh-cn')
+    }
 
     app.config(['$translateProvider', ($translateProvider) => {
       $translateProvider.useStaticFilesLoader({

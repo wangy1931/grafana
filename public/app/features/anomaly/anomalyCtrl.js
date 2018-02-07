@@ -52,15 +52,15 @@ define([
           $scope.pieData.anomalyPointPer = Math.round($scope.pieData.anomalyPointNum / dataPointNum * 100);
           if ($scope.checkZero([$scope.pieData.criticalMetricNum, $scope.pieData.criticalMetricNum, $scope.pieData.dangerMetricNum])) {
             var pieData = [
-              {label: "持续异常", data: 0},
-              {label: "临时异常", data: 0},
-              {label: "正常指标", data: 1},
+              {label: $translate.i18n.page_anomaly_critical_metrics, data: 0},
+              {label: $translate.i18n.page_anomaly_warning_metrics, data: 0},
+              {label: $translate.i18n.page_anomaly_normal_metrics, data: 1},
             ];
           } else {
             var pieData = [
-              {label: "持续异常", data: $scope.pieData.dangerMetricNum},
-              {label: "临时异常", data: $scope.pieData.criticalMetricNum},
-              {label: "正常指标", data: $scope.pieData.normalMetricNum},
+              {label: $translate.i18n.page_anomaly_critical_metrics, data: $scope.pieData.dangerMetricNum},
+              {label: $translate.i18n.page_anomaly_warning_metrics, data: $scope.pieData.criticalMetricNum},
+              {label: $translate.i18n.page_anomaly_normal_metrics, data: $scope.pieData.normalMetricNum},
             ];
           }
           $.plot("#anomaly-pie", pieData, {

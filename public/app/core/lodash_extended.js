@@ -91,16 +91,16 @@ function ($, moment, kbn) {
 
   _.getLeveal = function (score) {
     if (!_.isNumber(score) && _.isNaN(score) && _.isEmpty(score)) {
-      return "无";
+      return 'i18n_empty';
     }
     if (score > 75) {
-      return "优";
+      return "i18n_good";
     } else if (score > 50) {
-      return "良";
+      return "i18n_normal_level";
     } else if (score > 25) {
-      return "中";
+      return "i18n_unhealth";
     } else {
-      return "差";
+      return "i18n_bad";
     }
   };
 
@@ -135,7 +135,7 @@ function ($, moment, kbn) {
           if(/^(memory|hosts|interfaces|devices|services)$/.test(i)) {
             obj[i] = null;
           } else {
-            obj[i] = '暂无信息';
+            obj[i] = ' - ';
           }
         };
         if(_.isObject(obj[i])) {
@@ -169,19 +169,19 @@ function ($, moment, kbn) {
   // Translate
   _.translateAlertLevel = function (value) {
     var map = {
-      "CRITICAL": "严重",
-      "WARNING" : "警告",
-      "NORMAL"  : "正常"
+      "CRITICAL": "i18n_critical",
+      "WARNING" : "i18n_warning",
+      "NORMAL"  : "i18n_normal"
     };
     return value && map[value];
   };
 
   _.statusFormatter = function (value) {
     if (_.isNumber(value)) {
-      return value === 0 ? '正常' : '异常';
+      return value === 0 ? 'i18n_normal' : 'i18n_unnormal';
     }
     if (_.isString(value)) {
-      return value === 'GREEN' ? '正常' : (value === 'YELLOW' ? '警告' : (value === 'RED' ? '严重' : '异常'));
+      return value === 'GREEN' ? 'i18n_normal' : (value === 'YELLOW' ? 'i18n_warning' : (value === 'RED' ? 'i18n_critical' : 'i18n_unnormal'));
     }
   };
 

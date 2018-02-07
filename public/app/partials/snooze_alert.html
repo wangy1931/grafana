@@ -2,8 +2,7 @@
   <a class="modal-close" ng-click="dismiss();">
     <i class="fa fa-remove"></i>
   </a>
-  <h3>
-    延迟报警时间
+  <h3 translate="page_alert_delay">
   </h3>
   <form>
     <div style="display: inline-block">
@@ -22,8 +21,8 @@
       </div>
 
       <div class="" style="margin-top: 30px; margin-bottom: 20px;">
-        <button type="button" class="btn btn-inverse" ng-click="dismiss()">取消</button>
-        <button type="submit" class="btn btn-success" ng-click="ctrl.snooze()">延迟报警</button>
+        <button type="button" class="btn btn-inverse" ng-click="dismiss()" translate="i18n_cancel"></button>
+        <button type="submit" class="btn btn-success" ng-click="ctrl.snooze()" translate="i18n_confirm"></button>
       </div>
     </div>
   </form>

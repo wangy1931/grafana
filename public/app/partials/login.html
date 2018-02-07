@@ -2,18 +2,18 @@
 	<div ng-include="'public/app/partials/login_header.html'"></div>
 	<section class="login-inner-content">
 		<form name="loginForm" class="login-form login-content-form">
-			<label>登录名：</label>
-			<input type="text" name="username" required ng-model="formModel.user" placeholder="邮箱／用户名" />
+			<label><em translate="i18n_login_name"></em>：</label>
+			<input type="text" name="username" required ng-model="formModel.user" placeholder="{{ 'i18n_email_username' | translate }}" />
 
-			<label>密码：<a href="user/password/send-reset-email" class="pull-right" tabindex="-1">忘记密码？</a></label>
+			<label><em translate="page_profile_pwd"></em>：<a href="user/password/send-reset-email" class="pull-right" tabindex="-1"><em translate="i18n_forget_pwd"></em>？</a></label>
 			<div class="clearfix"></div>
 			<input type="password" name="password" required ng-model="formModel.password" id="inputPassword" />
 
 			<div class="btn-login-box">
-				<button type="submit" class="btn-link-login btn-login" ng-click="submit();">登录</button>
+				<button type="submit" class="btn-link-login btn-login" ng-click="submit();" translate="i18n_menu_login"></button>
 			</div>
 
-			<span class="help-block go-register">还没有用户名？<a href="signupfree" class="btn-link-login">免费注册</a></span>
+			<span class="help-block go-register"><em translate="i18n_no_username"></em>？<a href="signupfree" class="btn-link-login" translate="i18n_signup_free"></a></span>
 
 		</form>
 	</section>

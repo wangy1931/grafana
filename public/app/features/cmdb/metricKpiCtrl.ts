@@ -20,7 +20,8 @@ export class MetricKpiCtrl {
     private datasourceSrv,
     private $controller,
     private $q,
-    private contextSrv
+    private contextSrv,
+    private $translate
   ) {
     this.getService();
     this.$controller('OpenTSDBQueryCtrl', {$scope: this.$scope});
@@ -78,11 +79,11 @@ export class MetricKpiCtrl {
       this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限删除KPI']);
     } else {
       this.$scope.appEvent('confirm-modal', {
-        title: '删除',
-        text: '您确定要删除该KPI吗？',
+        title: this.$translate.i18n.i18n_delete,
+        text: this.$translate.i18n.i18n_sure_operator,
         icon: 'fa-trash',
-        yesText: '删除',
-        noText: '取消',
+        yesText: this.$translate.i18n.i18n_delete,
+        noText: this.$translate.i18n.i18n_cancel,
         onConfirm: () => {
           this.backendSrv.editKpi({
             service: service.name,

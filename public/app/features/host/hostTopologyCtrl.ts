@@ -43,7 +43,8 @@ export class HostTopologyCtrl {
     private $location,
     private NgTableParams,
     private alertSrv,
-    private $translate
+    private $translate,
+    private $timeout
   ) {
     $scope.ctrl = this;
     $scope.refresh_interval = '30s';
@@ -157,9 +158,14 @@ export class HostTopologyCtrl {
     var elem = _.find(this.data, data => {
       return data._private_.id === node.id;
     });
+
     // ignore .delete button
-    if (!$($event.target).hasClass('btn')) {
+    if (!$($event.target).hasClass('del-btn')) {
       this.currentHost = elem;
+      this.$timeout(() => {
+        this.tabs[1].active = true;
+        this.switchTab(1);
+      }, 100);
     }
   }
 
@@ -232,7 +238,13 @@ export class HostTopologyCtrl {
       this.predictionPanel[type].title = titleMap[type];
 
       this.backendSrv.getPredictionPercentage(params).then(response => {
-        var times = ['1天后', '1周后', '1月后', '3月后', '6月后'];
+        var times = [
+          this.$translate.i18n.i18n_day_after_1,
+          this.$translate.i18n.i18n_week_after_1,
+          this.$translate.i18n.i18n_month_after_1,
+          this.$translate.i18n.i18n_month_after_3,
+          this.$translate.i18n.i18n_month_after_6
+        ];
         var num   = 0;
         var data  = response.data;
 
@@ -266,7 +278,7 @@ export class HostTopologyCtrl {
           this.predictionPanel[key].selected = kbn.valueFormats.percent(score, 2);
         });
       }).catch(() => {
-        this.predictionPanel[type].errTip = '暂无预测数据';
+        this.predictionPanel[type].errTip = this.$translate.i18n.i18n_empty_tmp;
       });
     });
   }
@@ -310,7 +322,7 @@ export class HostTopologyCtrl {
 
   removeTag(tag) {
     if (this.contextSrv.isViewer) {
-      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_sorry, this.$translate.i18n.i18n_no_authority]);
       return;
     }
     _.remove(this.$scope.tags, tag);
@@ -396,24 +408,24 @@ export class HostTopologyCtrl {
     $event.preventDefault();
 
     this.$scope.appEvent('confirm-modal', {
-      title: '删除',
-      text: '您确认要删除该机器吗？',
+      title: this.$translate.i18n.i18n_delete,
+      text: this.$translate.i18n.i18n_sure_operator,
       icon: 'fa-trash',
-      yesText: '删除',
-      noText: '取消',
+      yesText: this.$translate.i18n.i18n_delete,
+      noText: this.$translate.i18n.i18n_cancel,
       onConfirm: () => {
         this.backendSrv.alertD({
           method: 'DELETE',
           url   : '/host',
           params: { 'id': hostId }
         }).then(() => {
-          this.alertSrv.set("删除成功", '', "success", 2000);
+          this.alertSrv.set(this.$translate.i18n.i18n_success, '', "success", 2000);
           _.remove(this.hostSummary, { id: hostId });
           this.$scope.$broadcast('topology-update', _.filter(this.data, (item) => {
             return item._private_.id !== hostId;
           }));
         }, (err) => {
-          this.alertSrv.set("删除失败", err.data, "error", 2000);
+          this.alertSrv.set(this.$translate.i18n.i18n_fail, err.data, "error", 2000);
         });
       }
     });

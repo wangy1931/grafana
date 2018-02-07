@@ -9,7 +9,7 @@ export class HostSrv {
   hostInfo: Array<any>;
 
   /** @ngInject */
-  constructor(private $http, private backendSrv) {
+  constructor(private $http, private backendSrv, private $translate) {
   }
 
   // Host Tags
@@ -192,7 +192,7 @@ export class HostSrv {
         this.hostInfo.push({
           "host": item.hostname,
           "id": item.id,
-          "status": _.statusFormatter(item["collector.state"]),
+          "status": this.$translate.i18n[_.statusFormatter(item["collector.state"])],
           "disk": _.percentFormatter(item["df.bytes.percentused"]),
           "cpu": _.percentFormatter(item["cpu.usr"]),
           "mem": _.percentFormatter(item["proc.meminfo.percentused"]),

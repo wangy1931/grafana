@@ -81,7 +81,7 @@ $summary-border-color: $body-bg; // #ECEFF1;
       justify-content: center;
       padding: 5px 0;
       span:after {
-        content: '个';
+        // content: '个';
         font-size: 14px;
       }
       span.status-green:after {
@@ -116,7 +116,7 @@ $summary-border-color: $body-bg; // #ECEFF1;
         width: 50%;
         text-align: center;
         a span:after {
-          content: '个';
+          // content: '个';
           font-size: 14px;
         }
       }

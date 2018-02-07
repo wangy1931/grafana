@@ -20,7 +20,9 @@ function (angular, $, config, moment) {
       unsavedChangesSrv,
       dashboardViewStateSrv,
       contextSrv,
-      $timeout) {
+      $timeout,
+      $translate
+    ) {
 
     $scope.editor = { index: 0 };
     $scope.panels = config.panels;
@@ -63,7 +65,7 @@ function (angular, $, config, moment) {
         $scope.appEvent("dashboard-loaded", $scope.dashboard);
       }).catch(function(err) {
         if (err.data && err.data.message) { err.message = err.data.message; }
-        $scope.appEvent("alert-error", ['仪表盘初始化失败', '模板不能被正常的初始化: ' + err.message]);
+        $scope.appEvent("alert-error", [$translate.i18n.page_dash_init_err, $translate.i18n.page_dash_err_tip2 + ': ' + err.message]);
       });
     };
 

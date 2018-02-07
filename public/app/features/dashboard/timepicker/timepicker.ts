@@ -26,7 +26,7 @@ export class TimePickerCtrl {
   isUtc: boolean;
 
   /** @ngInject */
-  constructor(private $scope, private $rootScope, private timeSrv) {
+  constructor(private $scope, private $rootScope, private timeSrv, private $translate) {
     $scope.ctrl = this;
 
     $rootScope.onAppEvent('zoom-out', () => this.zoom(2), $scope);
@@ -61,7 +61,7 @@ export class TimePickerCtrl {
 
     this.rangeString = rangeUtil.describeTimeRange(timeRaw);
     this.absolute = {fromJs: time.from.toDate(), toJs: time.to.toDate()};
-    this.tooltip = this.dashboard.formatDate(time.from) + ' 至 ';
+    this.tooltip = this.dashboard.formatDate(time.from) + ` ${this.$translate.i18n.i18n_to} `;
     this.tooltip += this.dashboard.formatDate(time.to);
 
     // do not update time raw when dropdown is open

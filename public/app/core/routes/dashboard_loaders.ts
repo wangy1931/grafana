@@ -32,10 +32,10 @@ export class DashFromImportCtrl {
   /** @ngInject */
   constructor(
     private $scope, private $location,
-    private alertSrv
+    private alertSrv, private $translate
   ) {
     if (!window.grafanaImportDashboard) {
-      alertSrv.set('抱歉', '不能在没有保存的情况下刷新页面', 'warning', 7000);
+      alertSrv.set($translate.i18n_sorry, $translate.page_dash_err_tip1, 'warning', 7000);
       $location.path('');
       return;
     }
@@ -52,7 +52,7 @@ export class NewDashboardCtrl {
   constructor(
     private $scope, private $routeParams
   ) {
-    var newTitle = $routeParams.title || "新的仪表盘";
+    var newTitle = $routeParams.title || "new dashboard";
     var newSystem = $routeParams.system;
 
     $scope.initDashboard({

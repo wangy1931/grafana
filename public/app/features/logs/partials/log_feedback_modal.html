@@ -2,27 +2,26 @@
 
   <div class="modal-body" style="overflow-x: hidden;">
   
-    <h3>
-      故障溯源关系添加
+    <h3 translate="page_logs_add_source">
     </h3>
   
     <form class="gf-form-group ng-pristine ng-valid">
       <div class="gf-form-section-modal">
-        <h3 class="page-heading">故障现象</h3>
+        <h3 class="page-heading" translate="page_rca_err"></h3>
         <div class="gf-form-inline">
           <div class="gf-form max-width-28">
-            <span class="gf-form-label width-9">现象指标</span>
+            <span class="gf-form-label width-9" translate="page_rca_err_metric"></span>
             <input type="text" class="gf-form-input" ng-model="causeMetric" required bs-typeahead-old="suggestMetrics"/>
           </div>
           <div class="gf-form max-width-28">
-            <span class="gf-form-label width-9">现象机器</span>
+            <span class="gf-form-label width-9" translate="page_alert_host"></span>
             <input type="text" class="gf-form-input" ng-model="causeHost" required bs-typeahead-old="suggestTagHost"/>
           </div>
         </div>
       </div>
   
       <div class="gf-form-section-modal">
-        <h3 class="page-heading">故障原因</h3>
+        <h3 class="page-heading" translate="page_rca_err_reason"></h3>
         <div class="gf-form-inline">
           <div class="gf-form" style="overflow-x: scroll;">
             <table class="table">
@@ -44,35 +43,35 @@
       <div class="gf-form-section-modal">
         <div class="gf-form-inline">
           <div class="gf-form max-width-28">
-            <span class="gf-form-label width-9">确认程度</span>
+            <span class="gf-form-label width-9" translate="page_rca_confidence_level"></span>
             <label class="gf-form-inline">
               <input class="gf-form-input" type="radio" name="confident" value="100" ng-model="confidenceLevel"/>
-              <span class="gf-form-label gf-form-label-radio">非常确定</span>
+              <span class="gf-form-label gf-form-label-radio" translate="page_rca_confidence_sure"></span>
             </label>
             <label class="gf-form-inline">
               <input class="gf-form-input" type="radio" name="confident" value="50" ng-model="confidenceLevel"/>
-              <span class="gf-form-label gf-form-label-radio">可能</span>
+              <span class="gf-form-label gf-form-label-radio" translate="page_rca_confidence_maybe"></span>
             </label>
           </div>
         </div>
       </div>
 
       <div class="gf-form-section-modal">
-        <h3 class="page-heading">日志原因概述：<span>（将作为故障溯源的结点名称）</span></h3>
+        <h3 class="page-heading"><em translate="page_rca_log_reason_desc"></em>：<span>（<em translate="page_rca_log_reason_tip"></em>）</span></h3>
         <div class="gf-form-inline">
           <input type="text" ng-model="reason" style="width: 100%;" maxlength="30" required />
         </div>
       </div>
 
       <div class="gf-form-section-modal">
-        <h3 class="page-heading">故障解决方案：</h3>
+        <h3 class="page-heading"><em translate="page_rca_err_solution"></em>：</h3>
         <div class="gf-form-inline">
           <textarea ng-model="solution" style="width: 100%;"></textarea>
         </div>
       </div>
   
       <div class="gf-form-button-row">
-        <button type="button" class="btn btn-success" ng-click="addCause(causeMetric, causeHost, confidenceLevel, reason, solution);$hide();">提交</button>
+        <button type="button" class="btn btn-success" ng-click="addCause(causeMetric, causeHost, confidenceLevel, reason, solution);$hide();" translate="i18n_confirm"></button>
       </div>
     </form>
   </div>

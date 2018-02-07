@@ -16,16 +16,16 @@ export class LogContextCtrl {
 
   /** @ngInject */
   constructor (
-    private $scope, private $controller,
+    private $scope, private $controller, private $translate,
     private contextSrv, private alertMgrSrv, private datasourceSrv
   ) {
     this.timeOptions = [
-      { name: '5秒', value: 5 },
-      { name: '10秒', value: 10 },
-      { name: '30秒', value: 30 },
-      { name: '1分钟', value: 60 },
-      { name: '2分钟', value: 120 },
-      { name: '5分钟', value: 300 }
+      { name: `5${$translate.i18n.i18n_second}`, value: 5 },
+      { name: `10${$translate.i18n.i18n_second}`, value: 10 },
+      { name: `30${$translate.i18n.i18n_second}`, value: 30 },
+      { name: `1${$translate.i18n.i18n_minute}`, value: 60 },
+      { name: `2${$translate.i18n.i18n_minute}`, value: 120 },
+      { name: `5${$translate.i18n.i18n_minute}`, value: 300 }
     ];
     this.timeSelected = this.timeOptions[0];
     this.originRow = this.$scope.$parent.$parent.originRow;

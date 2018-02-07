@@ -5,6 +5,8 @@ import $ from 'jquery';
 import moment from 'moment';
 import coreModule from 'app/core/core_module';
 
+var custom_metric;
+
 export class TreeMenuCtrl {
   isAssociation: boolean;
   isOpen: boolean;
@@ -20,12 +22,15 @@ export class TreeMenuCtrl {
   limitTime: number;
 
   /** @ngInject */
-  constructor(private $scope, private associationSrv,
+  constructor(
+    private $scope, private associationSrv,
     private $rootScope, private $timeout,
     private $controller, private backendSrv,
     private contextSrv, private healthSrv,
-    private alertMgrSrv, private timeSrv
+    private alertMgrSrv, private timeSrv,
+    private $translate
   ) {
+    custom_metric = this.$translate.i18n.page_metrics_custom;
     this.isOpen = false;
     this.isLoding = true;
     this.groupType = 'metrics';
@@ -165,14 +170,14 @@ export class TreeMenuCtrl {
     target.metric = this.prox + target.metric;
     var custom = null;
     if (this.groupType === 'metrics') {
-      (!this.correlationMetrics['自定义指标']) && (this.correlationMetrics['自定义指标'] = {});
-      custom = this.correlationMetrics['自定义指标'];
+      (!this.correlationMetrics[custom_metric]) && (this.correlationMetrics[custom_metric] = {});
+      custom = this.correlationMetrics[custom_metric];
       var key = target.metric;
       var value = target.host;
       var type = 'hosts';
     } else {
-      (!this.correlationHosts['自定义指标']) && (this.correlationHosts['自定义指标'] = {});
-      custom = this.correlationHosts['自定义指标'];
+      (!this.correlationHosts['']) && (this.correlationHosts[custom_metric] = {});
+      custom = this.correlationHosts[custom_metric];
       key = target.host;
       value = target.metric;
       type = 'metrics';
@@ -196,7 +201,7 @@ export class TreeMenuCtrl {
   }
 
   addQuery(event, metric, host, otherMetric?) {
-    if (host === '自定义指标' && this.groupType === 'hosts') {
+    if (host === custom_metric && this.groupType === 'hosts') {
       host = otherMetric;
     }
     if (this.checkSource(this.prox + metric, host)) {
@@ -311,10 +316,10 @@ export class TreeMenuCtrl {
       return;
     }
     this.$scope.appEvent('confirm-modal', {
-      title: '确定',
-      text: '您确定要重新计算关联指标吗？\n该计算过程可能较长,请耐心等待',
-      yesText: '确定',
-      noText: '取消',
+      title: this.$translate.i18n.i18n_confirm,
+      text: this.$translate.i18n.page_association_info4,
+      yesText: this.$translate.i18n.i18n_confirm,
+      noText: this.$translate.i18n.i18n_cancel,
       onConfirm: () => {
         this.timeRange.from = start;
         this.timeRange.to = end;

@@ -101,4 +101,9 @@ func addDataSourceMigration(mg *Migrator) {
 	mg.AddMigration("Add column with_credentials", NewAddColumnMigration(tableV2, &Column{
 		Name: "with_credentials", Type: DB_Bool, Nullable: false, Default: "0",
 	}))
+
+	// add column to activate intranetUrl option
+	mg.AddMigration("Add column intranet_url", NewAddColumnMigration(tableV2, &Column{
+		Name: "intranet_url", Type: DB_NVarchar, Length: 255, Nullable: true,
+	}))
 }

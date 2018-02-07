@@ -4,29 +4,28 @@
     <i class="fa fa-remove"></i>
   </a>
 
-  <h3>
-    修改不参与健康值计算指标
+  <h3 translate="page_excluded_title">
   </h3>
 
   <form>
     <div style="display: inline-block">
       <table class="grafana-options-table ng-scope">
         <tr>
-          <td>指标名称</td>
-          <td>操作</td>
+          <td translate="i18n_metric_name"></td>
+          <td translate="i18n_operating"></td>
         </tr>
         <tr ng-repeat="anomalyDef in excludeMetricsData">
-          <td>{{_.getMetricName(anomalyDef.metric)}} 主机名:{{anomalyDef.host}}</td>
+          <td>{{_.getMetricName(anomalyDef.metric)}} <em translate="page_alert_host"></em>:{{anomalyDef.host}}</td>
           <td>
             <a ng-click="include(anomalyDef)" class="btn btn-inverse btn-mini">
               <i class="fa fa-check"></i>
-              参与计算
+              <em translate="page_anomaly_calculate"></em>
             </a>
           </td>
         </tr>
       </table>
       <div class="" style="margin-top: 30px; margin-bottom: 20px;">
-        <button type="button" class="btn btn-inverse" ng-click="dismiss()">取消</button>
+        <button type="button" class="btn btn-inverse" ng-click="dismiss()" translate="i18n_cancel"></button>
       </div>
     </div>
   </form>

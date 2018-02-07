@@ -22,7 +22,7 @@ export class LogParseEditCtrl {
   /** @ngInject */
   constructor(private $scope, private contextSrv,
     private $routeParams, private logParseSrv,
-    private $location, private $interval) {
+    private $location, private $interval, private $translate) {
     this.logParseSrv.getHostList().then((result) => {
       this.hostList = result.data;
       return this.getServiceList();
@@ -52,10 +52,10 @@ export class LogParseEditCtrl {
     this.steps = ['page_logs_step1', 'page_logs_step2', 'page_logs_step3', 'page_logs_step4'];
 
     this.logStatus = {
-      '0': {txt: '校验日志中...', icon: 'fa fa-spinner fa-spin', class: 'log-stat0'},
-      '1': {txt: 'log文件存在并持续更新中...', icon: 'fa fa-check', class: 'log-stat1'},
-      '-1': {txt: 'log文件不存在', icon: 'fa fa-times', class: 'log-stat-1'},
-      '2': {txt: 'log文件存在,但最近5分钟没有值', icon: 'fa fa-exclamation-triangle', class: 'log-stat2'},
+      '0': {txt: $translate.i18n.page_log_status0, icon: 'fa fa-spinner fa-spin', class: 'log-stat0'},
+      '1': {txt: $translate.i18n.page_log_status1, icon: 'fa fa-check', class: 'log-stat1'},
+      '-1': {txt: $translate.i18n.page_log_status01, icon: 'fa fa-times', class: 'log-stat-1'},
+      '2': {txt: $translate.i18n.page_log_status2, icon: 'fa fa-exclamation-triangle', class: 'log-stat2'},
     }
     $scope.$on("$destroy", () => {
       if (this.inter) {
@@ -65,12 +65,12 @@ export class LogParseEditCtrl {
   }
 
   getTemplate(logServiceName, logType?) {
-    if (_.isEqual(logServiceName, '其他')) {
-      this.rule.logType = '其他';
-      this.rule.logTypes = ['其他'];
+    if (_.isEqual(logServiceName, this.$translate.i18n.i18n_other)) {
+      this.rule.logType = this.$translate.i18n.i18n_other;
+      this.rule.logTypes = [this.$translate.i18n.i18n_other];
       return;
     }
-    if (_.isEqual(logType, '其他')) {
+    if (_.isEqual(logType, this.$translate.i18n.i18n_other)) {
       return;
     } else {
       this.custom.logType = '';
@@ -84,12 +84,12 @@ export class LogParseEditCtrl {
     this.logParseSrv.getTemplate(params).then((response)=>{
       var tmp = response.data;
       if (_.isEmpty(tmp)) {
-        this.rule.logTypes = ['其他'];
-        this.rule.logType = '其他';
+        this.rule.logTypes = [this.$translate.i18n.i18n_other];
+        this.rule.logType = this.$translate.i18n.i18n_other;
       } else {
         this.rule.logTypes = tmp[0].logTypes || [];
         this.rule.logType = logType || this.rule.logTypes[0];
-        this.rule.logTypes.push('其他');
+        this.rule.logTypes.push(this.$translate.i18n.i18n_other);
       }
     });
   }
@@ -104,14 +104,14 @@ export class LogParseEditCtrl {
         host && this.rule.hosts.push(host);
       });
       this.rule.logTypes = this.rule.logTypes || [];
-      this.rule.logTypes.push('其他');
+      this.rule.logTypes.push(this.$translate.i18n.i18n_other);
       if (_.findIndex(this.serviceList, {name: this.rule.logServiceName}) === -1) {
         this.custom.logServiceName = this.rule.logServiceName;
-        this.rule.logServiceName = '其他';
+        this.rule.logServiceName = this.$translate.i18n.i18n_other;
       }
       if (_.indexOf(this.rule.logTypes, this.rule.logType) === -1) {
         this.custom.logType = this.rule.logType;
-        this.rule.logType = '其他';
+        this.rule.logType = this.$translate.i18n.i18n_other;
       }
     });
   }
@@ -119,29 +119,29 @@ export class LogParseEditCtrl {
   getServiceList() {
     return this.logParseSrv.getServiceList().then((result) => {
       this.serviceList = result.data;
-      this.serviceList.push({name: '其他'});
+      this.serviceList.push({name: this.$translate.i18n.i18n_other});
     });
   }
 
   addLogPath() {
     if (this.checkInput(this.newPath, 'logPath')) {
       if (_.includes(this.rule.paths, this.newPath)) {
-        this.$scope.appEvent('alert-warning', [this.newPath + '已存在', '请勿重复添加']);
+        this.$scope.appEvent('alert-warning', [this.newPath + this.$translate.i18n.i18n_existed, this.$translate.i18n.i18n_not_repeat]);
       } else {
         this.rule.paths.push(this.newPath);
         this.newPath = '';
       }
     } else {
-      this.$scope.appEvent('alert-warning', ['日志路径不合法', '请检查输入']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_input_invalid]);
     }
   }
 
   deleteLog(path) {
     this.$scope.appEvent('confirm-modal', {
-      title: '删除',
-      text: '您确定要删除该日志吗?',
-      yesText: '确定',
-      noText: '取消',
+      title: this.$translate.i18n.i18n_delete,
+      text: this.$translate.i18n.i18n_sure_operator,
+      yesText: this.$translate.i18n.i18n_confirm,
+      noText: this.$translate.i18n.i18n_cancel,
       onConfirm: () => {
         _.remove(this.rule.paths, (p) => {
           return _.isEqual(p, path);
@@ -153,10 +153,10 @@ export class LogParseEditCtrl {
   editPattren(pattern?) {
     if (!pattern && this.rule.patterns.length >= 2) {
       this.$scope.appEvent('confirm-modal', {
-        title: '抱歉',
-        text: '您最多只能添加两条解析规则',
-        yesText: '确定',
-        noText: '取消'
+        title: this.$translate.i18n.i18n_sorry,
+        text: this.$translate.i18n.page_log_parse_maxed,
+        yesText: this.$translate.i18n.i18n_confirm,
+        noText: this.$translate.i18n.i18n_cancel
       });
     } else {
       var newScope = this.$scope.$new();
@@ -210,17 +210,17 @@ export class LogParseEditCtrl {
     this.logParseSrv.validatePattern(pattern).then((res)=>{
       pattern.result = res.data;
     }, (err) => {
-      pattern.result = '规则解析失败';
+      pattern.result = this.$translate.i18n.i18n_fail;
     });
   }
 
   savePattern(oldPattern, pattern, isNew, dismiss) {
     if (!this.checkInput(pattern.name, 'parseName')) {
-      this.$scope.appEvent('alert-warning', ['解析器名称格式错误']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.page_log_format_error]);
       return;
     }
-    if (!pattern.result || pattern.result === '规则解析失败') {
-      this.$scope.appEvent('alert-warning', ['请测试正确的解析规则']);
+    if (!pattern.result || pattern.result === this.$translate.i18n.i18n_fail) {
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.page_log_format_test]);
       return;
     }
     if (isNew) {
@@ -229,29 +229,29 @@ export class LogParseEditCtrl {
       var index = _.findIndex(this.rule.patterns, oldPattern);
       this.rule.patterns[index] = _.cloneDeep(pattern);
     }
-    this.$scope.appEvent('alert-success', ['保存成功', '请点击“保存”按钮保存该操作']);
+    this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success, this.$translate.i18n.page_log_parse_save_tip]);
     dismiss();
   }
 
   deletePattern(pattern) {
     this.$scope.appEvent('confirm-modal', {
-      title: '删除',
+      title: this.$translate.i18n.i18n_delete,
       icon: 'fa-trash',
-      text: '您确定要删除该解析器吗？',
-      yesText: '确定',
-      noText: '取消',
+      text: this.$translate.i18n.i18n_sure_operator,
+      yesText: this.$translate.i18n.i18n_confirm,
+      noText: this.$translate.i18n.i18n_cancel,
       onConfirm: ()=>{
         _.remove(this.rule.patterns, (pat) => {
           return _.isEqual(pat, pattern);
         });
-        this.$scope.appEvent('alert-success', ['删除成功', '请点击“保存”按钮保存该操作']);
+        this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success, this.$translate.i18n.page_log_parse_save_tip]);
       }
     });
   }
 
   addHost() {
     if (this.rule.hosts.length === this.hostList.length) {
-      this.$scope.appEvent('alert-success', ['您已添加所有机器']);
+      this.$scope.appEvent('alert-success', [this.$translate.i18n.page_log_parse_host_fulled]);
       return;
     }
     this.otherHost = _.cloneDeep(this.hostList);
@@ -291,11 +291,11 @@ export class LogParseEditCtrl {
 
   deleteHost(hostId) {
     this.$scope.appEvent('confirm-modal', {
-      title: '删除',
+      title: this.$translate.i18n.i18n_delete,
       icon: 'fa-trash',
-      text: '您确定要删除该机器吗？',
-      yesText: '确定',
-      noText: '取消',
+      text: this.$translate.i18n.i18n_sure_operator,
+      yesText: this.$translate.i18n.i18n_confirm,
+      noText: this.$translate.i18n.i18n_cancel,
       onConfirm: ()=>{
         _.remove(this.rule.hosts, (host)=>{
           return host.id === hostId;
@@ -306,26 +306,26 @@ export class LogParseEditCtrl {
 
   saveRule() {
     if (this.contextSrv.isViewer) {
-      this.$scope.appEvent('alert-warning', ['抱歉', '您没有权限执行该操作']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_sorry, this.$translate.i18n.i18n_no_authority]);
       return;
     }
     this.rule.orgId = this.contextSrv.user.orgId;
     this.rule.sysId = this.contextSrv.user.systemId;
     this.$scope.appEvent('confirm-modal', {
-      title: '保存',
-      text: '您确定要保存该配置吗？',
-      yesText: '确定',
-      noText: '取消',
-      onConfirm: ()=>{
+      title: this.$translate.i18n.i18n_save,
+      text: this.$translate.i18n.i18n_sure_operator,
+      yesText: this.$translate.i18n.i18n_confirm,
+      noText: this.$translate.i18n.i18n_cancel,
+      onConfirm: () => {
         var data = _.cloneDeep(this.rule);
         data.hosts = _.map(this.rule.hosts, 'id');
         _.remove(data.logTypes, (type) => {
-          return type === '其他';
+          return type === this.$translate.i18n.i18n_other;
         });
-        if (data.logServiceName === '其他') {
+        if (data.logServiceName === this.$translate.i18n.i18n_other) {
           data.logServiceName = this.custom.logServiceName;
         }
-        if (data.logType === '其他') {
+        if (data.logType === this.$translate.i18n.i18n_other) {
           data.logType = this.custom.logType;
         }
         if (data.multiline) {
@@ -333,13 +333,13 @@ export class LogParseEditCtrl {
           data["multiline.match"] = data["multiline.match"] || "after";
         }
         this.logParseSrv.savePattern(this.contextSrv.user.id, data).then((res) => {
-          this.$scope.appEvent('alert-success', ['保存成功', '配置将于6分钟之后生效, 请稍后查看']);
+          this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success, this.$translate.i18n.page_log_parse_config_ok]);
           (this.curStep === 3) && this.curStep++;
         }, (err) => {
           if (err.status === 400) {
-            this.$scope.appEvent('alert-warning', ['规则名称已存在', '请修改规则名称']);
+            this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_existed, this.$translate.i18n.page_log_parse_rule_edit]);
           } else {
-            this.$scope.appEvent('alert-danger', ['保存失败', '请稍后重试']);
+            this.$scope.appEvent('alert-danger', [this.$translate.i18n.i18n_fail, this.$translate.i18n.i18n_try_later]);
           }
         });
       }
@@ -350,35 +350,35 @@ export class LogParseEditCtrl {
     switch (this.curStep) {
       case 1:
         if (!rule.ruleName) {
-          this.$scope.appEvent('alert-warning', ['警告', '请输入规则名称']);
+          this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_warning, this.$translate.i18n.i18n_input_full]);
           return false;
         }
         // validate logServiceName
-        if (rule.logServiceName === '其他') {
+        if (rule.logServiceName === this.$translate.i18n.i18n_other) {
           if (!this.checkInput(this.custom.logServiceName, 'parseName')) {
-            this.$scope.appEvent('alert-warning', ['警告', '服务名称非法']);
+            this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_warning, this.$translate.i18n.i18n_input_invalid]);
             return false;
           }
         } else if (!rule.logServiceName) {
-          this.$scope.appEvent('alert-warning', ['警告', '请选择服务']);
+          this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_warning, this.$translate.i18n.i18n_input_full]);
           return false;
         }
         // validate logType
-        if (rule.logType === '其他') {
+        if (rule.logType === this.$translate.i18n.i18n_warning) {
           if (!this.checkInput(this.custom.logType, 'logType')) {
-            this.$scope.appEvent('alert-warning', ['警告', '日志类型非法']);
+            this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_warning, this.$translate.i18n.i18n_input_invalid]);
             return false;
           }
         }
         if (_.isEmpty(rule.hosts)) {
-          this.$scope.appEvent('alert-warning', ['警告', '请选择机器列表']);
+          this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_warning, this.$translate.i18n.i18n_input_full]);
           return false;
         }
         break;
       case 2:
         // validate null
         if (_.isEmpty(rule.paths)) {
-          this.$scope.appEvent('alert-warning', ['警告', '请输入日志路径']);
+          this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_warning, this.$translate.i18n.i18n_input_full]);
           return false;
         }
         break;
@@ -390,12 +390,12 @@ export class LogParseEditCtrl {
           }
           _.each(status.directorys, (directorys) => {
             if (directorys.status === '0') {
-              this.$scope.appEvent('alert-warning', ['日志校验未完成', '请稍后']);
+              this.$scope.appEvent('alert-warning', [this.$translate.i18n.page_log_parse_rule_checking, this.$translate.i18n.later]);
               check = false;
               return;
             }
             if (directorys.status === '-1') {
-              this.$scope.appEvent('alert-warning', ['存在错误日志路径', '请返回上一步修正日志路径']);
+              this.$scope.appEvent('alert-warning', [this.$translate.i18n.page_log_parse_path_error, this.$translate.i18n.page_log_parse_back_edit]);
               check = false;
               return;
             }
