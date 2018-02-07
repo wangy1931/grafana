@@ -200,17 +200,13 @@ function (angular, _, coreModule, config) {
         options.params = {};
       }
       if (self.tokens) {
-        options.url = 'http://123.207.159.51:8080/_alertd' + options.url;
-        options.params.token = '0f320e7db4a2d8ba0a3229753bf7c90d821479da';
-        // options.url = self.alertDUrl + options.url;
-        // options.params.token = this.getToken();
+        options.url = self.alertDUrl + options.url;
+        options.params.token = this.getToken();
         return this.datasourceRequest(options);
       }
       return self.updateTokens().then(function () {
-        options.url = 'http://123.207.159.51:8080/_alertd' + options.url;
-        options.params.token = '0f320e7db4a2d8ba0a3229753bf7c90d821479da';
-        // options.url = self.alertDUrl + options.url;
-        // options.params.token = self.getToken();
+        options.url = self.alertDUrl + options.url;
+        options.params.token = self.getToken();
       }).then(function () {
         if (_.isEmpty(options.params.token)) {
           alertSrv.set("错误,无法获取TOKEN", "请联系service@cloudwiz.cn", "warning", 4000);
