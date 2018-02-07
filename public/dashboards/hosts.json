@@ -127,12 +127,22 @@
       "img": "",
       "info": "MySQL是一个关系型数据库管理系统，其特点为体积小、速度快、总体拥有成本低，且开放源码。",
       "deploy": [
-        "安装mysql探针之前请先执行以下命令：",
-        "bash -c \"$(curl -kL https://download.cloudwiz.cn/agent/mysql/deploy.sh)\"",
-        "(注意, 这里需要获取mysql的root账号密码)",
+        "1. 创建用户",
+        "1. a. linux用户使用shell创建",
+        "<p class='code-block indent2'> $ bash -c \"$(curl -kL https://download.cloudwiz.cn/agent/mysql/deploy.sh)\"</p>",
+        "1. b. windows用户手动创建",
+        "<p class='code-block indent2'> $ CREATE USER 'cloudwiz_user'@'%' IDENTIFIED BY 'cloudwiz_pass';</p>",
+        "<p class='code-block indent2'> $ GRANT REPLICATION CLIENT ON *.* TO 'cloudwiz_user'@'%' WITH MAX_USER_CONNECTIONS 5;</p>",
+        "<p class='code-block indent2'> $ GRANT PROCESS ON *.* TO 'cloudwiz_user'@'%';</p>",
+        "2. 修改配置文件",
         "路径:  /opt/cloudwiz-agent/agent/collectors/conf/mysql.conf",
-        "User: cloudwiz_user",
-        "Pass: cloudwiz_pass"
+        "<p class='code-block indent2'> [bash] </p>",
+        "<p class='code-block indent2'> user = cloudwiz_user #默认不需要修改</p>",
+        "<p class='code-block indent2'> pass = cloudwiz_pass #默认不需要修改</p>",
+        "<p class='code-block indent2'> interval = 30 #轮询时间不需要修改</p>",
+        "<p class='code-block indent2'> enabled = True </p>",
+        "<p class='code-block indent2'> host = 192.168.1.140 #目标IP地址</p>",
+        "<p class='code-block indent2'> port = 3306 #目标机器端口</p>"
       ],
       "status": -1,
       "template": "mysql",
@@ -542,6 +552,30 @@
       "status": -1,
       "template": "",
       "collectorName": "zabbix_bridge"
+    },{
+      "id": "sqlserver",
+      "name": "SqlServer",
+      "icon": "iconfont fa-sqlserver",
+      "img": "",
+      "info": "Microsoft SQL Server 是一个全面的数据库平台，使用集成的商业智能 (BI)工具提供了企业级的数据管理。",
+      "deploy": [
+        "1. 创建用户",
+        "打开SqlServer运行以下命令",
+        "<p class='code-block'> CREATE LOGIN cloudwiz WITH PASSWORD = 'Qwertyuiop123'; </p>",
+        "<p class='code-block'> CREATE USER cloudwiz FOR LOGIN cloudwiz; </p>",
+        "<p class='code-block'> GRANT SELECT on sys.dm_os_performance_counters to cloudwiz; </p>",
+        "<p class='code-block'> GRANT VIEW SERVER STATE to cloudwiz; </p>",
+        "2. 修改配置文件",
+        "路径: /opt/cloudwiz-agent/agent/collectors/conf/win32_sqlserver.conf",
+        "<p class='code-block'> [base] </p>",
+        "<p class='code-block'> enabled = False </p>",
+        "<p class='code-block'> server = 127.0.0.1,1433  #修改为相应的ip地址和端口 </p>",
+        "<p class='code-block'> username = cloudwiz      #按照上述sql创建,无需修改 </p>",
+        "<p class='code-block'> password = Qwertyuiop123 #按照上述sql创建,无需修改 </p>"
+      ],
+      "status": -1,
+      "template": "sqlserver",
+      "collectorName": "win32_sqlserver"
     }
   ]
 }

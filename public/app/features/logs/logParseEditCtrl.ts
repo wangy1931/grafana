@@ -504,6 +504,10 @@ export class LogParseEditCtrl {
     });
     _.every(check) && this.$interval.cancel(this.inter);
   }
+
+  checkeMetrics(fields, key) {
+    return _.indexOf(fields, key) > -1;
+  }
 }
 
 coreModule.controller('LogParseEditCtrl', LogParseEditCtrl);
