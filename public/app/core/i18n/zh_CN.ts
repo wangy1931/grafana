@@ -1,6 +1,6 @@
 export default {
-  "i18n_index_company": "云兴维智（北京）科技有限公司",
-  "i18n_index": "云兴维智",
+  "i18n_index_company": "北京昆仑联通科技发展股份有限公司",
+  "i18n_index": "昆仑联通",
   "page_overview_title": "系统总览",
   "page_overview_panel_health_title": "健康指数趋势",
   "page_overview_panel_alert_title": "报警状态",

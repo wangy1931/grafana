@@ -1,6 +1,6 @@
 export default {
-  "i18n_index_company": "Cloudwiz（Beijing）Technology Co., Ltd.",
-  "i18n_index": "Cloudwiz",
+  "i18n_index_company": "COM&LAN Co., Ltd.",
+  "i18n_index": "Com&Lan",
   "page_overview_title": "System Overview",
   "page_overview_panel_health_title": "Health Score Index",
   "page_overview_panel_alert_title": "Alert Status",
