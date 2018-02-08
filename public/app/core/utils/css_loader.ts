@@ -1,4 +1,4 @@
-///<reference path="../../headers/common.d.ts" />
+ 
 
 var waitSeconds = 100;
 var head = document.getElementsByTagName('head')[0];

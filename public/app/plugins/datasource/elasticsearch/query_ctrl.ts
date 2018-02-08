@@ -1,4 +1,4 @@
-///<reference path="../../../headers/common.d.ts" />
+ 
 
 import './bucket_agg';
 import './metric_agg';

@@ -1,25 +1,32 @@
-///<reference path="headers/common.d.ts" />
-
-import 'bootstrap';
-import 'vendor/filesaver';
-import 'lodash-src';
-import 'angular-strap';
+import 'babel-polyfill';
+import 'file-saver';
+import 'lodash';
+import 'jquery';
+import 'angular';
 import 'angular-route';
 import 'angular-sanitize';
-import 'angular-dragdrop';
+import 'angular-native-dragdrop';
 import 'angular-bindonce';
-import 'angular-animate';
-import 'angular-ui';
-import 'ui.calendar';
-import 'fullcalendar';
 
-import 'angular-strap.tpl';
-import 'angular-strap-old';
+// import 'angular-animate';
+// import 'angular-ui';
+// import 'ui.calendar';
+// import 'fullcalendar';
+// import 'spectrum';
+import 'app/core/lodash_extended';
 
-import 'jsPlumbToolkit';
+import 'vendor/bootstrap/bootstrap';
+import 'vendor/angular-other/angular-strap';
+import 'vendor/angular-ui/ui-bootstrap-tpls';
+import 'vendor/angular-ui-calendar/src/calendar';
 
-import 'ng-quill';
-import 'ng-table';
+import 'vendor/angular-other/angular-strap.tpl';
+import 'vendor/angular-other/angular-strap-old';
+
+import 'vendor/jsPlumb/jsPlumbToolkit';
+
+// import 'vendor/quill/ng-quill';
+import 'vendor/angular-other/ng-table.min';
 
 import * as locale_en from 'app/core/i18n/en';
 import * as locale_zh_cn from 'app/core/i18n/zh_CN';
@@ -30,6 +37,8 @@ import config from 'app/core/config';
 import _ from 'lodash';
 import moment from 'moment';
 import {coreModule} from './core/core';
+
+declare var System: any;
 
 export class GrafanaApp {
   registerFunctions: any;
@@ -53,8 +62,8 @@ export class GrafanaApp {
   }
 
   init() {
-    var app = angular.module('grafana', ['mgcrea.ngStrap', 'ngAnimate', 'ngTable', 'cloudwiz.translate']);
-    app.constant('grafanaVersion', "@grafanaVersion@");
+    var app = angular.module('grafana', ['mgcrea.ngStrap', 'ngTable', 'cloudwiz.translate']);
+    app.constant('grafanaVersion', '@grafanaVersion@');
 
     var locale = config.bootData.user.locale;
     /en/.test(locale) && (locale = 'en');
@@ -63,14 +72,9 @@ export class GrafanaApp {
     locale = window.localStorage.getItem('CLOUDWIZ_LANG_KEY') || locale;
     moment.locale(locale);
 
-    // fullcalendar: 没有检测到英文, 均显示中文
-    if (!/en/.test(locale)) {
-      System.import('zh-cn')
-    }
-
     app.config(['$translateProvider', ($translateProvider) => {
-      $translateProvider.translations('en', locale_en.default);
-      $translateProvider.translations('zh_CN', locale_zh_cn.default);
+      $translateProvider.translations(locale, locale_en.default);
+      $translateProvider.translations(locale, locale_zh_cn.default);
       $translateProvider.determinePreferredLanguage().fallbackLanguage('zh_CN');
       $translateProvider.useLocalStorage();
     }]);
@@ -80,24 +84,28 @@ export class GrafanaApp {
       $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|data|chrome-extension|javascript):/);
 
       this.registerFunctions.controller = $controllerProvider.register;
-      this.registerFunctions.directive  = $compileProvider.directive;
-      this.registerFunctions.factory    = $provide.factory;
-      this.registerFunctions.service    = $provide.service;
-      this.registerFunctions.filter     = $filterProvider.register;
+      this.registerFunctions.directive = $compileProvider.directive;
+      this.registerFunctions.factory = $provide.factory;
+      this.registerFunctions.service = $provide.service;
+      this.registerFunctions.filter = $filterProvider.register;
 
-      $provide.decorator("$http", ["$delegate", "$templateCache", function($delegate, $templateCache) {
-        var get = $delegate.get;
-        $delegate.get = function(url, config) {
-          if (url.match(/\.html$/)) {
-            // some template's already exist in the cache
-            if (!$templateCache.get(url)) {
-              url += "?v=" + new Date().getTime();
+      $provide.decorator('$http', [
+        '$delegate',
+        '$templateCache',
+        function($delegate, $templateCache) {
+          var get = $delegate.get;
+          $delegate.get = function(url, config) {
+            if (url.match(/\.html$/)) {
+              // some template's already exist in the cache
+              if (!$templateCache.get(url)) {
+                url += '?v=' + new Date().getTime();
+              }
             }
-          }
-          return get(url, config);
-        };
-        return $delegate;
-      }]);
+            return get(url, config);
+          };
+          return $delegate;
+        },
+      ]);
     });
 
     this.ngModuleDependencies = [
@@ -111,7 +119,7 @@ export class GrafanaApp {
       'ui.bootstrap',
       'ui.bootstrap.tpls',
       'ui.calendar',
-      'ngQuill'
+      'ngQuill',
     ];
 
     var module_types = ['controllers', 'directives', 'factories', 'services', 'filters', 'routes'];
@@ -126,20 +134,22 @@ export class GrafanaApp {
 
     var preBootRequires = [System.import('app/features/all')];
 
-    Promise.all(preBootRequires).then(() => {
-      // disable tool tip animation
-      $.fn.tooltip.defaults.animation = false;
-      // bootstrap the app
-      angular.bootstrap(document, this.ngModuleDependencies).invoke(() => {
-        _.each(this.preBootModules, module => {
-          _.extend(module, this.registerFunctions);
-        });
+    Promise.all(preBootRequires)
+      .then(() => {
+        // disable tool tip animation
+        $.fn.tooltip.defaults.animation = false;
+        // bootstrap the app
+        angular.bootstrap(document, this.ngModuleDependencies).invoke(() => {
+          _.each(this.preBootModules, module => {
+            _.extend(module, this.registerFunctions);
+          });
 
-        this.preBootModules = null;
+          this.preBootModules = null;
+        });
+      })
+      .catch(function(err) {
+        console.log('Application boot failed:', err);
       });
-    }).catch(function(err) {
-      console.log('Application boot failed:', err);
-    });
   }
 }
 

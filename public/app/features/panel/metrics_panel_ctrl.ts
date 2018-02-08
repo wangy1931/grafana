@@ -1,4 +1,4 @@
-///<reference path="../../headers/common.d.ts" />
+ 
 
 import config from 'app/core/config';
 import $ from 'jquery';
@@ -8,8 +8,6 @@ import {PanelCtrl} from './panel_ctrl';
 
 import * as rangeUtil from 'app/core/utils/rangeutil';
 import * as dateMath from 'app/core/utils/datemath';
-
-import {Subject} from 'vendor/npm/rxjs/Subject';
 
 class MetricsPanelCtrl extends PanelCtrl {
   error: boolean;

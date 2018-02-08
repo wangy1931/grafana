@@ -1,4 +1,4 @@
-///<reference path="../../../headers/common.d.ts" />
+ 
 
 import angular from 'angular';
 import config from 'app/core/config';
@@ -6,10 +6,10 @@ import _ from 'lodash';
 import $ from 'jquery';
 import moment from 'moment';
 import coreModule from '../../core_module';
-import 'jquery.flot';
-import 'jquery.flot.selection';
-import 'jquery.flot.time';
-import 'jquery.flot.navigate';
+import 'vendor/flot/jquery.flot';
+import 'vendor/flot/jquery.flot.selection';
+import 'vendor/flot/jquery.flot.time';
+import 'vendor/flot/jquery.flot.navigate';
 import 'app/plugins/panel/graph/jquery.flot.events';
 
 export class TimeWindowCtrl {

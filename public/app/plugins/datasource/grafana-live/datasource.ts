@@ -1,4 +1,4 @@
-///<reference path="../../../headers/common.d.ts" />
+ 
 
 import {liveSrv} from 'app/core/core';
 

@@ -1,4 +1,4 @@
-///<reference path="../../headers/common.d.ts" />
+ 
 import angular from 'angular';
 import coreModule from '../../core/core_module';
 

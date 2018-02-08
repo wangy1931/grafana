@@ -2,14 +2,12 @@ define([
   'jquery',
   'moment',
   'app/core/utils/kbn',
-  'lodash-src'
+  'lodash'
 ],
-function ($, moment, kbn) {
+function ($, moment, kbn, _) {
   'use strict';
 
   kbn = kbn.default;
-
-  var _ = window._;
 
   _.findWhere = _.find;
   _.contains = _.includes;

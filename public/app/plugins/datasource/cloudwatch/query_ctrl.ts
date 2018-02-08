@@ -1,4 +1,4 @@
-///<reference path="../../../headers/common.d.ts" />
+ 
 
 import './query_parameter_ctrl';
 import _ from 'lodash';

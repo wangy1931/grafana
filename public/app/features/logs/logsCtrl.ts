@@ -1,10 +1,10 @@
-///<reference path="../../headers/common.d.ts" />
+ 
 
 import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
 import moment from 'moment';
-import Diff from 'jsdiff';
+import Diff from 'vendor/jsdiff/index';
 import logsDash from './logsDash';
 import coreModule from '../../core/core_module';
 import 'app/plugins/datasource/opentsdb/queryCtrl';

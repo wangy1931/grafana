@@ -1,4 +1,4 @@
-///<reference path="../../../headers/common.d.ts" />
+ 
 
 import kbn from 'app/core/utils/kbn';
 

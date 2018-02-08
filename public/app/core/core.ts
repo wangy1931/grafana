@@ -56,6 +56,7 @@ import './filters/filters';
 import coreModule from './core_module';
 import appEvents from './app_events';
 import colors from './utils/colors';
+import { contextSrv } from './services/context_srv';
 import 'app/core/i18n/locale_provider';
 
 export {

@@ -1,4 +1,4 @@
-///<reference path="../../../headers/common.d.ts" />
+ 
 
 import moment from 'moment';
 import * as dateMath from 'app/core/utils/datemath';

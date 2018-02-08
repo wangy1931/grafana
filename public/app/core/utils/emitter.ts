@@ -1,4 +1,4 @@
-///<reference path="../../headers/common.d.ts" />
+ 
 
 import EventEmitter from 'eventemitter3';
 

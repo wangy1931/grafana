@@ -1,4 +1,4 @@
-///<reference path="../../headers/common.d.ts" />
+ 
 
 export class BundleLoader {
   lazy: any;

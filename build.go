@@ -25,16 +25,23 @@ var (
 	versionRe = regexp.MustCompile(`-[0-9]{1,3}-g[0-9a-f]{5,10}`)
 	goarch    string
 	goos      string
+	gocc      string
+	gocxx     string
+	cgo       string
+	pkgArch   string
 	version   string = "v1"
 	// deb & rpm does not support semver so have to handle their version a little differently
 	linuxPackageVersion   string = "v1"
 	linuxPackageIteration string = ""
 	race                  bool
+	phjsToRelease         string
 	workingDir            string
+	includeBuildNumber    bool     = true
+	buildNumber           int      = 0
 	binaries              []string = []string{"grafana-server", "grafana-cli"}
 )
 
-const minGoVersion = 1.3
+const minGoVersion = 1.8
 
 func main() {
 	log.SetOutput(os.Stdout)
@@ -73,15 +80,14 @@ func main() {
 			grunt("test")
 
 		case "package":
-			grunt("release", "--force")
-			//createLinuxPackages()
+			grunt(gruntBuildArg("release")...)
 
 		case "pkg-rpm":
-			grunt("release")
+			grunt(gruntBuildArg("release")...)
 			createRpmPackages()
 
 		case "pkg-deb":
-			grunt("release")
+			grunt(gruntBuildArg("release")...)
 			createDebPackages()
 
 		case "latest":
@@ -132,11 +138,20 @@ func readVersionFromPackageJson() {
 	if len(parts) > 1 {
 		linuxPackageVersion = parts[0]
 		linuxPackageIteration = parts[1]
-		if linuxPackageIteration != "" {
-			// add timestamp to iteration
-			linuxPackageIteration = fmt.Sprintf("%s%v", linuxPackageIteration, time.Now().Unix())
+		// if linuxPackageIteration != "" {
+		// 	// add timestamp to iteration
+		// 	linuxPackageIteration = fmt.Sprintf("%s%v", linuxPackageIteration, time.Now().Unix())
+		// }
+		// log.Println(fmt.Sprintf("Iteration %v", linuxPackageIteration))
+	}
+
+	// add timestamp to iteration
+	if includeBuildNumber {
+		if buildNumber != 0 {
+			linuxPackageIteration = fmt.Sprintf("%d%s", buildNumber, linuxPackageIteration)
+		} else {
+			linuxPackageIteration = fmt.Sprintf("%d%s", time.Now().Unix(), linuxPackageIteration)
 		}
-		log.Println(fmt.Sprintf("Iteration %v", linuxPackageIteration))
 	}
 }
 
@@ -306,7 +321,27 @@ func ChangeWorkingDir(dir string) {
 }
 
 func grunt(params ...string) {
-	runPrint("grunt", params...)
+	if runtime.GOOS == "windows" {
+		runPrint(`.\node_modules\.bin\grunt`, params...)
+	} else {
+		runPrint("./node_modules/.bin/grunt", params...)
+	}
+}
+
+func gruntBuildArg(task string) []string {
+	args := []string{task}
+	if includeBuildNumber {
+		args = append(args, fmt.Sprintf("--pkgVer=%v-%v", linuxPackageVersion, linuxPackageIteration))
+	} else {
+		args = append(args, fmt.Sprintf("--pkgVer=%v", version))
+	}
+	if pkgArch != "" {
+		args = append(args, fmt.Sprintf("--arch=%v", pkgArch))
+	}
+	if phjsToRelease != "" {
+		args = append(args, fmt.Sprintf("--phjsToRelease=%v", phjsToRelease))
+	}
+	return args
 }
 
 func setup() {
@@ -368,7 +403,7 @@ func rmr(paths ...string) {
 }
 
 func clean() {
-	rmr("bin", "Godeps/_workspace/pkg", "Godeps/_workspace/bin")
+	rmr("bin", "Godeps/_workspace/pkg", "Godeps/_workspace/bin")	
 	rmr("dist")
 	rmr("tmp")
 	rmr(filepath.Join(os.Getenv("GOPATH"), fmt.Sprintf("pkg/%s_%s/github.com/grafana", goos, goarch)))
@@ -385,6 +420,15 @@ func setBuildEnv() {
 	if goarch == "386" {
 		os.Setenv("GO386", "387")
 	}
+	if cgo != "" {
+		os.Setenv("CGO_ENABLED", cgo)
+	}
+	if gocc != "" {
+		os.Setenv("CC", gocc)
+	}
+	if gocxx != "" {
+		os.Setenv("CXX", gocxx)
+	}
 	wd, err := os.Getwd()
 	if err != nil {
 		log.Println("Warning: can't determine current dir:", err)
@@ -395,14 +439,10 @@ func setBuildEnv() {
 }
 
 func getGitSha() string {
-	v, err := runError("git", "describe", "--always", "--dirty")
+	v, err := runError("git", "rev-parse", "--short", "HEAD")
 	if err != nil {
 		return "unknown-dev"
 	}
-	v = versionRe.ReplaceAllFunc(v, func(s []byte) []byte {
-		s[0] = '+'
-		return s
-	})
 	return string(v)
 }
 
