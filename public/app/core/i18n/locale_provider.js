@@ -769,6 +769,7 @@
         } else {
           deferred.resolve(key);
           useLanguage(key);
+          $translate.i18n = $translationTable[key];
         }
 
         return deferred.promise;
