@@ -94,7 +94,7 @@
     position: relative;
     svg {
       transition: transform 1s ease;
-      transform: translateX(50%);
+      margin: 0 auto;
     }
     svg g {
       outline: none;
