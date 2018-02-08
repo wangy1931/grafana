@@ -43,7 +43,7 @@ export class SystemOverviewCtrl {
   constructor(
     private backendSrv, private alertSrv, private contextSrv, private alertMgrSrv, private healthSrv, private serviceDepSrv,
     private hostSrv, private utilSrv, private $location, private $scope, private $modal, private $q, private $translate,
-    private NgTableParams
+    private NgTableParams, private resourceSrv
   ) {
     $scope.ctrl = this;
 
@@ -154,7 +154,8 @@ export class SystemOverviewCtrl {
 
   // 机器资源信息
   getHostSummary() {
-    this.hostSrv.getHostInfo().then(response => {
+    this.resourceSrv.getList().then(response => {
+    // this.hostSrv.getHostInfo().then(response => {
       this.hostPanels = response;
     }, err => {
       this.hostPanels = [];
@@ -300,7 +301,7 @@ export class SystemOverviewCtrl {
 
       _.each(resp.hostStatusMap, (hostMap, hostKey) => {
         this.kpiPanel.leftTableBodys.push({
-          id: (_.find(this.hostPanels, { host: hostKey }) || {}).id,
+          id: (_.find(this.hostPanels, { name: hostKey }) || {}).id,
           name: hostKey,
           data: this.$translate.i18n[_.statusFormatter(hostMap.healthStatusType)],
           status: hostMap.healthStatusType
@@ -444,7 +445,7 @@ export class SystemOverviewCtrl {
     });
 
     this.kpiPanel.rightPanelHead = {
-      id: (_.findWhere(this.hostPanels, { host: hostname }) || {}).id,
+      id: (_.findWhere(this.hostPanels, { name: hostname }) || {}).id,
       name: hostname
     };
 

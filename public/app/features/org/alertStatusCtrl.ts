@@ -88,6 +88,9 @@ export class AlertStatusCtrl {
   }
 
   getAlertStatus(host) {
+    this.alertWarningCount = 0;
+    this.alertCriticalCount = 0;
+
     this.alertMgrSrv.loadTriggeredAlerts({ host: host }).then(response => {
       response.data.forEach(alert => {
         if (alert.status.level === "CRITICAL") {

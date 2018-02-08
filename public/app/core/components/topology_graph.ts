@@ -137,7 +137,6 @@ export class TopologyGraphCtrl {
 
     this.rendered = true;
     this.heatmap.data(this.data);
-    console.log(this.data);
 
     // 有 query 机器查询时, 先做groupby 再filter
     if (this.query && this.query !== '*') {

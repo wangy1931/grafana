@@ -17,9 +17,11 @@
             <tr>
                 <th>ID</th>
                 <th translate="i18n_servicename"></th>
-                <th>类型</th>
-                <th>资源组</th>
-                <th>位置</th>
+                <th translate="i18n_type">类型</th>
+                <th translate="i18n_status">状态</th>
+                <th translate="page_host_tab2">报警数</th>
+                <th translate="i18n_service_group">资源组</th>
+                <th translate="i18n_location">位置</th>
             </tr>
             <tr ng-repeat="item in ctrl.servicePanel"
                 ng-click="ctrl.rowClickHandle($event, item)"
@@ -27,6 +29,8 @@
                 <td>{{ item.id }}</td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.type }}</td>
+                <td class="status-{{ item.healthStatusType | lowercase }}">{{ item.status }}</td>
+                <td ng-class="{'status-yellow': item.alertNum}">{{ item.alertNum }}</td>
                 <td>{{ item.group }}</td>
                 <td>{{ item.location }}</td>
             </tr>

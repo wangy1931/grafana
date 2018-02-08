@@ -22,8 +22,8 @@
   "page_overview_err_dependency": "您还没有创建资源依赖关系, 建议您先创建",
   "page_overview_history_index": "点击查看历史指数",
   "page_probe_no_content": "探针没有收集到数据",
-  "page_probe_service_yes": "服务进程正常运行",
-  "page_probe_service_no": "服务没有正常工作",
+  "page_probe_service_yes": "资源正常运行",
+  "page_probe_service_no": "资源没有正常工作",
   "page_probe_service_no1": "(可能原因有: 1. 进程中断, 2. 探针没有正确收集数据)",
   "page_probe_service_no2": "(可能原因有: 1. 该服务进程中断, 2. 该服务工作不正常导致探针收集不到数据, 3. 该服务探针没有启动)",
   "page_home_title": "指标监控台",
@@ -631,5 +631,7 @@
   "i18n_china_unicom": "中国联通",
   "i18n_china_mobile": "中国移动",
   "i18n_china_telecom": "中国电信",
-  "i18n_maxed": "已达上限"
+  "i18n_maxed": "已达上限",
+  "i18n_location": "位置",
+  "i18n_service_group": "资源组"
 }

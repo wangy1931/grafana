@@ -64,10 +64,17 @@
                     <div ng-if="ctrl.kpiPanel.rightSelected == 'ServiceState'" class="kpi-detail-table">
                         <div ng-switch="ctrl.kpiPanel.rightItemTypes[ctrl.kpiPanel.rightSelected].status" class="service-state-text">
                             <div ng-switch-when="GREEN" translate="page_probe_service_yes"></div>
-                            <div ng-switch-when="YELLOW"><em translate="page_probe_service_no"></em> <em translate="page_probe_service_no1"></em></div>
-                            <div ng-switch-when="RED"><em translate="page_probe_service_no"></em> <em translate="page_probe_service_no1"></em></div>
+                            <div ng-switch-when="YELLOW">
+                                <em translate="page_probe_service_no"></em>
+                                <a class="btn btn-outline-primary btn-small" href="/service_topology?tabId=1&id={{ctrl.hostPanel.currentHost.id}}&name={{ctrl.hostPanel.currentHost.name}}" translate="page_anomaly_detail"></a>
+                            </div>
+                            <div ng-switch-when="RED">
+                                <em translate="page_probe_service_no"></em>
+                                <a class="btn btn-outline-primary btn-small" href="/service_topology?tabId=1&id={{ctrl.hostPanel.currentHost.id}}&name={{ctrl.hostPanel.currentHost.name}}" translate="page_anomaly_detail"></a>
+                            </div>
                             <div ng-switch-when="GREY">
-                                <strong translate="page_probe_no_content"></strong> <em translate="page_probe_service_no2"></em>
+                                <strong translate="page_probe_no_content"></strong>
+                                <a class="btn btn-outline-primary btn-small" href="/service_topology?tabId=1&id={{ctrl.hostPanel.currentHost.id}}&name={{ctrl.hostPanel.currentHost.name}}" translate="page_anomaly_detail"></a>
                             </div>
                         </div>
                     </div>

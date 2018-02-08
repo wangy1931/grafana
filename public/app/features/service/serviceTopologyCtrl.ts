@@ -48,7 +48,9 @@ export class ServiceTopologyCtrl {
     private $location,
     private $timeout,
     private alertSrv,
-    private $translate
+    private alertMgrSrv,
+    private $translate,
+    private $q
   ) {
     $scope.ctrl = this;
 
@@ -105,15 +107,28 @@ export class ServiceTopologyCtrl {
         this.switchTab(this.currentTab);
       }
 
-      (this.serviceList = []) && this.data.forEach(item => {
-        this.serviceList.push(item._private_);
-        this.servicePanel = this.serviceList;
-      });
+      // (this.serviceList = []) && this.data.forEach(item => {
+      //   this.serviceList.push(item._private_);
+      //   this.servicePanel = this.serviceList;
+      // });
     });
 
     _.isEmpty(this.serviceList) && this.resourceSrv.getList().then(response => {
       this.serviceList = response;
       this.servicePanel = response;
+      var qlist = [];
+
+      response.forEach(item => {
+        qlist.push(this.resourceSrv.getDetail(item).then(result => {
+          var row = _.find(this.servicePanel, { id: result.id });
+          row.status = result.status || result.state || result.status_of_primary || 'available';
+          row.healthStatusType = result.healthStatusType;
+        }));
+        qlist.push(this.alertMgrSrv.loadTriggeredAlerts({ host: item.name }).then(result => {
+          var row = _.find(this.servicePanel, { id: item.id });
+          row.alertNum = result.data.length || 0;
+        }));
+      });
     });
   }
 
@@ -132,8 +147,10 @@ export class ServiceTopologyCtrl {
         _.extend(this.tabs[1], { show: true, disabled: false });
         _.extend(this.tabs[4], { show: false, disabled: true });
 
-        if (+this.currentTab === 4) { this.currentTab = 0; }
-        this.tabs[0].active = true;
+        if (+this.currentTab === 4) {
+          this.currentTab = 0;
+          this.tabs[0].active = true;
+        }
       }
 
       this.switchTab(this.currentTab);
@@ -207,7 +224,7 @@ export class ServiceTopologyCtrl {
 
   getAnomaly(item) {
     this.$controller('AnomalyHistory', { $scope: this.$scope }).loadHistory(
-      { 'num': 1, 'type': 'hours', 'value': '1小时前', 'from': 'now-1h'}, '' // item && item.name
+      { 'num': 1, 'type': 'hours', 'value': '1小时前', 'from': 'now-1h'}, item && item.name
     );
   }
 

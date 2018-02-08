@@ -22,7 +22,7 @@
   "page_overview_err_dependency": "You have not created a service-dependency, and it is suggested that you create the service first.",
   "page_overview_history_index": "Click to view history index",
   "page_probe_no_content": "The probe has not collected data",
-  "page_probe_service_yes": "Process running normally",
+  "page_probe_service_yes": "Resource running normally",
   "page_probe_service_no": "No normal work",
   "page_probe_service_no1": "(The possible reasons are: 1. the process is interrupted 2. probe does not collect the data correctly)",
   "page_probe_service_no2": "(The possible reasons are: 1. the service process is interrupted 2. service work is not normal and the probe is not collected data, 3. service probe is not started)",
@@ -632,5 +632,7 @@
   "i18n_china_unicom": "China Unicom",
   "i18n_china_mobile": "China Mobile",
   "i18n_china_telecom": "China Telecom",
-  "i18n_maxed": "reach limit"
+  "i18n_maxed": "reach limit",
+  "i18n_location": "Location",
+  "i18n_service_group": "Resource Group"
 }
