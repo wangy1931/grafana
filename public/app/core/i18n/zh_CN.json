@@ -391,6 +391,7 @@
   "i18n_reference": "参考信息",
   "i18n_matching_rules": "匹配规则",
   "i18n_basic_info": "基本信息",
+  "i18n_system": "系统",
   "i18n_menu_monitor": "实时监控",
   "i18n_menu_dashboardlist": "指标",
   "i18n_menu_alert": "实时报警",
@@ -632,5 +633,7 @@
   "i18n_china_mobile": "中国移动",
   "i18n_china_telecom": "中国电信",
   "i18n_maxed": "已达上限",
-  "page_excluded_title": "修改不参与健康值计算指标"
+  "page_excluded_title": "修改不参与健康值计算指标",
+  "i18n_first_page": "已经是第一页了",
+  "i18n_last_page": "已经是最后一页了"
 }

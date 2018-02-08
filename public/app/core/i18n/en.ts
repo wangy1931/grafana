@@ -392,6 +392,7 @@ export default {
   "i18n_reference": "Reference Information",
   "i18n_matching_rules": "Matching Rules",
   "i18n_basic_info": "Basic Information",
+  "i18n_system": "System",
   "i18n_menu_monitor": "Monitor",
   "i18n_menu_alert": "Alerting",
   "i18n_menu_alert_rule": "Rule Based Alerts",
@@ -633,5 +634,7 @@ export default {
   "i18n_china_mobile": "China Mobile",
   "i18n_china_telecom": "China Telecom",
   "i18n_maxed": "reach limit",
-  "page_excluded_title": "It will not participate in the health value calculation"
+  "page_excluded_title": "It will not participate in the health value calculation",
+  "i18n_first_page": "First Page",
+  "i18n_last_page": "Last Page"
 }
