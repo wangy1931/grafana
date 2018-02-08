@@ -69,8 +69,8 @@ export class GrafanaApp {
     }
 
     app.config(['$translateProvider', ($translateProvider) => {
-      $translateProvider.translations(locale, locale_en.default);
-      $translateProvider.translations(locale, locale_zh_cn.default);
+      $translateProvider.translations('en', locale_en.default);
+      $translateProvider.translations('zh_CN', locale_zh_cn.default);
       $translateProvider.determinePreferredLanguage().fallbackLanguage('zh_CN');
       $translateProvider.useLocalStorage();
     }]);
