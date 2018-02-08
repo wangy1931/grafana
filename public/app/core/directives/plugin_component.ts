@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 import config from 'app/core/config';
 import coreModule from 'app/core/core_module';
+import { importPluginModule } from './plugin_loader';
 import {UnknownPanelCtrl} from 'app/plugins/panel/unknown/module';
 
 /** @ngInject **/
@@ -64,7 +65,7 @@ function pluginDirectiveLoader($compile, datasourceSrv, $rootScope, $q, $http, $
     let panelInfo = config.panels[scope.panel.type];
     var panelCtrlPromise = Promise.resolve(UnknownPanelCtrl);
     if (panelInfo) {
-      panelCtrlPromise = System.import(panelInfo.module).then(function(panelModule) {
+      panelCtrlPromise = importPluginModule(panelInfo.module).then(function(panelModule) {
         return panelModule.PanelCtrl;
       });
     }

@@ -7,21 +7,21 @@ import {BundleLoader} from './bundle_loader';
 function setupAngularRoutes($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
 
-  var loadPluginsBundle = new BundleLoader('app/features/plugins/all');
-  var loadAdminBundle = new BundleLoader('app/features/admin/admin');
-  var loadOrgBundle = new BundleLoader('app/features/org/all');
-  var loadOncallerBundle = new BundleLoader('app/features/oncaller/all');
-  var loadCMDBBundle = new BundleLoader('app/features/cmdb/all');
-  var loadSetupBundle = new BundleLoader('app/features/setup/all');
-  var loadSummaryBundle = new BundleLoader('app/features/summary/all');
-  var loadAnomalyBundle = new BundleLoader('app/features/anomaly/all');
-  var loadServiceBundle = new BundleLoader('app/features/service/all');
-  var loadAnalysisBundle = new BundleLoader('app/features/analysis/all');
-  var loadLogsBundle = new BundleLoader('app/features/logs/all');
-  var loadReportBundle = new BundleLoader('app/features/report/reportCtrl');
-  var loadRcaBundle = new BundleLoader('app/features/rca/all');
-  var loadHostBundle = new BundleLoader('app/features/host/all');
-  var loadKnowledgeBundle = new BundleLoader('app/features/knowledge/all');
+  var loadPluginsBundle = new BundleLoader('public/app/features/plugins/all');
+  var loadAdminBundle = new BundleLoader('public/app/features/admin/admin');
+  var loadOrgBundle = new BundleLoader('public/app/features/org/all');
+  var loadOncallerBundle = new BundleLoader('public/app/features/oncaller/all');
+  var loadCMDBBundle = new BundleLoader('public/app/features/cmdb/all');
+  var loadSetupBundle = new BundleLoader('public/app/features/setup/all');
+  var loadSummaryBundle = new BundleLoader('public/app/features/summary/all');
+  var loadAnomalyBundle = new BundleLoader('public/app/features/anomaly/all');
+  var loadServiceBundle = new BundleLoader('public/app/features/service/all');
+  var loadAnalysisBundle = new BundleLoader('public/app/features/analysis/all');
+  var loadLogsBundle = new BundleLoader('public/app/features/logs/all');
+  var loadReportBundle = new BundleLoader('public/app/features/report/reportCtrl');
+  var loadRcaBundle = new BundleLoader('public/app/features/rca/all');
+  var loadHostBundle = new BundleLoader('public/app/features/host/all');
+  var loadKnowledgeBundle = new BundleLoader('public/app/features/knowledge/all');
 
   $routeProvider
   .when('/', {

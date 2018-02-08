@@ -73,18 +73,6 @@ export class GrafanaApp {
     locale = window.localStorage.getItem('CLOUDWIZ_LANG_KEY') || locale;
     moment.locale(locale);
 
-    var locale = config.bootData.user.locale;
-    /en/.test(locale) && (locale = 'en');
-    /zh/.test(locale) && (locale = 'zh_CN');
-
-    locale = window.localStorage.getItem('CLOUDWIZ_LANG_KEY') || locale;
-    moment.locale(locale);
-
-    // fullcalendar: 没有检测到英文, 均显示中文
-    if (!/en/.test(locale)) {
-      System.import('zh-cn')
-    }
-
     app.config(['$translateProvider', ($translateProvider) => {
       $translateProvider.translations(locale, locale_en.default);
       $translateProvider.translations(locale, locale_zh_cn.default);
