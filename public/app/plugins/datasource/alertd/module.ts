@@ -6,6 +6,7 @@ class CustomConfigCtrl {
 }
 
 export {
+  AlertdDatasource,
   AlertdDatasource as Datasource,
   AlertDQueryCtrl as QueryCtrl,
   CustomConfigCtrl as ConfigCtrl,
