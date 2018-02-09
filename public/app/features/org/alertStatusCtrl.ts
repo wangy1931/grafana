@@ -165,10 +165,11 @@ export class AlertStatusCtrl {
           });
         });
       } else {
-        var tags = { host: alertItem.status.monitoredEntity };
+        var tags: any = {};
         alertItem.definition.alertDetails.tags && alertItem.definition.alertDetails.tags.forEach(tag => {
           tags[tag.name] = tag.value
         });
+        tags.host = alertItem.status.monitoredEntity;
 
         var queries = [{
           "metric": alertItem.metric,
@@ -179,6 +180,9 @@ export class AlertStatusCtrl {
         this.datasourceSrv.getHostStatus(queries, 'now-2m').then(response => {
           alertItem.curAlertValue = Math.floor(response.status * 1000) / 1000;
           if (isNaN(alertItem.curAlertValue)) { alertItem.curAlertValue = this.$translate.i18n.i18n_empty; }
+        })
+        .catch((err) => {
+          alertItem.curAlertValue = this.$translate.i18n.i18n_empty;
         });
       }
     });
