@@ -24,6 +24,7 @@ func AddMigrations(mg *Migrator) {
 	addPreferencesMigrations(mg)
 	addSystemMigrations(mg)
 	addOrgPermitMigrations(mg)
+	addCwizStaticMigrations(mg)
 }
 
 func addMigrationLogMigrations(mg *Migrator) {
