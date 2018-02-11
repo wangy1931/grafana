@@ -320,6 +320,8 @@ func Register(r *macaron.Macaron) {
 			r.Get("/alertd/:name",GetAlertDef)
 			// metric help message
 			r.Get("/metric/:name", GetMetricHelpFile)
+			// cwiz static
+			r.Get("/:type/:name", wrap(GetCwizStatic))
 		})
 
 		r.Get("/permit/:id", wrap(GetOrgPermitByOrgId))

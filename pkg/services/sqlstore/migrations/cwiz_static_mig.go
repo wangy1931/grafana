@@ -8,7 +8,6 @@ func addCwizStaticMigrations(mg *Migrator) {
 		Columns: []*Column{
 			{Name: "id", Type: DB_BigInt, IsPrimaryKey: true, IsAutoIncrement: true},
 			{Name: "org_id", Type: DB_BigInt, Length: 255, Nullable: false},
-			{Name: "sys_id", Type: DB_BigInt, Length: 255, Nullable: false},
 			{Name: "type", Type: DB_NVarchar, Length: 255, Nullable: false},
 			{Name: "name", Type: DB_NVarchar, Length: 255, Nullable: false},
 			{Name: "json_data", Type: DB_Text, Nullable: false},
@@ -25,7 +24,6 @@ func addCwizStaticMigrations(mg *Migrator) {
 	mg.AddMigration("copy data account to cwiz_static", NewCopyTableDataMigration("cwiz_static", "account_cwiz_static", map[string]string{
 		"id":      			"id",
 		"org_id": 			"org_id",
-		"sys_id":  			"sys_id",
 		"type": 				"type",
 		"name": 				"name",
 		"json_data": 		"json_data",
