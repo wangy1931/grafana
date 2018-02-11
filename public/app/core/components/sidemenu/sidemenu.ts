@@ -18,7 +18,7 @@ export class SideMenuCtrl {
   configMenu: any;
 
   /** @ngInject */
-  constructor($rootScope, private $scope, private $location, private contextSrv, private backendSrv, private $element, private $translate) {
+  constructor($rootScope, private $scope, private $location, private contextSrv, private backendSrv, private $element, private $translate, private staticSrv) {
     this.isSignedIn = contextSrv.isSignedIn;
     this.user = contextSrv.user;
     this.appSubUrl = config.appSubUrl;
@@ -73,7 +73,7 @@ export class SideMenuCtrl {
   }
 
   getMenus() {
-    this.backendSrv.get('/api/static/menu').then(response => {
+    this.staticSrv.getMenu().then(response => {
       this.mainLinks = response.menusTop;
     });
 

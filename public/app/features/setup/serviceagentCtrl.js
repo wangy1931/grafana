@@ -6,7 +6,7 @@ function (angular, _) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
-  module.controller('ServiceAgentCtrl', function ($scope, backendSrv, datasourceSrv, contextSrv, metricSrv) {
+  module.controller('ServiceAgentCtrl', function ($scope, backendSrv, datasourceSrv, contextSrv, metricSrv, staticSrv) {
     var NO_DATA = 2;
     var GET_DATA = 0;
     $scope.init = function() {
@@ -32,7 +32,7 @@ function (angular, _) {
     };
 
     $scope.getService = function() {
-      backendSrv.get('/api/static/hosts').then(function(result) {
+      staticSrv.getInstallation('services').then(function(result) {
         $scope.services = result.service;
         $scope.getServiceStatus(result.service);
       });

@@ -28,7 +28,7 @@ export class TreeMenuCtrl {
     private $controller, private backendSrv,
     private contextSrv, private healthSrv,
     private alertMgrSrv, private timeSrv,
-    private $translate
+    private $translate, private staticSrv
   ) {
     custom_metric = this.$translate.i18n.page_metrics_custom;
     this.isOpen = false;
@@ -71,7 +71,7 @@ export class TreeMenuCtrl {
       to: this.timeSrv.timeRange().to.unix()
     };
 
-    this.backendSrv.get('/api/static/config').then((res) => {
+    this.staticSrv.getConfig().then((res) => {
       this.limitTime = res.limit_association;
     })
   }

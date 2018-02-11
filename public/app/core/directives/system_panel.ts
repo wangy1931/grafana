@@ -5,7 +5,7 @@ import coreModule from 'app/core/core_module';
 import 'jquery.flot';
 import 'jquery.flot.pie';
 
-function systemPanel($parse, alertMgrSrv, healthSrv, datasourceSrv, contextSrv, backendSrv, $location, $q) {
+function systemPanel($parse, alertMgrSrv, healthSrv, datasourceSrv, contextSrv, backendSrv, $location, $q, staticSrv) {
   return {
     restrict: 'E',
     link: function (scope, elem, attr) {
@@ -58,7 +58,7 @@ function systemPanel($parse, alertMgrSrv, healthSrv, datasourceSrv, contextSrv, 
       };
 
       var getPlatform = function() {
-        backendSrv.get('/api/static/hosts').then(function(result) {
+        staticSrv.getInstallation('hosts').then(function(result) {
           scope.platform = result.hosts;
         });
       };

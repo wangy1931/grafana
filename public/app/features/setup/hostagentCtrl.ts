@@ -5,7 +5,7 @@ import _ from 'lodash';
 class HostAgentCtrl {
 
   /** @ngInject **/
-  constructor($scope, backendSrv, datasourceSrv, contextSrv, $interval, $location, $controller, $q) {
+  constructor($scope, backendSrv, datasourceSrv, contextSrv, $interval, $location, $controller, $q, staticSrv) {
     $scope.init = function() {
       $scope.type = '安装';
       $scope.installManual = false;
@@ -15,7 +15,7 @@ class HostAgentCtrl {
       $scope.agentUrl = backendSrv.downloadUrlIntranet + '/agent';
       $scope.token = backendSrv.getToken();
       $scope.system = _.find(contextSrv.systemsMap,{Id: contextSrv.user.systemId}).SystemsName;
-      backendSrv.get('/api/static/hosts').then(function(result) {
+      staticSrv.getInstallation('hosts').then(function(result) {
         $scope.platform = result.hosts;
       });
 
@@ -83,7 +83,7 @@ class HostAgentCtrl {
           $location.url('/');
           break;
         case "import": {
-          backendSrv.get('/api/static/alertd/machine').then(function(result) {
+          staticSrv.getAlertD('machine').then(function(result) {
             $scope.alertDefs = result.alertd;
             $scope.importAlerts($scope.alertDefs);
             return $scope.alertDef;
@@ -105,7 +105,7 @@ class HostAgentCtrl {
       }
       var promiseArr = [];
       _.each(tmp,function(template) {
-        var p = backendSrv.get('/api/static/template/'+template).then(function(result) {
+        var p = staticSrv.getDashboard(template).then(function(result) {
           result.system = contextSrv.user.systemId;
           result.id = null;
           return backendSrv.saveDashboard(result, options).then(function(data) {
