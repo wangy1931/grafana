@@ -29,7 +29,6 @@ export class TopNCtrl {
     private $location,
     private $scope,
     private $rootScope,
-    private templateValuesSrv,
     private dynamicDashboardSrv,
     private $popover,
     private $timeout,
@@ -136,12 +135,12 @@ export class TopNCtrl {
   variableUpdated(obj) {
     obj.host && (this.dashboard.templating.list[1].current = { "text": obj.host || "All", "value": obj.host || "$__all", "tags": [] });
 
-    this.templateValuesSrv.init(this.dashboard);
-    this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[1]).then(() => {
-      this.dynamicDashboardSrv.update(this.dashboard);
-      this.$rootScope.$emit('template-variable-value-updated');
-      // this.timeSrv.setTime(this.range);
-    });
+    // this.templateValuesSrv.init(this.dashboard);
+    // this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[1]).then(() => {
+    //   this.dynamicDashboardSrv.update(this.dashboard);
+    //   this.$rootScope.$emit('template-variable-value-updated');
+    //   // this.timeSrv.setTime(this.range);
+    // });
   }
 
   rowClick(pid, index) {
@@ -150,12 +149,12 @@ export class TopNCtrl {
       this.selected = index;
       this.dashboard.templating.list[0].current = { "text": pid.toString(), "value": pid.toString(), "tags": [] };
 
-      this.templateValuesSrv.init(this.dashboard);
-      this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
-        this.dynamicDashboardSrv.update(this.dashboard);
-        this.$rootScope.$emit('template-variable-value-updated');
-        // this.timeSrv.setTime(this.range);
-      });
+      // this.templateValuesSrv.init(this.dashboard);
+      // this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
+      //   this.dynamicDashboardSrv.update(this.dashboard);
+      //   this.$rootScope.$emit('template-variable-value-updated');
+      //   // this.timeSrv.setTime(this.range);
+      // });
     } else {
       this.selected = -1;
     }

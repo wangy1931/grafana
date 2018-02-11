@@ -1,7 +1,7 @@
 define([
     'angular',
-    'jquery.flot',
-    'jquery.flot.selection'
+    'vendor/flot/jquery.flot',
+    'vendor/flot/jquery.flot.selection'
   ],
   function (angular) {
     'use strict';

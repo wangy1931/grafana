@@ -1,1 +1,1 @@
-export { TimeBuckets } from './time_buckets';
+export { TimeBucketsProvider } from './time_buckets';

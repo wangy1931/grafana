@@ -3,8 +3,8 @@ import _ from 'lodash';
 import $ from 'jquery';
 import { coreModule } from 'app/core/core';
 import kbn from 'app/core/utils/kbn';
+import * as d3 from "d3";
 
-declare var window: any;
 const HEALTH_TYPE = {
   GREEN: { TEXT: 'green', COLOR: '#66C2A5' },
   YELLOW: { TEXT: 'yellow', COLOR: '#FDAE61' },
@@ -27,23 +27,20 @@ export class HostTopologyCtrl {
   dashboard: any;
   topologyGraphParams: any;
   needHostnameTabs: Array<number>;  // don't modify this variable, except init
-
   /** @ngInject */
   constructor (
-    private hostSrv,
-    private backendSrv,
-    private popoverSrv,
-    private templateValuesSrv,
-    private dynamicDashboardSrv,
-    private contextSrv,
-    private utilSrv,
     private $scope,
     private $rootScope,
+    private $translate,
     private $controller,
     private $location,
     private NgTableParams,
+    private hostSrv,
+    private backendSrv,
+    private popoverSrv,
+    private contextSrv,
+    private utilSrv,
     private alertSrv,
-    private $translate,
     private $timeout
   ) {
     $scope.ctrl = this;
@@ -75,7 +72,7 @@ export class HostTopologyCtrl {
       }
     };
 
-    this.tableParams = new this.NgTableParams({
+    this.tableParams = new NgTableParams({
       count: 100,
       sorting: { 'cpuPercent': 'desc' },
     }, {
@@ -120,10 +117,10 @@ export class HostTopologyCtrl {
   }
 
   render(host) {
-    window.d3.selectAll('.relationshipGraph-block').classed('selected', false);
+    d3.selectAll('.relationshipGraph-block').classed('selected', false);
 
     if (host.name) {
-      window.d3.select(`#${host.__id}`).classed('selected', true);
+      d3.select(`#${host.__id}`).classed('selected', true);
 
       this.needHostnameTabs.forEach(item => {
         _.extend(this.tabs[item], { show: true, disabled: false });
@@ -297,10 +294,11 @@ export class HostTopologyCtrl {
     ], colors.concat(['#DCDFE6']), 0.8);
   }
 
-  getDashboard(host) {
+  getHostDashboard(host) {
     this.saveTopologyData();
 
     if (!this.dashboard) {
+      console.log(2);
       this.backendSrv.get('/api/static/machine_host_topology').then(response => {
         // handle dashboard
         this.addDashboardTemplating(response);
@@ -312,9 +310,10 @@ export class HostTopologyCtrl {
           meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
         }, this.$scope);
 
-        host.name && this.variableUpdated(host);
+        // host.name && this.variableUpdated(host);
       });
     } else {
+      console.log(1);
       this.variableUpdated(host);
     }
   }
@@ -357,7 +356,7 @@ export class HostTopologyCtrl {
       this.getHostList(this.currentHost);
     }
     if (tabId === 1) {
-      this.getDashboard(this.currentHost);
+      this.getHostDashboard(this.currentHost);
     }
     if (tabId === 2) {
       this.getAlertStatus(this.currentHost);
@@ -390,12 +389,12 @@ export class HostTopologyCtrl {
   variableUpdated(host) {
     this.dashboard.templating.list[0].current = { "text": host.name || "All", "value": host.name || "$__all", "tags": [] };
 
-    this.templateValuesSrv.init(this.dashboard);
-    this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
-      this.dynamicDashboardSrv.update(this.dashboard);
-      this.$rootScope.$emit('template-variable-value-updated');
-      this.$rootScope.$broadcast('refresh');
-    });
+    // this.variableSrv.init(this.dashboard);
+    // this.variableSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
+    //   this.dynamicDashboardSrv.update(this.dashboard);
+    //   // this.$rootScope.$emit('template-variable-value-updated');
+    //   // this.$rootScope.$broadcast('refresh');
+    // });
   }
 
   saveTopologyData() {

@@ -1,4 +1,3 @@
- 
 
 import kbn from 'app/core/utils/kbn';
 
@@ -59,7 +58,7 @@ export class AxesEditorCtrl {
   }
 
   xAxisOptionChanged()  {
-    if (!this.panel.xaxis.values || !this.panel.xaxis.values[0]){
+    if (!this.panel.xaxis.values || !this.panel.xaxis.values[0]) {
       this.panelCtrl.processor.setPanelDefaultsForNewXAxisMode();
     }
     this.panelCtrl.onDataReceived(this.panelCtrl.dataList);

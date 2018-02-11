@@ -1,4 +1,3 @@
- 
 
 import moment from 'moment';
 import * as dateMath from 'app/core/utils/datemath';

@@ -1,5 +1,3 @@
- 
-
 
 import _ from 'lodash';
 import coreModule from 'app/core/core_module';

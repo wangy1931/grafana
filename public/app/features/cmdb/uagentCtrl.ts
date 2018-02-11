@@ -127,14 +127,14 @@ export class UagentCtrl {
 
     var data = {sections: [], hosts: [this.host.id]};
 
-    _.each(this.config.sections, (section)=>{
+    _.each(this.config.sections, (section) => {
       var new_section = {
         sectionName: section.name,
         isCover: this.isCover,
         props: []
       };
 
-      _.each(section.props, (prop)=>{
+      _.each(section.props, (prop) => {
         if (!prop.readOnly) {
           new_section.props.push({name: prop.name, value: prop.value});
         }
@@ -162,10 +162,10 @@ export class UagentCtrl {
       params: param,
       data: data,
       headers: {'Content-Type': 'text/plain;application/json;charset=UTF-8'},
-    }).then((response)=>{
+    }).then((response) => {
       this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success]);
       this.$location.url('/cmdb/config?serviceName=' + this.serviceName + '&hostId=' + this.host.id);
-    }, (err)=>{
+    }, (err) => {
       this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_fail, this.$translate.i18n.i18n_try_later]);
     });
   }
@@ -203,7 +203,7 @@ export class UagentCtrl {
       yesText: this.$translate.i18n.i18n_delete,
       noText: this.$translate.i18n.i18n_cancel,
       modalClass : 'contact-us',
-      onConfirm: ()=>{
+      onConfirm: () => {
         this.backendSrv.alertD({
           method: "delete",
           url: "/cmdb/config/host",
@@ -213,7 +213,7 @@ export class UagentCtrl {
             systemId: this.user.systemId,
             userId: this.user.id
           },
-        }).then((response)=>{
+        }).then((response) => {
           this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success]);
           this.$location.url('/cmdb/config?serviceName=' + this.serviceName + '&hostId=' + this.host.id);
           this.getData();
@@ -234,7 +234,7 @@ export class UagentCtrl {
       yesText: this.$translate.i18n.i18n_confirm,
       noText: this.$translate.i18n.i18n_cancel,
       modalClass : 'contact-us',
-      onConfirm: ()=>{
+      onConfirm: () => {
         this.backendSrv.alertD({
           method: "post",
           url: "/cmdb/config/copy",
@@ -245,7 +245,7 @@ export class UagentCtrl {
             userId: this.user.id
           },
           data: {hosts: hosts}
-        }).then((response)=>{
+        }).then((response) => {
           this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success]);
         });
       }

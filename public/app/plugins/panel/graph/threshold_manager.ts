@@ -1,6 +1,5 @@
- 
 
-import 'jquery.flot';
+import 'vendor/flot/jquery.flot';
 import $ from 'jquery';
 import _ from 'lodash';
 

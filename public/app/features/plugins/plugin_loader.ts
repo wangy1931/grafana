@@ -109,7 +109,7 @@ import 'vendor/flot/jquery.flot.pie';
 import 'vendor/flot/jquery.flot.stackpercent';
 import 'vendor/flot/jquery.flot.fillbelow';
 import 'vendor/flot/jquery.flot.crosshair';
-import 'vendor/flot/jquery.flot.dashes';
+// import 'vendor/flot/jquery.flot.dashes';
 
 const flotDeps = [
   'jquery.flot',

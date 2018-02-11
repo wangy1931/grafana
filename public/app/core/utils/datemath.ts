@@ -1,14 +1,19 @@
- 
 
 import _ from 'lodash';
 import moment from 'moment';
 
 const units = ['y', 'M', 'w', 'd', 'h', 'm', 's', 'ms'];
 
-export function parse(text, roundUp?) {
-  if (!text) { return undefined; }
-  if (moment.isMoment(text)) { return text; }
-  if (_.isDate(text)) { return moment(text); }
+export function parse(text, roundUp?, timezone?) {
+  if (!text) {
+    return undefined;
+  }
+  if (moment.isMoment(text)) {
+    return text;
+  }
+  if (_.isDate(text)) {
+    return moment(text);
+  }
 
   var time;
   var mathString = '';
@@ -16,7 +21,11 @@ export function parse(text, roundUp?) {
   var parseString;
 
   if (text.substring(0, 3) === 'now') {
-    time = moment();
+    if (timezone === 'utc') {
+      time = moment.utc();
+    } else {
+      time = moment();
+    }
     mathString = text.substring('now'.length);
   } else {
     index = text.indexOf('||');
@@ -28,7 +37,7 @@ export function parse(text, roundUp?) {
       mathString = text.substring(index + 2);
     }
     // We're going to just require ISO8601 timestamps, k?
-    time = moment(parseString);
+    time = moment(parseString, moment.ISO_8601);
   }
 
   if (!mathString.length) {

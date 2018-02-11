@@ -36,7 +36,7 @@ export class TreeMenuCtrl {
     this.groupType = 'metrics';
     this.limitTime = 2;
 
-    var analysis = this.$rootScope.$on('analysis', (event, data) =>{
+    var analysis = this.$rootScope.$on('analysis', (event, data) => {
       switch (data) {
         case 'thresholdSlider':
           this.associationSrv.updateRang(this.$scope.$parent.thresholdSlider.get());
@@ -143,7 +143,7 @@ export class TreeMenuCtrl {
 
   showTree() {
     this.isOpen = !this.isOpen;
-    this.$timeout(()=>{
+    this.$timeout(() => {
       this.$rootScope.$broadcast('render');
     })
   }

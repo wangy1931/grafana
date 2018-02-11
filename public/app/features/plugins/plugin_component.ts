@@ -256,6 +256,7 @@ function pluginDirectiveLoader($compile, datasourceSrv, $rootScope, $q, $http, $
     }
 
     if (!componentInfo.Component.registered) {
+      console.log(1);
       var directiveName = attrs.$normalize(componentInfo.name);
       var directiveFn = getPluginComponentDirective(componentInfo);
       coreModule.directive(directiveName, directiveFn);

@@ -1,4 +1,3 @@
- 
 
 import './add_graphite_func';
 import './func_editor';

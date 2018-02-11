@@ -1,4 +1,3 @@
- 
 
 import _ from 'lodash';
 import angular from 'angular';
@@ -39,14 +38,14 @@ export class TimePickerCtrl {
   }
 
   init() {
-    this.panel = this.dashboard.timepicker;
+    this.panel = this.dashboard && this.dashboard.timepicker;
 
     _.defaults(this.panel, TimePickerCtrl.defaults);
 
     var time = angular.copy(this.timeSrv.timeRange());
     var timeRaw = angular.copy(this.timeSrv.timeRange(false));
 
-    if (!this.dashboard.isTimezoneUtc()) {
+    if (this.dashboard && !this.dashboard.isTimezoneUtc()) {
       time.from.local();
       time.to.local();
       if (moment.isMoment(timeRaw.from)) {
@@ -61,8 +60,8 @@ export class TimePickerCtrl {
 
     this.rangeString = rangeUtil.describeTimeRange(timeRaw);
     this.absolute = {fromJs: time.from.toDate(), toJs: time.to.toDate()};
-    this.tooltip = this.dashboard.formatDate(time.from) + ` ${this.$translate.i18n.i18n_to} `;
-    this.tooltip += this.dashboard.formatDate(time.to);
+    this.tooltip = this.dashboard && (this.dashboard.formatDate(time.from) + ` ${this.$translate.i18n.i18n_to} `);
+    this.tooltip += this.dashboard && this.dashboard.formatDate(time.to);
 
     // do not update time raw when dropdown is open
     // as auto refresh will reset the from/to input fields

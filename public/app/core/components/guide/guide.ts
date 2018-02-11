@@ -12,8 +12,8 @@ export class GuideCtrl {
   exceptionMetrics: any = [];
   exceptionHosts: any = [];
   selected: any = {};
-  collapsed: boolean = true;
-  fixed: boolean = false;
+  collapsed = true;
+  fixed = false;
 
   /** @ngInject */
   constructor(

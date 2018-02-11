@@ -1,7 +1,6 @@
 define([
   './alert_srv',
   './util_srv',
-  './datasource_srv',
   './context_srv',
   './timer',
   './keyboard_manager',
@@ -20,6 +19,8 @@ define([
   './guide_srv',
   './logParseSrv',
   './metricSrv',
-  './report_srv'
+  './report_srv',
+  './bridge_srv',
+  './timer'
 ],
 function () {});

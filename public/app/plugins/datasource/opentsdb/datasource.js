@@ -4,8 +4,10 @@ define([
   'app/core/utils/datemath',
   'app/core/time_buckets/index'
 ],
-function (angular, _, dateMath, TimeBuckets) {
+function (angular, _, dateMath, TimeBucketsProvider) {
   'use strict';
+
+  var TimeBuckets = TimeBucketsProvider.TimeBucketsProvider();
 
   /** @ngInject */
   function OpenTsDatasource(instanceSettings, $q, backendSrv, templateSrv, contextSrv) {
@@ -20,7 +22,6 @@ function (angular, _, dateMath, TimeBuckets) {
     this.supportMetrics = true;
     this.tagKeys = {};
     this.prefix = contextSrv.user.orgId + "." + contextSrv.user.systemId + ".";
-    TimeBuckets = TimeBuckets.TimeBuckets;
 
     // Called once per panel (graph)
     this.query = function(options) {

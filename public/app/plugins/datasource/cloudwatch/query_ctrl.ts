@@ -1,4 +1,3 @@
- 
 
 import './query_parameter_ctrl';
 import _ from 'lodash';

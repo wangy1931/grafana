@@ -1,4 +1,3 @@
-///<reference path="../../app/headers/common.d.ts" />
 
 var _global = <any>(window);
 var beforeEach = _global.beforeEach;

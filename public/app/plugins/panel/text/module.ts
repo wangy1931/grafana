@@ -1,8 +1,6 @@
- 
 
 import _ from 'lodash';
-// import moment from 'moment';
-// import datemath from 'app/core/utils/datemath';
+import System from 'systemjs/dist/system.js';
 import {PanelCtrl} from 'app/plugins/sdk';
 
 export class TextPanelCtrl extends PanelCtrl {

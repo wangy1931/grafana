@@ -1,4 +1,3 @@
- 
 
 import angular from 'angular';
 import _ from 'lodash';
@@ -81,7 +80,7 @@ export class LogParseEditCtrl {
     if (logType) {
       params['logType'] = logType;
     }
-    this.logParseSrv.getTemplate(params).then((response)=>{
+    this.logParseSrv.getTemplate(params).then((response) => {
       var tmp = response.data;
       if (_.isEmpty(tmp)) {
         this.rule.logTypes = [this.$translate.i18n.i18n_other];
@@ -99,7 +98,7 @@ export class LogParseEditCtrl {
       this.rule = response.data;
       var tmpHosts = _.cloneDeep(this.rule.hosts);
       this.rule.hosts = [];
-      _.each(tmpHosts, (hostId)=>{
+      _.each(tmpHosts, (hostId) => {
         var host = _.find(this.hostList, {id: hostId});
         host && this.rule.hosts.push(host);
       });
@@ -207,7 +206,7 @@ export class LogParseEditCtrl {
   }
 
   testPattern(pattern) {
-    this.logParseSrv.validatePattern(pattern).then((res)=>{
+    this.logParseSrv.validatePattern(pattern).then((res) => {
       pattern.result = res.data;
     }, (err) => {
       pattern.result = this.$translate.i18n.i18n_fail;
@@ -240,7 +239,7 @@ export class LogParseEditCtrl {
       text: this.$translate.i18n.i18n_sure_operator,
       yesText: this.$translate.i18n.i18n_confirm,
       noText: this.$translate.i18n.i18n_cancel,
-      onConfirm: ()=>{
+      onConfirm: () => {
         _.remove(this.rule.patterns, (pat) => {
           return _.isEqual(pat, pattern);
         });
@@ -296,8 +295,8 @@ export class LogParseEditCtrl {
       text: this.$translate.i18n.i18n_sure_operator,
       yesText: this.$translate.i18n.i18n_confirm,
       noText: this.$translate.i18n.i18n_cancel,
-      onConfirm: ()=>{
-        _.remove(this.rule.hosts, (host)=>{
+      onConfirm: () => {
+        _.remove(this.rule.hosts, (host) => {
           return host.id === hostId;
         });
       }
@@ -498,7 +497,7 @@ export class LogParseEditCtrl {
 
   cancelInterval() {
     var check = _.map(this.checkStatus, (stat) => {
-      return _.every(stat.directorys, (directory)=>{
+      return _.every(stat.directorys, (directory) => {
         return directory.status !== '0';
       })
     });

@@ -1,4 +1,3 @@
- 
 
 import angular from 'angular';
 import coreModule from 'app/core/core_module';
@@ -21,10 +20,10 @@ export class ReportSrv {
 
   /**
    * saveReportConfig data
-   * @param {enabled} boolean 是否开启功能 
-   * @param {recipients} arrary 邮件通知列表 
-   * @param {delieverHour} number 发送邮件时间 
-   * @param {sections} array 配置的模块 
+   * @param {enabled} boolean 是否开启功能
+   * @param {recipients} arrary 邮件通知列表
+   * @param {delieverHour} number 发送邮件时间
+   * @param {sections} array 配置的模块
    */
   saveReportConfig(data) {
     return this.backendSrv.alertD({

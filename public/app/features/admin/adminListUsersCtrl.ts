@@ -1,4 +1,4 @@
- 
+
 import angular from 'angular';
 import coreModule from '../../core/core_module';
 

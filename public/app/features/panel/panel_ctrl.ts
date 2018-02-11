@@ -1,17 +1,18 @@
- 
 
 import config from 'app/core/config';
 import _ from 'lodash';
 import angular from 'angular';
 import $ from 'jquery';
-
-const TITLE_HEIGHT = 25;
-const EMPTY_TITLE_HEIGHT = 9;
-const PANEL_PADDING = 5;
+import Remarkable from 'remarkable';
+import { GRID_CELL_HEIGHT, GRID_CELL_VMARGIN, LS_PANEL_COPY_KEY } from 'app/core/constants';
 
 import {Emitter} from 'app/core/core';
 
+const TITLE_HEIGHT = 27;
+const PANEL_BORDER = 2;
+
 export class PanelCtrl {
+  error: any;
   panel: any;
   row: any;
   dashboard: any;
@@ -48,21 +49,29 @@ export class PanelCtrl {
     this.editorTabIndex = 0;
     this.events = new Emitter();
 
-    var plugin = config.panels[this.panel.type];
+    var plugin = config.panels[this.panel && this.panel.type];
     if (plugin) {
       this.pluginId = plugin.id;
       this.pluginName = plugin.name;
     }
 
+    $scope.$on('component-did-mount', () => this.panelDidMount());
     $scope.$on("refresh", (event, payload) => this.refresh(payload));
     $scope.$on("render", () => this.render());
-    $scope.$on("$destroy", () => this.events.emit('panel-teardown'));
+    $scope.$on("$destroy", () => {
+      this.events.emit('panel-teardown');
+      this.events.removeAllListeners();
+    });
   }
 
   init() {
-    this.calculatePanelHeight();
+    // this.calculatePanelHeight();
     this.publishAppEvent('panel-initialized', {scope: this.$scope});
     this.events.emit('panel-initialized');
+  }
+
+  panelDidMount() {
+    this.events.emit('component-did-mount');
   }
 
   renderingCompleted() {
@@ -184,17 +193,31 @@ export class PanelCtrl {
   calculatePanelHeight() {
     if (this.fullscreen) {
       var docHeight = $(window).height();
-      var editHeight = Math.floor(docHeight * 0.3);
-      var fullscreenHeight = Math.floor(docHeight * 0.7);
+      var editHeight = Math.floor(docHeight * 0.4);
+      var fullscreenHeight = Math.floor(docHeight * 0.8);
       this.containerHeight = this.editMode ? editHeight : fullscreenHeight;
     } else {
-      this.containerHeight = this.panel.height || this.row.height;
-      if (_.isString(this.containerHeight)) {
-        this.containerHeight = parseInt(this.containerHeight.replace('px', ''), 10);
-      }
+      this.containerHeight = this.panel.gridPos.h * GRID_CELL_HEIGHT + (this.panel.gridPos.h - 1) * GRID_CELL_VMARGIN;
     }
 
-    this.height = this.containerHeight - (PANEL_PADDING + (this.panel.title ? TITLE_HEIGHT : EMPTY_TITLE_HEIGHT));
+    if (this.panel.soloMode) {
+      this.containerHeight = $(window).height();
+    }
+
+    this.height = this.containerHeight - (PANEL_BORDER + TITLE_HEIGHT);
+    // if (this.fullscreen) {
+    //   var docHeight = $(window).height();
+    //   var editHeight = Math.floor(docHeight * 0.3);
+    //   var fullscreenHeight = Math.floor(docHeight * 0.7);
+    //   this.containerHeight = this.editMode ? editHeight : fullscreenHeight;
+    // } else {
+    //   this.containerHeight = this.panel.height || this.row.height;
+    //   if (_.isString(this.containerHeight)) {
+    //     this.containerHeight = parseInt(this.containerHeight.replace('px', ''), 10);
+    //   }
+    // }
+
+    // this.height = this.containerHeight - (PANEL_PADDING + (this.panel.title ? TITLE_HEIGHT : EMPTY_TITLE_HEIGHT));
   }
 
   render(payload?) {
@@ -203,7 +226,7 @@ export class PanelCtrl {
       return;
     }
 
-    this.calculatePanelHeight();
+    // this.calculatePanelHeight();
     this.events.emit('render', payload);
   }
 
@@ -268,6 +291,52 @@ export class PanelCtrl {
       src: 'public/app/features/dashboard/partials/shareModal.html',
       scope: shareScope
     });
+  }
+
+  getInfoMode() {
+    if (this.error) {
+      return 'error';
+    }
+    if (!!this.panel.description) {
+      return 'info';
+    }
+    if (this.panel.links && this.panel.links.length) {
+      return 'links';
+    }
+    return '';
+  }
+
+  getInfoContent(options) {
+    var markdown = this.panel.description;
+
+    if (options.mode === 'tooltip') {
+      markdown = this.error || this.panel.description;
+    }
+
+    var linkSrv = this.$injector.get('linkSrv');
+    var templateSrv = this.$injector.get('templateSrv');
+    var interpolatedMarkdown = templateSrv.replace(markdown, this.panel.scopedVars);
+    var html = '<div class="markdown-html">';
+
+    html += new Remarkable().render(interpolatedMarkdown);
+
+    if (this.panel.links && this.panel.links.length > 0) {
+      html += '<ul>';
+      for (let link of this.panel.links) {
+        var info = linkSrv.getPanelLinkAnchorInfo(link, this.panel.scopedVars);
+        html +=
+          '<li><a class="panel-menu-link" href="' +
+          info.href +
+          '" target="' +
+          info.target +
+          '">' +
+          info.title +
+          '</a></li>';
+      }
+      html += '</ul>';
+    }
+
+    return html + '</div>';
   }
 
   openInspector() {

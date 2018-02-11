@@ -18,7 +18,7 @@ export class AlertEditCtrl {
   alertTypeRange: Array<any>;
   alertTypeSelected: any;
   logType: string;
-  logAggregator: string = "SUM";
+  logAggregator = "SUM";
   logQueries: Array<any> = [{
     key: "",
     keyType: "",
@@ -64,7 +64,7 @@ export class AlertEditCtrl {
     alertLogQuery: {
       aggregator: "SUM",
       expression: ">",
-      logQueries: [  //日志类型 _TYPE只能有一个 
+      logQueries: [  //日志类型 _TYPE只能有一个
         {
           "key": "",
           "keyType": "_TYPE", //"_TYPE" or "MESSAGE" or "HOST"

@@ -1,4 +1,3 @@
- 
 
 import angular from 'angular';
 import _ from 'lodash';
@@ -58,7 +57,7 @@ export class LogParseCtrl {
   getRuleById(id) {
     this.logParseSrv.getRuleById(id).then((response) => {
       this.rule = response.data;
-      this.rule.hosts = _.map(this.rule.hosts, (host)=>{
+      this.rule.hosts = _.map(this.rule.hosts, (host) => {
         return _.find(this.hostList, {id: host});
       });
       this.initCheckStatus('1');

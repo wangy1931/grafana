@@ -1,6 +1,3 @@
- 
-
-import angular from 'angular';
 import _ from 'lodash';
 import coreModule from 'app/core/core_module';
 import appEvents from 'app/core/app_events';
@@ -39,6 +36,8 @@ export class DashImportListCtrl {
             });
           }, 500);
         });
+      } else {
+        return Promise.resolve();
       }
     });
   }
@@ -89,7 +88,3 @@ export function dashboardImportList() {
 }
 
 coreModule.directive('dashboardImportList', dashboardImportList);
-
-
-
-

@@ -1,12 +1,10 @@
- 
 
 import config from 'app/core/config';
 import _ from 'lodash';
 import $ from 'jquery';
 import coreModule from 'app/core/core_module';
-import 'd3.graph';
-
-declare var window: any;
+import * as d3 from "d3";
+import 'vendor/d3/d3.relationshipgraph.js';
 
 var template = `
   <div class="search" ng-show="ctrl.search">
@@ -64,7 +62,7 @@ export class TopologyGraphCtrl {
   data: any;
   currentItem: any;
   searchList: any;
-  search: boolean = true;
+  search = true;
   query: string;
   group: string;
   filter: string;
@@ -94,7 +92,7 @@ export class TopologyGraphCtrl {
       { 'text': $translate.i18n.i18n_critical, 'value': 'RED' },
       { 'text': $translate.i18n.i18n_breakdown, 'value': 'GREY' }
     ];
-    this.heatmap = window.d3.select('#heatmap');
+    this.heatmap = d3.select('#heatmap');
 
     this.types = {
       'host': $translate.i18n.i18n_host,
@@ -131,7 +129,7 @@ export class TopologyGraphCtrl {
     this.searchList = _.uniq(this.searchList);
     this.data = response;
 
-    !this.rendered && (this.heatmap = window.d3.select('#heatmap').relationshipGraph(this.$scope.ctrl.params));
+    !this.rendered && (this.heatmap = (<any>d3.select('#heatmap')).relationshipGraph(this.$scope.ctrl.params));
 
     this.rendered = true;
     this.heatmap.data(this.data);

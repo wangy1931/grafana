@@ -3,8 +3,8 @@ import _ from 'lodash';
 import $ from 'jquery';
 import { coreModule } from 'app/core/core';
 import kbn from 'app/core/utils/kbn';
+import * as d3 from "d3";
 
-declare var window: any;
 const HEALTH_TYPE = {
   GREEN: { TEXT: 'green', COLOR: '#66C2A5' },
   YELLOW: { TEXT: 'yellow', COLOR: '#FDAE61' },
@@ -98,10 +98,10 @@ export class ServiceTopologyCtrl {
   }
 
   render(curItem) {
-    window.d3.selectAll('.relationshipGraph-block').classed('selected', false);
+    d3.selectAll('.relationshipGraph-block').classed('selected', false);
 
     if (curItem.name) {
-      window.d3.select(`#${curItem.__id}`).classed('selected', true);
+      d3.select(`#${curItem.__id}`).classed('selected', true);
 
       this.needNameTabs.forEach(item => {
         _.extend(this.tabs[item], { show: true, disabled: false });

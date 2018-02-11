@@ -1,5 +1,3 @@
- 
-
 import _ from 'lodash';
 import moment from 'moment';
 import flatten from '../../../core/utils/flatten';
@@ -142,6 +140,28 @@ transformers['table'] = {
     if (!data || data.length === 0) {
       return [];
     }
+
+    // Single query returns data columns as is
+    if (data.length === 1) {
+      return [...data[0].columns];
+    }
+
+    // Track column indexes: name -> index
+    const columnNames = {};
+
+    // Union of all columns
+    const columns = data.reduce((acc, series) => {
+      series.columns.forEach(col => {
+        const { text } = col;
+        if (columnNames[text] === undefined) {
+          columnNames[text] = acc.length;
+          acc.push(col);
+        }
+      });
+      return acc;
+    }, []);
+
+    return columns;
   },
   transform: function(data, panel, model) {
     if (!data || data.length === 0) {

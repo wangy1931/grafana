@@ -1,5 +1,3 @@
-///<reference path="../headers/common.d.ts" />
-///<reference path="./mod_defs.d.ts" />
 
 import "./directives/annotation_tooltip";
 import "./directives/dash_class";
@@ -15,13 +13,14 @@ import "./directives/password_strenght";
 import "./directives/spectrum_picker";
 import "./directives/tags";
 import "./directives/value_select_dropdown";
-import "./directives/plugin_component";
 import "./directives/rebuild_on_change";
 import "./directives/give_focus";
 import './jquery_extended';
 import './partials';
+import './services/ng_react';
+import { registerAngularDirectives } from './angular_wrappers';
 
-//Cloudwiz 
+//Cloudwiz
 import "./directives/system_panel";
 import "./directives/service_dep";
 import "./directives/log_tabpane";
@@ -84,4 +83,6 @@ export {
   knowledgeBaseDirective,
   timeWindowDirective,
   autoRefresh,
+  contextSrv,
+  registerAngularDirectives
 };

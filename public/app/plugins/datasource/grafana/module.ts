@@ -1,4 +1,3 @@
- 
 
 import angular from 'angular';
 import {GrafanaDatasource} from './datasource';
@@ -13,4 +12,3 @@ export {
   GrafanaDatasource as Datasource,
   GrafanaQueryCtrl as QueryCtrl,
 };
-

@@ -7,6 +7,8 @@ import 'angular-route';
 import 'angular-sanitize';
 import 'angular-native-dragdrop';
 import 'angular-bindonce';
+import 'react';
+import 'react-dom';
 
 // import 'angular-animate';
 // import 'angular-ui';
@@ -36,7 +38,7 @@ import angular from 'angular';
 import config from 'app/core/config';
 import _ from 'lodash';
 import moment from 'moment';
-import {coreModule} from './core/core';
+import {coreModule, registerAngularDirectives} from './core/core';
 
 declare var System: any;
 
@@ -120,6 +122,7 @@ export class GrafanaApp {
       'ui.bootstrap.tpls',
       'ui.calendar',
       'ngQuill',
+      'react',
     ];
 
     var module_types = ['controllers', 'directives', 'factories', 'services', 'filters', 'routes'];
@@ -131,6 +134,7 @@ export class GrafanaApp {
 
     // makes it possible to add dynamic stuff
     this.useModule(coreModule);
+    registerAngularDirectives();
 
     var preBootRequires = [System.import('app/features/all')];
 

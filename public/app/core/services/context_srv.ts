@@ -9,6 +9,7 @@ export class User {
   isSignedIn: any;
   orgRole: any;
   systemId: any;
+  timezone: string;
 
   constructor() {
     if (config.bootData.user) {
@@ -65,6 +66,10 @@ export class ContextSrv {
 
   hasRole(role) {
     return this.user.orgRole === role;
+  }
+
+  isGrafanaVisible() {
+    return !!(document.visibilityState === undefined || document.visibilityState === 'visible');
   }
 
   setPinnedState(val) {

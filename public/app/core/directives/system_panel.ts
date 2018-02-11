@@ -2,8 +2,8 @@ import $ from 'jquery';
 import _ from 'lodash';
 
 import coreModule from 'app/core/core_module';
-import 'jquery.flot';
-import 'jquery.flot.pie';
+import 'vendor/flot/jquery.flot';
+import 'vendor/flot/jquery.flot.pie';
 
 function systemPanel($parse, alertMgrSrv, healthSrv, datasourceSrv, contextSrv, backendSrv, $location, $q) {
   return {
@@ -32,7 +32,7 @@ function systemPanel($parse, alertMgrSrv, healthSrv, datasourceSrv, contextSrv, 
       var getter = $parse(attr.sys), system = getter(scope);
       contextSrv.user.systemId = system;
       var setPie = function(type, system, pieData) {
-        if (pieData.length > 1){
+        if (pieData.length > 1) {
           var colors = ['rgb(61,183,121)','rgb(255,197,58)','rgb(224,76,65)'];
         } else {
           var colors = ['#555'];
@@ -122,7 +122,7 @@ function systemPanel($parse, alertMgrSrv, healthSrv, datasourceSrv, contextSrv, 
         var hostNum = result[0],
             alertRulesNum = result[1],
             alertStatus = result[2];
-        if (typeof(hostNum) === "undefined"){
+        if (typeof(hostNum) === "undefined") {
           getPlatform();
         } else {
           scope.alertNum = alertRulesNum * hostNum;

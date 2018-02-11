@@ -32,99 +32,23 @@ const config = {
   },
 };
 
-export class TimeBuckets {
-  _lb: any;
-  _ub: any;
-  _i: any;
-  __cached__: any;
+export function TimeBucketsProvider() {
+  // const calcAuto = Private(TimeBucketsCalcAutoIntervalProvider);
+  // const getConfig = (...args) => config.get(...args);
 
-  constructor() {
-    let cache = {};
-    const sameMoment = same(moment.isMoment);
-    const sameDuration = same(moment.isDuration);
+  function isValidMoment(m) {
+    return m && ('isValid' in m) && m.isValid();
+  }
 
-    const desc = {
-      __cached__: {
-        value: this
-      },
-    };
-
-    const breakers = {
-      setBounds: 'bounds',
-      clearBounds: 'bounds',
-      setInterval: 'interval'
-    };
-
-    const resources = {
-      bounds: {
-        setup: function () {
-          return [this._lb, this._ub];
-        },
-        changes: function (prev) {
-          return !sameMoment(prev[0], this._lb) || !sameMoment(prev[1], this._ub);
-        }
-      },
-      interval: {
-        setup: function () {
-          return this._i;
-        },
-        changes: function (prev) {
-          return !sameDuration(prev, this._i);
-        }
-      }
-    };
-
-    function cachedGetter(prop) {
-      return {
-        value: function cachedGetter() {
-          if (cache.hasOwnProperty(prop)) {
-            return cache[prop];
-          }
-
-          return cache[prop] = this[prop]();
-        }
-      };
-    }
-
-    function cacheBreaker(prop) {
-      const resource = resources[breakers[prop]];
-      const setup = resource.setup;
-      const changes = resource.changes;
-      const fn = this[prop];
-      const self = this;
-
-      return {
-        value: function cacheBreaker() {
-          const prev = setup.call(self);
-          const ret = fn.apply(self, arguments);
-
-          if (changes.call(self, prev)) {
-            cache = {};
-          }
-
-          return ret;
-        }
-      };
-    }
-
-    function same(checkType) {
-      return function (a, b) {
-        if (a === b) {return true;}
-        if (checkType(a) === checkType(b)) {return +a === +b;}
-        return false;
-      };
-    }
-
-
-    _.forOwn(TimeBuckets.prototype, function (fn, prop) {
-      if (prop[0] === '_') {return;}
-
-      if (breakers.hasOwnProperty(prop)) {
-        desc[prop] = cacheBreaker(prop);
-      } else {
-        desc[prop] = cachedGetter(prop);
-      }
-    });
+  /**
+   * Helper class for wrapping the concept of an "Interval",
+   * which describes a timespan that will seperate moments.
+   *
+   * @param {state} object - one of ""
+   * @param {[type]} display [description]
+   */
+  function TimeBuckets() {
+    return (<any>TimeBuckets).__cached__(this);
   }
 
   /****
@@ -142,19 +66,24 @@ export class TimeBuckets {
    *
    * @returns {undefined}
    */
-  setBounds(input?) {
-    if (!input) { return this.clearBounds(); }
+  TimeBuckets.prototype.setBounds = function (input) {
+    if (!input) {
+      return this.clearBounds();
+    }
 
     let bounds;
     if (_.isPlainObject(input)) {
-      bounds = [input.from, input.to];
+      // accept the response from timefilter.getActiveBounds()
+      bounds = [input.min, input.max];
     } else {
       bounds = Array.isArray(input) ? input : [];
     }
 
-    const moments = _(bounds);
+    const moments = _(bounds)
+      .map(_.ary(moment, 1))
+      .sortBy(Number);
 
-    const valid = moments.size() === 2 && moments.every(dateMath.isValid);
+    const valid = moments.size() === 2 && moments.every(isValidMoment);
     if (!valid) {
       this.clearBounds();
       throw new Error('invalid bounds set: ' + input);
@@ -162,6 +91,9 @@ export class TimeBuckets {
 
     this._lb = moments.shift();
     this._ub = moments.pop();
+    if (this.getDuration().asSeconds() < 0) {
+      throw new TypeError('Intervals must be positive');
+    }
   };
 
   /**
@@ -169,7 +101,7 @@ export class TimeBuckets {
    *
    * @return {undefined}
    */
-  clearBounds() {
+  TimeBuckets.prototype.clearBounds = function () {
     this._lb = this._ub = null;
   };
 
@@ -178,8 +110,8 @@ export class TimeBuckets {
    *
    * @return {Boolean}
    */
-  hasBounds() {
-    return dateMath.isValid(this._ub) && dateMath.isValid(this._lb);
+  TimeBuckets.prototype.hasBounds = function () {
+    return isValidMoment(this._ub) && isValidMoment(this._lb);
   };
 
   /**
@@ -196,8 +128,10 @@ export class TimeBuckets {
    *                      object
    *
    */
-  getBounds() {
-    if (!this.hasBounds()) { return; }
+  TimeBuckets.prototype.getBounds = function () {
+    if (!this.hasBounds()) {
+      return null;
+    }
     return {
       min: this._lb,
       max: this._ub
@@ -211,8 +145,10 @@ export class TimeBuckets {
    *
    * @return {moment.duration|undefined}
    */
-  getDuration() {
-    if (!this.hasBounds()) { return; }
+  TimeBuckets.prototype.getDuration = function () {
+    if (!this.hasBounds()) {
+      return null;
+    }
     return moment.duration(this._ub - this._lb, 'ms');
   };
 
@@ -228,7 +164,7 @@ export class TimeBuckets {
    *
    * @param {object|string|moment.duration} input - see desc
    */
-  setInterval(input) {
+  TimeBuckets.prototype.setInterval = function (input) {
     let interval = input;
 
     // selection object -> val
@@ -292,22 +228,25 @@ export class TimeBuckets {
    *
    * @return {[type]} [description]
    */
-  getInterval() {
-    const duration = this.getDuration();
-    const interval = this._i;
+  TimeBuckets.prototype.getInterval = function () {
     const self = this;
-
-    return decorateInterval(maybeScaleInterval(readInterval(interval)));
+    const duration = self.getDuration();
+    return decorateInterval(maybeScaleInterval(readInterval()));
 
     // either pull the interval from state or calculate the auto-interval
-    function readInterval(interval) {
-      if (moment.isDuration(interval)) { return interval; }
+    function readInterval() {
+      const interval = self._i;
+      if (moment.isDuration(interval)) {
+        return interval;
+      }
       return calcAutoInterval.near(config['histogram:barTarget'].value, duration);
     }
 
     // check to see if the interval should be scaled, and scale it if so
     function maybeScaleInterval(interval) {
-      if (!self.hasBounds()) { return interval; }
+      if (!self.hasBounds()) {
+        return interval;
+      }
 
       const maxLength = config['histogram:maxBars'].value;
       const approxLen = duration / interval;
@@ -319,7 +258,9 @@ export class TimeBuckets {
         return interval;
       }
 
-      if (+scaled === +interval) { return interval; }
+      if (+scaled === +interval) {
+        return interval;
+      }
 
       decorateInterval(interval);
       return _.assign(scaled, {
@@ -337,7 +278,7 @@ export class TimeBuckets {
       interval.expression = esInterval.expression;
       interval.overflow = duration > interval ? moment.duration(interval - duration) : false;
 
-      const prettyUnits = moment.normalizeUnits(esInterval.unit);
+      const prettyUnits = moment.normalizeUnits(<any>esInterval.unit);
       if (esInterval.value === 1) {
         interval.description = prettyUnits;
       } else {
@@ -359,7 +300,7 @@ export class TimeBuckets {
    *
    * @return {string}
    */
-  getScaledDateFormat() {
+  TimeBuckets.prototype.getScaledDateFormat = function () {
     const interval = this.getInterval();
     const rules = config['dateFormat:scaled'].value;
 
@@ -372,4 +313,119 @@ export class TimeBuckets {
 
     return config['dateFormat'].value;
   };
+
+  TimeBuckets.prototype.getScaledDateFormatter = function () {
+    const interval = this.getInterval();
+    const rules = config['dateFormat:scaled'].value;
+
+    for (let i = rules.length - 1; i >= 0; i--) {
+      const rule = rules[i];
+      if (!rule[0] || interval >= moment.duration(rule[0])) {
+        return rule[1];
+      }
+    }
+
+    return config['dateFormat'].value;
+  };
+
+
+  (<any>TimeBuckets).__cached__ = function (self) {
+    let cache = {};
+    const sameMoment = same(moment.isMoment);
+    const sameDuration = same(moment.isDuration);
+
+    const desc = {
+      __cached__: {
+        value: self
+      },
+    };
+
+    const breakers = {
+      setBounds: 'bounds',
+      clearBounds: 'bounds',
+      setInterval: 'interval'
+    };
+
+    const resources = {
+      bounds: {
+        setup: function () {
+          return [self._lb, self._ub];
+        },
+        changes: function (prev) {
+          return !sameMoment(prev[0], self._lb) || !sameMoment(prev[1], self._ub);
+        }
+      },
+      interval: {
+        setup: function () {
+          return self._i;
+        },
+        changes: function (prev) {
+          return !sameDuration(prev, this._i);
+        }
+      }
+    };
+
+    function cachedGetter(prop) {
+      return {
+        value: function cachedGetter() {
+          if (cache.hasOwnProperty(prop)) {
+            return cache[prop];
+          }
+
+          return cache[prop] = self[prop]();
+        }
+      };
+    }
+
+    function cacheBreaker(prop) {
+      const resource = resources[breakers[prop]];
+      const setup = resource.setup;
+      const changes = resource.changes;
+      const fn = self[prop];
+
+      return {
+        value: function cacheBreaker() {
+          const prev = setup.call(self);
+          const ret = fn.apply(self, arguments);
+
+          if (changes.call(self, prev)) {
+            cache = {};
+          }
+
+          return ret;
+        }
+      };
+    }
+
+    function same(checkType) {
+      return function (a, b) {
+        if (a === b) {
+          return true;
+        }
+        if (checkType(a) === checkType(b)) {
+          return +a === +b;
+        }
+        return false;
+      };
+    }
+
+
+    _.forOwn(TimeBuckets.prototype, function (fn, prop) {
+      if (prop[0] === '_') {
+        return null;
+      }
+
+      if (breakers.hasOwnProperty(prop)) {
+        desc[prop] = cacheBreaker(prop);
+      } else {
+        desc[prop] = cachedGetter(prop);
+      }
+    });
+
+    return Object.create(self, desc);
+  };
+
+  return TimeBuckets;
 }
+
+

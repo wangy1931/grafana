@@ -1,10 +1,9 @@
- 
 
 import angular from 'angular';
 import _ from 'lodash';
 import $ from 'jquery';
 import moment from 'moment';
-import 'highlight';
+import 'vendor/angular-other/highlight';
 import * as FileExport from 'app/core/utils/file_export';
 import {MetricsPanelCtrl} from 'app/plugins/sdk';
 import {transformDataToTable} from './transformers';
@@ -57,6 +56,8 @@ class TablePanelCtrl extends MetricsPanelCtrl {
     super($scope, $injector);
     this.pageIndex = 0;
 
+    !this.panel && (this.panel = {});
+
     if (this.panel.styles === void 0) {
       this.panel.styles = this.panel.columns;
       this.panel.columns = this.panel.fields;
@@ -64,7 +65,7 @@ class TablePanelCtrl extends MetricsPanelCtrl {
       delete this.panel.fields;
     }
 
-    // TODO UPDATE 
+    // TODO UPDATE
     !this.panel.styles && (this.panel.styles = []);
     // 修正接口“数值转换”的数据
     for (var i = 0; i < this.panel.styles.length; i++) {

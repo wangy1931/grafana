@@ -8,6 +8,8 @@ export class LoadDashboardCtrl {
     private $scope, private $routeParams, private $location,
     private dashboardLoaderSrv, private backendSrv
   ) {
+    $scope.appEvent('dashboard-fetch-start');
+
     if (!$routeParams.slug) {
       backendSrv.get('/api/dashboards/home').then(homeDash => {
         if (homeDash.redirectUri) {

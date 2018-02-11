@@ -1,4 +1,3 @@
- 
 
 import angular from 'angular';
 import _ from 'lodash';
@@ -10,8 +9,8 @@ import coreModule from '../../core/core_module';
 import 'app/plugins/datasource/opentsdb/queryCtrl';
 
 export class LogsCtrl {
-  private currentTab: number = 0;
-  private currentLogTab: number = 0;
+  private currentTab = 0;
+  private currentLogTab = 0;
   private panelMetas: any = logsDash.rows;
   private logResultPanel: any = logsDash.logResultPanel;
   private logClusterPanel: any = logsDash.logClusterPanel;
@@ -349,7 +348,7 @@ export class LogsCtrl {
     var start = this.$location.search().start;
     var initTime = { from: "now-6h", to: "now" };
     if (start && start !== 'undefined') {
-      initTime = { from: moment(+start).add(-6, 'hour'), to: moment(+start) }
+      initTime = { from: <any> moment(+start).add(-6, 'hour'), to: <any> moment(+start) }
     }
 
     this.$scope.initDashboard({

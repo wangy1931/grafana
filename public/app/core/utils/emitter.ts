@@ -1,6 +1,5 @@
- 
 
-import EventEmitter from 'eventemitter3';
+import {EventEmitter} from 'eventemitter3';
 
 var hasOwnProp = {}.hasOwnProperty;
 
@@ -27,6 +26,10 @@ export class Emitter {
         this.emitter.off(name, handler);
       });
     }
+  }
+
+  removeAllListeners(evt?) {
+    this.emitter.removeAllListeners(evt);
   }
 
   off(name, handler) {

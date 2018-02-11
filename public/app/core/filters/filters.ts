@@ -1,4 +1,3 @@
- 
 
 import _ from 'lodash';
 import angular from 'angular';
@@ -102,7 +101,7 @@ coreModule.filter('formatAnomalyHealth', ($translate) => {
 
 coreModule.filter('formatTimeRange', () => {
   return function (text) {
-    if (!text) { return; }
+    if (!text) { return null; }
 
     var from = text.from, to = text.to;
     var args = Array.prototype.slice.call(arguments), time = args[0], relative = args[1], index = args[2];

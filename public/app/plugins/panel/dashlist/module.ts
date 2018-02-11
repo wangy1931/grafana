@@ -1,4 +1,3 @@
- 
 
 import _ from 'lodash';
 import config from 'app/core/config';
@@ -19,14 +18,15 @@ class DashListCtrl extends PanelCtrl {
     search: false,
     starred: true,
     headings: true,
+    mode: ''
   };
 
   /** @ngInject */
   constructor($scope, $injector, private backendSrv, $translate) {
     super($scope, $injector);
-    _.defaults(this.panel, this.panelDefaults);
+    _.defaults((this.panel || (this.panel = {})), this.panelDefaults);
 
-    if (this.panel.tag) {
+    if (this.panel && this.panel.tag) {
       this.panel.tags = [this.panel.tag];
       delete this.panel.tag;
     }

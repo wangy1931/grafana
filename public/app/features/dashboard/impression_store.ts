@@ -1,4 +1,3 @@
- 
 
 import store from 'app/core/store';
 import _ from 'lodash';

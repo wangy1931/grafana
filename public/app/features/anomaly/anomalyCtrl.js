@@ -1,8 +1,8 @@
 define([
     'angular',
     'lodash',
-    'jquery.flot',
-    'jquery.flot.pie',
+    'vendor/flot/jquery.flot',
+    'vendor/flot/jquery.flot.pie',
   ],
   function (angular, _) {
     'use strict';

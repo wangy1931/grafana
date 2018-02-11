@@ -45,8 +45,6 @@ export class SystemOverviewCtrl {
     private hostSrv, private utilSrv, private $location, private $scope, private $modal, private $q, private $translate,
     private NgTableParams
   ) {
-    $scope.ctrl = this;
-
     this.topologyGraphParams = {
       blockSize: 36,
       spacing: 2,
@@ -136,18 +134,18 @@ export class SystemOverviewCtrl {
       return;
     }
 
+    this.getAlertStatus();
+    this.getAnomaly();
+    this.getSystemAnomaly();
+    this.getHostSummary();
+    this.getServices();
+
     this.backendSrv.get('/api/static/template/overview').then(response => {
       this._dashboard = response;
-      this.getAlertStatus();
-      this.getAnomaly();
-      this.getSystemAnomaly();
-      this.getHostSummary();
-      this.getServices();
-    }).then(() => {
-      this.$scope.initDashboard({
-        meta     : { canStar: false, canShare: false, canEdit: false, canSave: false },
-        dashboard: this._dashboard
-      }, this.$scope);
+      // this.$scope.initDashboard({
+      //   meta     : { canStar: false, canShare: false, canEdit: false, canSave: false },
+      //   dashboard: this._dashboard
+      // }, this.$scope);
     });
   }
 

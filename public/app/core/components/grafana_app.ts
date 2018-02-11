@@ -11,7 +11,7 @@ var locale = 'zh-CN';
 export class GrafanaCtrl {
 
   /** @ngInject */
-  constructor($scope, alertSrv, utilSrv, $rootScope, $controller, contextSrv, $location, healthSrv, backendSrv) {
+  constructor($scope, alertSrv, utilSrv, $rootScope, $controller, contextSrv, $location, healthSrv, backendSrv, bridgeSrv) {
 
     $scope.init = function() {
       $scope.contextSrv = contextSrv;
@@ -26,6 +26,8 @@ export class GrafanaCtrl {
 
       alertSrv.init();
       utilSrv.init();
+      // bridgeSrv.init();
+
       if (!($location.path() === '/login' || $location.path() === '/signupfree')) {
         backendSrv.initCustomizedSources();
         backendSrv.updateTokens();

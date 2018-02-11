@@ -1,4 +1,3 @@
- 
 
 import _ from 'lodash';
 import queryPart from './query_part';
@@ -155,7 +154,7 @@ export default class InfluxQuery {
       if (operator !== '>' && operator !== '<') {
         value = "'" + value.replace('\\', '\\\\') + "'";
       }
-    } else if (interpolate){
+    } else if (interpolate) {
       value = this.templateSrv.replace(value, this.scopedVars, 'regex');
     }
 

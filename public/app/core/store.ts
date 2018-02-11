@@ -7,7 +7,7 @@ export class Store {
     window.localStorage[key] = value;
   }
 
-  getBool(key, def) {
+  getBool(key, def?) {
     if (def !== void 0 && !this.exists(key)) {
       return def;
     }

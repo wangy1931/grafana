@@ -1,8 +1,7 @@
- 
-
 import angular from 'angular';
 import _ from 'lodash';
 import appEvents from 'app/core/app_events';
+import Remarkable from 'remarkable';
 
 export class PluginEditCtrl {
   model: any;
@@ -63,10 +62,8 @@ export class PluginEditCtrl {
 
   initReadme() {
     return this.backendSrv.get(`/api/plugins/${this.pluginId}/readme`).then(res => {
-      return System.import('remarkable').then(Remarkable => {
-        var md = new Remarkable();
-        this.readmeHtml = this.$sce.trustAsHtml(md.render(res));
-      });
+      var md = new Remarkable();
+      this.readmeHtml = this.$sce.trustAsHtml(md.render(res));
     });
   }
 
@@ -77,6 +74,7 @@ export class PluginEditCtrl {
       case 'app':  return 'icon-gf icon-gf-apps';
       case 'page':  return 'icon-gf icon-gf-endpoint-tiny';
       case 'dashboard':  return 'icon-gf icon-gf-dashboard';
+      default:  return 'icon-gf icon-gf-apps';
     }
   }
 

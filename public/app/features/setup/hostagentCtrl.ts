@@ -130,7 +130,7 @@ class HostAgentCtrl {
     };
 
     $scope.$on("$destroy", function() {
-      if ($scope.inter){
+      if ($scope.inter) {
         $interval.cancel($scope.inter);
       }
     });

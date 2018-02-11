@@ -1,4 +1,3 @@
- 
 
 import config from 'app/core/config';
 import $ from 'jquery';
@@ -10,6 +9,7 @@ import * as rangeUtil from 'app/core/utils/rangeutil';
 import * as dateMath from 'app/core/utils/datemath';
 
 class MetricsPanelCtrl extends PanelCtrl {
+  scope: any;
   error: boolean;
   loading: boolean;
   datasource: any;
@@ -38,13 +38,22 @@ class MetricsPanelCtrl extends PanelCtrl {
     this.datasourceSrv = $injector.get('datasourceSrv');
     this.timeSrv = $injector.get('timeSrv');
     this.templateSrv = $injector.get('templateSrv');
+    this.scope = $scope;
 
-    if (!this.panel.targets) {
+    if (this.panel && !this.panel.targets) {
       this.panel.targets = [{}];
     }
 
     this.events.on('refresh', this.onMetricsPanelRefresh.bind(this));
     this.events.on('init-edit-mode', this.onInitMetricsPanelEditMode.bind(this));
+    this.events.on('panel-teardown', this.onPanelTearDown.bind(this));
+  }
+
+  private onPanelTearDown() {
+    if (this.dataSubscription) {
+      this.dataSubscription.unsubscribe();
+      this.dataSubscription = null;
+    }
   }
 
   private onInitMetricsPanelEditMode() {
@@ -183,7 +192,7 @@ class MetricsPanelCtrl extends PanelCtrl {
     /**
      * 如果提供了外部数据源，直接返回，不再query
      * 注意：1）当要恢复为正常query请求时，把 externalDatasource 设置为 null
-     *      2）提供的外部数据源应该满足 graph | singlestats | table 或其他panel插件的格式要求 
+     *      2）提供的外部数据源应该满足 graph | singlestats | table 或其他panel插件的格式要求
      * 例，graph 的数据格式
      * [
      *    {

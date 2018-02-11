@@ -1,4 +1,4 @@
- 
+import System from 'systemjs/dist/system.js';
 
 export class BundleLoader {
   lazy: any;
