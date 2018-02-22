@@ -338,6 +338,9 @@ func Register(r *macaron.Macaron) {
 		r.Put("/users/:id/quotas/:target", bind(m.UpdateUserQuotaCmd{}), wrap(UpdateUserQuota))
 		r.Get("/customer", wrap(GetAllCustomerUsers))
 		r.Post("/permit/:id", bind(m.OrgPermit{}), UpdateOrgPermit)
+		r.Get("/statics/", wrap(GetAllCwizStaticList))
+		r.Get("/statics/:type", wrap(GetCwizStaticListByType))
+		r.Get("/statics/:id", wrap(GetCwizStaticById))
 	}, reqGrafanaAdmin)
 
 	// rendering

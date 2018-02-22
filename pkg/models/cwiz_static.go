@@ -25,6 +25,13 @@ type CwizStatic struct {
 	Updated			time.Time
 }
 
+type CwizStaticList struct {
+	Id					int64
+	OrgId				int64
+	Type				string
+	Name				string
+}
+
 // ---------------------
 // QUERIES
 type GetCwizStaticQuery struct {
@@ -34,6 +41,17 @@ type GetCwizStaticQuery struct {
 	Result 	*CwizStatic
 }
 
+type GetCwizStaticByIdQuery struct {
+	Id			int64
+	Result 	*CwizStatic
+}
+
+type GetCwizStaticListQuery struct {
+	OrgId		int64
+	Type		string
+	Result 	[]*CwizStaticList
+}
+
 // ---------------------
 // COMMANDS
 
@@ -41,5 +59,10 @@ type AddTemplateCommand struct {
 	OrgId			int64
 	Type			string
 	Name			string
+	JsonData	*simplejson.Json
+}
+
+type UpdateTemplateCommand struct {
+	Id				int64
 	JsonData	*simplejson.Json
 }

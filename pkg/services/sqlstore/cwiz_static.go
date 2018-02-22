@@ -8,6 +8,8 @@ import (
 
 func init() {
 	bus.AddHandler("sql", GetCwizStatic)
+	bus.AddHandler("sql", GetCwizStaticList)
+	bus.AddHandler("sql", GetCwizStaticById)
 	bus.AddHandler("sql", AddTemplate)
 	bus.AddHandler("sql", UpdateTemplate)
 }
@@ -24,6 +26,28 @@ func GetCwizStatic(query *m.GetCwizStaticQuery) error {
 	}
 	query.Result = tmp[0]
   return err
+}
+
+func GetCwizStaticList(query *m.GetCwizStaticListQuery) error {
+	query.Result = make([]*m.CwizStaticList, 0)
+	sess := x.Table("cwiz_static")
+	if query.Type != "" {
+		sess.Where("type=?", query.Type)
+	}
+	err := sess.Find(&query.Result)
+  return err
+}
+
+func GetCwizStaticById(query *m.GetCwizStaticByIdQuery) error {
+	static := m.CwizStatic{Id: query.Id}
+	sess := x.Table("cwiz_static")
+	exists, err := sess.Get(&static)
+	query.Result = &static
+
+	if !exists {
+		return m.ErrNoStaticTemplate
+	}
+	return err
 }
 
 // TODO ADD TEMPLATE
