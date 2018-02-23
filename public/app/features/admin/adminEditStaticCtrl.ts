@@ -18,8 +18,11 @@ class AdminEditStaticCtrl{
   }
 
   update() {
-    var newObject = angular.fromJson(this.static.JsonData);
-
+    var data = _.cloneDeep(this.static);
+    data.JsonData = angular.fromJson(this.static.JsonData);
+    this.staticSrv.updateStatic(data).then(res => {
+      this.$scope.appEvent('alert-success', ['updated']);
+    });
   }
 }
 

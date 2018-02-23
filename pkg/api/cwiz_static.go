@@ -43,4 +43,21 @@ func GetCwizStaticById(c *middleware.Context) Response {
   return Json(200, query.Result)
 }
 
-// POST /:type/:name
+// Delete /api/admin/static/:orgId
+func DeleteCwizStatic(c *middleware.Context) Response {
+	if err := bus.Dispatch(&m.DeleteTemplateCommand{Id: c.ParamsInt64(":id")}); err != nil {
+		return ApiError(500, "Failed to update static", err)
+	}
+
+	return ApiSuccess("Static deleted")
+}
+
+// POST
+func UpdateCwizStatic(c *middleware.Context, cmd m.UpdateTemplateCommand) Response {
+  if err := bus.Dispatch(&cmd); err != nil {
+		return ApiError(500, "failed to update static", err)
+	}
+
+	return ApiSuccess("User updated")
+}
+

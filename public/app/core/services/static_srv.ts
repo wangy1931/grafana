@@ -53,6 +53,14 @@ export class StaticSrv {
     return this.backendSrv.get(`/api/admin/static/${id}`)
   }
 
+  updateStatic(data) {
+    return this.backendSrv.post('/api/admin/static', data)
+  }
+
+  deleteStatic(id) {
+    return this.backendSrv.delete(`/api/admin/static/${id}`)
+  }
+
 }
 
 coreModule.service('staticSrv', StaticSrv);

@@ -343,6 +343,8 @@ func Register(r *macaron.Macaron) {
 		r.Get("/statics/", wrap(GetAllCwizStaticList))
 		r.Get("/statics/:type", wrap(GetCwizStaticListByType))
 		r.Get("/static/:id", wrap(GetCwizStaticById))
+		r.Delete("/static/:id", DeleteCwizStatic)
+		r.Post("/static", bind(m.UpdateTemplateCommand{}), UpdateCwizStatic)
 	}, reqGrafanaAdmin)
 
 	// rendering

@@ -1,6 +1,8 @@
 package sqlstore
 
 import (
+	"time"
+
 	"github.com/go-xorm/xorm"
 	"github.com/wangy1931/grafana/pkg/bus"
 	m "github.com/wangy1931/grafana/pkg/models"
@@ -12,6 +14,7 @@ func init() {
 	bus.AddHandler("sql", GetCwizStaticById)
 	bus.AddHandler("sql", AddTemplate)
 	bus.AddHandler("sql", UpdateTemplate)
+	bus.AddHandler("sql", DeleteTemplate)
 }
 
 func GetCwizStatic(query *m.GetCwizStaticQuery) error {
@@ -66,11 +69,26 @@ func AddTemplate(cmd *m.AddTemplateCommand) error {
 }
 
 // TODO UPDATE TEMPLATE
-func UpdateTemplate(template *m.CwizStatic) error {
+func UpdateTemplate(cmd *m.UpdateTemplateCommand) error {
 	return inTransaction2(func(sess *session) error {
-		if _, err := sess.Id(template.Id).Update(template); err != nil {
+
+		template := m.CwizStatic{
+			JsonData: cmd.JsonData,
+			Updated: 	time.Now(),
+		}
+		if _, err := sess.Id(cmd.Id).Update(&template); err != nil {
 			return err
 		}
     return nil
+	})
+}
+
+func DeleteTemplate(cmd *m.DeleteTemplateCommand) error {
+	return inTransaction2(func(sess *session) error {
+		_, err := sess.Exec("DELETE FROM cwiz_static WHERE id = ?", cmd.Id)
+		if err != nil {
+			return err
+		}
+		return nil
 	})
 }

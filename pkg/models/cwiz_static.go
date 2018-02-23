@@ -66,3 +66,7 @@ type UpdateTemplateCommand struct {
 	Id				int64
 	JsonData	*simplejson.Json
 }
+
+type DeleteTemplateCommand struct {
+	Id				int64
+}
