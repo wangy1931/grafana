@@ -98,6 +98,8 @@ func Register(r *macaron.Macaron) {
 	r.Get("/admin/orgs", reqGrafanaAdmin, Index)
 	r.Get("/admin/orgs/edit/:id", reqGrafanaAdmin, Index)
 	r.Get("/admin/stats", reqGrafanaAdmin, Index)
+	r.Get("/admin/statics", reqGrafanaAdmin, Index)
+	r.Get("/admin/statics/edit/:id", reqGrafanaAdmin, Index)
 
 	r.Get("/styleguide", reqSignedIn, Index)
 
@@ -340,7 +342,7 @@ func Register(r *macaron.Macaron) {
 		r.Post("/permit/:id", bind(m.OrgPermit{}), UpdateOrgPermit)
 		r.Get("/statics/", wrap(GetAllCwizStaticList))
 		r.Get("/statics/:type", wrap(GetCwizStaticListByType))
-		r.Get("/statics/:id", wrap(GetCwizStaticById))
+		r.Get("/static/:id", wrap(GetCwizStaticById))
 	}, reqGrafanaAdmin)
 
 	// rendering

@@ -45,6 +45,14 @@ export class StaticSrv {
     return this.backendSrv.get(`/api/static/${type}/${name}`).then(res => res.JsonData);
   }
 
+  getStatics(type) {
+    return this.backendSrv.get(`/api/admin/statics/${type}`)
+  }
+
+  getStaticById(id) {
+    return this.backendSrv.get(`/api/admin/static/${id}`)
+  }
+
 }
 
 coreModule.service('staticSrv', StaticSrv);

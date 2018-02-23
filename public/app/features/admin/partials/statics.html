@@ -1,0 +1,42 @@
+<navbar icon="fa fa-fw fa-cogs" title-url="admin">
+    <a href="admin/statics" class="navbar-page-btn">
+      Statics
+    </a>
+  </navbar>
+  
+  <div class="page-container">
+    <div class="page-header">
+      <h1>Statics</h1>
+    </div>
+  
+    <table class="filter-table form-inline">
+      <thead>
+        <tr>
+          <th></th>
+          <th translate="i18n_name"></th>
+          <th translate="i18n_type"></th>
+          <th translate="page_admin_org_id"></th>
+          <th translate="i18n_operating"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="static in ctrl.statics">
+          <td>{{$index + 1}}</td>
+          <td>{{static.Name}}</td>
+          <td>{{static.Type}}</td>
+          <td>{{static.OrgId}}</td>
+          <td class="text-right">
+            <a href="admin/statics/edit/{{static.Id}}" class="btn btn-inverse btn-small">
+              <i class="fa fa-edit"></i>
+              <span translate="i18n_edit"></span>
+            </a>
+            &nbsp;&nbsp;
+            <a class="btn btn-danger btn-small">
+              <i class="fa fa-remove"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

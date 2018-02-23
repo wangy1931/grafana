@@ -165,6 +165,11 @@ export class SideMenuCtrl {
             text: "i18n_menu_admin_orgs",
             icon: "fa fa-fw fa-users",
             url: this.getUrl("/admin/orgs"),
+          },
+          {
+            text: "i18n_menu_admin_orgs",
+            icon: "fa fa-fw fa-users",
+            url: this.getUrl("/admin/statics"),
           }
         ]
       });
