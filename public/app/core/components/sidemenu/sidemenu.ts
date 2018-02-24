@@ -167,7 +167,7 @@ export class SideMenuCtrl {
             url: this.getUrl("/admin/orgs"),
           },
           {
-            text: "i18n_menu_admin_orgs",
+            text: "Statics",
             icon: "fa fa-fw fa-users",
             url: this.getUrl("/admin/statics"),
           }

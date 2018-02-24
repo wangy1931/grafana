@@ -267,6 +267,10 @@ func SetEngine(engine *xorm.Engine, enableLog bool) (err error) {
 		x.Logger = xorm.NewSimpleLogger(f)
 	}
 
+	path := filepath.Join(setting.DataPath, "sql/cwiz_static.sql")
+	_, err = x.ImportFile(path)
+	log.Info("Import Data cwiz_static: %v\n", path)
+
 	return nil
 }
 
