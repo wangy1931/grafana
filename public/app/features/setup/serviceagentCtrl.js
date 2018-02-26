@@ -33,8 +33,10 @@ function (angular, _) {
 
     $scope.getService = function() {
       staticSrv.getInstallation('services').then(function(result) {
-        $scope.services = result.service;
-        $scope.getServiceStatus(result.service);
+        result = JSON.stringify(result, true);
+        result = _.replace(result, /@/gi, ';');
+        $scope.services = JSON.parse(result).service;
+        $scope.getServiceStatus($scope.services);
       });
     };
 
