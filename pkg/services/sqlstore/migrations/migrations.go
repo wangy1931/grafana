@@ -1,6 +1,9 @@
 package migrations
 
-import . "github.com/wangy1931/grafana/pkg/services/sqlstore/migrator"
+import (
+	. "github.com/wangy1931/grafana/pkg/services/sqlstore/migrator"
+	"github.com/go-xorm/xorm"
+)
 
 // --- Migration Guide line ---
 // 1. Never change a migration that is committed and pushed to master
@@ -24,7 +27,10 @@ func AddMigrations(mg *Migrator) {
 	addPreferencesMigrations(mg)
 	addSystemMigrations(mg)
 	addOrgPermitMigrations(mg)
-	addCwizStaticMigrations(mg)
+}
+
+func ImportMigrations(engine *xorm.Engine) {
+	importCwizStaticMigrations(engine)	
 }
 
 func addMigrationLogMigrations(mg *Migrator) {

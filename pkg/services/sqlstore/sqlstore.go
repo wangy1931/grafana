@@ -251,6 +251,7 @@ func SetEngine(engine *xorm.Engine, enableLog bool) (err error) {
 	migrator := migrator.NewMigrator(x)
 	migrator.LogLevel = log.INFO
 	migrations.AddMigrations(migrator)
+	migrations.ImportMigrations(x)
 
 	if err := migrator.Start(); err != nil {
 		return fmt.Errorf("Sqlstore::Migration failed err: %v\n", err)
@@ -266,10 +267,6 @@ func SetEngine(engine *xorm.Engine, enableLog bool) (err error) {
 		}
 		x.Logger = xorm.NewSimpleLogger(f)
 	}
-
-	path := filepath.Join(setting.DataPath, "sql/cwiz_static.sql")
-	_, err = x.ImportFile(path)
-	log.Info("Import Data cwiz_static: %v\n", path)
 
 	return nil
 }
