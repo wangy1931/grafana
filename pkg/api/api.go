@@ -316,12 +316,6 @@ func Register(r *macaron.Macaron) {
 		r.Group("/static", func() {
 			//dashboard
 			r.Get("/:name", GetStaticFile)
-			//template
-			// r.Get("/template/:name",GetDashboardTemplate)
-			//alertdef
-			// r.Get("/alertd/:name",GetAlertDef)
-			// metric help message
-			// r.Get("/metric/:name", GetMetricHelpFile)
 			// cwiz static
 			r.Get("/:type/:name", wrap(GetCwizStatic))
 		})

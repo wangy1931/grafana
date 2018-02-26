@@ -304,8 +304,8 @@ function (angular, _, coreModule, config) {
 
     this.readMetricHelpMessage = function (key) {
       !_.metricMessage[key] && this.get('/api/static/metrics/' + key).then(function (result) {
-        _.metricMessage[key] = result;
-        _.extend(_.metricHelpMessage, result);
+        _.metricMessage[key] = result.JsonData;
+        _.extend(_.metricHelpMessage, result.JsonData);
       })
       .catch(function (err) {
         // set isHandled true, then alertSrv won't show
