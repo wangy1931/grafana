@@ -8,7 +8,7 @@ export function loadPluginCss(options) {
   if (config.bootData.user.userTheme) {
     System.import(options[config.bootData.user.userTheme] + '!css');
   } else {
-    System.import(options.light + '!css');
+    System.import(options.benz + '!css');
   }
 }
 
