@@ -38,7 +38,7 @@ func importCwizStaticMigrations(engine *xorm.Engine) {
 	}
 	if isEmpty {
 		path := filepath.Join(setting.DataPath, "sql/cwiz_static.sql")
-		x.ImportFile(path)
-		log.Info("Import cwiz_static data")
+		res, err := x.ImportFile(path);
+		log.Info("Import cwiz_static data total: %v, err: %v", len(res), err)
 	}
 }
