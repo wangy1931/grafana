@@ -91,7 +91,7 @@ func CreateUser(cmd *m.CreateUserCommand) error {
 			IsAdmin:       cmd.IsAdmin,
 			OrgId:         orgId,
 			EmailVerified: cmd.EmailVerified,
-      Theme:         "light",
+      Theme:         "benz",
 			Created:       time.Now(),
 			Updated:       time.Now(),
 		}
