@@ -27,6 +27,7 @@ func AddMigrations(mg *Migrator) {
 	addPreferencesMigrations(mg)
 	addSystemMigrations(mg)
 	addOrgPermitMigrations(mg)
+	addCwizStaticMigrations(mg)
 }
 
 func ImportMigrations(engine *xorm.Engine) {
