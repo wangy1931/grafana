@@ -278,6 +278,7 @@ export function sideMenuDirective() {
         } else {
           scope.showTooltip = true;
         };
+        scope.$emit('resize-logo', scope.showTooltip)
         if (event) {
           scope.$apply();
         }

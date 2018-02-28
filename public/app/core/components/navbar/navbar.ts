@@ -11,6 +11,7 @@ export class NavbarCtrl {
   deadline: Number;
   priceUrl: string;
   showNavbarPageBtn: boolean = false;
+  logo: string = 'public/img/daimler.png';
 
   /** @ngInject */
   constructor(private $scope, private $rootScope, private $location, private contextSrv, private $translate) {
@@ -18,6 +19,10 @@ export class NavbarCtrl {
     this.showNavbarPageBtn = (this.$location.path() === '/');
     this.deadline = moment(contextSrv.user.deadline).diff(moment(), 'days');
     this.priceUrl = '//cloudwiz.cn/product_price.html';
+    // public/img/daimler.png
+    $rootScope.$on('resize-logo', (e, payload) => {
+      this.logo = payload ? 'public/img/daimler_s.png' : 'public/img/daimler.png';
+    });
   }
 
   showGuide() {
