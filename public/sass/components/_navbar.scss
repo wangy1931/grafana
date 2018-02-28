@@ -3,6 +3,7 @@
   overflow: visible;
   position: relative;
   z-index: $zindex-navbar;
+  font-size: 16px;
 }
 
 .navbar-inner {
@@ -31,7 +32,7 @@
 // Links
 .navbar .nav > li > a {
   float: none;
-  padding: 17px 13px 13px;
+  padding: 17px 13px;
   color: $navbarLinkColor;
   text-decoration: none;
 
@@ -123,11 +124,10 @@
   color: darken($link-color, 5%);
   background-color: $navbarButtonBackground;
   font-size: $font-size-lg;
-  padding: 1rem 1rem 0.7rem 1rem;
+  padding: 1.2rem 1rem 0.9rem 1rem;
 
   &:hover {
     background: $navbarButtonBackgroundHighlight;
-    color: $link-color;
   }
 
   .icon-gf {
@@ -170,6 +170,7 @@
     border-right: none;
     background-color: $dark-2;
     width: $side-menu-width;
+    height: $navbarHeight;
 
     .icon-gf-grafana_wordmark  {
       display: inline-block;

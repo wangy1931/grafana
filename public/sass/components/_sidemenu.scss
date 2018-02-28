@@ -4,7 +4,7 @@
 
 .sidemenu-wrapper {
   position: fixed;
-  top: 51px;
+  top: $navbarHeight;
   left: 0;
   width: $side-menu-width;
   background-color: $dark-2;
@@ -78,20 +78,12 @@
     bottom: 0;
     width: 100%;
     .sidemenu-main-link {
-      font-size: 12px;
       display: flex;
-    }
-    .icon-circle {
-      // margin-left: -15px;
     }
     .sidemenu-item-text {
       width: 102px;
       text-align: left;
     }
-  }
-  &.sidemenu-small > li > .sidemenu-item > span, 
-  &.submenu > li > .sidemenu-item > span {
-    // float: left;
   }
 
   &.submenu {
@@ -138,10 +130,6 @@
     opacity: 1;
     transform: translate3d(0,0,0);
   }
-}
-
-.sidemenu-main-link {
-  font-size: 14px;
 }
 
 .sidemenu-item-text {
@@ -302,10 +290,6 @@
         display: none !important;
       }
     }
-  }
-  .sidemenu-pinned .navbar-brand-btn {
-    // padding: 0.4rem;
-    // border-right: none;
   }
 
   .sidemenu-wrapper {

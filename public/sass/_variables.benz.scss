@@ -27,7 +27,7 @@ $dark-5:           #444444;
 $gray-1:           #555555;
 $gray-2:           #7B7B7B;
 $gray-3:           #b3b3b3;
-$gray-4:           #D8D9DA;
+$gray-4:           #BBBBBB;
 $gray-5:           #ECECEC;
 $gray-6:           #f4f5f8;
 $gray-7:           #fbfbfb;
@@ -40,8 +40,8 @@ $white:            #fff;
 
 // Accent colors
 // -------------------------
-$blue:                  #3269f9;  // #33B5E5;
-$blue-dark:             #005f81;
+$blue:                  #5097ab;  // #33B5E5;
+$blue-dark:             #00677f;
 $green:                 #01c482;  // #609000;
 $red:                   #f9445f;  // #CC3900;
 $yellow:                #ffc800;  // #ECBB13;
@@ -87,7 +87,7 @@ $external-link-color:     $blue;
 
 // Typography
 // -------------------------
-$headings-color:       darken($white,11%);
+$headings-color:       $white;
 $abbr-border-color: 	 $gray-3 !default;
 $text-muted: 			     $text-color-weak;
 
@@ -230,26 +230,26 @@ $horizontalComponentOffset:       180px;
 // -------------------------
 $wellBackground:                  #131517;
 
-$navbarHeight:                    52px;
+$navbarHeight:                    60px;
 // $navbarBackgroundHighlight:       $dark-3;
 // $navbarBackground:                $dark-3;
 // $navbarBorder:                    1px solid $body-bg;
 $navbarBackgroundHighlight: $dark-3;
-$navbarBackground: $panel-bg;
+$navbarBackground: #222327;
 $navbarBorder: 1px solid $dark-3;
 $navbarShadow: 0 0 20px black;
 
 $navbarText:                      $gray-4;
-$navbarLinkColor:                 $gray-4;
+$navbarLinkColor:                 $white;
 $navbarLinkColorHover:            $white;
 $navbarLinkColorActive:           $navbarLinkColorHover;
-$navbarLinkBackgroundHover:       transparent;
-$navbarLinkBackgroundActive:      $navbarBackground;
+$navbarLinkBackgroundHover:       $blue;
+$navbarLinkBackgroundActive:      $blue;
 $navbarBrandColor:                $link-color;
 $navbarDropdownShadow:            inset 0px 4px 10px -4px $body-bg;
 
 $navbarButtonBackground: $navbarBackground;
-$navbarButtonBackgroundHighlight: $body-bg;
+$navbarButtonBackgroundHighlight: $navbarBackground;
 
 $navbar-button-border: #151515;
 
@@ -361,6 +361,7 @@ $thresholds-hover-color: (#3DB779, #FFD500, #FE9805, #ff4f45, #BB1144, #BABFC7, 
     color: $body-color !important;
   }
   .health-panel.panels-wrapper:first-child {
+    color: $text-color-strong;
     border-right: solid 10px $page-bg;
   }
   .summary-panel.view-panel {
@@ -457,6 +458,9 @@ input, select, .input, .select {
 .navbar-inner {
   .navbar-brand-btn img {
     width: $side-menu-width - 2rem;
+  }
+  .navbar-brand-btn-background {
+    height: 48px;
   }
 }
 @media (max-height: 800px) {

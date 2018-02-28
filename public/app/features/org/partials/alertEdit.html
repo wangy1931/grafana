@@ -71,12 +71,12 @@
           <div class="gf-form">
             <span class="gf-form-label width-11" translate="page_alert_name"></span>
             <input type="text" class="input-xlarge tidy-form-input last"
-                ng-model="ctrl.alertDef.name" ng-blur="ctrl.checkName()" placeholder="报警规则名称" required>
+                ng-model="ctrl.alertDef.name" ng-blur="ctrl.checkName()" placeholder="{{ ctrl.$translate.i18n.page_alert_name }}" required>
           </div>
           <div class="gf-form">
               <span class="gf-form-label width-11" translate="page_alert_desc"></span>
               <input type="text" class="input-xlarge tidy-form-input last"
-                  ng-model="ctrl.alertDef.description" placeholder="报警规则描述信息" required>
+                  ng-model="ctrl.alertDef.description" placeholder="{{ ctrl.$translate.i18n.page_alert_desc }}" required>
           </div>
         </div>
       </div>
@@ -351,9 +351,9 @@
           <!-- Feichi: Modify -->
           <div class="gf-form-inline">
             <div class="gf-form">
-                <span class="gf-form-label width-7">实例列表</span>
+                <span class="gf-form-label width-7" translate="page_logs_filter_host"></span>
                 <input type="text" class="gf-form-input width-20"
-                      ng-model="ctrl.alertDef.alertDetails.hosts" placeholder="请输入以','分隔的hosts列表">
+                      ng-model="ctrl.alertDef.alertDetails.hosts" placeholder="{{ ctrl.$translate.i18n.page_alert_split }}">
             </div>
             <!-- <div class="gf-form">
                 <span class="gf-form-label">Host Membership</span>

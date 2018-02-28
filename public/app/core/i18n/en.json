@@ -187,6 +187,7 @@
   "page_alert_total": "Total",
   "page_alert_critical": "Critical",
   "page_alert_warning": "Warning",
+  "page_alert_split": "Please enter the hosts list separated by ','",
   "page_anomaly_title": "Anomaly Detection",
   "page_anomaly_data_point": "Data Points Number",
   "page_anomaly_metrics_stat": "Metrics Number",

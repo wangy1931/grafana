@@ -12,8 +12,8 @@
                 <tr ng-repeat="item in ctrl.kpiPanel.leftTableBodys"
                     ng-class="{ active: item.name == ctrl.kpiPanel.leftSelected }"
                     ng-click="ctrl.leftClickHandler(item, ctrl.kpiPanel.type)">
-                    <td class="text-overflow">
-                        <div class="status-{{ item.status | lowercase }}">{{ item.name }}</div>
+                    <td>
+                        <div class="text-overflow status-{{ item.status | lowercase }}" style="width: 150px;">{{ item.name }}</div>
                     </td>
                     <td class="">
                         <button type="button" 

@@ -289,7 +289,7 @@ export class AlertEditCtrl {
     private $scope, private $routeParams, private $controller, private $location,
     private $timeout, private $rootScope,
     private alertMgrSrv, private alertSrv, private contextSrv, private datasourceSrv,
-    private backendSrv, private timeSrv
+    private backendSrv, private timeSrv, private $translate
   ) {
     $controller('OpenTSDBQueryCtrl', { $scope: $scope });
     datasourceSrv.get('opentsdb').then(datasource => {

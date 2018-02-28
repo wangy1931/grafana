@@ -80,26 +80,26 @@ $enable-flex: false;
 // Typography
 // -------------------------
 
-$font-family-sans-serif:   "Helvetica Neue", Helvetica, Arial, sans-serif;
-$font-family-serif:        Georgia, "Times New Roman", Times, serif;
+$font-family-sans-serif:   Arial, "黑体", "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
+$font-family-serif:        Arial, "黑体", Georgia, "Times New Roman", Times, serif;
 $font-family-monospace:    Menlo, Monaco, Consolas, "Courier New", monospace;
 $font-family-base:         $font-family-sans-serif !default;
 
-$font-size-root: 14px !default;
+$font-size-root: 12px !default;
 
 $font-size-base: 1rem !default;
-$font-size-lg:   1.25rem !default;
+$font-size-lg:   1.3rem !default;
 $font-size-sm:   .875rem !default;
 $font-size-xs:   .75rem !default;
 
 $line-height-base: 1.5 !default;
 $font-weight-semi-bold: 600;
 
-$font-size-h1: 2.0rem !default;
-$font-size-h2: 1.75rem !default;
-$font-size-h3: 1.50rem !default;
-$font-size-h4: 1.30rem !default;
-$font-size-h5: 1.20rem !default;
+$font-size-h1: 1.5rem !default;
+$font-size-h2: 1.5rem !default;
+$font-size-h3: 14px !default;
+$font-size-h4: 14px !default;
+$font-size-h5: 14px !default;
 $font-size-h6: 1rem !default;
 
 $display1-size: 6rem !default;
@@ -116,7 +116,7 @@ $lead-font-size:   1.25rem !default;
 $lead-font-weight: 300 !default;
 
 $headings-margin-bottom: ($spacer / 2) !default;
-$headings-font-family:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$headings-font-family:   Arial, "黑体", "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
 $headings-font-weight:   400 !default;
 $headings-line-height:   1.1 !default;
 
