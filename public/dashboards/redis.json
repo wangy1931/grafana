@@ -1,9 +1,9 @@
 {
-  "id": 5,
-  "title": "Redis",
-  "system": 1,
+  "id": 7,
+  "title": "redis",
+  "system": 0,
   "manualAnnotation": null,
-  "originalTitle": "Redis",
+  "originalTitle": "redis",
   "tags": [],
   "style": "dark",
   "timezone": "browser",
@@ -110,10 +110,15 @@
           "targets": [
             {
               "aggregator": "sum",
+              "currentTagKey": "",
+              "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "metric": "redis.cache.connectedclients",
-              "refId": "A"
+              "refId": "A",
+              "tags": {
+                "host": "*"
+              }
             }
           ],
           "thresholds": [],
@@ -193,11 +198,16 @@
           "targets": [
             {
               "aggregator": "sum",
+              "currentTagKey": "",
+              "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "downsampleInterval": "",
               "metric": "redis.cache.usedmemory",
-              "refId": "A"
+              "refId": "A",
+              "tags": {
+                "host": "*"
+              }
             }
           ],
           "thresholds": [],
@@ -444,20 +454,32 @@
           "targets": [
             {
               "aggregator": "sum",
+              "currentTagKey": "",
+              "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "metric": "redis.cache.getcommands",
-              "refId": "A"
+              "refId": "A",
+              "tags": {
+                "host": "*"
+              }
             },
             {
               "aggregator": "sum",
+              "currentTagKey": "",
+              "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "metric": "redis.cache.setcommands",
-              "refId": "B"
+              "refId": "B",
+              "tags": {
+                "host": "*"
+              }
             },
             {
               "aggregator": "sum",
+              "currentTagKey": "host",
+              "currentTagValue": "*",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "metric": "redis.cache.totalcommandsprocessed",
@@ -542,26 +564,42 @@
             {
               "aggregator": "sum",
               "alias": "回收key数量",
+              "currentTagKey": "",
+              "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
+              "downsampleInterval": "",
               "metric": "redis.cache.evictedkeys",
-              "refId": "A"
+              "refId": "A",
+              "tags": {
+                "host": "*"
+              }
             },
             {
               "aggregator": "sum",
               "alias": "过期key数量",
+              "currentTagKey": "",
+              "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "metric": "redis.cache.expiredkeys",
-              "refId": "B"
+              "refId": "B",
+              "tags": {
+                "host": "*"
+              }
             },
             {
               "aggregator": "sum",
               "alias": "key总数",
+              "currentTagKey": "",
+              "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "metric": "redis.cache.totalkeys",
-              "refId": "C"
+              "refId": "C",
+              "tags": {
+                "host": "*"
+              }
             }
           ],
           "thresholds": [],
@@ -739,6 +777,6 @@
   },
   "refresh": false,
   "schemaVersion": 12,
-  "version": 2,
+  "version": 8,
   "links": []
 }
