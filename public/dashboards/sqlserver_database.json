@@ -1,7 +1,7 @@
 {
-  "id": 8,
+  "id": 9,
   "title": "sqlserver_database",
-  "system": 1,
+  "system": 0,
   "manualAnnotation": null,
   "originalTitle": "sqlserver_database",
   "tags": [],
@@ -26,6 +26,7 @@
             "rgba(50, 172, 45, 0.97)"
           ],
           "datasource": null,
+          "decimals": null,
           "editable": true,
           "error": false,
           "format": "percentunit",
@@ -56,7 +57,7 @@
           },
           "targets": [
             {
-              "aggregator": "none",
+              "aggregator": "avg",
               "disableDownsampling": true,
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
@@ -1208,6 +1209,80 @@
               "show": true
             }
           ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "id": 16,
+          "isNew": true,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "sum",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "metric": "sqlserver.database.cpu.percentage",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Panel Title",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
         }
       ],
       "title": "Row"
@@ -1248,8 +1323,8 @@
   "annotations": {
     "list": []
   },
-  "refresh": "30s",
+  "refresh": false,
   "schemaVersion": 12,
-  "version": 41,
+  "version": 0,
   "links": []
 }
