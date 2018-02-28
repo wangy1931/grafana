@@ -635,5 +635,7 @@
   "i18n_china_telecom": "China Telecom",
   "i18n_maxed": "reach limit",
   "i18n_location": "Location",
-  "i18n_service_group": "Resource Group"
+  "i18n_service_group": "Resource Group",
+  "i18n_eg_metric": "e.g. cpu.usr",
+  "i18n_eg_log_type": "e.g. nginx"
 }

@@ -634,5 +634,7 @@
   "i18n_china_telecom": "中国电信",
   "i18n_maxed": "已达上限",
   "i18n_location": "位置",
-  "i18n_service_group": "资源组"
+  "i18n_service_group": "资源组",
+  "i18n_eg_metric": "例: cpu.usr",
+  "i18n_eg_log_type": "例: nginx"
 }

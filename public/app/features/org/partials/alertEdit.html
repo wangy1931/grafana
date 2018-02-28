@@ -105,7 +105,7 @@
                       ng-model='ctrl.logType'
                       spellcheck='false'
                       bs-typeahead-old="ctrl.servicelist"
-                      placeholder="例: nginx" />
+                      placeholder="{{ ctrl.$translate.i18n.i18n_eg_log_type }}" />
               </div>
               <!-- <div class="gf-form">
                   <span class="gf-form-label width-7">聚合方式</span>
@@ -191,7 +191,7 @@
                           ng-model='metricDef.metric'
                           spellcheck='false'
                           bs-typeahead-old="suggestMetrics"
-                          placeholder="例: cpu.usr" />
+                          placeholder="{{ ctrl.$translate.i18n.i18n_eg_log_type }}" />
                 </div>
                 <div class="gf-form">
                     <span class="gf-form-label width-11">
