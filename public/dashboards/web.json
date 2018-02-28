@@ -1,7 +1,7 @@
 {
-  "id": 7,
+  "id": 10,
   "title": "Web服务",
-  "system": 1,
+  "system": 0,
   "manualAnnotation": null,
   "originalTitle": "Web服务",
   "tags": [],
@@ -118,11 +118,15 @@
           "targets": [
             {
               "aggregator": "sum",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "disableDownsampling": false,
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "downsampleInterval": "",
-              "metric": "web.application.serverfarms.cpu.percentage",
-              "refId": "A"
+              "metric": "server.farm.cpu.percentage",
+              "refId": "A",
+              "tags": {}
             }
           ],
           "thresholds": "",
@@ -243,7 +247,7 @@
               "disableDownsampling": true,
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
-              "metric": "web.application.serverfarms.memory.percentage",
+              "metric": "server.farm.memory.percentage",
               "refId": "A"
             }
           ],
@@ -301,10 +305,15 @@
           "targets": [
             {
               "aggregator": "sum",
+              "currentTagKey": "",
+              "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "metric": "web.application.site.requests",
-              "refId": "A"
+              "refId": "A",
+              "tags": {
+                "host": "*"
+              }
             }
           ],
           "thresholds": [],
@@ -376,11 +385,16 @@
           "targets": [
             {
               "aggregator": "sum",
+              "currentTagKey": "",
+              "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "downsampleInterval": "",
               "metric": "web.application.site.average.response.time",
-              "refId": "A"
+              "refId": "A",
+              "tags": {
+                "host": "*"
+              }
             }
           ],
           "thresholds": [],
@@ -452,18 +466,28 @@
           "targets": [
             {
               "aggregator": "sum",
+              "currentTagKey": "",
+              "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "downsampleInterval": "",
               "metric": "web.application.site.data.in",
-              "refId": "A"
+              "refId": "A",
+              "tags": {
+                "host": "*"
+              }
             },
             {
               "aggregator": "sum",
+              "currentTagKey": "",
+              "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "metric": "web.application.site.data.out",
-              "refId": "B"
+              "refId": "B",
+              "tags": {
+                "host": "*"
+              }
             }
           ],
           "thresholds": [],
@@ -543,12 +567,17 @@
           "targets": [
             {
               "aggregator": "none",
+              "currentTagKey": "",
+              "currentTagValue": "",
               "disableDownsampling": true,
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
               "downsampleInterval": "",
-              "metric": "web.application.serverfarms.disk.queue.length",
-              "refId": "A"
+              "metric": "server.farm.disk.queue.length",
+              "refId": "A",
+              "tags": {
+                "host": "*"
+              }
             }
           ],
           "thresholds": [],
@@ -594,7 +623,87 @@
       "collapse": false,
       "editable": true,
       "height": "250px",
-      "panels": [],
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "id": 11,
+          "isNew": true,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "aggregator": "sum",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "downsampleAggregator": "avg",
+              "downsampleFillPolicy": "none",
+              "metric": "server.farm.cpu.percentage",
+              "refId": "A",
+              "tags": {
+                "host": "*"
+              }
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Panel Title",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        }
+      ],
       "title": "New row"
     }
   ],
@@ -635,6 +744,6 @@
   },
   "refresh": false,
   "schemaVersion": 12,
-  "version": 1,
+  "version": 8,
   "links": []
 }
