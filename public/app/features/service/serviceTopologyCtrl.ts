@@ -18,7 +18,9 @@ const Map = {
   'Microsoft.Sql/servers': 'sqlserver',
   'Microsoft.Sql/servers/databases': 'sqlserver_database',
   'Microsoft.Cache/Redis': 'redis',
-  'Microsoft.Storage/storageAccounts': 'storage'
+  'Microsoft.Storage/storageAccounts': 'storage',
+  'Microsoft.Scheduler/jobCollections/jobs': 'job',
+  'Microsoft.Scheduler/jobcollections': 'job'
 };
 
 export class ServiceTopologyCtrl {
