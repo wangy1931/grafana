@@ -107,7 +107,7 @@
 }
 
 .navbar-toggle-menu-btn {
-  padding: 1.2rem 1rem 0.9rem 1rem;
+  padding: 1.4rem 1rem;
   border-right: 1px solid $tight-form-border;
   background-color: $navbarButtonBackground;
 }
@@ -124,7 +124,7 @@
   color: darken($link-color, 5%);
   background-color: $navbarButtonBackground;
   font-size: $font-size-lg;
-  padding: 1.2rem 1rem 0.9rem 1rem;
+  padding: 1.4rem 1rem;
 
   &:hover {
     background: $navbarButtonBackgroundHighlight;
