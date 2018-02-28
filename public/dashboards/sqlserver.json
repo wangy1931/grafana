@@ -1,7 +1,7 @@
 {
-  "id": 4,
+  "id": 8,
   "title": "sqlserver",
-  "system": 1,
+  "system": 0,
   "manualAnnotation": null,
   "originalTitle": "sqlserver",
   "tags": [],
@@ -53,7 +53,7 @@
               "currentTagValue": "",
               "downsampleAggregator": "avg",
               "downsampleFillPolicy": "none",
-              "metric": "sqlserver.dtu.percentage",
+              "metric": "sqlserver.dtu",
               "refId": "A",
               "tags": {
                 "host": "*"
@@ -217,6 +217,6 @@
   },
   "refresh": "30s",
   "schemaVersion": 12,
-  "version": 4,
+  "version": 0,
   "links": []
 }
