@@ -336,7 +336,7 @@
   "i18n_warning": "Warning",
   "i18n_critical": "Critical",
   "i18n_normal": "Normal",
-  "i18n_unnormal": "Unnormal",
+  "i18n_unnormal": "Abnormal",
   "i18n_breakdown": "Breakdown",
   "i18n_not_running": "Not running",
   "i18n_process": "process",
