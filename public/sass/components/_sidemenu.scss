@@ -59,7 +59,7 @@
         top: 0px;
         // important to overlap it otherwise it can be hidden
         // again by the mouse getting outside the hover space
-        left: 10.5rem;
+        left: 12.5rem;
         color: $dropdownLinkColorHover;
         background-color: white;
         @include animation('dropdown-anim 150ms ease-in-out 100ms forwards');
@@ -272,7 +272,7 @@
 
 .sidemenu-cover {
   position: fixed;
-  left: $side-menu-width + 10.5rem;
+  left: $side-menu-width + 12.5rem;
   right: 0px;
   bottom: 0px;
   top: -$navbarHeight;
