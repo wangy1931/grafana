@@ -251,10 +251,11 @@ func SetEngine(engine *xorm.Engine, enableLog bool) (err error) {
 	migrator := migrator.NewMigrator(x)
 	migrator.LogLevel = log.INFO
 	migrations.AddMigrations(migrator)
-
+	
 	if err := migrator.Start(); err != nil {
 		return fmt.Errorf("Sqlstore::Migration failed err: %v\n", err)
 	}
+	migrations.ImportMigrations(x)
 
 	if enableLog {
 		logPath := path.Join(setting.LogsPath, "xorm.log")

@@ -26,7 +26,8 @@ public/css/*.min.css
 .idea/
 *.iml
 
-/data/*
+/data/log/*
+/data/png/*
 /bin/*
 
 conf/custom.ini

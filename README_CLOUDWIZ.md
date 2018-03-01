@@ -1,5 +1,174 @@
 ## Update tables Features
 
+## Cwiz Statics
+data: 2018-02-26
+
+- Deploy
+1、请保证 /data/sql/cwiz_static.sql 为最新版本(公有云)
+2、请保证 /data/sql/cwiz_static.sql 为相应版本(私有云)
+3、更新mysql方法-添加下列语句至/data/sql/cwiz_static.sql:
+```sql
+INSERT INTO `cwiz_static` VALUES ('<id>', '<org_id/0>', '<type>', '<name>', '<json_data>', '<create_time>', '<update_time>'); 
+```
+4、请注意第16条语句不能加转义字符'/', 否则导入失败
+5、请避免 json_data 中使用分隔符';', 若不可避免,请使用'@'代替, 并在前端逻辑中replace
+6、直接从mysql中 dump+data 一般会失败, 请逐条INSERT
+
+- Get Template
+
+` GET /api/static/:type/:name`
+
+**Example Request**:
+
+  GET /api/static/report/report HTTP/1.1
+  Accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk
+
+**Example Response**:
+
+  HTTP/1.1 200
+  Content-Type: application/json
+  
+  {
+    "Id": 70,
+    "OrgId": 2,
+    "Type": "report",
+    "Name": "report",
+    "JsonData": {
+      "reports": [
+        {
+          "reportName": "报告20170314.pdf",
+          "reportUrl": "Report20170314.pdf"
+        }
+      ]
+    },
+    "Created": "2018-02-11T12:03:30+08:00",
+    "Updated": "2018-02-11T12:03:30+08:00"
+  }
+
+- Get Template List
+
+` GET /api/admin/statics/`
+
+**Example Request**:
+
+  GET /api/admin/statics/ HTTP/1.1
+  Accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk
+
+**Example Response**:
+
+  HTTP/1.1 200
+  Content-Type: application/json
+
+  [{
+    "Id": 1,
+    "OrgId": 0,
+    "Type": "alertd",
+    "Name": "hadoop.datanode"
+  }]
+
+- Get Template By Id
+
+` GET /api/admin/static/:id`
+
+**Example Request**:
+
+  GET /api/admin/statics/1 HTTP/1.1
+  Accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk
+
+**Example Response**:
+
+  HTTP/1.1 200
+  Content-Type: application/json
+
+  {
+    "Id": 1,
+    "OrgId": 0,
+    "Type": "alertd",
+    "Name": "hadoop.datanode",
+    "JsonData": {
+      "alertd": [
+        {
+          "alertDetails": {
+            "cluster": "cluster1",
+            "clusterwideAggregator": null,
+            "crit": {
+              "durarionMinutes": 10,
+              "threshold": 20000000000
+            },
+            "hostQuery": {
+              "expression": null,
+              "metricQueries": [
+                {
+                  "aggregator": "AVG",
+                  "metric": "hadoop.datanode.fsdatasetstate-null.DfsUsed",
+                  "transform": null
+                }
+              ]
+            },
+            "hosts": null,
+            "membership": "*",
+            "monitoringScope": "HOST",
+            "overrideHostQuery": null,
+            "warn": {
+              "durarionMinutes": 5,
+              "threshold": 10000000000
+            }
+          },
+          "creationTime": 1483658472835,
+          "description": "Hadoop文件使用空间不要超过总空间的80% (具体临界值要设, 目前是20G)",
+          "hash": 1264853798,
+          "id": "2.1.aa5182e8-09dc-48e2-8cc9-30745cff9c11",
+          "modificationTime": 1483658928273,
+          "name": "Hadoop文件使用空间太大",
+          "org": "2",
+          "service": "1"
+        }
+      ]
+    },
+    "Created": "2018-02-09T15:57:22+08:00",
+    "Updated": "2018-02-09T15:57:25+08:00"
+  }
+
+- Update Template
+
+` POST /api/admin/static`
+
+**Example Request**:
+
+  GET /api/admin/static HTTP/1.1
+  Accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk
+
+**Example Response**:
+
+  HTTP/1.1 200
+
+  <*api.NormalResponse Value>
+
+- Delete Template
+
+`DELETE /api/admin/static/:id`
+
+**Example Request**:
+
+  DELETE /api/admin/statics/1 HTTP/1.1
+  Accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk
+
+**Example Response**:
+
+  HTTP/1.1 200
+
+  <*api.NormalResponse Value>
+
 ## Datasource add column 'intranet_url'
 date: 2018-02-05
 

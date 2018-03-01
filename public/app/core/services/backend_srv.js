@@ -303,9 +303,9 @@ function (angular, _, coreModule, config) {
     };
 
     this.readMetricHelpMessage = function (key) {
-      !_.metricMessage[key] && this.get('/api/static/metric/' + key).then(function (result) {
-        _.metricMessage[key] = result;
-        _.extend(_.metricHelpMessage, result);
+      !_.metricMessage[key] && this.get('/api/static/metrics/' + key).then(function (result) {
+        _.metricMessage[key] = result.JsonData;
+        _.extend(_.metricHelpMessage, result.JsonData);
       })
       .catch(function (err) {
         // set isHandled true, then alertSrv won't show
@@ -345,7 +345,7 @@ function (angular, _, coreModule, config) {
     }
 
     this.importMetricsKpi = function() {
-      return this.get('/api/static/metric/kpi');
+      return this.get('/api/static/kpi/kpi');
     }
 
     this.isIE = function() {
