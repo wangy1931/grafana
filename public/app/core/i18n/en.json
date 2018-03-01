@@ -336,7 +336,7 @@
   "i18n_warning": "Warning",
   "i18n_critical": "Critical",
   "i18n_normal": "Normal",
-  "i18n_unnormal": "Unnormal",
+  "i18n_unnormal": "Abnormal",
   "i18n_breakdown": "Breakdown",
   "i18n_not_running": "Not running",
   "i18n_process": "process",
@@ -392,6 +392,7 @@
   "i18n_reference": "Reference Information",
   "i18n_matching_rules": "Matching Rules",
   "i18n_basic_info": "Basic Information",
+  "i18n_system": "System",
   "i18n_menu_monitor": "Monitor",
   "i18n_menu_alert": "Alerting",
   "i18n_menu_alert_rule": "Rule Based Alerts",
@@ -633,5 +634,7 @@
   "i18n_china_mobile": "China Mobile",
   "i18n_china_telecom": "China Telecom",
   "i18n_maxed": "reach limit",
-  "page_excluded_title": "It will not participate in the health value calculation"
+  "page_excluded_title": "It will not participate in the health value calculation",
+  "i18n_first_page": "First Page",
+  "i18n_last_page": "Last Page"
 }

@@ -61,7 +61,7 @@ module.exports = function(grunt) {
     });
     grunt.config('copy.backend_files', {
       expand: true,
-      src: ['conf/defaults.ini', 'conf/sample.ini', 'vendor/**/*', 'scripts/*'],
+      src: ['conf/defaults.ini', 'conf/sample.ini', 'vendor/**/*', 'scripts/*', 'data/sql/*'],
       options: { mode: true},
       dest: '<%= tempDir %>'
     });

@@ -98,6 +98,8 @@ func Register(r *macaron.Macaron) {
 	r.Get("/admin/orgs", reqGrafanaAdmin, Index)
 	r.Get("/admin/orgs/edit/:id", reqGrafanaAdmin, Index)
 	r.Get("/admin/stats", reqGrafanaAdmin, Index)
+	r.Get("/admin/statics", reqGrafanaAdmin, Index)
+	r.Get("/admin/statics/edit/:id", reqGrafanaAdmin, Index)
 
 	r.Get("/styleguide", reqSignedIn, Index)
 
@@ -314,12 +316,8 @@ func Register(r *macaron.Macaron) {
 		r.Group("/static", func() {
 			//dashboard
 			r.Get("/:name", GetStaticFile)
-			//template
-			r.Get("/template/:name",GetDashboardTemplate)
-			//alertdef
-			r.Get("/alertd/:name",GetAlertDef)
-			// metric help message
-			r.Get("/metric/:name", GetMetricHelpFile)
+			// cwiz static
+			r.Get("/:type/:name", wrap(GetCwizStatic))
 		})
 
 		r.Get("/permit/:id", wrap(GetOrgPermitByOrgId))
@@ -336,6 +334,11 @@ func Register(r *macaron.Macaron) {
 		r.Put("/users/:id/quotas/:target", bind(m.UpdateUserQuotaCmd{}), wrap(UpdateUserQuota))
 		r.Get("/customer", wrap(GetAllCustomerUsers))
 		r.Post("/permit/:id", bind(m.OrgPermit{}), UpdateOrgPermit)
+		r.Get("/statics/", wrap(GetAllCwizStaticList))
+		r.Get("/statics/:type", wrap(GetCwizStaticListByType))
+		r.Get("/static/:id", wrap(GetCwizStaticById))
+		r.Delete("/static/:id", DeleteCwizStatic)
+		r.Post("/static", bind(m.UpdateTemplateCommand{}), UpdateCwizStatic)
 	}, reqGrafanaAdmin)
 
 	// rendering

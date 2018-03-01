@@ -130,56 +130,69 @@ export class AlertStatusCtrl {
 
   getCurrentAlertValue() {
     this.alertRows.forEach(alertItem => {
-      if (alertItem.definition.alertDetails.alertType === 'LOG_ALERT') {
-        alertItem.curAlertValue = alertItem.status.triggeredValue;
-        return;
-      }
-      // when multi metrics, need expression
-      if (alertItem.definition.alertDetails.alertType === 'MUTI_ALERT') {
-        var metrics = angular.copy(alertItem.definition.alertDetails.alertMutiQuery.metricQueries);
-        metrics.forEach(metric => {
-          metric.metric = this.prefix + metric.metric;
-          metric.aggregator = metric.aggregator.toLowerCase();
-        });
-        let queries = {
-          timeRange: { from: '1m-ago', to: null },
-          metrics: metrics,
-          metricExpression: alertItem.definition.alertDetails.alertMutiQuery.expression.split(';')[1],
-          tags: [{
-            "type": "iliteral_or",
-            "tagk": "host",
-            "filter": alertItem.status.monitoredEntity,
-            "groupBy": true
-          }]
-        };
-
-        this.getDataSource().then(() => {
-          this.backendSrv.getOpentsdbExpressionQuery(queries, this.opentsdbUrl).then(response => {
-            var dps = 0;
-            if (!response.data.outputs[0].dps[0] || isNaN(response.data.outputs[0].dps[0][1])) {
-              dps = alertItem.status.triggeredValue;
-            } else {
-              dps = response.data.outputs[0].dps[0][1];
-            }
-            alertItem.curAlertValue = Math.floor(dps * 1000) / 1000;
+      switch (alertItem.definition.alertDetails.alertType) {
+        case 'LOG_ALERT':
+          alertItem.curAlertValue = alertItem.status.triggeredValue;
+          return;
+        case 'MUTI_ALERT': {
+          // when multi metrics, need expression
+          var metrics = angular.copy(alertItem.definition.alertDetails.alertMutiQuery.metricQueries);
+          metrics.forEach(metric => {
+            metric.metric = this.prefix + metric.metric;
+            metric.aggregator = metric.aggregator.toLowerCase();
           });
-        });
-      } else {
-        var tags = { host: alertItem.status.monitoredEntity };
-        alertItem.definition.alertDetails.tags && alertItem.definition.alertDetails.tags.forEach(tag => {
-          tags[tag.name] = tag.value
-        });
+          let queries = {
+            timeRange: { from: '1m-ago', to: null },
+            metrics: metrics,
+            metricExpression: alertItem.definition.alertDetails.alertMutiQuery.expression.split(';')[1],
+            tags: [{
+              "type": "iliteral_or",
+              "tagk": "host",
+              "filter": alertItem.status.monitoredEntity,
+              "groupBy": true
+            }]
+          };
 
-        var queries = [{
-          "metric": alertItem.metric,
-          "aggregator": alertItem.definition.alertDetails.alertSingleQuery.metricQueries[0].aggregator.toLowerCase(),
-          "downsample": "1m-avg",
-          "tags": tags
-        }];
-        this.datasourceSrv.getHostStatus(queries, 'now-2m').then(response => {
-          alertItem.curAlertValue = Math.floor(response.status * 1000) / 1000;
-          if (isNaN(alertItem.curAlertValue)) { alertItem.curAlertValue = this.$translate.i18n.i18n_empty; }
-        });
+          this.getDataSource().then(() => {
+            this.backendSrv.getOpentsdbExpressionQuery(queries, this.opentsdbUrl).then(response => {
+              var dps = 0;
+              if (!response.data.outputs[0].dps[0] || isNaN(response.data.outputs[0].dps[0][1])) {
+                dps = alertItem.status.triggeredValue;
+              } else {
+                dps = response.data.outputs[0].dps[0][1];
+              }
+              alertItem.curAlertValue = Math.floor(dps * 1000) / 1000;
+            });
+          });
+          break;
+        };
+        case 'SINGLE_ALERT': {
+          var tags: any = {};
+          alertItem.definition.alertDetails.tags && alertItem.definition.alertDetails.tags.forEach(tag => {
+            tags[tag.name] = tag.value
+          });
+          tags.host = alertItem.status.monitoredEntity;
+
+          var queries = [{
+            "metric": alertItem.metric,
+            "aggregator": alertItem.definition.alertDetails.alertSingleQuery.metricQueries[0].aggregator.toLowerCase(),
+            "downsample": "1m-avg",
+            "tags": tags
+          }];
+          this.datasourceSrv.getHostStatus(queries, 'now-2m').then(response => {
+            alertItem.curAlertValue = Math.floor(response.status * 1000) / 1000;
+            if (isNaN(alertItem.curAlertValue)) { alertItem.curAlertValue = this.$translate.i18n.i18n_empty; }
+          })
+          .catch((err) => {
+            alertItem.curAlertValue = this.$translate.i18n.i18n_empty;
+          });
+          break;
+        }
+        default: {
+          alertItem.curAlertValue = '-';
+          alertItem.definition.alertDetails.threshold = '-';
+          break;
+        }
       }
     });
   }
