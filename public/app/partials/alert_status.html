@@ -46,6 +46,7 @@
   <div class="">
     <table class="grafana-options-table table-block">
       <thead>
+        <th></th>
         <th translate="page_alert_name"></th>
         <th translate="page_alert_content"></th>
         <th translate="page_alert_host"></th>
@@ -61,10 +62,10 @@
       </thead>
       <tbody>
         <tr ng-repeat="alert in ctrl.alertRows | filter: ctrl.alertSearch">
-          <td>
-            <i class="fa fa-bell" ng-class="{'CRITICAL':'system-legend-danger','WARNING':'system-legend-warning'}[alert.status.level]"></i> &nbsp;
-            {{ alert.definition.name }}
+          <td ng-class="{'CRITICAL':'system-legend-danger','WARNING':'system-legend-warning'}[alert.status.level]">
+            <i ng-class="_.getAlertType(alert.definition.alertDetails.alertType)"></i>
           </td>
+          <td>{{ alert.definition.name }}</td>
           <td style="position: relative">
             <div ng-if="alert.type === 'MUTI_ALERT'" style="padding-right: 20px">
                 {{ _.getMetricName(alert.definition.alertDetails.alertMutiQuery.metricQueries[0].metric) }} <em translate="i18n_etc"></em>
@@ -98,6 +99,7 @@
   <div class="">
     <table class="table">
       <thead>
+        <th></th>
         <th translate="page_alert_name"></th>
         <th translate="page_alert_content"></th>
         <th translate="page_alert_host"></th>
@@ -110,10 +112,10 @@
       </thead>
       <tbody>
         <tr ng-repeat="alert in ctrl.alertHistory | orderBy:closedTimeInMillis:true | filter: ctrl.alertSearch">
-          <td>
-            <i class="fa fa-bell" ng-class="{'CRITICAL':'system-legend-danger','WARNING':'system-legend-warning'}[alert.status.level]"></i> &nbsp;
-            {{ alert.definition.name }}
+          <td ng-class="{'CRITICAL':'system-legend-danger','WARNING':'system-legend-warning'}[alert.status.level]">
+            <i ng-class="_.getAlertType(alert.definition.alertDetails.alertType)"></i>
           </td>
+          <td>{{ alert.definition.name }}</td>
           <td style="position: relative;">
             <div ng-if="alert.type === 'MUTI_ALERT'" style="padding-right: 20px">
                 {{ _.getMetricName(alert.definition.alertDetails.alertMutiQuery.metricQueries[0].metric) }} <em translate="i18n_etc"></em>

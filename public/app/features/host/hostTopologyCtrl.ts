@@ -301,7 +301,7 @@ export class HostTopologyCtrl {
   getDashboard(host) {
     this.saveTopologyData();
 
-    var dashboard_type = /windows/i.test(host._private_.osFamily) ? 'windows_machine_host_topology' : 'machine_host_topology';
+    var dashboard_type = _.getOsDashboard(host._private_.osFamily);
     var requery = !(this.dashboard && _.isEqual(dashboard_type, this.dashboard.title));
     if (requery) {
       this.staticSrv.getDashboard(dashboard_type).then(response => {
