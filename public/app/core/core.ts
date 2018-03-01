@@ -21,7 +21,7 @@ import "./directives/give_focus";
 import './jquery_extended';
 import './partials';
 
-//Cloudwiz 
+//Daimler 
 import "./directives/system_panel";
 import "./directives/service_dep";
 import "./directives/log_tabpane";

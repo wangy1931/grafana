@@ -1,6 +1,6 @@
 {
-  "i18n_index_company": "Cloudwiz（Beijing）Technology Co., Ltd.",
-  "i18n_index": "Cloudwiz",
+  "i18n_index_company": "2018 Daimler AG. All Rights Reserved",
+  "i18n_index": "Daimler",
   "page_overview_title": "System Overview",
   "page_overview_panel_health_title": "Health Score Index",
   "page_overview_panel_alert_title": "Alert Status",
@@ -259,7 +259,7 @@
   "page_report_inspection": "Weekly Report",
   "page_report_inspection_none": "Weekly Report",
   "page_report_expert": "Performance Analysis Report",
-  "page_report_expert_none": "You do not have a performance analysis report yet, and you can contact Cloudwiz administrator for expert reports",
+  "page_report_expert_none": "You do not have a performance analysis report yet, and you can contact Daimler administrator for expert reports",
   "page_report_download": "Preview/Download",
   "page_agent_synchronize": "Synchronize",
   "page_agent_synchronize_confirm": "Confirm",

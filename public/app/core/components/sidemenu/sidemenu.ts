@@ -180,12 +180,6 @@ export class SideMenuCtrl {
       });
     }
 
-    item.push({
-      text: "i18n_menu_document",
-      url: "http://cloudwiz.cn/document/",
-      target: '_blank'
-    });
-
     return item;
   };
 

@@ -75,12 +75,12 @@ func EnsureAdminUser() {
 
   system := m.AddSystemsCommand{}
   system.OrgId = cmd.Result.OrgId
-  system.SystemsName = []string{"Cloudwiz"}
+  system.SystemsName = []string{"Daimler"}
   if err := bus.Dispatch(&system); err != nil {
     log.Error(3, "Failed to create defalut system for admin", err)
     return
   }
-  log.Info("Created default Cloudwiz system")
+  log.Info("Created default Daimler system")
 	log.Info("Created default admin user: %v", setting.AdminUser)
 }
 

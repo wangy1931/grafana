@@ -36,28 +36,12 @@ export class ToolbarCtrl {
     });
 
     this.toolbarItems[2] = [];
-    if (!contextSrv.isViewer) {
-      this.toolbarItems[2].push({
-        class: '',
-        icon : 'fa fa-fw fa-cloud-download',
-        itemname: 'i18n_install_guide',
-        href: '/setting/agent',
-        clickHandler: () => {},
-      });
-    }
-
     this.toolbarItems[2].push({
       class: '',
-      icon: 'fa fa-fw fa-info-circle',
-      itemname: 'i18n_usage_guide',
-      href: 'javascript:;',
-      clickHandler: () => {
-        $rootScope.appEvent('show-modal', {
-          src: 'public/app/core/components/toolbar/guide_use.html',
-          modalClass: 'guide_use',
-          scope: $scope.$new(),
-        });
-      }
+      icon : 'fa fa-fw fa-cubes',
+      itemname: 'i18n_menu_cmdb_metrics',
+      href: '/cmdb/metrics',
+      clickHandler: () => {},
     });
 
   }

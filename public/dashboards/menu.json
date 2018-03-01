@@ -50,18 +50,6 @@
           "url": "/association?guide"
         }
       ]
-    },
-    {
-      "id": 5,
-      "text": "i18n_menu_cmdb",
-      "icon": "fa fa-fw fa-cubes",
-      "children": [
-        {
-          "id": 3,
-          "text": "i18n_menu_cmdb_metrics",
-          "url": "/cmdb/metrics"
-        }
-      ]
     }
   ]
 }
