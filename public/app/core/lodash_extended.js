@@ -259,5 +259,11 @@ function ($, moment, kbn) {
     return 'machine_host_topology';
   }
 
+  _.getServiceDashboard = function(service) {
+    if (/hadoop/i.test(service)) return 'hadoop';
+    if (/hbase/i.test(service)) return 'hbase';
+    return service;
+  }
+
   return _;
 });
