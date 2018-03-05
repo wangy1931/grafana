@@ -18,23 +18,3 @@ export default function createTreeMenu(element, event) {
   }]);
 }
 
-export function createNavBar(element, event) {
-  var injector = angular.element(document).injector();
-  var content = document.createElement('div');
-  content.innerHTML = '<navbar icon="fa fa-fw fa-cubes" title=""></navbar>';
-
-  injector.invoke(["$compile", "$rootScope", "$location", "contextSrv", "$translate", function($compile, $rootScope, $location, contextSrv, $translate) {
-    var tmpScope = $rootScope.$new(true);
-    // tmpScope.ctrl = {
-    //   contextSrv: contextSrv
-    // };
-    console.log(tmpScope);
-    tmpScope.ctrl = new NavbarCtrl(tmpScope, $rootScope, $location, contextSrv, $translate);
-
-    $compile(content)(tmpScope);
-    // tmpScope.$digest();
-    tmpScope.$destroy();
-
-    element.html(content);
-  }]);
-}

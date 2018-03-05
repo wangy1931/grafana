@@ -511,6 +511,34 @@ export class BackendSrv {
       data: tmpl
     });
   }
+
+  switchOrg(orgId) {
+    this.post('/api/user/using/' + orgId, {}).then(() => {
+      this.contextSrv.sidemenu = false;
+      window.location.href = config.appSubUrl + '/systems';
+    });
+  }
+
+  getOrgsMenu() {
+    var item: any = [];
+    return this.get('/api/user/orgs').then(orgs => {
+      orgs.forEach((org, index) => {
+        if (org.orgId === this.contextSrv.user.orgId) {
+          return;
+        }
+
+        item.push({
+          id: org.orgId,
+          text: org.name,
+          url: org.name,
+          click: () => {
+            this.switchOrg(org.orgId);
+          }
+        });
+      });
+      return item;
+    });
+  }
 }
 
 coreModule.service('backendSrv', BackendSrv);

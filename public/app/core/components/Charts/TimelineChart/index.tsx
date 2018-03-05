@@ -95,7 +95,6 @@ export default class TimelineChart extends React.Component<TimelineChartProps, a
         key: 'key', // key字段
         value: 'value', // value字段
       });
-    console.log(dv);
 
     const timeScale = {
       type: 'time',

@@ -42,7 +42,9 @@ export class HostTopologyCtrl {
     private alertSrv,
     private $translate,
     private $timeout,
-    private staticSrv
+    private staticSrv,
+    private templateValuesSrv,
+    private dynamicDashboardSrv
   ) {
     $scope.ctrl = this;
     $scope.refresh_interval = '30s';
@@ -298,9 +300,6 @@ export class HostTopologyCtrl {
   getHostDashboard(host) {
     this.saveTopologyData();
 
-    // if (!this.dashboard) {
-    //   console.log(2);
-    //   this.backendSrv.get('/api/static/machine_host_topology').then(response => {
     var dashboard_type = _.getOsDashboard(host._private_.osFamily);
     var requery = !(this.dashboard && _.isEqual(dashboard_type, this.dashboard.title));
     if (requery) {
@@ -315,10 +314,9 @@ export class HostTopologyCtrl {
           meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
         }, this.$scope);
 
-        // host.name && this.variableUpdated(host);
+        host.name && this.variableUpdated(host);
       });
     } else {
-      console.log(1);
       this.variableUpdated(host);
     }
   }
@@ -394,12 +392,12 @@ export class HostTopologyCtrl {
   variableUpdated(host) {
     this.dashboard.templating.list[0].current = { "text": host.name || "All", "value": host.name || "$__all", "tags": [] };
 
-    // this.variableSrv.init(this.dashboard);
-    // this.variableSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
-    //   this.dynamicDashboardSrv.update(this.dashboard);
-    //   // this.$rootScope.$emit('template-variable-value-updated');
-    //   // this.$rootScope.$broadcast('refresh');
-    // });
+    this.templateValuesSrv.init(this.dashboard);
+    this.templateValuesSrv.variableUpdated(this.dashboard.templating.list[0]).then(() => {
+      this.dynamicDashboardSrv.update(this.dashboard);
+      this.$rootScope.$emit('template-variable-value-updated');
+      this.$rootScope.$broadcast('refresh');
+    });
   }
 
   saveTopologyData() {

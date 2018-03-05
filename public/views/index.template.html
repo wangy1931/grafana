@@ -27,11 +27,7 @@
 <body ng-cloak class="theme-[[.User.UserTheme]]">
   <grafana-app class="grafana-app">
 
-    <!-- <aside class="sidemenu-wrapper">
-      <sidemenu ng-if="contextSrv.sidemenu"></sidemenu>
-    </aside> -->
-
-    <aside ng-if="contextSrv.isSignedIn">
+    <aside ng-if="contextSrv.isSignedIn && location.pathname !== '/systems'">
       <sider-menu collapsed="contextSrv.collapsed" onCollapse="handleMenuCollapse" menuData="menuData" location="location"></sider-menu>
     </aside>
 

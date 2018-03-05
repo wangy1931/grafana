@@ -52,6 +52,10 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
     fontSize: '100%',
     rowHeight: false,
     sort: {col: 0, desc: true},
+    operator: {
+      hide: true,
+      type: "checkbox"
+    },
   };
 
   pager: any;
@@ -67,6 +71,8 @@ class CWTablePanelCtrl extends MetricsPanelCtrl {
     super($scope, $injector);
     this.pageIndex = 0;
     this.pageCounts = [];
+
+    !this.panel && (this.panel = {});
 
     if (this.panel.styles === void 0) {
       this.panel.styles = this.panel.columns;

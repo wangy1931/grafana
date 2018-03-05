@@ -37,14 +37,12 @@ export default class TreeMenu extends React.Component<TreeMenuProps, any> {
   }
 
   onSelect = (selectedKeys, info) => {
-    console.log('selected', selectedKeys, info);
   }
 
   onCheck = (checkedKeys, info) => {
     if (this.props.onTreeCheck) {
       this.props.onTreeCheck(checkedKeys);
     }
-    // console.log('onCheck', checkedKeys, info);
   }
 
   renderTree(data) {

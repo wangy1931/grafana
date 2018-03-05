@@ -6,6 +6,8 @@ define([
 function (angular, _, config) {
   'use strict';
 
+  config = config.default;
+
   var module = angular.module('grafana.controllers');
 
   module.controller('RowCtrl', function($scope, $rootScope, $timeout) {

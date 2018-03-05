@@ -1,39 +1,46 @@
+
 import angular from 'angular';
-import Drop from 'tether-drop';
-import PerfectScrollbar from 'perfect-scrollbar';
+import $ from 'jquery';
 
 var module = angular.module('grafana.directives');
 
 var panelTemplate = `
-  <div class="panel-container">
-    <div class="panel-header" ng-class="{'grid-drag-handle': !ctrl.fullscreen}">
-      <span class="panel-info-corner">
-        <i class="fa"></i>
-        <span class="panel-info-corner-inner"></span>
+  <div class="panel-container" ng-class="{'panel-transparent': ctrl.panel.transparent}">
+    <div class="panel-header">
+      <span class="panel-error small pointer" ng-if="ctrl.error" ng-click="ctrl.openInspector()">
+        <span data-placement="top" bs-tooltip="ctrl.error" data-container="body">
+          <i class="fa fa-exclamation-circle"></i>
+        </span>
       </span>
 
       <span class="panel-loading" ng-show="ctrl.loading">
         <i class="fa fa-spinner fa-spin"></i>
       </span>
-
-      <panel-header class="panel-title-container" panel-ctrl="ctrl"></panel-header>
+      <div class="panel-title-container drag-handle" panel-menu></div>
     </div>
 
     <div class="panel-content">
-      <ng-transclude class="panel-height-helper"></ng-transclude>
+      <ng-transclude></ng-transclude>
+    </div>
+    <panel-resizer></panel-resizer>
+    <div class="help-info" ng-class="{true:'active'}[helpShow]" ng-if="helpInfo.info" ng-mouseleave="isShowInfo($event)">
+      <div>
+        <h2>{{helpInfo.title}}</h2>
+        <div ng-bind-html="helpInfo.context"></div>
+      </div>
     </div>
   </div>
 
   <div class="panel-full-edit" ng-if="ctrl.editMode">
     <div class="tabbed-view tabbed-view--panel-edit">
       <div class="tabbed-view-header">
-        <h3 class="tabbed-view-panel-title">
+        <h2 class="tabbed-view-title">
           {{ctrl.pluginName}}
-        </h3>
+        </h2>
 
         <ul class="gf-tabs">
           <li class="gf-tabs-item" ng-repeat="tab in ::ctrl.editorTabs">
-            <a class="gf-tabs-link" ng-click="ctrl.changeTab($index)" ng-class="{active: ctrl.editorTabIndex === $index}">
+            <a class="gf-tabs-link" ng-click="ctrl.editorTabIndex = $index" ng-class="{active: ctrl.editorTabIndex === $index}">
               {{::tab.title}}
             </a>
           </li>
@@ -53,169 +60,97 @@ var panelTemplate = `
   </div>
 `;
 
-module.directive('grafanaPanel', function($rootScope, $document, $timeout) {
+module.directive('grafanaPanel', function() {
   return {
     restrict: 'E',
     template: panelTemplate,
     transclude: true,
-    scope: { ctrl: '=' },
+    scope: { ctrl: "=" },
     link: function(scope: any, elem) {
       var panelContainer = elem.find('.panel-container');
-      var panelContent = elem.find('.panel-content');
-      var cornerInfoElem = elem.find('.panel-info-corner');
       var ctrl = scope.ctrl;
-      var infoDrop;
-      var panelScrollbar;
-
-      // the reason for handling these classes this way is for performance
-      // limit the watchers on panels etc
-      var transparentLastState = false;
-      var lastHasAlertRule = false;
-      var lastAlertState;
-      var hasAlertRule;
-
-      function mouseEnter() {
-        panelContainer.toggleClass('panel-hover-highlight', true);
-        ctrl.dashboard.setPanelFocus(ctrl.panel.id);
-      }
-
-      function mouseLeave() {
-        panelContainer.toggleClass('panel-hover-highlight', false);
-        ctrl.dashboard.setPanelFocus(0);
-      }
-
-      function panelHeightUpdated() {
-        panelContent.css({ height: ctrl.height + 'px' });
-        if (panelScrollbar) {
-          panelScrollbar.update();
-        }
-      }
-
-      // set initial transparency
-      if (ctrl.panel.transparent) {
-        transparentLastState = true;
-        panelContainer.addClass('panel-transparent');
-      }
-
-      // update scrollbar after mounting
-      ctrl.events.on('component-did-mount', () => {
-        if (ctrl.__proto__.constructor.scrollable) {
-          panelScrollbar = new PerfectScrollbar(panelContent[0], {
-            wheelPropagation: true,
-          });
-        }
+      scope.$watchGroup(['ctrl.fullscreen', 'ctrl.containerHeight'], function() {
+        panelContainer.css({minHeight: ctrl.containerHeight});
+        elem.toggleClass('panel-fullscreen', ctrl.fullscreen ? true : false);
       });
-
-      ctrl.events.on('panel-size-changed', () => {
-        ctrl.calculatePanelHeight();
-        panelHeightUpdated();
-        $timeout(() => {
-          ctrl.render();
-        });
-      });
-
-      // set initial height
-      ctrl.calculatePanelHeight();
-      panelHeightUpdated();
-
-      ctrl.events.on('render', () => {
-        if (transparentLastState !== ctrl.panel.transparent) {
-          panelContainer.toggleClass('panel-transparent', ctrl.panel.transparent === true);
-          transparentLastState = ctrl.panel.transparent;
-        }
-
-        // hasAlertRule = ctrl.panel.alert !== undefined;
-        // if (lastHasAlertRule !== hasAlertRule) {
-        //   panelContainer.toggleClass('panel-has-alert', hasAlertRule);
-
-        //   lastHasAlertRule = hasAlertRule;
-        // }
-
-        // if (ctrl.alertState) {
-        //   if (lastAlertState) {
-        //     panelContainer.removeClass('panel-alert-state--' + lastAlertState);
-        //   }
-
-        //   if (ctrl.alertState.state === 'ok' || ctrl.alertState.state === 'alerting') {
-        //     panelContainer.addClass('panel-alert-state--' + ctrl.alertState.state);
-        //   }
-
-        //   lastAlertState = ctrl.alertState.state;
-        // } else if (lastAlertState) {
-        //   panelContainer.removeClass('panel-alert-state--' + lastAlertState);
-        //   lastAlertState = null;
-        // }
-      });
-
-      function updatePanelCornerInfo() {
-        var cornerMode = ctrl.getInfoMode();
-        cornerInfoElem[0].className = 'panel-info-corner panel-info-corner--' + cornerMode;
-
-        if (cornerMode) {
-          if (infoDrop) {
-            infoDrop.destroy();
-          }
-
-          infoDrop = new Drop({
-            target: cornerInfoElem[0],
-            content: function() {
-              return ctrl.getInfoContent({ mode: 'tooltip' });
-            },
-            classes: ctrl.error ? 'drop-error' : 'drop-help',
-            openOn: 'hover',
-            hoverOpenDelay: 100,
-            tetherOptions: {
-              attachment: 'bottom left',
-              targetAttachment: 'top left',
-              constraints: [
-                {
-                  to: 'window',
-                  attachment: 'together',
-                  pin: true,
-                },
-              ],
-            },
-          });
-        }
-      }
-
-      scope.$watchGroup(['ctrl.error', 'ctrl.panel.description'], updatePanelCornerInfo);
-      scope.$watchCollection('ctrl.panel.links', updatePanelCornerInfo);
-
-      cornerInfoElem.on('click', function() {
-        infoDrop.close();
-        scope.$apply(ctrl.openInspector.bind(ctrl));
-      });
-
-      elem.on('mouseenter', mouseEnter);
-      elem.on('mouseleave', mouseLeave);
-
-      scope.$on('$destroy', function() {
-        elem.off();
-        cornerInfoElem.off();
-
-        if (infoDrop) {
-          infoDrop.destroy();
-        }
-
-        if (panelScrollbar) {
-          panelScrollbar.update();
-        }
-      });
-    },
+    }
   };
 });
 
-module.directive('panelHelpCorner', function($rootScope) {
+module.directive('panelResizer', function($rootScope) {
   return {
     restrict: 'E',
-    template: `
-    <span class="alert-error panel-error small pointer" ng-if="ctrl.error" ng-click="ctrl.openInspector()">
-    <span data-placement="top" bs-tooltip="ctrl.error">
-    <i class="fa fa-exclamation"></i><span class="panel-error-arrow"></span>
-    </span>
-    </span>
-    `,
-    link: function(scope, elem) {},
+    template: '<span class="resize-panel-handle"></span>',
+    link: function(scope: any, elem) {
+      var resizing = false;
+      var lastPanel;
+      var ctrl = scope.ctrl;
+      var handleOffset;
+      var originalHeight;
+      var originalWidth;
+      var maxWidth;
+
+      function dragStartHandler(e) {
+        e.preventDefault();
+        resizing = true;
+
+        handleOffset = $(e.target).offset();
+        originalHeight = parseInt(ctrl.row.height);
+        originalWidth = ctrl.panel.span;
+        maxWidth = $(document).width();
+
+        lastPanel = ctrl.row.panels[ctrl.row.panels.length - 1];
+
+        $('body').on('mousemove', moveHandler);
+        $('body').on('mouseup', dragEndHandler);
+      }
+
+      function moveHandler(e) {
+        ctrl.row.height = originalHeight + (e.pageY - handleOffset.top);
+        ctrl.panel.span = originalWidth + (((e.pageX - handleOffset.left) / maxWidth) * 12);
+        ctrl.panel.span = Math.min(Math.max(ctrl.panel.span, 1), 12);
+
+        var rowSpan = ctrl.dashboard.rowSpan(ctrl.row);
+
+        // auto adjust other panels
+        if (Math.floor(rowSpan) < 14) {
+          // last panel should not push row down
+          if (lastPanel === ctrl.panel && rowSpan > 12) {
+            lastPanel.span -= rowSpan - 12;
+          } else if (lastPanel !== ctrl.panel) {
+            // reduce width of last panel so total in row is 12
+            lastPanel.span = lastPanel.span - (rowSpan - 12);
+            lastPanel.span = Math.min(Math.max(lastPanel.span, 1), 12);
+          }
+        }
+
+        scope.$apply(function() {
+          ctrl.render();
+        });
+      }
+
+      function dragEndHandler() {
+        // if close to 12
+        var rowSpan = ctrl.dashboard.rowSpan(ctrl.row);
+        if (rowSpan < 12 && rowSpan > 11) {
+          lastPanel.span +=  12 - rowSpan;
+        }
+
+        scope.$apply(function() {
+          $rootScope.$broadcast('render');
+        });
+
+        $('body').off('mousemove', moveHandler);
+        $('body').off('mouseup', dragEndHandler);
+      }
+
+      elem.on('mousedown', dragStartHandler);
+
+      scope.$on("$destroy", function() {
+        elem.off('mousedown', dragStartHandler);
+      });
+    }
   };
 });
+
+

@@ -4,7 +4,7 @@ import coreModule from 'app/core/core_module';
 
 export class StaticSrv {
   /** @ngInject */
-  constructor(private backendSrv) {}
+  constructor(private backendSrv, private $translate) {}
 
   getExpertReports() {
     return this.getTemplate('report', 'report').then((res) => {
@@ -28,8 +28,18 @@ export class StaticSrv {
     return this.getTemplate('config', 'config');
   }
 
+  handleMenuData(menuData) {
+    menuData.forEach(item => {
+      item.text = this.$translate.i18n[item.text];
+      item.children && this.handleMenuData(item.children);
+    });
+  }
   getMenu() {
-    return this.getTemplate('menu', 'menu');
+    return this.getTemplate('menu', 'menu').then(response => {
+      this.handleMenuData(response.menusTop);
+      this.handleMenuData(response.menusBottom);
+      return response;
+    });
   }
 
   getKPI() {

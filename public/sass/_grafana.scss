@@ -168,9 +168,17 @@ body {
 .sider-menu.ant-layout-sider {
   background: #1e2028;
 }
+.ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title i + span {
+  max-width: 0;
+  display: inline-block;
+  opacity: 0;
+}
 
 // temp code for <a> link color
-.summary-page {
+a.pointer {
+  color: $text-color;
+}
+.summary-page, .metrics-def-container, .anomaly-page {
   a {
     color: $text-color;
   }

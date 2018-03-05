@@ -28,9 +28,23 @@ export class GrafanaCtrl {
       "menusBottom": []
     };
     staticSrv.getMenu().then(response => {
-      appEvents.emit('sidemenu-loaded', response);
-      $scope.menuData.menusTop = response.menusTop;
-      $scope.menuData.menusBottom = response.menusBottom;
+      response.menusBottom.unshift({
+        "text": contextSrv.systemsMap[_.findIndex(contextSrv.systemsMap,{'Id': contextSrv.user.systemId})].SystemsName,
+        "icon": "fa fa-fw fa-sitemap",
+        "url": config.appSubUrl + '/systems'
+      });
+      backendSrv.getOrgsMenu().then((res) => {
+        response.menusBottom.unshift({
+          "icon": "fa fa-fw fa-random",
+          "id": 104,
+          "text": contextSrv.user.orgName,
+          "url": "104",
+          "children": res
+        });
+        appEvents.emit('sidemenu-loaded', response);
+        $scope.menuData.menusTop = response.menusTop;
+        $scope.menuData.menusBottom = response.menusBottom;
+      });
     });
 
     $scope.init = function() {
@@ -76,8 +90,8 @@ export class GrafanaCtrl {
       callerScope.$on('$destroy', unbind);
     };
 
-    $rootScope.appEvent = function(name, payload) {
-      $rootScope.$emit(name, payload);
+    $rootScope.appEvent = function(name, payload?) {
+      $rootScope.$emit(name, payload || {});
     };
 
     $rootScope.colors = [

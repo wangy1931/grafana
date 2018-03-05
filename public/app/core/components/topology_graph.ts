@@ -207,7 +207,7 @@ export function topologyGraphDirective() {
       params: "=",
       currentItem: "="
     },
-    link: function(scope, elem) {
+    link: function(scope, elem, attr) {
     }
   };
 }

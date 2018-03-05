@@ -3,10 +3,10 @@ import angular from 'angular';
 import _ from 'lodash';
 
 export class QueryCtrl {
-  target: any;
-  datasource: any;
-  panelCtrl: any;
-  panel: any;
+  target: any = {};
+  datasource: any = {};
+  panelCtrl: any = {};
+  panel: any = {};
   hasRawMode: boolean;
   error: string;
 

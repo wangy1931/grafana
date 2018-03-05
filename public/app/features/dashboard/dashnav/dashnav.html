@@ -1,139 +1,84 @@
 <navbar>
 
-<a class="pointer navbar-page-btn" ng-if="::!ctrl.dashboard.meta.isSnapshot" ng-click="ctrl.openSearch()">
-	<i class="icon-gf icon-gf-dashboard"></i>
-	<span>{{ctrl.dashboard.title}}</span>
-	<i class="fa fa-caret-down"></i>
-</a>
-
-<a class="pointer navbar-page-btn" ng-if="::ctrl.dashboard.meta.isSnapshot" data-container="body" bs-tooltip="ctrl.titleTooltip" data-placement="bottom" ng-click="ctrl.openSearch()">
-	<i class="icon-gf icon-gf-snapshot"></i>
-	<span>
-		{{ctrl.dashboard.title}}
-		<em class="small">&nbsp;&nbsp;(snapshot)</em>
-	</span>
-</a>
-
-<ul class="nav pull-left dashnav-action-icons">
-	<li ng-show="::ctrl.dashboard.meta.canStar">
-		<a class="pointer" ng-click="ctrl.starDashboard()">
-			<i class="fa" ng-class="{'fa-star-o': !ctrl.dashboard.meta.isStarred, 'fa-star': ctrl.dashboard.meta.isStarred}" style="color: orange;"></i>
-		</a>
-	</li>
-	<li ng-show="::ctrl.dashboard.meta.canShare" class="dropdown">
-		<a class="pointer" ng-click="ctrl.hideTooltip($event)" data-container="body" bs-tooltip="'{{ 'i18n_share' | translate }}'" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-share-square-o"></i></a>
-		<ul class="dropdown-menu">
-			<li>
-				<a class="pointer" ng-click="ctrl.shareDashboard(0)">
-					<i class="fa fa-link"></i> <em translate="i18n_dash_share_link"></em>
-				</a>
-			</li>
-			<li>
-				<a class="pointer" ng-click="ctrl.shareDashboard(1)">
-					<i class="icon-gf icon-gf-snapshot"></i> <em translate="i18n_dash_share_snap"></em>
-				</a>
-			</li>
-		</ul>
-	</li>
-	<li ng-show="::ctrl.dashboard.meta.canSave">
-		<a ng-click="ctrl.saveDashboard()" data-container="body" bs-tooltip="'{{ 'i18n_save_dash' | translate }}'" data-placement="bottom"><i class="fa fa-save"></i></a>
-	</li>
-	<li ng-if="::ctrl.showSettingsMenu" class="dropdown">
-		<a class="pointer" ng-click="ctrl.hideTooltip($event)" data-container="body" bs-tooltip="'{{ 'i18n_dash_manage' | translate }}'" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-cog"></i></a>
-		<ul class="dropdown-menu">
-			<li ng-if="ctrl.dashboard.meta.canEdit"><a class="pointer" ng-click="ctrl.openEditView('settings');"><em translate="i18n_setting"></em></a></li>
-			<li ng-if="ctrl.dashboard.meta.canEdit"><a class="pointer" ng-click="ctrl.openEditView('annotations');"><em translate="i18n_annotation"></em></a></li>
-			<li ng-if="ctrl.dashboard.meta.canEdit"><a class="pointer" ng-click="ctrl.openEditView('templating');"><em translate="i18n_dash_templating"></em></a></li>
-			<li ng-if="ctrl.dashboard.meta.canEdit"><a class="pointer" ng-click="ctrl.exportDashboard();"><em translate="i18n_export"></em></a></li>
-			<li ng-if="ctrl.dashboard.meta.canEdit"><a class="pointer" ng-click="ctrl.editJson();"><em translate="i18n_view_json"></em></a></li>
-			<li ng-if="ctrl.contextSrv.isEditor && !ctrl.dashboard.editable"><a class="pointer" ng-click="ctrl.makeEditable();"><em translate="i18n_editable"></em></a></li>
-			<li ng-if="ctrl.contextSrv.isEditor"><a class="pointer" ng-click="ctrl.saveDashboardAs();"><em translate="i18n_saveAs"></em></a></li>
-			<li ng-if="ctrl.dashboard.meta.canSave"><a class="pointer" ng-click="ctrl.deleteDashboard();"><em translate="i18n_dash_delete"></em></a></li>
-		</ul>
-	</li>
-	<li>
-		<a ng-click="ctrl.newDashboard()" ng-show="::ctrl.contextSrv.isEditor" data-container="body" bs-tooltip="'{{ 'i18n_dash_new' | translate }}'">
-			<i class="fa fa-plus"></i>
-		</a>
-	</li>
-</ul>
-
-<ul class="nav dash-playlist-actions" ng-if="ctrl.playlistSrv">
-	<li>
-		<a ng-click="ctrl.playlistSrv.prev()"><i class="fa fa-step-backward"></i></a>
-	</li>
-	<li>
-		<a ng-click="ctrl.playlistSrv.stop()"><i class="fa fa-stop"></i></a>
-	</li>
-	<li>
-		<a ng-click="ctrl.playlistSrv.next()"><i class="fa fa-step-forward"></i></a>
-	</li>
-</ul>
-
-<ul class="nav pull-right">
-	<li ng-show="ctrl.dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
-		<a ng-click="ctrl.exitFullscreen()" translate="i18n_back_dashboard">
-		</a>
-	</li>
-	<li ng-if="ctrl.dashboard">
-		<gf-time-picker dashboard="ctrl.dashboard"></gf-time-picker>
-	</li>
-</ul>
-
+  <a class="pointer navbar-page-btn" ng-if="::!dashboardMeta.isSnapshot" ng-click="openSearch()">
+    <i class="icon-gf icon-gf-dashboard"></i>
+    <span>{{dashboard.title}}</span>
+    <i class="fa fa-caret-down"></i>
+  </a>
+  
+  <a class="pointer navbar-page-btn" ng-if="::dashboardMeta.isSnapshot" data-container="body" bs-tooltip="titleTooltip" data-placement="bottom" ng-click="openSearch()">
+    <i class="icon-gf icon-gf-snapshot"></i>
+    <span>
+      {{dashboard.title}}
+      <em class="small">&nbsp;&nbsp;(snapshot)</em>
+    </span>
+  </a>
+  
+  <ul class="nav pull-left dashnav-action-icons">
+    <li ng-show="::dashboardMeta.canStar">
+      <a class="pointer" ng-click="starDashboard()">
+        <i class="fa" ng-class="{'fa-star-o': !dashboardMeta.isStarred, 'fa-star': dashboardMeta.isStarred}" style="color: orange;"></i>
+      </a>
+    </li>
+    <li ng-show="::dashboardMeta.canShare" class="dropdown">
+      <a class="pointer" ng-click="hideTooltip($event)" data-container="body" bs-tooltip="'{{ 'i18n_share' | translate }}'" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-share-square-o"></i></a>
+      <ul class="dropdown-menu">
+        <li>
+          <a class="pointer" ng-click="shareDashboard(0)">
+            <i class="fa fa-link"></i> <em translate="i18n_dash_share_link"></em>
+          </a>
+        </li>
+        <li>
+          <a class="pointer" ng-click="shareDashboard(1)">
+            <i class="icon-gf icon-gf-snapshot"></i> <em translate="i18n_dash_share_snap"></em>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li ng-show="::dashboardMeta.canSave">
+      <a ng-click="saveDashboard()" data-container="body" bs-tooltip="'{{ 'i18n_save_dash' | translate }}'" data-placement="bottom"><i class="fa fa-save"></i></a>
+    </li>
+    <li ng-if="::showSettingsMenu" class="dropdown">
+      <a class="pointer" ng-click="hideTooltip($event)" data-container="body" bs-tooltip="'{{ 'i18n_dash_manage' | translate }}'" data-placement="bottom" data-toggle="dropdown"><i class="fa fa-cog"></i></a>
+      <ul class="dropdown-menu">
+        <li ng-if="dashboardMeta.canEdit"><a class="pointer" ng-click="openEditView('settings');"><em translate="i18n_setting"></em></a></li>
+        <li ng-if="dashboardMeta.canEdit"><a class="pointer" ng-click="openEditView('annotations');"><em translate="i18n_annotation"></em></a></li>
+        <li ng-if="dashboardMeta.canEdit"><a class="pointer" ng-click="openEditView('templating');"><em translate="i18n_dash_templating"></em></a></li>
+        <li ng-if="dashboardMeta.canEdit"><a class="pointer" ng-click="exportDashboard();"><em translate="i18n_export"></em></a></li>
+        <li ng-if="dashboardMeta.canEdit"><a class="pointer" ng-click="editJson();"><em translate="i18n_view_json"></em></a></li>
+        <li ng-if="contextSrv.isEditor && !dashboard.editable"><a class="pointer" ng-click="makeEditable();"><em translate="i18n_editable"></em></a></li>
+        <li ng-if="contextSrv.isEditor"><a class="pointer" ng-click="saveDashboardAs();"><em translate="i18n_saveAs"></em></a></li>
+        <li ng-if="dashboardMeta.canSave"><a class="pointer" ng-click="deleteDashboard();"><em translate="i18n_dash_delete"></em></a></li>
+      </ul>
+    </li>
+    <li>
+      <a ng-click="newDashboard()" ng-show="::contextSrv.isEditor" data-container="body" bs-tooltip="'{{ 'i18n_dash_new' | translate }}'">
+        <i class="fa fa-plus"></i>
+      </a>
+    </li>
+  </ul>
+  
+  <ul class="nav dash-playlist-actions" ng-if="playlistSrv">
+    <li>
+      <a ng-click="playlistSrv.prev()"><i class="fa fa-step-backward"></i></a>
+    </li>
+    <li>
+      <a ng-click="playlistSrv.stop()"><i class="fa fa-stop"></i></a>
+    </li>
+    <li>
+      <a ng-click="playlistSrv.next()"><i class="fa fa-step-forward"></i></a>
+    </li>
+  </ul>
+  
+  <ul class="nav pull-right">
+    <li ng-show="dashboard.meta.fullscreen" class="dashnav-back-to-dashboard">
+      <a ng-click="exitFullscreen()" translate="i18n_back_dashboard">
+      </a>
+    </li>
+    <li ng-if="dashboard">
+      <gf-time-picker dashboard="dashboard"></gf-time-picker>
+    </li>
+  </ul>
+  
 </navbar>
-
-<!-- <div class="navbar">
-	
-	<div>
-		<a class="navbar-page-btn" ng-click="ctrl.showSearch()">
-			<i class="gicon gicon-dashboard"></i>
-			{{ctrl.dashboard.title}}
-			<i class="fa fa-caret-down"></i>
-		</a>
-	</div>
-
-	<div class="navbar-buttons navbar-buttons--playlist" ng-if="ctrl.playlistSrv.isPlaying">
-		<a class="navbar-button navbar-button--tight" ng-click="ctrl.playlistSrv.prev()"><i class="fa fa-step-backward"></i></a>
-		<a class="navbar-button navbar-button--tight" ng-click="ctrl.playlistSrv.stop()"><i class="fa fa-stop"></i></a>
-		<a class="navbar-button navbar-button--tight" ng-click="ctrl.playlistSrv.next()"><i class="fa fa-step-forward"></i></a>
-	</div>
-
-	<div class="navbar__spacer"></div>
-
-	<div class="navbar-buttons navbar-buttons--actions">
-		<button class="btn navbar-button navbar-button--add-panel" ng-show="::ctrl.dashboard.meta.canSave" bs-tooltip="'Add panel'" data-placement="bottom" ng-click="ctrl.addPanel()">
-			<i class="gicon gicon-add-panel"></i>
-		</button>
-
-		<button class="btn navbar-button navbar-button--star" ng-show="::ctrl.dashboard.meta.canStar" ng-click="ctrl.starDashboard()" bs-tooltip="'Mark as favorite'" data-placement="bottom">
-			<i class="fa" ng-class="{'fa-star-o': !ctrl.dashboard.meta.isStarred, 'fa-star': ctrl.dashboard.meta.isStarred}"></i>
-		</button>
-
-		<button class="btn navbar-button navbar-button--share" ng-show="::ctrl.dashboard.meta.canShare" ng-click="ctrl.shareDashboard(0)" bs-tooltip="'Share dashboard'" data-placement="bottom">
-			<i class="fa fa-share-square-o"></i></a>
-		</button>
-
-		<button class="btn navbar-button navbar-button--save" ng-show="ctrl.dashboard.meta.canSave" ng-click="ctrl.saveDashboard()" bs-tooltip="'Save dashboard <br> CTRL+S'" data-placement="bottom">
-			<i class="fa fa-save"></i>
-		</button>
-
-		<a class="btn navbar-button navbar-button--snapshot-origin" ng-if="::ctrl.dashboard.snapshot.originalUrl" href="{{ctrl.dashboard.snapshot.originalUrl}}" bs-tooltip="'Open original dashboard'" data-placement="bottom">
-			<i class="fa fa-link"></i>
-		</a>
-
-		<button class="btn navbar-button navbar-button--settings" ng-click="ctrl.toggleSettings()" bs-tooltip="'Settings'" data-placement="bottom" ng-show="ctrl.dashboard.meta.showSettings">
-			<i class="fa fa-cog"></i>
-		</button>
-	</div>
-
-	<gf-time-picker class="gf-timepicker-nav" dashboard="ctrl.dashboard" ng-if="!ctrl.dashboard.timepicker.hidden"></gf-time-picker>
-
-	<div class="navbar-buttons navbar-buttons--close">
-		<button class="btn navbar-button navbar-button--primary" ng-click="ctrl.close()" bs-tooltip="'Back to dashboard'" data-placement="bottom">
-			<i class="fa fa-reply"></i>
-		</button>
-	</div>
-
-</div>
-
-<dashboard-search></dashboard-search> -->
+    

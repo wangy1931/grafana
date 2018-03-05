@@ -7,6 +7,8 @@ define([
 function (angular, $, config, moment) {
   "use strict";
 
+  config = config.default;
+
   var module = angular.module('grafana.controllers');
 
   module.controller('DashboardCtrl', function(

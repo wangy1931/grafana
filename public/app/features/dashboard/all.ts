@@ -7,7 +7,7 @@ import  './saveDashboardAsCtrl';
 import  './rowCtrl';
 import  './shareModalCtrl';
 import  './shareSnapshotCtrl';
-import  './dashboardSrv';
+import  './dashboardSrv.js';
 import  './keybindings';
 import  './viewStateSrv';
 import  './timeSrv';

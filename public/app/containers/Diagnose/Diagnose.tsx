@@ -19,17 +19,16 @@ import { Correlation } from './Correlation';
 import { Log } from 'app/containers/Logs/Log';
 import GlobalHeader from 'app/core/components/GlobalHeader/GlobalHeader';
 import SiderMenu from 'app/core/components/SiderMenu/SiderMenu';
-import { createNavBar } from './tree';
 
 const ButtonGroup = Button.Group;
 const { Header, Sider, Content } = Layout;
 
 const action = (
   <div>
-    <ButtonGroup>
+    {/* <ButtonGroup>
       <Button>暂缓报警</Button>
     </ButtonGroup>
-    <Button type="primary">处理报警</Button>
+    <Button type="primary">处理报警</Button> */}
   </div>
 );
 

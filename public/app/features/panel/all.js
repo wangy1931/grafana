@@ -1,5 +1,6 @@
 define([
-  './panel_header',
+  './panel_menu',
+  // './panel_header',
   './panel_directive',
   './solo_panel_ctrl',
   './query_ctrl',

@@ -3,7 +3,7 @@ import { Layout, Menu, Icon } from 'antd';
 import { contextSrv } from 'app/core/services/context_srv';
 import appEvents from 'app/core/app_events';
 import './index.less';
-import { observer } from 'mobx-react';
+import classNames from 'classnames';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -26,7 +26,8 @@ const getIcon = (icon) => {
     return <img src={icon} alt="icon" className="icon" />;
   }
   if (typeof icon === 'string') {
-    return <Icon type={icon} />;
+    const className = classNames(icon);
+    return <i className={className} style={{marginRight: "10px"}}></i>;  // <Icon type={icon} />;
   }
   return icon;
 };
@@ -125,12 +126,20 @@ export default class SiderMenu extends React.Component<SiderMenuProps, any> {
   getMenuItemPath = (item) => {
     const itemPath = this.conversionPath(item.url);
     const icon = getIcon(item.icon);
-    const { target, text } = item;
-    return (
-      <a href={itemPath} target={target}>
-        {icon}<span>{text}</span>
-      </a>
-    );
+    const { target, text, click } = item;
+    if (!click) {
+      return (
+        <a href={itemPath} target={target}>
+          {icon}<span>{text}</span>
+        </a>
+      )
+    } else {
+      return (
+        <a href="javascript:;" onClick={item.click}>
+          {icon}<span>{text}</span>
+        </a>
+      )
+    }
   }
   /**
    * get SubMenu or Item
@@ -197,7 +206,6 @@ export default class SiderMenu extends React.Component<SiderMenuProps, any> {
     return ItemDom;
   }
   handleOpenChanage = (openKeys, menus) => {
-    console.log(openKeys);
     const lastOpenKey = openKeys[openKeys.length - 1];
     const isMainMenu = menus.some(
       item => lastOpenKey && (item.key === lastOpenKey || item.url === lastOpenKey)

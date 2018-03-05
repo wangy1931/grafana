@@ -39,7 +39,6 @@ export class RCA extends React.Component<IContainerProps, any> {
       alerting.setRowKey(data.rowKey);
 
       rca2.load({ metric: data.metric, host: host });
-      // rca2.load({ metric: 'nginx.active_connections', host: 'centos24'});
       rca2.loadEvents({ hostname: host, range: { start: range.from.valueOf(), end: range.to.valueOf() } });
 
       topn.load({ hostname: host, from: range.from.valueOf(), to: range.to.valueOf() });
@@ -119,10 +118,6 @@ export class RCA extends React.Component<IContainerProps, any> {
         <div className="content-solution">
           解决方案：<span className="solution">{solution}</span>
         </div>
-        {/* <div className="extra">
-          <Avatar src={avatar} size="small" /><a href={href}>{owner}</a> 发布在 <a href={href}>{href}</a>
-          <em>{moment(updatedAt).format('YYYY-MM-DD HH:mm')}</em>
-        </div> */}
       </div>
     );
 

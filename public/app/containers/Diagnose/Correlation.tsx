@@ -6,7 +6,6 @@ import Graph from 'app/core/components/Charts/Graph/index';
 import { inject, observer } from 'mobx-react';
 import IContainerProps from 'app/containers/IContainerProps';
 import TreeMenu from './TreeMenu';
-import createTreeMenu from './tree';
 //import { DashboardGrid } from 'app/features/dashboard/dashgrid/DashboardGrid';
 
 const treeData = {
@@ -464,13 +463,9 @@ export class Correlation extends React.Component<IContainerProps, any> {
   }
 
   onTreeCheck(checkedKeys) {
-    console.log(checkedKeys);
   }
 
   componentDidMount() {
-    // var elem = $('<div></div>').appendTo($('#test'));
-    // createTreeMenu(elem, null);
-    // $('#test').html('<cw-tree-menu></cw-tree-menu>');
   }
 
   render() {

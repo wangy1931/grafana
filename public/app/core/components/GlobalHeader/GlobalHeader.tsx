@@ -8,16 +8,6 @@ import './index.less';
 
 const { Header } = Layout;
 
-const options = [{
-  value: 'zhejiang',
-  label: 'Zhejiang',
-  isLeaf: false,
-}, {
-  value: 'jiangsu',
-  label: 'Jiangsu',
-  isLeaf: false,
-}];
-
 export interface GlobalHeaderProps {
   collapsed?: boolean
   onCollapse?: (collapsed?) => void
@@ -26,7 +16,6 @@ export interface GlobalHeaderProps {
 // @observer
 export default class GlobalHeader extends PureComponent<GlobalHeaderProps, any> {
   state = {
-    options,
     collapsed: contextSrv.collapsed
   };
 
@@ -44,29 +33,6 @@ export default class GlobalHeader extends PureComponent<GlobalHeaderProps, any> 
     const event = document.createEvent('HTMLEvents');
     event.initEvent('resize', true, false);
     window.dispatchEvent(event);
-  }
-
-  onChange = (value, selectedOptions) => {
-    console.log(value, selectedOptions);
-  }
-  loadData = (selectedOptions) => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
-    targetOption.loading = true;
-
-    // load options lazily
-    setTimeout(() => {
-      targetOption.loading = false;
-      targetOption.children = [{
-        label: `${targetOption.label} Dynamic 1`,
-        value: 'dynamic1',
-      }, {
-        label: `${targetOption.label} Dynamic 2`,
-        value: 'dynamic2',
-      }];
-      this.setState({
-        options: [...this.state.options],
-      });
-    }, 1000);
   }
 
   render() {
@@ -94,14 +60,6 @@ export default class GlobalHeader extends PureComponent<GlobalHeaderProps, any> 
           type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
           // type={collapsed ? 'menu-unfold' : 'menu-fold'}
           onClick={this.toggle}
-        />
-        <Cascader
-          className="picker"
-          defaultValue={['Zhejiang']}
-          options={this.state.options}
-          loadData={this.loadData}
-          onChange={this.onChange}
-          changeOnSelect
         />
         <div className="right">
           {contextSrv.user.name ? (

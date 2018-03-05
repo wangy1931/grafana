@@ -6,6 +6,8 @@ define([
 function (angular, config, _) {
   'use strict';
 
+  config = config.default;
+
   var module = angular.module('grafana.controllers');
 
   module.controller('NewOrgCtrl', function ($scope, backendSrv, $translate) {
