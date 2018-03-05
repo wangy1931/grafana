@@ -43,8 +43,8 @@ export class ServiceTopologyCtrl {
 
     this.tabs = [
       { 'id': 0, 'title': $translate.i18n.page_service_tab0, 'active': false, 'show': true,  'content': 'public/app/features/service/partials/service_list_table.html' },
-      { 'id': 1, 'title': $translate.i18n.page_host_tab1, 'active': false, 'show': false,  'content': 'public/app/features/host/partials/host_system_status.html' },
-      { 'id': 2, 'title': $translate.i18n.page_service_tab1, 'active': false, 'show': false, 'content': 'public/app/features/service/partials/service_info.html' }
+      { 'id': 1, 'title': $translate.i18n.page_service_tab1, 'active': false, 'show': false,  'content': 'public/app/features/host/partials/host_system_status.html' },
+      { 'id': 2, 'title': $translate.i18n.page_service_tab2, 'active': false, 'show': false, 'content': 'public/app/features/service/partials/service_info.html' }
     ];
     this.needNameTabs = [1, 2];
 
