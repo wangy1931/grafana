@@ -5,7 +5,7 @@ export class DashboardSrv {
   dash: any;
 
   /** @ngInject */
-  constructor(private backendSrv, private $rootScope, private $location) {}
+  constructor(private backendSrv, private $rootScope, private $location, private panelLoader) {}
 
   create(dashboard, meta) {
     return new DashboardModel(dashboard, meta);
@@ -17,6 +17,14 @@ export class DashboardSrv {
 
   getCurrent() {
     return this.dash;
+  }
+
+  getDashboard() {
+    return this.dash;
+  }
+
+  getPanelLoader() {
+    return this.panelLoader;
   }
 
   handleSaveDashboardError(clone, err) {

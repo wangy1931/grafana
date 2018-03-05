@@ -1,0 +1,218 @@
+@import "~antd/lib/style/themes/default.less";
+
+.clearfix() {
+  zoom: 1;
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+    height: 0;
+  }
+}
+
+.rca2 {
+  .headerList {
+    margin-bottom: 4px;
+  }
+
+  .headerInfo {
+    position: relative;
+    text-align: center;
+    & > span {
+      color: @text-color-secondary;
+      display: inline-block;
+      font-size: @font-size-base;
+      line-height: 22px;
+      margin-bottom: 4px;
+    }
+    & > p {
+      color: @heading-color;
+      margin: 0;
+      font-size: 18px;
+    }
+    & > em {
+      background-color: @border-color-split;
+      position: absolute;
+      height: 56px;
+      width: 1px;
+      top: 0;
+      right: 0;
+    }
+  }
+
+  .rca-summary {
+    .headerInfo p {
+      font-size: 24px;
+      line-height: 32px;
+    }
+  }
+
+  .salesCard {
+    .salesBar {
+      padding: 0 0 32px 32px;
+    }
+    .eventsRank {
+      padding: 0 32px 32px 72px;
+    }
+    :global {
+      .ant-tabs-bar {
+        padding-left: 16px;
+        .ant-tabs-nav .ant-tabs-tab {
+          padding-top: 16px;
+          padding-bottom: 14px;
+          line-height: 24px;
+        }
+      }
+      .ant-tabs-extra-content {
+        padding-right: 24px;
+        line-height: 55px;
+      }
+      .ant-card-head {
+        position: relative;
+      }
+    }
+  }
+
+  .rankingList {
+    margin: 25px 0 0;
+    padding: 0;
+    list-style: none;
+    span {
+      color: @text-color;
+      font-size: @font-size-base;
+      line-height: 22px;
+    }
+    span.label {
+      background-color: @background-color-base;
+      border-radius: 20px;
+      display: inline-block;
+      font-size: @font-size-base;
+      font-weight: 600;
+      margin-right: 24px;
+      height: 20px;
+      line-height: 20px;
+      width: 20px;
+      text-align: center;
+    }
+    span.active {
+      //background-color: @primary-color;
+      background-color: #314659;
+      color: #fff;
+    }
+    // topn process
+    p {
+      .clearfix();
+      margin: 0;
+    }
+  }
+  
+  .tabsCard {
+    margin-bottom: 24px;
+    :global {
+      .ant-card-head {
+        padding: 0 16px;
+      }
+    }
+  }
+  
+  .noData {
+    color: @disabled-color;
+    text-align: center;
+    line-height: 64px;
+    font-size: 16px;
+    i {
+      font-size: 24px;
+      margin-right: 16px;
+      position: relative;
+      top: 3px;
+    }
+  }
+  
+  .heading {
+    color: @heading-color;
+    font-size: 24px;
+  }
+  
+  .textSecondary {
+    color: @text-color-secondary;
+  }
+
+  .rca-topn-item {
+    margin: 0;
+    padding: 16px 0;
+    border-bottom: 1px solid @border-color-split;
+    &:first-child {
+      padding: 0 0 16px 0;
+    }
+    &:last-child {
+      border-bottom: none;
+      padding: 16px 0 0 0;
+    }
+    .ant-row:last-child {
+      margin-top: 16px;
+    }
+  }
+
+  .ant-list-item-main {
+    width: 100%;
+  }
+
+  // rca graph
+  .jtk-demo-canvas, .jtk-canvas {
+    height: 598px;
+  }
+
+  // rca suggest
+  .listItemMetaTitle {
+    font-size: 18px;
+    color: @heading-color;
+  }
+  .listContent {
+    color: @heading-color;
+    span {
+      color: @text-color;
+    }
+  }
+  
+  @media screen and (max-width: @screen-sm) {
+    .stepDescription {
+      left: 8px;
+    }
+  }
+
+  @media screen and (max-width: @screen-lg) {
+    .rankingList {
+      li {
+        span:first-child {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: @screen-md) {
+    .rankingTitle {
+      margin-top: 16px;
+    }
+  
+    .salesCard .salesBar {
+      padding: 16px;
+    }
+  }
+
+  @media screen and (max-width: @screen-sm) {
+    .salesCard {
+      :global {
+        .ant-tabs-content {
+          padding-top: 30px;
+        }
+      }
+    }
+  }
+  
+}

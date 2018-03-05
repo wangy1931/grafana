@@ -84,7 +84,7 @@
           <td>{{ _.transformMillionTime(alert.status.levelChangedTime) }}</td>
           <td>{{ _.timeFrom(alert.status.levelChangedTime, alert.status.snoozeMinutes, 'm') }}</td>
           <td>
-              <button class="btn btn-outline-primary btn-small" ng-click="ctrl.associateAnalysis(alert.status.monitoredEntity, alert.metric, alert.status.levelChangedTime, alert.definition, alert.type)" translate="page_alert_diagnostic_analysis"></button>
+              <button class="btn btn-outline-primary btn-small" ng-click="ctrl.associateAnalysis(alert)" translate="page_alert_diagnostic_analysis"></button>
               <button class="btn btn-outline-primary btn-small" ng-click="ctrl.handleSnooze(alert)" translate="page_alert_delay"></button>
               <button class="btn btn-outline-primary btn-small" ng-click="ctrl.handleAlert(alert)" translate="page_alert_handle"></button>
           </td>

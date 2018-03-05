@@ -239,13 +239,19 @@ export class AlertStatusCtrl {
   }
 
   // 关联性分析
-  associateAnalysis(host, metric, startTime, alertDefinition, alertType) {
+  associateAnalysis(alert) {
+    var host = alert.status.monitoredEntity,
+        metric = alert.metric,
+        startTime = alert.status.levelChangedTime,
+        alertDefinition = alert.definition,
+        alertType = alert.type;
     if (alertType === 'LOG_ALERT') {
       this.$location.url(`/logs?query=${metric} AND host: ${host}&start=${startTime}`);
       return;
     }
 
-    var url = `/rca?guide&metric=${_.getMetricName(metric)}&host=${host}&start=${startTime}`;
+    // var url = `/rca?guide&metric=${_.getMetricName(metric)}&host=${host}&start=${startTime}`;
+    var url = `diagnose?key=${alert.status.rowKey}`;
     this.resetAlertRule(alertDefinition);
     this.associationSrv.setSourceAssociation({
       metric: this.prefix + metric,

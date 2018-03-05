@@ -10,6 +10,9 @@ export class User {
   orgRole: any;
   systemId: any;
   timezone: string;
+  orgName: string;
+  name: string;
+  gravatarUrl: string;
 
   constructor() {
     if (config.bootData.user) {

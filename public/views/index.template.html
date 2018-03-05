@@ -27,8 +27,12 @@
 <body ng-cloak class="theme-[[.User.UserTheme]]">
   <grafana-app class="grafana-app">
 
-    <aside class="sidemenu-wrapper">
+    <!-- <aside class="sidemenu-wrapper">
       <sidemenu ng-if="contextSrv.sidemenu"></sidemenu>
+    </aside> -->
+
+    <aside ng-if="contextSrv.sidemenu">
+      <sider-menu collapsed="contextSrv.sidemenu" onCollapse="handleMenuCollapse" menuData="menuData" location="location"></sider-menu>
     </aside>
 
     <div class="page-alert-list">

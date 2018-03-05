@@ -15,7 +15,7 @@ module.exports = {
     publicPath: "public/build/",
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.es6', '.js', '.json'],
+    extensions: ['.ts', '.tsx', '.es6', '.js', '.json', '.less'],
     alias: {
     },
     modules: [
@@ -44,7 +44,20 @@ module.exports = {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         use: [
-          { loader: "awesome-typescript-loader" }
+          {
+            loader: "awesome-typescript-loader",
+            options: {
+              "useBabel": true,
+              "babelOptions": {
+                "babelrc": false,
+                "plugins": [
+                  ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }]
+                  //  ["env", { "targets": "last 2 versions, ie 11", "modules": false }]
+                ],
+              },
+              "useCache": true
+            }
+          }
         ]
       },
       {

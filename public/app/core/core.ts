@@ -50,7 +50,6 @@ import {switchDirective} from './components/switch';
 import {dashboardSelector} from './components/dashboard_selector';
 import 'app/core/controllers/all';
 import 'app/core/services/all';
-import 'app/core/routes/routes';
 import './filters/filters';
 import coreModule from './core_module';
 import appEvents from './app_events';

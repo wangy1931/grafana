@@ -23,6 +23,12 @@ module.exports = merge(common, {
     rules: [
       require('./sass.rule.js')({
         sourceMap: false, minimize: true
+      }),
+      require('./less.rule.js')({
+        sourceMap: false, minimize: false
+      }),
+      require('./css.rule.js')({
+        sourceMap: false, minimize: false
       })
     ]
   },

@@ -174,6 +174,15 @@ function ($, moment, kbn, _) {
     return value && map[value];
   };
 
+  _.alertTypeFormatter = function (value) {
+    const map = {
+      "MUTI_ALERT": "多指标报警",
+      "SINGLE_ALERT": "单指标报警",
+      "LOG_ALERT": "日志报警"
+    }
+    return value && map[value]
+  }
+
   _.statusFormatter = function (value) {
     if (_.isNumber(value)) {
       return value === 0 ? 'i18n_normal' : 'i18n_unnormal';

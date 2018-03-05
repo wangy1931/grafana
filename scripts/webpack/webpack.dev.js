@@ -19,9 +19,21 @@ module.exports = merge(common, {
     vendor: require('./dependencies'),
   },
 
+  output: {
+    path: path.resolve(__dirname, '../../public/build'),
+    filename: '[name].js?[chunkhash]',
+    publicPath: "public/build/",
+  },
+
   module: {
     rules: [
       require('./sass.rule.js')({
+        sourceMap: false, minimize: false
+      }),
+      require('./less.rule.js')({
+        sourceMap: false, minimize: false
+      }),
+      require('./css.rule.js')({
         sourceMap: false, minimize: false
       })
     ]

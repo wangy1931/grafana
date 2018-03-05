@@ -22,7 +22,7 @@ module.directive('grafanaGraph', function($rootScope, timeSrv, integrateSrv) {
   return {
     restrict: 'A',
     template: '',
-    link: function(scope, elem) {
+    link: function(scope: any, elem) {
       var ctrl = scope.ctrl;
       var dashboard = ctrl.dashboard;
       var panel = ctrl.panel;
@@ -216,7 +216,7 @@ module.directive('grafanaGraph', function($rootScope, timeSrv, integrateSrv) {
 
       // Function for rendering panel
       function render_panel() {
-        panelWidth =  elem.width();
+        panelWidth =  (<any>elem).width();
 
         if (shouldAbortRender()) {
           return;
@@ -576,11 +576,11 @@ module.directive('grafanaGraph', function($rootScope, timeSrv, integrateSrv) {
         return sortedSeries;
       });
 
-      elem.bind("plotselected", function (event, ranges) {
+      elem.bind("plotselected", (...args) => {
         scope.$apply(function() {
           timeSrv.setTime({
-            from  : moment.utc(ranges.xaxis.from),
-            to    : moment.utc(ranges.xaxis.to),
+            from  : moment.utc(args[1].xaxis.from),
+            to    : moment.utc(args[1].xaxis.to),
           });
         });
       });

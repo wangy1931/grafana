@@ -1,3 +1,12 @@
+<!-- <a class="sidemenu__logo" ng-click="ctrl.toggleSideMenu()">
+	<img src="public/img/grafana_icon.svg"></img>
+</a>
+
+<a class="sidemenu__logo_small_breakpoint" ng-click="ctrl.toggleSideMenuSmallBreakpoint()">
+	<i class="fa fa-bars"></i>
+	<span class="sidemenu__close"><i class="fa fa-times"></i>&nbsp;Close</span>
+</a> -->
+
 <ul class="sidemenu">
 	<li ng-repeat="item in ::ctrl.mainLinks" class="dropdown" bs-tooltip="'{{::item.text | translate}}'" data-placement="right" data-container="body" bs-enabled="showTooltip">
 		<a class="sidemenu-item sidemenu-main-link" target="{{::item.target}}" ng-click="updateSubmenu(item)">

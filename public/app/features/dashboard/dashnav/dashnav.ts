@@ -62,7 +62,7 @@ export class DashNavCtrl {
   }
 
   hideTooltip(evt) {
-    angular.element(evt.currentTarget).tooltip('hide');
+    (<any>angular.element(evt.currentTarget)).tooltip('hide');
   }
 
   saveDashboard() {

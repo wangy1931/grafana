@@ -230,7 +230,7 @@ coreModule.directive('slider', () => {
   return {
     restrict: 'A',
     scope: false,
-    link: function (scope, element) {
+    link: function (scope: any, element) {
       noUiSlider.create(element[0], {
         start: [scope.ctrl.associationSrv.sourceAssociation.min || 900, scope.ctrl.associationSrv.sourceAssociation.max || 1000],
         connect: true,
@@ -241,7 +241,7 @@ coreModule.directive('slider', () => {
           'max': 1000
         },
       });
-      scope.$parent.thresholdSlider = element[0].noUiSlider;
+      scope.$parent.thresholdSlider = (<any>element[0]).noUiSlider;
       scope.$parent.thresholdSlider.on('change', () => {
         scope.$emit('analysis', 'thresholdSlider');
       })

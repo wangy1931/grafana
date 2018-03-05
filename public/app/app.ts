@@ -39,6 +39,7 @@ import config from 'app/core/config';
 import _ from 'lodash';
 import moment from 'moment';
 import {coreModule, registerAngularDirectives} from './core/core';
+import { setupAngularRoutes } from './routes/routes';
 
 declare var System: any;
 
@@ -134,6 +135,9 @@ export class GrafanaApp {
 
     // makes it possible to add dynamic stuff
     this.useModule(coreModule);
+
+    // register react angular wrappers
+    coreModule.config(setupAngularRoutes);
     registerAngularDirectives();
 
     var preBootRequires = [System.import('app/features/all')];

@@ -2,8 +2,9 @@ define([
   'jquery',
   'lodash',
   '../core_module',
+  'moment'
 ],
-function ($, _, coreModule) {
+function ($, _, coreModule, moment) {
   'use strict';
 
   coreModule.default.directive('annotationTooltip', function($sanitize, dashboardSrv, $compile) {
@@ -23,7 +24,7 @@ function ($, _, coreModule) {
         var event = scope.event;
         var title = sanitizeString(event.title);
         var dashboard = dashboardSrv.getCurrent();
-        var time = '<i>' + dashboard.formatDate(event.min) + '</i>';
+        var time = dashboard ? '<i>' + dashboard.formatDate(event.min) + '</i>' : '<i>' + moment(event.min).format('YYYY-MM-DD HH:mm:ss') + '</i>';
 
         var tooltip = '<div class="graph-annotation">';
         tooltip += '<div class="graph-annotation-title">' + title + "</div>";

@@ -5,13 +5,134 @@ import _ from 'lodash';
 import angular from 'angular';
 import $ from 'jquery';
 import coreModule from 'app/core/core_module';
+import { createStore } from 'app/stores/store';
 
 var locale = 'zh-CN';
 
 export class GrafanaCtrl {
 
   /** @ngInject */
-  constructor($scope, alertSrv, utilSrv, $rootScope, $controller, contextSrv, $location, healthSrv, backendSrv, bridgeSrv) {
+  constructor(
+    $scope, alertSrv, utilSrv, $rootScope, $controller, datasourceSrv,
+    contextSrv, $location, healthSrv, backendSrv, bridgeSrv, hostSrv
+  ) {
+    createStore(contextSrv, backendSrv, hostSrv, datasourceSrv);
+
+    $scope.handleMenuCollapse = (collapsed) => {
+      contextSrv.toggleSideMenu(null);
+    };
+    $scope.location = window.location;
+    $scope.menuData = {
+      "menusTop": [
+        {
+          "id": 2,
+          "text": "i18n_menu_monitor",
+          "icon": "fa fa-fw fa-tachometer",
+          "url": "2",
+          "children": [
+            {
+              "id": 1,
+              "text": "i18n_menu_dashboardlist",
+              "url": "/dashboardlist"
+            },
+            {
+              "id": 2,
+              "text": "i18n_menu_logs",
+              "url": "/logs"
+            },
+            {
+              "id": 3,
+              "text": "i18n_menu_host",
+              "url": "/host_topology"
+            },
+            {
+              "id": 4,
+              "text": "i18n_menu_service",
+              "url": "/service_topology"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "text": "i18n_menu_alert",
+          "icon": "fa fa-fw fa-bell",
+          "url": "3",
+          "children": [
+            {
+              "id": 1,
+              "text": "i18n_menu_alert_rule",
+              "url": "/alerts/status"
+            },
+            {
+              "id": 2,
+              "text": "i18n_menu_alert_auto",
+              "url": "/anomaly"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "text": "i18n_menu_diagnosis",
+          "icon": "fa fa-fw fa-bar-chart",
+          "url": "4",
+          "children": [
+            {
+              "id": 1,
+              "text": "i18n_menu_diagnostic_assistant",
+              "url": "/rca?guide"
+            },
+            {
+              "id": 2,
+              "text": "i18n_menu_report",
+              "url": "/report"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "text": "i18n_menu_cmdb",
+          "icon": "fa fa-fw fa-cubes",
+          "url": "5",
+          "children": [
+            {
+              "id": 1,
+              "text": "i18n_menu_cmdb_config",
+              "url": "/cmdb/config?serviceName=collector"
+            },
+            {
+              "id": 2,
+              "text": "i18n_menu_logs_parse",
+              "url": "/logs/rules"
+            },
+            {
+              "id": 3,
+              "text": "i18n_menu_cmdb_metrics",
+              "url": "/cmdb/metrics"
+            }
+          ]
+        }
+      ],
+      "menusBottom": [
+        {
+          "id": 101,
+          "text": "安装指南",
+          "icon": "fa fa-fw fa-cloud-download",
+          "url": "/setting/agent",
+        },
+        {
+          "id": 102,
+          "text": '运维轮班',
+          "icon": "fa fa-fw fa-calendar",
+          "url": "/oncallerschedule"
+        },
+        {
+          "id": 103,
+          "text": '运维知识库',
+          "icon": "fa fa-fw fa-book",
+          "url": "/knowledgebase"
+        }
+      ]
+    };
 
     $scope.init = function() {
       $scope.contextSrv = contextSrv;
@@ -26,7 +147,7 @@ export class GrafanaCtrl {
 
       alertSrv.init();
       utilSrv.init();
-      // bridgeSrv.init();
+      bridgeSrv.init();
 
       if (!($location.path() === '/login' || $location.path() === '/signupfree')) {
         backendSrv.initCustomizedSources();
@@ -151,11 +272,12 @@ export class GrafanaCtrl {
 }
 
 /** @ngInject */
-export function grafanaAppDirective(playlistSrv, contextSrv, $translate) {
+export function grafanaAppDirective(playlistSrv, contextSrv, $translate, $route) {
   return {
     restrict: 'E',
     controller: GrafanaCtrl,
     link: (scope, elem, attr) => {
+      console.log($route);
       var ignoreSideMenuHide;
       var body = $('body');
 
@@ -178,6 +300,7 @@ export function grafanaAppDirective(playlistSrv, contextSrv, $translate) {
       });
 
       scope.$watch('contextSrv.pinned', newVal => {
+        console.log(newVal)
         if (newVal !== undefined) {
           body.toggleClass('sidemenu-pinned', newVal);
         }

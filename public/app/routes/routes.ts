@@ -1,12 +1,14 @@
 
 import './dashboard_loaders';
+import './ReactContainer';
 
 import angular from 'angular';
 import coreModule from 'app/core/core_module';
 import {BundleLoader} from './bundle_loader';
+import { Diagnose } from 'app/containers/Diagnose/Diagnose';
 
 /** @ngInject **/
-function setupAngularRoutes($routeProvider, $locationProvider) {
+export function setupAngularRoutes($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
 
   // var loadPluginsBundle = new BundleLoader('public/app/features/plugins/all');
@@ -385,6 +387,17 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controller : 'RootCauseAnalysisCtrl',
     reloadOnSearch: false
   })
+  .when('/diagnose', {
+    template: '<react-container />',
+    resolve: {
+      component: () => Diagnose,
+    },
+  })
+  // .when('/rca_2', {
+  //   templateUrl: 'public/app/features/rca/partials/rca_2.html',
+  //   controller : 'RootCauseAnalysisCtrl2',
+  //   reloadOnSearch: false
+  // })
   // Host Topology
   .when('/host_topology', {
     templateUrl: 'public/app/features/host/partials/host.html',
@@ -413,5 +426,3 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     reloadOnSearch: false,
   });
 }
-
-coreModule.config(setupAngularRoutes);

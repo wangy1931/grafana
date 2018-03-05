@@ -3,7 +3,7 @@ import _ from 'lodash';
 import coreModule from 'app/core/core_module';
 
 export class AssociationSrv {
-  sourceAssociation: any;
+  sourceAssociation: any = {};
 
   /** @ngInject */
   constructor(private alertMgrSrv) {}

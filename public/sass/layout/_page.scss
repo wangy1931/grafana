@@ -1,10 +1,18 @@
 .grafana-app {
-  display: block;
+  display: flex;
   height: 100%;
+  // display: flex;
+  // flex: auto;
+  // flex-direction: row;
 }
 
 .main-view {
   height: 100%;
+  // display: flex;
+  // flex-direction: row;
+  // flex: auto;
+  background: #f0f2f5;
+  flex: auto;
 }
 
 .page-container {
@@ -16,6 +24,14 @@
   overflow: scroll;
   height: 100vh;
   // background-image: linear-gradient(60deg, transparent 70%, darken($page-bg, 4%) 98%)
+}
+
+.react-page-container {
+  max-height: calc(100% - 54px);
+  padding-bottom: $spacer * 5;
+  overflow: scroll;
+  height: 100vh;
+  // margin-left: $side-menu-width;
 }
 
 .page-body {
