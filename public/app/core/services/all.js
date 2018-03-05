@@ -21,6 +21,7 @@ define([
   './metricSrv',
   './report_srv',
   './bridge_srv',
-  './timer'
+  './timer',
+  './static_srv'
 ],
 function () {});

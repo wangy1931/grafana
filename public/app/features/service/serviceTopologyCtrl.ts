@@ -36,15 +36,17 @@ export class ServiceTopologyCtrl {
     private $location,
     private alertSrv,
     private $translate,
-    private $timeout
+    private $timeout,
+    private staticSrv
   ) {
     $scope.ctrl = this;
 
     this.tabs = [
       { 'id': 0, 'title': $translate.i18n.page_service_tab0, 'active': false, 'show': true,  'content': 'public/app/features/service/partials/service_list_table.html' },
-      { 'id': 1, 'title': $translate.i18n.page_service_tab1, 'active': false, 'show': false, 'content': 'public/app/features/service/partials/service_info.html' }
+      { 'id': 1, 'title': $translate.i18n.page_host_tab1, 'active': false, 'show': false,  'content': 'public/app/features/host/partials/host_system_status.html' },
+      { 'id': 2, 'title': $translate.i18n.page_service_tab1, 'active': false, 'show': false, 'content': 'public/app/features/service/partials/service_info.html' }
     ];
-    this.needNameTabs = [1];
+    this.needNameTabs = [1, 2];
 
     this.topologyGraphParams = {
       blockSize: 36,
@@ -185,6 +187,9 @@ export class ServiceTopologyCtrl {
       this.getList(this.currentService);
     }
     if (tabId === 1) {
+      this.getDashboard(this.currentService);
+    }
+    if (tabId === 2) {
       this.getInfo();
     }
   }
@@ -223,6 +228,27 @@ export class ServiceTopologyCtrl {
   }
 
   showGuideResult(e, params) {
+  }
+
+  getDashboard (service) {
+    var dashboard_type = _.getServiceDashboard(service.name);
+    var requery = !(this.dashboard && _.isEqual(dashboard_type, this.dashboard.title));
+
+    if (requery) {
+      this.staticSrv.getDashboard(dashboard_type).then(response => {
+        // store & init dashboard
+        this.dashboard = response;
+        this.$scope.initDashboard({
+          dashboard: response,
+          meta: { canStar: false, canShare: false, canEdit: false, canSave: false },
+        }, this.$scope);
+
+        this.$rootScope.$broadcast('refresh');
+      }).catch((err) => {
+        this.$scope.dashboard = null;
+        err.isHandled = true;
+      });
+    }
   }
 
 };

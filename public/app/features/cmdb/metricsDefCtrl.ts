@@ -13,7 +13,7 @@ export class MetricsDefCtrl {
   suggestMetrics: any;
 
   /** @ngInject */
-  constructor(private $scope, private metricSrv, private contextSrv) {
+  constructor(private $scope, private metricSrv, private contextSrv, private $translate) {
     this.params = {
       size: SIZE,
     };
@@ -52,7 +52,7 @@ export class MetricsDefCtrl {
       }
     } else if (page < 1) {
       page = 1;
-      this.$scope.appEvent('alert-warning', ['已经是第一页了']);
+      this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_first_page]);
       return;
     }
     this.params.page = page;
@@ -67,7 +67,7 @@ export class MetricsDefCtrl {
         this.metricList = res.data;
         if (res.data.length < SIZE) {
           this.params.page--;
-          this.$scope.appEvent('alert-warning', ['已经是最后一页了']);
+          this.$scope.appEvent('alert-warning', [this.$translate.i18n.i18n_last_page]);
         }
       }
     });
@@ -99,13 +99,13 @@ export class MetricsDefCtrl {
     };
     this.metricSrv.updateMetricInfo(params, this.metricCur).then((res) => {
       this.metricCur.disabled = true;
-      this.$scope.appEvent('alert-success', ['保存成功']);
+      this.$scope.appEvent('alert-success', [this.$translate.i18n.i18n_success]);
       this.metricList[index] = _.cloneDeep(this.metricCur);
       this.metricCur.subType = _.cloneDeep(tmp);
       this.metricCur.subTypes = _.cloneDeep(subTypes);
     }, () => {
       this.getDetailById(metric, true);
-      this.$scope.appEvent('alert-danger', ['保存失败']);
+      this.$scope.appEvent('alert-danger', [this.$translate.i18n.i18n_fail]);
     });
   }
 

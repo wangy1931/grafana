@@ -12,9 +12,6 @@ func addOrgPermitMigrations(mg *Migrator) {
 			{Name: "level", Type: DB_NVarchar, Length: 255, Nullable: false},
 			{Name: "deadline", Type: DB_DateTime, Nullable: false},
 		},
-		Indices: []*Index{
-			{Cols: []string{"org_id"}, Type: UniqueIndex},
-		},
 	}
 
 	// create table

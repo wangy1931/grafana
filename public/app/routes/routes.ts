@@ -206,6 +206,18 @@ export function setupAngularRoutes($routeProvider, $locationProvider) {
     templateUrl: 'public/app/features/admin/partials/edit_org.html',
     controller : 'AdminEditOrgCtrl'
   })
+  .when('/admin/statics', {
+    templateUrl: 'public/app/features/admin/partials/statics.html',
+    controller : 'AdminListStaticsCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadAdminBundle,
+  })
+  .when('/admin/statics/edit/:id', {
+    templateUrl: 'public/app/features/admin/partials/edit_static.html',
+    controller : 'AdminEditStaticCtrl',
+    controllerAs: 'ctrl',
+    resolve: loadAdminBundle,
+  })
   // LOGIN / SIGNUP
   .when('/login', {
     templateUrl: 'public/app/partials/login.html',

@@ -36,7 +36,8 @@ export class AlertAssociationCtrl {
     private timeSrv,
     private integrateSrv,
     private NgTableParams,
-    private $translate
+    private $translate,
+    private staticSrv
   ) {
     this.targetObj = _.extend({}, {
       metric: "",
@@ -116,7 +117,7 @@ export class AlertAssociationCtrl {
   }
 
   createAlertMetricsGraph(metric, host) {
-    this.backendSrv.get('/api/static/alert_association').then(response => {
+    this.staticSrv.getDashboard('alert_association').then(response => {
       // store & init dashboard
       var dashboard = response;
 

@@ -248,5 +248,29 @@ function ($, moment, kbn, _) {
     }
   }
 
+  _.getAlertType = function(type) {
+    var map = {
+      'ZABBIX_ALERT': 'iconfont fa-zabbix',
+      'ONEAPM_ALERT': 'iconfont fa-oneapm',
+      'BMC_ALERT': 'iconfont fa-bmc',
+      'LOG_ALERT': 'fa fa-clipboard',
+      'SINGLE_ALERT': 'fa fa-dashboard',
+      'MUTI_ALERT': 'fa fa-dashboard',
+    }
+    return map[type] || 'fa fa-dashboard';
+  }
+
+  _.getOsDashboard = function(os) {
+    if (/windows/i.test(os)) return 'windows_machine_host_topology';
+    if (/zabbix/i.test(os)) return 'zabbix_host_topology';
+    return 'machine_host_topology';
+  }
+
+  _.getServiceDashboard = function(service) {
+    if (/hadoop/i.test(service)) return 'hadoop';
+    if (/hbase/i.test(service)) return 'hbase';
+    return service;
+  }
+
   return _;
 });

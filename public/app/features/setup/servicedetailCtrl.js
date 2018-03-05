@@ -6,7 +6,7 @@ function (angular) {
   'use strict';
 
   var module = angular.module('grafana.controllers');
-  module.controller('ServiceDetailCtrl', function ($scope, backendSrv, datasourceSrv, contextSrv, $controller) {
+  module.controller('ServiceDetailCtrl', function ($scope, backendSrv, datasourceSrv, contextSrv, $controller, staticSrv) {
     var NO_DATA = 2;
     var GET_DATA = 0;
     var NO_SERVER = -1;
@@ -30,7 +30,7 @@ function (angular) {
     };
 
     $scope.install = function(template) {
-      backendSrv.get('/api/static/template/' + template).then(function(result) {
+      staticSrv.getDashboard(template).then(function(result) {
         $scope.template = result;
         $scope.checkeServie();
       });
@@ -62,7 +62,7 @@ function (angular) {
     };
 
     $scope.importAlerts = function(service) {
-      backendSrv.get('/api/static/alertd/'+service).then(function(result) {
+      staticSrv.getAlertD(service).then(function(result) {
         var alertDefs = result.alertd;
         if(alertDefs.length) {
           $scope.importAlert(alertDefs);

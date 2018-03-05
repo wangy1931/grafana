@@ -32,7 +32,8 @@ export class TopNCtrl {
     private dynamicDashboardSrv,
     private $popover,
     private $timeout,
-    private timeSrv
+    private timeSrv,
+    private staticSrv
   ) {
     this.targetObj = _.extend({}, {
       metric: "",
@@ -90,7 +91,7 @@ export class TopNCtrl {
 
   getDashboard() {
     if (!this.dashboard) {
-      this.backendSrv.get('/api/static/topn').then(response => {
+      this.staticSrv.getDashboard('topn').then(response => {
         // handle dashboard
         this.addDashboardTemplating(response);
 

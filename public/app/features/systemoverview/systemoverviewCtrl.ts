@@ -43,7 +43,7 @@ export class SystemOverviewCtrl {
   constructor(
     private backendSrv, private alertSrv, private contextSrv, private alertMgrSrv, private healthSrv, private serviceDepSrv,
     private hostSrv, private utilSrv, private $location, private $scope, private $modal, private $q, private $translate,
-    private NgTableParams
+    private NgTableParams, private staticSrv
   ) {
     this.topologyGraphParams = {
       blockSize: 36,
@@ -134,13 +134,7 @@ export class SystemOverviewCtrl {
       return;
     }
 
-    this.getAlertStatus();
-    this.getAnomaly();
-    this.getSystemAnomaly();
-    this.getHostSummary();
-    this.getServices();
-
-    this.backendSrv.get('/api/static/template/overview').then(response => {
+    this.staticSrv.getDashboard('overview').then(response => {
       this._dashboard = response;
       // this.$scope.initDashboard({
       //   meta     : { canStar: false, canShare: false, canEdit: false, canSave: false },

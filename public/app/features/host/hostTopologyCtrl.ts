@@ -31,7 +31,6 @@ export class HostTopologyCtrl {
   constructor (
     private $scope,
     private $rootScope,
-    private $translate,
     private $controller,
     private $location,
     private NgTableParams,
@@ -41,7 +40,9 @@ export class HostTopologyCtrl {
     private contextSrv,
     private utilSrv,
     private alertSrv,
-    private $timeout
+    private $translate,
+    private $timeout,
+    private staticSrv
   ) {
     $scope.ctrl = this;
     $scope.refresh_interval = '30s';
@@ -297,9 +298,13 @@ export class HostTopologyCtrl {
   getHostDashboard(host) {
     this.saveTopologyData();
 
-    if (!this.dashboard) {
-      console.log(2);
-      this.backendSrv.get('/api/static/machine_host_topology').then(response => {
+    // if (!this.dashboard) {
+    //   console.log(2);
+    //   this.backendSrv.get('/api/static/machine_host_topology').then(response => {
+    var dashboard_type = _.getOsDashboard(host._private_.osFamily);
+    var requery = !(this.dashboard && _.isEqual(dashboard_type, this.dashboard.title));
+    if (requery) {
+      this.staticSrv.getDashboard(dashboard_type).then(response => {
         // handle dashboard
         this.addDashboardTemplating(response);
 
