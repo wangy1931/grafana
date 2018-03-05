@@ -210,13 +210,13 @@ export function setupAngularRoutes($routeProvider, $locationProvider) {
     templateUrl: 'public/app/features/admin/partials/statics.html',
     controller : 'AdminListStaticsCtrl',
     controllerAs: 'ctrl',
-    resolve: loadAdminBundle,
+    // resolve: loadAdminBundle,
   })
   .when('/admin/statics/edit/:id', {
     templateUrl: 'public/app/features/admin/partials/edit_static.html',
     controller : 'AdminEditStaticCtrl',
     controllerAs: 'ctrl',
-    resolve: loadAdminBundle,
+    // resolve: loadAdminBundle,
   })
   // LOGIN / SIGNUP
   .when('/login', {
