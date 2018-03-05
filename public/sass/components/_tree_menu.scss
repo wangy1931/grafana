@@ -36,16 +36,20 @@
     line-height: 30px;
     font-size: 18px;
     margin: 10px 0;
+    position: relative;
     .btn-group {
       position: absolute;
-      top: 2.5rem;
+      top: 0;
       right: 0;
     }
     .btn-group.dropdown {
-      top: 3rem;
-      right: 2rem;
+      top: 1rem;
+      right: auto;
+      left: 0;
       .dropdown-menu {
         font-size: 10px;
+        max-height: 10rem;
+        overflow: scroll;
       }
     }
     .panel-time-info {
