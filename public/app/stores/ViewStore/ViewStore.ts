@@ -2,7 +2,7 @@ import { types } from 'mobx-state-tree';
 import { toJS } from 'mobx';
 import { toUrlParams } from 'app/core/utils/url';
 
-const QueryInnerValueType = types.union(types.string, types.boolean, types.number);
+const QueryInnerValueType = types.union(types.string, types.boolean, types.number, types.null);
 const QueryValueType = types.union(QueryInnerValueType, types.array(QueryInnerValueType));
 
 export const ViewStore = types

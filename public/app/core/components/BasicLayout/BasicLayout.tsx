@@ -36,7 +36,7 @@ export class BasicLayout extends React.Component<BasicLayoutProps, any> {
   handleMenuCollapse = (collapsed) => {
     // const { context } = this.props;
     // context.toggleSideMenu(collapsed);
-    contextSrv.toggleSideMenu(null);
+    contextSrv.toggleSideMenuState();
   }
 
   render() {
@@ -169,7 +169,7 @@ export class BasicLayout extends React.Component<BasicLayoutProps, any> {
         {/* <Layout> */}
           <GlobalHeader
           // collapsed={context.collapsed}
-          collapsed={contextSrv.pinned}
+          collapsed={contextSrv.collapsed}
           onCollapse={this.handleMenuCollapse}
           />
           <Content style={{ height: '100%' }}>

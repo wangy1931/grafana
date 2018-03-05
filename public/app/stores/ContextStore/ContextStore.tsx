@@ -7,12 +7,12 @@ export const ContextStore = types
     systemsMap: types.optional(types.frozen, {})
   })
   .actions(self => ({
-    toggleSideMenu(collapsed) {
-      const contextSrv = getEnv(self).contextSrv;
-      // contextSrv.toggleSideMenu();
-      self.collapsed = collapsed;
-      // self.collapsed = contextSrv.pinned;
-      self.user = contextSrv.user;
-      self.systemsMap = contextSrv.systemsMap;
-    }
+    // toggleSideMenu(collapsed) {
+    //   const contextSrv = getEnv(self).contextSrv;
+    //   // contextSrv.toggleSideMenu();
+    //   self.collapsed = collapsed;
+    //   // self.collapsed = contextSrv.pinned;
+    //   self.user = contextSrv.user;
+    //   self.systemsMap = contextSrv.systemsMap;
+    // }
   }))

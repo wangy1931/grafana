@@ -2,7 +2,8 @@ import './editorCtrl';
 import coreModule from 'app/core/core_module';
 
 import templateSrv from './templateSrv';
-import { VariableSrv } from './variableSrv';
+import { VariableSrv } from './variableSrv_new';
+import './variableSrv.js';
 import { IntervalVariable } from './interval_variable';
 import { QueryVariable } from './query_variable';
 import { DatasourceVariable } from './datasource_variable';

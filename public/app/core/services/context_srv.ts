@@ -3,6 +3,7 @@ import config from 'app/core/config';
 import _ from 'lodash';
 import coreModule from 'app/core/core_module';
 import store from 'app/core/store';
+import appEvents from 'app/core/app_events';
 
 export class User {
   isGrafanaAdmin: any;
@@ -42,10 +43,12 @@ export class ContextSrv {
   hostNum: any;
   isViewer: any;
   signupUser: SignupUser;
+  collapsed: any;
 
   constructor() {
     this.pinned = store.getBool('grafana.sidemenu.pinned', false);
     this.sidemenu = this.pinned ? true : false;
+    this.collapsed = store.getBool('cloudwiz.sidemenu.collapsed', false);
 
     if (!config.buildInfo) {
       config.buildInfo = {};
@@ -78,6 +81,13 @@ export class ContextSrv {
   setPinnedState(val) {
     this.pinned = val;
     store.set('grafana.sidemenu.pinned', val);
+  }
+
+  toggleSideMenuState() {
+    this.collapsed = !this.collapsed;
+    appEvents.emit('sidemenu-collapse', {
+      collapsed: this.collapsed
+    });
   }
 
   toggleSideMenu($event) {

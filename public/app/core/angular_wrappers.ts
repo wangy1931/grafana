@@ -6,14 +6,14 @@ import GlobalHeader from 'app/core/components/GlobalHeader/GlobalHeader';
 export function registerAngularDirectives() {
   react2AngularDirective('basicLayout', BasicLayout, ['context']);
   react2AngularDirective('siderMenu', SiderMenu, ['menuData',
-  'collapsed',
+  // 'collapsed',
   // 'onCollapse',
-  // ['collapsed', { watchDepth: 'reference' }],
+  ['collapsed', { watchDepth: 'value' }],
   ['onCollapse', { watchDepth: 'reference' }],
   'location']);
   react2AngularDirective('globalHeader', GlobalHeader, [
-    'collapsed',
-    // ['collapsed', { watchDepth: 'reference' }],
+    // 'collapsed',
+    ['collapsed', { watchDepth: 'value' }],
     ['onCollapse', { watchDepth: 'reference' }],
   ]);
 }

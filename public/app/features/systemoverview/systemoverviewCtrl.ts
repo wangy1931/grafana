@@ -136,6 +136,11 @@ export class SystemOverviewCtrl {
 
     this.staticSrv.getDashboard('overview').then(response => {
       this._dashboard = response;
+      this.getAlertStatus();
+      this.getAnomaly();
+      this.getSystemAnomaly();
+      this.getHostSummary();
+      this.getServices();
       // this.$scope.initDashboard({
       //   meta     : { canStar: false, canShare: false, canEdit: false, canSave: false },
       //   dashboard: this._dashboard

@@ -1,5 +1,5 @@
 
-import  './dashboardCtrl';
+import  './dashboardCtrl.js';
 import  './dashboardLoaderSrv';
 import  './dashnav/dashnav';
 import  './submenu/submenu';

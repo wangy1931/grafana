@@ -31,8 +31,8 @@
       <sidemenu ng-if="contextSrv.sidemenu"></sidemenu>
     </aside> -->
 
-    <aside ng-if="contextSrv.sidemenu">
-      <sider-menu collapsed="contextSrv.sidemenu" onCollapse="handleMenuCollapse" menuData="menuData" location="location"></sider-menu>
+    <aside ng-if="contextSrv.isSignedIn">
+      <sider-menu collapsed="contextSrv.collapsed" onCollapse="handleMenuCollapse" menuData="menuData" location="location"></sider-menu>
     </aside>
 
     <div class="page-alert-list">

@@ -157,6 +157,7 @@ body {
   }
 }
 
+// temp code
 .global-header.ant-layout-header {
   height: 52px;
   line-height: 52px;
@@ -166,4 +167,11 @@ body {
 }
 .sider-menu.ant-layout-sider {
   background: #1e2028;
+}
+
+// temp code for <a> link color
+.summary-page {
+  a {
+    color: $text-color;
+  }
 }

@@ -3,6 +3,7 @@ import { Layout, Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Cascader } fr
 import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { contextSrv } from 'app/core/services/context_srv';
+import config from 'app/core/config';
 import './index.less';
 
 const { Header } = Layout;
@@ -18,21 +19,24 @@ const options = [{
 }];
 
 export interface GlobalHeaderProps {
-  collapsed: boolean
+  collapsed?: boolean
   onCollapse?: (collapsed?) => void
 }
 
+// @observer
 export default class GlobalHeader extends PureComponent<GlobalHeaderProps, any> {
+  state = {
+    options,
+    collapsed: contextSrv.collapsed
+  };
+
   componentWillUnmount() {
     // this.triggerResizeEvent.cancel();
   }
 
   toggle = () => {
-    const { collapsed, onCollapse } = this.props;
-    console.log(collapsed);
-    // onCollapse && onCollapse(!collapsed);
-    // if (!onCollapse) { contextSrv.toggleSideMenu(null); }
-    contextSrv.toggleSideMenu(null);
+    contextSrv.toggleSideMenuState();
+    this.setState({ collapsed: contextSrv.collapsed });
     this.triggerResizeEvent();
   }
 
@@ -42,9 +46,6 @@ export default class GlobalHeader extends PureComponent<GlobalHeaderProps, any> 
     window.dispatchEvent(event);
   }
 
-  state = {
-    options,
-  };
   onChange = (value, selectedOptions) => {
     console.log(value, selectedOptions);
   }
@@ -75,11 +76,14 @@ export default class GlobalHeader extends PureComponent<GlobalHeaderProps, any> 
 
     const menu = (
       <Menu className="menu" selectedKeys={[]}>
-        <Menu.Item disabled><a href="/profile"><Icon type="user" />个人信息</a></Menu.Item>
-        <Menu.Item disabled><Icon type="setting" />设置</Menu.Item>
-        <Menu.Item key="triggerError"><Icon type="close-circle" />触发报错</Menu.Item>
+        <Menu.Item><a href="/profile"><Icon type="user" />个人信息</a></Menu.Item>
+        { config.allowOrgCreate && <Menu.Item ><a href="/org/new"><i className="fa fa-fw fa-plus"></i>新建公司</a></Menu.Item> }
+        { contextSrv.hasRole('Admin') && <Menu.Item><a href="/org"><Icon type="user" />公司信息</a></Menu.Item> }
+        { contextSrv.hasRole('Admin') && <Menu.Item><a href="/org/users"><Icon type="user" />公司成员</a></Menu.Item> }
+        { contextSrv.isGrafanaAdmin &&  <Menu.Item><a href="/org/apikeys"><Icon type="user" />密钥管理</a></Menu.Item> }
+        { contextSrv.isGrafanaAdmin &&  <Menu.Item><a href="/datasources"><i className="icon-gf icon-gf-dashboard"></i>数据源</a></Menu.Item> }
         <Menu.Divider />
-        <Menu.Item key="logout"><Icon type="logout" />退出登录</Menu.Item>
+        <Menu.Item key="logout"><a href="logout"><Icon type="logout" />退出登录</a></Menu.Item>
       </Menu>
     );
 
@@ -87,7 +91,7 @@ export default class GlobalHeader extends PureComponent<GlobalHeaderProps, any> 
       <Header className="global-header">
         <Icon
           className="trigger"
-          type={contextSrv.pinned ? 'menu-unfold' : 'menu-fold'}
+          type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
           // type={collapsed ? 'menu-unfold' : 'menu-fold'}
           onClick={this.toggle}
         />
@@ -100,11 +104,11 @@ export default class GlobalHeader extends PureComponent<GlobalHeaderProps, any> 
           changeOnSelect
         />
         <div className="right">
-          {contextSrv.user.orgName ? (
+          {contextSrv.user.name ? (
             <Dropdown overlay={menu}>
               <span className="action account">
                 <Avatar size="small" className="avatar" src={contextSrv.user.gravatarUrl} />
-                <span className="name">{contextSrv.user.orgName}</span>
+                <span className="name">{contextSrv.user.name}</span>
               </span>
             </Dropdown>
           ) : <Spin size="small" style={{ marginLeft: 8 }} />}

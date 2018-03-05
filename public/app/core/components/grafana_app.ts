@@ -6,6 +6,7 @@ import angular from 'angular';
 import $ from 'jquery';
 import coreModule from 'app/core/core_module';
 import { createStore } from 'app/stores/store';
+import appEvents from 'app/core/app_events';
 
 var locale = 'zh-CN';
 
@@ -14,125 +15,23 @@ export class GrafanaCtrl {
   /** @ngInject */
   constructor(
     $scope, alertSrv, utilSrv, $rootScope, $controller, datasourceSrv,
-    contextSrv, $location, healthSrv, backendSrv, bridgeSrv, hostSrv
+    contextSrv, $location, healthSrv, backendSrv, bridgeSrv, hostSrv, staticSrv
   ) {
     createStore(contextSrv, backendSrv, hostSrv, datasourceSrv);
 
     $scope.handleMenuCollapse = (collapsed) => {
-      contextSrv.toggleSideMenu(null);
+      contextSrv.toggleSideMenuState();
     };
     $scope.location = window.location;
     $scope.menuData = {
-      "menusTop": [
-        {
-          "id": 2,
-          "text": "i18n_menu_monitor",
-          "icon": "fa fa-fw fa-tachometer",
-          "url": "2",
-          "children": [
-            {
-              "id": 1,
-              "text": "i18n_menu_dashboardlist",
-              "url": "/dashboardlist"
-            },
-            {
-              "id": 2,
-              "text": "i18n_menu_logs",
-              "url": "/logs"
-            },
-            {
-              "id": 3,
-              "text": "i18n_menu_host",
-              "url": "/host_topology"
-            },
-            {
-              "id": 4,
-              "text": "i18n_menu_service",
-              "url": "/service_topology"
-            }
-          ]
-        },
-        {
-          "id": 3,
-          "text": "i18n_menu_alert",
-          "icon": "fa fa-fw fa-bell",
-          "url": "3",
-          "children": [
-            {
-              "id": 1,
-              "text": "i18n_menu_alert_rule",
-              "url": "/alerts/status"
-            },
-            {
-              "id": 2,
-              "text": "i18n_menu_alert_auto",
-              "url": "/anomaly"
-            }
-          ]
-        },
-        {
-          "id": 4,
-          "text": "i18n_menu_diagnosis",
-          "icon": "fa fa-fw fa-bar-chart",
-          "url": "4",
-          "children": [
-            {
-              "id": 1,
-              "text": "i18n_menu_diagnostic_assistant",
-              "url": "/rca?guide"
-            },
-            {
-              "id": 2,
-              "text": "i18n_menu_report",
-              "url": "/report"
-            }
-          ]
-        },
-        {
-          "id": 5,
-          "text": "i18n_menu_cmdb",
-          "icon": "fa fa-fw fa-cubes",
-          "url": "5",
-          "children": [
-            {
-              "id": 1,
-              "text": "i18n_menu_cmdb_config",
-              "url": "/cmdb/config?serviceName=collector"
-            },
-            {
-              "id": 2,
-              "text": "i18n_menu_logs_parse",
-              "url": "/logs/rules"
-            },
-            {
-              "id": 3,
-              "text": "i18n_menu_cmdb_metrics",
-              "url": "/cmdb/metrics"
-            }
-          ]
-        }
-      ],
-      "menusBottom": [
-        {
-          "id": 101,
-          "text": "安装指南",
-          "icon": "fa fa-fw fa-cloud-download",
-          "url": "/setting/agent",
-        },
-        {
-          "id": 102,
-          "text": '运维轮班',
-          "icon": "fa fa-fw fa-calendar",
-          "url": "/oncallerschedule"
-        },
-        {
-          "id": 103,
-          "text": '运维知识库',
-          "icon": "fa fa-fw fa-book",
-          "url": "/knowledgebase"
-        }
-      ]
+      "menusTop": [],
+      "menusBottom": []
     };
+    staticSrv.getMenu().then(response => {
+      appEvents.emit('sidemenu-loaded', response);
+      $scope.menuData.menusTop = response.menusTop;
+      $scope.menuData.menusBottom = response.menusBottom;
+    });
 
     $scope.init = function() {
       $scope.contextSrv = contextSrv;
@@ -284,27 +183,27 @@ export function grafanaAppDirective(playlistSrv, contextSrv, $translate, $route)
       locale = attr.locale;
 
       // handle sidemenu open state
-      scope.$watch('contextSrv.sidemenu', newVal => {
-        if (newVal !== undefined) {
-          body.toggleClass('sidemenu-open', scope.contextSrv.sidemenu);
-          if (!newVal) {
-            contextSrv.setPinnedState(false);
-          }
-        }
-        if (contextSrv.sidemenu) {
-          ignoreSideMenuHide = true;
-          setTimeout(() => {
-            ignoreSideMenuHide = false;
-          }, 300);
-        }
-      });
+      // scope.$watch('contextSrv.sidemenu', newVal => {
+      //   if (newVal !== undefined) {
+      //     body.toggleClass('sidemenu-open', scope.contextSrv.sidemenu);
+      //     if (!newVal) {
+      //       contextSrv.setPinnedState(false);
+      //     }
+      //   }
+      //   if (contextSrv.sidemenu) {
+      //     ignoreSideMenuHide = true;
+      //     setTimeout(() => {
+      //       ignoreSideMenuHide = false;
+      //     }, 300);
+      //   }
+      // });
 
-      scope.$watch('contextSrv.pinned', newVal => {
-        console.log(newVal)
-        if (newVal !== undefined) {
-          body.toggleClass('sidemenu-pinned', newVal);
-        }
-      });
+      // scope.$watch('contextSrv.pinned', newVal => {
+      //   console.log(newVal)
+      //   if (newVal !== undefined) {
+      //     body.toggleClass('sidemenu-pinned', newVal);
+      //   }
+      // });
 
       // tooltip removal fix
       // manage page classes
@@ -340,13 +239,13 @@ export function grafanaAppDirective(playlistSrv, contextSrv, $translate, $route)
           }
         }
         // hide sidemenu
-        if (!ignoreSideMenuHide && !contextSrv.pinned && body.find('.sidemenu').length > 0) {
-          if (target.parents('.sidemenu').length === 0) {
-            scope.$apply(function() {
-              scope.contextSrv.toggleSideMenu();
-            });
-          }
-        }
+        // if (!ignoreSideMenuHide && !contextSrv.pinned && body.find('.sidemenu').length > 0) {
+        //   if (target.parents('.sidemenu').length === 0) {
+        //     scope.$apply(function() {
+        //       scope.contextSrv.toggleSideMenu();
+        //     });
+        //   }
+        // }
 
         // hide popovers
         var popover = elem.find('.popover');

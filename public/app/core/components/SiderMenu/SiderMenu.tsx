@@ -1,6 +1,9 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Layout, Menu, Icon } from 'antd';
+import { contextSrv } from 'app/core/services/context_srv';
+import appEvents from 'app/core/app_events';
 import './index.less';
+import { observer } from 'mobx-react';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -10,8 +13,8 @@ export interface SiderMenuProps {
   location?: any
   Authorized?: any
   logo?: any
-  collapsed: boolean
-  onCollapse: (collapsed?) => void
+  collapsed?: boolean
+  onCollapse?: (collapsed?) => void
 };
 
 // Allow menu.js config icon as string or ReactNode
@@ -28,15 +31,26 @@ const getIcon = (icon) => {
   return icon;
 };
 
-export default class SiderMenu extends PureComponent<SiderMenuProps, any> {
+export default class SiderMenu extends React.Component<SiderMenuProps, any> {
   constructor(props) {
     super(props);
     this.state = {
+      collapsed: contextSrv.collapsed,
       openKeys: this.getDefaultCollapsedSubMenus(props),
+      sidemenu: false
     };
+    appEvents.on('sidemenu-collapse', payload => {
+      this.setState(payload);
+    });
+    appEvents.on('sidemenu-loaded', payload => {
+      this.menus = payload;
+      this.setState({sidemenu: true});
+    })
   }
 
   menus = this.props.menuData;
+
+  toggle = (collapsed) => {}
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.location.pathname !== this.props.location.pathname) {
@@ -162,18 +176,6 @@ export default class SiderMenu extends PureComponent<SiderMenuProps, any> {
       })
       .filter(item => !!item);
   }
-  getBottomMenuItems = (menusBottomData) => {
-    if (!menusBottomData) {
-      return [];
-    }
-    return menusBottomData
-      .filter(item => item.text && !item.hideInMenu)
-      .map((item) => {
-        const ItemDom = this.getSubMenuOrItem(item);
-        return ItemDom;  //this.checkPermissionItem(item.authority, ItemDom);
-      })
-      .filter(item => !!item);
-  }
   // conversion Path
   // 转化路径
   conversionPath = (path) => {
@@ -209,12 +211,12 @@ export default class SiderMenu extends PureComponent<SiderMenuProps, any> {
   }
   handleBottomOpenChange = (openKeys) => {
     this.handleOpenChanage(openKeys, this.menus.menusBottom);
-  };
+  }
   render() {
-    const { logo, collapsed, location: { pathname }, onCollapse } = this.props;
+    const { logo, location: { pathname }, onCollapse } = this.props;
     const { openKeys } = this.state;
     // Don't show popup menu when it is been collapsed
-    const menuProps = collapsed ? {} : {
+    const menuProps = contextSrv.collapsed ? {} : {
       openKeys,
     };
     // if pathname can't match, use the nearest parent's key
@@ -227,9 +229,9 @@ export default class SiderMenu extends PureComponent<SiderMenuProps, any> {
       <Sider
         trigger={null}
         collapsible
-        collapsed={collapsed}
+        collapsed={this.state.collapsed}
         breakpoint="lg"
-        onCollapse={onCollapse}
+        onCollapse={this.toggle}
         width={168}
         className="sider sider-menu"
       >
@@ -239,7 +241,7 @@ export default class SiderMenu extends PureComponent<SiderMenuProps, any> {
             <h1>Cloudwiz</h1>
           </a>
         </div>
-        <Menu
+        {this.state.sidemenu && <Menu
           key="MenuTop"
           theme="dark"
           mode="inline"
@@ -249,8 +251,8 @@ export default class SiderMenu extends PureComponent<SiderMenuProps, any> {
           style={{ padding: '16px 0', width: '100%' }}
         >
           {this.getNavMenuItems(this.menus.menusTop)}
-        </Menu>
-        <Menu
+        </Menu>}
+        {this.state.sidemenu && <Menu
           key="MenuBottom"
           theme="dark"
           mode="inline"
@@ -259,8 +261,8 @@ export default class SiderMenu extends PureComponent<SiderMenuProps, any> {
           selectedKeys={selectedKeys}
           style={{ padding: '16px 0', width: '100%', position: 'absolute', bottom: '0' }}
         >
-          {this.getBottomMenuItems(this.menus.menusBottom)}
-        </Menu>
+          {this.getNavMenuItems(this.menus.menusBottom)}
+        </Menu>}
       </Sider>
     );
   }
