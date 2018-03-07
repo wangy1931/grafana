@@ -7,7 +7,6 @@ define([
   './reset_password_ctrl',
   './error_ctrl',
   './installCtrl',
-  './signupFreeCtrl',
   './systemCtrl',
   './guide_use_ctrl'
 ], function () {});

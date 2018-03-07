@@ -77,9 +77,6 @@
   .navbar-brand-btn-background {
     display: flex;
     padding: 4px;
-    border-radius: 50%;
-    background: transparent;
-    width: 40px;
     height: 40px;
     align-content: center;
     span {
@@ -177,6 +174,8 @@
     }
 
     .navbar-brand-btn-background {
+      background: url('/public/img/daimler.png') no-repeat;
+      background-size: 100% 100%;
       span {
         display: block;
       }
@@ -186,9 +185,6 @@
 }
 
 @media (max-height: 800px) {
-  .navbar-brand-btn {
-    padding: 0.4rem;
-  }
   .navbar-toggle-menu-btn {
     border-left: 1px solid $body-bg;
   }

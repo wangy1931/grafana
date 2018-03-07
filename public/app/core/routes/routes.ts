@@ -238,10 +238,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     templateUrl: 'public/app/partials/login.html',
     controller : 'LoginCtrl',
   })
-  .when('/signupfree', {
-    templateUrl: 'public/app/partials/signup.html',
-    controller : 'SignupFreeCtrl',
-  })
   .when('/invite/:code', {
     templateUrl: 'public/app/partials/signup_invited.html',
     controller : 'InvitedCtrl',

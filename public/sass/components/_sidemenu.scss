@@ -284,8 +284,10 @@
   $side-menu-width: 3.5rem;
   .navbar-brand-btn {
     width: $side-menu-width !important;
-    padding: 0.4rem;
+    padding: 0.4rem 0 !important;
     .navbar-brand-btn-background {
+      padding: 0 !important;
+      background: url('/public/img/daimler_s.png') center !important;
       span {
         display: none !important;
       }
