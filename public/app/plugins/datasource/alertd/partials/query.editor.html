@@ -1,0 +1,26 @@
+<query-editor-row query-ctrl="ctrl" can-collapse="false">
+	<div class="gf-form-inline">
+		<div class="gf-form">
+			<label class="gf-form-label">Apis</label>
+			<select class="gf-form-input width-6" ng-model="ctrl.target.api" ng-options="m for m in ctrl.apis"></select>
+		</div>
+
+		<div  class="gf-form" ng-if="ctrl.target.api === 'predict'">
+			<div class="gf-form">
+				<label class="gf-form-label">Host</label>
+				<input type="text" class="gf-form-input"
+					ng-model="ctrl.target.params.host"
+					spellcheck='false' bs-typeahead-old="ctrl.suggestHosts"
+					ng-blur="ctrl.targetBlur()">
+			</div>
+			<div class="gf-form">
+				<label class="gf-form-label">Metric</label>
+				<input type="text" class="gf-form-input"
+					ng-model="ctrl.target.params.metric"
+					spellcheck='false' bs-typeahead-old="ctrl.suggestMetrics"
+					ng-change="ctrl.getSuggestMetrics();"
+					ng-blur="ctrl.targetBlur()">
+			</div>
+		</div>
+	</div>
+</query-editor-row>

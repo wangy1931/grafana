@@ -142,8 +142,8 @@ func AddDatasourceFromConfig() {
 
 		if err := bus.Dispatch(&m.AddDataSourceCommand{
 			OrgId:     MAINORG_ID,
-			Name:      "alert",
-			Type:      m.DS_CUSTOMDB,
+			Name:      "alertd",
+			Type:      m.DS_ALERTD,
 			Access:    m.DS_ACCESS_DIRECT,
 			Url:       setting.Alert.AlertUrlRoot,
 			IntranetUrl:  setting.Alert.AlertUrlIntranet,
@@ -204,8 +204,8 @@ func AddDatasourceForOrg(orgId int64) (err error) {
 
 	if err := bus.Dispatch(&m.AddDataSourceCommand{
 		OrgId:     orgId,
-		Name:      "alert",
-		Type:      m.DS_CUSTOMDB,
+		Name:      "alertd",
+		Type:      m.DS_ALERTD,
 		Access:    m.DS_ACCESS_DIRECT,
 		Url:       setting.Alert.AlertUrlRoot,
 		IntranetUrl:  setting.Alert.AlertUrlIntranet,

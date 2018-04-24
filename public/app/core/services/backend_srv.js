@@ -188,10 +188,10 @@ function (angular, _, coreModule, config) {
 
     this.initCustomizedSources = function () {
       return this.get('/api/customized_sources').then(function (result) {
-        self.alertDUrl = result.alert;
+        self.alertDUrl = result.alertd;
         self.downloadUrl = result.download;
         contextSrv.elkUrl = result.elk;
-        self.alertDUrlIntranet = result.alert_intranet;
+        self.alertDUrlIntranet = result.alertd_intranet;
         self.downloadUrlIntranet = result.download_intranet;
         self.opentsdbUrlIntranet = result.opentsdb_intranet;
       });
